@@ -189,6 +189,26 @@ describe("security audit gateway cloudflare-access findings", () => {
     );
   });
 
+  it("treats whitespace-only allowedEmailDomains entries as empty", () => {
+    const cfg = {
+      gateway: {
+        bind: "lan",
+        auth: {
+          mode: "cloudflare-access",
+          cloudflareAccess: {
+            teamDomain: "complex",
+            aud: "abc123",
+            allowedEmailDomains: ["", "  "],
+          },
+        },
+      },
+    } satisfies SunClawConfig;
+    const findings = collectGatewayCloudflareAccessFindings(cfg);
+    expect(findings.map((f) => f.checkId)).toContain(
+      "gateway.http.cloudflare_access_no_email_allowlist",
+    );
+  });
+
   it("is silent on a well-formed cloudflare-access config", () => {
     const cfg = {
       gateway: {

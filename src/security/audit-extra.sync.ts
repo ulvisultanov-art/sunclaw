@@ -814,29 +814,30 @@ export function collectGatewayCloudflareAccessFindings(cfg: SunClawConfig): Secu
   const cf = auth.cloudflareAccess;
   const teamDomain = normalizeOptionalString(cf?.teamDomain);
   const aud = normalizeOptionalString(cf?.aud);
-  const allowedEmailDomains = Array.isArray(cf?.allowedEmailDomains)
-    ? cf.allowedEmailDomains
-    : undefined;
+  const allowedEmailDomains = normalizeUniqueStringEntries(
+    Array.isArray(cf?.allowedEmailDomains) ? cf.allowedEmailDomains : [],
+  );
 
   if (!cf || !teamDomain || !aud) {
     const missing: string[] = [];
-    if (!cf || !teamDomain) {
+    if (!teamDomain) {
       missing.push("teamDomain");
     }
-    if (!cf || !aud) {
+    if (!aud) {
       missing.push("aud");
     }
+    const missingPaths = missing
+      .map((field) => `gateway.auth.cloudflareAccess.${field}`)
+      .join(" and ");
+    const verb = missing.length > 1 ? "are" : "is";
     findings.push({
       checkId: "gateway.http.cloudflare_access_misconfig",
       severity: "critical",
       title: "Cloudflare Access auth mode is misconfigured",
       detail:
-        `gateway.auth.mode="cloudflare-access" but gateway.auth.cloudflareAccess.${missing.join(
-          "/.",
-        )} ` +
-        "is missing. Without teamDomain the JWKS endpoint cannot be derived and without aud " +
-        "the audience claim cannot be validated — every request would fail closed and the " +
-        "Gateway cannot start safely.",
+        `gateway.auth.mode="cloudflare-access" but ${missingPaths} ${verb} missing. ` +
+        "Without both, the JWT verification cannot complete and every request would fail " +
+        "closed — the Gateway cannot start safely.",
       remediation:
         "Set gateway.auth.cloudflareAccess.teamDomain to your Cloudflare Access team subdomain " +
         "(e.g. 'complex') and gateway.auth.cloudflareAccess.aud to the Application Audience " +
@@ -845,7 +846,7 @@ export function collectGatewayCloudflareAccessFindings(cfg: SunClawConfig): Secu
     return findings;
   }
 
-  if (!allowedEmailDomains || allowedEmailDomains.length === 0) {
+  if (allowedEmailDomains.length === 0) {
     findings.push({
       checkId: "gateway.http.cloudflare_access_no_email_allowlist",
       severity: "critical",
