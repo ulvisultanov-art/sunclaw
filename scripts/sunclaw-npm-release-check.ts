@@ -64,7 +64,7 @@ export type NpmDistTagMirrorAuth = {
 };
 const EXPECTED_REPOSITORY_URL = "https://github.com/ulvisultanov-art/sunclaw";
 const OPTIONAL_LOCAL_EMBEDDING_RUNTIME_PACKAGE = "node-llama-cpp";
-const FS_SAFE_PACKAGE = "@sunclaw/fs-safe";
+const FS_SAFE_PACKAGE = "@openclaw/fs-safe";
 const MAX_CALVER_DISTANCE_DAYS = 2;
 const REQUIRED_PACKED_PATHS = [
   "npm-shrinkwrap.json",

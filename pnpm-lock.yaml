@@ -5,6 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
+  sunclaw: workspace:*
   '@anthropic-ai/sdk': 0.100.1
   '@aws-sdk/core': 3.974.13
   '@aws-sdk/xml-builder': 3.972.25
@@ -320,19 +321,19 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/admin-http-rpc:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/alibaba:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -357,7 +358,7 @@ importers:
         specifier: 4.14.2
         version: 4.14.2
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -370,13 +371,13 @@ importers:
         specifier: 1.1.0
         version: 1.1.0
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/anthropic:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -386,19 +387,19 @@ importers:
         specifier: 0.16.1
         version: 0.16.1(zod@4.4.3)
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/arcee:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/azure-speech:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -408,13 +409,13 @@ importers:
         specifier: 1.3.9
         version: 1.3.9
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/brave:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -439,7 +440,7 @@ importers:
         specifier: 8.21.0
         version: 8.21.0
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       undici:
@@ -448,7 +449,7 @@ importers:
 
   extensions/byteplus:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -473,19 +474,19 @@ importers:
         specifier: 8.21.0
         version: 8.21.0
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/cerebras:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/chutes:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -498,16 +499,16 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
-        specifier: 2026.5.28
-        version: 2026.5.28
+      sunclaw:
+        specifier: workspace:*
+        version: link:../..
 
   extensions/cloudflare-ai-gateway:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -526,7 +527,7 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -545,13 +546,13 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/comfy:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -564,31 +565,31 @@ importers:
       '@github/copilot':
         specifier: 1.0.55
         version: 1.0.55
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/copilot-proxy:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/deepgram:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/deepinfra:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/deepseek:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -628,13 +629,13 @@ importers:
         specifier: 1.41.1
         version: 1.41.1
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/diagnostics-prometheus:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -659,13 +660,13 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/diffs-language-pack:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -690,12 +691,12 @@ importers:
         specifier: 8.21.0
         version: 8.21.0
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
-        specifier: 2026.5.28
-        version: 2026.5.28
+      sunclaw:
+        specifier: workspace:*
+        version: link:../..
 
   extensions/document-extract:
     dependencies:
@@ -703,31 +704,31 @@ importers:
         specifier: 0.3.0
         version: 0.3.0
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/duckduckgo:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/elevenlabs:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/exa:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/fal:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -743,12 +744,12 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
-        specifier: 2026.5.28
-        version: 2026.5.28
+      sunclaw:
+        specifier: workspace:*
+        version: link:../..
 
   extensions/file-transfer:
     dependencies:
@@ -759,7 +760,7 @@ importers:
         specifier: 1.1.39
         version: 1.1.39
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -769,13 +770,13 @@ importers:
         specifier: 1.1.39
         version: 1.1.39
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/fireworks:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -785,13 +786,13 @@ importers:
         specifier: 1.4.0
         version: 1.4.0
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/gmi:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -804,7 +805,7 @@ importers:
         specifier: 10.6.2
         version: 10.6.2
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -817,12 +818,12 @@ importers:
         specifier: 1.1.39
         version: 1.1.39
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
-        specifier: 2026.5.28
-        version: 2026.5.28
+      sunclaw:
+        specifier: workspace:*
+        version: link:../..
 
   extensions/googlechat:
     dependencies:
@@ -836,46 +837,46 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
-        specifier: 2026.5.28
-        version: 2026.5.28
+      sunclaw:
+        specifier: workspace:*
+        version: link:../..
 
   extensions/gradium:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/groq:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/huggingface:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/image-generation-core:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/imessage:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/inworld:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -885,19 +886,19 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/kilocode:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/kimi-coding:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -910,16 +911,16 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
-        specifier: 2026.5.28
-        version: 2026.5.28
+      sunclaw:
+        specifier: workspace:*
+        version: link:../..
 
   extensions/litellm:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -929,7 +930,7 @@ importers:
         specifier: 1.1.39
         version: 1.1.39
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -944,7 +945,7 @@ importers:
         specifier: 1.1.39
         version: 1.1.39
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -975,12 +976,12 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
-        specifier: 2026.5.28
-        version: 2026.5.28
+      sunclaw:
+        specifier: workspace:*
+        version: link:../..
 
   extensions/mattermost:
     dependencies:
@@ -991,16 +992,16 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
-        specifier: 2026.5.28
-        version: 2026.5.28
+      sunclaw:
+        specifier: workspace:*
+        version: link:../..
 
   extensions/media-understanding-core:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1016,12 +1017,12 @@ importers:
         specifier: 1.1.39
         version: 1.1.39
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
-        specifier: 2026.5.28
-        version: 2026.5.28
+      sunclaw:
+        specifier: workspace:*
+        version: link:../..
 
   extensions/memory-lancedb:
     dependencies:
@@ -1038,7 +1039,7 @@ importers:
         specifier: 1.1.39
         version: 1.1.39
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1054,12 +1055,12 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
-        specifier: 2026.5.28
-        version: 2026.5.28
+      sunclaw:
+        specifier: workspace:*
+        version: link:../..
 
   extensions/microsoft:
     dependencies:
@@ -1067,24 +1068,24 @@ importers:
         specifier: 1.2.10
         version: 1.2.10
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/microsoft-foundry:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/migrate-claude:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
-        specifier: 2026.5.28
-        version: 2026.5.28
+      sunclaw:
+        specifier: workspace:*
+        version: link:../..
 
   extensions/migrate-hermes:
     dependencies:
@@ -1092,28 +1093,28 @@ importers:
         specifier: 2.9.0
         version: 2.9.0
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
-        specifier: 2026.5.28
-        version: 2026.5.28
+      sunclaw:
+        specifier: workspace:*
+        version: link:../..
 
   extensions/minimax:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/mistral:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/moonshot:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1135,15 +1136,15 @@ importers:
         specifier: 1.1.39
         version: 1.1.39
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       jose:
         specifier: 6.2.3
         version: 6.2.3
-      openclaw:
-        specifier: 2026.5.28
-        version: 2026.5.28
+      sunclaw:
+        specifier: workspace:*
+        version: link:../..
 
   extensions/nextcloud-talk:
     dependencies:
@@ -1151,12 +1152,12 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
-        specifier: 2026.5.28
-        version: 2026.5.28
+      sunclaw:
+        specifier: workspace:*
+        version: link:../..
 
   extensions/nostr:
     dependencies:
@@ -1167,22 +1168,22 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
-        specifier: 2026.5.28
-        version: 2026.5.28
+      sunclaw:
+        specifier: workspace:*
+        version: link:../..
 
   extensions/novita:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/nvidia:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1201,12 +1202,12 @@ importers:
         specifier: 2.9.0
         version: 2.9.0
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
-        specifier: 2026.5.28
-        version: 2026.5.28
+      sunclaw:
+        specifier: workspace:*
+        version: link:../..
 
   extensions/ollama:
     dependencies:
@@ -1214,13 +1215,13 @@ importers:
         specifier: 1.1.39
         version: 1.1.39
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/open-prose:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1230,25 +1231,25 @@ importers:
         specifier: 8.21.0
         version: 8.21.0
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/opencode:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/opencode-go:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/openrouter:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1258,24 +1259,24 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/perplexity:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/pixverse:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
-        specifier: 2026.5.28
-        version: 2026.5.28
+      sunclaw:
+        specifier: workspace:*
+        version: link:../..
 
   extensions/policy:
     dependencies:
@@ -1283,12 +1284,12 @@ importers:
         specifier: 2.2.3
         version: 2.2.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
-        specifier: 2026.5.28
-        version: 2026.5.28
+      sunclaw:
+        specifier: workspace:*
+        version: link:../..
 
   extensions/qa-channel:
     dependencies:
@@ -1299,12 +1300,12 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
-        specifier: 2026.5.28
-        version: 2026.5.28
+      sunclaw:
+        specifier: workspace:*
+        version: link:../..
 
   extensions/qa-lab:
     dependencies:
@@ -1324,21 +1325,21 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/discord':
+      '@sunclaw/discord':
         specifier: workspace:*
         version: link:../discord
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      '@openclaw/slack':
+      '@sunclaw/slack':
         specifier: workspace:*
         version: link:../slack
-      '@openclaw/whatsapp':
+      '@sunclaw/whatsapp':
         specifier: workspace:*
         version: link:../whatsapp
-      openclaw:
-        specifier: 2026.5.28
-        version: 2026.5.28
+      sunclaw:
+        specifier: workspace:*
+        version: link:../..
 
   extensions/qa-matrix:
     dependencies:
@@ -1346,19 +1347,19 @@ importers:
         specifier: 8.3.0
         version: 8.3.0
     devDependencies:
-      '@openclaw/matrix':
+      '@sunclaw/matrix':
         specifier: workspace:*
         version: link:../matrix
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
-        specifier: 2026.5.28
-        version: 2026.5.28
+      sunclaw:
+        specifier: workspace:*
+        version: link:../..
 
   extensions/qianfan:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1380,43 +1381,43 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       '@types/ws':
         specifier: 8.18.1
         version: 8.18.1
-      openclaw:
-        specifier: 2026.5.28
-        version: 2026.5.28
+      sunclaw:
+        specifier: workspace:*
+        version: link:../..
 
   extensions/qwen:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/runway:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/searxng:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/senseaudio:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/sglang:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1426,7 +1427,7 @@ importers:
         specifier: 8.21.0
         version: 8.21.0
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1448,12 +1449,12 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
-        specifier: 2026.5.28
-        version: 2026.5.28
+      sunclaw:
+        specifier: workspace:*
+        version: link:../..
 
   extensions/sms:
     dependencies:
@@ -1461,13 +1462,13 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/stepfun:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1477,13 +1478,13 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/synthetic:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1493,7 +1494,7 @@ importers:
         specifier: 1.1.39
         version: 1.1.39
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1515,13 +1516,13 @@ importers:
         specifier: 8.3.0
         version: 8.3.0
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/tencent:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1543,16 +1544,16 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
-        specifier: 2026.5.28
-        version: 2026.5.28
+      sunclaw:
+        specifier: workspace:*
+        version: link:../..
 
   extensions/together:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1562,16 +1563,16 @@ importers:
         specifier: 0.8.0
         version: 0.8.0
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
-        specifier: 2026.5.28
-        version: 2026.5.28
+      sunclaw:
+        specifier: workspace:*
+        version: link:../..
 
   extensions/tts-local-cli:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1590,31 +1591,31 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/venice:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/vercel-ai-gateway:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/video-generation-core:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/vllm:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1633,28 +1634,28 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
-        specifier: 2026.5.28
-        version: 2026.5.28
+      sunclaw:
+        specifier: workspace:*
+        version: link:../..
 
   extensions/volcengine:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/voyage:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/vydra:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1667,7 +1668,7 @@ importers:
         specifier: 0.18.12
         version: 0.18.12
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1677,7 +1678,7 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1693,12 +1694,12 @@ importers:
         specifier: 1.1.39
         version: 1.1.39
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
-        specifier: 2026.5.28
-        version: 2026.5.28
+      sunclaw:
+        specifier: workspace:*
+        version: link:../..
 
   extensions/workboard:
     dependencies:
@@ -1706,12 +1707,12 @@ importers:
         specifier: 1.1.39
         version: 1.1.39
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
-        specifier: 2026.5.28
-        version: 2026.5.28
+      sunclaw:
+        specifier: workspace:*
+        version: link:../..
 
   extensions/xai:
     dependencies:
@@ -1719,7 +1720,7 @@ importers:
         specifier: 1.1.39
         version: 1.1.39
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       ws:
@@ -1728,13 +1729,13 @@ importers:
 
   extensions/xiaomi:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/zai:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1744,12 +1745,12 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
-        specifier: 2026.5.28
-        version: 2026.5.28
+      sunclaw:
+        specifier: workspace:*
+        version: link:../..
 
   extensions/zalouser:
     dependencies:
@@ -1763,22 +1764,22 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@sunclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
-        specifier: 2026.5.28
-        version: 2026.5.28
+      sunclaw:
+        specifier: workspace:*
+        version: link:../..
 
   packages/acp-core:
     dependencies:
-      '@openclaw/normalization-core':
+      '@sunclaw/normalization-core':
         specifier: workspace:*
         version: link:../normalization-core
 
   packages/agent-core:
     dependencies:
-      '@openclaw/llm-core':
+      '@sunclaw/llm-core':
         specifier: workspace:*
         version: link:../llm-core
       ignore:
@@ -1793,7 +1794,7 @@ importers:
 
   packages/gateway-client:
     dependencies:
-      '@openclaw/gateway-protocol':
+      '@sunclaw/gateway-protocol':
         specifier: workspace:*
         version: link:../gateway-protocol
       ipaddr.js:
@@ -1817,7 +1818,7 @@ importers:
 
   packages/llm-runtime:
     dependencies:
-      '@openclaw/llm-core':
+      '@sunclaw/llm-core':
         specifier: workspace:*
         version: link:../llm-core
 
@@ -1832,7 +1833,7 @@ importers:
 
   packages/media-core:
     dependencies:
-      '@openclaw/normalization-core':
+      '@sunclaw/normalization-core':
         specifier: workspace:*
         version: link:../normalization-core
       file-type:
@@ -1861,15 +1862,15 @@ importers:
 
   packages/sdk:
     dependencies:
-      '@openclaw/gateway-client':
+      '@sunclaw/gateway-client':
         specifier: workspace:*
         version: link:../gateway-client
 
   packages/speech-core:
     dependencies:
-      openclaw:
-        specifier: 2026.5.28
-        version: 2026.5.28
+      sunclaw:
+        specifier: workspace:*
+        version: link:../..
 
   packages/terminal-core:
     dependencies:
@@ -1892,10 +1893,10 @@ importers:
       '@noble/ed25519':
         specifier: 3.1.0
         version: 3.1.0
-      '@openclaw/media-core':
+      '@sunclaw/media-core':
         specifier: workspace:*
         version: link:../packages/media-core
-      '@openclaw/normalization-core':
+      '@sunclaw/normalization-core':
         specifier: workspace:*
         version: link:../packages/normalization-core
       dompurify:
@@ -2445,10 +2446,6 @@ packages:
     resolution: {integrity: sha512-3yJ255e4ag3wfZu/DSxeOZK1UtnqNxnspmLaQetGT0pDkThNZoHs+Zg6dgZZ19JEVomXygvfHn9lNpICZuYtEA==}
     engines: {node: '>=22.12.0'}
 
-  '@earendil-works/pi-tui@0.76.0':
-    resolution: {integrity: sha512-TWQEWqc38gVRYr/VTrlfePQPpJk938gNNLL1xuv0M+9cTkVr880/Q3baZQrxKoLrmN/MmVx7TyR8knYZGxTqqg==}
-    engines: {node: '>=22.19.0'}
-
   '@earendil-works/pi-tui@0.78.0':
     resolution: {integrity: sha512-3a705FnsVVUhAyceShNB3kS2rpxcxLcx+hqB0u6MMMpHwQGbW+m++MqA6r7eOzq/8FLx5e3vDh38h/SVTk2qzw==}
     engines: {node: '>=22.19.0'}
@@ -2689,15 +2686,6 @@ packages:
   '@github/copilot@1.0.55':
     resolution: {integrity: sha512-wqzI0L7krORW6jDAQPx7VnInka5BYN5yVgu+dpUK4w8xP5RgnOBa6kRoXpydj/9O1ufs0k6RKRtQjsVLp52TRw==}
     hasBin: true
-
-  '@google/genai@2.6.0':
-    resolution: {integrity: sha512-HjoW3mPuEn7pnuKABJl9VbDoWDSF4nbwYKYvYYor7YjPeDxrrBxHzu2d1Prcd+BAuC4w+85UP6y7ZdcrQAoO7g==}
-    engines: {node: '>=20.0.0'}
-    peerDependencies:
-      '@modelcontextprotocol/sdk': ^1.25.2
-    peerDependenciesMeta:
-      '@modelcontextprotocol/sdk':
-        optional: true
 
   '@google/genai@2.7.0':
     resolution: {integrity: sha512-tv0DRtcndt2oEhBYy+5mA0TaXH98+L1Gt0AP9unBfH7DP20KhB7+O3QqAN1Lz+laMARGTHS7BFQSNpLbl4gm1g==}
@@ -4624,10 +4612,6 @@ packages:
   cjs-module-lexer@2.2.0:
     resolution: {integrity: sha512-4bHTS2YuzUvtoLjdy+98ykbNB5jS0+07EvFNXerqZQJ89F7DI6ET7OQo/HJuW6K0aVsKA9hj9/RVb2kQVOrPDQ==}
 
-  clawpdf@0.2.0:
-    resolution: {integrity: sha512-Za4HD3CMRHNqOXOOyVJiQLnEuezRZR/oXiBzraTwL5XEQZuBwFxnyC1UzN4AjQWV2JrLN3ItbzfPRGE0gGOVwg==}
-    engines: {node: '>=20'}
-
   clawpdf@0.3.0:
     resolution: {integrity: sha512-41+3AnKk9yek2sm+/9XvUlDTN8Wi+ag7fmxZuqw+ySn4lqaf/fCgLeamqPLiXY4gVbizKEHGoTG/JrIIFNE2rw==}
     engines: {node: '>=20'}
@@ -5262,10 +5246,6 @@ packages:
   hosted-git-info@10.1.1:
     resolution: {integrity: sha512-DeOnSPAvOndYKfw075gt8yZzQ7S2hNztw34zBTfhIzLhmBTswIBg5/y+pqu/VD5cYWm5goAFTusDmUEmKZ0PEQ==}
     engines: {node: ^22.22.2 || ^24.15.0 || >=26.0.0}
-
-  hosted-git-info@9.0.3:
-    resolution: {integrity: sha512-Hc+ghLoSt6QaYZUv0WBiIvmMDZuZZ7oaDvdH8MbfOO4lOsxdXLEvuC6ePoGs9H1X9oCLyq6+NVN0MKqD+ydxyg==}
-    engines: {node: ^20.17.0 || >=22.9.0}
 
   html-encoding-sniffer@6.0.0:
     resolution: {integrity: sha512-CV9TW3Y3f8/wT0BRFc1/KAVQ3TUHiXmaAb6VW9vtiMFf7SLoMd1PdAc4W3KFOFETBJUb90KatHqlsZMWV+R9Gg==}
@@ -6060,18 +6040,6 @@ packages:
     resolution: {integrity: sha512-YgBpdJHPyQ2UE5x+hlSXcnejzAvD0b22U2OuAP+8OnlJT+PjWPxtgmGqKKc+RgTM63U9gN0YzrYc71R2WT/hTA==}
     engines: {node: '>=18'}
 
-  openai@6.39.0:
-    resolution: {integrity: sha512-O61LIsimY3acVabwvomwFhwrnN36yvHY2quIfy9keEcFytGgWeV35yLHQ6NVMLSBxRpHmcg2yuhCnlu2HT4pLQ==}
-    hasBin: true
-    peerDependencies:
-      ws: ^8.18.0
-      zod: ^3.25 || ^4.0
-    peerDependenciesMeta:
-      ws:
-        optional: true
-      zod:
-        optional: true
-
   openai@6.39.1:
     resolution: {integrity: sha512-z3dO9fEWOXBzlXynVb/xZ/tujzUjFWQWn3C0n0mw6Vo0zJTbEkaN4b2cLWjhJ6haJQx8LlREoafHRl+Gu/Hl+A==}
     hasBin: true
@@ -6083,11 +6051,6 @@ packages:
         optional: true
       zod:
         optional: true
-
-  openclaw@2026.5.28:
-    resolution: {integrity: sha512-p7jGN9wzCrqEvHNI6Y7+eh6DWoYDzJ1iQGKTm8xqQ2uQ9/2mY1CCf87WoZeb0+m3eHKSGchlI3tN33fE1lMtEA==}
-    engines: {node: '>=22.19.0'}
-    hasBin: true
 
   opus-decoder@0.7.11:
     resolution: {integrity: sha512-+e+Jz3vGQLxRTBHs8YJQPRPc1Tr+/aC6coV/DlZylriA29BdHQAYXhvNRKtjftof17OFng0+P4wsFIqQu3a48A==}
@@ -6385,10 +6348,6 @@ packages:
   range-parser@1.2.1:
     resolution: {integrity: sha512-Hrgsx+orqoygnmhFbKaHE6c296J+HTAQXoxEF6gNupROmmGJRoyzfG3ccAveqCBrwr/2yxQ5BVd/GTl5agOwSg==}
     engines: {node: '>= 0.6'}
-
-  rastermill@0.3.0:
-    resolution: {integrity: sha512-4g2i0I7M5sba//lFBh19Wi0hDGw8o+isnt/BtEyqQXIZaYclhcNBwL/Fw/6gDCp7aaLwQHADuUvyHCB0Oat5Vw==}
-    engines: {node: '>=20'}
 
   rastermill@0.3.1:
     resolution: {integrity: sha512-CX4nij6+ZLHYIaojJNfLTr7W+AiH/IPJi6E9Aw1br2///1KZL2KBOHd68rkcLedc47MPvb4hhH+fzYeGFa4A/Q==}
@@ -8036,11 +7995,6 @@ snapshots:
       - opusscript
       - utf-8-validate
 
-  '@earendil-works/pi-tui@0.76.0':
-    dependencies:
-      get-east-asian-width: 1.6.0
-      marked: 15.0.12
-
   '@earendil-works/pi-tui@0.78.0':
     dependencies:
       get-east-asian-width: 1.6.0
@@ -8188,19 +8142,6 @@ snapshots:
       '@github/copilot-linuxmusl-x64': 1.0.55
       '@github/copilot-win32-arm64': 1.0.55
       '@github/copilot-win32-x64': 1.0.55
-
-  '@google/genai@2.6.0(@modelcontextprotocol/sdk@1.29.0(zod@4.4.3))':
-    dependencies:
-      google-auth-library: 10.6.2
-      p-retry: 4.6.2
-      protobufjs: 8.4.0
-      ws: 8.21.0
-    optionalDependencies:
-      '@modelcontextprotocol/sdk': 1.29.0(zod@4.4.3)
-    transitivePeerDependencies:
-      - bufferutil
-      - supports-color
-      - utf-8-validate
 
   '@google/genai@2.7.0(@modelcontextprotocol/sdk@1.29.0(zod@4.4.3))':
     dependencies:
@@ -10115,8 +10056,6 @@ snapshots:
 
   cjs-module-lexer@2.2.0: {}
 
-  clawpdf@0.2.0: {}
-
   clawpdf@0.3.0: {}
 
   cli-table3@0.6.5:
@@ -10841,10 +10780,6 @@ snapshots:
   hookified@2.2.0: {}
 
   hosted-git-info@10.1.1:
-    dependencies:
-      lru-cache: 11.5.1
-
-  hosted-git-info@9.0.3:
     dependencies:
       lru-cache: 11.5.1
 
@@ -11827,86 +11762,10 @@ snapshots:
       is-inside-container: 1.0.0
       wsl-utils: 0.1.0
 
-  openai@6.39.0(ws@8.21.0)(zod@4.4.3):
-    optionalDependencies:
-      ws: 8.21.0
-      zod: 4.4.3
-
   openai@6.39.1(ws@8.21.0)(zod@4.4.3):
     optionalDependencies:
       ws: 8.21.0
       zod: 4.4.3
-
-  openclaw@2026.5.28:
-    dependencies:
-      '@agentclientprotocol/sdk': 0.22.1(zod@4.4.3)
-      '@anthropic-ai/sdk': 0.100.1(zod@4.4.3)
-      '@clack/core': 1.3.1
-      '@clack/prompts': 1.4.0
-      '@earendil-works/pi-tui': 0.76.0
-      '@google/genai': 2.6.0(@modelcontextprotocol/sdk@1.29.0(zod@4.4.3))
-      '@grammyjs/runner': 2.0.3(grammy@1.43.0)
-      '@grammyjs/transformer-throttler': 1.2.1(grammy@1.43.0)
-      '@homebridge/ciao': 1.3.9
-      '@lydell/node-pty': 1.2.0-beta.12
-      '@mistralai/mistralai': 2.2.5
-      '@modelcontextprotocol/sdk': 1.29.0(zod@4.4.3)
-      '@mozilla/readability': 0.6.0
-      '@openclaw/fs-safe': 0.3.0
-      '@openclaw/proxyline': 0.3.3(undici@8.3.0)
-      '@silvia-odwyer/photon-node': 0.3.4
-      chalk: 5.6.2
-      chokidar: 5.0.0
-      clawpdf: 0.2.0
-      commander: 14.0.3
-      croner: 10.0.1
-      cross-spawn: 7.0.6
-      diff: 9.0.0
-      dotenv: 17.4.2
-      express: 5.2.1
-      file-type: 22.0.1
-      glob: 13.0.6
-      grammy: 1.43.0
-      highlight.js: 11.11.1
-      hosted-git-info: 9.0.3
-      ignore: 7.0.5
-      ipaddr.js: 2.4.0
-      jiti: 2.7.0
-      json5: 2.2.3
-      jszip: 3.10.1
-      kysely: 0.29.2
-      linkedom: 0.18.12
-      markdown-it: 14.2.0
-      minimatch: 10.2.5
-      node-edge-tts: 1.2.10
-      openai: 6.39.0(ws@8.21.0)(zod@4.4.3)
-      partial-json: 0.1.7
-      playwright-core: 1.60.0
-      proper-lockfile: 4.1.2
-      qrcode: 1.5.4
-      quickjs-wasi: 3.0.0
-      rastermill: 0.3.0
-      tar: 7.5.15
-      tree-sitter-bash: 0.25.1
-      tslog: 4.10.2
-      typebox: 1.1.39
-      typescript: 6.0.3
-      undici: 8.3.0
-      web-push: 3.6.7
-      web-tree-sitter: 0.26.9
-      ws: 8.21.0
-      yaml: 2.9.0
-      zod: 4.4.3
-    optionalDependencies:
-      sqlite-vec: 0.1.9
-    transitivePeerDependencies:
-      - '@cfworker/json-schema'
-      - bufferutil
-      - canvas
-      - encoding
-      - supports-color
-      - tree-sitter
-      - utf-8-validate
 
   opus-decoder@0.7.11:
     dependencies:
@@ -12230,10 +12089,6 @@ snapshots:
   quickjs-wasi@3.0.0: {}
 
   range-parser@1.2.1: {}
-
-  rastermill@0.3.0:
-    dependencies:
-      '@silvia-odwyer/photon-node': 0.3.4
 
   rastermill@0.3.1:
     dependencies:

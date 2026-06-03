@@ -1,4 +1,4 @@
-import { createAmbientNodeProxyAgent, hasAmbientNodeProxyConfigured } from "@sunclaw/proxyline";
+import { createAmbientNodeProxyAgent, hasAmbientNodeProxyConfigured } from "@openclaw/proxyline";
 import type { z } from "zod";
 import type { SunClawConfig } from "../config/config.js";
 import { resolveActiveManagedProxyTlsOptions } from "../infra/net/proxy/managed-proxy-undici.js";

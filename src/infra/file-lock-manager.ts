@@ -4,4 +4,4 @@ export {
   createFileLockManager,
   type FileLockHeldEntry,
   type FileLockManager,
-} from "@sunclaw/fs-safe/file-lock";
+} from "@openclaw/fs-safe/file-lock";

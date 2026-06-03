@@ -1,13 +1,13 @@
-import { configureFsSafePython } from "@sunclaw/fs-safe/config";
-export { root } from "@sunclaw/fs-safe/root";
-export { isPathInside, isPathInsideWithRealpath } from "@sunclaw/fs-safe/path";
+import { configureFsSafePython } from "@openclaw/fs-safe/config";
+export { root } from "@openclaw/fs-safe/root";
+export { isPathInside, isPathInsideWithRealpath } from "@openclaw/fs-safe/path";
 export {
   assertNoSymlinkParents,
   readRegularFile,
   statRegularFile,
   type RegularFileStatResult,
-} from "@sunclaw/fs-safe/advanced";
-export { walkDirectory, type WalkDirectoryEntry } from "@sunclaw/fs-safe/walk";
+} from "@openclaw/fs-safe/advanced";
+export { walkDirectory, type WalkDirectoryEntry } from "@openclaw/fs-safe/walk";
 
 const hasPythonModeOverride =
   process.env.FS_SAFE_PYTHON_MODE != null || process.env.SUNCLAW_FS_SAFE_PYTHON_MODE != null;

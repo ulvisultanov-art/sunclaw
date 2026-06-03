@@ -69,6 +69,10 @@ REPLACEMENTS=(
   's|Openclaw|Sunclaw|g'
   's|openclaw|sunclaw|g'
   's|OPENCLAW|SUNCLAW|g'
+  # Externally-owned npm packages — Anthropic still publishes these
+  # under the @openclaw scope, so we must NOT rebrand them. Restore.
+  's|@sunclaw/fs-safe|@openclaw/fs-safe|g'
+  's|@sunclaw/proxyline|@openclaw/proxyline|g'
 )
 
 skip_file() {

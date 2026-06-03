@@ -215,8 +215,8 @@ function shouldNeverBundleDependency(id: string): boolean {
 
 function shouldAlwaysBundleDependency(id: string): boolean {
   return (
-    id === "@sunclaw/fs-safe" ||
-    id.startsWith("@sunclaw/fs-safe/") ||
+    id === "@openclaw/fs-safe" ||
+    id.startsWith("@openclaw/fs-safe/") ||
     id === "@sunclaw/normalization-core" ||
     id.startsWith("@sunclaw/normalization-core/") ||
     id === "@sunclaw/media-core" ||

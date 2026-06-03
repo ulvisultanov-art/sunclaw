@@ -1,6 +1,6 @@
 import fsSync from "node:fs";
 import path from "node:path";
-import { readRootJsonObjectSync } from "@sunclaw/fs-safe/json";
+import { readRootJsonObjectSync } from "@openclaw/fs-safe/json";
 import { isRecord } from "@sunclaw/normalization-core/record-coerce";
 
 export function expectedIntegrityForUpdate(

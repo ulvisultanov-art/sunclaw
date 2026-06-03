@@ -7,4 +7,4 @@ export {
   type TempWorkspaceSync,
   withTempWorkspace,
   withTempWorkspaceSync,
-} from "@sunclaw/fs-safe/temp";
+} from "@openclaw/fs-safe/temp";
