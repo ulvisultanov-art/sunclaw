@@ -8,6 +8,8 @@
  * - Re-fetches eagerly when the requested `kid` is missing from cache —
  *   handles Cloudflare key rotation (new keys appear instantly without
  *   waiting for the 6h TTL to expire).
+ * - Deduplicates concurrent fetches for the same cache key so N parallel
+ *   callers issue exactly one upstream request.
  *
  * Surface kept tiny on purpose: this module is only consumed by
  * `./verify.ts`, which is the only entry point the rest of the gateway
@@ -43,6 +45,9 @@ interface CacheEntry {
 
 const cache = new Map<string, CacheEntry>();
 
+/** In-flight fetch promises keyed by cache key — deduplicates concurrent callers. */
+const inflight = new Map<string, Promise<JwksDocument>>();
+
 export async function fetchAndCacheJwks(params: FetchJwksParams): Promise<JwksDocument> {
   const { teamDomain, requireKid, ttlMs = DEFAULT_TTL_MS } = params;
   const cacheKey = teamDomain;
@@ -57,17 +62,43 @@ export async function fetchAndCacheJwks(params: FetchJwksParams): Promise<JwksDo
     return cached.document;
   }
 
-  const url = `https://${teamDomain}.cloudflareaccess.com/cdn-cgi/access/certs`;
-  const response = await fetch(url, { method: "GET" });
-  if (!response.ok) {
-    throw new Error(`JWKS fetch failed: ${url} returned HTTP ${response.status}`);
+  // Deduplicate: if a fetch is already in flight for this key, await it.
+  const pending = inflight.get(cacheKey);
+  if (pending !== undefined) {
+    return pending;
   }
-  const document = (await response.json()) as JwksDocument;
-  cache.set(cacheKey, { document, fetchedAt: now, ttlMs });
-  return document;
+
+  const url = `https://${teamDomain}.cloudflareaccess.com/cdn-cgi/access/certs`;
+
+  const fetchPromise = (async (): Promise<JwksDocument> => {
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+        signal: AbortSignal.timeout(5000),
+      });
+      if (!response.ok) {
+        throw new Error(`JWKS fetch failed: ${url} returned HTTP ${response.status}`);
+      }
+
+      const parsed: unknown = await response.json();
+      if (!parsed || !Array.isArray((parsed as { keys?: unknown }).keys)) {
+        throw new Error(`JWKS response from ${url} is malformed: missing keys array`);
+      }
+      const document = parsed as JwksDocument;
+
+      cache.set(cacheKey, { document, fetchedAt: Date.now(), ttlMs });
+      return document;
+    } finally {
+      inflight.delete(cacheKey);
+    }
+  })();
+
+  inflight.set(cacheKey, fetchPromise);
+  return fetchPromise;
 }
 
-/** Test-only — clears the in-process cache between cases. */
+/** Test-only — clears the in-process cache and inflight map between cases. */
 export function _resetJwksCacheForTests(): void {
   cache.clear();
+  inflight.clear();
 }

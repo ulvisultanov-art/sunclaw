@@ -40,4 +40,36 @@ describe("jwks-cache", () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response("nope", { status: 503 }));
     await expect(fetchAndCacheJwks({ teamDomain: "complex" })).rejects.toThrow(/JWKS fetch failed/);
   });
+
+  it("dedupes concurrent fetches into a single upstream call", async () => {
+    const sample = { keys: [{ kid: "k1", kty: "RSA", n: "x", e: "AQAB" }] };
+    let resolveFetch: (r: Response) => void = () => {};
+    const fetchSpy = vi.spyOn(globalThis, "fetch").mockImplementation(
+      () =>
+        new Promise<Response>((resolve) => {
+          resolveFetch = resolve;
+        }),
+    );
+    const a = fetchAndCacheJwks({ teamDomain: "complex" });
+    const b = fetchAndCacheJwks({ teamDomain: "complex" });
+    resolveFetch(new Response(JSON.stringify(sample), { status: 200 }));
+    const [resA, resB] = await Promise.all([a, b]);
+    expect(resA).toEqual(sample);
+    expect(resB).toEqual(sample);
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it("throws when JWKS body is missing a keys array", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      new Response(JSON.stringify({ public_certs: [] }), { status: 200 }),
+    );
+    await expect(fetchAndCacheJwks({ teamDomain: "complex" })).rejects.toThrow(/malformed/i);
+  });
+
+  it("propagates abort/timeout errors from the fetch call", async () => {
+    vi.spyOn(globalThis, "fetch").mockRejectedValue(
+      Object.assign(new Error("The operation was aborted"), { name: "AbortError" }),
+    );
+    await expect(fetchAndCacheJwks({ teamDomain: "complex" })).rejects.toThrow();
+  });
 });
