@@ -10,10 +10,12 @@ name: SunClaw Fork Invariants
 #      idempotent against the input/expected fixtures).
 #   2. No raw OpenClaw / openclaw / OPENCLAW strings have leaked back into
 #      tracked sources outside the documented allowlist (LICENSE, NOTICE,
-#      UPSTREAM.md, scripts/rebrand.sh, tests/fixtures/rebrand/, docs/sunclaw/,
-#      CHANGELOG.md). External package scopes @openclaw/fs-safe and
-#      @openclaw/proxyline are also allowed because Anthropic publishes them
-#      under that scope.
+#      README.md, UPSTREAM.md, scripts/rebrand.sh, tests/fixtures/rebrand/,
+#      docs/sunclaw/, CHANGELOG.md). README.md is allowlisted because the
+#      MIT fork-attribution convention requires naming the upstream project
+#      ("Forked from OpenClaw, ..."). External package scopes
+#      @openclaw/fs-safe and @openclaw/proxyline are also allowed because
+#      Anthropic publishes them under that scope.
 #   3. UPSTREAM.md exists and records a pinned upstream SHA -- required for
 #      scripts/upstream-merge.sh (Task 16) to know which commit we are tracking.
 #
@@ -63,6 +65,7 @@ jobs:
           if git grep -nIE 'OpenClaw|openclaw|OPENCLAW' -- \
             ':!LICENSE' \
             ':!NOTICE' \
+            ':!README.md' \
             ':!UPSTREAM.md' \
             ':!CHANGELOG.md' \
             ':!scripts/rebrand.sh' \

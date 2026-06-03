@@ -1,0 +1,19 @@
+SunClaw
+Copyright 2026 SUN Corporation
+
+This product is a fork of OpenClaw (https://github.com/openclaw/openclaw),
+licensed under the MIT License. The upstream copyright notice is preserved
+in the LICENSE file and applies to all upstream-authored code.
+
+SunClaw additions, modifications, and SUN-specific skills are:
+  Copyright 2026 SUN Corporation, under the MIT License.
+
+For details see:
+  UPSTREAM.md      -- pinned upstream commit + sync cadence
+  CHANGELOG.md     -- enumerated SunClaw-specific changes
+  docs/sunclaw/    -- architecture/decision records (ADRs) for each
+                      M0 task showing where this fork diverges from
+                      (or deliberately tracks) upstream.
+
+Third-party notices for incorporated or adapted code are recorded in
+THIRD_PARTY_NOTICES.md.
