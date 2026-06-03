@@ -7,6 +7,37 @@ format with [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Upstream
 OpenClaw release notes (dated `YYYY.M.D`) are preserved below for reference; do
 not re-tag them — they were cut by upstream against their own version line.
 
+## [0.2.1] — 2026-06-03 (M2 — Cloudflare Access JWT for ClawHub)
+
+Tracks [ECO-2088](https://complex.az/ws/projects/ecosystem-master-plan?task=ECO-2088)
+(M2 milestone) under programme [ECO-2077](https://complex.az/ws/projects/ecosystem-master-plan?task=ECO-2077).
+Fork source tag: `sunclaw-v0.2.1`. Image tag: `registry.complex.az/sunclaw:sunclaw-v0.2.1`.
+
+### Added
+
+- New `gateway.auth.mode = "cloudflare-access"` auth mode. Verifies the
+  Cloudflare Access JWT against the per-team JWKS endpoint with AUD
+  pinning and an email-domain allowlist. See
+  `docs/sunclaw/m2-clawhub-access.md`.
+- JWKS in-process cache (6h TTL, refetch on `kid` miss, inflight dedup,
+  fetch-timeout via `AbortSignal.timeout`, array shape guard) at
+  `src/gateway/cloudflare-access/jwks-cache.ts`.
+- Audit findings `gateway.http.cloudflare_access_misconfig` (critical)
+  and `gateway.http.cloudflare_access_no_email_allowlist` (high).
+- `assertGatewayAuthConfigured` now fail-fasts a misconfigured
+  `cloudflare-access` deployment at startup (missing config block, or
+  empty `teamDomain` / `aud` / `allowedEmailDomains`).
+- `GatewayAuthResult.subject` field (optional, stable identity from
+  verified JWT `sub` claim).
+
+### Changed
+
+- `GatewayAuthResult.method` union extended with `"cloudflare-access"`.
+- Snapshot protocol `authMode` literal extended with
+  `"cloudflare-access"` so health-state snapshots type-check.
+
+ECO-2088 / programme ECO-2077.
+
 ## [0.1.0] — 2026-06-03 (M0 — Bootstrap & Fork)
 
 First tagged SunClaw cut. Tracks
