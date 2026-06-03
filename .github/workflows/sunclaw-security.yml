@@ -1,0 +1,116 @@
+name: SunClaw Security CI
+
+# Complementary to upstream's existing security workflows -- this workflow only
+# runs checks that upstream's CI does NOT already perform:
+#
+#   * gitleaks       -- scans the git *history* for committed secrets.
+#                       Upstream has dependency-guard.yml (dep-change autoscrub)
+#                       and CodeQL / OpenGrep (source-tree SAST) but nothing
+#                       walks the commit log looking for leaked API keys.
+#   * pnpm audit     -- runs the npm-registry advisory DB against the live
+#                       workspace lockfile. CodeQL/OpenGrep find code smells,
+#                       not "this version of axios has a published CVE".
+#   * osv-scanner    -- runs the OSV (open source vulnerability) database --
+#                       broader cross-ecosystem coverage than npm advisory DB,
+#                       catches issues that have not been mirrored to npm yet.
+#
+# We DO NOT duplicate upstream's CodeQL / OpenGrep / dependency-guard pipelines
+# -- they are heavyweight, well-maintained, and would just burn CI minutes if
+# re-run from a fork-side workflow.
+#
+# Security note: no run: block here interpolates github.event.* fields. All
+# shell substitutions use $-vars sourced from the checkout itself. PR titles /
+# bodies / refs cannot inject into the shell. permissions are read-only.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Weekly Monday 06:00 UTC -- OSV / npm advisory DBs are updated daily but
+    # weekly cadence catches retroactive disclosures without spamming CI.
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sunclaw-security-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gitleaks:
+    name: gitleaks (git-history secret scan)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout (full history for gitleaks detect)
+        uses: actions/checkout@v4
+        with:
+          # gitleaks detect mode walks the full commit log; shallow clones
+          # would miss historical leaks. fetch-depth: 0 = unshallow.
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Run gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          # Our SunClaw-specific rules live in .gitleaks.toml; extend.useDefault
+          # in that file pulls in the gitleaks-maintained baseline rule set.
+          GITLEAKS_CONFIG: .gitleaks.toml
+          # GITHUB_TOKEN scope follows the workflow-level read-only declaration.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  pnpm-audit:
+    name: pnpm audit (npm advisory DB)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.19.0"
+
+      - name: Setup pnpm via upstream composite action
+        # Reuses the same pnpm bootstrap that upstream's ci.yml uses (corepack
+        # prepare from packageManager pin in package.json). This keeps our
+        # audit job aligned with how production builds resolve pnpm, avoiding
+        # version skew between ci.yml and sunclaw-security.yml.
+        uses: ./.github/actions/setup-pnpm-store-cache
+        with:
+          node-version: "22.19.0"
+
+      - name: Install (frozen lockfile, no postinstall)
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Audit production dependencies (fail on High / Critical)
+        # --prod skips devDependencies (test-only CVEs are noise for this gate;
+        # OpenGrep + CodeQL already cover SAST on dev tooling). --audit-level
+        # tightens the bar to High+Critical only.
+        run: pnpm audit --prod --audit-level=high
+
+  osv-scanner:
+    name: osv-scanner (OSV database)
+    # Reusable workflow -- must be invoked at the job level (not as a step),
+    # which is why this job has `uses:` instead of `runs-on:` + `steps:`. The
+    # reusable workflow handles its own checkout, scan, and SARIF upload.
+    # Permissions are inherited from the caller via `permissions:` on the
+    # called workflow's declared needs.
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    uses: google/osv-scanner-action/.github/workflows/osv-scanner-reusable.yml@v1.9.0
+    with:
+      # Scan the lockfile directly -- faster + more deterministic than walking
+      # node_modules. OSV covers npm + any other manifests that appear in the
+      # tree (cargo, go.sum, pip) which is forward-proof.
+      scan-args: |-
+        --lockfile=pnpm-lock.yaml
+        --recursive
+        ./

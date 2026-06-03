@@ -1,0 +1,64 @@
+# SunClaw gitleaks config.
+#
+# Upstream's existing security CI covers SAST (CodeQL + OpenGrep) and
+# dependency-change detection (.github/workflows/dependency-guard.yml), but
+# nothing scans the *git history* for committed credentials. gitleaks fills
+# that gap. Defaults from gitleaks ship with rules for AWS / GCP / Slack /
+# generic API key shapes -- we extend them with provider-specific rules for
+# the LLM keys most likely to leak in this codebase (OpenAI, Anthropic).
+#
+# Run locally: gitleaks detect --config .gitleaks.toml --redact --no-banner
+
+title = "SunClaw gitleaks config"
+
+[extend]
+# Inherit the gitleaks-maintained default rule set (AWS, GCP, Slack, Stripe,
+# generic-api-key, etc.) and layer our additions on top. Without this the
+# config below REPLACES the defaults instead of extending them.
+useDefault = true
+
+# ----------------------------------------------------------------------------
+# Allowlist: paths where matches are expected / harmless.
+# ----------------------------------------------------------------------------
+[[allowlists]]
+description = "Test fixtures + rebrand fixtures intentionally contain placeholder credential-shaped strings"
+paths = [
+  '''tests/fixtures/.*''',
+  '''.*__tests__/.*''',
+  '''.*__mocks__/.*''',
+  '''.*\.test\..*''',
+  '''.*\.spec\..*''',
+  '''.*\.fixture\..*''',
+  '''.*-fixture\..*''',
+  '''.*\.mock\..*''',
+  '''.*-mock\..*''',
+]
+
+[[allowlists]]
+description = "Lockfiles -- pnpm-lock.yaml content hashes look like credentials to generic regexes"
+paths = [
+  '''pnpm-lock\.yaml''',
+  '''package-lock\.json''',
+  '''yarn\.lock''',
+]
+
+# ----------------------------------------------------------------------------
+# Provider-specific rules (additive over defaults).
+# ----------------------------------------------------------------------------
+[[rules]]
+id = "openai-key"
+description = "OpenAI API key (sk-... 48-char tail)"
+regex = '''sk-[A-Za-z0-9]{48}'''
+tags = ["llm", "openai", "key"]
+
+[[rules]]
+id = "anthropic-key"
+description = "Anthropic API key (sk-ant-... 95-char tail)"
+regex = '''sk-ant-[A-Za-z0-9_\-]{95}'''
+tags = ["llm", "anthropic", "key"]
+
+[[rules]]
+id = "openrouter-key"
+description = "OpenRouter API key (sk-or-... prefix)"
+regex = '''sk-or-v[0-9]-[A-Za-z0-9]{64}'''
+tags = ["llm", "openrouter", "key"]
