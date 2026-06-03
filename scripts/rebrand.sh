@@ -15,6 +15,7 @@ EXCLUDE_DIRS=(
 # Exact filenames to skip.
 EXCLUDE_FILENAMES=(
   "LICENSE" "NOTICE" "pnpm-lock.yaml" "yarn.lock" "package-lock.json"
+  "rebrand.sh" "test-rebrand.sh"
 )
 
 # File-name globs to skip (binary / lock formats).
@@ -57,6 +58,8 @@ REPLACEMENTS=(
   's|openclaw\.ai|docs.sunclaw.complex.az|g'
   's|github\.com/openclaw/openclaw|github.com/ulvisultanov-art/sunclaw|g'
   's|OpenClaw|SunClaw|g'
+  's|openClaw|sunClaw|g'
+  's|Openclaw|Sunclaw|g'
   's|openclaw|sunclaw|g'
   's|OPENCLAW|SUNCLAW|g'
 )
