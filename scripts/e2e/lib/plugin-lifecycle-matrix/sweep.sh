@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-source scripts/lib/openclaw-e2e-instance.sh
+source scripts/lib/sunclaw-e2e-instance.sh
 
-openclaw_e2e_eval_test_state_from_b64 "${OPENCLAW_TEST_STATE_SCRIPT_B64:?missing OPENCLAW_TEST_STATE_SCRIPT_B64}"
-openclaw_e2e_install_package /tmp/openclaw-plugin-lifecycle-install.log "mounted OpenClaw package" /tmp/npm-prefix
+sunclaw_e2e_eval_test_state_from_b64 "${SUNCLAW_TEST_STATE_SCRIPT_B64:?missing SUNCLAW_TEST_STATE_SCRIPT_B64}"
+sunclaw_e2e_install_package /tmp/sunclaw-plugin-lifecycle-install.log "mounted SunClaw package" /tmp/npm-prefix
 
-package_root="$(openclaw_e2e_package_root /tmp/npm-prefix)"
-entry="$(openclaw_e2e_package_entrypoint "$package_root")"
+package_root="$(sunclaw_e2e_package_root /tmp/npm-prefix)"
+entry="$(sunclaw_e2e_package_entrypoint "$package_root")"
 export PATH="/tmp/npm-prefix/bin:$PATH"
 export npm_config_loglevel=error
 export npm_config_fund=false
@@ -16,10 +16,10 @@ export npm_config_audit=false
 source scripts/e2e/lib/plugins/fixtures.sh
 
 plugin_id="lifecycle-claw"
-package_name="@openclaw/lifecycle-claw"
+package_name="@sunclaw/lifecycle-claw"
 probe="scripts/e2e/lib/plugin-lifecycle-matrix/probe.mjs"
 measure="scripts/e2e/lib/plugin-lifecycle-matrix/measure.mjs"
-resource_dir="$(mktemp -d "/tmp/openclaw-plugin-lifecycle-matrix.XXXXXX")"
+resource_dir="$(mktemp -d "/tmp/sunclaw-plugin-lifecycle-matrix.XXXXXX")"
 pack_root=""
 registry_root=""
 tarball_v1="$resource_dir/lifecycle-claw-1.0.0.tgz"
@@ -27,7 +27,7 @@ tarball_v2="$resource_dir/lifecycle-claw-2.0.0.tgz"
 inspect_v1="$resource_dir/plugin-lifecycle-inspect-v1.json"
 
 cleanup() {
-  openclaw_plugins_cleanup_fixture_servers
+  sunclaw_plugins_cleanup_fixture_servers
   rm -rf "$resource_dir"
 }
 trap cleanup EXIT

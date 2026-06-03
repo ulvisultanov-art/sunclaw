@@ -4,7 +4,7 @@ import { posixProviderOnlyPluginIsolationScript } from "./plugin-isolation.ts";
 import {
   psSingleQuote,
   windowsAgentTurnConfigPatchScript,
-  windowsOpenClawResolver,
+  windowsSunClawResolver,
   windowsScopedEnvFunction,
 } from "./powershell.ts";
 import {
@@ -19,10 +19,10 @@ export interface NpmUpdateScriptInput {
   updateTarget: string;
 }
 
-const windowsStalePostSwapImportRegex = String.raw`node_modules\\openclaw\\dist\\[^\\]+-[A-Za-z0-9_-]+\.js`;
+const windowsStalePostSwapImportRegex = String.raw`node_modules\\sunclaw\\dist\\[^\\]+-[A-Za-z0-9_-]+\.js`;
 const macosGuestPath =
   "/opt/homebrew/bin:/opt/homebrew/opt/node/bin:/usr/local/bin:/usr/local/sbin:/opt/homebrew/sbin:/usr/bin:/bin:/usr/sbin:/sbin";
-const macosOpenClawCommand = '"$OPENCLAW_BIN"';
+const macosSunClawCommand = '"$SUNCLAW_BIN"';
 
 function posixModelProviderConfigCommands(
   command: string,
@@ -54,10 +54,10 @@ agent_ok=false
 for attempt in 1 2; do
   session_id=${shellQuote(sessionId)}
   if [ "$attempt" -gt 1 ]; then session_id=${shellQuote(`${sessionId}-retry`)}"-$attempt"; fi
-  rm -f "$HOME/.openclaw/agents/main/sessions/$session_id.jsonl"
+  rm -f "$HOME/.sunclaw/agents/main/sessions/$session_id.jsonl"
   output_file="$(mktemp)"
   set +e
-  OPENCLAW_ALLOW_ROOT="\${OPENCLAW_ALLOW_ROOT:-}" ${input.auth.apiKeyEnv}=${shellQuote(input.auth.apiKeyValue)} ${command} agent --local --agent main --session-id "$session_id" --message 'Reply with exact ASCII text OK only.' --thinking off --json >"$output_file" 2>&1
+  SUNCLAW_ALLOW_ROOT="\${SUNCLAW_ALLOW_ROOT:-}" ${input.auth.apiKeyEnv}=${shellQuote(input.auth.apiKeyValue)} ${command} agent --local --agent main --session-id "$session_id" --message 'Reply with exact ASCII text OK only.' --thinking off --json >"$output_file" 2>&1
   rc=$?
   set -e
   cat "$output_file"
@@ -77,56 +77,56 @@ for attempt in 1 2; do
   fi
 done
 if [ "$agent_ok" != true ]; then
-  echo "openclaw agent finished without OK response" >&2
+  echo "sunclaw agent finished without OK response" >&2
   exit 1
 fi`;
 }
 
 function windowsUpdateWithBundledPluginsDisabled(input: NpmUpdateScriptInput): string {
-  return `$script:OpenClawUpdateExit = 0
-$updateOutput = Invoke-WithScopedEnv @{ OPENCLAW_DISABLE_BUNDLED_PLUGINS = '1'; OPENCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS = '1' } {
-  Invoke-OpenClaw update --tag ${psSingleQuote(input.updateTarget)} --yes --json --no-restart 2>&1
-  $script:OpenClawUpdateExit = $LASTEXITCODE
+  return `$script:SunClawUpdateExit = 0
+$updateOutput = Invoke-WithScopedEnv @{ SUNCLAW_DISABLE_BUNDLED_PLUGINS = '1'; SUNCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS = '1' } {
+  Invoke-SunClaw update --tag ${psSingleQuote(input.updateTarget)} --yes --json --no-restart 2>&1
+  $script:SunClawUpdateExit = $LASTEXITCODE
 }
-$updateExit = $script:OpenClawUpdateExit
+$updateExit = $script:SunClawUpdateExit
 $updateOutput`;
 }
 
 function windowsGatewayReadyScript(): string {
-  return `function Wait-OpenClawGateway {
+  return `function Wait-SunClawGateway {
   $deadline = (Get-Date).AddSeconds(180)
   $attempt = 0
   while ((Get-Date) -lt $deadline) {
-    Invoke-OpenClaw gateway status --deep --require-rpc --timeout 15000
+    Invoke-SunClaw gateway status --deep --require-rpc --timeout 15000
     if ($LASTEXITCODE -eq 0) { return }
     $attempt += 1
     if ($attempt -eq 4) {
-      Invoke-OpenClaw gateway start *>&1 | Out-Host
+      Invoke-SunClaw gateway start *>&1 | Out-Host
     }
     Start-Sleep -Seconds 5
   }
   throw "gateway did not become ready after update"
 }
-Invoke-OpenClaw gateway restart *>&1 | Out-Host
+Invoke-SunClaw gateway restart *>&1 | Out-Host
 if ($LASTEXITCODE -ne 0) {
   "gateway restart exited with code $LASTEXITCODE; probing readiness before failing" | Out-Host
 }
-Wait-OpenClawGateway`;
+Wait-SunClawGateway`;
 }
 
 function windowsAssertAgentOkScript(input: NpmUpdateScriptInput): string {
   return `${windowsAgentTurnConfigPatchScript(input.auth.modelId)}
-$sessionPath = Join-Path $env:USERPROFILE '.openclaw\\agents\\main\\sessions\\parallels-npm-update-windows.jsonl'
+$sessionPath = Join-Path $env:USERPROFILE '.sunclaw\\agents\\main\\sessions\\parallels-npm-update-windows.jsonl'
 Remove-Item $sessionPath -Force -ErrorAction SilentlyContinue
 ${windowsAgentWorkspaceScript("Parallels npm update smoke test assistant.")}
 Set-Item -Path ('Env:' + ${psSingleQuote(input.auth.apiKeyEnv)}) -Value ${psSingleQuote(input.auth.apiKeyValue)}
 $agentOk = $false
 for ($attempt = 1; $attempt -le 2; $attempt++) {
   $sessionId = if ($attempt -eq 1) { 'parallels-npm-update-windows' } else { "parallels-npm-update-windows-retry-$attempt" }
-  $sessionsDir = Join-Path $env:USERPROFILE '.openclaw\\agents\\main\\sessions'
+  $sessionsDir = Join-Path $env:USERPROFILE '.sunclaw\\agents\\main\\sessions'
   $sessionPath = Join-Path $sessionsDir "$sessionId.jsonl"
   Remove-Item $sessionPath -Force -ErrorAction SilentlyContinue
-  $output = Invoke-OpenClaw agent --local --agent main --session-id $sessionId --model ${psSingleQuote(input.auth.modelId)} --message 'Reply with exact ASCII text OK only.' --thinking off --timeout ${resolveParallelsModelTimeoutSeconds("windows")} --json 2>&1
+  $output = Invoke-SunClaw agent --local --agent main --session-id $sessionId --model ${psSingleQuote(input.auth.modelId)} --message 'Reply with exact ASCII text OK only.' --thinking off --timeout ${resolveParallelsModelTimeoutSeconds("windows")} --json 2>&1
   if ($null -ne $output) { $output | ForEach-Object { $_ } }
   if ($LASTEXITCODE -ne 0) { throw "agent failed with exit code $LASTEXITCODE" }
   if (($output | Out-String) -match '"finalAssistant(Raw|Visible)Text":\\s*"OK"') {
@@ -138,7 +138,7 @@ for ($attempt = 1; $attempt -le 2; $attempt++) {
     Start-Sleep -Seconds 3
   }
 }
-if (-not $agentOk) { throw 'openclaw agent finished without OK response' }`;
+if (-not $agentOk) { throw 'sunclaw agent finished without OK response' }`;
 }
 
 export function macosUpdateScript(input: NpmUpdateScriptInput): string {
@@ -150,12 +150,12 @@ resolve_required_command() {
     exit 127
   }
 }
-OPENCLAW_BIN="$(resolve_required_command openclaw)"
+SUNCLAW_BIN="$(resolve_required_command sunclaw)"
 scrub_future_plugin_entries() {
   python3 - <<'PY'
 import json
 from pathlib import Path
-path = Path.home() / ".openclaw" / "openclaw.json"
+path = Path.home() / ".sunclaw" / "sunclaw.json"
 if not path.exists():
     raise SystemExit(0)
 try:
@@ -176,9 +176,9 @@ if isinstance(allow, list):
 path.write_text(json.dumps(config, indent=2) + "\n")
 PY
 }
-stop_openclaw_gateway_processes() {
-  OPENCLAW_DISABLE_BUNDLED_PLUGINS=1 "$OPENCLAW_BIN" gateway stop || true
-  pkill -f 'openclaw.*gateway' >/dev/null 2>&1 || true
+stop_sunclaw_gateway_processes() {
+  SUNCLAW_DISABLE_BUNDLED_PLUGINS=1 "$SUNCLAW_BIN" gateway stop || true
+  pkill -f 'sunclaw.*gateway' >/dev/null 2>&1 || true
   if command -v lsof >/dev/null 2>&1; then
     pids="$(lsof -tiTCP:18789 -sTCP:LISTEN 2>/dev/null || true)"
     if [ -n "$pids" ]; then
@@ -188,65 +188,65 @@ stop_openclaw_gateway_processes() {
     fi
   fi
 }
-start_openclaw_gateway() {
-  stop_openclaw_gateway_processes
-  rm -f /tmp/openclaw-parallels-macos-gateway.log
+start_sunclaw_gateway() {
+  stop_sunclaw_gateway_processes
+  rm -f /tmp/sunclaw-parallels-macos-gateway.log
   trap '' HUP
-  /usr/bin/env OPENCLAW_HOME="$HOME" OPENCLAW_STATE_DIR="$HOME/.openclaw" OPENCLAW_CONFIG_PATH="$HOME/.openclaw/openclaw.json" ${input.auth.apiKeyEnv}=${shellQuote(
+  /usr/bin/env SUNCLAW_HOME="$HOME" SUNCLAW_STATE_DIR="$HOME/.sunclaw" SUNCLAW_CONFIG_PATH="$HOME/.sunclaw/sunclaw.json" ${input.auth.apiKeyEnv}=${shellQuote(
     input.auth.apiKeyValue,
-  )} "$OPENCLAW_BIN" gateway run --bind loopback --port 18789 --force >/tmp/openclaw-parallels-macos-gateway.log 2>&1 </dev/null &
+  )} "$SUNCLAW_BIN" gateway run --bind loopback --port 18789 --force >/tmp/sunclaw-parallels-macos-gateway.log 2>&1 </dev/null &
   sleep 1
 }
 wait_for_gateway() {
   deadline=$((SECONDS + 240))
   while [ "$SECONDS" -lt "$deadline" ]; do
-    if "$OPENCLAW_BIN" gateway status --deep --require-rpc --timeout 15000; then
+    if "$SUNCLAW_BIN" gateway status --deep --require-rpc --timeout 15000; then
       return
     fi
     sleep 2
   done
-  cat /tmp/openclaw-parallels-macos-gateway.log >&2 || true
+  cat /tmp/sunclaw-parallels-macos-gateway.log >&2 || true
   echo "gateway did not become ready after update" >&2
   exit 1
 }
 scrub_future_plugin_entries
-stop_openclaw_gateway_processes
-OPENCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS=1 OPENCLAW_DISABLE_BUNDLED_PLUGINS=1 "$OPENCLAW_BIN" update --tag ${shellQuote(input.updateTarget)} --yes --json --no-restart
-${posixVersionCheck(macosOpenClawCommand, input.expectedNeedle)}
-start_openclaw_gateway
+stop_sunclaw_gateway_processes
+SUNCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS=1 SUNCLAW_DISABLE_BUNDLED_PLUGINS=1 "$SUNCLAW_BIN" update --tag ${shellQuote(input.updateTarget)} --yes --json --no-restart
+${posixVersionCheck(macosSunClawCommand, input.expectedNeedle)}
+start_sunclaw_gateway
 wait_for_gateway
-"$OPENCLAW_BIN" models set ${shellQuote(input.auth.modelId)}
-${posixModelProviderConfigCommands(macosOpenClawCommand, input.auth.modelId, "macos")}
-"$OPENCLAW_BIN" config set agents.defaults.skipBootstrap true --strict-json
-"$OPENCLAW_BIN" config set tools.profile minimal
+"$SUNCLAW_BIN" models set ${shellQuote(input.auth.modelId)}
+${posixModelProviderConfigCommands(macosSunClawCommand, input.auth.modelId, "macos")}
+"$SUNCLAW_BIN" config set agents.defaults.skipBootstrap true --strict-json
+"$SUNCLAW_BIN" config set tools.profile minimal
 ${posixAgentWorkspaceScript("Parallels npm update smoke test assistant.")}
-${posixAssertAgentOkScript(macosOpenClawCommand, input, "parallels-npm-update-macos")}`;
+${posixAssertAgentOkScript(macosSunClawCommand, input, "parallels-npm-update-macos")}`;
 }
 
 export function windowsUpdateScript(input: NpmUpdateScriptInput): string {
   return `$ErrorActionPreference = 'Stop'
 $PSNativeCommandUseErrorActionPreference = $false
-${windowsOpenClawResolver}
+${windowsSunClawResolver}
 ${windowsScopedEnvFunction}
 function Remove-FuturePluginEntries {
-  $configPath = Join-Path $env:USERPROFILE '.openclaw\\openclaw.json'
+  $configPath = Join-Path $env:USERPROFILE '.sunclaw\\sunclaw.json'
   if (-not (Test-Path $configPath)) { return }
   try { $config = Get-Content $configPath -Raw | ConvertFrom-Json } catch { return }
-  $plugins = Get-OpenClawJsonProperty $config 'plugins'
+  $plugins = Get-SunClawJsonProperty $config 'plugins'
   if ($null -eq $plugins) { return }
-  $entries = Get-OpenClawJsonProperty $plugins 'entries'
+  $entries = Get-SunClawJsonProperty $plugins 'entries'
   if ($null -ne $entries) {
     foreach ($pluginId in @('feishu', 'whatsapp', 'openai')) {
-      Remove-OpenClawJsonProperty $entries $pluginId
+      Remove-SunClawJsonProperty $entries $pluginId
     }
   }
-  $allow = Get-OpenClawJsonProperty $plugins 'allow'
+  $allow = Get-SunClawJsonProperty $plugins 'allow'
   if ($allow -is [array]) {
-    Set-OpenClawJsonProperty $plugins 'allow' @($allow | Where-Object { $_ -notin @('feishu', 'whatsapp', 'openai') })
+    Set-SunClawJsonProperty $plugins 'allow' @($allow | Where-Object { $_ -notin @('feishu', 'whatsapp', 'openai') })
   }
   $config | ConvertTo-Json -Depth 100 | Set-Content -Path $configPath -Encoding UTF8
 }
-function Get-OpenClawJsonProperty {
+function Get-SunClawJsonProperty {
   param([object]$Object, [string]$Name)
   if ($null -eq $Object) { return $null }
   if ($Object -is [System.Collections.IDictionary]) { return $Object[$Name] }
@@ -254,7 +254,7 @@ function Get-OpenClawJsonProperty {
   if ($null -eq $property) { return $null }
   return $property.Value
 }
-function Set-OpenClawJsonProperty {
+function Set-SunClawJsonProperty {
   param([object]$Object, [string]$Name, [object]$Value)
   if ($Object -is [System.Collections.IDictionary]) {
     $Object[$Name] = $Value
@@ -267,7 +267,7 @@ function Set-OpenClawJsonProperty {
   }
   $Object | Add-Member -NotePropertyName $Name -NotePropertyValue $Value
 }
-function Remove-OpenClawJsonProperty {
+function Remove-SunClawJsonProperty {
   param([object]$Object, [string]$Name)
   if ($null -eq $Object) { return }
   if ($Object -is [System.Collections.IDictionary]) {
@@ -278,10 +278,10 @@ function Remove-OpenClawJsonProperty {
     $Object.PSObject.Properties.Remove($Name)
   }
 }
-function Stop-OpenClawGatewayProcesses {
-  Invoke-OpenClaw gateway stop *>&1 | Out-Host
+function Stop-SunClawGatewayProcesses {
+  Invoke-SunClaw gateway stop *>&1 | Out-Host
   Get-CimInstance Win32_Process -ErrorAction SilentlyContinue |
-    Where-Object { $_.CommandLine -match 'openclaw.*gateway' } |
+    Where-Object { $_.CommandLine -match 'sunclaw.*gateway' } |
     ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }
   Get-NetTCPConnection -LocalPort 18789 -State Listen -ErrorAction SilentlyContinue |
     Select-Object -ExpandProperty OwningProcess -Unique |
@@ -289,13 +289,13 @@ function Stop-OpenClawGatewayProcesses {
   Start-Sleep -Seconds 2
 }
 Remove-FuturePluginEntries
-Stop-OpenClawGatewayProcesses
+Stop-SunClawGatewayProcesses
 ${windowsUpdateWithBundledPluginsDisabled(input)}
 if ($updateExit -ne 0) {
   $updateText = $updateOutput | Out-String
   $stalePostSwapImport = $updateText -match 'ERR_MODULE_NOT_FOUND' -and $updateText -match ${psSingleQuote(windowsStalePostSwapImportRegex)}
-  if (-not $stalePostSwapImport) { throw "openclaw update failed with exit code $updateExit" }
-  Write-Host "openclaw update returned a stale post-swap module import; continuing to post-update health checks"
+  if (-not $stalePostSwapImport) { throw "sunclaw update failed with exit code $updateExit" }
+  Write-Host "sunclaw update returned a stale post-swap module import; continuing to post-update health checks"
 }
 ${windowsVersionCheck(input.expectedNeedle)}
 ${windowsGatewayReadyScript()}
@@ -305,12 +305,12 @@ ${windowsAssertAgentOkScript(input)}`;
 export function linuxUpdateScript(input: NpmUpdateScriptInput): string {
   return String.raw`set -euo pipefail
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/snap/bin
-export OPENCLAW_ALLOW_ROOT=1
+export SUNCLAW_ALLOW_ROOT=1
 scrub_future_plugin_entries() {
   node - <<'JS'
 const fs = require("node:fs");
 const path = require("node:path");
-const configPath = path.join(process.env.HOME || "/root", ".openclaw", "openclaw.json");
+const configPath = path.join(process.env.HOME || "/root", ".sunclaw", "sunclaw.json");
 if (!fs.existsSync(configPath)) process.exit(0);
 let config;
 try { config = JSON.parse(fs.readFileSync(configPath, "utf8")); } catch { process.exit(0); }
@@ -327,43 +327,43 @@ if (Array.isArray(plugins.allow)) {
 fs.writeFileSync(configPath, JSON.stringify(config, null, 2) + "\n");
 JS
 }
-stop_openclaw_gateway_processes() {
-  OPENCLAW_DISABLE_BUNDLED_PLUGINS=1 OPENCLAW_ALLOW_ROOT=1 openclaw gateway stop || true
-  pkill -f 'openclaw.*gateway' >/dev/null 2>&1 || true
+stop_sunclaw_gateway_processes() {
+  SUNCLAW_DISABLE_BUNDLED_PLUGINS=1 SUNCLAW_ALLOW_ROOT=1 sunclaw gateway stop || true
+  pkill -f 'sunclaw.*gateway' >/dev/null 2>&1 || true
 }
-start_openclaw_gateway() {
-  pkill -f "openclaw gateway run" >/dev/null 2>&1 || true
-  rm -f /tmp/openclaw-parallels-linux-gateway.log
+start_sunclaw_gateway() {
+  pkill -f "sunclaw gateway run" >/dev/null 2>&1 || true
+  rm -f /tmp/sunclaw-parallels-linux-gateway.log
   setsid sh -lc ${shellQuote(
-    `exec env OPENCLAW_HOME=/root OPENCLAW_STATE_DIR=/root/.openclaw OPENCLAW_CONFIG_PATH=/root/.openclaw/openclaw.json OPENCLAW_DISABLE_BONJOUR=1 OPENCLAW_ALLOW_ROOT=1 ${input.auth.apiKeyEnv}=${shellQuote(
+    `exec env SUNCLAW_HOME=/root SUNCLAW_STATE_DIR=/root/.sunclaw SUNCLAW_CONFIG_PATH=/root/.sunclaw/sunclaw.json SUNCLAW_DISABLE_BONJOUR=1 SUNCLAW_ALLOW_ROOT=1 ${input.auth.apiKeyEnv}=${shellQuote(
       input.auth.apiKeyValue,
-    )} openclaw gateway run --bind loopback --port 18789 --force >/tmp/openclaw-parallels-linux-gateway.log 2>&1`,
+    )} sunclaw gateway run --bind loopback --port 18789 --force >/tmp/sunclaw-parallels-linux-gateway.log 2>&1`,
   )} >/dev/null 2>&1 < /dev/null &
 }
 wait_for_gateway() {
   deadline=$((SECONDS + 240))
   while [ "$SECONDS" -lt "$deadline" ]; do
-    if openclaw gateway status --deep --require-rpc --timeout 15000; then
+    if sunclaw gateway status --deep --require-rpc --timeout 15000; then
       return
     fi
     sleep 2
   done
-  cat /tmp/openclaw-parallels-linux-gateway.log >&2 || true
+  cat /tmp/sunclaw-parallels-linux-gateway.log >&2 || true
   echo "gateway did not become ready after update" >&2
   exit 1
 }
 scrub_future_plugin_entries
-stop_openclaw_gateway_processes
-OPENCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS=1 OPENCLAW_DISABLE_BUNDLED_PLUGINS=1 openclaw update --tag ${shellQuote(input.updateTarget)} --yes --json --no-restart
-${posixVersionCheck("openclaw", input.expectedNeedle)}
-start_openclaw_gateway
+stop_sunclaw_gateway_processes
+SUNCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS=1 SUNCLAW_DISABLE_BUNDLED_PLUGINS=1 sunclaw update --tag ${shellQuote(input.updateTarget)} --yes --json --no-restart
+${posixVersionCheck("sunclaw", input.expectedNeedle)}
+start_sunclaw_gateway
 wait_for_gateway
-openclaw models set ${shellQuote(input.auth.modelId)}
-${posixModelProviderConfigCommands("openclaw", input.auth.modelId, "linux")}
-openclaw config set agents.defaults.skipBootstrap true --strict-json
-openclaw config set tools.profile minimal
+sunclaw models set ${shellQuote(input.auth.modelId)}
+${posixModelProviderConfigCommands("sunclaw", input.auth.modelId, "linux")}
+sunclaw config set agents.defaults.skipBootstrap true --strict-json
+sunclaw config set tools.profile minimal
 ${posixAgentWorkspaceScript("Parallels npm update smoke test assistant.")}
-${posixAssertAgentOkScript("openclaw", input, "parallels-npm-update-linux")}`;
+${posixAssertAgentOkScript("sunclaw", input, "parallels-npm-update-linux")}`;
 }
 
 function posixVersionCheck(command: string, expectedNeedle: string): string {
@@ -412,10 +412,10 @@ function windowsVersionCheck(expectedNeedle: string): string {
   if (!expectedNeedle) {
     return `$versionDeadline = (Get-Date).AddSeconds(60)
 while ($true) {
-  $version = Invoke-OpenClaw --version
+  $version = Invoke-SunClaw --version
   $version
   if ($LASTEXITCODE -eq 0) { break }
-  if ((Get-Date) -ge $versionDeadline) { throw "openclaw --version failed with exit code $LASTEXITCODE" }
+  if ((Get-Date) -ge $versionDeadline) { throw "sunclaw --version failed with exit code $LASTEXITCODE" }
   Start-Sleep -Seconds 2
 }`;
   }
@@ -423,11 +423,11 @@ while ($true) {
   const mismatch = psSingleQuote(`version mismatch: expected ${expectedNeedle}`);
   return `$versionDeadline = (Get-Date).AddSeconds(60)
 while ($true) {
-  $version = Invoke-OpenClaw --version
+  $version = Invoke-SunClaw --version
   $version
   if ($LASTEXITCODE -eq 0 -and (($version | Out-String) -like ${expectedPattern})) { break }
   if ((Get-Date) -ge $versionDeadline) {
-    if ($LASTEXITCODE -ne 0) { throw "openclaw --version failed with exit code $LASTEXITCODE" }
+    if ($LASTEXITCODE -ne 0) { throw "sunclaw --version failed with exit code $LASTEXITCODE" }
     throw ${mismatch}
   }
   Start-Sleep -Seconds 2

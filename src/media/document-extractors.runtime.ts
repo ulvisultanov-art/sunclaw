@@ -1,5 +1,5 @@
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { normalizeLowercaseStringOrEmpty } from "@sunclaw/normalization-core/string-coerce";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type {
   DocumentExtractionRequest,
   DocumentExtractionResult,
@@ -7,13 +7,13 @@ import type {
 import { resolvePluginDocumentExtractors } from "../plugins/document-extractors.runtime.js";
 import { createConfigScopedPromiseLoader } from "../plugins/plugin-cache-primitives.js";
 
-const documentExtractorLoader = createConfigScopedPromiseLoader((config?: OpenClawConfig) =>
+const documentExtractorLoader = createConfigScopedPromiseLoader((config?: SunClawConfig) =>
   resolvePluginDocumentExtractors(config ? { config } : undefined),
 );
 
 export async function extractDocumentContent(
   params: DocumentExtractionRequest & {
-    config?: OpenClawConfig;
+    config?: SunClawConfig;
   },
 ): Promise<(DocumentExtractionResult & { extractor: string }) | null> {
   const mimeType = normalizeLowercaseStringOrEmpty(params.mimeType);

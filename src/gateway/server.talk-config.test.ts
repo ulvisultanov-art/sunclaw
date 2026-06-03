@@ -61,7 +61,7 @@ afterAll(async () => {
 
 async function createFreshOperatorDevice(scopes: string[], nonce: string) {
   const identity = loadOrCreateDeviceIdentity(
-    path.join(os.tmpdir(), `openclaw-talk-config-device-${process.pid}-${talkConfigDeviceSeq++}`),
+    path.join(os.tmpdir(), `sunclaw-talk-config-device-${process.pid}-${talkConfigDeviceSeq++}`),
   );
   const signedAtMs = Date.now();
   const payload = buildDeviceAuthPayload({
@@ -260,7 +260,7 @@ describe("gateway talk.config", () => {
       expectTalkConfig(res.payload?.config?.talk, {
         provider: GENERIC_TALK_PROVIDER_ID,
         voiceId: "voice-123",
-        apiKey: "__OPENCLAW_REDACTED__",
+        apiKey: "__SUNCLAW_REDACTED__",
         speechLocale: "ru-RU",
         silenceTimeoutMs: 1500,
       });
@@ -391,9 +391,9 @@ describe("gateway talk.config", () => {
             // sentinel so no credential material leaks to read-scope callers.
             const redactedApiKey = talk?.providers?.[GENERIC_TALK_PROVIDER_ID]?.apiKey;
             expect(redactedApiKey).toEqual({
-              id: "__OPENCLAW_REDACTED__",
-              provider: "__OPENCLAW_REDACTED__",
-              source: "__OPENCLAW_REDACTED__",
+              id: "__SUNCLAW_REDACTED__",
+              provider: "__SUNCLAW_REDACTED__",
+              source: "__SUNCLAW_REDACTED__",
             });
             expect(talk?.resolved?.config?.apiKey).toEqual(redactedApiKey);
           });

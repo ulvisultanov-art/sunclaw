@@ -1,8 +1,8 @@
 import type {
   ExecApprovalRequest,
   PluginApprovalRequest,
-} from "openclaw/plugin-sdk/approval-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+} from "sunclaw/plugin-sdk/approval-runtime";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
 import { describe, expect, it } from "vitest";
 import {
   imessageApprovalCapability,
@@ -10,14 +10,14 @@ import {
   shouldSuppressLocalIMessageExecApprovalPrompt,
 } from "./approval-native.js";
 
-type IMessageConfig = NonNullable<NonNullable<OpenClawConfig["channels"]>["imessage"]>;
+type IMessageConfig = NonNullable<NonNullable<SunClawConfig["channels"]>["imessage"]>;
 
 function buildConfig(
   params: {
     imessage?: Partial<IMessageConfig>;
-    approvals?: OpenClawConfig["approvals"];
+    approvals?: SunClawConfig["approvals"];
   } = {},
-): OpenClawConfig {
+): SunClawConfig {
   return {
     channels: {
       imessage: {
@@ -26,7 +26,7 @@ function buildConfig(
       },
     },
     approvals: params.approvals,
-  } as OpenClawConfig;
+  } as SunClawConfig;
 }
 
 function buildExecRequest(
@@ -71,7 +71,7 @@ function buildPluginRequest(
 }
 
 function nativeShouldHandle(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   request: ExecApprovalRequest | PluginApprovalRequest;
   accountId?: string | null;
 }) {

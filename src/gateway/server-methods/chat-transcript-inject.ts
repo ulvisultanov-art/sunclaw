@@ -1,6 +1,6 @@
 import type { SessionManager } from "../../agents/sessions/session-manager.js";
 import { appendSessionTranscriptMessage } from "../../config/sessions/transcript-append.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { formatErrorMessage } from "../../infra/errors.js";
 import { emitSessionTranscriptUpdate } from "../../sessions/transcript-events.js";
 
@@ -65,7 +65,7 @@ export async function appendInjectedAssistantMessageToTranscript(params: {
   abortMeta?: GatewayInjectedAbortMeta;
   ttsSupplement?: GatewayInjectedTtsSupplementMarker;
   now?: number;
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
 }): Promise<GatewayInjectedTranscriptAppendResult> {
   const now = params.now ?? Date.now();
   const usage = {
@@ -101,13 +101,13 @@ export async function appendInjectedAssistantMessageToTranscript(params: {
     usage,
     // Make these explicit so downstream tooling never treats this as model output.
     api: "openai-responses",
-    provider: "openclaw",
+    provider: "sunclaw",
     model: "gateway-injected",
     ...(params.idempotencyKey ? { idempotencyKey: params.idempotencyKey } : {}),
-    ...(params.ttsSupplement ? { openclawTtsSupplement: params.ttsSupplement } : {}),
+    ...(params.ttsSupplement ? { sunclawTtsSupplement: params.ttsSupplement } : {}),
     ...(params.abortMeta
       ? {
-          openclawAbort: {
+          sunclawAbort: {
             aborted: true,
             origin: params.abortMeta.origin,
             runId: params.abortMeta.runId,

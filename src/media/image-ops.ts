@@ -9,7 +9,7 @@ import {
   type ImageMetadata,
 } from "rastermill";
 import { resolveSystemBin } from "../infra/resolve-system-bin.js";
-import { resolvePreferredOpenClawTmpDir } from "../infra/tmp-openclaw-dir.js";
+import { resolvePreferredSunClawTmpDir } from "../infra/tmp-sunclaw-dir.js";
 
 export type { ImageMetadata, ImageProbe };
 
@@ -53,8 +53,8 @@ export function createImageProcessor() {
       outputPixels: MAX_IMAGE_INPUT_PIXELS,
     },
     temp: {
-      rootDir: resolvePreferredOpenClawTmpDir(),
-      prefix: "openclaw-img-",
+      rootDir: resolvePreferredSunClawTmpDir(),
+      prefix: "sunclaw-img-",
     },
     commandResolver: (command) =>
       resolveSystemBin(command, { trust: command === "powershell" ? "strict" : "standard" }),

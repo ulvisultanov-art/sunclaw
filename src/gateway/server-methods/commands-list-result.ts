@@ -1,4 +1,4 @@
-import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalLowercaseString } from "@sunclaw/normalization-core/string-coerce";
 import type {
   CommandEntry,
   CommandsListResult,
@@ -22,7 +22,7 @@ import type {
   CommandArgDefinition,
 } from "../../auto-reply/commands-registry.types.js";
 import { getChannelPlugin } from "../../channels/plugins/index.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import {
   getPluginCommandEntrySpecs,
   getPluginCommandEntrySpecsFromRegistrations,
@@ -156,7 +156,7 @@ function mapCommand(
 function buildPluginCommandEntries(params: {
   provider?: string;
   nameSurface: CommandNameSurface;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
 }): CommandEntry[] {
   const gatewayRegistry = getActivePluginGatewayCommandRegistry();
   const pluginSpecs = gatewayRegistry
@@ -191,7 +191,7 @@ function buildPluginCommandEntries(params: {
 
 /** Builds the public commands.list payload for an agent/provider/scope view. */
 export function buildCommandsListResult(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   agentId: string;
   provider?: string;
   scope?: "native" | "text" | "both";

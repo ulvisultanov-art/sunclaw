@@ -16,7 +16,7 @@ import {
 } from "../../src/logging/diagnostic-phase.ts";
 
 export async function withProofTempRoot(callback) {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-proof-"));
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "sunclaw-proof-"));
   try {
     return await callback(root);
   } finally {

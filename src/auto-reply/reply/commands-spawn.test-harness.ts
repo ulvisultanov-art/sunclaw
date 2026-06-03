@@ -1,10 +1,10 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import type { MsgContext } from "../templating.js";
 import { buildCommandTestParams as buildBaseCommandTestParams } from "./commands.test-harness.js";
 
 export function buildCommandTestParams(
   commandBody: string,
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   ctxOverrides?: Partial<MsgContext>,
 ) {
   return buildBaseCommandTestParams(commandBody, cfg, ctxOverrides);

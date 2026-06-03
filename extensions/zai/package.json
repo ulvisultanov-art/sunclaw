@@ -1,13 +1,13 @@
 {
-  "name": "@openclaw/zai-provider",
+  "name": "@sunclaw/zai-provider",
   "version": "2026.6.2",
   "private": true,
-  "description": "OpenClaw Z.AI provider plugin",
+  "description": "SunClaw Z.AI provider plugin",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@sunclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ]

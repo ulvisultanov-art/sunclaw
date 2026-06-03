@@ -1,12 +1,12 @@
 ---
-summary: "CLI reference for `openclaw uninstall` (remove gateway service + local data)"
+summary: "CLI reference for `sunclaw uninstall` (remove gateway service + local data)"
 read_when:
   - You want to remove the gateway service and/or local state
   - You want a dry-run first
 title: "Uninstall"
 ---
 
-# `openclaw uninstall`
+# `sunclaw uninstall`
 
 Uninstall the gateway service + local data (CLI remains).
 
@@ -24,17 +24,17 @@ Options:
 Examples:
 
 ```bash
-openclaw backup create
-openclaw uninstall
-openclaw uninstall --service --yes --non-interactive
-openclaw uninstall --state --workspace --yes --non-interactive
-openclaw uninstall --all --yes
-openclaw uninstall --dry-run
+sunclaw backup create
+sunclaw uninstall
+sunclaw uninstall --service --yes --non-interactive
+sunclaw uninstall --state --workspace --yes --non-interactive
+sunclaw uninstall --all --yes
+sunclaw uninstall --dry-run
 ```
 
 Notes:
 
-- Run `openclaw backup create` first if you want a restorable snapshot before removing state or workspaces.
+- Run `sunclaw backup create` first if you want a restorable snapshot before removing state or workspaces.
 - `--state` preserves configured workspace directories unless `--workspace` is also selected.
 - `--all` is shorthand for removing service, state, workspace, and app together.
 - `--non-interactive` requires `--yes`.

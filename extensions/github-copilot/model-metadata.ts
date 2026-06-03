@@ -1,5 +1,5 @@
-import type { ModelDefinitionConfig } from "openclaw/plugin-sdk/provider-model-shared";
-import { normalizeOptionalLowercaseString } from "openclaw/plugin-sdk/string-coerce-runtime";
+import type { ModelDefinitionConfig } from "sunclaw/plugin-sdk/provider-model-shared";
+import { normalizeOptionalLowercaseString } from "sunclaw/plugin-sdk/string-coerce-runtime";
 
 type CopilotRuntimeApi = "anthropic-messages" | "openai-completions" | "openai-responses";
 

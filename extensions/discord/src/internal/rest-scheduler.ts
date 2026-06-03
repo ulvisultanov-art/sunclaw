@@ -1,4 +1,4 @@
-import { resolveIntegerOption, resolveTimerTimeoutMs } from "openclaw/plugin-sdk/number-runtime";
+import { resolveIntegerOption, resolveTimerTimeoutMs } from "sunclaw/plugin-sdk/number-runtime";
 import { RateLimitError, readRetryAfter } from "./rest-errors.js";
 import {
   createBucketKey,

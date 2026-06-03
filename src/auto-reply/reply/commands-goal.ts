@@ -1,7 +1,7 @@
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@sunclaw/normalization-core/string-coerce";
 import {
   clearSessionGoal,
   createSessionGoal,

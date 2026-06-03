@@ -53,7 +53,7 @@ function runPtyProbe(
 
 describe("run-with-pty", () => {
   it("rejects loose terminal dimension env values", async () => {
-    const tempRoot = await mkdtemp(path.join(os.tmpdir(), "openclaw-run-with-pty-"));
+    const tempRoot = await mkdtemp(path.join(os.tmpdir(), "sunclaw-run-with-pty-"));
     const logPath = path.join(tempRoot, "pty.log");
     try {
       const result = await runPtyProbe(logPath, { COLUMNS: "120cols" });
@@ -66,7 +66,7 @@ describe("run-with-pty", () => {
   });
 
   it("forwards stdin through a PTY and writes the transcript log", async () => {
-    const tempRoot = await mkdtemp(path.join(os.tmpdir(), "openclaw-run-with-pty-"));
+    const tempRoot = await mkdtemp(path.join(os.tmpdir(), "sunclaw-run-with-pty-"));
     const logPath = path.join(tempRoot, "pty.log");
     try {
       const result = await runPtyProbe(logPath);
@@ -83,12 +83,12 @@ describe("run-with-pty", () => {
   });
 
   it("caps noisy PTY output in stdout and transcript logs", async () => {
-    const tempRoot = await mkdtemp(path.join(os.tmpdir(), "openclaw-run-with-pty-"));
+    const tempRoot = await mkdtemp(path.join(os.tmpdir(), "sunclaw-run-with-pty-"));
     const logPath = path.join(tempRoot, "pty.log");
     try {
       const result = await runPtyProbe(
         logPath,
-        { OPENCLAW_E2E_PTY_OUTPUT_MAX_BYTES: "64" },
+        { SUNCLAW_E2E_PTY_OUTPUT_MAX_BYTES: "64" },
         [process.execPath, "-e", "process.stdout.write('x'.repeat(2048))"],
         "",
       );
@@ -106,7 +106,7 @@ describe("run-with-pty", () => {
   });
 
   posixIt("escalates forwarded termination signals for PTY commands that ignore them", async () => {
-    const tempRoot = await mkdtemp(path.join(os.tmpdir(), "openclaw-run-with-pty-"));
+    const tempRoot = await mkdtemp(path.join(os.tmpdir(), "sunclaw-run-with-pty-"));
     const logPath = path.join(tempRoot, "pty.log");
     const child = spawn(
       process.execPath,
@@ -120,7 +120,7 @@ describe("run-with-pty", () => {
       {
         env: {
           ...process.env,
-          OPENCLAW_E2E_PTY_FORCE_KILL_MS: "25",
+          SUNCLAW_E2E_PTY_FORCE_KILL_MS: "25",
         },
         stdio: ["ignore", "pipe", "pipe"],
       },

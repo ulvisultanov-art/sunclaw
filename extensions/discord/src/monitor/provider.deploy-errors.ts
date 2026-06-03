@@ -2,9 +2,9 @@ import { inspect } from "node:util";
 import {
   parseStrictFiniteNumber,
   parseStrictNonNegativeInteger,
-} from "openclaw/plugin-sdk/number-runtime";
-import { formatDurationSeconds } from "openclaw/plugin-sdk/runtime-env";
-import { formatErrorMessage } from "openclaw/plugin-sdk/ssrf-runtime";
+} from "sunclaw/plugin-sdk/number-runtime";
+import { formatDurationSeconds } from "sunclaw/plugin-sdk/runtime-env";
+import { formatErrorMessage } from "sunclaw/plugin-sdk/ssrf-runtime";
 import { RateLimitError } from "../internal/discord.js";
 
 const DISCORD_DEPLOY_REJECTED_ENTRY_LIMIT = 3;

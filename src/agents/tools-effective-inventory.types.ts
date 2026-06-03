@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type { ProviderRuntimeModel } from "../plugins/provider-runtime-model.types.js";
 
 export type EffectiveToolSource = "core" | "plugin" | "channel" | "mcp";
@@ -36,7 +36,7 @@ export type EffectiveToolInventoryResult = {
 };
 
 export type ResolveEffectiveToolInventoryParams = {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   agentId?: string;
   sessionKey?: string;
   workspaceDir?: string;

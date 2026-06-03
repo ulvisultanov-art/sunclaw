@@ -111,18 +111,18 @@ describe("startGatewayTailscaleExposure preserveFunnel", () => {
       tailscaleMode: "serve",
       port: 18789,
       resetOnExit: true,
-      serviceName: "svc:openclaw",
+      serviceName: "svc:sunclaw",
       logTailscale,
     });
 
-    expect(mocks.enableTailscaleServe).toHaveBeenCalledWith(18789, undefined, "svc:openclaw");
+    expect(mocks.enableTailscaleServe).toHaveBeenCalledWith(18789, undefined, "svc:sunclaw");
     expect(logTailscale.info).toHaveBeenCalledWith(
-      "serve enabled for svc:openclaw: https://openclaw.tailnet.ts.net/ (WS via wss://openclaw.tailnet.ts.net)",
+      "serve enabled for svc:sunclaw: https://sunclaw.tailnet.ts.net/ (WS via wss://sunclaw.tailnet.ts.net)",
     );
 
     await cleanup?.();
 
-    expect(mocks.disableTailscaleServe).toHaveBeenCalledWith(undefined, "svc:openclaw");
+    expect(mocks.disableTailscaleServe).toHaveBeenCalledWith(undefined, "svc:sunclaw");
   });
 
   it("does not use serviceName in funnel mode", async () => {
@@ -133,7 +133,7 @@ describe("startGatewayTailscaleExposure preserveFunnel", () => {
       tailscaleMode: "funnel",
       port: 18789,
       resetOnExit: true,
-      serviceName: "svc:openclaw",
+      serviceName: "svc:sunclaw",
       logTailscale,
     });
 
@@ -156,11 +156,11 @@ describe("startGatewayTailscaleExposure preserveFunnel", () => {
     await startGatewayTailscaleExposure({
       tailscaleMode: "serve",
       port: 18789,
-      serviceName: "svc:openclaw",
+      serviceName: "svc:sunclaw",
       logTailscale,
     });
 
-    expect(mocks.enableTailscaleServe).toHaveBeenCalledWith(18789, undefined, "svc:openclaw");
+    expect(mocks.enableTailscaleServe).toHaveBeenCalledWith(18789, undefined, "svc:sunclaw");
     expect(logTailscale.info).toHaveBeenCalledWith("serve enabled");
   });
 
@@ -171,11 +171,11 @@ describe("startGatewayTailscaleExposure preserveFunnel", () => {
     await startGatewayTailscaleExposure({
       tailscaleMode: "serve",
       port: 18789,
-      serviceName: "svc:openclaw",
+      serviceName: "svc:sunclaw",
       logTailscale,
     });
 
-    expect(mocks.enableTailscaleServe).toHaveBeenCalledWith(18789, undefined, "svc:openclaw");
+    expect(mocks.enableTailscaleServe).toHaveBeenCalledWith(18789, undefined, "svc:sunclaw");
     expect(logTailscale.info).toHaveBeenCalledWith("serve enabled");
   });
 

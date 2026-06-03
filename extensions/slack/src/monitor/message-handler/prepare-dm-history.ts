@@ -1,7 +1,7 @@
-import { formatInboundEnvelope } from "openclaw/plugin-sdk/channel-inbound";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { formatInboundEnvelope } from "sunclaw/plugin-sdk/channel-inbound";
+import { formatErrorMessage } from "sunclaw/plugin-sdk/error-runtime";
+import { logVerbose } from "sunclaw/plugin-sdk/runtime-env";
+import { normalizeOptionalString } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import type { ResolvedSlackAccount } from "../../accounts.js";
 import type { SlackMonitorContext } from "../context.js";
 import { resolveSlackTimestampMs } from "./timestamp.js";
@@ -38,7 +38,7 @@ export async function resolveSlackDmHistoryContext(params: {
   currentMessageTs?: string;
   limit: number;
   envelopeOptions: ReturnType<
-    typeof import("openclaw/plugin-sdk/channel-inbound").resolveEnvelopeFormatOptions
+    typeof import("sunclaw/plugin-sdk/channel-inbound").resolveEnvelopeFormatOptions
   >;
 }): Promise<{ body: string | undefined; inboundHistory: SlackDmHistoryEntry[] | undefined }> {
   const maxMessages = Math.max(0, Math.floor(params.limit));

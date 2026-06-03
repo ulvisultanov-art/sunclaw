@@ -1,16 +1,16 @@
 {
-  "name": "@openclaw/llm-task",
+  "name": "@sunclaw/llm-task",
   "version": "2026.6.2",
   "private": true,
-  "description": "OpenClaw JSON-only LLM task plugin",
+  "description": "SunClaw JSON-only LLM task plugin",
   "type": "module",
   "dependencies": {
     "typebox": "1.1.39"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@sunclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ]

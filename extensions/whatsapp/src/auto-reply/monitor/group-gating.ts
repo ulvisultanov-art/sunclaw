@@ -1,5 +1,5 @@
-import type { BuildMentionRegexesOptions } from "openclaw/plugin-sdk/channel-mention-gating";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { BuildMentionRegexesOptions } from "sunclaw/plugin-sdk/channel-mention-gating";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
 import { resolveWhatsAppGroupsConfigPath } from "../../group-config-path.js";
 import {
   getPrimaryIdentityId,
@@ -33,7 +33,7 @@ export type GroupHistoryEntry = {
 };
 
 type ApplyGroupGatingParams = {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   msg: WebInboundMsg;
   mentionText?: string;
   deferMissingMention?: boolean;

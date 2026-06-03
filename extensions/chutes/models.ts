@@ -1,14 +1,14 @@
-import type { ModelDefinitionConfig } from "openclaw/plugin-sdk/provider-model-shared";
-import { createSubsystemLogger } from "openclaw/plugin-sdk/runtime-env";
+import type { ModelDefinitionConfig } from "sunclaw/plugin-sdk/provider-model-shared";
+import { createSubsystemLogger } from "sunclaw/plugin-sdk/runtime-env";
 import {
   fetchWithSsrFGuard,
   ssrfPolicyFromHttpBaseUrlAllowedHostname,
-} from "openclaw/plugin-sdk/ssrf-runtime";
+} from "sunclaw/plugin-sdk/ssrf-runtime";
 import {
   asPositiveSafeInteger,
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { isChutesModelDiscoveryTestEnvironment } from "./model-discovery-env.js";
 
 const log = createSubsystemLogger("chutes-models");

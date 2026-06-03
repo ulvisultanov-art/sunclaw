@@ -49,7 +49,7 @@ async function stopGatewayIfRunning(runtime: RuntimeEnv) {
 }
 
 function logBackupRecommendation(runtime: RuntimeEnv) {
-  runtime.log(`Recommended first: ${formatCliCommand("openclaw backup create")}`);
+  runtime.log(`Recommended first: ${formatCliCommand("sunclaw backup create")}`);
 }
 
 export async function resetCommand(runtime: RuntimeEnv, opts: ResetOptions) {
@@ -73,7 +73,7 @@ export async function resetCommand(runtime: RuntimeEnv, opts: ResetOptions) {
         {
           value: "config",
           label: "Config only",
-          hint: "openclaw.json",
+          hint: "sunclaw.json",
         },
         {
           value: "config+creds+sessions",
@@ -138,7 +138,7 @@ export async function resetCommand(runtime: RuntimeEnv, opts: ResetOptions) {
     for (const dir of sessionDirs) {
       await removePath(dir, runtime, { dryRun, label: dir });
     }
-    runtime.log(`Next: ${formatCliCommand("openclaw onboard --install-daemon")}`);
+    runtime.log(`Next: ${formatCliCommand("sunclaw onboard --install-daemon")}`);
     return;
   }
 
@@ -150,6 +150,6 @@ export async function resetCommand(runtime: RuntimeEnv, opts: ResetOptions) {
     );
     await removeWorkspaceDirs(workspaceDirs, runtime, { dryRun });
     await removeWorkspaceAttestationPaths(workspaceDirs, runtime, { dryRun });
-    runtime.log(`Next: ${formatCliCommand("openclaw onboard --install-daemon")}`);
+    runtime.log(`Next: ${formatCliCommand("sunclaw onboard --install-daemon")}`);
   }
 }

@@ -1,12 +1,12 @@
 import crypto from "node:crypto";
 import fs from "node:fs/promises";
-import { parseStrictNonNegativeInteger } from "openclaw/plugin-sdk/number-runtime";
+import { parseStrictNonNegativeInteger } from "sunclaw/plugin-sdk/number-runtime";
 import {
   isRecord,
   normalizeOptionalString,
   normalizeStringEntries,
   uniqueStrings,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { getMSTeamsRuntime } from "./runtime.js";
 import {
   resolveMSTeamsSqliteStateEnv,
@@ -127,15 +127,15 @@ export function extractMSTeamsPollVote(
     return null;
   }
   const pollId =
-    readNestedString(value, ["openclawPollId"]) ??
+    readNestedString(value, ["sunclawPollId"]) ??
     readNestedString(value, ["pollId"]) ??
-    readNestedString(value, ["openclaw", "pollId"]) ??
-    readNestedString(value, ["openclaw", "poll", "id"]) ??
-    readNestedString(value, ["data", "openclawPollId"]) ??
+    readNestedString(value, ["sunclaw", "pollId"]) ??
+    readNestedString(value, ["sunclaw", "poll", "id"]) ??
+    readNestedString(value, ["data", "sunclawPollId"]) ??
     readNestedString(value, ["data", "pollId"]) ??
-    readNestedString(value, ["data", "openclaw", "pollId"]) ??
+    readNestedString(value, ["data", "sunclaw", "pollId"]) ??
     // Action.Execute (Universal Action Model) payload shape: value.action.data
-    readNestedString(value, ["action", "data", "openclawPollId"]) ??
+    readNestedString(value, ["action", "data", "sunclawPollId"]) ??
     readNestedString(value, ["action", "data", "pollId"]);
   if (!pollId) {
     return null;
@@ -217,9 +217,9 @@ export function buildMSTeamsPollCard(params: {
       {
         type: "Action.Execute",
         title: "Vote",
-        verb: "openclaw.poll.vote",
+        verb: "sunclaw.poll.vote",
         data: {
-          openclawPollId: pollId,
+          sunclawPollId: pollId,
           pollId,
         },
       },

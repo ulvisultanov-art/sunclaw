@@ -1,10 +1,10 @@
 {
-  "name": "@openclaw/feishu",
+  "name": "@sunclaw/feishu",
   "version": "2026.6.2",
-  "description": "OpenClaw Feishu/Lark channel plugin for chats and workplace tools (community maintained by @m1heng).",
+  "description": "SunClaw Feishu/Lark channel plugin for chats and workplace tools (community maintained by @m1heng).",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/ulvisultanov-art/sunclaw"
   },
   "type": "module",
   "dependencies": {
@@ -13,18 +13,18 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "2026.5.28"
+    "@sunclaw/plugin-sdk": "workspace:*",
+    "sunclaw": "2026.5.28"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.6.2"
+    "sunclaw": ">=2026.6.2"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "sunclaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ],
@@ -46,7 +46,7 @@
       "quickstartAllowFrom": true
     },
     "install": {
-      "npmSpec": "@openclaw/feishu",
+      "npmSpec": "@sunclaw/feishu",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.5.29"
     },
@@ -54,7 +54,7 @@
       "pluginApi": ">=2026.6.2"
     },
     "build": {
-      "openclawVersion": "2026.6.2"
+      "sunclawVersion": "2026.6.2"
     },
     "release": {
       "publishToClawHub": true,

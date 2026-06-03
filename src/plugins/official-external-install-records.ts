@@ -37,7 +37,7 @@ function isOfficialClawHubInstallRecord(record: PluginInstallRecord): boolean {
   if (record.source !== "clawhub" || record.clawhubChannel !== "official") {
     return false;
   }
-  return (record.clawhubUrl ?? "").replace(/\/+$/, "") === "https://clawhub.ai";
+  return (record.clawhubUrl ?? "").replace(/\/+$/, "") === "https://clawhub.complex.az";
 }
 
 export function resolveTrustedSourceLinkedOfficialNpmSpec(params: {

@@ -1,4 +1,4 @@
-import type { ChannelDoctorAdapter } from "openclaw/plugin-sdk/channel-contract";
+import type { ChannelDoctorAdapter } from "sunclaw/plugin-sdk/channel-contract";
 import { collectIMessageDuplicateAccountSourceWarnings } from "./accounts.js";
 
 export const imessageDoctor: ChannelDoctorAdapter = {

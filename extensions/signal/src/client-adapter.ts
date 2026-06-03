@@ -9,7 +9,7 @@
 import {
   asDateTimestampMs,
   resolveExpiresAtMsFromDurationMs,
-} from "openclaw/plugin-sdk/number-runtime";
+} from "sunclaw/plugin-sdk/number-runtime";
 import {
   containerCheck,
   containerRpcRequest,

@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type { PluginRuntimeGatewayRequestScope } from "../plugins/runtime/gateway-request-scope.js";
 import type { GatewayRequestContext, GatewayRequestOptions } from "./server-methods/types.js";
 
@@ -17,13 +17,13 @@ vi.mock("./server-methods.js", () => ({
 type ServerPluginsModule = typeof import("./server-plugins.js");
 type GatewayRequestScopeModule = typeof import("../plugins/runtime/gateway-request-scope.js");
 
-function createTestCfg(): OpenClawConfig {
+function createTestCfg(): SunClawConfig {
   return {
     session: { mainKey: "agent:main:main", scope: "per-sender" },
-  } as unknown as OpenClawConfig;
+  } as unknown as SunClawConfig;
 }
 
-function createTestContext(label: string, cfg: OpenClawConfig): GatewayRequestContext {
+function createTestContext(label: string, cfg: SunClawConfig): GatewayRequestContext {
   return {
     label,
     getRuntimeConfig: () => cfg,

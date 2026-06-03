@@ -1,8 +1,8 @@
 export type { Command } from "commander";
-export type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-export { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
-export { callGatewayFromCli } from "openclaw/plugin-sdk/gateway-runtime";
-export type { PluginRuntime } from "openclaw/plugin-sdk/runtime-store";
+export type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+export { definePluginEntry } from "sunclaw/plugin-sdk/plugin-entry";
+export { callGatewayFromCli } from "sunclaw/plugin-sdk/gateway-runtime";
+export type { PluginRuntime } from "sunclaw/plugin-sdk/runtime-store";
 export { defaultQaRuntimeModelForMode } from "./model-selection.runtime.js";
 export {
   buildQaTarget,
@@ -20,7 +20,7 @@ export {
   searchQaBusMessages,
   sendQaBusMessage,
   setQaChannelRuntime,
-} from "openclaw/plugin-sdk/qa-channel";
+} from "sunclaw/plugin-sdk/qa-channel";
 export type {
   QaBusAttachment,
   QaBusConversation,

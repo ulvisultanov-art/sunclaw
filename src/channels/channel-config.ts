@@ -1,5 +1,5 @@
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
-import { normalizeUniqueSingleOrTrimmedStringList } from "@openclaw/normalization-core/string-normalization";
+import { normalizeLowercaseStringOrEmpty } from "@sunclaw/normalization-core/string-coerce";
+import { normalizeUniqueSingleOrTrimmedStringList } from "@sunclaw/normalization-core/string-normalization";
 
 export type ChannelMatchSource = "direct" | "parent" | "wildcard";
 

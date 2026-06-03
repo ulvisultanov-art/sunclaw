@@ -1,20 +1,20 @@
 ---
-summary: "CLI reference for `openclaw docs` (search the live docs index)"
+summary: "CLI reference for `sunclaw docs` (search the live docs index)"
 read_when:
-  - You want to search the live OpenClaw docs from the terminal
+  - You want to search the live SunClaw docs from the terminal
   - You need to know which hosted search API the docs CLI calls
 title: "Docs"
 ---
 
-# `openclaw docs`
+# `sunclaw docs`
 
-Search the live OpenClaw docs index from the terminal. The command calls OpenClaw's Cloudflare-hosted docs search API and renders the results in your terminal.
+Search the live SunClaw docs index from the terminal. The command calls SunClaw's Cloudflare-hosted docs search API and renders the results in your terminal.
 
 ## Usage
 
 ```bash
-openclaw docs                       # print docs entrypoint and example search
-openclaw docs <query...>            # search the live docs index
+sunclaw docs                       # print docs entrypoint and example search
+sunclaw docs <query...>            # search the live docs index
 ```
 
 Arguments:
@@ -26,16 +26,16 @@ Arguments:
 ## Examples
 
 ```bash
-openclaw docs browser existing-session
-openclaw docs sandbox allowHostControl
-openclaw docs gateway token secretref
+sunclaw docs browser existing-session
+sunclaw docs sandbox allowHostControl
+sunclaw docs gateway token secretref
 ```
 
-With no query, `openclaw docs` prints the docs entrypoint URL plus a sample search command instead of running a search.
+With no query, `sunclaw docs` prints the docs entrypoint URL plus a sample search command instead of running a search.
 
 ## How it works
 
-`openclaw docs` calls `https://docs.openclaw.ai/api/search` and renders the JSON results. The search call uses a fixed 30 second timeout.
+`sunclaw docs` calls `https://docs.sunclaw.complex.az/api/search` and renders the JSON results. The search call uses a fixed 30 second timeout.
 
 ## Output
 
@@ -46,8 +46,8 @@ In non-rich output (piped, `--no-color`, scripts), the same data renders as Mark
 ```markdown
 # Docs search: <query>
 
-- [Title](https://docs.openclaw.ai/...) - snippet
-- [Title](https://docs.openclaw.ai/...) - snippet
+- [Title](https://docs.sunclaw.complex.az/...) - snippet
+- [Title](https://docs.sunclaw.complex.az/...) - snippet
 ```
 
 ## Exit codes
@@ -60,4 +60,4 @@ In non-rich output (piped, `--no-color`, scripts), the same data renders as Mark
 ## Related
 
 - [CLI reference](/cli)
-- [Live docs](https://docs.openclaw.ai)
+- [Live docs](https://docs.sunclaw.complex.az)

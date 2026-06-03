@@ -1,12 +1,12 @@
 import {
   resolveDateTimestampMs,
   resolveExpiresAtMsFromDurationMs,
-} from "@openclaw/normalization-core/number-coercion";
+} from "@sunclaw/normalization-core/number-coercion";
 import type {
   ChannelMessageSendCommitContext,
   ChannelMessageUnknownSendReconciliationResult,
 } from "../../channels/message/types.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { formatErrorMessage } from "../errors.js";
 import { resolveOutboundChannelMessageAdapter } from "./channel-resolution.js";
 import type { OutboundDeliveryResult } from "./deliver-types.js";
@@ -33,7 +33,7 @@ export type RecoverySummary = {
 
 export type DeliverFn = (
   params: {
-    cfg: OpenClawConfig;
+    cfg: SunClawConfig;
   } & QueuedDeliveryPayload & {
       deliveryQueueId?: string;
       deliveryQueueStateDir?: string;
@@ -137,7 +137,7 @@ export async function withActiveDeliveryClaim<T>(
   }
 }
 
-function buildRecoveryDeliverParams(entry: QueuedDelivery, cfg: OpenClawConfig, stateDir?: string) {
+function buildRecoveryDeliverParams(entry: QueuedDelivery, cfg: SunClawConfig, stateDir?: string) {
   return {
     cfg,
     channel: entry.channel,
@@ -167,7 +167,7 @@ function buildRecoveryDeliverParams(entry: QueuedDelivery, cfg: OpenClawConfig, 
 
 async function reconcileUnknownQueuedDelivery(opts: {
   entry: QueuedDelivery;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   log: RecoveryLogger;
 }): Promise<ChannelMessageUnknownSendReconciliationResult | null> {
   const adapter = resolveOutboundChannelMessageAdapter({
@@ -226,7 +226,7 @@ function buildReconciledSentResult(
 
 function buildReconciledCommitContext(params: {
   entry: QueuedDelivery;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   result: OutboundDeliveryResult;
 }): ChannelMessageSendCommitContext {
   const payload = params.entry.payloads[0] ?? {};
@@ -283,7 +283,7 @@ function buildReconciledCommitContext(params: {
 
 async function runReconciledSentCommitHooks(params: {
   entry: QueuedDelivery;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   reconciliation: Extract<ChannelMessageUnknownSendReconciliationResult, { status: "sent" }>;
   log: RecoveryLogger;
 }): Promise<void> {
@@ -375,7 +375,7 @@ export function isPermanentDeliveryError(error: string): boolean {
 
 async function drainQueuedEntry(opts: {
   entry: QueuedDelivery;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   deliver: DeliverFn;
   log: RecoveryLogger;
   stateDir?: string;
@@ -492,7 +492,7 @@ async function drainQueuedEntry(opts: {
 export async function drainPendingDeliveries(opts: {
   drainKey: string;
   logLabel: string;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   log: RecoveryLogger;
   stateDir?: string;
   deliver: DeliverFn;
@@ -604,7 +604,7 @@ export async function drainPendingDeliveries(opts: {
 export async function recoverPendingDeliveries(opts: {
   deliver: DeliverFn;
   log: RecoveryLogger;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   stateDir?: string;
   /** Maximum wall-clock time for recovery in ms. Remaining entries are deferred to next startup. Default: 60 000. */
   maxRecoveryMs?: number;

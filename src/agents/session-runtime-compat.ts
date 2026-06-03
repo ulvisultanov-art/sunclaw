@@ -1,4 +1,4 @@
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@sunclaw/normalization-core/string-coerce";
 import type { SessionEntry } from "../config/sessions.js";
 import { isDefaultAgentRuntimeId } from "./agent-runtime-id.js";
 import { normalizeOptionalAgentRuntimeId } from "./agent-runtime-id.js";
@@ -29,8 +29,8 @@ export function resolveSessionRuntimeOverrideForProvider(params: {
   if (!runtime || isDefaultAgentRuntimeId(runtime)) {
     return undefined;
   }
-  if (runtime === "openclaw") {
-    return "openclaw";
+  if (runtime === "sunclaw") {
+    return "sunclaw";
   }
   if (provider === "openai" && runtime === "codex") {
     return "codex";

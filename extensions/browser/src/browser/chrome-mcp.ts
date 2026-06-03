@@ -11,14 +11,14 @@ import {
   addTimerTimeoutGraceMs,
   parseStrictPositiveInteger,
   resolveNonNegativeIntegerOption,
-} from "openclaw/plugin-sdk/number-runtime";
+} from "sunclaw/plugin-sdk/number-runtime";
 import {
   normalizeOptionalString,
   readStringValue,
   uniqueStrings,
   uniqueValues,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
-import { resolvePreferredOpenClawTmpDir } from "../infra/tmp-openclaw-dir.js";
+} from "sunclaw/plugin-sdk/string-coerce-runtime";
+import { resolvePreferredSunClawTmpDir } from "../infra/tmp-sunclaw-dir.js";
 import { redactToolPayloadText } from "../logging/redact.js";
 import { createSubsystemLogger } from "../logging/subsystem.js";
 import { asRecord } from "../record-shared.js";
@@ -691,7 +691,7 @@ async function createRealSession(
   });
   const client = new Client(
     {
-      name: "openclaw-browser",
+      name: "sunclaw-browser",
       version: "0.0.0",
     },
     {},
@@ -1270,7 +1270,7 @@ async function callTool(
 }
 
 async function withTempFile<T>(fn: (filePath: string) => Promise<T>): Promise<T> {
-  const dir = await fs.mkdtemp(path.join(resolvePreferredOpenClawTmpDir(), "openclaw-chrome-mcp-"));
+  const dir = await fs.mkdtemp(path.join(resolvePreferredSunClawTmpDir(), "sunclaw-chrome-mcp-"));
   const filePath = path.join(dir, randomUUID());
   try {
     return await fn(filePath);

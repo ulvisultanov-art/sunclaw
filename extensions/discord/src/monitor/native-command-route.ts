@@ -1,7 +1,7 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import * as conversationRuntime from "openclaw/plugin-sdk/conversation-binding-runtime";
-import type { ResolvedAgentRoute } from "openclaw/plugin-sdk/routing";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import * as conversationRuntime from "sunclaw/plugin-sdk/conversation-binding-runtime";
+import type { ResolvedAgentRoute } from "sunclaw/plugin-sdk/routing";
+import { normalizeOptionalString } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import {
   resolveDiscordBoundConversationRoute,
   resolveDiscordEffectiveRoute,
@@ -27,7 +27,7 @@ type DiscordNativeInteractionRouteState = {
 };
 
 export async function resolveDiscordNativeInteractionRouteState(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   accountId: string;
   guildId?: string;
   memberRoleIds?: string[];

@@ -1,33 +1,33 @@
-import { resolveChannelConfigWrites } from "openclaw/plugin-sdk/channel-config-writes";
+import { resolveChannelConfigWrites } from "sunclaw/plugin-sdk/channel-config-writes";
 import {
   buildChannelInboundEventContext,
   toInboundMediaFacts,
-} from "openclaw/plugin-sdk/channel-inbound";
-import { resolveAgentOutboundIdentity } from "openclaw/plugin-sdk/channel-outbound";
-import { createChannelPairingController } from "openclaw/plugin-sdk/channel-pairing";
+} from "sunclaw/plugin-sdk/channel-inbound";
+import { resolveAgentOutboundIdentity } from "sunclaw/plugin-sdk/channel-outbound";
+import { createChannelPairingController } from "sunclaw/plugin-sdk/channel-pairing";
 import {
   ensureConfiguredBindingRouteReady,
   resolveConfiguredBindingRoute,
   resolveRuntimeConversationBindingRoute,
-} from "openclaw/plugin-sdk/conversation-runtime";
+} from "sunclaw/plugin-sdk/conversation-runtime";
 import {
   asDateTimestampMs,
   parseStrictNonNegativeInteger,
   resolveExpiresAtMsFromDurationMs,
-} from "openclaw/plugin-sdk/number-runtime";
+} from "sunclaw/plugin-sdk/number-runtime";
 import {
   DEFAULT_GROUP_HISTORY_LIMIT,
   createChannelHistoryWindow,
   type HistoryEntry,
-} from "openclaw/plugin-sdk/reply-history";
-import { resolveInboundLastRouteSessionKey } from "openclaw/plugin-sdk/routing";
+} from "sunclaw/plugin-sdk/reply-history";
+import { resolveInboundLastRouteSessionKey } from "sunclaw/plugin-sdk/routing";
 import {
   resolveDefaultGroupPolicy,
   resolveOpenProviderRuntimeGroupPolicy,
   warnMissingProviderGroupPolicyFallbackOnce,
-} from "openclaw/plugin-sdk/runtime-group-policy";
-import { resolvePinnedMainDmOwnerFromAllowlist } from "openclaw/plugin-sdk/security-runtime";
-import { normalizeOptionalString, uniqueStrings } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/runtime-group-policy";
+import { resolvePinnedMainDmOwnerFromAllowlist } from "sunclaw/plugin-sdk/security-runtime";
+import { normalizeOptionalString, uniqueStrings } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { resolveFeishuRuntimeAccount } from "./accounts.js";
 import {
   checkBotMentioned,

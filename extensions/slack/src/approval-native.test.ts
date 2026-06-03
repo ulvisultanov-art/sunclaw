@@ -1,14 +1,14 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { clearSessionStoreCacheForTest } from "openclaw/plugin-sdk/session-store-runtime";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import { clearSessionStoreCacheForTest } from "sunclaw/plugin-sdk/session-store-runtime";
 import { describe, expect, it } from "vitest";
 import { slackApprovalCapability, slackNativeApprovalAdapter, testing } from "./approval-native.js";
 
 function buildConfig(
-  overrides?: Partial<NonNullable<NonNullable<OpenClawConfig["channels"]>["slack"]>>,
-): OpenClawConfig {
+  overrides?: Partial<NonNullable<NonNullable<SunClawConfig["channels"]>["slack"]>>,
+): SunClawConfig {
   return {
     channels: {
       slack: {
@@ -22,10 +22,10 @@ function buildConfig(
         ...overrides,
       },
     },
-  } as OpenClawConfig;
+  } as SunClawConfig;
 }
 
-const STORE_PATH = path.join(os.tmpdir(), "openclaw-slack-approval-native-test.json");
+const STORE_PATH = path.join(os.tmpdir(), "sunclaw-slack-approval-native-test.json");
 
 function writeStore(store: Record<string, unknown>) {
   fs.writeFileSync(STORE_PATH, `${JSON.stringify(store, null, 2)}\n`, "utf8");
@@ -323,7 +323,7 @@ describe("slack native approval adapter", () => {
           targets: [{ channel: "slack", to: "U123OWNER" }],
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as SunClawConfig;
     const request = {
       id: "plugin:req-1",
       request: {
@@ -392,7 +392,7 @@ describe("slack native approval adapter", () => {
           sessionFilter: ["slack:"],
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as SunClawConfig;
     const request = {
       id: "plugin:req-open-session",
       request: {
@@ -471,7 +471,7 @@ describe("slack native approval adapter", () => {
           targets: [{ channel: "slack", accountId: "work", to: "user:U123OWNER" }],
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as SunClawConfig;
     const request = {
       id: "plugin:req-transport",
       request: {
@@ -531,7 +531,7 @@ describe("slack native approval adapter", () => {
           targets: [{ channel: "slack", accountId: "work", to: "user:U123OWNER" }],
         },
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
     const request = {
       id: "plugin:req-http",
       request: {
@@ -594,7 +594,7 @@ describe("slack native approval adapter", () => {
           targets: [{ channel: "slack", accountId: "work", to: "user:U123OWNER" }],
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as SunClawConfig;
     const request = {
       id: "plugin:req-http-secret-ref",
       request: {
@@ -639,7 +639,7 @@ describe("slack native approval adapter", () => {
           mode: "session",
         },
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
     const request = {
       id: "plugin:req-account-bound",
       request: {
@@ -1058,7 +1058,7 @@ describe("slack native approval adapter", () => {
           targets: [{ channel: "slack", to: "user:U123OWNER" }],
         },
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
 
     expect(
       shouldSuppress({
@@ -1100,7 +1100,7 @@ describe("slack native approval adapter", () => {
           targets: [{ channel: "slack", to: "U123OWNER" }],
         },
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
 
     expect(
       shouldSuppress({
@@ -1146,7 +1146,7 @@ describe("slack native approval adapter", () => {
           targets: [{ channel: "slack", to: "channel:CAPPROVALS" }],
         },
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
 
     expect(
       shouldSuppress({

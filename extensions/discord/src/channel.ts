@@ -2,26 +2,26 @@ import {
   buildLegacyDmAccountAllowlistAdapter,
   createAccountScopedAllowlistNameResolver,
   createNestedAllowlistOverrideResolver,
-} from "openclaw/plugin-sdk/allowlist-config-edit";
+} from "sunclaw/plugin-sdk/allowlist-config-edit";
 import type {
   ChannelMessageActionAdapter,
   ChannelMessageToolDiscovery,
-} from "openclaw/plugin-sdk/channel-contract";
-import { createChatChannelPlugin } from "openclaw/plugin-sdk/channel-core";
-import { createChannelMessageAdapterFromOutbound } from "openclaw/plugin-sdk/channel-outbound";
-import { createPairingPrefixStripper } from "openclaw/plugin-sdk/channel-pairing";
+} from "sunclaw/plugin-sdk/channel-contract";
+import { createChatChannelPlugin } from "sunclaw/plugin-sdk/channel-core";
+import { createChannelMessageAdapterFromOutbound } from "sunclaw/plugin-sdk/channel-outbound";
+import { createPairingPrefixStripper } from "sunclaw/plugin-sdk/channel-pairing";
 import {
   createChannelDirectoryAdapter,
   createRuntimeDirectoryLiveAdapter,
-} from "openclaw/plugin-sdk/directory-runtime";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { sleepWithAbort } from "openclaw/plugin-sdk/runtime-env";
+} from "sunclaw/plugin-sdk/directory-runtime";
+import { formatErrorMessage } from "sunclaw/plugin-sdk/error-runtime";
+import { sleepWithAbort } from "sunclaw/plugin-sdk/runtime-env";
 import {
   createComputedAccountStatusAdapter,
   createDefaultChannelRuntimeState,
-} from "openclaw/plugin-sdk/status-helpers";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { resolveTargetsWithOptionalToken } from "openclaw/plugin-sdk/target-resolver-runtime";
+} from "sunclaw/plugin-sdk/status-helpers";
+import { normalizeOptionalString } from "sunclaw/plugin-sdk/string-coerce-runtime";
+import { resolveTargetsWithOptionalToken } from "sunclaw/plugin-sdk/target-resolver-runtime";
 import {
   listDiscordAccountIds,
   resolveDiscordAccount,
@@ -38,7 +38,7 @@ import {
   projectCredentialSnapshotFields,
   resolveConfiguredFromCredentialStatuses,
   type ChannelPlugin,
-  type OpenClawConfig,
+  type SunClawConfig,
 } from "./channel-api.js";
 import {
   buildDiscordCrossContextPresentation,
@@ -219,7 +219,7 @@ const discordMessageActions = {
   },
 };
 
-function resolveDiscordStartupDelayMs(cfg: OpenClawConfig, accountId: string): number {
+function resolveDiscordStartupDelayMs(cfg: SunClawConfig, accountId: string): number {
   const startupAccountIds = listDiscordAccountIds(cfg).filter((candidateId) => {
     const candidate = resolveDiscordAccount({ cfg, accountId: candidateId });
     return (
@@ -308,7 +308,7 @@ export const discordPlugin: ChannelPlugin<ResolvedDiscordAccount, DiscordProbe> 
         messageToolHints: () => [
           "- Discord mentions: use canonical outbound syntax: users `<@USER_ID>`, channels `<#CHANNEL_ID>`, and roles `<@&ROLE_ID>`. Plain `@name` text only pings when a configured `mentionAliases` entry rewrites it; do not use the legacy `<@!USER_ID>` nickname form.",
           "- Discord components: set `components` when sending messages to include buttons, selects, or v2 containers.",
-          "- Forms: add `components.modal` (title, fields). OpenClaw adds a trigger button and routes submissions as new messages.",
+          "- Forms: add `components.modal` (title, fields). SunClaw adds a trigger button and routes submissions as new messages.",
         ],
       },
       messaging: {
@@ -564,7 +564,7 @@ export const discordPlugin: ChannelPlugin<ResolvedDiscordAccount, DiscordProbe> 
               ],
             };
           }
-          const statusCfg: OpenClawConfig = {
+          const statusCfg: SunClawConfig = {
             channels: {
               discord: {
                 accounts: {

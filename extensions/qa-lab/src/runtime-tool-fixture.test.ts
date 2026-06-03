@@ -50,8 +50,8 @@ describe("runtime tool fixture", () => {
       {
         toolName: "read",
         toolCoverage: {
-          bucket: "openclaw-dynamic-integration",
-          expectedLayer: "openclaw-dynamic",
+          bucket: "sunclaw-dynamic-integration",
+          expectedLayer: "sunclaw-dynamic",
         },
       },
       {
@@ -79,14 +79,14 @@ describe("runtime tool fixture", () => {
     ]);
   });
 
-  it("does not fail Codex-native fixtures solely because OpenClaw dynamic exposure is absent", async () => {
+  it("does not fail Codex-native fixtures solely because SunClaw dynamic exposure is absent", async () => {
     const env = await makeEnv({
       mock: { baseUrl: "http://127.0.0.1:9999" },
       gateway: {
         baseUrl: "http://127.0.0.1:1",
         tempRoot: "",
         workspaceDir: "",
-        runtimeEnv: { OPENCLAW_QA_FORCE_RUNTIME: "codex" },
+        runtimeEnv: { SUNCLAW_QA_FORCE_RUNTIME: "codex" },
         call: vi.fn(),
       },
     });
@@ -126,11 +126,11 @@ describe("runtime tool fixture", () => {
     );
 
     expect(details).toContain("codex-native-workspace read");
-    expect(details).toContain("OpenClaw dynamic exposure is intentionally omitted");
+    expect(details).toContain("SunClaw dynamic exposure is intentionally omitted");
     expect(details).toContain("mock provider happy planned args (diagnostic only)");
   });
 
-  it("still fails required OpenClaw dynamic fixtures when the tool is absent", async () => {
+  it("still fails required SunClaw dynamic fixtures when the tool is absent", async () => {
     const env = await makeEnv();
 
     await expect(
@@ -139,8 +139,8 @@ describe("runtime tool fixture", () => {
         {
           toolName: "web_search",
           toolCoverage: {
-            bucket: "openclaw-dynamic-integration",
-            expectedLayer: "openclaw-dynamic",
+            bucket: "sunclaw-dynamic-integration",
+            expectedLayer: "sunclaw-dynamic",
           },
         },
         {

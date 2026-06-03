@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { resetCoreHealthChecksForTest } from "../flows/doctor-core-checks.js";
 import { clearHealthChecksForTest } from "../flows/health-check-registry.js";
 import { runDoctorLintCli } from "./doctor-lint.js";
@@ -31,7 +31,7 @@ describe("runDoctorLintCli", () => {
       exists: true,
       valid: true,
       config: {},
-      path: "/tmp/openclaw.json",
+      path: "/tmp/sunclaw.json",
     });
 
     const stdout = vi.spyOn(process.stdout, "write").mockImplementation(() => true);
@@ -55,7 +55,7 @@ describe("runDoctorLintCli", () => {
       exists: true,
       valid: true,
       config: {},
-      path: "/tmp/openclaw.json",
+      path: "/tmp/sunclaw.json",
     });
 
     const stdout = vi.spyOn(process.stdout, "write").mockImplementation(() => true);
@@ -81,7 +81,7 @@ describe("runDoctorLintCli", () => {
       exists: true,
       valid: false,
       config: {},
-      path: "/tmp/openclaw.json",
+      path: "/tmp/sunclaw.json",
       issues: [{ path: "gateway.mode", message: "Required" }],
     });
 
@@ -114,7 +114,7 @@ describe("runDoctorLintCli", () => {
       exists: true,
       valid: true,
       config: {},
-      path: "/tmp/openclaw.json",
+      path: "/tmp/sunclaw.json",
     });
 
     const stdout = vi.spyOn(process.stdout, "write").mockImplementation(() => true);
@@ -159,8 +159,8 @@ describe("runDoctorLintCli", () => {
             },
           },
         },
-      } as unknown as OpenClawConfig,
-      path: "/tmp/openclaw.json",
+      } as unknown as SunClawConfig,
+      path: "/tmp/sunclaw.json",
     });
 
     const stdout = vi.spyOn(process.stdout, "write").mockImplementation(() => true);
@@ -185,7 +185,7 @@ describe("runDoctorLintCli", () => {
         ],
       });
       expect(payload.findings[0].message).toContain("Codex plugin is disabled by config");
-      expect(payload.findings[0].fixHint).toContain("openclaw doctor --fix");
+      expect(payload.findings[0].fixHint).toContain("sunclaw doctor --fix");
     } finally {
       stdout.mockRestore();
     }

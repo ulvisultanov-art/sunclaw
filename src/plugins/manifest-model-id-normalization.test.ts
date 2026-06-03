@@ -2,7 +2,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import {
   clearCurrentPluginMetadataSnapshot,
   resolvePluginMetadataControlPlaneFingerprint,
@@ -11,7 +11,7 @@ import {
 import { resolveInstalledPluginIndexPolicyHash } from "./installed-plugin-index-policy.js";
 import { writePersistedInstalledPluginIndexSync } from "./installed-plugin-index-store.js";
 import type { InstalledPluginIndex } from "./installed-plugin-index.js";
-import { listOpenClawPluginManifestMetadata } from "./manifest-metadata-scan.js";
+import { listSunClawPluginManifestMetadata } from "./manifest-metadata-scan.js";
 import { normalizeProviderModelIdWithManifest } from "./manifest-model-id-normalization.js";
 import { clearPluginMetadataLifecycleCaches } from "./plugin-metadata-lifecycle.js";
 import type { PluginMetadataSnapshot } from "./plugin-metadata-snapshot.js";
@@ -19,59 +19,59 @@ import { createEmptyPluginRegistry } from "./registry-empty.js";
 import { resetPluginRuntimeStateForTest, setActivePluginRegistry } from "./runtime.js";
 
 const ORIGINAL_ENV = {
-  OPENCLAW_STATE_DIR: process.env.OPENCLAW_STATE_DIR,
-  OPENCLAW_HOME: process.env.OPENCLAW_HOME,
-  OPENCLAW_DISABLE_BUNDLED_PLUGINS: process.env.OPENCLAW_DISABLE_BUNDLED_PLUGINS,
-  OPENCLAW_BUNDLED_PLUGINS_DIR: process.env.OPENCLAW_BUNDLED_PLUGINS_DIR,
+  SUNCLAW_STATE_DIR: process.env.SUNCLAW_STATE_DIR,
+  SUNCLAW_HOME: process.env.SUNCLAW_HOME,
+  SUNCLAW_DISABLE_BUNDLED_PLUGINS: process.env.SUNCLAW_DISABLE_BUNDLED_PLUGINS,
+  SUNCLAW_BUNDLED_PLUGINS_DIR: process.env.SUNCLAW_BUNDLED_PLUGINS_DIR,
 } as const;
 
 const tempDirs: string[] = [];
 
-function restoreOpenClawStateDirEnv(): void {
-  const value = ORIGINAL_ENV.OPENCLAW_STATE_DIR;
+function restoreSunClawStateDirEnv(): void {
+  const value = ORIGINAL_ENV.SUNCLAW_STATE_DIR;
   if (value === undefined) {
-    delete process.env.OPENCLAW_STATE_DIR;
+    delete process.env.SUNCLAW_STATE_DIR;
   } else {
-    process.env.OPENCLAW_STATE_DIR = value;
+    process.env.SUNCLAW_STATE_DIR = value;
   }
 }
 
-function restoreOpenClawHomeEnv(): void {
-  const value = ORIGINAL_ENV.OPENCLAW_HOME;
+function restoreSunClawHomeEnv(): void {
+  const value = ORIGINAL_ENV.SUNCLAW_HOME;
   if (value === undefined) {
-    delete process.env.OPENCLAW_HOME;
+    delete process.env.SUNCLAW_HOME;
   } else {
-    process.env.OPENCLAW_HOME = value;
+    process.env.SUNCLAW_HOME = value;
   }
 }
 
-function restoreOpenClawDisableBundledPluginsEnv(): void {
-  const value = ORIGINAL_ENV.OPENCLAW_DISABLE_BUNDLED_PLUGINS;
+function restoreSunClawDisableBundledPluginsEnv(): void {
+  const value = ORIGINAL_ENV.SUNCLAW_DISABLE_BUNDLED_PLUGINS;
   if (value === undefined) {
-    delete process.env.OPENCLAW_DISABLE_BUNDLED_PLUGINS;
+    delete process.env.SUNCLAW_DISABLE_BUNDLED_PLUGINS;
   } else {
-    process.env.OPENCLAW_DISABLE_BUNDLED_PLUGINS = value;
+    process.env.SUNCLAW_DISABLE_BUNDLED_PLUGINS = value;
   }
 }
 
-function restoreOpenClawBundledPluginsDirEnv(): void {
-  const value = ORIGINAL_ENV.OPENCLAW_BUNDLED_PLUGINS_DIR;
+function restoreSunClawBundledPluginsDirEnv(): void {
+  const value = ORIGINAL_ENV.SUNCLAW_BUNDLED_PLUGINS_DIR;
   if (value === undefined) {
-    delete process.env.OPENCLAW_BUNDLED_PLUGINS_DIR;
+    delete process.env.SUNCLAW_BUNDLED_PLUGINS_DIR;
   } else {
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = value;
+    process.env.SUNCLAW_BUNDLED_PLUGINS_DIR = value;
   }
 }
 
 function restoreEnv(): void {
-  restoreOpenClawStateDirEnv();
-  restoreOpenClawHomeEnv();
-  restoreOpenClawDisableBundledPluginsEnv();
-  restoreOpenClawBundledPluginsDirEnv();
+  restoreSunClawStateDirEnv();
+  restoreSunClawHomeEnv();
+  restoreSunClawDisableBundledPluginsEnv();
+  restoreSunClawBundledPluginsDirEnv();
 }
 
 function makeTempDir(): string {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-model-id-normalization-"));
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "sunclaw-model-id-normalization-"));
   tempDirs.push(dir);
   return dir;
 }
@@ -89,7 +89,7 @@ function writeInstallIndex(params: { stateDir: string; pluginDir: string }): voi
       plugins: [
         {
           pluginId: "normalizer",
-          manifestPath: path.join(params.pluginDir, "openclaw.plugin.json"),
+          manifestPath: path.join(params.pluginDir, "sunclaw.plugin.json"),
           manifestHash: "normalizer-manifest",
           rootDir: params.pluginDir,
           origin: "global",
@@ -117,7 +117,7 @@ function writeNormalizerManifest(params: { pluginDir: string; prefix: string }):
     "utf-8",
   );
   fs.writeFileSync(
-    path.join(params.pluginDir, "openclaw.plugin.json"),
+    path.join(params.pluginDir, "sunclaw.plugin.json"),
     JSON.stringify({
       id: "normalizer",
       configSchema: { type: "object" },
@@ -138,7 +138,7 @@ function createCurrentSnapshot(params: {
   manifestHash: string;
   prefix: string;
   workspaceDir?: string;
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
 }): PluginMetadataSnapshot {
   const config = params.config ?? {};
   const policyHash = resolveInstalledPluginIndexPolicyHash(config);
@@ -153,7 +153,7 @@ function createCurrentSnapshot(params: {
     plugins: [
       {
         pluginId: "normalizer",
-        manifestPath: `/tmp/normalizer-${params.manifestHash}/openclaw.plugin.json`,
+        manifestPath: `/tmp/normalizer-${params.manifestHash}/sunclaw.plugin.json`,
         manifestHash: params.manifestHash,
         source: `/tmp/normalizer-${params.manifestHash}/index.ts`,
         rootDir: `/tmp/normalizer-${params.manifestHash}`,
@@ -298,7 +298,7 @@ describe("manifest model id normalization", () => {
   });
 
   it("reuses current metadata when callers omit config", () => {
-    const config: OpenClawConfig = { plugins: { allow: ["normalizer"] } };
+    const config: SunClawConfig = { plugins: { allow: ["normalizer"] } };
     setCurrentPluginMetadataSnapshot(
       createCurrentSnapshot({
         manifestHash: "alpha",
@@ -327,10 +327,10 @@ describe("manifest model id normalization", () => {
 
     const env = {
       ...process.env,
-      OPENCLAW_STATE_DIR: stateDir,
-      OPENCLAW_HOME: undefined,
-      OPENCLAW_DISABLE_BUNDLED_PLUGINS: "1",
-      OPENCLAW_BUNDLED_PLUGINS_DIR: undefined,
+      SUNCLAW_STATE_DIR: stateDir,
+      SUNCLAW_HOME: undefined,
+      SUNCLAW_DISABLE_BUNDLED_PLUGINS: "1",
+      SUNCLAW_BUNDLED_PLUGINS_DIR: undefined,
     };
 
     expect(normalizeDemoModelWithEnv(env)).toBe("bravo/demo-model");
@@ -342,10 +342,10 @@ describe("manifest model id normalization", () => {
     writeInstallIndex({ stateDir: stateDirA, pluginDir: pluginDirA });
     writeNormalizerManifest({ pluginDir: pluginDirA, prefix: "alpha" });
 
-    process.env.OPENCLAW_STATE_DIR = stateDirA;
-    process.env.OPENCLAW_HOME = undefined;
-    process.env.OPENCLAW_DISABLE_BUNDLED_PLUGINS = "1";
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = undefined;
+    process.env.SUNCLAW_STATE_DIR = stateDirA;
+    process.env.SUNCLAW_HOME = undefined;
+    process.env.SUNCLAW_DISABLE_BUNDLED_PLUGINS = "1";
+    process.env.SUNCLAW_BUNDLED_PLUGINS_DIR = undefined;
 
     expect(normalizeDemoModel()).toBe("alpha/demo-model");
 
@@ -357,7 +357,7 @@ describe("manifest model id normalization", () => {
     writeInstallIndex({ stateDir: stateDirB, pluginDir: pluginDirB });
     writeNormalizerManifest({ pluginDir: pluginDirB, prefix: "charlie" });
 
-    process.env.OPENCLAW_STATE_DIR = stateDirB;
+    process.env.SUNCLAW_STATE_DIR = stateDirB;
     clearPluginMetadataLifecycleCaches();
     expect(normalizeDemoModel()).toBe("charlie/demo-model");
   });
@@ -365,19 +365,19 @@ describe("manifest model id normalization", () => {
   it("reuses manifest metadata while file fingerprints are unchanged", () => {
     const stateDir = makeTempDir();
     const pluginDir = path.join(stateDir, "extensions", "normalizer");
-    const manifestPath = path.join(pluginDir, "openclaw.plugin.json");
+    const manifestPath = path.join(pluginDir, "sunclaw.plugin.json");
     writeInstallIndex({ stateDir, pluginDir });
     writeNormalizerManifest({ pluginDir, prefix: "alpha" });
 
-    process.env.OPENCLAW_STATE_DIR = stateDir;
-    process.env.OPENCLAW_HOME = undefined;
-    process.env.OPENCLAW_DISABLE_BUNDLED_PLUGINS = "1";
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = undefined;
+    process.env.SUNCLAW_STATE_DIR = stateDir;
+    process.env.SUNCLAW_HOME = undefined;
+    process.env.SUNCLAW_DISABLE_BUNDLED_PLUGINS = "1";
+    process.env.SUNCLAW_BUNDLED_PLUGINS_DIR = undefined;
 
     const readFileSyncSpy = vi.spyOn(fs, "readFileSync");
 
-    expect(listOpenClawPluginManifestMetadata(process.env)).toHaveLength(1);
-    expect(listOpenClawPluginManifestMetadata(process.env)).toHaveLength(1);
+    expect(listSunClawPluginManifestMetadata(process.env)).toHaveLength(1);
+    expect(listSunClawPluginManifestMetadata(process.env)).toHaveLength(1);
 
     const manifestReads = readFileSyncSpy.mock.calls.filter(
       ([filePath]) => String(filePath) === manifestPath,

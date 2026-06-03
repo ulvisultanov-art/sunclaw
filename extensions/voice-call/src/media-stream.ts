@@ -9,20 +9,20 @@
 
 import type { IncomingMessage } from "node:http";
 import type { Duplex } from "node:stream";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { resolveTimerTimeoutMs } from "openclaw/plugin-sdk/number-runtime";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import { resolveTimerTimeoutMs } from "sunclaw/plugin-sdk/number-runtime";
 import type {
   RealtimeTranscriptionProviderConfig,
   RealtimeTranscriptionProviderPlugin,
   RealtimeTranscriptionSession,
-} from "openclaw/plugin-sdk/realtime-transcription";
+} from "sunclaw/plugin-sdk/realtime-transcription";
 import {
   createTalkSessionController,
   recordTalkObservabilityEvent,
   type TalkEvent,
   type TalkEventInput,
   type TalkSessionController,
-} from "openclaw/plugin-sdk/realtime-voice";
+} from "sunclaw/plugin-sdk/realtime-voice";
 import { type RawData, WebSocket, WebSocketServer } from "ws";
 
 /**
@@ -34,7 +34,7 @@ export interface MediaStreamConfig {
   /** Provider-owned config blob passed into the transcription session. */
   providerConfig: RealtimeTranscriptionProviderConfig;
   /** Full runtime config, used by providers that can resolve OAuth profiles. */
-  cfg?: OpenClawConfig;
+  cfg?: SunClawConfig;
   /** Close sockets that never send a valid `start` frame within this window. */
   preStartTimeoutMs?: number;
   /** Max concurrent pre-start sockets. */

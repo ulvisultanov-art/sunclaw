@@ -1,4 +1,4 @@
-import type { AgentToolResult } from "openclaw/plugin-sdk/agent-core";
+import type { AgentToolResult } from "sunclaw/plugin-sdk/agent-core";
 import {
   createAgentToolResultMiddlewareRunner,
   createCodexAppServerToolResultExtensionRunner,
@@ -19,14 +19,14 @@ import {
   type MessagingToolSend,
   type MessagingToolSourceReplyPayload,
   wrapToolWithBeforeToolCallHook,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
-import { emitTrustedDiagnosticEvent } from "openclaw/plugin-sdk/diagnostic-runtime";
-import type { ImageContent, TextContent } from "openclaw/plugin-sdk/llm";
-import { normalizeAgentId } from "openclaw/plugin-sdk/routing";
+} from "sunclaw/plugin-sdk/agent-harness-runtime";
+import { emitTrustedDiagnosticEvent } from "sunclaw/plugin-sdk/diagnostic-runtime";
+import type { ImageContent, TextContent } from "sunclaw/plugin-sdk/llm";
+import { normalizeAgentId } from "sunclaw/plugin-sdk/routing";
 import {
   asOptionalRecord as readRecord,
   isRecord,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/string-coerce-runtime";
 import type { CodexDynamicToolsLoading } from "./config.js";
 import { invalidInlineImageText, sanitizeInlineImageDataUrl } from "./image-payload-sanitizer.js";
 import type {
@@ -80,9 +80,9 @@ export type CodexDynamicToolBridge = {
   };
 };
 
-export const CODEX_OPENCLAW_DYNAMIC_TOOL_NAMESPACE = "openclaw";
+export const CODEX_SUNCLAW_DYNAMIC_TOOL_NAMESPACE = "sunclaw";
 
-// Keep OpenClaw session spawning searchable in Codex mode so Codex's native
+// Keep SunClaw session spawning searchable in Codex mode so Codex's native
 // spawn_agent remains the primary Codex subagent surface.
 const ALWAYS_DIRECT_DYNAMIC_TOOL_NAMES = new Set(["sessions_yield"]);
 const DEFAULT_CODEX_DYNAMIC_TOOL_RESULT_MAX_CHARS = 16_000;
@@ -167,14 +167,14 @@ export function createCodexDynamicToolBridge(params: {
             contentItems: [
               {
                 type: "inputText",
-                text: `OpenClaw tool is not available for this turn: ${call.tool}`,
+                text: `SunClaw tool is not available for this turn: ${call.tool}`,
               },
             ],
             success: false,
           };
         }
         return {
-          contentItems: [{ type: "inputText", text: `Unknown OpenClaw tool: ${call.tool}` }],
+          contentItems: [{ type: "inputText", text: `Unknown SunClaw tool: ${call.tool}` }],
           success: false,
         };
       }
@@ -301,7 +301,7 @@ function createCodexDynamicToolSpec(params: {
   }
   return {
     ...base,
-    namespace: CODEX_OPENCLAW_DYNAMIC_TOOL_NAMESPACE,
+    namespace: CODEX_SUNCLAW_DYNAMIC_TOOL_NAMESPACE,
     deferLoading: true,
   };
 }
@@ -675,7 +675,7 @@ function convertToolContents(
     return content.flatMap(convertToolContent);
   }
 
-  const noticeText = `...(OpenClaw truncated dynamic tool result: original ${totalTextChars} chars, showing ${maxChars}; rerun with narrower args.)`;
+  const noticeText = `...(SunClaw truncated dynamic tool result: original ${totalTextChars} chars, showing ${maxChars}; rerun with narrower args.)`;
   const notice = `\n${noticeText}`;
   const textBudget = Math.max(0, maxChars - notice.length);
   let remainingTextBudget = textBudget;

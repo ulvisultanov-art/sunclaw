@@ -21,7 +21,7 @@ function readJsonFile(filePath) {
 }
 
 export function isPublishablePluginPackage(packageJson) {
-  return packageJson.openclaw?.release?.publishToNpm === true;
+  return packageJson.sunclaw?.release?.publishToNpm === true;
 }
 
 function normalizePackageEntry(value) {
@@ -65,7 +65,7 @@ function getRecord(value) {
 function createNeverBundleDependencyMatcher(packageJson) {
   const externalDependencies = collectExternalDependencyNames(packageJson);
   return (id) => {
-    if (id === "openclaw" || id.startsWith("openclaw/")) {
+    if (id === "sunclaw" || id.startsWith("sunclaw/")) {
       return true;
     }
     for (const dependency of externalDependencies) {
@@ -120,8 +120,8 @@ export function resolvePluginNpmRuntimePackageFiles(plan) {
       : [],
   );
   merged.add("dist/**");
-  if (packageRelativePathExists(plan.packageDir, "openclaw.plugin.json")) {
-    merged.add("openclaw.plugin.json");
+  if (packageRelativePathExists(plan.packageDir, "sunclaw.plugin.json")) {
+    merged.add("sunclaw.plugin.json");
   }
   if (packageRelativePathExists(plan.packageDir, "npm-shrinkwrap.json")) {
     merged.add("npm-shrinkwrap.json");
@@ -138,7 +138,7 @@ export function resolvePluginNpmRuntimePackageFiles(plan) {
   return [...merged];
 }
 
-function normalizeOpenClawPeerRange(value) {
+function normalizeSunClawPeerRange(value) {
   const normalized = normalizePackageEntry(value);
   if (!normalized) {
     return "";
@@ -148,35 +148,35 @@ function normalizeOpenClawPeerRange(value) {
     : `>=${normalized}`;
 }
 
-function resolveOpenClawPeerRange(packageJson, rootPackageJson) {
+function resolveSunClawPeerRange(packageJson, rootPackageJson) {
   return (
-    normalizeOpenClawPeerRange(packageJson.openclaw?.compat?.pluginApi) ||
-    normalizeOpenClawPeerRange(packageJson.peerDependencies?.openclaw) ||
-    normalizeOpenClawPeerRange(packageJson.openclaw?.build?.openclawVersion) ||
-    normalizeOpenClawPeerRange(rootPackageJson?.version) ||
-    normalizeOpenClawPeerRange(packageJson.version)
+    normalizeSunClawPeerRange(packageJson.sunclaw?.compat?.pluginApi) ||
+    normalizeSunClawPeerRange(packageJson.peerDependencies?.sunclaw) ||
+    normalizeSunClawPeerRange(packageJson.sunclaw?.build?.sunclawVersion) ||
+    normalizeSunClawPeerRange(rootPackageJson?.version) ||
+    normalizeSunClawPeerRange(packageJson.version)
   );
 }
 
 export function resolvePluginNpmRuntimePackagePeerMetadata(plan) {
-  const openclawPeerRange = resolveOpenClawPeerRange(plan.packageJson, plan.rootPackageJson);
-  if (!openclawPeerRange) {
+  const sunclawPeerRange = resolveSunClawPeerRange(plan.packageJson, plan.rootPackageJson);
+  if (!sunclawPeerRange) {
     throw new Error(
-      `cannot infer openclaw peerDependency range for ${plan.pluginDir}; set openclaw.compat.pluginApi or package version`,
+      `cannot infer sunclaw peerDependency range for ${plan.pluginDir}; set sunclaw.compat.pluginApi or package version`,
     );
   }
   const existingPeerDependencies = getStringRecord(plan.packageJson.peerDependencies);
   const existingPeerDependenciesMeta = getRecord(plan.packageJson.peerDependenciesMeta);
-  const existingOpenClawMeta = getRecord(existingPeerDependenciesMeta.openclaw);
+  const existingSunClawMeta = getRecord(existingPeerDependenciesMeta.sunclaw);
   return {
     peerDependencies: {
       ...existingPeerDependencies,
-      openclaw: openclawPeerRange,
+      sunclaw: sunclawPeerRange,
     },
     peerDependenciesMeta: {
       ...existingPeerDependenciesMeta,
-      openclaw: {
-        ...existingOpenClawMeta,
+      sunclaw: {
+        ...existingSunClawMeta,
         optional: true,
       },
     },
@@ -228,15 +228,15 @@ export function resolvePluginNpmRuntimeBuildPlan(params) {
     sourceEntries,
     entry,
     outDir: path.join(packageDir, "dist"),
-    runtimeExtensions: (Array.isArray(packageJson.openclaw?.extensions)
-      ? packageJson.openclaw.extensions
+    runtimeExtensions: (Array.isArray(packageJson.sunclaw?.extensions)
+      ? packageJson.sunclaw.extensions
       : []
     )
       .map(normalizePackageEntry)
       .filter(Boolean)
       .map(toPackageRuntimeEntry),
-    runtimeSetupEntry: normalizePackageEntry(packageJson.openclaw?.setupEntry)
-      ? toPackageRuntimeEntry(packageJson.openclaw.setupEntry)
+    runtimeSetupEntry: normalizePackageEntry(packageJson.sunclaw?.setupEntry)
+      ? toPackageRuntimeEntry(packageJson.sunclaw.setupEntry)
       : undefined,
   };
   return {

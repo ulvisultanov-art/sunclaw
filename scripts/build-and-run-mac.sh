@@ -3,9 +3,9 @@ set -euo pipefail
 cd "$(dirname "$0")/../apps/macos"
 
 BUILD_PATH=".build-local"
-PRODUCT="OpenClaw"
+PRODUCT="SunClaw"
 BIN="$BUILD_PATH/debug/$PRODUCT"
-LOG_PATH="${OPENCLAW_MAC_RUN_LOG:-$(mktemp "${TMPDIR:-/tmp}/openclaw-${PRODUCT}.XXXXXX.log")}"
+LOG_PATH="${SUNCLAW_MAC_RUN_LOG:-$(mktemp "${TMPDIR:-/tmp}/sunclaw-${PRODUCT}.XXXXXX.log")}"
 
 printf "\n▶️  Building $PRODUCT (debug, build path: $BUILD_PATH)\n"
 swift build -c debug --product "$PRODUCT" --build-path "$BUILD_PATH"

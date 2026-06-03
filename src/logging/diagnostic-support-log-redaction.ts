@@ -1,4 +1,4 @@
-import { asOptionalRecord } from "@openclaw/normalization-core/record-coerce";
+import { asOptionalRecord } from "@sunclaw/normalization-core/record-coerce";
 import { isBlockedObjectKey } from "../infra/prototype-keys.js";
 import {
   redactSupportString,

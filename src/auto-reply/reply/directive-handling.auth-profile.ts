@@ -1,14 +1,14 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
 import {
   ensureAuthProfileStore,
   findPersistedAuthProfileCredential,
 } from "../../agents/auth-profiles/store.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 
 export function resolveProfileOverride(params: {
   rawProfile?: string;
   provider: string;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   agentDir?: string;
 }): { profileId?: string; error?: string } {
   const raw = normalizeOptionalString(params.rawProfile);

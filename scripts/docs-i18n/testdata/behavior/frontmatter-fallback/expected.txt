@@ -1,1 +1,1 @@
-Deploying OpenClaw on Fly.io
+Deploying SunClaw on Fly.io

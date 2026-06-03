@@ -3,9 +3,9 @@ import type { AgentPromptSurfaceKind } from "./types.js";
 export function normalizeAgentPromptSurfaceKind(
   surface: AgentPromptSurfaceKind,
 ): AgentPromptSurfaceKind {
-  return surface === "pi_main" ? "openclaw_main" : surface;
+  return surface === "pi_main" ? "sunclaw_main" : surface;
 }
 
-export function isOpenClawMainPromptSurface(surface: AgentPromptSurfaceKind): boolean {
-  return normalizeAgentPromptSurfaceKind(surface) === "openclaw_main";
+export function isSunClawMainPromptSurface(surface: AgentPromptSurfaceKind): boolean {
+  return normalizeAgentPromptSurfaceKind(surface) === "sunclaw_main";
 }

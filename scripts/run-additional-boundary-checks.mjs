@@ -431,31 +431,31 @@ function resolveCliShardSpec(args, env) {
   if (inlineShard) {
     return inlineShard.slice("--shard=".length);
   }
-  return env.OPENCLAW_ADDITIONAL_BOUNDARY_SHARD ?? "";
+  return env.SUNCLAW_ADDITIONAL_BOUNDARY_SHARD ?? "";
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   const concurrencyRaw =
-    process.env.OPENCLAW_ADDITIONAL_BOUNDARY_CONCURRENCY ??
-    process.env.OPENCLAW_EXTENSION_BOUNDARY_CONCURRENCY;
+    process.env.SUNCLAW_ADDITIONAL_BOUNDARY_CONCURRENCY ??
+    process.env.SUNCLAW_EXTENSION_BOUNDARY_CONCURRENCY;
   const concurrencyLabel =
-    process.env.OPENCLAW_ADDITIONAL_BOUNDARY_CONCURRENCY === undefined
-      ? "OPENCLAW_EXTENSION_BOUNDARY_CONCURRENCY"
-      : "OPENCLAW_ADDITIONAL_BOUNDARY_CONCURRENCY";
+    process.env.SUNCLAW_ADDITIONAL_BOUNDARY_CONCURRENCY === undefined
+      ? "SUNCLAW_EXTENSION_BOUNDARY_CONCURRENCY"
+      : "SUNCLAW_ADDITIONAL_BOUNDARY_CONCURRENCY";
   const concurrency = resolveConcurrency(
     concurrencyRaw,
     4,
     concurrencyLabel,
   );
   const checkTimeoutMs = resolvePositiveInteger(
-    process.env.OPENCLAW_ADDITIONAL_BOUNDARY_TIMEOUT_MS,
+    process.env.SUNCLAW_ADDITIONAL_BOUNDARY_TIMEOUT_MS,
     DEFAULT_CHECK_TIMEOUT_MS,
-    "OPENCLAW_ADDITIONAL_BOUNDARY_TIMEOUT_MS",
+    "SUNCLAW_ADDITIONAL_BOUNDARY_TIMEOUT_MS",
   );
   const outputMaxBytes = resolvePositiveInteger(
-    process.env.OPENCLAW_ADDITIONAL_BOUNDARY_OUTPUT_MAX_BYTES,
+    process.env.SUNCLAW_ADDITIONAL_BOUNDARY_OUTPUT_MAX_BYTES,
     DEFAULT_OUTPUT_MAX_BYTES,
-    "OPENCLAW_ADDITIONAL_BOUNDARY_OUTPUT_MAX_BYTES",
+    "SUNCLAW_ADDITIONAL_BOUNDARY_OUTPUT_MAX_BYTES",
   );
   const shards = parseShardSelection(resolveCliShardSpec(process.argv.slice(2), process.env));
   const checks = selectChecksForShard(BOUNDARY_CHECKS, shards);

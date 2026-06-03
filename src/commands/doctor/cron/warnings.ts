@@ -4,7 +4,7 @@ import { normalizeOptionalString } from "../../../../packages/normalization-core
 import { note } from "../../../../packages/terminal-core/src/note.js";
 import { formatCliCommand } from "../../../cli/command-format.js";
 import { resolveAgentModelPrimaryValue } from "../../../config/model-input.js";
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../../config/types.sunclaw.js";
 import { shortenHomePath } from "../../../utils.js";
 
 type CrontabReader = () => Promise<{ stdout?: unknown; stderr?: unknown }>;
@@ -62,7 +62,7 @@ function formatProviderCounts(counts: Map<string, number>): string {
 }
 
 export function noteCronModelOverrides(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   jobs: Array<Record<string, unknown>>;
   storePath: string;
 }) {
@@ -113,7 +113,7 @@ export function noteCronModelOverrides(params: {
     lines.push(`- Examples: ${mismatchExamples.join(", ")}`);
   }
   lines.push(
-    `Review with ${formatCliCommand("openclaw cron list")} and ${formatCliCommand("openclaw cron show <job-id>")}; remove \`payload.model\` from jobs that should inherit the default.`,
+    `Review with ${formatCliCommand("sunclaw cron list")} and ${formatCliCommand("sunclaw cron show <job-id>")}; remove \`payload.model\` from jobs that should inherit the default.`,
   );
 
   note(lines.join("\n"), "Cron");
@@ -175,8 +175,8 @@ export async function collectLegacyWhatsAppCrontabHealthWarning(
 
   return [
     "Legacy WhatsApp crontab health check detected.",
-    "`~/.openclaw/bin/ensure-whatsapp.sh` is not maintained by current OpenClaw and can misreport `Gateway inactive` from cron when the systemd user bus environment is missing.",
-    `Remove the stale crontab entry with ${formatCliCommand("crontab -e")}; use ${formatCliCommand("openclaw channels status --probe")}, ${formatCliCommand("openclaw doctor")}, and ${formatCliCommand("openclaw gateway status")} for current health checks.`,
+    "`~/.sunclaw/bin/ensure-whatsapp.sh` is not maintained by current SunClaw and can misreport `Gateway inactive` from cron when the systemd user bus environment is missing.",
+    `Remove the stale crontab entry with ${formatCliCommand("crontab -e")}; use ${formatCliCommand("sunclaw channels status --probe")}, ${formatCliCommand("sunclaw doctor")}, and ${formatCliCommand("sunclaw gateway status")} for current health checks.`,
     `Matched ${pluralize(legacyLines.length, "entry")}.`,
   ].join("\n");
 }

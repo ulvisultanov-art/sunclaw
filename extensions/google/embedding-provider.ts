@@ -6,24 +6,24 @@ import {
   type EmbeddingInput,
   type MemoryEmbeddingProvider,
   type MemoryEmbeddingProviderCreateOptions,
-} from "openclaw/plugin-sdk/memory-core-host-engine-embeddings";
-import { resolveMemorySecretInputString } from "openclaw/plugin-sdk/memory-core-host-secret";
+} from "sunclaw/plugin-sdk/memory-core-host-engine-embeddings";
+import { resolveMemorySecretInputString } from "sunclaw/plugin-sdk/memory-core-host-secret";
 import {
   collectProviderApiKeysForExecution,
   executeWithApiKeyRotation,
   requireApiKey,
   resolveApiKeyForProvider,
-} from "openclaw/plugin-sdk/provider-auth-runtime";
+} from "sunclaw/plugin-sdk/provider-auth-runtime";
 import {
   createProviderHttpError,
   providerOperationRetryConfig,
   readProviderJsonObjectResponse,
-} from "openclaw/plugin-sdk/provider-http";
-import type { SsrFPolicy } from "openclaw/plugin-sdk/ssrf-runtime";
+} from "sunclaw/plugin-sdk/provider-http";
+import type { SsrFPolicy } from "sunclaw/plugin-sdk/ssrf-runtime";
 import {
   asOptionalRecord as asRecord,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/string-coerce-runtime";
 
 export type GeminiEmbeddingClient = {
   baseUrl: string;

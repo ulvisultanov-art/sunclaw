@@ -253,7 +253,7 @@ test("sessions.list keeps bulk rows lightweight and uses persisted model fields"
       JSON.stringify({
         message: {
           role: "assistant",
-          provider: "openclaw",
+          provider: "sunclaw",
           model: "delivery-mirror",
           usage: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
         },

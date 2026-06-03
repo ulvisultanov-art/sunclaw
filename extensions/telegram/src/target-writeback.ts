@@ -1,18 +1,18 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
 import {
   readConfigFileSnapshotForWrite,
   replaceConfigFile,
-} from "openclaw/plugin-sdk/config-mutation";
+} from "sunclaw/plugin-sdk/config-mutation";
 import {
   loadCronStore,
   resolveCronStorePath,
   saveCronStore,
-} from "openclaw/plugin-sdk/cron-store-runtime";
-import { createSubsystemLogger } from "openclaw/plugin-sdk/runtime-env";
+} from "sunclaw/plugin-sdk/cron-store-runtime";
+import { createSubsystemLogger } from "sunclaw/plugin-sdk/runtime-env";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/string-coerce-runtime";
 import {
   normalizeTelegramChatId,
   normalizeTelegramLookupTarget,
@@ -103,7 +103,7 @@ function rewriteTargetIfMatch(params: {
 }
 
 function replaceTelegramDefaultToTargets(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   matchKey: string;
   resolvedTarget: string;
 }): boolean {
@@ -142,7 +142,7 @@ function replaceTelegramDefaultToTargets(params: {
 }
 
 export async function maybePersistResolvedTelegramTarget(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   rawTarget: string;
   resolvedChatId: string;
   verbose?: boolean;

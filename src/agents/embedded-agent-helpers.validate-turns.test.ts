@@ -1,4 +1,4 @@
-import type { AgentMessage } from "openclaw/plugin-sdk/agent-core";
+import type { AgentMessage } from "sunclaw/plugin-sdk/agent-core";
 import { describe, expect, it } from "vitest";
 import {
   mergeConsecutiveUserTurns,

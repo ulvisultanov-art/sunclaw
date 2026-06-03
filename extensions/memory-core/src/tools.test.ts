@@ -13,7 +13,7 @@ import {
 import { createMemorySearchTool, testing as memoryToolsTesting } from "./tools.js";
 import { MemoryGetSchema, MemorySearchSchema } from "./tools.shared.js";
 import {
-  asOpenClawConfig,
+  asSunClawConfig,
   createMemorySearchToolOrThrow,
   expectUnavailableMemorySearchDetails,
 } from "./tools.test-helpers.js";
@@ -26,9 +26,9 @@ const sessionStore = vi.hoisted(() => ({
   },
 }));
 
-vi.mock("openclaw/plugin-sdk/session-transcript-hit", async (importOriginal) => {
+vi.mock("sunclaw/plugin-sdk/session-transcript-hit", async (importOriginal) => {
   const actual =
-    await importOriginal<typeof import("openclaw/plugin-sdk/session-transcript-hit")>();
+    await importOriginal<typeof import("sunclaw/plugin-sdk/session-transcript-hit")>();
   return {
     ...actual,
     loadCombinedSessionStoreForGateway: vi.fn(() => ({
@@ -285,7 +285,7 @@ describe("memory_search unavailable payloads", () => {
       warning:
         "Tell the user: memory search is paused because the memory index was built with a different embedding provider/model/settings.",
       action:
-        "Tell the user to run: openclaw memory status --index or openclaw memory index --force.",
+        "Tell the user to run: sunclaw memory status --index or sunclaw memory index --force.",
     });
     expect(searchCalls).toBe(1);
     expect(getMemorySyncMockCalls()).toBe(0);
@@ -366,7 +366,7 @@ describe("memory_search corpus labels", () => {
 
   it("uses explicit plugin context agent over synthetic active-memory session keys", async () => {
     const tool = createMemorySearchToolOrThrow({
-      config: asOpenClawConfig({
+      config: asSunClawConfig({
         agents: {
           list: [
             { id: "main", default: true, memorySearch: { enabled: false } },
@@ -384,7 +384,7 @@ describe("memory_search corpus labels", () => {
   });
 
   it("re-resolves config when executing a previously created tool", async () => {
-    const startupConfig = asOpenClawConfig({
+    const startupConfig = asSunClawConfig({
       agents: {
         defaults: {
           memorySearch: {
@@ -398,7 +398,7 @@ describe("memory_search corpus labels", () => {
         backend: "builtin",
       },
     });
-    const patchedConfig = asOpenClawConfig({
+    const patchedConfig = asSunClawConfig({
       agents: {
         defaults: {
           memorySearch: {

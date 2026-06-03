@@ -1,8 +1,8 @@
 import {
   createCapturedPluginRegistration,
   registerSingleProviderPlugin,
-} from "openclaw/plugin-sdk/plugin-test-runtime";
-import type { ProviderCatalogContext } from "openclaw/plugin-sdk/provider-catalog-shared";
+} from "sunclaw/plugin-sdk/plugin-test-runtime";
+import type { ProviderCatalogContext } from "sunclaw/plugin-sdk/provider-catalog-shared";
 import { describe, expect, it, vi } from "vitest";
 import deepinfraPlugin from "./index.js";
 import {
@@ -23,7 +23,7 @@ function buildDeepInfraCatalogContext(): ProviderCatalogContext {
   return {
     config: {},
     env: {},
-    agentDir: "/tmp/openclaw-agent",
+    agentDir: "/tmp/sunclaw-agent",
     resolveProviderApiKey: () => ({ apiKey: "profile-key" }),
     resolveProviderAuth: () => ({
       apiKey: "profile-key",
@@ -213,7 +213,7 @@ describe("deepinfra augmentModelCatalog", () => {
 });
 
 describe("deepinfra capability registration", () => {
-  it("registers all DeepInfra-backed OpenClaw provider surfaces", () => {
+  it("registers all DeepInfra-backed SunClaw provider surfaces", () => {
     const captured = createCapturedPluginRegistration();
     deepinfraPlugin.register(captured.api);
 

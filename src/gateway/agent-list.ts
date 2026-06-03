@@ -1,10 +1,10 @@
 import fs from "node:fs";
 import path from "node:path";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
 import { resolveDefaultAgentId } from "../agents/agent-scope.js";
 import { resolveStateDir } from "../config/paths.js";
 import type { SessionScope } from "../config/sessions.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { normalizeAgentId, normalizeMainKey } from "../routing/session-key.js";
 
 type GatewayAgentListRow = {
@@ -26,7 +26,7 @@ function listExistingAgentIdsFromDisk(): string[] {
   }
 }
 
-function listConfiguredAgentIds(cfg: OpenClawConfig): string[] {
+function listConfiguredAgentIds(cfg: SunClawConfig): string[] {
   const ids = new Set<string>();
   const defaultId = normalizeAgentId(resolveDefaultAgentId(cfg));
   ids.add(defaultId);
@@ -48,7 +48,7 @@ function listConfiguredAgentIds(cfg: OpenClawConfig): string[] {
     : sorted;
 }
 
-export function listGatewayAgentsBasic(cfg: OpenClawConfig): {
+export function listGatewayAgentsBasic(cfg: SunClawConfig): {
   defaultId: string;
   mainKey: string;
   scope: SessionScope;

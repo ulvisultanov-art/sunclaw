@@ -1,11 +1,11 @@
-import { resolveSessionIdentityFromMeta } from "@openclaw/acp-core/runtime/session-identity";
+import { resolveSessionIdentityFromMeta } from "@sunclaw/acp-core/runtime/session-identity";
 import type {
   AcpRuntime,
   AcpRuntimeCapabilities,
   AcpRuntimeHandle,
   AcpRuntimeStatus,
-} from "@openclaw/acp-core/runtime/types";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+} from "@sunclaw/acp-core/runtime/types";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { withAcpRuntimeErrorBoundary } from "../runtime/errors.js";
 import type {
   AcpSessionStatus,
@@ -17,7 +17,7 @@ import { requireReadySessionMeta } from "./manager.utils.js";
 import { resolveRuntimeOptionsFromMeta } from "./runtime-options.js";
 
 export async function runManagerGetSessionStatus(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   sessionKey: string;
   signal?: AbortSignal;
   throwIfAborted: (signal?: AbortSignal) => void;

@@ -7,9 +7,9 @@ import { describe, expect, it } from "vitest";
 const assertionsPath = path.resolve("scripts/e2e/lib/npm-onboard-channel-agent/assertions.mjs");
 
 function writeConfig(home: string, channels: Record<string, unknown>): void {
-  const configDir = path.join(home, ".openclaw");
+  const configDir = path.join(home, ".sunclaw");
   fs.mkdirSync(configDir, { recursive: true });
-  fs.writeFileSync(path.join(configDir, "openclaw.json"), JSON.stringify({ channels }));
+  fs.writeFileSync(path.join(configDir, "sunclaw.json"), JSON.stringify({ channels }));
 }
 
 function runAssert(home: string, channel: string, ...tokens: string[]) {
@@ -28,7 +28,7 @@ function runAssert(home: string, channel: string, ...tokens: string[]) {
 
 describe("npm onboard channel agent assertions", () => {
   it("validates channel tokens in their canonical config fields", () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-channel-assertions-"));
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "sunclaw-channel-assertions-"));
     try {
       writeConfig(tempDir, {
         discord: { enabled: true, token: "discord-token" },
@@ -45,7 +45,7 @@ describe("npm onboard channel agent assertions", () => {
   });
 
   it("rejects tokens persisted on the wrong channel config field", () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-channel-assertions-"));
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "sunclaw-channel-assertions-"));
     try {
       writeConfig(tempDir, {
         telegram: { enabled: true, token: "telegram-token" },

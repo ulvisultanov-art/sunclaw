@@ -9,15 +9,15 @@ import { resolvePluginNpmProjectDir } from "./install-paths.js";
 import { createSuiteTempRootTracker } from "./test-helpers/fs-fixtures.js";
 
 const runCommandWithTimeoutMock = vi.fn();
-const resolveOpenClawPackageRootSyncMock = vi.fn();
+const resolveSunClawPackageRootSyncMock = vi.fn();
 
 vi.mock("../process/exec.js", () => ({
   runCommandWithTimeout: (...args: unknown[]) => runCommandWithTimeoutMock(...args),
 }));
 
-vi.mock("../infra/openclaw-root.js", () => ({
-  resolveOpenClawPackageRootSync: (...args: unknown[]) =>
-    resolveOpenClawPackageRootSyncMock(...args),
+vi.mock("../infra/sunclaw-root.js", () => ({
+  resolveSunClawPackageRootSync: (...args: unknown[]) =>
+    resolveSunClawPackageRootSyncMock(...args),
 }));
 
 vi.resetModules();
@@ -25,7 +25,7 @@ vi.resetModules();
 const { installPluginFromNpmPackArchive, installPluginFromNpmSpec, PLUGIN_INSTALL_ERROR_CODE } =
   await import("./install.js");
 
-const suiteTempRootTracker = createSuiteTempRootTracker("openclaw-plugin-install-npm-spec");
+const suiteTempRootTracker = createSuiteTempRootTracker("sunclaw-plugin-install-npm-spec");
 let previousNpmGlobalConfig: string | undefined;
 let npmGlobalConfigPath: string;
 let npmPackArchiveInstallCase: {
@@ -74,7 +74,7 @@ function npmViewArgv(spec: string): string[] {
     "version",
     "dist.integrity",
     "dist.shasum",
-    "openclaw",
+    "sunclaw",
     "--json",
   ];
 }
@@ -173,7 +173,7 @@ function writeInstalledNpmPlugin(params: {
   dependency?: { name: string; version: string };
   hoistedDependency?: { name: string; version: string };
   peerDependencies?: Record<string, string>;
-  openclaw?: Record<string, unknown>;
+  sunclaw?: Record<string, unknown>;
 }) {
   const pluginDir = path.join(params.npmRoot, "node_modules", params.packageName);
   fs.mkdirSync(path.join(pluginDir, "dist"), { recursive: true });
@@ -182,7 +182,7 @@ function writeInstalledNpmPlugin(params: {
     JSON.stringify({
       name: params.packageName,
       version: params.version,
-      openclaw: params.openclaw ?? { extensions: ["./dist/index.js"] },
+      sunclaw: params.sunclaw ?? { extensions: ["./dist/index.js"] },
       ...(params.dependency
         ? { dependencies: { [params.dependency.name]: params.dependency.version } }
         : {}),
@@ -191,7 +191,7 @@ function writeInstalledNpmPlugin(params: {
     "utf-8",
   );
   fs.writeFileSync(
-    path.join(pluginDir, "openclaw.plugin.json"),
+    path.join(pluginDir, "sunclaw.plugin.json"),
     JSON.stringify({
       id: params.pluginId ?? params.packageName,
       name: params.pluginId ?? params.packageName,
@@ -243,12 +243,12 @@ type MockNpmPackage = {
   dependency?: { name: string; version: string };
   hoistedDependency?: { name: string; version: string };
   peerDependencies?: Record<string, string>;
-  openclaw?: Record<string, unknown>;
+  sunclaw?: Record<string, unknown>;
   expectedDependencySpec?: string;
   versions?: string[];
   installedVersion?: string;
   installedIntegrity?: string;
-  materializesRootOpenClaw?: boolean;
+  materializesRootSunClaw?: boolean;
   skipLockfileEntry?: boolean;
   packArchivePath?: string;
   packTarballName?: string;
@@ -272,8 +272,8 @@ function writeNpmRootPackageLock(params: {
       version: pkg.installedVersion ?? pkg.version,
       integrity: pkg.installedIntegrity ?? pkg.integrity ?? "sha512-plugin-test",
     };
-    if (pkg.materializesRootOpenClaw) {
-      lockPackages["node_modules/openclaw"] = {
+    if (pkg.materializesRootSunClaw) {
+      lockPackages["node_modules/sunclaw"] = {
         peer: true,
         version: "2026.5.3",
       };
@@ -301,7 +301,7 @@ function readTextFileTree(dir: string, rootDir = dir): Record<string, string> {
   );
 }
 
-function prunePluginLocalOpenClawPeerLinks(npmRoot: string) {
+function prunePluginLocalSunClawPeerLinks(npmRoot: string) {
   const nodeModulesDir = path.join(npmRoot, "node_modules");
   if (!fs.existsSync(nodeModulesDir)) {
     return;
@@ -325,7 +325,7 @@ function prunePluginLocalOpenClawPeerLinks(npmRoot: string) {
       if (packageNodeModules && !packageNodeModules.isDirectory()) {
         continue;
       }
-      fs.rmSync(path.join(packageNodeModulesDir, "openclaw"), {
+      fs.rmSync(path.join(packageNodeModulesDir, "sunclaw"), {
         recursive: true,
         force: true,
       });
@@ -345,12 +345,12 @@ function mockNpmViewAndInstall(params: {
   dependency?: { name: string; version: string };
   hoistedDependency?: { name: string; version: string };
   peerDependencies?: Record<string, string>;
-  openclaw?: Record<string, unknown>;
+  sunclaw?: Record<string, unknown>;
   expectedDependencySpec?: string;
   versions?: string[];
   installedVersion?: string;
   installedIntegrity?: string;
-  materializesRootOpenClaw?: boolean;
+  materializesRootSunClaw?: boolean;
   skipLockfileEntry?: boolean;
 }) {
   mockNpmViewAndInstallMany([params]);
@@ -401,7 +401,7 @@ function mockNpmViewAndInstallMany(packages: MockNpmPackage[]) {
               integrity: viewPackage.integrity ?? "sha512-plugin-test",
               shasum: viewPackage.shasum ?? "pluginshasum",
             },
-            ...(viewPackage.openclaw ? { openclaw: viewPackage.openclaw } : {}),
+            ...(viewPackage.sunclaw ? { sunclaw: viewPackage.sunclaw } : {}),
           }),
         );
       }
@@ -441,14 +441,14 @@ function mockNpmViewAndInstallMany(packages: MockNpmPackage[]) {
           dependencies?: Record<string, string>;
         };
         const installedPackages: MockNpmPackage[] = [];
-        prunePluginLocalOpenClawPeerLinks(npmRoot);
+        prunePluginLocalSunClawPeerLinks(npmRoot);
         for (const packageName of Object.keys(manifest.dependencies ?? {})) {
-          if (packageName === "openclaw") {
-            const openclawRoot = path.join(npmRoot, "node_modules", "openclaw");
-            fs.mkdirSync(openclawRoot, { recursive: true });
+          if (packageName === "sunclaw") {
+            const sunclawRoot = path.join(npmRoot, "node_modules", "sunclaw");
+            fs.mkdirSync(sunclawRoot, { recursive: true });
             fs.writeFileSync(
-              path.join(openclawRoot, "package.json"),
-              JSON.stringify({ name: "openclaw", version: "0.0.0-test" }),
+              path.join(sunclawRoot, "package.json"),
+              JSON.stringify({ name: "sunclaw", version: "0.0.0-test" }),
               "utf8",
             );
             continue;
@@ -474,12 +474,12 @@ function mockNpmViewAndInstallMany(packages: MockNpmPackage[]) {
             npmRoot,
             version: pkg.installedVersion ?? pkg.version,
           });
-          if (pkg.materializesRootOpenClaw) {
-            const openclawRoot = path.join(npmRoot, "node_modules", "openclaw");
-            fs.mkdirSync(openclawRoot, { recursive: true });
+          if (pkg.materializesRootSunClaw) {
+            const sunclawRoot = path.join(npmRoot, "node_modules", "sunclaw");
+            fs.mkdirSync(sunclawRoot, { recursive: true });
             fs.writeFileSync(
-              path.join(openclawRoot, "package.json"),
-              JSON.stringify({ name: "openclaw", version: "2026.5.3" }),
+              path.join(sunclawRoot, "package.json"),
+              JSON.stringify({ name: "sunclaw", version: "2026.5.3" }),
               "utf8",
             );
           }
@@ -494,12 +494,12 @@ function mockNpmViewAndInstallMany(packages: MockNpmPackage[]) {
       }
       if (argv[0] === "npm" && argv[1] === "uninstall") {
         const packageName = (argv as string[]).at(-1);
-        if (packageName === "openclaw") {
+        if (packageName === "sunclaw") {
           const npmRoot = options?.cwd;
           if (!npmRoot) {
             throw new Error(`unexpected npm uninstall command: ${(argv as string[]).join(" ")}`);
           }
-          fs.rmSync(path.join(npmRoot, "node_modules", "openclaw"), {
+          fs.rmSync(path.join(npmRoot, "node_modules", "sunclaw"), {
             recursive: true,
             force: true,
           });
@@ -541,38 +541,38 @@ afterAll(() => {
 
 beforeEach(() => {
   runCommandWithTimeoutMock.mockReset();
-  resolveOpenClawPackageRootSyncMock.mockReset();
+  resolveSunClawPackageRootSyncMock.mockReset();
   const hostRoot = suiteTempRootTracker.makeTempDir();
   fs.writeFileSync(
     path.join(hostRoot, "package.json"),
-    `${JSON.stringify({ name: "openclaw", version: "0.0.0-test" }, null, 2)}\n`,
+    `${JSON.stringify({ name: "sunclaw", version: "0.0.0-test" }, null, 2)}\n`,
     "utf8",
   );
-  resolveOpenClawPackageRootSyncMock.mockReturnValue(hostRoot);
+  resolveSunClawPackageRootSyncMock.mockReturnValue(hostRoot);
   vi.unstubAllEnvs();
   process.env.NPM_CONFIG_GLOBALCONFIG = npmGlobalConfigPath;
 });
 
 beforeAll(async () => {
   runCommandWithTimeoutMock.mockReset();
-  resolveOpenClawPackageRootSyncMock.mockReset();
+  resolveSunClawPackageRootSyncMock.mockReset();
   const hostRoot = suiteTempRootTracker.makeTempDir();
   fs.writeFileSync(
     path.join(hostRoot, "package.json"),
-    `${JSON.stringify({ name: "openclaw", version: "0.0.0-test" }, null, 2)}\n`,
+    `${JSON.stringify({ name: "sunclaw", version: "0.0.0-test" }, null, 2)}\n`,
     "utf8",
   );
-  resolveOpenClawPackageRootSyncMock.mockReturnValue(hostRoot);
+  resolveSunClawPackageRootSyncMock.mockReturnValue(hostRoot);
   process.env.NPM_CONFIG_GLOBALCONFIG = npmGlobalConfigPath;
 
   const stateDir = suiteTempRootTracker.makeTempDir();
   const npmRoot = path.join(stateDir, "npm");
-  const archivePath = path.join(stateDir, "openclaw-pack-demo-1.2.3.tgz");
+  const archivePath = path.join(stateDir, "sunclaw-pack-demo-1.2.3.tgz");
   fs.writeFileSync(archivePath, "fixture pack contents", "utf8");
 
   mockNpmViewAndInstallMany([
     {
-      packageName: "@openclaw/pack-demo",
+      packageName: "@sunclaw/pack-demo",
       version: "1.2.3",
       pluginId: "pack-demo",
       npmRoot,
@@ -581,8 +581,8 @@ beforeAll(async () => {
       packArchivePath: archivePath,
     },
     {
-      spec: "@openclaw/voice-call@0.0.1",
-      packageName: "@openclaw/voice-call",
+      spec: "@sunclaw/voice-call@0.0.1",
+      packageName: "@sunclaw/voice-call",
       version: "0.0.1",
       pluginId: "voice-call",
       npmRoot,
@@ -596,12 +596,12 @@ beforeAll(async () => {
   });
   const npmProjectRoot = resolvePluginNpmProjectDir({
     npmDir: npmRoot,
-    packageName: "@openclaw/pack-demo",
+    packageName: "@sunclaw/pack-demo",
   });
   const managedManifest = JSON.parse(
     await fs.promises.readFile(path.join(npmProjectRoot, "package.json"), "utf8"),
   ) as { dependencies?: Record<string, string> };
-  const dependencySpec = managedManifest.dependencies?.["@openclaw/pack-demo"];
+  const dependencySpec = managedManifest.dependencies?.["@sunclaw/pack-demo"];
   const stagedArchivePath = dependencySpec
     ? resolveManagedFileDependency(npmProjectRoot, dependencySpec)
     : null;
@@ -620,22 +620,22 @@ beforeAll(async () => {
 
 beforeAll(async () => {
   runCommandWithTimeoutMock.mockReset();
-  resolveOpenClawPackageRootSyncMock.mockReset();
+  resolveSunClawPackageRootSyncMock.mockReset();
   const hostRoot = suiteTempRootTracker.makeTempDir();
   fs.writeFileSync(
     path.join(hostRoot, "package.json"),
-    `${JSON.stringify({ name: "openclaw", version: "0.0.0-test" }, null, 2)}\n`,
+    `${JSON.stringify({ name: "sunclaw", version: "0.0.0-test" }, null, 2)}\n`,
     "utf8",
   );
-  resolveOpenClawPackageRootSyncMock.mockReturnValue(hostRoot);
+  resolveSunClawPackageRootSyncMock.mockReturnValue(hostRoot);
   process.env.NPM_CONFIG_GLOBALCONFIG = npmGlobalConfigPath;
 
   const stateDir = suiteTempRootTracker.makeTempDir();
   const npmRoot = path.join(stateDir, "npm");
 
   mockNpmViewAndInstall({
-    spec: "@openclaw/voice-call@0.0.1",
-    packageName: "@openclaw/voice-call",
+    spec: "@sunclaw/voice-call@0.0.1",
+    packageName: "@sunclaw/voice-call",
     version: "0.0.1",
     pluginId: "voice-call",
     npmRoot,
@@ -643,7 +643,7 @@ beforeAll(async () => {
   });
 
   const result = await installPluginFromNpmSpec({
-    spec: "@openclaw/voice-call@0.0.1",
+    spec: "@sunclaw/voice-call@0.0.1",
     npmDir: npmRoot,
     logger: { info: () => {}, warn: () => {} },
   });
@@ -668,16 +668,16 @@ describe("installPluginFromNpmSpec", () => {
       return;
     }
     expect(result.pluginId).toBe("pack-demo");
-    expect(result.targetDir).toBe(resolveTestPluginPackageDir(npmRoot, "@openclaw/pack-demo"));
-    expect(result.npmResolution?.resolvedSpec).toBe("@openclaw/pack-demo@1.2.3");
+    expect(result.targetDir).toBe(resolveTestPluginPackageDir(npmRoot, "@sunclaw/pack-demo"));
+    expect(result.npmResolution?.resolvedSpec).toBe("@sunclaw/pack-demo@1.2.3");
     expect(result.npmResolution?.integrity).toBe("sha512-pack-demo");
-    expect(result.npmTarballName).toBe("openclaw-pack-demo-1.2.3.tgz");
+    expect(result.npmTarballName).toBe("sunclaw-pack-demo-1.2.3.tgz");
     expectNpmInstallIntoProject({
       calls,
       npmRoot,
-      packageName: "@openclaw/pack-demo",
+      packageName: "@sunclaw/pack-demo",
     });
-    expect(dependencySpec).toMatch(/^file:\.\/_openclaw-pack-archives\/.+\.tgz$/);
+    expect(dependencySpec).toMatch(/^file:\.\/_sunclaw-pack-archives\/.+\.tgz$/);
     expect(dependencySpec).not.toContain(archivePath);
     expect(stagedArchiveContents).toBe("fixture pack contents");
   });
@@ -714,16 +714,16 @@ describe("installPluginFromNpmSpec", () => {
     expect(result.error).toContain("unsupported npm pack package name");
     expect(fs.existsSync(path.join(victimDir, "keep.txt"))).toBe(true);
     expect(fs.existsSync(path.join(npmRoot, "package.json"))).toBe(false);
-    expect(fs.existsSync(path.join(npmRoot, "_openclaw-pack-archives"))).toBe(false);
+    expect(fs.existsSync(path.join(npmRoot, "_sunclaw-pack-archives"))).toBe(false);
     expect(runCommandWithTimeoutMock.mock.calls).toHaveLength(1);
   });
 
   it("rolls back staged npm pack archives when a forced update is blocked", async () => {
     const stateDir = suiteTempRootTracker.makeTempDir();
     const npmRoot = path.join(stateDir, "npm");
-    const packageName = "@openclaw/pack-demo";
-    const archiveV1Path = path.join(stateDir, "openclaw-pack-demo-1.0.0.tgz");
-    const archiveV2Path = path.join(stateDir, "openclaw-pack-demo-2.0.0.tgz");
+    const packageName = "@sunclaw/pack-demo";
+    const archiveV1Path = path.join(stateDir, "sunclaw-pack-demo-1.0.0.tgz");
+    const archiveV2Path = path.join(stateDir, "sunclaw-pack-demo-2.0.0.tgz");
     fs.writeFileSync(archiveV1Path, "v1 pack contents", "utf8");
     fs.writeFileSync(archiveV2Path, "v2 pack contents", "utf8");
 
@@ -783,8 +783,8 @@ describe("installPluginFromNpmSpec", () => {
   it("cleans staged npm pack archives when a fresh install is blocked", async () => {
     const stateDir = suiteTempRootTracker.makeTempDir();
     const npmRoot = path.join(stateDir, "npm");
-    const packageName = "@openclaw/pack-demo";
-    const archivePath = path.join(stateDir, "openclaw-pack-demo-2.0.0.tgz");
+    const packageName = "@sunclaw/pack-demo";
+    const archivePath = path.join(stateDir, "sunclaw-pack-demo-2.0.0.tgz");
     fs.writeFileSync(archivePath, "v2 pack contents", "utf8");
 
     mockNpmViewAndInstallMany([
@@ -815,12 +815,12 @@ describe("installPluginFromNpmSpec", () => {
       npmDir: npmRoot,
       packageName,
     });
-    expect(fs.existsSync(path.join(npmProjectRoot, "_openclaw-pack-archives"))).toBe(false);
+    expect(fs.existsSync(path.join(npmProjectRoot, "_sunclaw-pack-archives"))).toBe(false);
     expect(fs.existsSync(path.join(npmProjectRoot, "package.json"))).toBe(false);
     expect(fs.existsSync(resolveTestPluginPackageDir(npmRoot, packageName))).toBe(false);
   });
 
-  it("installs npm plugins into .openclaw/npm", async () => {
+  it("installs npm plugins into .sunclaw/npm", async () => {
     const { calls, dependencyInstalled, npmRoot, result } = npmSpecInstallCase;
 
     expect(result.ok).toBe(true);
@@ -828,14 +828,14 @@ describe("installPluginFromNpmSpec", () => {
       return;
     }
     expect(result.pluginId).toBe("voice-call");
-    expect(result.targetDir).toBe(resolveTestPluginPackageDir(npmRoot, "@openclaw/voice-call"));
-    expect(result.npmResolution?.resolvedSpec).toBe("@openclaw/voice-call@0.0.1");
+    expect(result.targetDir).toBe(resolveTestPluginPackageDir(npmRoot, "@sunclaw/voice-call"));
+    expect(result.npmResolution?.resolvedSpec).toBe("@sunclaw/voice-call@0.0.1");
     expect(result.npmResolution?.integrity).toBe("sha512-plugin-test");
     expect(dependencyInstalled).toBe(true);
     expectNpmInstallIntoProject({
       calls,
       npmRoot,
-      packageName: "@openclaw/voice-call",
+      packageName: "@sunclaw/voice-call",
     });
   });
 
@@ -955,7 +955,7 @@ describe("installPluginFromNpmSpec", () => {
   it("quarantines and rebuilds a corrupt managed npm project after npm from-argument failures", async () => {
     const stateDir = suiteTempRootTracker.makeTempDir();
     const npmRoot = path.join(stateDir, "npm");
-    const packageName = "@openclaw/voice-call";
+    const packageName = "@sunclaw/voice-call";
     const warnings: string[] = [];
     const npmProjectRoot = resolvePluginNpmProjectDir({ npmDir: npmRoot, packageName });
     const stalePackageDir = path.join(npmProjectRoot, "node_modules", "stale-plugin");
@@ -1010,7 +1010,7 @@ describe("installPluginFromNpmSpec", () => {
     expect(warnings.some((warning) => warning.includes("managed npm project corruption"))).toBe(
       true,
     );
-    const quarantineParent = path.join(npmProjectRoot, "_openclaw-quarantined-npm-projects");
+    const quarantineParent = path.join(npmProjectRoot, "_sunclaw-quarantined-npm-projects");
     const quarantines = fs.readdirSync(quarantineParent);
     expect(quarantines).toHaveLength(1);
     const quarantineDir = path.join(quarantineParent, quarantines[0] ?? "");
@@ -1126,7 +1126,7 @@ describe("installPluginFromNpmSpec", () => {
     expect(managedInstallAttempts).toBeGreaterThanOrEqual(2);
     expect(result.error).toContain("npm install failed after managed npm project recovery");
     expect(result.error).toContain("Original npm error");
-    const quarantineParent = path.join(npmProjectRoot, "_openclaw-quarantined-npm-projects");
+    const quarantineParent = path.join(npmProjectRoot, "_sunclaw-quarantined-npm-projects");
     const quarantines = fs.readdirSync(quarantineParent);
     expect(quarantines).toHaveLength(1);
     expect(
@@ -1171,7 +1171,7 @@ describe("installPluginFromNpmSpec", () => {
   });
 
   it.runIf(process.platform !== "win32")(
-    "does not let managed openclaw peer links poison later npm installs",
+    "does not let managed sunclaw peer links poison later npm installs",
     async () => {
       const stateDir = suiteTempRootTracker.makeTempDir();
       const npmRoot = path.join(stateDir, "npm");
@@ -1183,7 +1183,7 @@ describe("installPluginFromNpmSpec", () => {
           version: "1.0.0",
           pluginId: "peer-plugin",
           npmRoot,
-          peerDependencies: { openclaw: "^2026.0.0" },
+          peerDependencies: { sunclaw: "^2026.0.0" },
         },
         {
           spec: "next-plugin@1.0.0",
@@ -1202,7 +1202,7 @@ describe("installPluginFromNpmSpec", () => {
       expect(first.ok).toBe(true);
       const peerPluginDir = resolveTestPluginPackageDir(npmRoot, "peer-plugin");
       expect(
-        fs.lstatSync(path.join(peerPluginDir, "node_modules", "openclaw")).isSymbolicLink(),
+        fs.lstatSync(path.join(peerPluginDir, "node_modules", "sunclaw")).isSymbolicLink(),
       ).toBe(true);
 
       const second = await installPluginFromNpmSpec({
@@ -1213,10 +1213,10 @@ describe("installPluginFromNpmSpec", () => {
 
       expect(second.ok).toBe(true);
       if (!second.ok) {
-        expect(second.error).not.toContain("peer-plugin/node_modules/openclaw");
+        expect(second.error).not.toContain("peer-plugin/node_modules/sunclaw");
       }
       expect(
-        fs.lstatSync(path.join(peerPluginDir, "node_modules", "openclaw")).isSymbolicLink(),
+        fs.lstatSync(path.join(peerPluginDir, "node_modules", "sunclaw")).isSymbolicLink(),
       ).toBe(true);
     },
   );
@@ -1235,7 +1235,7 @@ describe("installPluginFromNpmSpec", () => {
           version: "1.0.0",
           pluginId: "peer-plugin",
           npmRoot,
-          peerDependencies: { openclaw: "^2026.0.0" },
+          peerDependencies: { sunclaw: "^2026.0.0" },
         },
         {
           spec: "next-plugin@1.0.0",
@@ -1271,23 +1271,23 @@ describe("installPluginFromNpmSpec", () => {
     },
   );
 
-  it("rejects managed npm plugins when their openclaw peer link cannot be repaired", async () => {
+  it("rejects managed npm plugins when their sunclaw peer link cannot be repaired", async () => {
     const stateDir = suiteTempRootTracker.makeTempDir();
     const npmRoot = path.join(stateDir, "npm");
     const warnings: string[] = [];
 
-    resolveOpenClawPackageRootSyncMock.mockReturnValue(null);
+    resolveSunClawPackageRootSyncMock.mockReturnValue(null);
     mockNpmViewAndInstall({
-      spec: "@openclaw/codex@2026.5.7",
-      packageName: "@openclaw/codex",
+      spec: "@sunclaw/codex@2026.5.7",
+      packageName: "@sunclaw/codex",
       version: "2026.5.7",
-      pluginId: "@openclaw/codex",
+      pluginId: "@sunclaw/codex",
       npmRoot,
-      peerDependencies: { openclaw: ">=2026.5.7" },
+      peerDependencies: { sunclaw: ">=2026.5.7" },
     });
 
     const result = await installPluginFromNpmSpec({
-      spec: "@openclaw/codex@2026.5.7",
+      spec: "@sunclaw/codex@2026.5.7",
       npmDir: npmRoot,
       logger: { info: () => {}, warn: (message) => warnings.push(message) },
     });
@@ -1296,15 +1296,15 @@ describe("installPluginFromNpmSpec", () => {
     if (result.ok) {
       return;
     }
-    expect(result.error).toContain("@openclaw/codex");
-    expect(result.error).toContain("plugin-local node_modules/openclaw link");
+    expect(result.error).toContain("@sunclaw/codex");
+    expect(result.error).toContain("plugin-local node_modules/sunclaw link");
     expect(
-      warnings.some((warning) => warning.includes("Could not locate openclaw package root")),
+      warnings.some((warning) => warning.includes("Could not locate sunclaw package root")),
     ).toBe(true);
-    expect(fs.existsSync(resolveTestPluginPackageDir(npmRoot, "@openclaw/codex"))).toBe(false);
+    expect(fs.existsSync(resolveTestPluginPackageDir(npmRoot, "@sunclaw/codex"))).toBe(false);
     const npmProjectRoot = resolvePluginNpmProjectDir({
       npmDir: npmRoot,
-      packageName: "@openclaw/codex",
+      packageName: "@sunclaw/codex",
     });
     expect(fs.existsSync(path.join(npmProjectRoot, "package.json"))).toBe(false);
   });
@@ -1312,16 +1312,16 @@ describe("installPluginFromNpmSpec", () => {
   it("rejects exact npm plugins whose package compatibility requires a newer host", async () => {
     const stateDir = suiteTempRootTracker.makeTempDir();
     const npmRoot = path.join(stateDir, "npm");
-    vi.stubEnv("OPENCLAW_COMPATIBILITY_HOST_VERSION", "2026.5.10-beta.1");
+    vi.stubEnv("SUNCLAW_COMPATIBILITY_HOST_VERSION", "2026.5.10-beta.1");
 
     mockNpmViewAndInstall({
-      spec: "@openclaw/whatsapp@2026.5.27",
-      packageName: "@openclaw/whatsapp",
+      spec: "@sunclaw/whatsapp@2026.5.27",
+      packageName: "@sunclaw/whatsapp",
       version: "2026.5.27",
       pluginId: "whatsapp",
       npmRoot,
-      peerDependencies: { openclaw: ">=2026.5.27" },
-      openclaw: {
+      peerDependencies: { sunclaw: ">=2026.5.27" },
+      sunclaw: {
         extensions: ["./dist/index.js"],
         install: { minHostVersion: ">=2026.4.25" },
         compat: { pluginApi: ">=2026.5.27" },
@@ -1329,7 +1329,7 @@ describe("installPluginFromNpmSpec", () => {
     });
 
     const result = await installPluginFromNpmSpec({
-      spec: "@openclaw/whatsapp@2026.5.27",
+      spec: "@sunclaw/whatsapp@2026.5.27",
       npmDir: npmRoot,
       logger: { info: () => {}, warn: () => {} },
     });
@@ -1342,7 +1342,7 @@ describe("installPluginFromNpmSpec", () => {
     expect(result.error).toContain("requires plugin API >=2026.5.27");
     expect(result.error).toContain("runtime exposes 2026.5.10-beta.1");
     expect(result.error).toContain("install a compatible plugin version");
-    expect(fs.existsSync(path.join(npmRoot, "node_modules", "@openclaw", "whatsapp"))).toBe(false);
+    expect(fs.existsSync(path.join(npmRoot, "node_modules", "@sunclaw", "whatsapp"))).toBe(false);
     expect(fs.existsSync(path.join(npmRoot, "package.json"))).toBe(false);
     expect(
       runCommandWithTimeoutMock.mock.calls.some(([argv]) => isManagedNpmInstallCommand(argv)),
@@ -1353,30 +1353,30 @@ describe("installPluginFromNpmSpec", () => {
     const stateDir = suiteTempRootTracker.makeTempDir();
     const npmRoot = path.join(stateDir, "npm");
     const warnings: string[] = [];
-    vi.stubEnv("OPENCLAW_COMPATIBILITY_HOST_VERSION", "2026.5.10-beta.1");
+    vi.stubEnv("SUNCLAW_COMPATIBILITY_HOST_VERSION", "2026.5.10-beta.1");
 
     mockNpmViewAndInstallMany([
       {
-        spec: "@openclaw/whatsapp",
-        packageName: "@openclaw/whatsapp",
+        spec: "@sunclaw/whatsapp",
+        packageName: "@sunclaw/whatsapp",
         version: "2026.5.27",
         pluginId: "whatsapp",
         npmRoot,
         versions: ["2026.5.26", "2026.5.27"],
-        openclaw: {
+        sunclaw: {
           extensions: ["./dist/index.js"],
           install: { minHostVersion: ">=2026.4.25" },
           compat: { pluginApi: ">=2026.5.27" },
         },
       },
       {
-        spec: "@openclaw/whatsapp@2026.5.26",
-        packageName: "@openclaw/whatsapp",
+        spec: "@sunclaw/whatsapp@2026.5.26",
+        packageName: "@sunclaw/whatsapp",
         version: "2026.5.26",
         pluginId: "whatsapp",
         npmRoot,
         expectedDependencySpec: "2026.5.26",
-        openclaw: {
+        sunclaw: {
           extensions: ["./dist/index.js"],
           install: { minHostVersion: ">=2026.4.25" },
           compat: { pluginApi: ">=2026.5.10-beta.1" },
@@ -1385,7 +1385,7 @@ describe("installPluginFromNpmSpec", () => {
     ]);
 
     const result = await installPluginFromNpmSpec({
-      spec: "@openclaw/whatsapp",
+      spec: "@sunclaw/whatsapp",
       npmDir: npmRoot,
       logger: { info: () => {}, warn: (message) => warnings.push(message) },
     });
@@ -1394,13 +1394,13 @@ describe("installPluginFromNpmSpec", () => {
     if (!result.ok) {
       return;
     }
-    expect(result.npmResolution?.resolvedSpec).toBe("@openclaw/whatsapp@2026.5.26");
+    expect(result.npmResolution?.resolvedSpec).toBe("@sunclaw/whatsapp@2026.5.26");
     expect(result.npmResolution?.version).toBe("2026.5.26");
-    expect(warnings.join("\n")).toContain("using newest compatible @openclaw/whatsapp@2026.5.26");
+    expect(warnings.join("\n")).toContain("using newest compatible @sunclaw/whatsapp@2026.5.26");
     expect(
       JSON.parse(
         fs.readFileSync(
-          path.join(resolveTestPluginPackageDir(npmRoot, "@openclaw/whatsapp"), "package.json"),
+          path.join(resolveTestPluginPackageDir(npmRoot, "@sunclaw/whatsapp"), "package.json"),
           "utf8",
         ),
       ).version,
@@ -1412,7 +1412,7 @@ describe("installPluginFromNpmSpec", () => {
     const npmRoot = path.join(stateDir, "npm");
     const npmProjectRoot = resolvePluginNpmProjectDir({
       npmDir: npmRoot,
-      packageName: "@openclaw/whatsapp",
+      packageName: "@sunclaw/whatsapp",
     });
     const warnings: string[] = [];
     fs.mkdirSync(npmProjectRoot, { recursive: true });
@@ -1421,45 +1421,45 @@ describe("installPluginFromNpmSpec", () => {
       JSON.stringify({
         private: true,
         dependencies: {
-          "@openclaw/whatsapp": "2026.5.26",
+          "@sunclaw/whatsapp": "2026.5.26",
         },
       }),
       "utf8",
     );
     writeInstalledNpmPlugin({
-      packageName: "@openclaw/whatsapp",
+      packageName: "@sunclaw/whatsapp",
       version: "2026.5.26",
       pluginId: "whatsapp",
       npmRoot: npmProjectRoot,
-      openclaw: {
+      sunclaw: {
         extensions: ["./dist/index.js"],
         install: { minHostVersion: ">=2026.4.25" },
         compat: { pluginApi: ">=2026.5.10-beta.1" },
       },
     });
-    vi.stubEnv("OPENCLAW_COMPATIBILITY_HOST_VERSION", "2026.5.10-beta.1");
+    vi.stubEnv("SUNCLAW_COMPATIBILITY_HOST_VERSION", "2026.5.10-beta.1");
     mockNpmViewAndInstallMany([
       {
-        spec: "@openclaw/whatsapp",
-        packageName: "@openclaw/whatsapp",
+        spec: "@sunclaw/whatsapp",
+        packageName: "@sunclaw/whatsapp",
         version: "2026.5.27",
         pluginId: "whatsapp",
         npmRoot,
         versions: ["2026.5.26", "2026.5.27"],
-        openclaw: {
+        sunclaw: {
           extensions: ["./dist/index.js"],
           install: { minHostVersion: ">=2026.4.25" },
           compat: { pluginApi: ">=2026.5.27" },
         },
       },
       {
-        spec: "@openclaw/whatsapp@2026.5.26",
-        packageName: "@openclaw/whatsapp",
+        spec: "@sunclaw/whatsapp@2026.5.26",
+        packageName: "@sunclaw/whatsapp",
         version: "2026.5.26",
         pluginId: "whatsapp",
         npmRoot,
         expectedDependencySpec: "2026.5.26",
-        openclaw: {
+        sunclaw: {
           extensions: ["./dist/index.js"],
           install: { minHostVersion: ">=2026.4.25" },
           compat: { pluginApi: ">=2026.5.10-beta.1" },
@@ -1468,7 +1468,7 @@ describe("installPluginFromNpmSpec", () => {
     ]);
 
     const result = await installPluginFromNpmSpec({
-      spec: "@openclaw/whatsapp",
+      spec: "@sunclaw/whatsapp",
       npmDir: npmRoot,
       mode: "update",
       logger: { info: () => {}, warn: (message) => warnings.push(message) },
@@ -1478,12 +1478,12 @@ describe("installPluginFromNpmSpec", () => {
     if (!result.ok) {
       return;
     }
-    expect(result.npmResolution?.resolvedSpec).toBe("@openclaw/whatsapp@2026.5.26");
-    expect(warnings.join("\n")).toContain("using newest compatible @openclaw/whatsapp@2026.5.26");
+    expect(result.npmResolution?.resolvedSpec).toBe("@sunclaw/whatsapp@2026.5.26");
+    expect(warnings.join("\n")).toContain("using newest compatible @sunclaw/whatsapp@2026.5.26");
     expect(
       JSON.parse(
         fs.readFileSync(
-          path.join(resolveTestPluginPackageDir(npmRoot, "@openclaw/whatsapp"), "package.json"),
+          path.join(resolveTestPluginPackageDir(npmRoot, "@sunclaw/whatsapp"), "package.json"),
           "utf8",
         ),
       ).version,
@@ -1491,7 +1491,7 @@ describe("installPluginFromNpmSpec", () => {
     const managedManifest = JSON.parse(
       fs.readFileSync(path.join(npmProjectRoot, "package.json"), "utf8"),
     ) as { dependencies?: Record<string, string> };
-    expect(managedManifest.dependencies?.["@openclaw/whatsapp"]).toBe("2026.5.26");
+    expect(managedManifest.dependencies?.["@sunclaw/whatsapp"]).toBe("2026.5.26");
     expect(
       runCommandWithTimeoutMock.mock.calls.some(([argv]) => isManagedNpmInstallCommand(argv)),
     ).toBe(true);
@@ -1501,29 +1501,29 @@ describe("installPluginFromNpmSpec", () => {
     const stateDir = suiteTempRootTracker.makeTempDir();
     const npmRoot = path.join(stateDir, "npm");
     const warnings: string[] = [];
-    vi.stubEnv("OPENCLAW_COMPATIBILITY_HOST_VERSION", "2026.5.28-beta.3");
+    vi.stubEnv("SUNCLAW_COMPATIBILITY_HOST_VERSION", "2026.5.28-beta.3");
 
     mockNpmViewAndInstallMany([
       {
-        spec: "@openclaw/msteams@beta",
-        packageName: "@openclaw/msteams",
+        spec: "@sunclaw/msteams@beta",
+        packageName: "@sunclaw/msteams",
         version: "2026.5.28-beta.4",
         pluginId: "msteams",
         npmRoot,
         versions: ["2026.5.28-beta.3", "2026.5.28-beta.4"],
-        openclaw: {
+        sunclaw: {
           extensions: ["./dist/index.js"],
           compat: { pluginApi: ">=2026.5.28-beta.4" },
         },
       },
       {
-        spec: "@openclaw/msteams@2026.5.28-beta.3",
-        packageName: "@openclaw/msteams",
+        spec: "@sunclaw/msteams@2026.5.28-beta.3",
+        packageName: "@sunclaw/msteams",
         version: "2026.5.28-beta.3",
         pluginId: "msteams",
         npmRoot,
         expectedDependencySpec: "2026.5.28-beta.3",
-        openclaw: {
+        sunclaw: {
           extensions: ["./dist/index.js"],
           compat: { pluginApi: ">=2026.5.28-beta.3" },
         },
@@ -1531,7 +1531,7 @@ describe("installPluginFromNpmSpec", () => {
     ]);
 
     const result = await installPluginFromNpmSpec({
-      spec: "@openclaw/msteams@beta",
+      spec: "@sunclaw/msteams@beta",
       npmDir: npmRoot,
       mode: "update",
       logger: { info: () => {}, warn: (message) => warnings.push(message) },
@@ -1541,35 +1541,35 @@ describe("installPluginFromNpmSpec", () => {
     if (!result.ok) {
       return;
     }
-    expect(result.npmResolution?.resolvedSpec).toBe("@openclaw/msteams@2026.5.28-beta.3");
+    expect(result.npmResolution?.resolvedSpec).toBe("@sunclaw/msteams@2026.5.28-beta.3");
     expect(result.npmResolution?.version).toBe("2026.5.28-beta.3");
     expect(warnings.join("\n")).toContain(
-      "using newest compatible @openclaw/msteams@2026.5.28-beta.3",
+      "using newest compatible @sunclaw/msteams@2026.5.28-beta.3",
     );
     const npmProjectRoot = resolvePluginNpmProjectDir({
       npmDir: npmRoot,
-      packageName: "@openclaw/msteams",
+      packageName: "@sunclaw/msteams",
     });
     const managedManifest = JSON.parse(
       fs.readFileSync(path.join(npmProjectRoot, "package.json"), "utf8"),
     ) as { dependencies?: Record<string, string> };
-    expect(managedManifest.dependencies?.["@openclaw/msteams"]).toBe("2026.5.28-beta.3");
+    expect(managedManifest.dependencies?.["@sunclaw/msteams"]).toBe("2026.5.28-beta.3");
   });
 
   it("does not resolve explicit prerelease tags to stable compatible versions", async () => {
     const stateDir = suiteTempRootTracker.makeTempDir();
     const npmRoot = path.join(stateDir, "npm");
-    vi.stubEnv("OPENCLAW_COMPATIBILITY_HOST_VERSION", "2026.5.28-beta.3");
+    vi.stubEnv("SUNCLAW_COMPATIBILITY_HOST_VERSION", "2026.5.28-beta.3");
 
     mockNpmViewAndInstallMany([
       {
-        spec: "@openclaw/msteams@beta",
-        packageName: "@openclaw/msteams",
+        spec: "@sunclaw/msteams@beta",
+        packageName: "@sunclaw/msteams",
         version: "2026.5.28-beta.4",
         pluginId: "msteams",
         npmRoot,
         versions: ["2026.5.27", "2026.5.28-beta.4"],
-        openclaw: {
+        sunclaw: {
           extensions: ["./dist/index.js"],
           compat: { pluginApi: ">=2026.5.28-beta.4" },
         },
@@ -1577,7 +1577,7 @@ describe("installPluginFromNpmSpec", () => {
     ]);
 
     const result = await installPluginFromNpmSpec({
-      spec: "@openclaw/msteams@beta",
+      spec: "@sunclaw/msteams@beta",
       npmDir: npmRoot,
       mode: "update",
       logger: { info: () => {}, warn: () => {} },
@@ -1597,17 +1597,17 @@ describe("installPluginFromNpmSpec", () => {
   it("does not resolve explicit prerelease tags to a different prerelease channel", async () => {
     const stateDir = suiteTempRootTracker.makeTempDir();
     const npmRoot = path.join(stateDir, "npm");
-    vi.stubEnv("OPENCLAW_COMPATIBILITY_HOST_VERSION", "2026.5.28-beta.3");
+    vi.stubEnv("SUNCLAW_COMPATIBILITY_HOST_VERSION", "2026.5.28-beta.3");
 
     mockNpmViewAndInstallMany([
       {
-        spec: "@openclaw/msteams@beta",
-        packageName: "@openclaw/msteams",
+        spec: "@sunclaw/msteams@beta",
+        packageName: "@sunclaw/msteams",
         version: "2026.5.28-beta.4",
         pluginId: "msteams",
         npmRoot,
         versions: ["2026.5.28-alpha.10", "2026.5.28-beta.4"],
-        openclaw: {
+        sunclaw: {
           extensions: ["./dist/index.js"],
           compat: { pluginApi: ">=2026.5.28-beta.4" },
         },
@@ -1615,7 +1615,7 @@ describe("installPluginFromNpmSpec", () => {
     ]);
 
     const result = await installPluginFromNpmSpec({
-      spec: "@openclaw/msteams@beta",
+      spec: "@sunclaw/msteams@beta",
       npmDir: npmRoot,
       mode: "update",
       logger: { info: () => {}, warn: () => {} },
@@ -1633,7 +1633,7 @@ describe("installPluginFromNpmSpec", () => {
   });
 
   it.runIf(process.platform !== "win32")(
-    "repairs root openclaw materialized by npm peer handling",
+    "repairs root sunclaw materialized by npm peer handling",
     async () => {
       const stateDir = suiteTempRootTracker.makeTempDir();
       const npmRoot = path.join(stateDir, "npm");
@@ -1644,8 +1644,8 @@ describe("installPluginFromNpmSpec", () => {
         version: "1.0.0",
         pluginId: "required-peer-plugin",
         npmRoot,
-        peerDependencies: { openclaw: "^2026.0.0" },
-        materializesRootOpenClaw: true,
+        peerDependencies: { sunclaw: "^2026.0.0" },
+        materializesRootSunClaw: true,
       });
 
       const result = await installPluginFromNpmSpec({
@@ -1660,34 +1660,34 @@ describe("installPluginFromNpmSpec", () => {
         packageName: "required-peer-plugin",
       });
       const requiredPeerPluginDir = resolveTestPluginPackageDir(npmRoot, "required-peer-plugin");
-      expect(fs.existsSync(path.join(npmProjectRoot, "node_modules", "openclaw"))).toBe(false);
+      expect(fs.existsSync(path.join(npmProjectRoot, "node_modules", "sunclaw"))).toBe(false);
       const lockfile = JSON.parse(
         fs.readFileSync(path.join(npmProjectRoot, "package-lock.json"), "utf8"),
       ) as {
         packages?: Record<string, unknown>;
       };
-      expect(lockfile.packages?.["node_modules/openclaw"]).toBeUndefined();
+      expect(lockfile.packages?.["node_modules/sunclaw"]).toBeUndefined();
       expect(
-        fs.lstatSync(path.join(requiredPeerPluginDir, "node_modules", "openclaw")).isSymbolicLink(),
+        fs.lstatSync(path.join(requiredPeerPluginDir, "node_modules", "sunclaw")).isSymbolicLink(),
       ).toBe(true);
     },
   );
 
-  it("repairs stale managed openclaw root packages before npm plugin installs", async () => {
+  it("repairs stale managed sunclaw root packages before npm plugin installs", async () => {
     const stateDir = suiteTempRootTracker.makeTempDir();
     const npmRoot = path.join(stateDir, "npm");
     const npmProjectRoot = resolvePluginNpmProjectDir({
       npmDir: npmRoot,
-      packageName: "@openclaw/discord",
+      packageName: "@sunclaw/discord",
     });
-    fs.mkdirSync(path.join(npmProjectRoot, "node_modules", "openclaw"), { recursive: true });
+    fs.mkdirSync(path.join(npmProjectRoot, "node_modules", "sunclaw"), { recursive: true });
     fs.writeFileSync(
       path.join(npmProjectRoot, "package.json"),
       JSON.stringify(
         {
           private: true,
           dependencies: {
-            openclaw: "2026.5.4",
+            sunclaw: "2026.5.4",
           },
         },
         null,
@@ -1703,16 +1703,16 @@ describe("installPluginFromNpmSpec", () => {
           packages: {
             "": {
               dependencies: {
-                openclaw: "2026.5.4",
+                sunclaw: "2026.5.4",
               },
             },
-            "node_modules/openclaw": {
+            "node_modules/sunclaw": {
               version: "2026.5.4",
-              resolved: "https://registry.npmjs.org/openclaw/-/openclaw-2026.5.4.tgz",
+              resolved: "https://registry.npmjs.org/sunclaw/-/sunclaw-2026.5.4.tgz",
             },
           },
           dependencies: {
-            openclaw: {
+            sunclaw: {
               version: "2026.5.4",
             },
           },
@@ -1723,26 +1723,26 @@ describe("installPluginFromNpmSpec", () => {
       "utf-8",
     );
     fs.writeFileSync(
-      path.join(npmProjectRoot, "node_modules", "openclaw", "package.json"),
+      path.join(npmProjectRoot, "node_modules", "sunclaw", "package.json"),
       JSON.stringify({
-        name: "openclaw",
+        name: "sunclaw",
         version: "2026.5.4",
       }),
       "utf-8",
     );
 
     mockNpmViewAndInstall({
-      spec: "@openclaw/discord@beta",
-      packageName: "@openclaw/discord",
+      spec: "@sunclaw/discord@beta",
+      packageName: "@sunclaw/discord",
       version: "2026.5.5-beta.1",
       pluginId: "discord",
       npmRoot,
-      peerDependencies: { openclaw: ">=2026.5.5-beta.1" },
+      peerDependencies: { sunclaw: ">=2026.5.5-beta.1" },
       expectedDependencySpec: "2026.5.5-beta.1",
     });
 
     const result = await installPluginFromNpmSpec({
-      spec: "@openclaw/discord@beta",
+      spec: "@sunclaw/discord@beta",
       npmDir: npmRoot,
       logger: { info: () => {}, warn: () => {} },
     });
@@ -1751,22 +1751,22 @@ describe("installPluginFromNpmSpec", () => {
     const manifest = JSON.parse(
       fs.readFileSync(path.join(npmProjectRoot, "package.json"), "utf8"),
     ) as { dependencies?: Record<string, string> };
-    expect(manifest.dependencies).not.toHaveProperty("openclaw");
-    expect(manifest.dependencies?.["@openclaw/discord"]).toBe("2026.5.5-beta.1");
+    expect(manifest.dependencies).not.toHaveProperty("sunclaw");
+    expect(manifest.dependencies?.["@sunclaw/discord"]).toBe("2026.5.5-beta.1");
     const lockfile = JSON.parse(
       fs.readFileSync(path.join(npmProjectRoot, "package-lock.json"), "utf8"),
     ) as {
       packages?: Record<string, unknown>;
       dependencies?: Record<string, unknown>;
     };
-    expect(lockfile.packages?.["node_modules/openclaw"]).toBeUndefined();
-    expect(lockfile.dependencies?.openclaw).toBeUndefined();
+    expect(lockfile.packages?.["node_modules/sunclaw"]).toBeUndefined();
+    expect(lockfile.dependencies?.sunclaw).toBeUndefined();
   });
 
-  it("preserves the active host openclaw runtime package during npm plugin installs", async () => {
+  it("preserves the active host sunclaw runtime package during npm plugin installs", async () => {
     const stateDir = suiteTempRootTracker.makeTempDir();
     const npmRoot = path.join(stateDir, "npm");
-    const hostPackageRoot = path.join(npmRoot, "node_modules", "openclaw");
+    const hostPackageRoot = path.join(npmRoot, "node_modules", "sunclaw");
     fs.mkdirSync(hostPackageRoot, { recursive: true });
     fs.writeFileSync(
       path.join(npmRoot, "package.json"),
@@ -1774,7 +1774,7 @@ describe("installPluginFromNpmSpec", () => {
         {
           private: true,
           dependencies: {
-            openclaw: "2026.5.12-beta.6",
+            sunclaw: "2026.5.12-beta.6",
           },
         },
         null,
@@ -1790,10 +1790,10 @@ describe("installPluginFromNpmSpec", () => {
           packages: {
             "": {
               dependencies: {
-                openclaw: "2026.5.12-beta.6",
+                sunclaw: "2026.5.12-beta.6",
               },
             },
-            "node_modules/openclaw": {
+            "node_modules/sunclaw": {
               version: "2026.5.12-beta.6",
             },
           },
@@ -1806,16 +1806,16 @@ describe("installPluginFromNpmSpec", () => {
     fs.writeFileSync(
       path.join(hostPackageRoot, "package.json"),
       JSON.stringify({
-        name: "openclaw",
+        name: "sunclaw",
         version: "2026.5.12-beta.6",
       }),
       "utf-8",
     );
 
-    resolveOpenClawPackageRootSyncMock.mockReturnValue(hostPackageRoot);
+    resolveSunClawPackageRootSyncMock.mockReturnValue(hostPackageRoot);
     mockNpmViewAndInstall({
-      spec: "@xdarkicex/openclaw-memory-libravdb@1.4.69",
-      packageName: "@xdarkicex/openclaw-memory-libravdb",
+      spec: "@xdarkicex/sunclaw-memory-libravdb@1.4.69",
+      packageName: "@xdarkicex/sunclaw-memory-libravdb",
       version: "1.4.69",
       pluginId: "libravdb-memory",
       npmRoot,
@@ -1823,7 +1823,7 @@ describe("installPluginFromNpmSpec", () => {
     });
 
     const result = await installPluginFromNpmSpec({
-      spec: "@xdarkicex/openclaw-memory-libravdb@1.4.69",
+      spec: "@xdarkicex/sunclaw-memory-libravdb@1.4.69",
       npmDir: npmRoot,
       logger: { info: () => {}, warn: () => {} },
     });
@@ -1835,19 +1835,19 @@ describe("installPluginFromNpmSpec", () => {
     const baseManifest = JSON.parse(
       fs.readFileSync(path.join(npmRoot, "package.json"), "utf8"),
     ) as { dependencies?: Record<string, string> };
-    expect(baseManifest.dependencies?.openclaw).toBe("2026.5.12-beta.6");
-    expect(baseManifest.dependencies?.["@xdarkicex/openclaw-memory-libravdb"]).toBeUndefined();
+    expect(baseManifest.dependencies?.sunclaw).toBe("2026.5.12-beta.6");
+    expect(baseManifest.dependencies?.["@xdarkicex/sunclaw-memory-libravdb"]).toBeUndefined();
     const npmProjectRoot = resolvePluginNpmProjectDir({
       npmDir: npmRoot,
-      packageName: "@xdarkicex/openclaw-memory-libravdb",
+      packageName: "@xdarkicex/sunclaw-memory-libravdb",
     });
     const projectManifest = JSON.parse(
       fs.readFileSync(path.join(npmProjectRoot, "package.json"), "utf8"),
     ) as { dependencies?: Record<string, string> };
-    expect(projectManifest.dependencies?.["@xdarkicex/openclaw-memory-libravdb"]).toBe("1.4.69");
+    expect(projectManifest.dependencies?.["@xdarkicex/sunclaw-memory-libravdb"]).toBe("1.4.69");
     expect(fs.existsSync(hostPackageRoot)).toBe(true);
     expect(result.targetDir).toBe(
-      resolveTestPluginPackageDir(npmRoot, "@xdarkicex/openclaw-memory-libravdb"),
+      resolveTestPluginPackageDir(npmRoot, "@xdarkicex/sunclaw-memory-libravdb"),
     );
     expect(
       runCommandWithTimeoutMock.mock.calls.some(
@@ -1855,7 +1855,7 @@ describe("installPluginFromNpmSpec", () => {
           Array.isArray(argv) &&
           argv[0] === "npm" &&
           argv[1] === "uninstall" &&
-          argv.includes("openclaw"),
+          argv.includes("sunclaw"),
       ),
     ).toBe(false);
   });
@@ -1901,14 +1901,14 @@ describe("installPluginFromNpmSpec", () => {
     const npmRoot = path.join(suiteTempRootTracker.makeTempDir(), "npm");
     const npmProjectRoot = resolvePluginNpmProjectDir({
       npmDir: npmRoot,
-      packageName: "@openclaw/voice-call",
+      packageName: "@sunclaw/voice-call",
     });
     runCommandWithTimeoutMock.mockImplementation(
       async (argv: string[], options?: { cwd?: string }) => {
-        if (JSON.stringify(argv) === JSON.stringify(npmViewArgv("@openclaw/voice-call@0.0.1"))) {
+        if (JSON.stringify(argv) === JSON.stringify(npmViewArgv("@sunclaw/voice-call@0.0.1"))) {
           return successfulSpawn(
             JSON.stringify({
-              name: "@openclaw/voice-call",
+              name: "@sunclaw/voice-call",
               version: "0.0.1",
               dist: {
                 integrity: "sha512-plugin-test",
@@ -1946,7 +1946,7 @@ describe("installPluginFromNpmSpec", () => {
         }
         if (argv[0] === "npm" && argv[1] === "uninstall") {
           if (!(argv as string[]).includes("--legacy-peer-deps")) {
-            fs.mkdirSync(path.join(options?.cwd ?? npmRoot, "node_modules", "openclaw"), {
+            fs.mkdirSync(path.join(options?.cwd ?? npmRoot, "node_modules", "sunclaw"), {
               recursive: true,
             });
           }
@@ -1957,7 +1957,7 @@ describe("installPluginFromNpmSpec", () => {
     );
 
     const result = await installPluginFromNpmSpec({
-      spec: "@openclaw/voice-call@0.0.1",
+      spec: "@sunclaw/voice-call@0.0.1",
       npmDir: npmRoot,
       logger: { info: () => {}, warn: () => {} },
     });
@@ -1970,15 +1970,15 @@ describe("installPluginFromNpmSpec", () => {
       fs.promises.access(path.join(npmProjectRoot, "package.json")),
     ).rejects.toHaveProperty("code", "ENOENT");
     await expect(
-      fs.promises.access(path.join(npmProjectRoot, "node_modules", "openclaw")),
+      fs.promises.access(path.join(npmProjectRoot, "node_modules", "sunclaw")),
     ).rejects.toHaveProperty("code", "ENOENT");
   });
 
-  it("does not fail rollback snapshots on plugin-local openclaw peer symlinks", async () => {
+  it("does not fail rollback snapshots on plugin-local sunclaw peer symlinks", async () => {
     const npmRoot = path.join(suiteTempRootTracker.makeTempDir(), "npm");
     const npmProjectRoot = resolvePluginNpmProjectDir({
       npmDir: npmRoot,
-      packageName: "@openclaw/codex",
+      packageName: "@sunclaw/codex",
     });
     fs.mkdirSync(npmProjectRoot, { recursive: true });
     fs.writeFileSync(
@@ -1987,7 +1987,7 @@ describe("installPluginFromNpmSpec", () => {
         {
           private: true,
           dependencies: {
-            "@openclaw/codex": "0.0.1",
+            "@sunclaw/codex": "0.0.1",
           },
         },
         null,
@@ -1997,10 +1997,10 @@ describe("installPluginFromNpmSpec", () => {
     );
     writeNpmRootPackageLock({
       npmRoot: npmProjectRoot,
-      dependencies: { "@openclaw/codex": "0.0.1" },
+      dependencies: { "@sunclaw/codex": "0.0.1" },
       packages: [
         {
-          packageName: "@openclaw/codex",
+          packageName: "@sunclaw/codex",
           version: "0.0.1",
           npmRoot: npmProjectRoot,
         },
@@ -2009,17 +2009,17 @@ describe("installPluginFromNpmSpec", () => {
     const hostRoot = suiteTempRootTracker.makeTempDir();
     fs.writeFileSync(
       path.join(hostRoot, "package.json"),
-      `${JSON.stringify({ name: "openclaw", version: "0.0.0-test" }, null, 2)}\n`,
+      `${JSON.stringify({ name: "sunclaw", version: "0.0.0-test" }, null, 2)}\n`,
       "utf8",
     );
-    resolveOpenClawPackageRootSyncMock.mockReturnValue(hostRoot);
+    resolveSunClawPackageRootSyncMock.mockReturnValue(hostRoot);
     const installedDir = writeInstalledNpmPlugin({
       npmRoot: npmProjectRoot,
-      packageName: "@openclaw/codex",
+      packageName: "@sunclaw/codex",
       version: "0.0.1",
-      peerDependencies: { openclaw: "*" },
+      peerDependencies: { sunclaw: "*" },
     });
-    const peerLink = path.join(installedDir, "node_modules", "openclaw");
+    const peerLink = path.join(installedDir, "node_modules", "sunclaw");
     fs.mkdirSync(path.dirname(peerLink), { recursive: true });
     fs.symlinkSync(hostRoot, peerLink, "junction");
 
@@ -2034,10 +2034,10 @@ describe("installPluginFromNpmSpec", () => {
       if (source === nodeModulesDir && fs.existsSync(peerLink)) {
         const destinationPeerLink = path.join(
           destination,
-          "@openclaw",
+          "@sunclaw",
           "codex",
           "node_modules",
-          "openclaw",
+          "sunclaw",
         );
         const shouldCopyPeerLink = options.filter
           ? await options.filter(peerLink, destinationPeerLink)
@@ -2055,10 +2055,10 @@ describe("installPluginFromNpmSpec", () => {
     });
     runCommandWithTimeoutMock.mockImplementation(
       async (argv: string[], options?: { cwd?: string }) => {
-        if (JSON.stringify(argv) === JSON.stringify(npmViewArgv("@openclaw/codex@0.0.2"))) {
+        if (JSON.stringify(argv) === JSON.stringify(npmViewArgv("@sunclaw/codex@0.0.2"))) {
           return successfulSpawn(
             JSON.stringify({
-              name: "@openclaw/codex",
+              name: "@sunclaw/codex",
               version: "0.0.2",
               dist: {
                 integrity: "sha512-plugin-test",
@@ -2082,7 +2082,7 @@ describe("installPluginFromNpmSpec", () => {
             dependencies: manifest.dependencies ?? {},
             packages: [
               {
-                packageName: "@openclaw/codex",
+                packageName: "@sunclaw/codex",
                 version: "0.0.1",
                 npmRoot: npmRootLocal,
               },
@@ -2106,7 +2106,7 @@ describe("installPluginFromNpmSpec", () => {
 
     try {
       const result = await installPluginFromNpmSpec({
-        spec: "@openclaw/codex@0.0.2",
+        spec: "@sunclaw/codex@0.0.2",
         npmDir: npmRoot,
         mode: "update",
         logger: { info: () => {}, warn: () => {} },
@@ -2132,7 +2132,7 @@ describe("installPluginFromNpmSpec", () => {
       path.join(hostRoot, "package.json"),
       `${JSON.stringify(
         {
-          name: "openclaw",
+          name: "sunclaw",
           overrides: {
             axios: "1.16.0",
             "node-domexception": "npm:@nolyfill/domexception@1.0.28",
@@ -2147,10 +2147,10 @@ describe("installPluginFromNpmSpec", () => {
       )}\n`,
       "utf8",
     );
-    resolveOpenClawPackageRootSyncMock.mockReturnValue(hostRoot);
+    resolveSunClawPackageRootSyncMock.mockReturnValue(hostRoot);
     mockNpmViewAndInstall({
-      spec: "@openclaw/voice-call@0.0.1",
-      packageName: "@openclaw/voice-call",
+      spec: "@sunclaw/voice-call@0.0.1",
+      packageName: "@sunclaw/voice-call",
       version: "0.0.1",
       pluginId: "voice-call",
       npmRoot,
@@ -2167,12 +2167,12 @@ describe("installPluginFromNpmSpec", () => {
           }
           const manifest = JSON.parse(
             fs.readFileSync(path.join(npmProjectRoot, "package.json"), "utf8"),
-          ) as { overrides?: Record<string, unknown>; openclaw?: { managedOverrides?: string[] } };
+          ) as { overrides?: Record<string, unknown>; sunclaw?: { managedOverrides?: string[] } };
           if (installAttempts === 1) {
             expect(manifest.overrides?.["node-domexception"]).toBe(
               "npm:@nolyfill/domexception@1.0.28",
             );
-            expect(manifest.openclaw?.managedOverrides).toEqual([
+            expect(manifest.sunclaw?.managedOverrides).toEqual([
               "axios",
               "nested",
               "node-domexception",
@@ -2192,7 +2192,7 @@ describe("installPluginFromNpmSpec", () => {
               semver: "1.2.3",
             },
           });
-          expect(manifest.openclaw?.managedOverrides).toEqual(["axios", "nested"]);
+          expect(manifest.sunclaw?.managedOverrides).toEqual(["axios", "nested"]);
         }
         return await baseImplementation?.(argv, options);
       },
@@ -2200,7 +2200,7 @@ describe("installPluginFromNpmSpec", () => {
 
     const warnings: string[] = [];
     const result = await installPluginFromNpmSpec({
-      spec: "@openclaw/voice-call@0.0.1",
+      spec: "@sunclaw/voice-call@0.0.1",
       npmDir: npmRoot,
       logger: { info: () => {}, warn: (message) => warnings.push(message) },
     });
@@ -2371,22 +2371,22 @@ describe("installPluginFromNpmSpec", () => {
 
   const officialLaunchPluginCases = [
     {
-      spec: "@openclaw/acpx",
+      spec: "@sunclaw/acpx",
       pluginId: "acpx",
       indexJs: `import { spawn } from "node:child_process";\nspawn("codex-acp", []);`,
     },
     {
-      spec: "@openclaw/codex",
+      spec: "@sunclaw/codex",
       pluginId: "codex",
       indexJs: `import { spawn } from "node:child_process";\nspawn("codex", ["app-server"]);`,
     },
     {
-      spec: "@openclaw/google-meet",
+      spec: "@sunclaw/google-meet",
       pluginId: "google-meet",
       indexJs: `import { spawnSync } from "node:child_process";\nspawnSync("node", ["bridge.js"]);`,
     },
     {
-      spec: "@openclaw/voice-call",
+      spec: "@sunclaw/voice-call",
       pluginId: "voice-call",
       indexJs: `import { spawn } from "node:child_process";\nspawn("ngrok", ["http", "3000"]);`,
     },
@@ -2423,7 +2423,7 @@ describe("installPluginFromNpmSpec", () => {
       expect(fs.existsSync(resolveTestPluginPackageDir(npmRoot, spec))).toBe(false);
       expect(
         warnings.some((warning) =>
-          warning.includes("allowed because it is an official OpenClaw package"),
+          warning.includes("allowed because it is an official SunClaw package"),
         ),
       ).toBe(false);
     },
@@ -2480,17 +2480,17 @@ describe("installPluginFromNpmSpec", () => {
   it("rejects duplicate npm installs unless update mode is requested", async () => {
     const stateDir = suiteTempRootTracker.makeTempDir();
     const npmRoot = path.join(stateDir, "npm");
-    const installRoot = resolveTestPluginPackageDir(npmRoot, "@openclaw/voice-call");
+    const installRoot = resolveTestPluginPackageDir(npmRoot, "@sunclaw/voice-call");
     fs.mkdirSync(installRoot, { recursive: true });
     mockNpmViewMetadataResult(runCommandWithTimeoutMock, {
-      name: "@openclaw/voice-call",
+      name: "@sunclaw/voice-call",
       version: "0.0.1",
       integrity: "sha512-plugin-test",
       shasum: "pluginshasum",
     });
 
     const result = await installPluginFromNpmSpec({
-      spec: "@openclaw/voice-call@0.0.1",
+      spec: "@sunclaw/voice-call@0.0.1",
       npmDir: npmRoot,
       mode: "install",
     });
@@ -2510,19 +2510,19 @@ describe("installPluginFromNpmSpec", () => {
   it("allows duplicate npm installs in update mode", async () => {
     const stateDir = suiteTempRootTracker.makeTempDir();
     const npmRoot = path.join(stateDir, "npm");
-    const installRoot = resolveTestPluginPackageDir(npmRoot, "@openclaw/voice-call");
+    const installRoot = resolveTestPluginPackageDir(npmRoot, "@sunclaw/voice-call");
     fs.mkdirSync(installRoot, { recursive: true });
     fs.writeFileSync(path.join(installRoot, "old.txt"), "old", "utf-8");
     mockNpmViewAndInstall({
-      spec: "@openclaw/voice-call@0.0.2",
-      packageName: "@openclaw/voice-call",
+      spec: "@sunclaw/voice-call@0.0.2",
+      packageName: "@sunclaw/voice-call",
       version: "0.0.2",
       pluginId: "voice-call",
       npmRoot,
     });
 
     const result = await installPluginFromNpmSpec({
-      spec: "@openclaw/voice-call@0.0.2",
+      spec: "@sunclaw/voice-call@0.0.2",
       npmDir: npmRoot,
       mode: "update",
       logger: { info: () => {}, warn: () => {} },
@@ -2537,7 +2537,7 @@ describe("installPluginFromNpmSpec", () => {
     expectNpmInstallIntoProject({
       calls: runCommandWithTimeoutMock.mock.calls,
       npmRoot,
-      packageName: "@openclaw/voice-call",
+      packageName: "@sunclaw/voice-call",
     });
   });
 
@@ -2547,15 +2547,15 @@ describe("installPluginFromNpmSpec", () => {
 
     mockNpmViewAndInstallMany([
       {
-        spec: "@openclaw/voice-call@0.0.1",
-        packageName: "@openclaw/voice-call",
+        spec: "@sunclaw/voice-call@0.0.1",
+        packageName: "@sunclaw/voice-call",
         version: "0.0.1",
         pluginId: "voice-call",
         npmRoot,
       },
       {
-        spec: "@openclaw/whatsapp@0.0.1",
-        packageName: "@openclaw/whatsapp",
+        spec: "@sunclaw/whatsapp@0.0.1",
+        packageName: "@sunclaw/whatsapp",
         version: "0.0.1",
         pluginId: "whatsapp",
         npmRoot,
@@ -2563,7 +2563,7 @@ describe("installPluginFromNpmSpec", () => {
     ]);
 
     const result1 = await installPluginFromNpmSpec({
-      spec: "@openclaw/voice-call@0.0.1",
+      spec: "@sunclaw/voice-call@0.0.1",
       npmDir: npmRoot,
       logger: { info: () => {}, warn: () => {} },
     });
@@ -2571,7 +2571,7 @@ describe("installPluginFromNpmSpec", () => {
 
     runCommandWithTimeoutMock.mockClear();
     const result2 = await installPluginFromNpmSpec({
-      spec: "@openclaw/whatsapp@0.0.1",
+      spec: "@sunclaw/whatsapp@0.0.1",
       npmDir: npmRoot,
       logger: { info: () => {}, warn: () => {} },
     });
@@ -2580,15 +2580,15 @@ describe("installPluginFromNpmSpec", () => {
     expectNpmInstallIntoProject({
       calls: runCommandWithTimeoutMock.mock.calls,
       npmRoot,
-      packageName: "@openclaw/whatsapp",
+      packageName: "@sunclaw/whatsapp",
     });
-    expect(fs.existsSync(resolveTestPluginPackageDir(npmRoot, "@openclaw/voice-call"))).toBe(true);
-    expect(fs.existsSync(resolveTestPluginPackageDir(npmRoot, "@openclaw/whatsapp"))).toBe(true);
+    expect(fs.existsSync(resolveTestPluginPackageDir(npmRoot, "@sunclaw/voice-call"))).toBe(true);
+    expect(fs.existsSync(resolveTestPluginPackageDir(npmRoot, "@sunclaw/whatsapp"))).toBe(true);
   });
 
   it("aborts when integrity drift callback rejects the fetched artifact", async () => {
     mockNpmViewMetadataResult(runCommandWithTimeoutMock, {
-      name: "@openclaw/voice-call",
+      name: "@sunclaw/voice-call",
       version: "0.0.1",
       integrity: "sha512-new",
       shasum: "newshasum",
@@ -2596,7 +2596,7 @@ describe("installPluginFromNpmSpec", () => {
 
     const onIntegrityDrift = vi.fn(async () => false);
     const result = await installPluginFromNpmSpec({
-      spec: "@openclaw/voice-call@0.0.1",
+      spec: "@sunclaw/voice-call@0.0.1",
       expectedIntegrity: "sha512-old",
       onIntegrityDrift,
     });
@@ -2619,7 +2619,7 @@ describe("installPluginFromNpmSpec", () => {
     });
 
     const result = await installPluginFromNpmSpec({
-      spec: "@openclaw/not-found",
+      spec: "@sunclaw/not-found",
       logger: { info: () => {}, warn: () => {} },
     });
     expect(result.ok).toBe(false);
@@ -2630,20 +2630,20 @@ describe("installPluginFromNpmSpec", () => {
 
   it("rejects implicit prerelease npm specs with beta guidance", async () => {
     mockNpmViewMetadataResult(runCommandWithTimeoutMock, {
-      name: "@openclaw/voice-call",
+      name: "@sunclaw/voice-call",
       version: "0.0.2-beta.1",
       integrity: "sha512-beta",
       shasum: "betashasum",
     });
 
     const rejected = await installPluginFromNpmSpec({
-      spec: "@openclaw/voice-call",
+      spec: "@sunclaw/voice-call",
       logger: { info: () => {}, warn: () => {} },
     });
     expect(rejected.ok).toBe(false);
     if (!rejected.ok) {
       expect(rejected.error).toContain("prerelease version 0.0.2-beta.1");
-      expect(rejected.error).toContain('"@openclaw/voice-call@beta"');
+      expect(rejected.error).toContain('"@sunclaw/voice-call@beta"');
     }
   });
 
@@ -2652,15 +2652,15 @@ describe("installPluginFromNpmSpec", () => {
     const warnings: string[] = [];
     mockNpmViewAndInstallMany([
       {
-        spec: "@openclaw/voice-call",
-        packageName: "@openclaw/voice-call",
+        spec: "@sunclaw/voice-call",
+        packageName: "@sunclaw/voice-call",
         version: "0.0.2-beta.1",
         npmRoot: officialNpmRoot,
         versions: ["0.0.1", "0.0.2-beta.1"],
       },
       {
-        spec: "@openclaw/voice-call@0.0.1",
-        packageName: "@openclaw/voice-call",
+        spec: "@sunclaw/voice-call@0.0.1",
+        packageName: "@sunclaw/voice-call",
         version: "0.0.1",
         pluginId: "voice-call",
         npmRoot: officialNpmRoot,
@@ -2669,7 +2669,7 @@ describe("installPluginFromNpmSpec", () => {
     ]);
 
     const officialFallback = await installPluginFromNpmSpec({
-      spec: "@openclaw/voice-call",
+      spec: "@sunclaw/voice-call",
       npmDir: officialNpmRoot,
       expectedPluginId: "voice-call",
       trustedSourceLinkedOfficialInstall: true,
@@ -2683,8 +2683,8 @@ describe("installPluginFromNpmSpec", () => {
       return;
     }
     expect(officialFallback.npmResolution?.version).toBe("0.0.1");
-    expect(officialFallback.npmResolution?.resolvedSpec).toBe("@openclaw/voice-call@0.0.1");
-    expect(warnings.join("\n")).toContain("falling back to stable @openclaw/voice-call@0.0.1");
+    expect(officialFallback.npmResolution?.resolvedSpec).toBe("@sunclaw/voice-call@0.0.1");
+    expect(warnings.join("\n")).toContain("falling back to stable @sunclaw/voice-call@0.0.1");
   });
 
   it("keeps stable correction versions when resolving official npm packages", async () => {
@@ -2692,8 +2692,8 @@ describe("installPluginFromNpmSpec", () => {
     const correctionWarnings: string[] = [];
     mockNpmViewAndInstallMany([
       {
-        spec: "@openclaw/voice-call",
-        packageName: "@openclaw/voice-call",
+        spec: "@sunclaw/voice-call",
+        packageName: "@sunclaw/voice-call",
         version: "2026.5.3-1",
         pluginId: "voice-call",
         npmRoot: correctionNpmRoot,
@@ -2703,7 +2703,7 @@ describe("installPluginFromNpmSpec", () => {
     ]);
 
     const stableCorrection = await installPluginFromNpmSpec({
-      spec: "@openclaw/voice-call",
+      spec: "@sunclaw/voice-call",
       npmDir: correctionNpmRoot,
       expectedPluginId: "voice-call",
       trustedSourceLinkedOfficialInstall: true,
@@ -2717,7 +2717,7 @@ describe("installPluginFromNpmSpec", () => {
       return;
     }
     expect(stableCorrection.npmResolution?.version).toBe("2026.5.3-1");
-    expect(stableCorrection.npmResolution?.resolvedSpec).toBe("@openclaw/voice-call@2026.5.3-1");
+    expect(stableCorrection.npmResolution?.resolvedSpec).toBe("@sunclaw/voice-call@2026.5.3-1");
     expect(correctionWarnings).toStrictEqual([]);
   });
 
@@ -2726,16 +2726,16 @@ describe("installPluginFromNpmSpec", () => {
     const prereleaseOnlyWarnings: string[] = [];
     mockNpmViewAndInstallMany([
       {
-        spec: "@openclaw/voice-call",
-        packageName: "@openclaw/voice-call",
+        spec: "@sunclaw/voice-call",
+        packageName: "@sunclaw/voice-call",
         version: "0.0.1-beta.1",
         pluginId: "voice-call",
         npmRoot: prereleaseOnlyNpmRoot,
         versions: ["0.0.1-beta.1", "0.0.2-beta.1"],
       },
       {
-        spec: "@openclaw/voice-call@0.0.2-beta.1",
-        packageName: "@openclaw/voice-call",
+        spec: "@sunclaw/voice-call@0.0.2-beta.1",
+        packageName: "@sunclaw/voice-call",
         version: "0.0.2-beta.1",
         pluginId: "voice-call",
         npmRoot: prereleaseOnlyNpmRoot,
@@ -2744,7 +2744,7 @@ describe("installPluginFromNpmSpec", () => {
     ]);
 
     const prereleaseOnly = await installPluginFromNpmSpec({
-      spec: "@openclaw/voice-call",
+      spec: "@sunclaw/voice-call",
       npmDir: prereleaseOnlyNpmRoot,
       expectedPluginId: "voice-call",
       trustedSourceLinkedOfficialInstall: true,
@@ -2758,18 +2758,18 @@ describe("installPluginFromNpmSpec", () => {
       return;
     }
     expect(prereleaseOnly.npmResolution?.version).toBe("0.0.2-beta.1");
-    expect(prereleaseOnly.npmResolution?.resolvedSpec).toBe("@openclaw/voice-call@0.0.2-beta.1");
+    expect(prereleaseOnly.npmResolution?.resolvedSpec).toBe("@sunclaw/voice-call@0.0.2-beta.1");
     expect(prereleaseOnlyWarnings.join("\n")).toContain("has no stable npm versions yet");
     expect(prereleaseOnlyWarnings.join("\n")).toContain(
-      "using newest prerelease @openclaw/voice-call@0.0.2-beta.1",
+      "using newest prerelease @sunclaw/voice-call@0.0.2-beta.1",
     );
   });
 
   it("accepts explicit prerelease npm dist-tags", async () => {
     const npmRoot = path.join(suiteTempRootTracker.makeTempDir(), "npm");
     mockNpmViewAndInstall({
-      spec: "@openclaw/voice-call@beta",
-      packageName: "@openclaw/voice-call",
+      spec: "@sunclaw/voice-call@beta",
+      packageName: "@sunclaw/voice-call",
       version: "0.0.2-beta.1",
       pluginId: "voice-call",
       integrity: "sha512-beta",
@@ -2778,7 +2778,7 @@ describe("installPluginFromNpmSpec", () => {
     });
 
     const accepted = await installPluginFromNpmSpec({
-      spec: "@openclaw/voice-call@beta",
+      spec: "@sunclaw/voice-call@beta",
       npmDir: npmRoot,
       logger: { info: () => {}, warn: () => {} },
     });
@@ -2787,11 +2787,11 @@ describe("installPluginFromNpmSpec", () => {
       return;
     }
     expect(accepted.npmResolution?.version).toBe("0.0.2-beta.1");
-    expect(accepted.npmResolution?.resolvedSpec).toBe("@openclaw/voice-call@0.0.2-beta.1");
+    expect(accepted.npmResolution?.resolvedSpec).toBe("@sunclaw/voice-call@0.0.2-beta.1");
     expectNpmInstallIntoProject({
       calls: runCommandWithTimeoutMock.mock.calls,
       npmRoot,
-      packageName: "@openclaw/voice-call",
+      packageName: "@sunclaw/voice-call",
     });
   });
 });

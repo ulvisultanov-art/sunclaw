@@ -1,5 +1,5 @@
-import { normalizeStringEntries } from "@openclaw/normalization-core/string-normalization";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { normalizeStringEntries } from "@sunclaw/normalization-core/string-normalization";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type {
   AgentToolResultMiddleware,
   AgentToolResultMiddlewareOptions,
@@ -25,14 +25,14 @@ import type {
   AnyAgentTool,
   AgentHarness,
   CliBackendPlugin,
-  OpenClawPluginApi,
+  SunClawPluginApi,
   ImageGenerationProviderPlugin,
   MediaUnderstandingProviderPlugin,
   TranscriptSourceProvider,
   MigrationProviderPlugin,
   MusicGenerationProviderPlugin,
-  OpenClawPluginCliCommandDescriptor,
-  OpenClawPluginCliRegistrar,
+  SunClawPluginCliCommandDescriptor,
+  SunClawPluginCliRegistrar,
   PluginTextTransformRegistration,
   ProviderPlugin,
   RealtimeTranscriptionProviderPlugin,
@@ -45,14 +45,14 @@ import type {
 } from "./types.js";
 
 type CapturedPluginCliRegistration = {
-  register: OpenClawPluginCliRegistrar;
+  register: SunClawPluginCliRegistrar;
   parentPath: string[];
   commands: string[];
-  descriptors: OpenClawPluginCliCommandDescriptor[];
+  descriptors: SunClawPluginCliCommandDescriptor[];
 };
 
 export type CapturedPluginRegistration = {
-  api: OpenClawPluginApi;
+  api: SunClawPluginApi;
   providers: ProviderPlugin[];
   agentHarnesses: AgentHarness[];
   cliRegistrars: CapturedPluginCliRegistration[];
@@ -86,10 +86,10 @@ export type CapturedPluginRegistration = {
 };
 
 export function createCapturedPluginRegistration(params?: {
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   id?: string;
   name?: string;
-  registrationMode?: OpenClawPluginApi["registrationMode"];
+  registrationMode?: SunClawPluginApi["registrationMode"];
   source?: string;
 }): CapturedPluginRegistration {
   const providers: ProviderPlugin[] = [];
@@ -169,7 +169,7 @@ export function createCapturedPluginRegistration(params?: {
       name: pluginName,
       source: pluginSource,
       registrationMode: params?.registrationMode ?? "full",
-      config: params?.config ?? ({} as OpenClawConfig),
+      config: params?.config ?? ({} as SunClawConfig),
       runtime: {} as PluginRuntime,
       logger: noopLogger,
       resolvePath: (input) => input,
@@ -322,7 +322,7 @@ export function createCapturedPluginRegistration(params?: {
 
 export function capturePluginRegistration(
   params: NonNullable<Parameters<typeof createCapturedPluginRegistration>[0]> & {
-    register(api: OpenClawPluginApi): void;
+    register(api: SunClawPluginApi): void;
   },
 ): CapturedPluginRegistration {
   const captured = createCapturedPluginRegistration(params);

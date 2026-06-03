@@ -58,9 +58,9 @@ describe("check-memory-fd-repro", () => {
     expect(
       withEnv(
         {
-          OPENCLAW_MEMORY_FD_REPRO_FILES: "17",
-          OPENCLAW_MEMORY_FD_REPRO_MAX_WORKSPACE_REG_FDS: "0",
-          OPENCLAW_MEMORY_FD_REPRO_SAMPLE_DELAY_MS: "0",
+          SUNCLAW_MEMORY_FD_REPRO_FILES: "17",
+          SUNCLAW_MEMORY_FD_REPRO_MAX_WORKSPACE_REG_FDS: "0",
+          SUNCLAW_MEMORY_FD_REPRO_SAMPLE_DELAY_MS: "0",
         },
         () => parseArgs([]),
       ),
@@ -71,22 +71,22 @@ describe("check-memory-fd-repro", () => {
     });
 
     expect(() =>
-      withEnv({ OPENCLAW_MEMORY_FD_REPRO_FILES: "17files" }, () => parseArgs([])),
-    ).toThrow("OPENCLAW_MEMORY_FD_REPRO_FILES must be a non-negative integer");
+      withEnv({ SUNCLAW_MEMORY_FD_REPRO_FILES: "17files" }, () => parseArgs([])),
+    ).toThrow("SUNCLAW_MEMORY_FD_REPRO_FILES must be a non-negative integer");
     expect(() =>
-      withEnv({ OPENCLAW_MEMORY_FD_REPRO_TIMEOUT_MS: "1e3" }, () => parseArgs([])),
-    ).toThrow("OPENCLAW_MEMORY_FD_REPRO_TIMEOUT_MS must be a non-negative integer");
+      withEnv({ SUNCLAW_MEMORY_FD_REPRO_TIMEOUT_MS: "1e3" }, () => parseArgs([])),
+    ).toThrow("SUNCLAW_MEMORY_FD_REPRO_TIMEOUT_MS must be a non-negative integer");
   });
 
   it("lets explicit CLI numeric flags override malformed inherited env defaults", () => {
     expect(
       withEnv(
         {
-          OPENCLAW_MEMORY_FD_REPRO_FILES: "17files",
-          OPENCLAW_MEMORY_FD_REPRO_MAX_WORKSPACE_REG_FDS: "4fds",
-          OPENCLAW_MEMORY_FD_REPRO_TIMEOUT_MS: "1e3",
-          OPENCLAW_MEMORY_FD_REPRO_SAMPLE_DELAY_MS: "soon",
-          OPENCLAW_MEMORY_FD_REPRO_SETTLE_DELAY_MS: "later",
+          SUNCLAW_MEMORY_FD_REPRO_FILES: "17files",
+          SUNCLAW_MEMORY_FD_REPRO_MAX_WORKSPACE_REG_FDS: "4fds",
+          SUNCLAW_MEMORY_FD_REPRO_TIMEOUT_MS: "1e3",
+          SUNCLAW_MEMORY_FD_REPRO_SAMPLE_DELAY_MS: "soon",
+          SUNCLAW_MEMORY_FD_REPRO_SETTLE_DELAY_MS: "later",
         },
         () =>
           parseArgs([
@@ -117,7 +117,7 @@ describe("check-memory-fd-repro", () => {
     });
 
     expect(
-      withEnv({ OPENCLAW_MEMORY_FD_REPRO_FILES: "17" }, () => parseArgs(["--", "--unknown"])),
+      withEnv({ SUNCLAW_MEMORY_FD_REPRO_FILES: "17" }, () => parseArgs(["--", "--unknown"])),
     ).toMatchObject({
       fileCount: 17,
     });
@@ -136,7 +136,7 @@ describe("check-memory-fd-repro", () => {
   });
 
   it("writes an offline FTS-only memory search config for repro indexing", () => {
-    const root = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-memory-fd-config-"));
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), "sunclaw-memory-fd-config-"));
     try {
       const homeDir = path.join(root, "home");
       const workspaceDir = path.join(root, "workspace");
@@ -153,7 +153,7 @@ describe("check-memory-fd-repro", () => {
         provider: "none",
         model: "",
         store: {
-          path: path.join(homeDir, ".openclaw", "memory", "main.sqlite"),
+          path: path.join(homeDir, ".sunclaw", "memory", "main.sqlite"),
           vector: { enabled: false },
         },
         sync: {

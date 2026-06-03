@@ -1,5 +1,5 @@
 ---
-summary: "CLI reference for `openclaw skills` (search/install/update/verify/list/info/check/workshop)"
+summary: "CLI reference for `sunclaw skills` (search/install/update/verify/list/info/check/workshop)"
 read_when:
   - You want to see which skills are available and ready to run
   - You want to search ClawHub or install skills from ClawHub, Git, or local directories
@@ -8,7 +8,7 @@ read_when:
 title: "Skills"
 ---
 
-# `openclaw skills`
+# `sunclaw skills`
 
 Inspect local skills, search ClawHub, install skills from ClawHub/Git/local
 directories, verify ClawHub skills, and update ClawHub-tracked installs.
@@ -23,45 +23,45 @@ Related:
 ## Commands
 
 ```bash
-openclaw skills search "calendar"
-openclaw skills search --limit 20 --json
-openclaw skills install <slug>
-openclaw skills install <slug> --version <version>
-openclaw skills install git:owner/repo
-openclaw skills install git:owner/repo@main
-openclaw skills install ./path/to/skill --as custom-name
-openclaw skills install <slug> --force
-openclaw skills install <slug> --agent <id>
-openclaw skills install <slug> --global
-openclaw skills update <slug>
-openclaw skills update <slug> --global
-openclaw skills update --all
-openclaw skills update --all --agent <id>
-openclaw skills update --all --global
-openclaw skills verify <slug>
-openclaw skills verify <slug> --version <version>
-openclaw skills verify <slug> --tag <tag>
-openclaw skills verify <slug> --card
-openclaw skills verify <slug> --global
-openclaw skills list
-openclaw skills list --eligible
-openclaw skills list --json
-openclaw skills list --verbose
-openclaw skills list --agent <id>
-openclaw skills info <name>
-openclaw skills info <name> --json
-openclaw skills info <name> --agent <id>
-openclaw skills check
-openclaw skills check --agent <id>
-openclaw skills check --json
-openclaw skills workshop propose-create --name "qa-check" --description "QA checklist" --proposal ./PROPOSAL.md
-openclaw skills workshop propose-update qa-check --proposal ./PROPOSAL.md
-openclaw skills workshop list
-openclaw skills workshop inspect <proposal-id>
-openclaw skills workshop revise <proposal-id> --proposal ./PROPOSAL.md
-openclaw skills workshop apply <proposal-id>
-openclaw skills workshop reject <proposal-id> --reason "Not reusable"
-openclaw skills workshop quarantine <proposal-id> --reason "Needs security review"
+sunclaw skills search "calendar"
+sunclaw skills search --limit 20 --json
+sunclaw skills install <slug>
+sunclaw skills install <slug> --version <version>
+sunclaw skills install git:owner/repo
+sunclaw skills install git:owner/repo@main
+sunclaw skills install ./path/to/skill --as custom-name
+sunclaw skills install <slug> --force
+sunclaw skills install <slug> --agent <id>
+sunclaw skills install <slug> --global
+sunclaw skills update <slug>
+sunclaw skills update <slug> --global
+sunclaw skills update --all
+sunclaw skills update --all --agent <id>
+sunclaw skills update --all --global
+sunclaw skills verify <slug>
+sunclaw skills verify <slug> --version <version>
+sunclaw skills verify <slug> --tag <tag>
+sunclaw skills verify <slug> --card
+sunclaw skills verify <slug> --global
+sunclaw skills list
+sunclaw skills list --eligible
+sunclaw skills list --json
+sunclaw skills list --verbose
+sunclaw skills list --agent <id>
+sunclaw skills info <name>
+sunclaw skills info <name> --json
+sunclaw skills info <name> --agent <id>
+sunclaw skills check
+sunclaw skills check --agent <id>
+sunclaw skills check --json
+sunclaw skills workshop propose-create --name "qa-check" --description "QA checklist" --proposal ./PROPOSAL.md
+sunclaw skills workshop propose-update qa-check --proposal ./PROPOSAL.md
+sunclaw skills workshop list
+sunclaw skills workshop inspect <proposal-id>
+sunclaw skills workshop revise <proposal-id> --proposal ./PROPOSAL.md
+sunclaw skills workshop apply <proposal-id>
+sunclaw skills workshop reject <proposal-id> --reason "Not reusable"
+sunclaw skills workshop quarantine <proposal-id> --reason "Needs security review"
 ```
 
 `search`, `update`, and `verify` use ClawHub directly. `install <slug>` installs
@@ -78,7 +78,7 @@ Git and local directory installs expect `SKILL.md` at the source root. The
 install slug comes from `SKILL.md` frontmatter `name` when it is valid, then the
 source directory or repository name; use `--as <slug>` to override it. `--version`
 is ClawHub-only. Skill installs do not support npm package specs or zip/archive
-paths, and `openclaw skills update` updates ClawHub-tracked installs only.
+paths, and `sunclaw skills update` updates ClawHub-tracked installs only.
 
 Gateway-backed skill dependency installs triggered from onboarding or Skills
 settings use the separate `skills.install` request path instead.
@@ -114,7 +114,7 @@ Notes:
 - `verify --card` prints the generated Skill Card Markdown instead of JSON. The
   command exits non-zero when ClawHub returns `ok: false` or `decision: "fail"`;
   unsigned signatures are informational unless ClawHub policy changes.
-- Installed ClawHub bundles can include a generated `skill-card.md`. OpenClaw
+- Installed ClawHub bundles can include a generated `skill-card.md`. SunClaw
   treats verification as a ClawHub server decision and does not reject an
   installed skill just because that generated card changes the bundle
   fingerprint.
@@ -127,27 +127,27 @@ Notes:
 
 ## Skill Workshop
 
-`openclaw skills workshop` manages pending skill proposals in the selected
+`sunclaw skills workshop` manages pending skill proposals in the selected
 workspace. Proposals are not active skills until applied. For proposal storage,
 support-file safeguards, Gateway methods, and approval policy, see
 [Skill Workshop](/tools/skill-workshop).
 
 ```bash
-openclaw skills workshop propose-create \
+sunclaw skills workshop propose-create \
   --name "qa-check" \
   --description "Repeatable QA checklist" \
   --proposal ./PROPOSAL.md
-openclaw skills workshop propose-create \
+sunclaw skills workshop propose-create \
   --name "qa-check" \
   --description "Repeatable QA checklist" \
   --proposal-dir ./qa-check-proposal
-openclaw skills workshop propose-update qa-check --proposal ./PROPOSAL.md
-openclaw skills workshop list
-openclaw skills workshop inspect <proposal-id>
-openclaw skills workshop revise <proposal-id> --proposal ./PROPOSAL.md
-openclaw skills workshop apply <proposal-id>
-openclaw skills workshop reject <proposal-id> --reason "Duplicate"
-openclaw skills workshop quarantine <proposal-id> --reason "Needs security review"
+sunclaw skills workshop propose-update qa-check --proposal ./PROPOSAL.md
+sunclaw skills workshop list
+sunclaw skills workshop inspect <proposal-id>
+sunclaw skills workshop revise <proposal-id> --proposal ./PROPOSAL.md
+sunclaw skills workshop apply <proposal-id>
+sunclaw skills workshop reject <proposal-id> --reason "Duplicate"
+sunclaw skills workshop quarantine <proposal-id> --reason "Needs security review"
 ```
 
 ## Related

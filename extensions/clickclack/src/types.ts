@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
 
 export type ClickClackAccountConfig = {
   name?: string;
@@ -23,8 +23,8 @@ export type ClickClackConfig = ClickClackAccountConfig & {
   defaultAccount?: string;
 };
 
-export type CoreConfig = OpenClawConfig & {
-  channels?: OpenClawConfig["channels"] & {
+export type CoreConfig = SunClawConfig & {
+  channels?: SunClawConfig["channels"] & {
     clickclack?: ClickClackConfig;
   };
 };

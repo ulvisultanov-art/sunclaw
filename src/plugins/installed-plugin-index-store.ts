@@ -1,11 +1,11 @@
 import { existsSync, readFileSync } from "node:fs";
 import { z } from "zod";
 import { isBlockedObjectKey } from "../infra/prototype-keys.js";
-import type { OpenClawStateDatabaseOptions } from "../state/openclaw-state-db.js";
+import type { SunClawStateDatabaseOptions } from "../state/sunclaw-state-db.js";
 import {
-  openOpenClawStateDatabase,
-  runOpenClawStateWriteTransaction,
-} from "../state/openclaw-state-db.js";
+  openSunClawStateDatabase,
+  runSunClawStateWriteTransaction,
+} from "../state/sunclaw-state-db.js";
 import { safeParseWithSchema } from "../utils/zod-parse.js";
 import { resolveCompatibilityHostVersion } from "../version.js";
 import { normalizePluginsConfig, resolveEffectiveEnableState } from "./config-state.js";
@@ -196,7 +196,7 @@ type InstalledPluginIndexSqliteRow = {
 
 function resolveStateDatabaseOptions(
   options: InstalledPluginIndexStoreOptions = {},
-): OpenClawStateDatabaseOptions {
+): SunClawStateDatabaseOptions {
   if (options.filePath) {
     return {
       ...(options.env ? { env: options.env } : {}),
@@ -207,7 +207,7 @@ function resolveStateDatabaseOptions(
     return {
       env: {
         ...(options.env ?? process.env),
-        OPENCLAW_STATE_DIR: options.stateDir,
+        SUNCLAW_STATE_DIR: options.stateDir,
       },
     };
   }
@@ -263,7 +263,7 @@ function assertWritableInstalledPluginIndexStoreOptions(
 ): void {
   if (isExplicitLegacyJsonStorePath(options)) {
     throw new Error(
-      "Explicit JSON installed plugin index paths are retired. Use the shared SQLite state DB or run openclaw doctor --fix to migrate legacy plugins/installs.json.",
+      "Explicit JSON installed plugin index paths are retired. Use the shared SQLite state DB or run sunclaw doctor --fix to migrate legacy plugins/installs.json.",
     );
   }
 }
@@ -307,7 +307,7 @@ function readPersistedInstalledPluginIndexFromSqlite(
     return null;
   }
   try {
-    const database = openOpenClawStateDatabase(resolveStateDatabaseOptions(options));
+    const database = openSunClawStateDatabase(resolveStateDatabaseOptions(options));
     const row = database.db
       .prepare(
         `
@@ -336,7 +336,7 @@ function writePersistedInstalledPluginIndexToSqlite(
     installRecords: copySafeInstallRecords(index.installRecords) ?? {},
   };
   const now = Date.now();
-  runOpenClawStateWriteTransaction(({ db }) => {
+  runSunClawStateWriteTransaction(({ db }) => {
     db.prepare(
       `
         INSERT INTO installed_plugin_index (

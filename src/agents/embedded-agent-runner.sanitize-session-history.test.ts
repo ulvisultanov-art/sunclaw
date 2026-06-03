@@ -1,10 +1,10 @@
-import type { AgentMessage } from "openclaw/plugin-sdk/agent-core";
+import type { AgentMessage } from "sunclaw/plugin-sdk/agent-core";
 import type {
   AssistantMessage,
   ThinkingContent,
   UserMessage,
   Usage,
-} from "openclaw/plugin-sdk/llm";
+} from "sunclaw/plugin-sdk/llm";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   expectOpenAIResponsesStrictSanitizeCall,
@@ -1248,7 +1248,7 @@ describe("sanitizeSessionHistory", () => {
           text: [
             "Conversation info (untrusted metadata):",
             "```json",
-            '{"chat_id":"channel:123","sender":"OpenClaw"}',
+            '{"chat_id":"channel:123","sender":"SunClaw"}',
             "```",
             "",
             "Pong",
@@ -1285,7 +1285,7 @@ describe("sanitizeSessionHistory", () => {
     const metadataOnlyText = [
       "Conversation info (untrusted metadata):",
       "```json",
-      '{"chat_id":"channel:123","sender":"OpenClaw"}',
+      '{"chat_id":"channel:123","sender":"SunClaw"}',
       "```",
     ].join("\n");
     const messages = castAgentMessages([

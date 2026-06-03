@@ -1,10 +1,10 @@
 {
-  "name": "@openclaw/whatsapp",
+  "name": "@sunclaw/whatsapp",
   "version": "2026.6.2",
-  "description": "OpenClaw WhatsApp channel plugin for WhatsApp Web chats.",
+  "description": "SunClaw WhatsApp channel plugin for WhatsApp Web chats.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/ulvisultanov-art/sunclaw"
   },
   "type": "module",
   "dependencies": {
@@ -13,18 +13,18 @@
     "typebox": "1.1.39"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "2026.5.28"
+    "@sunclaw/plugin-sdk": "workspace:*",
+    "sunclaw": "2026.5.28"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.6.2"
+    "sunclaw": ">=2026.6.2"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "sunclaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ],
@@ -54,8 +54,8 @@
       ]
     },
     "install": {
-      "clawhubSpec": "clawhub:@openclaw/whatsapp",
-      "npmSpec": "@openclaw/whatsapp",
+      "clawhubSpec": "clawhub:@sunclaw/whatsapp",
+      "npmSpec": "@sunclaw/whatsapp",
       "defaultChoice": "clawhub",
       "minHostVersion": ">=2026.4.25"
     },
@@ -63,7 +63,7 @@
       "pluginApi": ">=2026.6.2"
     },
     "build": {
-      "openclawVersion": "2026.6.2"
+      "sunclawVersion": "2026.6.2"
     },
     "release": {
       "publishToClawHub": true,

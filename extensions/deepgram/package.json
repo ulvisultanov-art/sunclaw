@@ -1,13 +1,13 @@
 {
-  "name": "@openclaw/deepgram-provider",
+  "name": "@sunclaw/deepgram-provider",
   "version": "2026.6.2",
   "private": true,
-  "description": "OpenClaw Deepgram media-understanding provider",
+  "description": "SunClaw Deepgram media-understanding provider",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@sunclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ]

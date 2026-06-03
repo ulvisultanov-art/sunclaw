@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
 import {
   autoMigrateLegacyMatrixState,
   autoPrepareLegacyMatrixCrypto,
@@ -43,7 +43,7 @@ async function runBestEffortMatrixMigrationStep(params: {
 }
 
 export async function runMatrixStartupMaintenance(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   env?: NodeJS.ProcessEnv;
   log: MatrixStartupLogger;
   trigger?: string;

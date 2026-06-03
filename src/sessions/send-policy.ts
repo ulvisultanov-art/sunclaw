@@ -1,10 +1,10 @@
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@sunclaw/normalization-core/string-coerce";
 import { normalizeChatType } from "../channels/chat-type.js";
 import type { SessionChatType, SessionEntry } from "../config/sessions.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { deriveSessionChatType } from "./session-chat-type.js";
 
 export type SessionSendPolicyDecision = "allow" | "deny";
@@ -72,7 +72,7 @@ function deriveChatTypeFromKey(key?: string): SessionChatType | undefined {
 }
 
 export function resolveSendPolicy(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   entry?: SessionEntry;
   sessionKey?: string;
   channel?: string;

@@ -1,5 +1,5 @@
 import { applyPluginAutoEnable } from "../config/plugin-auto-enable.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import {
   withBundledPluginEnablementCompat,
   withBundledPluginVitestCompat,
@@ -24,10 +24,10 @@ export type PluginActivationBundledCompatMode = {
 };
 
 export type PluginActivationInputs = {
-  rawConfig?: OpenClawConfig;
-  config?: OpenClawConfig;
+  rawConfig?: SunClawConfig;
+  config?: SunClawConfig;
   normalized: NormalizedPluginsConfig;
-  activationSourceConfig?: OpenClawConfig;
+  activationSourceConfig?: SunClawConfig;
   activationSource: PluginActivationConfigSource;
   autoEnabledReasons: Record<string, string[]>;
 };
@@ -52,8 +52,8 @@ export type BundledPluginCompatibleLoadValues = Pick<
 >;
 
 type BundledPluginCompatibleActivationParams = {
-  rawConfig?: OpenClawConfig;
-  resolvedConfig?: OpenClawConfig;
+  rawConfig?: SunClawConfig;
+  resolvedConfig?: SunClawConfig;
   autoEnabledReasons?: Record<string, string[]>;
   env?: NodeJS.ProcessEnv;
   workspaceDir?: string;
@@ -61,7 +61,7 @@ type BundledPluginCompatibleActivationParams = {
   applyAutoEnable?: boolean;
   compatMode: PluginActivationBundledCompatMode;
   resolveCompatPluginIds: (params: {
-    config?: OpenClawConfig;
+    config?: SunClawConfig;
     workspaceDir?: string;
     env?: NodeJS.ProcessEnv;
     onlyPluginIds?: readonly string[];
@@ -70,11 +70,11 @@ type BundledPluginCompatibleActivationParams = {
 };
 
 export function withActivatedPluginIds(params: {
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   pluginIds: readonly string[];
   overrideGlobalDisable?: boolean;
   overrideExplicitDisable?: boolean;
-}): OpenClawConfig | undefined {
+}): SunClawConfig | undefined {
   if (params.pluginIds.length === 0) {
     return params.config;
   }
@@ -114,10 +114,10 @@ export function withActivatedPluginIds(params: {
 }
 
 export function applyPluginCompatibilityOverrides(params: {
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   compat?: PluginActivationCompatConfig;
   env: NodeJS.ProcessEnv;
-}): OpenClawConfig | undefined {
+}): SunClawConfig | undefined {
   const enablementCompat = params.compat?.enablementPluginIds?.length
     ? withBundledPluginEnablementCompat({
         config: params.config,
@@ -152,7 +152,7 @@ function createBundledPluginCompatConfig(params: {
 }
 
 function applyPluginAutoEnableForActivation(params: {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   env: NodeJS.ProcessEnv;
   workspaceDir?: string;
   discovery?: PluginDiscoveryResult;
@@ -183,8 +183,8 @@ function applyPluginAutoEnableForActivation(params: {
 }
 
 export function resolvePluginActivationSnapshot(params: {
-  rawConfig?: OpenClawConfig;
-  resolvedConfig?: OpenClawConfig;
+  rawConfig?: SunClawConfig;
+  resolvedConfig?: SunClawConfig;
   autoEnabledReasons?: Record<string, string[]>;
   env?: NodeJS.ProcessEnv;
   workspaceDir?: string;
@@ -220,8 +220,8 @@ export function resolvePluginActivationSnapshot(params: {
 }
 
 export function resolvePluginActivationInputs(params: {
-  rawConfig?: OpenClawConfig;
-  resolvedConfig?: OpenClawConfig;
+  rawConfig?: SunClawConfig;
+  resolvedConfig?: SunClawConfig;
   autoEnabledReasons?: Record<string, string[]>;
   env?: NodeJS.ProcessEnv;
   workspaceDir?: string;

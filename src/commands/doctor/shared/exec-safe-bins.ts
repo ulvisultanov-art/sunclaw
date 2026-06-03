@@ -1,6 +1,6 @@
-import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalLowercaseString } from "@sunclaw/normalization-core/string-coerce";
 import { sanitizeForLog } from "../../../../packages/terminal-core/src/ansi.js";
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../../config/types.sunclaw.js";
 import { resolveCommandResolutionFromArgv } from "../../../infra/exec-command-resolution.js";
 import {
   listInterpreterLikeSafeBins,
@@ -58,7 +58,7 @@ function normalizeConfiguredTrustedSafeBinDirs(entries: unknown): string[] {
   );
 }
 
-function collectExecSafeBinScopes(cfg: OpenClawConfig): ExecSafeBinScopeRef[] {
+function collectExecSafeBinScopes(cfg: SunClawConfig): ExecSafeBinScopeRef[] {
   const scopes: ExecSafeBinScopeRef[] = [];
   const globalExec = asObjectRecord(cfg.tools?.exec);
   const globalTrustedDirs = normalizeConfiguredTrustedSafeBinDirs(globalExec?.safeBinTrustedDirs);
@@ -112,7 +112,7 @@ function collectExecSafeBinScopes(cfg: OpenClawConfig): ExecSafeBinScopeRef[] {
   return scopes;
 }
 
-export function scanExecSafeBinCoverage(cfg: OpenClawConfig): ExecSafeBinCoverageHit[] {
+export function scanExecSafeBinCoverage(cfg: SunClawConfig): ExecSafeBinCoverageHit[] {
   const hits: ExecSafeBinCoverageHit[] = [];
   for (const scope of collectExecSafeBinScopes(cfg)) {
     const interpreterBins = new Set(listInterpreterLikeSafeBins(scope.safeBins));
@@ -140,7 +140,7 @@ export function scanExecSafeBinCoverage(cfg: OpenClawConfig): ExecSafeBinCoverag
 }
 
 export function scanExecSafeBinTrustedDirHints(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
 ): ExecSafeBinTrustedDirHintHit[] {
   const hits: ExecSafeBinTrustedDirHintHit[] = [];
   for (const scope of collectExecSafeBinScopes(cfg)) {
@@ -243,8 +243,8 @@ export function collectExecSafeBinTrustedDirHintWarnings(
   return lines;
 }
 
-export function maybeRepairExecSafeBinProfiles(cfg: OpenClawConfig): {
-  config: OpenClawConfig;
+export function maybeRepairExecSafeBinProfiles(cfg: SunClawConfig): {
+  config: SunClawConfig;
   changes: string[];
   warnings: string[];
 } {

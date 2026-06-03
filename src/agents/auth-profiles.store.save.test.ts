@@ -55,7 +55,7 @@ function expectProfileFields(profile: unknown, expected: Record<string, unknown>
 
 describe("saveAuthProfileStore", () => {
   it("resolves external auth profiles once per save", async () => {
-    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-auth-save-once-"));
+    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-auth-save-once-"));
     const store: AuthProfileStore = {
       version: 1,
       profiles: {
@@ -104,7 +104,7 @@ describe("saveAuthProfileStore", () => {
 
   it("strips plaintext when keyRef/tokenRef are present", async () => {
     const structuredCloneSpy = vi.spyOn(globalThis, "structuredClone");
-    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-auth-save-"));
+    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-auth-save-"));
     try {
       const store: AuthProfileStore = {
         version: 1,
@@ -161,7 +161,7 @@ describe("saveAuthProfileStore", () => {
   });
 
   it("refreshes the runtime snapshot when a saved store rotates oauth tokens", async () => {
-    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-auth-save-runtime-"));
+    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-auth-save-runtime-"));
     try {
       replaceRuntimeAuthProfileStoreSnapshots([
         {
@@ -220,7 +220,7 @@ describe("saveAuthProfileStore", () => {
   });
 
   it("keeps runtime-only external cli oauth profiles in active runtime snapshots", async () => {
-    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-auth-save-external-"));
+    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-auth-save-external-"));
     const externalProfileId = "anthropic:claude-cli";
     const localAnthropicProfileId = "anthropic:local";
     const localProfileId = "openai:default";
@@ -462,7 +462,7 @@ describe("saveAuthProfileStore", () => {
   });
 
   it("preserves unrelated runtime-only external profiles after scoped runtime saves", async () => {
-    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-auth-save-scoped-"));
+    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-auth-save-scoped-"));
     const scopedProfileId = "anthropic:claude-cli";
     const unrelatedProfileId = "minimax:minimax-cli";
     externalAuthMocks.shouldPersistExternalAuthProfile.mockReturnValue(false);
@@ -599,7 +599,7 @@ describe("saveAuthProfileStore", () => {
   });
 
   it("does not persist profiles already marked runtime-only external", async () => {
-    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-auth-save-runtime-only-"));
+    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-auth-save-runtime-only-"));
     const profileId = "anthropic:claude-cli";
 
     try {
@@ -652,7 +652,7 @@ describe("saveAuthProfileStore", () => {
   });
 
   it("does not persist runtime-only external profiles without an installed snapshot", async () => {
-    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-auth-save-unsnapshotted-"));
+    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-auth-save-unsnapshotted-"));
     const profileId = "openai:oauth";
 
     try {
@@ -686,7 +686,7 @@ describe("saveAuthProfileStore", () => {
   });
 
   it("returns active runtime-only external profiles on unscoped reads", async () => {
-    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-auth-read-runtime-only-"));
+    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-auth-read-runtime-only-"));
     const profileId = "openai:oauth";
 
     try {
@@ -730,7 +730,7 @@ describe("saveAuthProfileStore", () => {
   });
 
   it("does not resurrect runtime-only profiles after authoritative empty overlays", async () => {
-    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-auth-read-removed-"));
+    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-auth-read-removed-"));
     const profileId = "anthropic:claude-cli";
     externalAuthMocks.overlayExternalAuthProfiles.mockImplementation((store) => ({
       ...(store as AuthProfileStore),
@@ -771,7 +771,7 @@ describe("saveAuthProfileStore", () => {
   });
 
   it("persists refreshed runtime-only external OAuth credentials", async () => {
-    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-auth-save-refreshed-"));
+    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-auth-save-refreshed-"));
     const profileId = "anthropic:claude-cli";
 
     try {
@@ -857,7 +857,7 @@ describe("saveAuthProfileStore", () => {
   });
 
   it("writes runtime scheduling state to auth-state.json only", async () => {
-    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-auth-save-state-"));
+    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-auth-save-state-"));
     try {
       const store: AuthProfileStore = {
         version: 1,
@@ -914,7 +914,7 @@ describe("saveAuthProfileStore", () => {
   });
 
   it("does not rewrite auth secrets when only runtime scheduling state changes", async () => {
-    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-auth-save-state-only-"));
+    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-auth-save-state-only-"));
     try {
       const profileId = "anthropic:default";
       const store: AuthProfileStore = {
@@ -969,7 +969,7 @@ describe("saveAuthProfileStore", () => {
   it.runIf(process.platform !== "win32")(
     "repairs auth secrets permissions when the payload is unchanged",
     async () => {
-      const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-auth-save-permissions-"));
+      const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-auth-save-permissions-"));
       try {
         const store: AuthProfileStore = {
           version: 1,
@@ -997,7 +997,7 @@ describe("saveAuthProfileStore", () => {
   );
 
   it("does not rewrite unchanged runtime scheduling state", async () => {
-    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-auth-save-state-same-"));
+    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-auth-save-state-same-"));
     try {
       const profileId = "anthropic:default";
       const store: AuthProfileStore = {
@@ -1029,12 +1029,12 @@ describe("saveAuthProfileStore", () => {
   });
 
   it("does not persist unchanged inherited main OAuth when saving secondary local updates", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-auth-save-inherited-"));
-    const stateDir = path.join(root, ".openclaw");
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-auth-save-inherited-"));
+    const stateDir = path.join(root, ".sunclaw");
     const childAgentDir = path.join(stateDir, "agents", "worker", "agent");
     const childAuthPath = resolveAuthStorePath(childAgentDir);
-    vi.stubEnv("OPENCLAW_STATE_DIR", stateDir);
-    vi.stubEnv("OPENCLAW_AGENT_DIR", "");
+    vi.stubEnv("SUNCLAW_STATE_DIR", stateDir);
+    vi.stubEnv("SUNCLAW_AGENT_DIR", "");
     try {
       saveAuthProfileStore({
         version: 1,
@@ -1099,12 +1099,12 @@ describe("saveAuthProfileStore", () => {
   });
 
   it("does not persist stale inherited main OAuth after main refreshes", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-auth-save-stale-inherited-"));
-    const stateDir = path.join(root, ".openclaw");
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-auth-save-stale-inherited-"));
+    const stateDir = path.join(root, ".sunclaw");
     const childAgentDir = path.join(stateDir, "agents", "worker", "agent");
     const childAuthPath = resolveAuthStorePath(childAgentDir);
-    vi.stubEnv("OPENCLAW_STATE_DIR", stateDir);
-    vi.stubEnv("OPENCLAW_AGENT_DIR", "");
+    vi.stubEnv("SUNCLAW_STATE_DIR", stateDir);
+    vi.stubEnv("SUNCLAW_AGENT_DIR", "");
     try {
       saveAuthProfileStore({
         version: 1,
@@ -1172,12 +1172,12 @@ describe("saveAuthProfileStore", () => {
   });
 
   it("does not persist inherited OAuth with an out-of-range local expiry", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-auth-save-invalid-local-"));
-    const stateDir = path.join(root, ".openclaw");
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-auth-save-invalid-local-"));
+    const stateDir = path.join(root, ".sunclaw");
     const childAgentDir = path.join(stateDir, "agents", "worker", "agent");
     const childAuthPath = resolveAuthStorePath(childAgentDir);
-    vi.stubEnv("OPENCLAW_STATE_DIR", stateDir);
-    vi.stubEnv("OPENCLAW_AGENT_DIR", "");
+    vi.stubEnv("SUNCLAW_STATE_DIR", stateDir);
+    vi.stubEnv("SUNCLAW_AGENT_DIR", "");
     try {
       saveAuthProfileStore({
         version: 1,
@@ -1229,12 +1229,12 @@ describe("saveAuthProfileStore", () => {
   });
 
   it("preserves inherited main OAuth in active secondary runtime snapshots", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-auth-save-snapshot-"));
-    const stateDir = path.join(root, ".openclaw");
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-auth-save-snapshot-"));
+    const stateDir = path.join(root, ".sunclaw");
     const childAgentDir = path.join(stateDir, "agents", "worker", "agent");
     const childAuthPath = resolveAuthStorePath(childAgentDir);
-    vi.stubEnv("OPENCLAW_STATE_DIR", stateDir);
-    vi.stubEnv("OPENCLAW_AGENT_DIR", "");
+    vi.stubEnv("SUNCLAW_STATE_DIR", stateDir);
+    vi.stubEnv("SUNCLAW_AGENT_DIR", "");
     try {
       saveAuthProfileStore({
         version: 1,
@@ -1308,7 +1308,7 @@ describe("saveAuthProfileStore", () => {
   });
 
   it("keeps local replacements for old runtime-only profile ids visible", async () => {
-    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-auth-save-replace-"));
+    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-auth-save-replace-"));
     const profileId = "anthropic:claude-cli";
 
     try {
@@ -1368,7 +1368,7 @@ describe("saveAuthProfileStore", () => {
   });
 
   it("clears non-authoritative runtime-only metadata after local replacements", async () => {
-    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-auth-save-replace-scoped-"));
+    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-auth-save-replace-scoped-"));
     const profileId = "anthropic:claude-cli";
 
     try {

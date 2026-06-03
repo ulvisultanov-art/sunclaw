@@ -20,7 +20,7 @@ describe("scripts/measure-rpc-rtt.mjs", () => {
 
     await expect(
       startGateway({
-        configPath: "/tmp/openclaw.json",
+        configPath: "/tmp/sunclaw.json",
         env: { PATH: "/bin" },
         openImpl,
         port: 23456,
@@ -38,7 +38,7 @@ describe("scripts/measure-rpc-rtt.mjs", () => {
     expect(spawnImpl).toHaveBeenCalledWith(
       "pnpm",
       [
-        "openclaw",
+        "sunclaw",
         "gateway",
         "run",
         "--port",
@@ -51,9 +51,9 @@ describe("scripts/measure-rpc-rtt.mjs", () => {
         cwd: "/repo",
         env: expect.objectContaining({
           HOME: "/tmp/rpc-rtt/home",
-          OPENCLAW_CONFIG_PATH: "/tmp/openclaw.json",
-          OPENCLAW_GATEWAY_TOKEN: "secret-token",
-          OPENCLAW_STATE_DIR: "/tmp/rpc-rtt/state",
+          SUNCLAW_CONFIG_PATH: "/tmp/sunclaw.json",
+          SUNCLAW_GATEWAY_TOKEN: "secret-token",
+          SUNCLAW_STATE_DIR: "/tmp/rpc-rtt/state",
           PATH: "/bin",
         }),
         stdio: ["ignore", 41, 42],

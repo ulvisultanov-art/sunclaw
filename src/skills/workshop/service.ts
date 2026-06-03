@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { readLocalFileSafely, root, walkDirectory } from "../../infra/fs-safe.js";
 import { normalizeSkillIndexName } from "../discovery/skill-index.js";
 import {
@@ -62,7 +62,7 @@ import {
 } from "./types.js";
 
 type SkillWorkshopWorkspaceOptions = {
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   agentId?: string;
 };
 
@@ -70,7 +70,7 @@ type SkillProposalScopeOptions = {
   workspaceDir?: string;
 };
 
-const WRITABLE_WORKSPACE_SOURCES = new Set(["openclaw-workspace", "agents-skills-project"]);
+const WRITABLE_WORKSPACE_SOURCES = new Set(["sunclaw-workspace", "agents-skills-project"]);
 const MAX_PROPOSAL_DRAFT_BYTES = 1024 * 1024;
 const MAX_PROPOSAL_DIRECTORY_ENTRIES = MAX_PROPOSAL_SUPPORT_FILES * 4;
 const MAX_SKILL_PROPOSAL_DESCRIPTION_BYTES = 160;
@@ -281,7 +281,7 @@ export async function proposeCreateSkill(
       skillKey: target.skillKey,
       skillDir: target.skillDir,
       skillFile: target.skillFile,
-      source: "openclaw-workspace",
+      source: "sunclaw-workspace",
     },
     scan: scanProposalBundle(proposalContent, supportFiles),
     ...(supportFiles.length > 0

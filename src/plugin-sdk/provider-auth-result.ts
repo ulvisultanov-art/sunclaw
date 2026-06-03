@@ -7,7 +7,7 @@ import {
   normalizeAgentModelRefForConfig,
 } from "../config/model-input.js";
 import type { ModelProviderConfig } from "../config/types.models.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type { ProviderAuthResult } from "../plugins/types.js";
 
 function normalizeAgentModelConfigForAuthResult(value: unknown): unknown {
@@ -62,8 +62,8 @@ function normalizeProviderConfigModelIdsForAuthResult(
 }
 
 function normalizeProviderAuthConfigPatchModelRefs(
-  patch: Partial<OpenClawConfig>,
-): Partial<OpenClawConfig> {
+  patch: Partial<SunClawConfig>,
+): Partial<SunClawConfig> {
   let next = patch;
   const defaults = patch.agents?.defaults;
   if (defaults) {
@@ -130,7 +130,7 @@ export function buildOauthProviderAuthResult(params: {
   profileName?: string | null;
   profilePrefix?: string;
   credentialExtra?: Record<string, unknown>;
-  configPatch?: Partial<OpenClawConfig>;
+  configPatch?: Partial<SunClawConfig>;
   notes?: string[];
 }): ProviderAuthResult {
   const email = params.email ?? undefined;
@@ -166,7 +166,7 @@ export function buildOauthProviderAuthResult(params: {
               },
             },
           },
-        } as Partial<OpenClawConfig>),
+        } as Partial<SunClawConfig>),
     ),
     defaultModel,
     notes: params.notes,

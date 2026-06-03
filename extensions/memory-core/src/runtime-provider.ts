@@ -1,5 +1,5 @@
-import type { MemoryPluginRuntime } from "openclaw/plugin-sdk/memory-core-host-runtime-core";
-import { resolveMemoryBackendConfig } from "openclaw/plugin-sdk/memory-core-host-runtime-files";
+import type { MemoryPluginRuntime } from "sunclaw/plugin-sdk/memory-core-host-runtime-core";
+import { resolveMemoryBackendConfig } from "sunclaw/plugin-sdk/memory-core-host-runtime-files";
 import {
   closeAllMemorySearchManagers,
   closeMemorySearchManager,

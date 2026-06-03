@@ -1,5 +1,5 @@
-import type { AcpRuntime, AcpRuntimeHandle } from "@openclaw/acp-core/runtime/types";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { AcpRuntime, AcpRuntimeHandle } from "@sunclaw/acp-core/runtime/types";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import {
   type AcpRuntimeError,
   toAcpRuntimeError,
@@ -15,7 +15,7 @@ import type {
 import { normalizeActorKey, requireReadySessionMeta } from "./manager.utils.js";
 
 export async function runManagerCancelSession(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   sessionKey: string;
   reason?: string;
   activeTurnBySession: Map<string, ActiveTurnState>;

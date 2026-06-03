@@ -1,7 +1,7 @@
 import os from "node:os";
 import path from "node:path";
 import type { PromptRequest } from "@agentclientprotocol/sdk";
-import { createInMemorySessionStore } from "@openclaw/acp-core/session";
+import { createInMemorySessionStore } from "@sunclaw/acp-core/session";
 import { describe, expect, it, vi } from "vitest";
 import type { GatewayClient } from "../gateway/client.js";
 import { AcpGatewayAgent } from "./translator.js";
@@ -46,7 +46,7 @@ describe("acp prompt cwd prefix", () => {
     sessionStore.createSession({
       sessionId: TEST_SESSION_ID,
       sessionKey: TEST_SESSION_KEY,
-      cwd: options.cwd ?? path.join(os.homedir(), "openclaw-test"),
+      cwd: options.cwd ?? path.join(os.homedir(), "sunclaw-test"),
     });
 
     const requestSpy = createStopAfterSendSpy();
@@ -71,18 +71,18 @@ describe("acp prompt cwd prefix", () => {
 
   async function runPromptWithCwd(cwd: string) {
     const pinnedHome = os.homedir();
-    const previousOpenClawHome = process.env.OPENCLAW_HOME;
+    const previousSunClawHome = process.env.SUNCLAW_HOME;
     const previousHome = process.env.HOME;
-    delete process.env.OPENCLAW_HOME;
+    delete process.env.SUNCLAW_HOME;
     process.env.HOME = pinnedHome;
 
     try {
       return await runPromptAndCaptureRequest({ cwd, prefixCwd: true });
     } finally {
-      if (previousOpenClawHome === undefined) {
-        delete process.env.OPENCLAW_HOME;
+      if (previousSunClawHome === undefined) {
+        delete process.env.SUNCLAW_HOME;
       } else {
-        process.env.OPENCLAW_HOME = previousOpenClawHome;
+        process.env.SUNCLAW_HOME = previousSunClawHome;
       }
       if (previousHome === undefined) {
         delete process.env.HOME;
@@ -93,16 +93,16 @@ describe("acp prompt cwd prefix", () => {
   }
 
   it("redacts home directory in prompt prefix", async () => {
-    const requestSpy = await runPromptWithCwd(path.join(os.homedir(), "openclaw-test"));
+    const requestSpy = await runPromptWithCwd(path.join(os.homedir(), "sunclaw-test"));
     const payload = chatSendPayload(requestSpy);
     expect(typeof payload.message).toBe("string");
-    expect(payload.message).toMatch(/\[Working directory: ~[\\/]openclaw-test\]/);
+    expect(payload.message).toMatch(/\[Working directory: ~[\\/]sunclaw-test\]/);
   });
 
   it("keeps backslash separators when cwd uses them", async () => {
-    const requestSpy = await runPromptWithCwd(`${os.homedir()}\\openclaw-test`);
+    const requestSpy = await runPromptWithCwd(`${os.homedir()}\\sunclaw-test`);
     const payload = chatSendPayload(requestSpy);
-    expect(payload.message).toContain("[Working directory: ~\\openclaw-test]");
+    expect(payload.message).toContain("[Working directory: ~\\sunclaw-test]");
   });
 
   it("injects system provenance metadata when enabled", async () => {
@@ -112,7 +112,7 @@ describe("acp prompt cwd prefix", () => {
       kind: "external_user",
       originSessionId: TEST_SESSION_ID,
       sourceChannel: "acp",
-      sourceTool: "openclaw_acp",
+      sourceTool: "sunclaw_acp",
     });
     expect(payload.systemProvenanceReceipt).toBeUndefined();
   });
@@ -124,12 +124,12 @@ describe("acp prompt cwd prefix", () => {
       kind: "external_user",
       originSessionId: TEST_SESSION_ID,
       sourceChannel: "acp",
-      sourceTool: "openclaw_acp",
+      sourceTool: "sunclaw_acp",
     });
     expect(typeof payload.systemProvenanceReceipt).toBe("string");
     const receipt = payload.systemProvenanceReceipt as string;
     expect(receipt).toContain("[Source Receipt]");
-    expect(receipt).toContain("bridge=openclaw-acp");
+    expect(receipt).toContain("bridge=sunclaw-acp");
     expect(receipt).toContain(`originSessionId=${TEST_SESSION_ID}`);
     expect(receipt).toContain(`targetSession=${TEST_SESSION_KEY}`);
   });
@@ -156,7 +156,7 @@ describe("acp prompt cwd prefix", () => {
     sessionStore.createSession({
       sessionId: TEST_SESSION_ID,
       sessionKey: TEST_SESSION_KEY,
-      cwd: path.join(os.homedir(), "openclaw-test"),
+      cwd: path.join(os.homedir(), "sunclaw-test"),
     });
     const agent = new AcpGatewayAgent(
       createAcpConnection(),
@@ -174,7 +174,7 @@ describe("acp prompt cwd prefix", () => {
       kind: "external_user",
       originSessionId: TEST_SESSION_ID,
       sourceChannel: "acp",
-      sourceTool: "openclaw_acp",
+      sourceTool: "sunclaw_acp",
     });
     expect(firstPayload.systemProvenanceReceipt).toContain("[Source Receipt]");
 

@@ -45,7 +45,7 @@ vi.mock("../../infra/clawhub.js", () => ({
 
 vi.mock("../../skills/security/clawhub-verdicts.js", () => ({
   collectClawHubVerdictTargets: vi.fn(() => []),
-  fetchOpenClawSkillSecurityVerdicts: vi.fn(),
+  fetchSunClawSkillSecurityVerdicts: vi.fn(),
 }));
 
 const { skillsHandlers } = await import("./skills.js");
@@ -56,10 +56,10 @@ function callHandler(method: string, params: Record<string, unknown>) {
 
 describe("skills proposal gateway handlers", () => {
   beforeEach(async () => {
-    envSnapshot = captureEnv(["OPENCLAW_STATE_DIR"]);
-    mocks.workspaceDir = await tempDirs.make("openclaw-skills-proposals-gateway-");
-    stateDir = await tempDirs.make("openclaw-skills-proposals-gateway-state-");
-    process.env.OPENCLAW_STATE_DIR = stateDir;
+    envSnapshot = captureEnv(["SUNCLAW_STATE_DIR"]);
+    mocks.workspaceDir = await tempDirs.make("sunclaw-skills-proposals-gateway-");
+    stateDir = await tempDirs.make("sunclaw-skills-proposals-gateway-state-");
+    process.env.SUNCLAW_STATE_DIR = stateDir;
   });
 
   afterEach(async () => {
@@ -148,7 +148,7 @@ describe("skills proposal gateway handlers", () => {
     expect(first.ok).toBe(true);
     const firstCreated = first.response as { record: { id: string } };
 
-    const secondWorkspaceDir = await tempDirs.make("openclaw-skills-proposals-gateway-second-");
+    const secondWorkspaceDir = await tempDirs.make("sunclaw-skills-proposals-gateway-second-");
     mocks.workspaceDir = secondWorkspaceDir;
     const second = await callHandler("skills.proposals.create", {
       name: "Second Gateway Skill",

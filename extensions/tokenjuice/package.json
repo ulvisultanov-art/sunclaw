@@ -1,34 +1,34 @@
 {
-  "name": "@openclaw/tokenjuice",
+  "name": "@sunclaw/tokenjuice",
   "version": "2026.6.2",
-  "description": "OpenClaw tokenjuice exec output compaction plugin",
+  "description": "SunClaw tokenjuice exec output compaction plugin",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/ulvisultanov-art/sunclaw"
   },
   "type": "module",
   "dependencies": {
     "tokenjuice": "0.8.0"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.6.2"
+    "sunclaw": ">=2026.6.2"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "sunclaw": {
       "optional": true
     }
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "2026.5.28"
+    "@sunclaw/plugin-sdk": "workspace:*",
+    "sunclaw": "2026.5.28"
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "clawhubSpec": "clawhub:@openclaw/tokenjuice",
-      "npmSpec": "@openclaw/tokenjuice",
+      "clawhubSpec": "clawhub:@sunclaw/tokenjuice",
+      "npmSpec": "@sunclaw/tokenjuice",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.5.28"
     },
@@ -36,7 +36,7 @@
       "pluginApi": ">=2026.6.2"
     },
     "build": {
-      "openclawVersion": "2026.6.2",
+      "sunclawVersion": "2026.6.2",
       "bundledDist": false
     },
     "release": {

@@ -1,14 +1,14 @@
 import fs from "node:fs";
 import path from "node:path";
-import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
+import { normalizeOptionalLowercaseString } from "@sunclaw/normalization-core/string-coerce";
+import { uniqueStrings } from "@sunclaw/normalization-core/string-normalization";
 import { tryReadJsonSync } from "../infra/json-files.js";
-import { resolveOpenClawPackageRootSync } from "../infra/openclaw-root.js";
+import { resolveSunClawPackageRootSync } from "../infra/sunclaw-root.js";
 import { resolveBundledPluginsDir } from "../plugins/bundled-dir.js";
 import type { PluginPackageChannel } from "../plugins/manifest.js";
 
 type ChannelCatalogEntryLike = {
-  openclaw?: {
+  sunclaw?: {
     channel?: PluginPackageChannel;
   };
 };
@@ -27,8 +27,8 @@ const bundledPackageCatalogCache = new Map<string, ChannelCatalogEntryLike[] | n
 function listPackageRoots(): string[] {
   return uniqueStrings(
     [
-      resolveOpenClawPackageRootSync({ cwd: process.cwd() }),
-      resolveOpenClawPackageRootSync({ moduleUrl: import.meta.url }),
+      resolveSunClawPackageRootSync({ cwd: process.cwd() }),
+      resolveSunClawPackageRootSync({ moduleUrl: import.meta.url }),
     ].filter((entry): entry is string => Boolean(entry)),
   );
 }
@@ -89,14 +89,14 @@ function readOfficialCatalogFileSync(): ChannelCatalogEntryLike[] {
 function isChannelCatalogEntryLike(
   entry: ChannelCatalogEntryLike | PluginPackageChannel,
 ): entry is ChannelCatalogEntryLike {
-  return "openclaw" in entry;
+  return "sunclaw" in entry;
 }
 
 function toBundledChannelEntry(
   entry: ChannelCatalogEntryLike | PluginPackageChannel,
 ): BundledChannelCatalogEntry | null {
   const channel: PluginPackageChannel | undefined = isChannelCatalogEntryLike(entry)
-    ? entry.openclaw?.channel
+    ? entry.sunclaw?.channel
     : entry;
   const id = normalizeOptionalLowercaseString(channel?.id);
   if (!id || !channel) {

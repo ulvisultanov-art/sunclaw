@@ -1,19 +1,19 @@
-import { resolveApiKeyForProvider } from "openclaw/plugin-sdk/agent-runtime";
-import type { ModelCatalogEntry } from "openclaw/plugin-sdk/agent-runtime";
+import { resolveApiKeyForProvider } from "sunclaw/plugin-sdk/agent-runtime";
+import type { ModelCatalogEntry } from "sunclaw/plugin-sdk/agent-runtime";
 import {
   findModelInCatalog,
   loadModelCatalog,
   modelSupportsVision,
-} from "openclaw/plugin-sdk/agent-runtime";
-import { resolveDefaultModelForAgent } from "openclaw/plugin-sdk/agent-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { resolveAutoImageModel } from "openclaw/plugin-sdk/media-runtime";
+} from "sunclaw/plugin-sdk/agent-runtime";
+import { resolveDefaultModelForAgent } from "sunclaw/plugin-sdk/agent-runtime";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import { resolveAutoImageModel } from "sunclaw/plugin-sdk/media-runtime";
 import {
   resolveAutoMediaKeyProviders,
   resolveDefaultMediaModel,
-} from "openclaw/plugin-sdk/media-runtime";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/media-runtime";
+import { logVerbose } from "sunclaw/plugin-sdk/runtime-env";
+import { normalizeLowercaseStringOrEmpty } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { getTelegramRuntime } from "./runtime.js";
 export {
   cacheSticker,
@@ -39,7 +39,7 @@ function isMinimaxVlmProvider(provider: string): boolean {
 
 export interface DescribeStickerParams {
   imagePath: string;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   agentDir?: string;
   agentId?: string;
 }

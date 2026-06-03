@@ -4,9 +4,9 @@ import { pathToFileURL } from "node:url";
 import { afterAll, afterEach, describe, expect, it } from "vitest";
 import {
   defineBundledChannelEntry,
-  type OpenClawPluginApi,
+  type SunClawPluginApi,
 } from "../plugin-sdk/channel-entry-contract.js";
-import { loadOpenClawPluginCliRegistry, loadOpenClawPlugins } from "./loader.js";
+import { loadSunClawPluginCliRegistry, loadSunClawPlugins } from "./loader.js";
 import {
   cleanupPluginLoaderFixturesForTest,
   EMPTY_PLUGIN_SCHEMA,
@@ -48,7 +48,7 @@ describe("plugin loader CLI metadata", () => {
       });
       const errors: string[] = [];
 
-      const registry = await loadOpenClawPluginCliRegistry({
+      const registry = await loadSunClawPluginCliRegistry({
         cache: false,
         logger: {
           info: () => {},
@@ -104,8 +104,8 @@ describe("plugin loader CLI metadata", () => {
     });
 
     const warnings: string[] = [];
-    const registry = await loadOpenClawPluginCliRegistry({
-      env: { ...process.env, OPENCLAW_STATE_DIR: stateDir },
+    const registry = await loadSunClawPluginCliRegistry({
+      env: { ...process.env, SUNCLAW_STATE_DIR: stateDir },
       logger: {
         info: () => {},
         warn: (msg: string) => warnings.push(msg),
@@ -147,7 +147,7 @@ describe("plugin loader CLI metadata", () => {
 };`,
     });
     fs.writeFileSync(
-      path.join(plugin.dir, "openclaw.plugin.json"),
+      path.join(plugin.dir, "sunclaw.plugin.json"),
       JSON.stringify(
         {
           id: "config-cli",
@@ -166,7 +166,7 @@ describe("plugin loader CLI metadata", () => {
       "utf-8",
     );
 
-    const registry = await loadOpenClawPluginCliRegistry({
+    const registry = await loadSunClawPluginCliRegistry({
       config: {
         plugins: {
           load: { paths: [plugin.file] },
@@ -197,8 +197,8 @@ describe("plugin loader CLI metadata", () => {
       path.join(pluginDir, "package.json"),
       JSON.stringify(
         {
-          name: "@openclaw/cli-metadata-channel",
-          openclaw: { extensions: ["./index.cjs"], setupEntry: "./setup-entry.cjs" },
+          name: "@sunclaw/cli-metadata-channel",
+          sunclaw: { extensions: ["./index.cjs"], setupEntry: "./setup-entry.cjs" },
         },
         null,
         2,
@@ -206,7 +206,7 @@ describe("plugin loader CLI metadata", () => {
       "utf-8",
     );
     fs.writeFileSync(
-      path.join(pluginDir, "openclaw.plugin.json"),
+      path.join(pluginDir, "sunclaw.plugin.json"),
       JSON.stringify(
         {
           id: "cli-metadata-channel",
@@ -275,7 +275,7 @@ module.exports = {
       "utf-8",
     );
 
-    const registry = await loadOpenClawPluginCliRegistry({
+    const registry = await loadSunClawPluginCliRegistry({
       config: {
         plugins: {
           load: { paths: [pluginDir] },
@@ -298,14 +298,14 @@ module.exports = {
     const fullMarker = path.join(pluginDir, "full-loaded.txt");
 
     fs.mkdirSync(pluginDir, { recursive: true });
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = bundledRoot;
+    process.env.SUNCLAW_BUNDLED_PLUGINS_DIR = bundledRoot;
 
     fs.writeFileSync(
       path.join(pluginDir, "package.json"),
       JSON.stringify(
         {
-          name: "@openclaw/bundled-skip-channel",
-          openclaw: { extensions: ["./index.cjs"] },
+          name: "@sunclaw/bundled-skip-channel",
+          sunclaw: { extensions: ["./index.cjs"] },
         },
         null,
         2,
@@ -313,7 +313,7 @@ module.exports = {
       "utf-8",
     );
     fs.writeFileSync(
-      path.join(pluginDir, "openclaw.plugin.json"),
+      path.join(pluginDir, "sunclaw.plugin.json"),
       JSON.stringify(
         {
           id: "bundled-skip-channel",
@@ -337,7 +337,7 @@ module.exports = {
       "utf-8",
     );
 
-    const registry = await loadOpenClawPluginCliRegistry({
+    const registry = await loadSunClawPluginCliRegistry({
       config: {
         plugins: {
           allow: ["bundled-skip-channel"],
@@ -366,14 +366,14 @@ module.exports = {
     const cliMarker = path.join(pluginDir, "cli-loaded.txt");
 
     fs.mkdirSync(pluginDir, { recursive: true });
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = bundledRoot;
+    process.env.SUNCLAW_BUNDLED_PLUGINS_DIR = bundledRoot;
 
     fs.writeFileSync(
       path.join(pluginDir, "package.json"),
       JSON.stringify(
         {
-          name: "@openclaw/bundled-cli-channel",
-          openclaw: { extensions: ["./index.cjs"] },
+          name: "@sunclaw/bundled-cli-channel",
+          sunclaw: { extensions: ["./index.cjs"] },
         },
         null,
         2,
@@ -381,7 +381,7 @@ module.exports = {
       "utf-8",
     );
     fs.writeFileSync(
-      path.join(pluginDir, "openclaw.plugin.json"),
+      path.join(pluginDir, "sunclaw.plugin.json"),
       JSON.stringify(
         {
           id: "bundled-cli-channel",
@@ -424,7 +424,7 @@ module.exports = {
       "utf-8",
     );
 
-    const registry = await loadOpenClawPluginCliRegistry({
+    const registry = await loadSunClawPluginCliRegistry({
       config: {
         plugins: {
           allow: ["bundled-cli-channel"],
@@ -450,14 +450,14 @@ module.exports = {
     const fullMarker = path.join(pluginDir, "full-loaded.txt");
 
     fs.mkdirSync(pluginDir, { recursive: true });
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = bundledRoot;
+    process.env.SUNCLAW_BUNDLED_PLUGINS_DIR = bundledRoot;
 
     fs.writeFileSync(
       path.join(pluginDir, "package.json"),
       JSON.stringify(
         {
-          name: "@openclaw/bundled-skip-provider",
-          openclaw: { extensions: ["./index.cjs"] },
+          name: "@sunclaw/bundled-skip-provider",
+          sunclaw: { extensions: ["./index.cjs"] },
         },
         null,
         2,
@@ -465,7 +465,7 @@ module.exports = {
       "utf-8",
     );
     fs.writeFileSync(
-      path.join(pluginDir, "openclaw.plugin.json"),
+      path.join(pluginDir, "sunclaw.plugin.json"),
       JSON.stringify(
         {
           id: "bundled-skip-provider",
@@ -488,7 +488,7 @@ module.exports = {
       "utf-8",
     );
 
-    const registry = await loadOpenClawPluginCliRegistry({
+    const registry = await loadSunClawPluginCliRegistry({
       config: {
         plugins: {
           allow: ["bundled-skip-provider"],
@@ -520,8 +520,8 @@ module.exports = {
       path.join(pluginDir, "package.json"),
       JSON.stringify(
         {
-          name: "@openclaw/full-cli-metadata-channel",
-          openclaw: { extensions: ["./index.cjs"] },
+          name: "@sunclaw/full-cli-metadata-channel",
+          sunclaw: { extensions: ["./index.cjs"] },
         },
         null,
         2,
@@ -529,7 +529,7 @@ module.exports = {
       "utf-8",
     );
     fs.writeFileSync(
-      path.join(pluginDir, "openclaw.plugin.json"),
+      path.join(pluginDir, "sunclaw.plugin.json"),
       JSON.stringify(
         {
           id: "full-cli-metadata-channel",
@@ -589,7 +589,7 @@ module.exports = {
       "utf-8",
     );
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadSunClawPlugins({
       cache: false,
       config: {
         plugins: {
@@ -617,8 +617,8 @@ module.exports = {
       path.join(pluginDir, "package.json"),
       JSON.stringify(
         {
-          name: "@openclaw/discovery-cli-metadata-channel",
-          openclaw: { extensions: ["./index.cjs"] },
+          name: "@sunclaw/discovery-cli-metadata-channel",
+          sunclaw: { extensions: ["./index.cjs"] },
         },
         null,
         2,
@@ -626,7 +626,7 @@ module.exports = {
       "utf-8",
     );
     fs.writeFileSync(
-      path.join(pluginDir, "openclaw.plugin.json"),
+      path.join(pluginDir, "sunclaw.plugin.json"),
       JSON.stringify(
         {
           id: "discovery-cli-metadata-channel",
@@ -689,7 +689,7 @@ module.exports = {
       "utf-8",
     );
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadSunClawPlugins({
       activate: false,
       cache: false,
       config: {
@@ -723,8 +723,8 @@ module.exports = {
       path.join(pluginDir, "package.json"),
       JSON.stringify(
         {
-          name: "@openclaw/force-runtime-cli-channel",
-          openclaw: { extensions: ["./index.cjs"], setupEntry: "./setup-entry.cjs" },
+          name: "@sunclaw/force-runtime-cli-channel",
+          sunclaw: { extensions: ["./index.cjs"], setupEntry: "./setup-entry.cjs" },
         },
         null,
         2,
@@ -732,7 +732,7 @@ module.exports = {
       "utf-8",
     );
     fs.writeFileSync(
-      path.join(pluginDir, "openclaw.plugin.json"),
+      path.join(pluginDir, "sunclaw.plugin.json"),
       JSON.stringify(
         {
           id: "force-runtime-cli-channel",
@@ -794,7 +794,7 @@ module.exports = {
       "utf-8",
     );
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadSunClawPlugins({
       activate: false,
       cache: false,
       forceFullRuntimeForChannelPlugins: true,
@@ -884,7 +884,7 @@ module.exports = {
 
     entry.register({
       registrationMode: "discovery",
-      runtime: {} as OpenClawPluginApi["runtime"],
+      runtime: {} as SunClawPluginApi["runtime"],
       registerChannel: (registration) => {
         const plugin = "plugin" in registration ? registration.plugin : registration;
         channels.push(plugin.id);
@@ -892,7 +892,7 @@ module.exports = {
       registerCli: (_register, options) => {
         commands.push(...(options?.descriptors ?? []).map((descriptor) => descriptor.name));
       },
-    } as OpenClawPluginApi);
+    } as SunClawPluginApi);
 
     expect(channels).toEqual(["bundled-discovery-cli"]);
     expect(fs.existsSync(runtimeMarker)).toBe(true);
@@ -928,7 +928,7 @@ module.exports = {
 };`,
     });
 
-    const registry = await loadOpenClawPluginCliRegistry({
+    const registry = await loadSunClawPluginCliRegistry({
       cache: false,
       config: {
         plugins: {
@@ -975,7 +975,7 @@ module.exports = {
 };`,
     });
 
-    const registry = await loadOpenClawPluginCliRegistry({
+    const registry = await loadSunClawPluginCliRegistry({
       config: {
         plugins: {
           load: { paths: [plugin.file] },
@@ -1013,7 +1013,7 @@ module.exports = {
 };`,
     });
     fs.writeFileSync(
-      path.join(plugin.dir, "openclaw.plugin.json"),
+      path.join(plugin.dir, "sunclaw.plugin.json"),
       JSON.stringify(
         {
           id: "memory-external",
@@ -1026,7 +1026,7 @@ module.exports = {
       "utf-8",
     );
 
-    const registry = await loadOpenClawPluginCliRegistry({
+    const registry = await loadSunClawPluginCliRegistry({
       config: {
         plugins: {
           load: { paths: [plugin.file] },
@@ -1066,7 +1066,7 @@ module.exports = {
 };`,
     });
 
-    const registry = await loadOpenClawPluginCliRegistry({
+    const registry = await loadSunClawPluginCliRegistry({
       config: {
         plugins: {
           load: { paths: [plugin.file] },

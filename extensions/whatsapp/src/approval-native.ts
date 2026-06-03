@@ -1,26 +1,26 @@
 import {
   createChannelApprovalCapability,
   splitChannelApprovalCapability,
-} from "openclaw/plugin-sdk/approval-delivery-runtime";
-import { createLazyChannelApprovalNativeRuntimeAdapter } from "openclaw/plugin-sdk/approval-handler-adapter-runtime";
-import type { ChannelApprovalNativeRuntimeAdapter } from "openclaw/plugin-sdk/approval-handler-runtime";
+} from "sunclaw/plugin-sdk/approval-delivery-runtime";
+import { createLazyChannelApprovalNativeRuntimeAdapter } from "sunclaw/plugin-sdk/approval-handler-adapter-runtime";
+import type { ChannelApprovalNativeRuntimeAdapter } from "sunclaw/plugin-sdk/approval-handler-runtime";
 import {
   createChannelApproverDmTargetResolver,
   createChannelNativeOriginTargetResolver,
   createNativeApprovalChannelRouteGates,
   createNativeApprovalForwardingFallbackSuppressor,
-} from "openclaw/plugin-sdk/approval-native-runtime";
-import { buildApprovalReactionPromptPayloadForRequest } from "openclaw/plugin-sdk/approval-reaction-runtime";
+} from "sunclaw/plugin-sdk/approval-native-runtime";
+import { buildApprovalReactionPromptPayloadForRequest } from "sunclaw/plugin-sdk/approval-reaction-runtime";
 import type {
   ExecApprovalRequest,
   PluginApprovalRequest,
-} from "openclaw/plugin-sdk/approval-runtime";
-import type { ChannelApprovalCapability } from "openclaw/plugin-sdk/channel-contract";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+} from "sunclaw/plugin-sdk/approval-runtime";
+import type { ChannelApprovalCapability } from "sunclaw/plugin-sdk/channel-contract";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/string-coerce-runtime";
 import {
   listWhatsAppAccountIds,
   resolveDefaultWhatsAppAccountId,
@@ -30,7 +30,7 @@ import { getWhatsAppApprovalApprovers, whatsappApprovalAuth } from "./approval-a
 import { isWhatsAppGroupJid, normalizeWhatsAppMessagingTarget } from "./normalize.js";
 
 type ApprovalRequest = ExecApprovalRequest | PluginApprovalRequest;
-type ApprovalForwardingConfig = NonNullable<NonNullable<OpenClawConfig["approvals"]>["exec"]>;
+type ApprovalForwardingConfig = NonNullable<NonNullable<SunClawConfig["approvals"]>["exec"]>;
 type ApprovalForwardingMode = NonNullable<ApprovalForwardingConfig["mode"]>;
 type ChannelApprovalForwardTarget = Parameters<
   NonNullable<
@@ -46,7 +46,7 @@ type WhatsAppApprovalTarget = {
 const DEFAULT_APPROVAL_FORWARDING_MODE: ApprovalForwardingMode = "session";
 
 function isWhatsAppApprovalTransportEnabled(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   accountId?: string | null;
 }): boolean {
   return resolveWhatsAppAccount({ cfg: params.cfg, accountId: params.accountId }).enabled;
@@ -124,7 +124,7 @@ const resolveWhatsAppOriginTargetBase = createChannelNativeOriginTargetResolver(
 });
 
 function resolveWhatsAppOriginTarget(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   accountId?: string | null;
   approvalKind?: "exec" | "plugin";
   request: ApprovalRequest;

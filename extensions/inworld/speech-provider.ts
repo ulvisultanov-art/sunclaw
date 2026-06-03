@@ -1,16 +1,16 @@
-import { normalizeResolvedSecretInputString } from "openclaw/plugin-sdk/secret-input";
+import { normalizeResolvedSecretInputString } from "sunclaw/plugin-sdk/secret-input";
 import type {
   SpeechDirectiveTokenParseContext,
   SpeechProviderConfig,
   SpeechProviderOverrides,
   SpeechProviderPlugin,
-} from "openclaw/plugin-sdk/speech-core";
+} from "sunclaw/plugin-sdk/speech-core";
 import {
   asObject,
   parseSpeechDirectiveNumberOverride,
   trimToUndefined,
-} from "openclaw/plugin-sdk/speech-core";
-import { asFiniteNumberInRange } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/speech-core";
+import { asFiniteNumberInRange } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import {
   DEFAULT_INWORLD_MODEL_ID,
   DEFAULT_INWORLD_VOICE_ID,

@@ -1,5 +1,5 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import { sortUniqueStrings } from "@openclaw/normalization-core/string-normalization";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
+import { sortUniqueStrings } from "@sunclaw/normalization-core/string-normalization";
 import { resolveDefaultAgentDir } from "../agents/agent-scope.js";
 import { DEFAULT_MODEL, DEFAULT_PROVIDER } from "../agents/defaults.js";
 import { resolveVisibleModelCatalog } from "../agents/model-catalog-visibility.js";
@@ -26,7 +26,7 @@ import {
   resolveAgentModelFallbackValues,
   resolveAgentModelPrimaryValue,
 } from "../config/model-input.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { resolveOwningPluginIdsForProviderRef } from "../plugins/providers.js";
 import type { ProviderPlugin } from "../plugins/types.js";
 import type { RuntimeEnv } from "../runtime.js";
@@ -72,7 +72,7 @@ function formatModelRefLabel(params: {
 }
 
 function resolvePickerAgentDir(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   agentDir?: string;
   env?: NodeJS.ProcessEnv;
 }): string {
@@ -80,7 +80,7 @@ function resolvePickerAgentDir(params: {
 }
 
 export type PromptDefaultModelParams = {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   prompter: WizardPrompter;
   allowKeep?: boolean;
   includeManual?: boolean;
@@ -96,7 +96,7 @@ export type PromptDefaultModelParams = {
   message?: string;
 };
 
-export type PromptDefaultModelResult = { model?: string; config?: OpenClawConfig };
+export type PromptDefaultModelResult = { model?: string; config?: SunClawConfig };
 export type PromptModelAllowlistResult = { models?: string[]; scopeKeys?: string[] };
 
 async function loadModelPickerRuntime() {
@@ -108,11 +108,11 @@ const loadResolvedModelPickerRuntime = createLazyRuntimeSurface(
   ({ modelPickerRuntime }) => modelPickerRuntime,
 );
 
-function resolveConfiguredModelRaw(cfg: OpenClawConfig): string {
+function resolveConfiguredModelRaw(cfg: SunClawConfig): string {
   return resolveAgentModelPrimaryValue(cfg.agents?.defaults?.model) ?? "";
 }
 
-function resolveConfiguredModelKeys(cfg: OpenClawConfig): string[] {
+function resolveConfiguredModelKeys(cfg: SunClawConfig): string[] {
   const models = cfg.agents?.defaults?.models ?? {};
   return Object.keys(models)
     .map((key) => key.trim())
@@ -133,7 +133,7 @@ function toPickerCatalogEntry(
 }
 
 function loadPickerModelCatalog(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   opts: {
     preferredProvider?: string;
     preferLiveProviderCatalog?: boolean;
@@ -208,7 +208,7 @@ function normalizeModelKeys(values: string[]): string[] {
 }
 
 function resolveFallbackModelKey(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   raw: string;
   defaultProvider: string;
   aliasIndex: ModelAliasIndex;
@@ -230,7 +230,7 @@ function resolveFallbackModelKey(params: {
 }
 
 function resolveFallbackModelKeys(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   rawFallbacks: string[];
   defaultProvider: string;
   aliasIndex: ModelAliasIndex;
@@ -261,7 +261,7 @@ function resolveModelRouteHint(provider: string): string | undefined {
 }
 
 async function resolveLiteralPrefixProviderIds(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
 }): Promise<Set<string>> {
@@ -397,7 +397,7 @@ async function addModelKeySelectOption(params: {
 
 function createPreferredProviderMatcher(params: {
   preferredProvider: string;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
 }): (entryProvider: string) => boolean {
@@ -483,7 +483,7 @@ async function maybeFilterModelsByProvider(params: {
   }>;
   preferredProvider?: string;
   prompter: WizardPrompter;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   isVisibleProvider: (provider: string) => boolean;
@@ -524,7 +524,7 @@ async function maybeFilterModelsByProvider(params: {
 }
 
 async function resolveProviderPluginSetupOptions(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
 }): Promise<WizardSelectOption[]> {
@@ -554,7 +554,7 @@ async function resolveProviderPluginSetupOptions(params: {
 
 async function maybeHandleProviderPluginSelection(params: {
   selection: string;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   prompter: WizardPrompter;
   agentDir?: string;
   workspaceDir?: string;
@@ -975,7 +975,7 @@ export async function promptDefaultModel(
 }
 
 export async function promptModelAllowlist(params: {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   prompter: WizardPrompter;
   message?: string;
   agentDir?: string;
@@ -1313,10 +1313,10 @@ export async function promptModelAllowlist(params: {
 }
 
 export function applyModelAllowlist(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   models: string[],
   opts: { scopeKeys?: string[] } = {},
-): OpenClawConfig {
+): SunClawConfig {
   const defaults = cfg.agents?.defaults;
   const normalized = normalizeModelKeys(models);
   const scopeKeys = opts.scopeKeys ? normalizeModelKeys(opts.scopeKeys) : [];
@@ -1389,10 +1389,10 @@ export function applyModelAllowlist(
 }
 
 export function applyModelFallbacksFromSelection(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   selection: string[],
   opts: { scopeKeys?: string[] } = {},
-): OpenClawConfig {
+): SunClawConfig {
   const normalized = normalizeModelKeys(selection);
   const scopeKeys = opts.scopeKeys ? normalizeModelKeys(opts.scopeKeys) : [];
   const scopeKeySet = scopeKeys.length > 0 ? new Set(scopeKeys) : null;

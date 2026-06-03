@@ -1,4 +1,4 @@
-import { resolveTimerTimeoutMs } from "openclaw/plugin-sdk/number-runtime";
+import { resolveTimerTimeoutMs } from "sunclaw/plugin-sdk/number-runtime";
 
 export type MatrixQaFetchLike = typeof fetch;
 

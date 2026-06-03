@@ -182,9 +182,9 @@ export async function runZaiFallbackRepro(deps: RunZaiFallbackReproDeps = {}): P
     return 1;
   }
 
-  const baseDir = await mkdtemp(path.join(os.tmpdir(), "openclaw-zai-fallback-"));
+  const baseDir = await mkdtemp(path.join(os.tmpdir(), "sunclaw-zai-fallback-"));
   const stateDir = path.join(baseDir, "state");
-  const configPath = path.join(baseDir, "openclaw.json");
+  const configPath = path.join(baseDir, "sunclaw.json");
   try {
     await mkdir(stateDir, { recursive: true });
 
@@ -205,12 +205,12 @@ export async function runZaiFallbackRepro(deps: RunZaiFallbackReproDeps = {}): P
     };
     await writeFile(configPath, JSON.stringify(config, null, 2), "utf8");
 
-    const sessionId = env.OPENCLAW_ZAI_FALLBACK_SESSION_ID ?? createUuid();
+    const sessionId = env.SUNCLAW_ZAI_FALLBACK_SESSION_ID ?? createUuid();
 
     const baseEnv: NodeJS.ProcessEnv = {
       ...env,
-      OPENCLAW_CONFIG_PATH: configPath,
-      OPENCLAW_STATE_DIR: stateDir,
+      SUNCLAW_CONFIG_PATH: configPath,
+      SUNCLAW_STATE_DIR: stateDir,
       ZAI_API_KEY: zaiKey,
       Z_AI_API_KEY: "",
     };
@@ -233,7 +233,7 @@ export async function runZaiFallbackRepro(deps: RunZaiFallbackReproDeps = {}): P
       "Then use the read tool to display the file contents. Reply with just the file contents.";
     const run1 = await run(
       "run1",
-      ["openclaw", "agent", "--local", "--session-id", sessionId, "--message", toolPrompt],
+      ["sunclaw", "agent", "--local", "--session-id", sessionId, "--message", toolPrompt],
       envValidAnthropic,
     );
     if (run1.code !== 0) {
@@ -251,7 +251,7 @@ export async function runZaiFallbackRepro(deps: RunZaiFallbackReproDeps = {}): P
       "What is the content of zai-fallback-tool.txt? Reply with just the contents.";
     const run2 = await run(
       "run2",
-      ["openclaw", "agent", "--local", "--session-id", sessionId, "--message", followupPrompt],
+      ["sunclaw", "agent", "--local", "--session-id", sessionId, "--message", followupPrompt],
       envInvalidAnthropic,
     );
 

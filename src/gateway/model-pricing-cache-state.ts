@@ -1,5 +1,5 @@
-import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { normalizeProviderId } from "@sunclaw/model-catalog-core/provider-id";
+import { normalizeLowercaseStringOrEmpty } from "@sunclaw/normalization-core/string-coerce";
 import { normalizeModelRef } from "../agents/model-selection.js";
 
 export type CachedPricingTier = {

@@ -2,7 +2,7 @@ import {
   hasNonEmptyString as hasNonEmptyStringField,
   normalizeOptionalString,
   readStringValue,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@sunclaw/normalization-core/string-coerce";
 import type { AgentMessage } from "./runtime/index.js";
 import {
   extractToolCallsFromAssistant,
@@ -143,8 +143,8 @@ function hasSessionsSpawnAttachmentToolCall(content: unknown[]): boolean {
 }
 
 const DEFAULT_MISSING_TOOL_RESULT_TEXT =
-  "[openclaw] missing tool result in session history; inserted synthetic error result for transcript repair.";
-const SYNTHETIC_MISSING_TOOL_RESULT_DETAIL_KEY = "openclawSyntheticMissingToolResult";
+  "[sunclaw] missing tool result in session history; inserted synthetic error result for transcript repair.";
+const SYNTHETIC_MISSING_TOOL_RESULT_DETAIL_KEY = "sunclawSyntheticMissingToolResult";
 
 function makeMissingToolResult(params: {
   toolCallId: string;
@@ -153,7 +153,7 @@ function makeMissingToolResult(params: {
   // function_call_output normalization; live coverage in
   // openai-reasoning-compat.live.test.ts and tool-replay-repair.live.test.ts
   // sends this repaired history to real models. Other providers keep the older,
-  // explicit OpenClaw diagnostic text unless the caller opts in.
+  // explicit SunClaw diagnostic text unless the caller opts in.
   text?: string;
 }): Extract<AgentMessage, { role: "toolResult" }> {
   return {

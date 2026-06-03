@@ -3,12 +3,12 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { promisify } from "node:util";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
 import { note } from "../../packages/terminal-core/src/note.js";
 import { formatCliCommand } from "../cli/command-format.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { hasConfiguredSecretInput } from "../config/types.secrets.js";
-import { findStaleOpenClawUpdateLaunchdJobs } from "../daemon/launchd.js";
+import { findStaleSunClawUpdateLaunchdJobs } from "../daemon/launchd.js";
 import { resolveGatewayService, type GatewayService } from "../daemon/service.js";
 import { shortenHomePath } from "../utils.js";
 
@@ -27,7 +27,7 @@ export function collectMacLaunchAgentOverrideWarning(deps?: {
     return null;
   }
   const home = deps?.homeDir ?? resolveHomeDir();
-  const markerCandidates = [path.join(home, ".openclaw", "disable-launchagent")];
+  const markerCandidates = [path.join(home, ".sunclaw", "disable-launchagent")];
   const exists = deps?.exists ?? fs.existsSync;
   const markerPath = markerCandidates.find((candidate) => exists(candidate));
   if (!markerPath) {
@@ -49,9 +49,9 @@ export async function noteMacLaunchAgentOverrides() {
   }
 }
 
-export async function collectMacStaleOpenClawUpdateLaunchdJobsWarning(deps?: {
+export async function collectMacStaleSunClawUpdateLaunchdJobsWarning(deps?: {
   platform?: NodeJS.Platform;
-  findJobs?: typeof findStaleOpenClawUpdateLaunchdJobs;
+  findJobs?: typeof findStaleSunClawUpdateLaunchdJobs;
   env?: NodeJS.ProcessEnv;
 }): Promise<string | null> {
   const platform = deps?.platform ?? process.platform;
@@ -59,7 +59,7 @@ export async function collectMacStaleOpenClawUpdateLaunchdJobsWarning(deps?: {
     return null;
   }
   const scanEnv = deps?.env ?? process.env;
-  const jobs = await (deps?.findJobs ?? findStaleOpenClawUpdateLaunchdJobs)(scanEnv).catch(
+  const jobs = await (deps?.findJobs ?? findStaleSunClawUpdateLaunchdJobs)(scanEnv).catch(
     () => [],
   );
   if (jobs.length === 0) {
@@ -67,7 +67,7 @@ export async function collectMacStaleOpenClawUpdateLaunchdJobsWarning(deps?: {
   }
 
   return [
-    "- Stale OpenClaw updater launchd job(s) detected.",
+    "- Stale SunClaw updater launchd job(s) detected.",
     ...jobs.map((job) => {
       const exitStatus =
         job.lastExitStatus !== undefined ? `, last exit ${job.lastExitStatus}` : "";
@@ -76,13 +76,13 @@ export async function collectMacStaleOpenClawUpdateLaunchdJobsWarning(deps?: {
     }),
     "- Fix after confirming no update is running:",
     "  launchctl remove <label>",
-    `  ${formatCliCommand("openclaw gateway restart")}`,
+    `  ${formatCliCommand("sunclaw gateway restart")}`,
   ].join("\n");
 }
 
-export async function noteMacStaleOpenClawUpdateLaunchdJobs(deps?: {
+export async function noteMacStaleSunClawUpdateLaunchdJobs(deps?: {
   platform?: NodeJS.Platform;
-  findJobs?: typeof findStaleOpenClawUpdateLaunchdJobs;
+  findJobs?: typeof findStaleSunClawUpdateLaunchdJobs;
   env?: NodeJS.ProcessEnv;
   service?: Pick<GatewayService, "readCommand">;
   noteFn?: typeof note;
@@ -90,7 +90,7 @@ export async function noteMacStaleOpenClawUpdateLaunchdJobs(deps?: {
   const platform = deps?.platform ?? process.platform;
   const serviceEnv =
     platform === "darwin" ? await resolveGatewayServiceEnvForPlatformNotes(deps) : deps?.env;
-  const warning = await collectMacStaleOpenClawUpdateLaunchdJobsWarning({
+  const warning = await collectMacStaleSunClawUpdateLaunchdJobsWarning({
     env: serviceEnv,
     findJobs: deps?.findJobs,
     platform,
@@ -110,7 +110,7 @@ async function launchctlGetenv(name: string): Promise<string | undefined> {
   }
 }
 
-function hasConfigGatewayCreds(cfg: OpenClawConfig): boolean {
+function hasConfigGatewayCreds(cfg: SunClawConfig): boolean {
   const localPassword = cfg.gateway?.auth?.password;
   const remoteToken = cfg.gateway?.remote?.token;
   const remotePassword = cfg.gateway?.remote?.password;
@@ -123,7 +123,7 @@ function hasConfigGatewayCreds(cfg: OpenClawConfig): boolean {
 }
 
 export async function collectMacLaunchctlGatewayEnvOverrideWarning(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   deps?: {
     platform?: NodeJS.Platform;
     getenv?: (name: string) => Promise<string | undefined>;
@@ -139,10 +139,10 @@ export async function collectMacLaunchctlGatewayEnvOverrideWarning(
 
   const getenv = deps?.getenv ?? launchctlGetenv;
   const tokenEntries = [
-    ["OPENCLAW_GATEWAY_TOKEN", await getenv("OPENCLAW_GATEWAY_TOKEN")],
+    ["SUNCLAW_GATEWAY_TOKEN", await getenv("SUNCLAW_GATEWAY_TOKEN")],
   ] as const;
   const passwordEntries = [
-    ["OPENCLAW_GATEWAY_PASSWORD", await getenv("OPENCLAW_GATEWAY_PASSWORD")],
+    ["SUNCLAW_GATEWAY_PASSWORD", await getenv("SUNCLAW_GATEWAY_PASSWORD")],
   ] as const;
   const tokenEntry = tokenEntries.find(([, value]) => normalizeOptionalString(value));
   const passwordEntry = passwordEntries.find(([, value]) => normalizeOptionalString(value));
@@ -161,7 +161,7 @@ export async function collectMacLaunchctlGatewayEnvOverrideWarning(
       ? `- \`${envTokenKey}\` is set; it can make local clients use a different token than gateway.auth.token.`
       : undefined,
     envPassword
-      ? `- \`${envPasswordKey ?? "OPENCLAW_GATEWAY_PASSWORD"}\` is set; it can make local clients use a different password than gateway.auth.password.`
+      ? `- \`${envPasswordKey ?? "SUNCLAW_GATEWAY_PASSWORD"}\` is set; it can make local clients use a different password than gateway.auth.password.`
       : undefined,
     "- Clear overrides and restart the app/gateway:",
     envTokenKey ? `  launchctl unsetenv ${envTokenKey}` : undefined,
@@ -172,7 +172,7 @@ export async function collectMacLaunchctlGatewayEnvOverrideWarning(
 }
 
 export async function noteMacLaunchctlGatewayEnvOverrides(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   deps?: {
     platform?: NodeJS.Platform;
     getenv?: (name: string) => Promise<string | undefined>;
@@ -201,12 +201,12 @@ async function resolveGatewayServiceEnvForPlatformNotes(deps?: {
 }
 
 export async function collectMacGatewayPlatformWarnings(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   deps?: {
     platform?: NodeJS.Platform;
     env?: NodeJS.ProcessEnv;
     service?: Pick<GatewayService, "readCommand">;
-    findJobs?: typeof findStaleOpenClawUpdateLaunchdJobs;
+    findJobs?: typeof findStaleSunClawUpdateLaunchdJobs;
   },
 ): Promise<readonly string[]> {
   const platform = deps?.platform ?? process.platform;
@@ -217,7 +217,7 @@ export async function collectMacGatewayPlatformWarnings(
   }
   const serviceEnv =
     platform === "darwin" ? await resolveGatewayServiceEnvForPlatformNotes(deps) : deps?.env;
-  const staleUpdateWarning = await collectMacStaleOpenClawUpdateLaunchdJobsWarning({
+  const staleUpdateWarning = await collectMacStaleSunClawUpdateLaunchdJobsWarning({
     env: serviceEnv,
     findJobs: deps?.findJobs,
     platform,
@@ -272,7 +272,7 @@ export function noteStartupOptimizationHints(
   const noteFn = deps?.noteFn ?? note;
   const compileCache = normalizeOptionalString(env.NODE_COMPILE_CACHE) ?? "";
   const disableCompileCache = normalizeOptionalString(env.NODE_DISABLE_COMPILE_CACHE) ?? "";
-  const noRespawn = normalizeOptionalString(env.OPENCLAW_NO_RESPAWN) ?? "";
+  const noRespawn = normalizeOptionalString(env.SUNCLAW_NO_RESPAWN) ?? "";
   const lines: string[] = [];
 
   if (!compileCache) {
@@ -291,7 +291,7 @@ export function noteStartupOptimizationHints(
 
   if (noRespawn !== "1") {
     lines.push(
-      "- OPENCLAW_NO_RESPAWN is not set to 1; set it when you want routine gateway restarts to stay in-process instead of handing off to a managed supervisor.",
+      "- SUNCLAW_NO_RESPAWN is not set to 1; set it when you want routine gateway restarts to stay in-process instead of handing off to a managed supervisor.",
     );
   }
 
@@ -301,9 +301,9 @@ export function noteStartupOptimizationHints(
 
   const suggestions = [
     "- Suggested env for low-power hosts:",
-    "  export NODE_COMPILE_CACHE=/var/tmp/openclaw-compile-cache",
-    "  mkdir -p /var/tmp/openclaw-compile-cache",
-    "  export OPENCLAW_NO_RESPAWN=1",
+    "  export NODE_COMPILE_CACHE=/var/tmp/sunclaw-compile-cache",
+    "  mkdir -p /var/tmp/sunclaw-compile-cache",
+    "  export SUNCLAW_NO_RESPAWN=1",
     isTruthyEnvValue(disableCompileCache) ? "  unset NODE_DISABLE_COMPILE_CACHE" : undefined,
   ].filter((line): line is string => Boolean(line));
 

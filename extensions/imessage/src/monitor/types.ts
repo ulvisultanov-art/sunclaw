@@ -1,6 +1,6 @@
-import type { ChannelRuntimeSurface } from "openclaw/plugin-sdk/channel-contract";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
+import type { ChannelRuntimeSurface } from "sunclaw/plugin-sdk/channel-contract";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import type { RuntimeEnv } from "sunclaw/plugin-sdk/runtime-env";
 
 export type IMessageAttachment = {
   original_path?: string | null;
@@ -44,7 +44,7 @@ export type MonitorIMessageOpts = {
   cliPath?: string;
   dbPath?: string;
   accountId?: string;
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   allowFrom?: Array<string | number>;
   groupAllowFrom?: Array<string | number>;
   includeAttachments?: boolean;

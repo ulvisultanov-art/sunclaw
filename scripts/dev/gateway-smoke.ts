@@ -16,7 +16,7 @@ function writeStderrLine(message: string): void {
 function writeUsage(): void {
   writeStderrLine(
     "Usage: bun scripts/dev/gateway-smoke.ts --url <wss://host[:port]> --token <gateway.auth.token>\n" +
-      "Or set env: OPENCLAW_GATEWAY_URL / OPENCLAW_GATEWAY_TOKEN",
+      "Or set env: SUNCLAW_GATEWAY_URL / SUNCLAW_GATEWAY_TOKEN",
   );
 }
 
@@ -53,12 +53,12 @@ export async function runGatewaySmoke(
       minProtocol: MIN_CLIENT_PROTOCOL_VERSION,
       maxProtocol: PROTOCOL_VERSION,
       client: {
-        id: "openclaw-ios",
-        displayName: "openclaw gateway smoke test",
+        id: "sunclaw-ios",
+        displayName: "sunclaw gateway smoke test",
         version: "dev",
         platform: "dev",
         mode: "ui",
-        instanceId: "openclaw-dev-smoke",
+        instanceId: "sunclaw-dev-smoke",
       },
       locale: "en-US",
       userAgent: "gateway-smoke",
@@ -94,8 +94,8 @@ export async function runGatewaySmoke(
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   const { get: getArg } = createArgReader();
-  const urlRaw = getArg("--url") ?? process.env.OPENCLAW_GATEWAY_URL;
-  const token = getArg("--token") ?? process.env.OPENCLAW_GATEWAY_TOKEN;
+  const urlRaw = getArg("--url") ?? process.env.SUNCLAW_GATEWAY_URL;
+  const token = getArg("--token") ?? process.env.SUNCLAW_GATEWAY_TOKEN;
 
   if (!urlRaw || !token) {
     writeUsage();

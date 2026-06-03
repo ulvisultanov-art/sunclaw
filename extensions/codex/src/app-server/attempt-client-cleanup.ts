@@ -1,4 +1,4 @@
-import { embeddedAgentLog } from "openclaw/plugin-sdk/agent-harness-runtime";
+import { embeddedAgentLog } from "sunclaw/plugin-sdk/agent-harness-runtime";
 import type { CodexAppServerClient } from "./client.js";
 import { retireSharedCodexAppServerClientIfCurrent } from "./shared-client.js";
 

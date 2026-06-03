@@ -1,5 +1,5 @@
 import { readDiscordComponentSpec } from "../components.js";
-import type { OpenClawConfig } from "../runtime-api.js";
+import type { SunClawConfig } from "../runtime-api.js";
 import { sendDiscordComponentMessage } from "../send.components.js";
 import {
   createThreadDiscord,
@@ -59,7 +59,7 @@ export const discordMessagingActionRuntime = {
 
 async function resolveDiscordReactionTargetChannelId(params: {
   target: string;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   accountId?: string;
 }): Promise<string> {
   try {

@@ -2,15 +2,15 @@ import type { ReactionTypeEmoji } from "grammy/types";
 import {
   resolveAckReaction,
   shouldAckReaction as shouldAckReactionGate,
-} from "openclaw/plugin-sdk/channel-feedback";
-import { logInboundDrop } from "openclaw/plugin-sdk/channel-inbound";
+} from "sunclaw/plugin-sdk/channel-feedback";
+import { logInboundDrop } from "sunclaw/plugin-sdk/channel-inbound";
 import type {
   TelegramDirectConfig,
   TelegramGroupConfig,
-} from "openclaw/plugin-sdk/config-contracts";
-import { deriveLastRoutePolicy } from "openclaw/plugin-sdk/routing";
-import { normalizeAccountId, resolveThreadSessionKeys } from "openclaw/plugin-sdk/routing";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
+} from "sunclaw/plugin-sdk/config-contracts";
+import { deriveLastRoutePolicy } from "sunclaw/plugin-sdk/routing";
+import { normalizeAccountId, resolveThreadSessionKeys } from "sunclaw/plugin-sdk/routing";
+import { logVerbose } from "sunclaw/plugin-sdk/runtime-env";
 import {
   expandTelegramAllowFromWithAccessGroups,
   resolveTelegramDmAllow,

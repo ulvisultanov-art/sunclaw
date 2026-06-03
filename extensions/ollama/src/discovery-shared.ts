@@ -1,6 +1,6 @@
-import { getCachedLiveCatalogValue } from "openclaw/plugin-sdk/provider-catalog-shared";
-import type { ModelProviderConfig } from "openclaw/plugin-sdk/provider-model-shared";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { getCachedLiveCatalogValue } from "sunclaw/plugin-sdk/provider-catalog-shared";
+import type { ModelProviderConfig } from "sunclaw/plugin-sdk/provider-model-shared";
+import { normalizeOptionalString } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { OLLAMA_DEFAULT_BASE_URL } from "./defaults.js";
 import { readProviderBaseUrl } from "./provider-base-url.js";
 import { resolveOllamaApiBase } from "./provider-models.js";

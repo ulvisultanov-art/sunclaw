@@ -43,22 +43,22 @@ Do **not** use it when you need local files, your shell, your repo, or paired de
     config can also power Grok `web_search`.
 
     ```bash
-    openclaw models auth login --provider xai --method oauth
-    openclaw models auth login --provider xai --device-code
+    sunclaw models auth login --provider xai --method oauth
+    sunclaw models auth login --provider xai --device-code
     ```
 
     During a fresh install, the same auth choices are available inside
     onboarding:
 
     ```bash
-    openclaw onboard --install-daemon
-    openclaw onboard --install-daemon --auth-choice xai-device-code
+    sunclaw onboard --install-daemon
+    sunclaw onboard --install-daemon --auth-choice xai-device-code
     ```
 
     Or use an API key:
 
     ```bash
-    openclaw models auth login --provider xai --method api-key
+    sunclaw models auth login --provider xai --method api-key
     export XAI_API_KEY=xai-...
     ```
 
@@ -110,7 +110,7 @@ Do **not** use it when you need local files, your shell, your repo, or paired de
 
   <Step title="Restart the Gateway">
     ```bash
-    openclaw gateway restart
+    sunclaw gateway restart
     ```
 
     `code_execution` shows up in the agent's tool list once the xAI plugin re-registers with `enabled: true`.
@@ -127,7 +127,7 @@ Use code_execution to calculate the 7-day moving average for these numbers: ...
 ```
 
 ```text
-Use x_search to find posts mentioning OpenClaw this week, then use code_execution to count them by day.
+Use x_search to find posts mentioning SunClaw this week, then use code_execution to count them by day.
 ```
 
 ```text
@@ -143,8 +143,8 @@ When the tool runs without auth, it returns a structured `missing_xai_api_key` e
 ```json
 {
   "error": "missing_xai_api_key",
-  "message": "code_execution needs xAI credentials. Run `openclaw onboard --auth-choice xai-oauth` to sign in with Grok, run `openclaw onboard --auth-choice xai-api-key`, set `XAI_API_KEY` in the Gateway environment, or configure `plugins.entries.xai.config.webSearch.apiKey`.",
-  "docs": "https://docs.openclaw.ai/tools/code-execution"
+  "message": "code_execution needs xAI credentials. Run `sunclaw onboard --auth-choice xai-oauth` to sign in with Grok, run `sunclaw onboard --auth-choice xai-api-key`, set `XAI_API_KEY` in the Gateway environment, or configure `plugins.entries.xai.config.webSearch.apiKey`.",
+  "docs": "https://docs.sunclaw.complex.az/tools/code-execution"
 }
 ```
 

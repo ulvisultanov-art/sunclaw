@@ -1,12 +1,12 @@
-import { DEFAULT_ACCOUNT_ID } from "openclaw/plugin-sdk/account-id";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import { DEFAULT_ACCOUNT_ID } from "sunclaw/plugin-sdk/account-id";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
 import {
   applySetupAccountConfigPatch,
   createStandardChannelSetupStatus,
   formatDocsLink,
   createSetupTranslator,
   type ChannelSetupWizard,
-} from "openclaw/plugin-sdk/setup";
+} from "sunclaw/plugin-sdk/setup";
 import {
   applyMattermostSetupConfigPatch,
   isMattermostConfigured,
@@ -127,7 +127,7 @@ export const mattermostSetupWizard: ChannelSetupWizard = {
         }),
     },
   ],
-  disable: (cfg: OpenClawConfig) => ({
+  disable: (cfg: SunClawConfig) => ({
     ...cfg,
     channels: {
       ...cfg.channels,

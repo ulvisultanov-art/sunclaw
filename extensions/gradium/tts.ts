@@ -1,6 +1,6 @@
-import { assertOkOrThrowProviderError } from "openclaw/plugin-sdk/provider-http";
-import { readResponseWithLimit } from "openclaw/plugin-sdk/response-limit-runtime";
-import { fetchWithSsrFGuard } from "openclaw/plugin-sdk/ssrf-runtime";
+import { assertOkOrThrowProviderError } from "sunclaw/plugin-sdk/provider-http";
+import { readResponseWithLimit } from "sunclaw/plugin-sdk/response-limit-runtime";
+import { fetchWithSsrFGuard } from "sunclaw/plugin-sdk/ssrf-runtime";
 import { normalizeGradiumBaseUrl } from "./shared.js";
 
 const DEFAULT_TTS_MAX_BYTES = 16 * 1024 * 1024;

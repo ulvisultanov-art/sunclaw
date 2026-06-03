@@ -1,6 +1,6 @@
 import { setTimeout as scheduleNativeTimeout } from "node:timers";
 import { setTimeout as sleep } from "node:timers/promises";
-import { MAX_TIMER_TIMEOUT_MS } from "@openclaw/normalization-core/number-coercion";
+import { MAX_TIMER_TIMEOUT_MS } from "@sunclaw/normalization-core/number-coercion";
 import { describe, expect, it, vi } from "vitest";
 import {
   requireTaskByRunId,
@@ -22,7 +22,7 @@ import {
   installAcpSessionManagerTestLifecycle,
   mockCallArg,
   readySessionMeta,
-  type OpenClawConfig,
+  type SunClawConfig,
   resetAcpSessionManagerForTests,
   type SessionAcpMeta,
 } from "./manager.test-helpers.js";
@@ -78,7 +78,7 @@ describe("AcpSessionManager", () => {
       ...baseCfg,
       session: { mainKey: "main" },
       agents: { list: [{ id: "main", default: true }] },
-    } as OpenClawConfig;
+    } as SunClawConfig;
 
     await manager.runTurn({
       cfg,
@@ -274,7 +274,7 @@ describe("AcpSessionManager", () => {
         label: "Korean path",
         task: "Print the current directory in Korean",
         status: "succeeded",
-        progressSummary: "현재 작업 디렉토리는 /home/bykim0119/.openclaw/workspace 입니다",
+        progressSummary: "현재 작업 디렉토리는 /home/bykim0119/.sunclaw/workspace 입니다",
       });
     });
   }, 300_000);
@@ -655,7 +655,7 @@ describe("AcpSessionManager", () => {
             timeoutSeconds: 1,
           },
         },
-      } as OpenClawConfig;
+      } as SunClawConfig;
 
       const first = manager.runTurn({
         cfg,
@@ -785,7 +785,7 @@ describe("AcpSessionManager", () => {
             timeoutSeconds: 1,
           },
         },
-      } as OpenClawConfig;
+      } as SunClawConfig;
 
       const first = manager.runTurn({
         cfg,
@@ -912,7 +912,7 @@ describe("AcpSessionManager", () => {
         ...baseCfg.acp,
         maxConcurrentSessions: 1,
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
 
     const manager = new AcpSessionManager();
     await manager.runTurn({
@@ -969,7 +969,7 @@ describe("AcpSessionManager", () => {
         enabled: true,
         dispatch: { enabled: true },
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
 
     const manager = new AcpSessionManager();
     await expect(
@@ -1024,7 +1024,7 @@ describe("AcpSessionManager", () => {
           ...baseCfg.acp,
           maxConcurrentSessions: 1,
         },
-      } as OpenClawConfig;
+      } as SunClawConfig;
 
       const manager = new AcpSessionManager();
       await manager.runTurn({
@@ -1104,17 +1104,17 @@ describe("AcpSessionManager", () => {
       runtime: runtimeState.runtime,
     });
     hoisted.readAcpSessionEntryMock.mockReturnValue({
-      sessionKey: "agent:openclaw:acp:session-1",
-      storeSessionKey: "agent:openclaw:acp:session-1",
+      sessionKey: "agent:sunclaw:acp:session-1",
+      storeSessionKey: "agent:sunclaw:acp:session-1",
       acp: readySessionMeta({
-        agent: "openclaw",
+        agent: "sunclaw",
       }),
     });
 
     const manager = new AcpSessionManager();
     const closeResult = await manager.closeSession({
       cfg: baseCfg,
-      sessionKey: "agent:openclaw:acp:session-1",
+      sessionKey: "agent:sunclaw:acp:session-1",
       reason: "terminal-task-cleanup",
       allowBackendUnavailable: true,
       discardPersistentState: true,
@@ -1125,7 +1125,7 @@ describe("AcpSessionManager", () => {
     expect(closeResult.runtimeNotice).toContain("does not support session/close");
     expect(closeResult.metaCleared).toBe(true);
     expect(runtimeState.prepareFreshSession).toHaveBeenCalledWith({
-      sessionKey: "agent:openclaw:acp:session-1",
+      sessionKey: "agent:sunclaw:acp:session-1",
     });
   });
 
@@ -1357,7 +1357,7 @@ describe("AcpSessionManager", () => {
             ttlMinutes: 0.01,
           },
         },
-      } as OpenClawConfig;
+      } as SunClawConfig;
 
       const manager = new AcpSessionManager();
       await manager.runTurn({

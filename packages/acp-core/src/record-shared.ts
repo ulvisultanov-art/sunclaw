@@ -1,1 +1,1 @@
-export { asOptionalRecord as asRecord } from "@openclaw/normalization-core/record-coerce";
+export { asOptionalRecord as asRecord } from "@sunclaw/normalization-core/record-coerce";

@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { discoverAuthStorage, discoverModels } from "./agent-model-discovery.js";
 import { resolveDefaultAgentDir } from "./agent-scope.js";
 import { resolveModelPluginMetadataSnapshot } from "./model-discovery-context.js";
@@ -13,7 +13,7 @@ export type LoadAgentModelRegistryOptions = {
 };
 
 export function loadAgentModelRegistry(
-  config: OpenClawConfig,
+  config: SunClawConfig,
   options: LoadAgentModelRegistryOptions = {},
 ): { agentDir: string; registry: ModelRegistry } {
   const agentDir = resolveDefaultAgentDir(config);

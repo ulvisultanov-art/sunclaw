@@ -1,4 +1,4 @@
-import { normalizeOptionalString as normalizeString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString as normalizeString } from "@sunclaw/normalization-core/string-coerce";
 import type { HistoryMediaEntry } from "../../auto-reply/reply/history.types.js";
 import type { InboundMediaFacts } from "../turn/types.js";
 

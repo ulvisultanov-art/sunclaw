@@ -1,5 +1,5 @@
 import { normalizeConfiguredMcpServers } from "../config/mcp-config-normalize.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import {
   loadEnabledBundleMcpConfig,
   type BundleMcpConfig,
@@ -15,7 +15,7 @@ type MergedBundleMcpConfig = {
 
 type BundleMcpServerMapper = (server: BundleMcpServerConfig, name: string) => BundleMcpServerConfig;
 
-const OPENCLAW_TRANSPORT_TO_CLI_BUNDLE_TYPE: Record<string, string> = {
+const SUNCLAW_TRANSPORT_TO_CLI_BUNDLE_TYPE: Record<string, string> = {
   "streamable-http": "http",
   http: "http",
   sse: "sse",
@@ -23,10 +23,10 @@ const OPENCLAW_TRANSPORT_TO_CLI_BUNDLE_TYPE: Record<string, string> = {
 };
 
 /**
- * User config stores OpenClaw MCP transport names, while CLI backends such as
+ * User config stores SunClaw MCP transport names, while CLI backends such as
  * Claude Code and Gemini expect a downstream `type` field. Keep this adapter
- * out of the generic merge path because embedded OpenClaw still consumes the raw
- * OpenClaw `transport` shape directly.
+ * out of the generic merge path because embedded SunClaw still consumes the raw
+ * SunClaw `transport` shape directly.
  */
 export function toCliBundleMcpServerConfig(server: BundleMcpServerConfig): BundleMcpServerConfig {
   const next = { ...server } as Record<string, unknown>;
@@ -36,7 +36,7 @@ export function toCliBundleMcpServerConfig(server: BundleMcpServerConfig): Bundl
     return next as BundleMcpServerConfig;
   }
   if (typeof rawTransport === "string") {
-    const mapped = OPENCLAW_TRANSPORT_TO_CLI_BUNDLE_TYPE[rawTransport];
+    const mapped = SUNCLAW_TRANSPORT_TO_CLI_BUNDLE_TYPE[rawTransport];
     if (mapped) {
       next.type = mapped;
     }
@@ -46,7 +46,7 @@ export function toCliBundleMcpServerConfig(server: BundleMcpServerConfig): Bundl
 
 export function loadMergedBundleMcpConfig(params: {
   workspaceDir: string;
-  cfg?: OpenClawConfig;
+  cfg?: SunClawConfig;
   manifestRegistry?: Pick<PluginManifestRegistry, "plugins">;
   mapConfiguredServer?: BundleMcpServerMapper;
 }): MergedBundleMcpConfig {
@@ -73,7 +73,7 @@ export function loadMergedBundleMcpConfig(params: {
 
   return {
     config: {
-      // OpenClaw config is the owner-managed layer, so it overrides bundle defaults.
+      // SunClaw config is the owner-managed layer, so it overrides bundle defaults.
       mcpServers: {
         ...enabledBundleMcp,
         ...Object.fromEntries(

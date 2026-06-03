@@ -4,32 +4,32 @@ import path from "node:path";
 import type {
   OpenKeyedStoreOptions,
   PluginStateKeyedStore,
-} from "openclaw/plugin-sdk/plugin-state-runtime";
+} from "sunclaw/plugin-sdk/plugin-state-runtime";
 import {
   createPluginStateKeyedStoreForTests,
   resetPluginStateStoreForTests,
-} from "openclaw/plugin-sdk/plugin-state-test-runtime";
-import { createTestPluginApi } from "openclaw/plugin-sdk/plugin-test-api";
+} from "sunclaw/plugin-sdk/plugin-state-test-runtime";
+import { createTestPluginApi } from "sunclaw/plugin-sdk/plugin-test-api";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import registerPhoneControl from "./index.js";
 import type {
-  OpenClawPluginApi,
-  OpenClawPluginCommandDefinition,
-  OpenClawPluginService,
+  SunClawPluginApi,
+  SunClawPluginCommandDefinition,
+  SunClawPluginService,
   PluginCommandContext,
 } from "./runtime-api.js";
 
-const PHONE_CONTROL_STATE_PREFIX = "openclaw-phone-control-test-";
+const PHONE_CONTROL_STATE_PREFIX = "sunclaw-phone-control-test-";
 const WRITE_COMMANDS = ["calendar.add", "contacts.add", "reminders.add", "sms.send"] as const;
 
 function createApi(params: {
   stateDir: string;
   getConfig: () => Record<string, unknown>;
   writeConfig: (next: Record<string, unknown>) => Promise<void>;
-  registerCommand: (command: OpenClawPluginCommandDefinition) => void;
-  registerService?: (service: OpenClawPluginService) => void;
-  openKeyedStore?: OpenClawPluginApi["runtime"]["state"]["openKeyedStore"];
-}): OpenClawPluginApi {
+  registerCommand: (command: SunClawPluginCommandDefinition) => void;
+  registerService?: (service: SunClawPluginService) => void;
+  openKeyedStore?: SunClawPluginApi["runtime"]["state"]["openKeyedStore"];
+}): SunClawPluginApi {
   return createTestPluginApi({
     id: "phone-control",
     name: "phone-control",
@@ -44,7 +44,7 @@ function createApi(params: {
           ((options: OpenKeyedStoreOptions) =>
             createPluginStateKeyedStoreForTests("phone-control", {
               ...options,
-              env: { ...process.env, OPENCLAW_STATE_DIR: params.stateDir },
+              env: { ...process.env, SUNCLAW_STATE_DIR: params.stateDir },
             })),
       },
       config: {
@@ -58,7 +58,7 @@ function createApi(params: {
           mutate(nextConfig);
           await params.writeConfig(nextConfig);
           return {
-            path: "/tmp/openclaw.json",
+            path: "/tmp/sunclaw.json",
             previousHash: null,
             persistedHash: null,
             snapshot: {},
@@ -71,7 +71,7 @@ function createApi(params: {
         replaceConfigFile: ({ nextConfig }: { nextConfig: unknown }) =>
           params.writeConfig(nextConfig as Record<string, unknown>),
       },
-    } as unknown as OpenClawPluginApi["runtime"],
+    } as unknown as SunClawPluginApi["runtime"],
     registerCommand: params.registerCommand,
     ...(params.registerService ? { registerService: params.registerService } : {}),
   });
@@ -107,7 +107,7 @@ function createPhoneControlConfig(): Record<string, unknown> {
 function createMockOpenKeyedStore(params: {
   lookup: ReturnType<typeof vi.fn>;
   delete?: ReturnType<typeof vi.fn>;
-}): OpenClawPluginApi["runtime"]["state"]["openKeyedStore"] {
+}): SunClawPluginApi["runtime"]["state"]["openKeyedStore"] {
   return <T>() => {
     const store: PluginStateKeyedStore<T> = {
       register: vi.fn(async () => {}),
@@ -125,7 +125,7 @@ function createMockOpenKeyedStore(params: {
 
 async function withRegisteredPhoneControl(
   run: (params: {
-    command: OpenClawPluginCommandDefinition;
+    command: SunClawPluginCommandDefinition;
     writeConfigFile: ReturnType<typeof vi.fn>;
     getConfig: () => Record<string, unknown>;
   }) => Promise<void>,
@@ -137,7 +137,7 @@ async function withRegisteredPhoneControl(
       config = next;
     });
 
-    let command: OpenClawPluginCommandDefinition | undefined;
+    let command: SunClawPluginCommandDefinition | undefined;
     registerPhoneControl.register(
       createApi({
         stateDir,
@@ -366,7 +366,7 @@ describe("phone-control plugin", () => {
     const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), PHONE_CONTROL_STATE_PREFIX));
     try {
       const lookup = vi.fn(async () => undefined);
-      let service: OpenClawPluginService | undefined;
+      let service: SunClawPluginService | undefined;
 
       registerPhoneControl.register(
         createApi({
@@ -433,7 +433,7 @@ describe("phone-control plugin", () => {
         removedFromDeny: [...WRITE_COMMANDS],
       }));
       const removeState = vi.fn(async () => true);
-      let service: OpenClawPluginService | undefined;
+      let service: SunClawPluginService | undefined;
 
       registerPhoneControl.register(
         createApi({

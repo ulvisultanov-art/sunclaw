@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import type {
   ConfiguredBindingResolution,
   StatefulBindingTargetDescriptor,
@@ -15,19 +15,19 @@ export type StatefulBindingTargetResetResult =
 export type StatefulBindingTargetDriver = {
   id: string;
   ensureReady: (params: {
-    cfg: OpenClawConfig;
+    cfg: SunClawConfig;
     bindingResolution: ConfiguredBindingResolution;
   }) => Promise<StatefulBindingTargetReadyResult>;
   ensureSession: (params: {
-    cfg: OpenClawConfig;
+    cfg: SunClawConfig;
     bindingResolution: ConfiguredBindingResolution;
   }) => Promise<StatefulBindingTargetSessionResult>;
   resolveTargetBySessionKey?: (params: {
-    cfg: OpenClawConfig;
+    cfg: SunClawConfig;
     sessionKey: string;
   }) => StatefulBindingTargetDescriptor | null;
   resetInPlace?: (params: {
-    cfg: OpenClawConfig;
+    cfg: SunClawConfig;
     sessionKey: string;
     bindingTarget: StatefulBindingTargetDescriptor;
     reason: "new" | "reset";
@@ -67,7 +67,7 @@ export function getStatefulBindingTargetDriver(id: string): StatefulBindingTarge
 }
 
 export function resolveStatefulBindingTargetBySessionKey(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   sessionKey: string;
 }): { driver: StatefulBindingTargetDriver; bindingTarget: StatefulBindingTargetDescriptor } | null {
   const sessionKey = params.sessionKey.trim();

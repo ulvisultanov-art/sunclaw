@@ -1,7 +1,7 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { CommandArgValues } from "openclaw/plugin-sdk/native-command-registry";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import type { CommandArgValues } from "sunclaw/plugin-sdk/native-command-registry";
 
-export type DiscordConfig = NonNullable<OpenClawConfig["channels"]>["discord"];
+export type DiscordConfig = NonNullable<SunClawConfig["channels"]>["discord"];
 
 export type DiscordCommandArgs = {
   raw?: string;

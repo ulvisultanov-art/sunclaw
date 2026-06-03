@@ -1,15 +1,15 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
 import {
   coerceSecretRef,
   ensureAuthProfileStore,
   listProfilesForProvider,
-} from "openclaw/plugin-sdk/provider-auth";
-import { resolveRequiredConfiguredSecretRefInputString } from "openclaw/plugin-sdk/secret-input-runtime";
+} from "sunclaw/plugin-sdk/provider-auth";
+import { resolveRequiredConfiguredSecretRefInputString } from "sunclaw/plugin-sdk/secret-input-runtime";
 import { PROVIDER_ID } from "./models.js";
 
 export async function resolveFirstGithubToken(params: {
   agentDir?: string;
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   env: NodeJS.ProcessEnv;
 }): Promise<{
   githubToken: string;

@@ -23,27 +23,27 @@ type PublishablePluginPackage = {
 
 const execFileAsync = promisify(execFile);
 const REQUIRED_REVIEWED_PUBLISHABLE_CRITICAL_FINDINGS = new Set([
-  "@openclaw/acpx:dangerous-exec:src/codex-auth-bridge.ts",
-  "@openclaw/acpx:dangerous-exec:src/runtime-internals/mcp-proxy.mjs",
-  "@openclaw/codex:dangerous-exec:src/app-server/sandbox-exec-server/http.ts",
-  "@openclaw/codex:dangerous-exec:src/app-server/sandbox-exec-server/processes.ts",
-  "@openclaw/codex:dangerous-exec:src/app-server/transport-stdio.ts",
-  "@openclaw/codex:dangerous-exec:src/node-cli-sessions.ts",
-  "@openclaw/discord:dangerous-exec:src/voice/audio.ts",
-  "@openclaw/google-meet:dangerous-exec:src/node-host.ts",
-  "@openclaw/google-meet:dangerous-exec:src/realtime.ts",
-  "@openclaw/matrix:dangerous-exec:src/matrix/deps.ts",
-  "@openclaw/voice-call:dangerous-exec:src/tunnel.ts",
-  "@openclaw/voice-call:dangerous-exec:src/webhook/tailscale.ts",
+  "@sunclaw/acpx:dangerous-exec:src/codex-auth-bridge.ts",
+  "@sunclaw/acpx:dangerous-exec:src/runtime-internals/mcp-proxy.mjs",
+  "@sunclaw/codex:dangerous-exec:src/app-server/sandbox-exec-server/http.ts",
+  "@sunclaw/codex:dangerous-exec:src/app-server/sandbox-exec-server/processes.ts",
+  "@sunclaw/codex:dangerous-exec:src/app-server/transport-stdio.ts",
+  "@sunclaw/codex:dangerous-exec:src/node-cli-sessions.ts",
+  "@sunclaw/discord:dangerous-exec:src/voice/audio.ts",
+  "@sunclaw/google-meet:dangerous-exec:src/node-host.ts",
+  "@sunclaw/google-meet:dangerous-exec:src/realtime.ts",
+  "@sunclaw/matrix:dangerous-exec:src/matrix/deps.ts",
+  "@sunclaw/voice-call:dangerous-exec:src/tunnel.ts",
+  "@sunclaw/voice-call:dangerous-exec:src/webhook/tailscale.ts",
 ]);
 
 const OPTIONAL_REVIEWED_PUBLISHABLE_DIST_CRITICAL_FINDINGS = new Set([
-  "@openclaw/acpx:dangerous-exec:dist/mcp-proxy.mjs",
-  "@openclaw/acpx:dangerous-exec:dist/service-<hash>.js",
-  "@openclaw/codex:dangerous-exec:dist/client-<hash>.js",
-  "@openclaw/google-meet:dangerous-exec:dist/index.js",
-  "@openclaw/slack:dynamic-code-execution:dist/outbound-payload.test-harness-<hash>.js",
-  "@openclaw/voice-call:dangerous-exec:dist/runtime-entry-<hash>.js",
+  "@sunclaw/acpx:dangerous-exec:dist/mcp-proxy.mjs",
+  "@sunclaw/acpx:dangerous-exec:dist/service-<hash>.js",
+  "@sunclaw/codex:dangerous-exec:dist/client-<hash>.js",
+  "@sunclaw/google-meet:dangerous-exec:dist/index.js",
+  "@sunclaw/slack:dynamic-code-execution:dist/outbound-payload.test-harness-<hash>.js",
+  "@sunclaw/voice-call:dangerous-exec:dist/runtime-entry-<hash>.js",
 ]);
 
 function parseNpmPackFiles(raw: string, packageName: string): string[] {
@@ -108,7 +108,7 @@ function stageScannerRelevantPackedFiles(
   packageDir: string,
   packedFiles: readonly string[],
 ): string {
-  const stageDir = mkdtempSync(join(tmpdir(), "openclaw-plugin-npm-scan-"));
+  const stageDir = mkdtempSync(join(tmpdir(), "sunclaw-plugin-npm-scan-"));
 
   for (const packedPath of packedFiles) {
     if (!isScannerWalkedPackedPath(packedPath)) {
@@ -181,14 +181,14 @@ function collectPublishablePluginPackages(): PublishablePluginPackage[] {
       const packageJsonPath = join(packageDir, "package.json");
       let packageJson: {
         name?: unknown;
-        openclaw?: { release?: { publishToNpm?: unknown } };
+        sunclaw?: { release?: { publishToNpm?: unknown } };
       };
       try {
         packageJson = JSON.parse(readFileSync(packageJsonPath, "utf8")) as typeof packageJson;
       } catch {
         return [];
       }
-      if (packageJson.openclaw?.release?.publishToNpm !== true) {
+      if (packageJson.sunclaw?.release?.publishToNpm !== true) {
         return [];
       }
       if (typeof packageJson.name !== "string" || !packageJson.name.trim()) {

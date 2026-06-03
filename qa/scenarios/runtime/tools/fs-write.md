@@ -8,9 +8,9 @@ runtimeParityTier: standard
 coverage:
   primary:
     - tools.fs.write
-objective: Verify file write behavior is tracked across OpenClaw and Codex while Codex owns write natively.
+objective: Verify file write behavior is tracked across SunClaw and Codex while Codex owns write natively.
 successCriteria:
-  - OpenClaw may expose OpenClaw write while Codex app-server mode may omit duplicate OpenClaw dynamic write.
+  - SunClaw may expose SunClaw write while Codex app-server mode may omit duplicate SunClaw dynamic write.
   - Mock provider write plans are reported as fixture intent, not as actual runtime tool calls.
   - The row stays report-only until the fixture validates native Codex write behavior directly.
 docsRefs:
@@ -32,11 +32,11 @@ execution:
       tracking: "#80319"
       codexDefaultImpact: P4
       qaImpact: P1
-      action: split native write behavior from OpenClaw dynamic tool parity
-      reason: Codex app-server intentionally owns write natively; the fixture must not require OpenClaw dynamic write exposure.
+      action: split native write behavior from SunClaw dynamic tool parity
+      reason: Codex app-server intentionally owns write natively; the fixture must not require SunClaw dynamic write exposure.
     knownHarnessGap:
       issue: "#80319"
-      reason: QA tool-defaults currently needs native write behavior coverage instead of OpenClaw dynamic write exposure.
+      reason: QA tool-defaults currently needs native write behavior coverage instead of SunClaw dynamic write exposure.
     promptSnippet: "target=write"
     failurePromptSnippet: "failure target=write"
 ```

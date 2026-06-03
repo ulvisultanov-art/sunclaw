@@ -47,6 +47,6 @@ export function logRuntimeToolSchemaQuarantine(params: {
     })
     .join("; ");
   log.warn(
-    `[tools] quarantined ${params.diagnostics.length} unsupported tool schema${params.diagnostics.length === 1 ? "" : "s"} before model runtime projection: ${summary}. Run openclaw doctor for details.`,
+    `[tools] quarantined ${params.diagnostics.length} unsupported tool schema${params.diagnostics.length === 1 ? "" : "s"} before model runtime projection: ${summary}. Run sunclaw doctor for details.`,
   );
 }

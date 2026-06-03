@@ -4,10 +4,10 @@ import {
   asSafeIntegerInRange,
   resolveExpiresAtMsFromDurationOrEpoch,
   resolvePositiveTimerTimeoutMs,
-} from "openclaw/plugin-sdk/number-runtime";
-import { generatePkceVerifierChallenge, toFormUrlEncoded } from "openclaw/plugin-sdk/provider-auth";
-import { ensureGlobalUndiciEnvProxyDispatcher } from "openclaw/plugin-sdk/runtime-env";
-import { fetchWithSsrFGuard } from "openclaw/plugin-sdk/ssrf-runtime";
+} from "sunclaw/plugin-sdk/number-runtime";
+import { generatePkceVerifierChallenge, toFormUrlEncoded } from "sunclaw/plugin-sdk/provider-auth";
+import { ensureGlobalUndiciEnvProxyDispatcher } from "sunclaw/plugin-sdk/runtime-env";
+import { fetchWithSsrFGuard } from "sunclaw/plugin-sdk/ssrf-runtime";
 
 export type MiniMaxRegion = "cn" | "global";
 

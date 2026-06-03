@@ -3,21 +3,21 @@ import path from "node:path";
 import type {
   OpenKeyedStoreOptions,
   PluginStateSyncKeyedStore,
-} from "openclaw/plugin-sdk/plugin-state-runtime";
+} from "sunclaw/plugin-sdk/plugin-state-runtime";
 import {
   createPluginStateKeyedStoreForTests,
   createPluginStateSyncKeyedStoreForTests,
   resetPluginStateStoreForTests,
-} from "openclaw/plugin-sdk/plugin-state-test-runtime";
-import type { PluginRuntime } from "openclaw/plugin-sdk/runtime-store";
-import { resolvePreferredOpenClawTmpDir } from "openclaw/plugin-sdk/temp-path";
+} from "sunclaw/plugin-sdk/plugin-state-test-runtime";
+import type { PluginRuntime } from "sunclaw/plugin-sdk/runtime-store";
+import { resolvePreferredSunClawTmpDir } from "sunclaw/plugin-sdk/temp-path";
 import { setIMessageRuntime } from "../runtime.js";
 
 function createIMessageTestEnv(): NodeJS.ProcessEnv {
   const stateDir = fs.mkdtempSync(
-    path.join(resolvePreferredOpenClawTmpDir(), "openclaw-imessage-state-"),
+    path.join(resolvePreferredSunClawTmpDir(), "sunclaw-imessage-state-"),
   );
-  return { ...process.env, OPENCLAW_STATE_DIR: stateDir };
+  return { ...process.env, SUNCLAW_STATE_DIR: stateDir };
 }
 
 let imessageTestEnv = createIMessageTestEnv();

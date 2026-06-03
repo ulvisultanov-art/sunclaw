@@ -1,11 +1,11 @@
-import { describeAccountSnapshot } from "openclaw/plugin-sdk/account-helpers";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import { describeAccountSnapshot } from "sunclaw/plugin-sdk/account-helpers";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
 import {
   createDelegatedSetupWizardProxy,
   createStandardChannelSetupStatus,
   DEFAULT_ACCOUNT_ID,
   createSetupTranslator,
-} from "openclaw/plugin-sdk/setup-runtime";
+} from "sunclaw/plugin-sdk/setup-runtime";
 import { buildChannelConfigSchema, type ChannelPlugin } from "./channel-api.js";
 import { NostrConfigSchema } from "./config-schema.js";
 import { DEFAULT_RELAYS } from "./default-relays.js";
@@ -38,13 +38,13 @@ type ResolvedNostrSetupAccount = {
   config: NostrAccountConfig;
 };
 
-function getNostrConfig(cfg: OpenClawConfig): NostrAccountConfig | undefined {
+function getNostrConfig(cfg: SunClawConfig): NostrAccountConfig | undefined {
   return (cfg.channels as Record<string, unknown> | undefined)?.nostr as
     | NostrAccountConfig
     | undefined;
 }
 
-function listSetupNostrAccountIds(cfg: OpenClawConfig): string[] {
+function listSetupNostrAccountIds(cfg: SunClawConfig): string[] {
   const nostrCfg = getNostrConfig(cfg);
   const privateKey = typeof nostrCfg?.privateKey === "string" ? nostrCfg.privateKey.trim() : "";
   if (!privateKey) {
@@ -53,7 +53,7 @@ function listSetupNostrAccountIds(cfg: OpenClawConfig): string[] {
   return [resolveDefaultSetupNostrAccountId(cfg)];
 }
 
-function resolveDefaultSetupNostrAccountId(cfg: OpenClawConfig): string {
+function resolveDefaultSetupNostrAccountId(cfg: SunClawConfig): string {
   const configured = getNostrConfig(cfg)?.defaultAccount;
   return typeof configured === "string" && configured.trim()
     ? configured.trim()
@@ -61,7 +61,7 @@ function resolveDefaultSetupNostrAccountId(cfg: OpenClawConfig): string {
 }
 
 function resolveSetupNostrAccount(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   accountId?: string | null;
 }): ResolvedNostrSetupAccount {
   const nostrCfg = getNostrConfig(params.cfg);

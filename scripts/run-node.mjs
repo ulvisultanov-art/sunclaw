@@ -75,7 +75,7 @@ const resolvePrivateQaRequiredDistEntries = (distRoot) => [
   path.join(distRoot, "plugin-sdk", "qa-runtime.js"),
 ];
 const shouldIncludePrivateQaBundledOutputs = (env = process.env) =>
-  env.OPENCLAW_BUILD_PRIVATE_QA === "1";
+  env.SUNCLAW_BUILD_PRIVATE_QA === "1";
 
 const shouldRequireBundledPluginRuntimeOutput = (pluginId, env = process.env) =>
   shouldIncludePrivateQaBundledOutputs(env) || !NON_PACKAGED_BUNDLED_PLUGIN_DIRS.has(pluginId);
@@ -364,7 +364,7 @@ const listRequiredBundledPluginMetadataOutputs = (pluginEntries, deps) =>
       requiredPaths.push(path.join(builtPluginDir, "package.json"));
     }
     if (hasManifest) {
-      requiredPaths.push(path.join(builtPluginDir, "openclaw.plugin.json"));
+      requiredPaths.push(path.join(builtPluginDir, "sunclaw.plugin.json"));
     }
     return requiredPaths;
   });
@@ -445,7 +445,7 @@ const readPackageJsonPluginSdkAliasFileNames = (deps) => {
   return fileNames.size > 0 ? fileNames : null;
 };
 
-const listRequiredOpenClawExtensionAliasOutputs = (deps) => {
+const listRequiredSunClawExtensionAliasOutputs = (deps) => {
   const distRoot = resolveRuntimePostBuildDistRoot(deps);
   const distExtensionsRoot = path.join(distRoot, "extensions");
   if (!deps.fs.existsSync(distExtensionsRoot)) {
@@ -460,7 +460,7 @@ const listRequiredOpenClawExtensionAliasOutputs = (deps) => {
   }
 
   const exportedPluginSdkFileNames = readPackageJsonPluginSdkAliasFileNames(deps);
-  const aliasDir = path.join(distRoot, "extensions", "node_modules", "openclaw");
+  const aliasDir = path.join(distRoot, "extensions", "node_modules", "sunclaw");
   return [
     path.join(aliasDir, "package.json"),
     ...dirents
@@ -473,7 +473,7 @@ const listRequiredOpenClawExtensionAliasOutputs = (deps) => {
 };
 
 const listRequiredStaticExtensionAssetOutputs = (deps) => {
-  if (deps.env.OPENCLAW_RUNTIME_POSTBUILD_STATIC_ASSETS === "0") {
+  if (deps.env.SUNCLAW_RUNTIME_POSTBUILD_STATIC_ASSETS === "0") {
     return [];
   }
   const distRoot = resolveRuntimePostBuildDistRoot(deps);
@@ -502,7 +502,7 @@ export const listRequiredRuntimePostBuildOutputs = (deps) => {
   const builtPluginEntries = listBuiltBundledPluginEntries(deps);
   return [
     ...listRequiredCoreRuntimePostBuildOutputs(deps),
-    ...listRequiredOpenClawExtensionAliasOutputs(deps),
+    ...listRequiredSunClawExtensionAliasOutputs(deps),
     ...listRequiredStaticExtensionAssetOutputs(deps),
     ...listRequiredBundledPluginMetadataOutputs(builtPluginEntries, deps),
     ...listRequiredBundledPluginRuntimeOverlayOutputs(deps),
@@ -515,11 +515,11 @@ const hasMissingRequiredRuntimePostBuildOutput = (deps) =>
   );
 
 export const resolveBuildRequirement = (deps) => {
-  if (deps.env.OPENCLAW_FORCE_BUILD === "1") {
+  if (deps.env.SUNCLAW_FORCE_BUILD === "1") {
     return { shouldBuild: true, reason: "force_build" };
   }
   if (
-    deps.env.OPENCLAW_BUILD_PRIVATE_QA === "1" &&
+    deps.env.SUNCLAW_BUILD_PRIVATE_QA === "1" &&
     (deps.privateQaRequiredDistEntries ?? resolvePrivateQaRequiredDistEntries(deps.distRoot)).some(
       (entry) => statMtime(entry, deps.fs) == null,
     )
@@ -572,7 +572,7 @@ export const resolveBuildRequirement = (deps) => {
 };
 
 export const resolveRuntimePostBuildRequirement = (deps) => {
-  if (deps.env.OPENCLAW_FORCE_RUNTIME_POSTBUILD === "1") {
+  if (deps.env.SUNCLAW_FORCE_RUNTIME_POSTBUILD === "1") {
     return { shouldSync: true, reason: "force_runtime_postbuild" };
   }
 
@@ -621,7 +621,7 @@ export const resolveRuntimePostBuildRequirement = (deps) => {
 };
 
 const BUILD_REASON_LABELS = {
-  force_build: "forced by OPENCLAW_FORCE_BUILD",
+  force_build: "forced by SUNCLAW_FORCE_BUILD",
   missing_build_stamp: "build stamp missing",
   missing_dist_entry: "dist entry missing",
   config_newer: "config newer than build stamp",
@@ -635,7 +635,7 @@ const BUILD_REASON_LABELS = {
 };
 
 const RUNTIME_POSTBUILD_REASON_LABELS = {
-  force_runtime_postbuild: "forced by OPENCLAW_FORCE_RUNTIME_POSTBUILD",
+  force_runtime_postbuild: "forced by SUNCLAW_FORCE_RUNTIME_POSTBUILD",
   missing_runtime_postbuild_output: "required runtime postbuild output missing",
   missing_runtime_postbuild_stamp: "runtime postbuild stamp missing",
   missing_build_stamp: "build stamp missing",
@@ -659,14 +659,14 @@ const isSignalKey = (signal) => Object.hasOwn(SIGNAL_EXIT_CODES, signal);
 
 const getSignalExitCode = (signal) => (isSignalKey(signal) ? SIGNAL_EXIT_CODES[signal] : 1);
 
-const RUN_NODE_OUTPUT_LOG_ENV = "OPENCLAW_RUN_NODE_OUTPUT_LOG";
-const RUN_NODE_CPU_PROF_DIR_ENV = "OPENCLAW_RUN_NODE_CPU_PROF_DIR";
-const RUN_NODE_CPU_PROF_MAX_FILES_ENV = "OPENCLAW_RUN_NODE_CPU_PROF_MAX_FILES";
-const RUN_NODE_FILTER_SYNC_IO_STDERR_ENV = "OPENCLAW_RUN_NODE_FILTER_SYNC_IO_STDERR";
-const RUN_NODE_BUILD_LOCK_TIMEOUT_ENV = "OPENCLAW_RUN_NODE_BUILD_LOCK_TIMEOUT_MS";
-const RUN_NODE_BUILD_LOCK_POLL_ENV = "OPENCLAW_RUN_NODE_BUILD_LOCK_POLL_MS";
-const RUN_NODE_BUILD_LOCK_STALE_ENV = "OPENCLAW_RUN_NODE_BUILD_LOCK_STALE_MS";
-const RUN_NODE_SKIP_DTS_BUILD_ENV = "OPENCLAW_RUN_NODE_SKIP_DTS_BUILD";
+const RUN_NODE_OUTPUT_LOG_ENV = "SUNCLAW_RUN_NODE_OUTPUT_LOG";
+const RUN_NODE_CPU_PROF_DIR_ENV = "SUNCLAW_RUN_NODE_CPU_PROF_DIR";
+const RUN_NODE_CPU_PROF_MAX_FILES_ENV = "SUNCLAW_RUN_NODE_CPU_PROF_MAX_FILES";
+const RUN_NODE_FILTER_SYNC_IO_STDERR_ENV = "SUNCLAW_RUN_NODE_FILTER_SYNC_IO_STDERR";
+const RUN_NODE_BUILD_LOCK_TIMEOUT_ENV = "SUNCLAW_RUN_NODE_BUILD_LOCK_TIMEOUT_MS";
+const RUN_NODE_BUILD_LOCK_POLL_ENV = "SUNCLAW_RUN_NODE_BUILD_LOCK_POLL_MS";
+const RUN_NODE_BUILD_LOCK_STALE_ENV = "SUNCLAW_RUN_NODE_BUILD_LOCK_STALE_MS";
+const RUN_NODE_SKIP_DTS_BUILD_ENV = "SUNCLAW_RUN_NODE_SKIP_DTS_BUILD";
 const DEFAULT_BUILD_LOCK_TIMEOUT_MS = 5 * 60 * 1000;
 const DEFAULT_BUILD_LOCK_POLL_MS = 100;
 const DEFAULT_BUILD_LOCK_STALE_MS = 10 * 60 * 1000;
@@ -753,10 +753,10 @@ const createRunNodeOutputTee = (deps) => {
 };
 
 const logRunner = (message, deps) => {
-  if (deps.env.OPENCLAW_RUNNER_LOG === "0") {
+  if (deps.env.SUNCLAW_RUNNER_LOG === "0") {
     return;
   }
-  const line = `[openclaw] ${message}\n`;
+  const line = `[sunclaw] ${message}\n`;
   deps.runNodeProgress?.clearLine();
   deps.stderr.write(line);
   deps.runNodeProgress?.render();
@@ -767,7 +767,7 @@ const RUN_NODE_PROGRESS_FRAMES = ["-", "\\", "|", "/"];
 
 const shouldUseRunNodeProgress = (deps) =>
   deps.stderr?.isTTY === true &&
-  deps.env.OPENCLAW_RUNNER_PROGRESS !== "0" &&
+  deps.env.SUNCLAW_RUNNER_PROGRESS !== "0" &&
   deps.env.CI !== "true" &&
   !deps.outputTee;
 
@@ -794,7 +794,7 @@ const createRunNodeProgress = (label, deps) => {
     const elapsedSeconds = Math.max(0, Math.round((Date.now() - startedAt) / 1000));
     const frame = RUN_NODE_PROGRESS_FRAMES[frameIndex % RUN_NODE_PROGRESS_FRAMES.length];
     frameIndex += 1;
-    deps.stderr.write(`\r[openclaw] ${frame} ${label} (${elapsedSeconds}s)`);
+    deps.stderr.write(`\r[sunclaw] ${frame} ${label} (${elapsedSeconds}s)`);
     visible = true;
   };
   const timer = setInterval(render, 120);
@@ -860,7 +860,7 @@ const listRunNodeCpuProfiles = (deps, absoluteProfileDir, commandName) => {
   } catch {
     return [];
   }
-  const prefix = `openclaw-${commandName}-`;
+  const prefix = `sunclaw-${commandName}-`;
   return entries
     .filter(
       (entry) =>
@@ -908,7 +908,7 @@ const resolveRunNodeCpuProfileArgs = (deps) => {
   pruneRunNodeCpuProfiles(deps, absoluteProfileDir, commandName);
   const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
   const pid = Number.isInteger(deps.process.pid) && deps.process.pid > 0 ? deps.process.pid : "pid";
-  const profileName = `openclaw-${commandName}-${pid}-${timestamp}.cpuprofile`;
+  const profileName = `sunclaw-${commandName}-${pid}-${timestamp}.cpuprofile`;
   const profilePath = path.join(absoluteProfileDir, profileName);
   const relativeProfilePath = path.relative(deps.cwd, profilePath) || profilePath;
   logRunner(`Writing Node CPU profile to ${relativeProfilePath}.`, deps);
@@ -917,7 +917,7 @@ const resolveRunNodeCpuProfileArgs = (deps) => {
 
 const resolveRunNodeDiagnosticArgs = (deps) => {
   const args = [...resolveRunNodeCpuProfileArgs(deps)];
-  if (deps.env.OPENCLAW_TRACE_SYNC_IO === "1") {
+  if (deps.env.SUNCLAW_TRACE_SYNC_IO === "1") {
     logRunner("Enabling Node --trace-sync-io for startup I/O diagnostics.", deps);
     args.push("--trace-sync-io");
   }
@@ -991,9 +991,9 @@ const getInterruptedSpawnExitCode = (res) => {
   return null;
 };
 
-const runOpenClaw = async (deps) => {
+const runSunClaw = async (deps) => {
   const diagnosticArgs = resolveRunNodeDiagnosticArgs(deps);
-  const nodeProcess = deps.spawn(deps.execPath, [...diagnosticArgs, "openclaw.mjs", ...deps.args], {
+  const nodeProcess = deps.spawn(deps.execPath, [...diagnosticArgs, "sunclaw.mjs", ...deps.args], {
     cwd: deps.cwd,
     env: deps.env,
     stdio: deps.outputTee ? ["inherit", "pipe", "pipe"] : "inherit",
@@ -1097,7 +1097,7 @@ const closeRunNodeOutputTee = async (deps, exitCode) => {
     await deps.outputTee.close();
   } catch (error) {
     deps.stderr.write(
-      `[openclaw] Failed to write output log: ${error?.message ?? "unknown error"}\n`,
+      `[sunclaw] Failed to write output log: ${error?.message ?? "unknown error"}\n`,
     );
     return exitCode === 0 ? 1 : exitCode;
   }
@@ -1285,7 +1285,7 @@ const writeBuildStamp = (deps) => {
 };
 
 const shouldSkipWatchRuntimeSync = (deps, requirement) =>
-  deps.env.OPENCLAW_WATCH_MODE === "1" &&
+  deps.env.SUNCLAW_WATCH_MODE === "1" &&
   requirement.reason === "missing_runtime_postbuild_stamp" &&
   hasDirtyRuntimePostBuildInputs(deps) !== true &&
   !hasMissingRequiredRuntimePostBuildOutput(deps);
@@ -1296,7 +1296,7 @@ const isGatewayClientCommand = (args) =>
 
 const shouldFastPathExistingDistForGatewayClient = (deps) =>
   isGatewayClientCommand(deps.args) &&
-  deps.env.OPENCLAW_FORCE_BUILD !== "1" &&
+  deps.env.SUNCLAW_FORCE_BUILD !== "1" &&
   statMtime(deps.distEntry, deps.fs) != null &&
   canUseStampedGatewayClientDist(deps);
 
@@ -1323,7 +1323,7 @@ const canUseStampedGatewayClientDist = (deps) => {
     runtimeStamp.mtime == null ||
     runtimeStamp.mtime < buildStamp.mtime ||
     runtimeStamp.head !== currentHead ||
-    deps.env.OPENCLAW_FORCE_RUNTIME_POSTBUILD === "1"
+    deps.env.SUNCLAW_FORCE_RUNTIME_POSTBUILD === "1"
   ) {
     return false;
   }
@@ -1336,13 +1336,13 @@ const isQaCoverageReportCommand = (args) => args[0] === "qa" && args[1] === "cov
 const shouldRunQaParityReportFromSource = (deps, buildRequirement) =>
   buildRequirement.reason === "missing_private_qa_dist" &&
   isQaParityReportCommand(deps.args) &&
-  deps.env.OPENCLAW_FORCE_BUILD !== "1" &&
+  deps.env.SUNCLAW_FORCE_BUILD !== "1" &&
   statMtime(path.join(deps.cwd, "extensions", "qa-lab", "src", "cli.runtime.ts"), deps.fs) != null;
 
 const shouldRunQaCoverageReportFromSource = (deps, buildRequirement) =>
   buildRequirement.reason === "missing_private_qa_dist" &&
   isQaCoverageReportCommand(deps.args) &&
-  deps.env.OPENCLAW_FORCE_BUILD !== "1" &&
+  deps.env.SUNCLAW_FORCE_BUILD !== "1" &&
   statMtime(path.join(deps.cwd, "extensions", "qa-lab", "src", "cli.runtime.ts"), deps.fs) != null;
 
 const runQaParityReportFromSource = async (deps) => {
@@ -1411,16 +1411,16 @@ export async function runNodeMain(params = {}) {
   deps.configFiles = runNodeConfigFiles.map((filePath) => path.join(deps.cwd, filePath));
   deps.privateQaRequiredDistEntries = resolvePrivateQaRequiredDistEntries(deps.distRoot);
   if (deps.args[0] === "qa") {
-    deps.env.OPENCLAW_BUILD_PRIVATE_QA = "1";
-    deps.env.OPENCLAW_ENABLE_PRIVATE_QA_CLI = "1";
-    deps.env.OPENCLAW_DISABLE_BUNDLED_PLUGINS ??= "0";
+    deps.env.SUNCLAW_BUILD_PRIVATE_QA = "1";
+    deps.env.SUNCLAW_ENABLE_PRIVATE_QA_CLI = "1";
+    deps.env.SUNCLAW_DISABLE_BUNDLED_PLUGINS ??= "0";
   }
   deps.outputTee = createRunNodeOutputTee(deps);
 
   try {
     let exitCode = 1;
     if (shouldFastPathExistingDistForGatewayClient(deps)) {
-      exitCode = await runOpenClaw(deps);
+      exitCode = await runSunClaw(deps);
       return await closeRunNodeOutputTee(deps, exitCode);
     }
     const buildRequirement = resolveBuildRequirement(deps);
@@ -1457,7 +1457,7 @@ export async function runNodeMain(params = {}) {
           return await closeRunNodeOutputTee(deps, 1);
         }
       }
-      exitCode = await runOpenClaw(deps);
+      exitCode = await runSunClaw(deps);
       return await closeRunNodeOutputTee(deps, exitCode);
     }
 
@@ -1534,7 +1534,7 @@ export async function runNodeMain(params = {}) {
     if (buildExitCode !== 0) {
       return await closeRunNodeOutputTee(deps, buildExitCode);
     }
-    exitCode = await runOpenClaw(deps);
+    exitCode = await runSunClaw(deps);
     return await closeRunNodeOutputTee(deps, exitCode);
   } catch (error) {
     await closeRunNodeOutputTee(deps, 1);

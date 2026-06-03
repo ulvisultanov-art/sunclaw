@@ -7,8 +7,8 @@ import {
   asDateTimestampMs,
   resolveDateTimestampMs,
   resolveExpiresAtMsFromDurationSeconds,
-} from "openclaw/plugin-sdk/number-runtime";
-import { fetchWithSsrFGuard } from "openclaw/plugin-sdk/ssrf-runtime";
+} from "sunclaw/plugin-sdk/number-runtime";
+import { fetchWithSsrFGuard } from "sunclaw/plugin-sdk/ssrf-runtime";
 import { getFeishuUserAgent } from "./client.js";
 import { resolveFeishuCardTemplate, type CardHeaderConfig } from "./send.js";
 import type { FeishuDomain } from "./types.js";

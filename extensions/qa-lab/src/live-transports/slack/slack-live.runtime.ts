@@ -1,12 +1,12 @@
 import { randomUUID } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { createSlackWebClient, createSlackWriteClient } from "@openclaw/slack/api.js";
+import { createSlackWebClient, createSlackWriteClient } from "@sunclaw/slack/api.js";
 import type { WebClient } from "@slack/web-api";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { parseStrictPositiveInteger } from "openclaw/plugin-sdk/number-runtime";
-import { uniqueStrings } from "openclaw/plugin-sdk/string-coerce-runtime";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import { formatErrorMessage } from "sunclaw/plugin-sdk/error-runtime";
+import { parseStrictPositiveInteger } from "sunclaw/plugin-sdk/number-runtime";
+import { uniqueStrings } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { z } from "zod";
 import { startQaGatewayChild } from "../../gateway-child.js";
 import { DEFAULT_QA_LIVE_PROVIDER_MODE } from "../../providers/index.js";
@@ -250,17 +250,17 @@ type SlackQaSummary = {
 type SlackCredentialLease = Awaited<ReturnType<typeof acquireQaCredentialLease<SlackQaRuntimeEnv>>>;
 type SlackCredentialHeartbeat = ReturnType<typeof startQaCredentialLeaseHeartbeat>;
 
-const SLACK_QA_CAPTURE_CONTENT_ENV = "OPENCLAW_QA_SLACK_CAPTURE_CONTENT";
-const SLACK_QA_APPROVAL_CHECKPOINT_DIR_ENV = "OPENCLAW_QA_SLACK_APPROVAL_CHECKPOINT_DIR";
+const SLACK_QA_CAPTURE_CONTENT_ENV = "SUNCLAW_QA_SLACK_CAPTURE_CONTENT";
+const SLACK_QA_APPROVAL_CHECKPOINT_DIR_ENV = "SUNCLAW_QA_SLACK_APPROVAL_CHECKPOINT_DIR";
 const SLACK_QA_APPROVAL_CHECKPOINT_TIMEOUT_MS_ENV =
-  "OPENCLAW_QA_SLACK_APPROVAL_CHECKPOINT_TIMEOUT_MS";
-const QA_REDACT_PUBLIC_METADATA_ENV = "OPENCLAW_QA_REDACT_PUBLIC_METADATA";
+  "SUNCLAW_QA_SLACK_APPROVAL_CHECKPOINT_TIMEOUT_MS";
+const QA_REDACT_PUBLIC_METADATA_ENV = "SUNCLAW_QA_REDACT_PUBLIC_METADATA";
 const SLACK_QA_WEB_API_TIMEOUT_MS = 45_000;
 const SLACK_QA_ENV_KEYS = [
-  "OPENCLAW_QA_SLACK_CHANNEL_ID",
-  "OPENCLAW_QA_SLACK_DRIVER_BOT_TOKEN",
-  "OPENCLAW_QA_SLACK_SUT_BOT_TOKEN",
-  "OPENCLAW_QA_SLACK_SUT_APP_TOKEN",
+  "SUNCLAW_QA_SLACK_CHANNEL_ID",
+  "SUNCLAW_QA_SLACK_DRIVER_BOT_TOKEN",
+  "SUNCLAW_QA_SLACK_SUT_BOT_TOKEN",
+  "SUNCLAW_QA_SLACK_SUT_APP_TOKEN",
 ] as const;
 
 const slackQaCredentialPayloadSchema = z.object({
@@ -337,8 +337,8 @@ const SLACK_QA_SCENARIOS: SlackQaScenarioDefinition[] = [
     title: "Slack non-allowlisted sender does not trigger",
     timeoutMs: 8_000,
     configOverrides: {
-      allowFrom: ["U_OPENCLAW_QA_NEVER_ALLOWED"],
-      users: ["U_OPENCLAW_QA_NEVER_ALLOWED"],
+      allowFrom: ["U_SUNCLAW_QA_NEVER_ALLOWED"],
+      users: ["U_SUNCLAW_QA_NEVER_ALLOWED"],
     },
     buildRun: (sutUserId) => {
       const token = `SLACK_QA_BLOCK_${randomUUID().slice(0, 8).toUpperCase()}`;
@@ -532,7 +532,7 @@ function inferSlackCredentialSource(
   env: NodeJS.ProcessEnv = process.env,
 ): "convex" | "env" {
   const normalized =
-    value?.trim().toLowerCase() || env.OPENCLAW_QA_CREDENTIAL_SOURCE?.trim().toLowerCase();
+    value?.trim().toLowerCase() || env.SUNCLAW_QA_CREDENTIAL_SOURCE?.trim().toLowerCase();
   return normalized === "convex" ? "convex" : "env";
 }
 
@@ -559,12 +559,12 @@ function validateSlackQaRuntimeEnv(runtimeEnv: SlackQaRuntimeEnv, label: string)
 
 function resolveSlackQaRuntimeEnv(env: NodeJS.ProcessEnv = process.env): SlackQaRuntimeEnv {
   const runtimeEnv = {
-    channelId: resolveEnvValue(env, "OPENCLAW_QA_SLACK_CHANNEL_ID"),
-    driverBotToken: resolveEnvValue(env, "OPENCLAW_QA_SLACK_DRIVER_BOT_TOKEN"),
-    sutBotToken: resolveEnvValue(env, "OPENCLAW_QA_SLACK_SUT_BOT_TOKEN"),
-    sutAppToken: resolveEnvValue(env, "OPENCLAW_QA_SLACK_SUT_APP_TOKEN"),
+    channelId: resolveEnvValue(env, "SUNCLAW_QA_SLACK_CHANNEL_ID"),
+    driverBotToken: resolveEnvValue(env, "SUNCLAW_QA_SLACK_DRIVER_BOT_TOKEN"),
+    sutBotToken: resolveEnvValue(env, "SUNCLAW_QA_SLACK_SUT_BOT_TOKEN"),
+    sutAppToken: resolveEnvValue(env, "SUNCLAW_QA_SLACK_SUT_APP_TOKEN"),
   };
-  return validateSlackQaRuntimeEnv(runtimeEnv, "OPENCLAW_QA_SLACK");
+  return validateSlackQaRuntimeEnv(runtimeEnv, "SUNCLAW_QA_SLACK");
 }
 
 function parseSlackQaCredentialPayload(payload: unknown): SlackQaRuntimeEnv {
@@ -587,7 +587,7 @@ function findScenario(ids?: string[]) {
 }
 
 function buildSlackQaConfig(
-  baseCfg: OpenClawConfig,
+  baseCfg: SunClawConfig,
   params: {
     channelId: string;
     driverBotUserId: string;
@@ -596,7 +596,7 @@ function buildSlackQaConfig(
     sutAppToken: string;
     sutBotToken: string;
   },
-): OpenClawConfig {
+): SunClawConfig {
   const pluginAllow = uniqueStrings([...(baseCfg.plugins?.allow ?? []), "slack"]);
   const approvalOverrides = params.overrides?.approvals;
   const approvalForwardingConfig =
@@ -1649,7 +1649,7 @@ function resolveSlackChannelReadySince(params: {
 }
 
 function resolveSlackQaReadyTimeoutMs(env: NodeJS.ProcessEnv = process.env) {
-  const raw = env.OPENCLAW_QA_TRANSPORT_READY_TIMEOUT_MS;
+  const raw = env.SUNCLAW_QA_TRANSPORT_READY_TIMEOUT_MS;
   if (!raw) {
     return SLACK_QA_DEFAULT_READY_TIMEOUT_MS;
   }

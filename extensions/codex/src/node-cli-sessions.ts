@@ -3,18 +3,18 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import process from "node:process";
-import { timestampMsToIsoString } from "openclaw/plugin-sdk/number-runtime";
+import { timestampMsToIsoString } from "sunclaw/plugin-sdk/number-runtime";
 import type {
-  OpenClawPluginNodeHostCommand,
-  OpenClawPluginNodeInvokePolicy,
-} from "openclaw/plugin-sdk/plugin-entry";
-import type { PluginRuntime } from "openclaw/plugin-sdk/plugin-runtime";
-import { isRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { resolvePreferredOpenClawTmpDir } from "openclaw/plugin-sdk/temp-path";
+  SunClawPluginNodeHostCommand,
+  SunClawPluginNodeInvokePolicy,
+} from "sunclaw/plugin-sdk/plugin-entry";
+import type { PluginRuntime } from "sunclaw/plugin-sdk/plugin-runtime";
+import { isRecord } from "sunclaw/plugin-sdk/string-coerce-runtime";
+import { resolvePreferredSunClawTmpDir } from "sunclaw/plugin-sdk/temp-path";
 import {
   materializeWindowsSpawnProgram,
   resolveWindowsSpawnProgram,
-} from "openclaw/plugin-sdk/windows-spawn";
+} from "sunclaw/plugin-sdk/windows-spawn";
 import { formatCodexDisplayText } from "./command-formatters.js";
 
 export const CODEX_CLI_SESSIONS_LIST_COMMAND = "codex.cli.sessions.list";
@@ -66,7 +66,7 @@ const DEFAULT_RESUME_SPAWN_RUNTIME: CodexCliResumeSpawnRuntime = {
   execPath: process.execPath,
 };
 
-export function createCodexCliSessionNodeHostCommands(): OpenClawPluginNodeHostCommand[] {
+export function createCodexCliSessionNodeHostCommands(): SunClawPluginNodeHostCommand[] {
   return [
     {
       command: CODEX_CLI_SESSIONS_LIST_COMMAND,
@@ -82,7 +82,7 @@ export function createCodexCliSessionNodeHostCommands(): OpenClawPluginNodeHostC
   ];
 }
 
-export function createCodexCliSessionNodeInvokePolicies(): OpenClawPluginNodeInvokePolicy[] {
+export function createCodexCliSessionNodeInvokePolicies(): SunClawPluginNodeInvokePolicy[] {
   return [
     {
       commands: [CODEX_CLI_SESSIONS_LIST_COMMAND],
@@ -254,7 +254,7 @@ async function runCodexExecResume(params: {
   timeoutMs: number;
 }): Promise<string> {
   const outputPath = path.join(
-    await fs.mkdtemp(path.join(resolvePreferredOpenClawTmpDir(), "openclaw-codex-cli-")),
+    await fs.mkdtemp(path.join(resolvePreferredSunClawTmpDir(), "sunclaw-codex-cli-")),
     "last-message.txt",
   );
   try {

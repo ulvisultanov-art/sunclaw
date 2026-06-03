@@ -1,1 +1,1 @@
-export { redactSensitiveText, redactToolPayloadText } from "openclaw/plugin-sdk/logging-core";
+export { redactSensitiveText, redactToolPayloadText } from "sunclaw/plugin-sdk/logging-core";

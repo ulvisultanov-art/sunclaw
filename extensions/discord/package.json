@@ -1,10 +1,10 @@
 {
-  "name": "@openclaw/discord",
+  "name": "@sunclaw/discord",
   "version": "2026.6.2",
-  "description": "OpenClaw Discord channel plugin for channels, DMs, commands, and app events.",
+  "description": "SunClaw Discord channel plugin for channels, DMs, commands, and app events.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/ulvisultanov-art/sunclaw"
   },
   "type": "module",
   "dependencies": {
@@ -16,18 +16,18 @@
     "ws": "8.21.0"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "2026.5.28"
+    "@sunclaw/plugin-sdk": "workspace:*",
+    "sunclaw": "2026.5.28"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.6.2"
+    "sunclaw": ">=2026.6.2"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "sunclaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ],
@@ -61,7 +61,7 @@
       }
     },
     "install": {
-      "npmSpec": "@openclaw/discord",
+      "npmSpec": "@sunclaw/discord",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.5.26",
       "allowInvalidConfigRecovery": true
@@ -70,7 +70,7 @@
       "pluginApi": ">=2026.6.2"
     },
     "build": {
-      "openclawVersion": "2026.6.2"
+      "sunclawVersion": "2026.6.2"
     },
     "release": {
       "publishToClawHub": true,

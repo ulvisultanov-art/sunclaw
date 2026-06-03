@@ -1,7 +1,7 @@
 import {
   createProviderHttpError,
   extractProviderErrorDetail,
-} from "openclaw/plugin-sdk/provider-http";
+} from "sunclaw/plugin-sdk/provider-http";
 
 export async function createMSTeamsHttpError(
   response: Response,

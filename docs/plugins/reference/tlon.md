@@ -1,5 +1,5 @@
 ---
-summary: "OpenClaw Tlon/Urbit channel plugin for chat workflows."
+summary: "SunClaw Tlon/Urbit channel plugin for chat workflows."
 read_when:
   - You are installing, configuring, or auditing the tlon plugin
 title: "Tlon plugin"
@@ -7,11 +7,11 @@ title: "Tlon plugin"
 
 # Tlon plugin
 
-OpenClaw Tlon/Urbit channel plugin for chat workflows.
+SunClaw Tlon/Urbit channel plugin for chat workflows.
 
 ## Distribution
 
-- Package: `@openclaw/tlon`
+- Package: `@sunclaw/tlon`
 - Install route: npm; ClawHub
 
 ## Surface

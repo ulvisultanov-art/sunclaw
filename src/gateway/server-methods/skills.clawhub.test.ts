@@ -42,7 +42,7 @@ vi.mock("../../infra/clawhub.js", () => ({
   fetchClawHubSkillDetail: vi.fn(),
   fetchClawHubSkillSecurityVerdicts: (...args: unknown[]) =>
     fetchClawHubSkillSecurityVerdictsMock(...args),
-  resolveClawHubBaseUrl: () => "https://clawhub.ai",
+  resolveClawHubBaseUrl: () => "https://clawhub.complex.az",
 }));
 
 const { skillsHandlers } = await import("./skills.js");
@@ -52,7 +52,7 @@ type SkillsHandlerName = keyof typeof skillsHandlers;
 function emptySkillStatusReport() {
   return {
     workspaceDir: "/tmp/workspace",
-    managedSkillsDir: "/tmp/openclaw/skills",
+    managedSkillsDir: "/tmp/sunclaw/skills",
     skills: [],
   };
 }
@@ -63,7 +63,7 @@ async function callSkillsHandler(method: SkillsHandlerName, params: Record<strin
 
 function expectEmptySecurityVerdicts(response: unknown): void {
   expect(response).toEqual({
-    schema: "openclaw.skills.security-verdicts.v1",
+    schema: "sunclaw.skills.security-verdicts.v1",
     items: [],
   });
 }
@@ -102,7 +102,7 @@ describe("skills gateway handlers (clawhub)", () => {
   it("fetches one bulk ClawHub verdict batch for linked installed skills", async () => {
     buildWorkspaceSkillStatusMock.mockReturnValue({
       workspaceDir: "/tmp/workspace",
-      managedSkillsDir: "/tmp/openclaw/skills",
+      managedSkillsDir: "/tmp/sunclaw/skills",
       skills: [
         {
           name: "agentreceipt",
@@ -110,7 +110,7 @@ describe("skills gateway handlers (clawhub)", () => {
           clawhub: {
             status: "linked",
             valid: true,
-            registry: "https://clawhub.ai",
+            registry: "https://clawhub.complex.az",
             slug: "agentreceipt",
             installedVersion: "1.2.3",
             installedAt: 123,
@@ -133,7 +133,7 @@ describe("skills gateway handlers (clawhub)", () => {
           slug: "agentreceipt",
           requestedVersion: "1.2.3",
           version: "1.2.3",
-          securityAuditUrl: "https://clawhub.ai/openclaw/agentreceipt/security-audit?version=1.2.3",
+          securityAuditUrl: "https://clawhub.complex.az/sunclaw/agentreceipt/security-audit?version=1.2.3",
           security: { status: "clean", passed: true },
           scannerPayload: { ignored: true },
         },
@@ -145,17 +145,17 @@ describe("skills gateway handlers (clawhub)", () => {
     expect(error).toBeUndefined();
     expect(fetchClawHubSkillSecurityVerdictsMock).toHaveBeenCalledTimes(1);
     expect(fetchClawHubSkillSecurityVerdictsMock).toHaveBeenCalledWith({
-      baseUrl: "https://clawhub.ai",
+      baseUrl: "https://clawhub.complex.az",
       items: [{ slug: "agentreceipt", version: "1.2.3" }],
       skipAuth: true,
     });
     expect(ok).toBe(true);
     expect(error).toBeUndefined();
     expect(response).toEqual({
-      schema: "openclaw.skills.security-verdicts.v1",
+      schema: "sunclaw.skills.security-verdicts.v1",
       items: [
         expect.objectContaining({
-          registry: "https://clawhub.ai",
+          registry: "https://clawhub.complex.az",
           ok: true,
           requestedSlug: "agentreceipt",
           requestedVersion: "1.2.3",
@@ -171,7 +171,7 @@ describe("skills gateway handlers (clawhub)", () => {
   it("does not passively fetch verdicts from a non-default registry", async () => {
     buildWorkspaceSkillStatusMock.mockReturnValue({
       workspaceDir: "/tmp/workspace",
-      managedSkillsDir: "/tmp/openclaw/skills",
+      managedSkillsDir: "/tmp/sunclaw/skills",
       skills: [
         {
           name: "agentreceipt",
@@ -194,7 +194,7 @@ describe("skills gateway handlers (clawhub)", () => {
   it("loads local Skill Card content for a known installed skill", async () => {
     buildWorkspaceSkillStatusMock.mockReturnValue({
       workspaceDir: "/tmp/workspace",
-      managedSkillsDir: "/tmp/openclaw/skills",
+      managedSkillsDir: "/tmp/sunclaw/skills",
       skills: [
         {
           name: "AgentReceipt",
@@ -220,7 +220,7 @@ describe("skills gateway handlers (clawhub)", () => {
       "/tmp/workspace/skills/agentreceipt",
     );
     expect(response).toEqual({
-      schema: "openclaw.skills.skill-card.v1",
+      schema: "sunclaw.skills.skill-card.v1",
       skillKey: "agentreceipt",
       path: "/tmp/workspace/skills/agentreceipt/skill-card.md",
       sizeBytes: 34,

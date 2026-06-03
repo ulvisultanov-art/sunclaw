@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/config.js";
-import { openOpenClawStateDatabase } from "../../state/openclaw-state-db.js";
+import type { SunClawConfig } from "../../config/config.js";
+import { openSunClawStateDatabase } from "../../state/sunclaw-state-db.js";
 import {
   type DeliverFn,
   drainPendingDeliveries,
@@ -20,7 +20,7 @@ import {
   setQueuedEntryState,
 } from "./delivery-queue.test-helpers.js";
 
-const stubCfg = {} as OpenClawConfig;
+const stubCfg = {} as SunClawConfig;
 const NO_LISTENER_ERROR = "No active DirectChat listener";
 
 function normalizeReconnectAccountIdForTest(accountId?: string | null): string {
@@ -61,8 +61,8 @@ function expectLogMessageWith(logFn: ReturnType<typeof vi.fn>, text: string): vo
 }
 
 function readOutboundQueueStatus(tmpDir: string, id: string): string | undefined {
-  const { db } = openOpenClawStateDatabase({
-    env: { ...process.env, OPENCLAW_STATE_DIR: tmpDir },
+  const { db } = openSunClawStateDatabase({
+    env: { ...process.env, SUNCLAW_STATE_DIR: tmpDir },
   });
   const row = db
     .prepare("SELECT status FROM delivery_queue_entries WHERE queue_name = 'outbound' AND id = ?")
@@ -462,7 +462,7 @@ describe("drainPendingDeliveries for reconnect", () => {
   });
 
   it("skips entries that an in-flight live delivery has actively claimed", async () => {
-    // Regression for openclaw/openclaw#70386: a reconnect drain that runs
+    // Regression for sunclaw/sunclaw#70386: a reconnect drain that runs
     // while the live send is still writing to the adapter must not re-drive
     // the same entry. The live delivery path holds an in-memory active claim
     // for `queueId` across its send; drain honors that claim via the same

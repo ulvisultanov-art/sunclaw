@@ -4,7 +4,7 @@ import {
   GATEWAY_CLIENT_NAMES,
 } from "../../packages/gateway-protocol/src/client-info.js";
 import { ConnectErrorDetailCodes } from "../../packages/gateway-protocol/src/connect-error-details.js";
-import { getRuntimeConfig, type OpenClawConfig } from "../config/config.js";
+import { getRuntimeConfig, type SunClawConfig } from "../config/config.js";
 import { startGatewayClientWhenEventLoopReady } from "../gateway/client-start-readiness.js";
 import { GatewayClient, type GatewayReconnectPausedInfo } from "../gateway/client.js";
 import { resolveGatewayConnectionAuth } from "../gateway/connection-auth.js";
@@ -13,7 +13,7 @@ import type { SkillBinTrustEntry } from "../infra/exec-approvals.js";
 import { resolveExecutableFromPathEnv } from "../infra/executable-path.js";
 import { getMachineDisplayName } from "../infra/machine-name.js";
 import { NODE_EXEC_APPROVALS_COMMANDS, NODE_SYSTEM_RUN_COMMANDS } from "../infra/node-commands.js";
-import { ensureOpenClawCliOnPath } from "../infra/path-env.js";
+import { ensureSunClawCliOnPath } from "../infra/path-env.js";
 import { VERSION } from "../version.js";
 import { ensureNodeHostConfig, saveNodeHostConfig, type NodeHostGatewayConfig } from "./config.js";
 import {
@@ -190,7 +190,7 @@ class SkillBinsCache implements SkillBinsProvider {
 }
 
 function ensureNodePathEnv(): string {
-  ensureOpenClawCliOnPath({ pathEnv: process.env.PATH ?? "" });
+  ensureSunClawCliOnPath({ pathEnv: process.env.PATH ?? "" });
   const current = process.env.PATH ?? "";
   if (current.trim()) {
     return current;
@@ -200,7 +200,7 @@ function ensureNodePathEnv(): string {
 }
 
 export async function resolveNodeHostGatewayCredentials(params: {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   env?: NodeJS.ProcessEnv;
 }): Promise<{ token?: string; password?: string }> {
   const mode = params.config.gateway?.mode === "remote" ? "remote" : "local";
@@ -216,7 +216,7 @@ export async function resolveNodeHostGatewayCredentials(params: {
   });
 }
 
-function buildNodeHostLocalAuthConfig(config: OpenClawConfig): OpenClawConfig {
+function buildNodeHostLocalAuthConfig(config: SunClawConfig): SunClawConfig {
   if (!config.gateway?.remote?.token && !config.gateway?.remote?.password) {
     return config;
   }

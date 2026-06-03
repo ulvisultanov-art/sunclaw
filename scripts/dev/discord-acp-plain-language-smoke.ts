@@ -66,7 +66,7 @@ const execFileAsync = promisify(execFile);
 const THREAD_BINDINGS_NAMESPACE = "thread-bindings";
 const THREAD_BINDINGS_MAX_ENTRIES = 10_000;
 
-type DriverMode = "token" | "webhook" | "openclaw";
+type DriverMode = "token" | "webhook" | "sunclaw";
 
 type Args = {
   channelId: string;
@@ -81,7 +81,7 @@ type Args = {
   mentionUserId?: string;
   instruction?: string;
   stateDir: string;
-  openclawBin: string;
+  sunclawBin: string;
   json: boolean;
 };
 
@@ -132,7 +132,7 @@ type FailureResult = {
 
 const DISCORD_API_BASE = "https://discord.com/api/v10";
 const DEFAULT_REQUEST_TIMEOUT_MS = 30_000;
-const DEFAULT_OPENCLAW_CLI_TIMEOUT_MS = 60_000;
+const DEFAULT_SUNCLAW_CLI_TIMEOUT_MS = 60_000;
 const DISCORD_RESPONSE_BODY_MAX_BYTES = 1024 * 1024;
 const WEBHOOK_CLEANUP_TIMEOUT_MS = 10_000;
 
@@ -222,7 +222,7 @@ async function readDiscordResponseJson(params: {
 }
 
 function resolveStateDir(): string {
-  const override = process.env.OPENCLAW_STATE_DIR?.trim();
+  const override = process.env.SUNCLAW_STATE_DIR?.trim();
   if (override) {
     if (override === "~") {
       return path.resolve(process.env.HOME || "");
@@ -232,8 +232,8 @@ function resolveStateDir(): string {
     }
     return path.resolve(override);
   }
-  const home = process.env.OPENCLAW_HOME?.trim() || process.env.HOME || "";
-  return path.join(home, ".openclaw");
+  const home = process.env.SUNCLAW_HOME?.trim() || process.env.HOME || "";
+  return path.join(home, ".sunclaw");
 }
 
 function resolveArg(flag: string): string | undefined {
@@ -255,11 +255,11 @@ function hasFlag(flag: string): boolean {
 
 function parseDriverMode(raw: string): DriverMode {
   const normalized = raw.trim().toLowerCase();
-  if (normalized === "token" || normalized === "webhook" || normalized === "openclaw") {
+  if (normalized === "token" || normalized === "webhook" || normalized === "sunclaw") {
     return normalized;
   }
   throw new Error(
-    `Invalid --driver value ${JSON.stringify(raw)}; expected token, webhook, or openclaw.`,
+    `Invalid --driver value ${JSON.stringify(raw)}; expected token, webhook, or sunclaw.`,
   );
 }
 
@@ -277,13 +277,13 @@ function safeErrorMessage(error: unknown): string {
 function usage(): string {
   return (
     "Usage: bun scripts/dev/discord-acp-plain-language-smoke.ts " +
-    "--channel <discord-channel-id> [--token <driver-token> | --driver webhook --bot-token <bot-token> | --driver openclaw] [options]\n\n" +
+    "--channel <discord-channel-id> [--token <driver-token> | --driver webhook --bot-token <bot-token> | --driver sunclaw] [options]\n\n" +
     "Manual live smoke only (not CI). Sends a plain-language instruction in Discord and verifies:\n" +
-    "1) OpenClaw spawned an ACP thread binding\n" +
+    "1) SunClaw spawned an ACP thread binding\n" +
     "2) agent replied in that bound thread with the expected ACK token\n\n" +
     "Options:\n" +
     "  --channel <id>               Parent Discord channel id (required)\n" +
-    "  --driver <token|webhook|openclaw> Driver transport mode (default: token)\n" +
+    "  --driver <token|webhook|sunclaw> Driver transport mode (default: token)\n" +
     "  --token <token>              Driver Discord token (required for driver=token)\n" +
     "  --token-prefix <prefix>      Auth prefix for --token (default: Bot)\n" +
     "  --bot-token <token>          Bot token for webhook driver mode\n" +
@@ -293,62 +293,62 @@ function usage(): string {
     "  --instruction <text>         Custom instruction template (optional)\n" +
     "  --timeout-ms <n>             Total timeout in ms (default: 240000)\n" +
     "  --poll-ms <n>                Poll interval in ms (default: 1500)\n" +
-    "  --state-dir <p>              Override OpenClaw state dir for plugin-state polling\n" +
-    "  --openclaw-bin <path>        OpenClaw CLI binary for driver=openclaw (default: openclaw)\n" +
+    "  --state-dir <p>              Override SunClaw state dir for plugin-state polling\n" +
+    "  --sunclaw-bin <path>        SunClaw CLI binary for driver=sunclaw (default: sunclaw)\n" +
     "  --json                       Emit JSON output\n" +
     "\n" +
     "Environment fallbacks:\n" +
-    "  OPENCLAW_DISCORD_SMOKE_CHANNEL_ID\n" +
-    "  OPENCLAW_DISCORD_SMOKE_DRIVER\n" +
-    "  OPENCLAW_DISCORD_SMOKE_DRIVER_TOKEN\n" +
-    "  OPENCLAW_DISCORD_SMOKE_DRIVER_TOKEN_PREFIX\n" +
-    "  OPENCLAW_DISCORD_SMOKE_BOT_TOKEN\n" +
-    "  OPENCLAW_DISCORD_SMOKE_BOT_TOKEN_PREFIX\n" +
-    "  OPENCLAW_DISCORD_SMOKE_AGENT\n" +
-    "  OPENCLAW_DISCORD_SMOKE_MENTION_USER_ID\n" +
-    "  OPENCLAW_DISCORD_SMOKE_TIMEOUT_MS\n" +
-    "  OPENCLAW_DISCORD_SMOKE_POLL_MS\n" +
-    "  OPENCLAW_STATE_DIR\n" +
-    "  OPENCLAW_DISCORD_SMOKE_OPENCLAW_BIN"
+    "  SUNCLAW_DISCORD_SMOKE_CHANNEL_ID\n" +
+    "  SUNCLAW_DISCORD_SMOKE_DRIVER\n" +
+    "  SUNCLAW_DISCORD_SMOKE_DRIVER_TOKEN\n" +
+    "  SUNCLAW_DISCORD_SMOKE_DRIVER_TOKEN_PREFIX\n" +
+    "  SUNCLAW_DISCORD_SMOKE_BOT_TOKEN\n" +
+    "  SUNCLAW_DISCORD_SMOKE_BOT_TOKEN_PREFIX\n" +
+    "  SUNCLAW_DISCORD_SMOKE_AGENT\n" +
+    "  SUNCLAW_DISCORD_SMOKE_MENTION_USER_ID\n" +
+    "  SUNCLAW_DISCORD_SMOKE_TIMEOUT_MS\n" +
+    "  SUNCLAW_DISCORD_SMOKE_POLL_MS\n" +
+    "  SUNCLAW_STATE_DIR\n" +
+    "  SUNCLAW_DISCORD_SMOKE_SUNCLAW_BIN"
   );
 }
 
 function parseArgs(): Args {
-  const channelId = resolveArg("--channel") || process.env.OPENCLAW_DISCORD_SMOKE_CHANNEL_ID || "";
+  const channelId = resolveArg("--channel") || process.env.SUNCLAW_DISCORD_SMOKE_CHANNEL_ID || "";
   const driverModeRaw =
-    resolveArg("--driver") || process.env.OPENCLAW_DISCORD_SMOKE_DRIVER || "token";
+    resolveArg("--driver") || process.env.SUNCLAW_DISCORD_SMOKE_DRIVER || "token";
   const driverMode = parseDriverMode(driverModeRaw);
   const driverToken =
-    resolveArg("--token") || process.env.OPENCLAW_DISCORD_SMOKE_DRIVER_TOKEN || "";
+    resolveArg("--token") || process.env.SUNCLAW_DISCORD_SMOKE_DRIVER_TOKEN || "";
   const driverTokenPrefix =
-    resolveArg("--token-prefix") || process.env.OPENCLAW_DISCORD_SMOKE_DRIVER_TOKEN_PREFIX || "Bot";
+    resolveArg("--token-prefix") || process.env.SUNCLAW_DISCORD_SMOKE_DRIVER_TOKEN_PREFIX || "Bot";
   const botToken =
     resolveArg("--bot-token") ||
-    process.env.OPENCLAW_DISCORD_SMOKE_BOT_TOKEN ||
+    process.env.SUNCLAW_DISCORD_SMOKE_BOT_TOKEN ||
     process.env.DISCORD_BOT_TOKEN ||
     "";
   const botTokenPrefix =
     resolveArg("--bot-token-prefix") ||
-    process.env.OPENCLAW_DISCORD_SMOKE_BOT_TOKEN_PREFIX ||
+    process.env.SUNCLAW_DISCORD_SMOKE_BOT_TOKEN_PREFIX ||
     "Bot";
-  const targetAgent = resolveArg("--agent") || process.env.OPENCLAW_DISCORD_SMOKE_AGENT || "codex";
+  const targetAgent = resolveArg("--agent") || process.env.SUNCLAW_DISCORD_SMOKE_AGENT || "codex";
   const mentionUserId =
-    resolveArg("--mention") || process.env.OPENCLAW_DISCORD_SMOKE_MENTION_USER_ID || undefined;
+    resolveArg("--mention") || process.env.SUNCLAW_DISCORD_SMOKE_MENTION_USER_ID || undefined;
   const instruction =
-    resolveArg("--instruction") || process.env.OPENCLAW_DISCORD_SMOKE_INSTRUCTION || undefined;
+    resolveArg("--instruction") || process.env.SUNCLAW_DISCORD_SMOKE_INSTRUCTION || undefined;
   const timeoutMs = parseNumber(
-    resolveArg("--timeout-ms") || process.env.OPENCLAW_DISCORD_SMOKE_TIMEOUT_MS,
+    resolveArg("--timeout-ms") || process.env.SUNCLAW_DISCORD_SMOKE_TIMEOUT_MS,
     240_000,
     "--timeout-ms",
   );
   const pollMs = parseNumber(
-    resolveArg("--poll-ms") || process.env.OPENCLAW_DISCORD_SMOKE_POLL_MS,
+    resolveArg("--poll-ms") || process.env.SUNCLAW_DISCORD_SMOKE_POLL_MS,
     1_500,
     "--poll-ms",
   );
   const stateDir = path.resolve(resolveArg("--state-dir") || resolveStateDir());
-  const openclawBin =
-    resolveArg("--openclaw-bin") || process.env.OPENCLAW_DISCORD_SMOKE_OPENCLAW_BIN || "openclaw";
+  const sunclawBin =
+    resolveArg("--sunclaw-bin") || process.env.SUNCLAW_DISCORD_SMOKE_SUNCLAW_BIN || "sunclaw";
   const json = hasFlag("--json");
 
   if (!channelId) {
@@ -374,41 +374,41 @@ function parseArgs(): Args {
     mentionUserId,
     instruction,
     stateDir,
-    openclawBin,
+    sunclawBin,
     json,
   };
 }
 
-async function openclawCliJson<T>(params: {
-  openclawBin: string;
+async function sunclawCliJson<T>(params: {
+  sunclawBin: string;
   args: string[];
   timeoutMs?: number;
 }): Promise<T> {
-  const result = await execFileAsync(params.openclawBin, params.args, {
+  const result = await execFileAsync(params.sunclawBin, params.args, {
     maxBuffer: 8 * 1024 * 1024,
     env: process.env,
-    timeout: params.timeoutMs ?? DEFAULT_OPENCLAW_CLI_TIMEOUT_MS,
+    timeout: params.timeoutMs ?? DEFAULT_SUNCLAW_CLI_TIMEOUT_MS,
     killSignal: "SIGKILL",
   });
   const stdout = (result.stdout || "").trim();
   if (!stdout) {
-    throw new Error(`openclaw ${params.args.join(" ")} returned empty stdout`);
+    throw new Error(`sunclaw ${params.args.join(" ")} returned empty stdout`);
   }
   return JSON.parse(stdout) as T;
 }
 
-async function readMessagesWithOpenclaw(params: {
-  openclawBin: string;
+async function readMessagesWithSunclaw(params: {
+  sunclawBin: string;
   target: string;
   limit: number;
   timeoutMs?: number;
 }): Promise<DiscordMessage[]> {
-  const response = await openclawCliJson<{
+  const response = await sunclawCliJson<{
     payload?: {
       messages?: DiscordMessage[];
     };
   }>({
-    openclawBin: params.openclawBin,
+    sunclawBin: params.sunclawBin,
     args: [
       "message",
       "read",
@@ -596,7 +596,7 @@ async function readThreadBindings(stateDir: string): Promise<ThreadBindingRecord
   const store = createPluginStateKeyedStore<ThreadBindingRecord>("discord", {
     namespace: THREAD_BINDINGS_NAMESPACE,
     maxEntries: THREAD_BINDINGS_MAX_ENTRIES,
-    env: { ...process.env, OPENCLAW_STATE_DIR: stateDir },
+    env: { ...process.env, SUNCLAW_STATE_DIR: stateDir },
   });
   const entries = await store.entries();
   return entries
@@ -666,9 +666,9 @@ async function loadParentRecentMessages(params: {
   readAuthHeader: string;
   timeoutMs?: number;
 }): Promise<DiscordMessage[]> {
-  if (params.args.driverMode === "openclaw") {
-    return await readMessagesWithOpenclaw({
-      openclawBin: params.args.openclawBin,
+  if (params.args.driverMode === "sunclaw") {
+    return await readMessagesWithSunclaw({
+      sunclawBin: params.args.sunclawBin,
       target: params.args.channelId,
       limit: 20,
       timeoutMs: params.timeoutMs,
@@ -819,7 +819,7 @@ async function run(): Promise<SuccessResult | FailureResult> {
         authHeader: botAuthHeader,
         timeoutMs: remainingTimeoutMs(deadline),
         body: {
-          name: `openclaw-acp-smoke-${smokeId.slice(-8)}`,
+          name: `sunclaw-acp-smoke-${smokeId.slice(-8)}`,
         },
       });
       if (!webhook.id || !webhook.token) {
@@ -852,14 +852,14 @@ async function run(): Promise<SuccessResult | FailureResult> {
     } else {
       setupStage = "send-message";
       minBindingBoundAt = Date.now() - 3_000;
-      const sent = await openclawCliJson<{
+      const sent = await sunclawCliJson<{
         payload?: {
           result?: {
             messageId?: string;
           };
         };
       }>({
-        openclawBin: args.openclawBin,
+        sunclawBin: args.sunclawBin,
         args: [
           "message",
           "send",
@@ -875,7 +875,7 @@ async function run(): Promise<SuccessResult | FailureResult> {
       });
       sentMessageId = sent.payload?.result?.messageId || "";
       if (!sentMessageId) {
-        throw new Error("openclaw message send did not return payload.result.messageId");
+        throw new Error("sunclaw message send did not return payload.result.messageId");
       }
     }
   } catch (err) {
@@ -943,9 +943,9 @@ async function run(): Promise<SuccessResult | FailureResult> {
     while (Date.now() < deadline && !ackMessage) {
       try {
         const threadMessages =
-          args.driverMode === "openclaw"
-            ? await readMessagesWithOpenclaw({
-                openclawBin: args.openclawBin,
+          args.driverMode === "sunclaw"
+            ? await readMessagesWithSunclaw({
+                sunclawBin: args.sunclawBin,
                 target: threadId,
                 limit: 50,
                 timeoutMs: remainingTimeoutMs(deadline),
@@ -988,7 +988,7 @@ async function run(): Promise<SuccessResult | FailureResult> {
         ok: false,
         stage: "wait-ack",
         smokeId,
-        error: `Thread bound (${threadId}) but timed out waiting for ACK token "${ackToken}" from OpenClaw.`,
+        error: `Thread bound (${threadId}) but timed out waiting for ACK token "${ackToken}" from SunClaw.`,
         diagnostics: {
           bindingCandidates: [
             {

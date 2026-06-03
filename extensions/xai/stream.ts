@@ -1,15 +1,15 @@
-import type { StreamFn } from "openclaw/plugin-sdk/agent-core";
+import type { StreamFn } from "sunclaw/plugin-sdk/agent-core";
 import {
   streamSimple,
   type AssistantMessage,
   type AssistantMessageEvent,
-} from "openclaw/plugin-sdk/llm";
-import type { ProviderWrapStreamFnContext } from "openclaw/plugin-sdk/plugin-entry";
+} from "sunclaw/plugin-sdk/llm";
+import type { ProviderWrapStreamFnContext } from "sunclaw/plugin-sdk/plugin-entry";
 import {
   composeProviderStreamWrappers,
   createPlainTextToolCallCompatWrapper,
   createToolStreamWrapper,
-} from "openclaw/plugin-sdk/provider-stream-shared";
+} from "sunclaw/plugin-sdk/provider-stream-shared";
 
 const XAI_FAST_MODEL_IDS = new Map<string, string>([
   ["grok-3", "grok-3-fast"],

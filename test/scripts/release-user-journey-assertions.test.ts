@@ -88,21 +88,21 @@ async function startTcpFixtureServer(handler: (socket: Socket) => void): Promise
 
 describe("release user journey assertions", () => {
   it("fails when uninstall leaves the managed plugin directory behind", () => {
-    const root = mkdtempSync(path.join(tmpdir(), "openclaw-release-user-assertions-"));
+    const root = mkdtempSync(path.join(tmpdir(), "sunclaw-release-user-assertions-"));
     const home = path.join(root, "home");
     const pluginId = "journey-plugin-a";
-    const installPath = path.join(home, ".openclaw", "extensions", pluginId);
+    const installPath = path.join(home, ".sunclaw", "extensions", pluginId);
     const installPathFile = path.join(root, "install-path.txt");
 
     try {
-      writeJson(path.join(home, ".openclaw", "openclaw.json"), {
+      writeJson(path.join(home, ".sunclaw", "sunclaw.json"), {
         plugins: {
           entries: {},
           allow: [],
           deny: [],
         },
       });
-      writeJson(path.join(home, ".openclaw", "plugins", "installs.json"), {
+      writeJson(path.join(home, ".sunclaw", "plugins", "installs.json"), {
         installRecords: {},
       });
       mkdirSync(installPath, { recursive: true });
@@ -118,24 +118,24 @@ describe("release user journey assertions", () => {
   });
 
   it("passes after uninstall clears config, records, and managed files", () => {
-    const root = mkdtempSync(path.join(tmpdir(), "openclaw-release-user-assertions-"));
+    const root = mkdtempSync(path.join(tmpdir(), "sunclaw-release-user-assertions-"));
     const home = path.join(root, "home");
     const installPathFile = path.join(root, "install-path.txt");
 
     try {
-      writeJson(path.join(home, ".openclaw", "openclaw.json"), {
+      writeJson(path.join(home, ".sunclaw", "sunclaw.json"), {
         plugins: {
           entries: {},
           allow: [],
           deny: [],
         },
       });
-      writeJson(path.join(home, ".openclaw", "plugins", "installs.json"), {
+      writeJson(path.join(home, ".sunclaw", "plugins", "installs.json"), {
         installRecords: {},
       });
       writeFileSync(
         installPathFile,
-        path.join(home, ".openclaw", "extensions", "journey-plugin-a"),
+        path.join(home, ".sunclaw", "extensions", "journey-plugin-a"),
         "utf8",
       );
 
@@ -152,18 +152,18 @@ describe("release user journey assertions", () => {
   });
 
   it("remembers the installed plugin path from the install record", () => {
-    const root = mkdtempSync(path.join(tmpdir(), "openclaw-release-user-assertions-"));
+    const root = mkdtempSync(path.join(tmpdir(), "sunclaw-release-user-assertions-"));
     const home = path.join(root, "home");
     const pluginId = "journey-plugin-a";
     const sourcePath = path.join(root, "source", pluginId);
-    const installPath = path.join(home, ".openclaw", "extensions", pluginId);
+    const installPath = path.join(home, ".sunclaw", "extensions", pluginId);
     const installPathFile = path.join(root, "install-path.txt");
     const sourcePathFile = path.join(root, "source-path.txt");
 
     try {
       mkdirSync(sourcePath, { recursive: true });
       mkdirSync(installPath, { recursive: true });
-      writeJson(path.join(home, ".openclaw", "plugins", "installs.json"), {
+      writeJson(path.join(home, ".sunclaw", "plugins", "installs.json"), {
         installRecords: {
           [pluginId]: {
             source: "path",
@@ -189,7 +189,7 @@ describe("release user journey assertions", () => {
   });
 
   it("accepts ready ClickClack fixture state", async () => {
-    const root = mkdtempSync(path.join(tmpdir(), "openclaw-release-user-assertions-"));
+    const root = mkdtempSync(path.join(tmpdir(), "sunclaw-release-user-assertions-"));
     const home = path.join(root, "home");
     const server = await startTcpFixtureServer((socket) => {
       const body = JSON.stringify({ socketCount: 1 });
@@ -200,7 +200,7 @@ describe("release user journey assertions", () => {
 
     try {
       await expect(
-        withEnv({ HOME: home, OPENCLAW_RELEASE_USER_JOURNEY_HTTP_TIMEOUT_MS: "1000" }, () =>
+        withEnv({ HOME: home, SUNCLAW_RELEASE_USER_JOURNEY_HTTP_TIMEOUT_MS: "1000" }, () =>
           runReleaseUserJourneyAssertion("wait-clickclack-socket", [
             `http://127.0.0.1:${server.port}`,
             "1",
@@ -214,7 +214,7 @@ describe("release user journey assertions", () => {
   });
 
   it("bounds stalled ClickClack fixture HTTP probes", async () => {
-    const root = mkdtempSync(path.join(tmpdir(), "openclaw-release-user-assertions-"));
+    const root = mkdtempSync(path.join(tmpdir(), "sunclaw-release-user-assertions-"));
     const home = path.join(root, "home");
     const server = await startTcpFixtureServer((socket) =>
       socket.write("HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n"),
@@ -223,7 +223,7 @@ describe("release user journey assertions", () => {
     try {
       const startedAt = Date.now();
       await expect(
-        withEnv({ HOME: home, OPENCLAW_RELEASE_USER_JOURNEY_HTTP_TIMEOUT_MS: "100" }, () =>
+        withEnv({ HOME: home, SUNCLAW_RELEASE_USER_JOURNEY_HTTP_TIMEOUT_MS: "100" }, () =>
           runReleaseUserJourneyAssertion("wait-clickclack-socket", [
             `http://127.0.0.1:${server.port}`,
             "0.2",
@@ -238,7 +238,7 @@ describe("release user journey assertions", () => {
   });
 
   it("rejects loose HTTP timeout env values instead of parsing prefixes", async () => {
-    const root = mkdtempSync(path.join(tmpdir(), "openclaw-release-user-assertions-"));
+    const root = mkdtempSync(path.join(tmpdir(), "sunclaw-release-user-assertions-"));
     const home = path.join(root, "home");
     const server = await startTcpFixtureServer((socket) =>
       socket.write("HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n"),
@@ -246,7 +246,7 @@ describe("release user journey assertions", () => {
 
     try {
       await expect(
-        withEnv({ HOME: home, OPENCLAW_RELEASE_USER_JOURNEY_HTTP_TIMEOUT_MS: "100ms" }, () =>
+        withEnv({ HOME: home, SUNCLAW_RELEASE_USER_JOURNEY_HTTP_TIMEOUT_MS: "100ms" }, () =>
           runReleaseUserJourneyAssertion("wait-clickclack-socket", [
             `http://127.0.0.1:${server.port}`,
             "0.2",
@@ -260,7 +260,7 @@ describe("release user journey assertions", () => {
   });
 
   it("bounds ClickClack fixture error response bodies", async () => {
-    const root = mkdtempSync(path.join(tmpdir(), "openclaw-release-user-assertions-"));
+    const root = mkdtempSync(path.join(tmpdir(), "sunclaw-release-user-assertions-"));
     const home = path.join(root, "home");
     const server = await startTcpFixtureServer((socket) => {
       const body = "x".repeat(128);
@@ -274,8 +274,8 @@ describe("release user journey assertions", () => {
         withEnv(
           {
             HOME: home,
-            OPENCLAW_RELEASE_USER_JOURNEY_HTTP_BODY_MAX_BYTES: "16",
-            OPENCLAW_RELEASE_USER_JOURNEY_HTTP_TIMEOUT_MS: "1000",
+            SUNCLAW_RELEASE_USER_JOURNEY_HTTP_BODY_MAX_BYTES: "16",
+            SUNCLAW_RELEASE_USER_JOURNEY_HTTP_TIMEOUT_MS: "1000",
           },
           () =>
             runReleaseUserJourneyAssertion("post-clickclack-inbound", [
@@ -291,7 +291,7 @@ describe("release user journey assertions", () => {
   });
 
   it("rejects loose body byte env values instead of parsing prefixes", async () => {
-    const root = mkdtempSync(path.join(tmpdir(), "openclaw-release-user-assertions-"));
+    const root = mkdtempSync(path.join(tmpdir(), "sunclaw-release-user-assertions-"));
     const home = path.join(root, "home");
     const server = await startTcpFixtureServer((socket) => {
       const body = "x".repeat(128);
@@ -305,8 +305,8 @@ describe("release user journey assertions", () => {
         withEnv(
           {
             HOME: home,
-            OPENCLAW_RELEASE_USER_JOURNEY_HTTP_BODY_MAX_BYTES: "16bytes",
-            OPENCLAW_RELEASE_USER_JOURNEY_HTTP_TIMEOUT_MS: "1000",
+            SUNCLAW_RELEASE_USER_JOURNEY_HTTP_BODY_MAX_BYTES: "16bytes",
+            SUNCLAW_RELEASE_USER_JOURNEY_HTTP_TIMEOUT_MS: "1000",
           },
           () =>
             runReleaseUserJourneyAssertion("post-clickclack-inbound", [

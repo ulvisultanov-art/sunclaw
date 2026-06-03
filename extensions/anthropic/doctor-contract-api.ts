@@ -1,4 +1,4 @@
-import type { DoctorSessionRouteStateOwner } from "openclaw/plugin-sdk/runtime-doctor";
+import type { DoctorSessionRouteStateOwner } from "sunclaw/plugin-sdk/runtime-doctor";
 
 export const legacyConfigRules = [];
 

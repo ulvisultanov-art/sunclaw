@@ -1,8 +1,8 @@
 import { createHash } from "node:crypto";
-import { asFiniteNumber } from "@openclaw/normalization-core/number-coercion";
-import { asOptionalRecord as readRecord } from "@openclaw/normalization-core/record-coerce";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import { OPENCLAW_RUNTIME_CONTEXT_CUSTOM_TYPE } from "../agents/internal-runtime-context.js";
+import { asFiniteNumber } from "@sunclaw/normalization-core/number-coercion";
+import { asOptionalRecord as readRecord } from "@sunclaw/normalization-core/record-coerce";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
+import { SUNCLAW_RUNTIME_CONTEXT_CUSTOM_TYPE } from "../agents/internal-runtime-context.js";
 import { isHeartbeatOkResponse, isHeartbeatUserMessage } from "../auto-reply/heartbeat-filter.js";
 import { HEARTBEAT_PROMPT } from "../auto-reply/heartbeat.js";
 import {
@@ -122,8 +122,8 @@ function sanitizeChatHistoryContentBlock(
     delete entry.thinkingSignature;
     changed = true;
   }
-  if ("openclawReasoningReplay" in entry) {
-    delete entry.openclawReasoningReplay;
+  if ("sunclawReasoningReplay" in entry) {
+    delete entry.sunclawReasoningReplay;
     changed = true;
   }
   const type = typeof entry.type === "string" ? entry.type : "";
@@ -735,7 +735,7 @@ function buildMessageToolVisibleReplyMirror(
   const mirror: Record<string, unknown> = {
     role: "assistant",
     content: [{ type: "text", text: pending.text }],
-    openclawMessageToolMirror: {
+    sunclawMessageToolMirror: {
       toolName: "message",
       ...(pending.toolCallId ? { toolCallId: pending.toolCallId } : {}),
     },
@@ -745,9 +745,9 @@ function buildMessageToolVisibleReplyMirror(
       mirror[field] = pending.anchor[field];
     }
   }
-  const transcriptMeta = readRecord((pending.completionAnchor ?? pending.anchor)["__openclaw"]);
+  const transcriptMeta = readRecord((pending.completionAnchor ?? pending.anchor)["__sunclaw"]);
   if (transcriptMeta) {
-    mirror["__openclaw"] = { ...transcriptMeta };
+    mirror["__sunclaw"] = { ...transcriptMeta };
   }
   return mirror;
 }
@@ -956,7 +956,7 @@ function digestTtsSupplementText(text: string): string {
 function readTtsSupplementMarker(
   message: Record<string, unknown>,
 ): { textSha256?: string; spokenText?: string } | undefined {
-  const marker = message.openclawTtsSupplement;
+  const marker = message.sunclawTtsSupplement;
   if (!marker || typeof marker !== "object" || Array.isArray(marker)) {
     return undefined;
   }
@@ -1113,7 +1113,7 @@ function isDisplayHiddenProjectedMessage(message: Record<string, unknown>): bool
   if (message.display === false) {
     return true;
   }
-  return message.role === "custom" && message.customType === OPENCLAW_RUNTIME_CONTEXT_CUSTOM_TYPE;
+  return message.role === "custom" && message.customType === SUNCLAW_RUNTIME_CONTEXT_CUSTOM_TYPE;
 }
 
 function shouldHideProjectedHistoryMessage(message: Record<string, unknown>): boolean {
@@ -1146,9 +1146,9 @@ function shouldHideProjectedHistoryMessage(message: Record<string, unknown>): bo
   return isHeartbeatOkResponse(roleContent);
 }
 
-function openclawAssistantModel(message: Record<string, unknown>): string | undefined {
+function sunclawAssistantModel(message: Record<string, unknown>): string | undefined {
   return message.role === "assistant" &&
-    message.provider === "openclaw" &&
+    message.provider === "sunclaw" &&
     typeof message.model === "string"
     ? message.model
     : undefined;
@@ -1167,8 +1167,8 @@ function isDuplicateAcpGatewayInjectedMessage(
     return false;
   }
   if (
-    openclawAssistantModel(previousVisible) !== "acp-runtime" ||
-    openclawAssistantModel(current) !== "gateway-injected"
+    sunclawAssistantModel(previousVisible) !== "acp-runtime" ||
+    sunclawAssistantModel(current) !== "gateway-injected"
   ) {
     return false;
   }

@@ -1,5 +1,5 @@
-import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { normalizeProviderId } from "@sunclaw/model-catalog-core/provider-id";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 
 const CORE_BUILT_IN_MODEL_APIS = new Set([
   "anthropic-messages",
@@ -14,7 +14,7 @@ const CORE_BUILT_IN_MODEL_APIS = new Set([
 
 export function resolveProviderConfigApiOwnerHint(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
 }): string | undefined {
   const providers = params.config?.models?.providers;
   if (!providers) {

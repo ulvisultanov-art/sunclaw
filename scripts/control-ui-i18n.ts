@@ -4,7 +4,7 @@ import { existsSync } from "node:fs";
 import { mkdir, readFile, readdir, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { completeSimple, type AssistantMessage, type Model } from "openclaw/plugin-sdk/llm";
+import { completeSimple, type AssistantMessage, type Model } from "sunclaw/plugin-sdk/llm";
 import * as ts from "typescript";
 import { formatErrorMessage } from "../src/infra/errors.ts";
 
@@ -102,12 +102,12 @@ const RUN_PROCESS_OUTPUT_MAX_CHARS = 1024 * 1024;
 const RUN_PROCESS_TIMEOUT_MS = 120_000;
 const RUN_PROCESS_KILL_GRACE_MS = 5_000;
 const PROGRESS_HEARTBEAT_MS = 30_000;
-const ENV_PROVIDER = "OPENCLAW_CONTROL_UI_I18N_PROVIDER";
-const ENV_MODEL = "OPENCLAW_CONTROL_UI_I18N_MODEL";
-const ENV_THINKING = "OPENCLAW_CONTROL_UI_I18N_THINKING";
-const ENV_BATCH_CHAR_BUDGET = "OPENCLAW_CONTROL_UI_I18N_BATCH_CHAR_BUDGET";
-const ENV_PROMPT_TIMEOUT = "OPENCLAW_CONTROL_UI_I18N_PROMPT_TIMEOUT";
-const ENV_AUTH_OPTIONAL = "OPENCLAW_CONTROL_UI_I18N_AUTH_OPTIONAL";
+const ENV_PROVIDER = "SUNCLAW_CONTROL_UI_I18N_PROVIDER";
+const ENV_MODEL = "SUNCLAW_CONTROL_UI_I18N_MODEL";
+const ENV_THINKING = "SUNCLAW_CONTROL_UI_I18N_THINKING";
+const ENV_BATCH_CHAR_BUDGET = "SUNCLAW_CONTROL_UI_I18N_BATCH_CHAR_BUDGET";
+const ENV_PROMPT_TIMEOUT = "SUNCLAW_CONTROL_UI_I18N_PROMPT_TIMEOUT";
+const ENV_AUTH_OPTIONAL = "SUNCLAW_CONTROL_UI_I18N_AUTH_OPTIONAL";
 
 type TranslationProvider = "openai" | "anthropic";
 
@@ -156,7 +156,7 @@ const LOCALE_ENTRIES: readonly LocaleEntry[] = [
 ];
 
 const DEFAULT_GLOSSARY: readonly GlossaryEntry[] = [
-  { source: "OpenClaw", target: "OpenClaw" },
+  { source: "SunClaw", target: "SunClaw" },
   { source: "Gateway", target: "Gateway" },
   { source: "Control UI", target: "Control UI" },
   { source: "Skills", target: "Skills" },
@@ -315,7 +315,7 @@ function hashText(text: string): string {
 function cacheNamespace(): string {
   return [
     `wf=${CONTROL_UI_I18N_WORKFLOW}`,
-    "engine=openclaw-llm",
+    "engine=sunclaw-llm",
     `provider=${resolveConfiguredProvider()}`,
     `model=${resolveConfiguredModel()}`,
   ].join("|");

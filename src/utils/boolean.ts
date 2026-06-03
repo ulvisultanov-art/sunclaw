@@ -1,4 +1,4 @@
-import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalLowercaseString } from "@sunclaw/normalization-core/string-coerce";
 
 /** Accepted string literals for boolean parsing beyond actual booleans. */
 export type BooleanParseOptions = {

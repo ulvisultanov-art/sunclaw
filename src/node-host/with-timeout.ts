@@ -1,4 +1,4 @@
-import { resolveTimerTimeoutMs } from "@openclaw/normalization-core/number-coercion";
+import { resolveTimerTimeoutMs } from "@sunclaw/normalization-core/number-coercion";
 
 export async function withTimeout<T>(
   work: (signal: AbortSignal | undefined) => Promise<T>,

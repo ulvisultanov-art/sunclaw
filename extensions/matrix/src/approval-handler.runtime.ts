@@ -3,24 +3,24 @@ import type {
   ChannelApprovalCapabilityHandlerContext,
   PendingApprovalView,
   ResolvedApprovalView,
-} from "openclaw/plugin-sdk/approval-handler-runtime";
-import { createChannelApprovalNativeRuntimeAdapter } from "openclaw/plugin-sdk/approval-handler-runtime";
-import { buildChannelApprovalNativeTargetKey } from "openclaw/plugin-sdk/approval-native-runtime";
+} from "sunclaw/plugin-sdk/approval-handler-runtime";
+import { createChannelApprovalNativeRuntimeAdapter } from "sunclaw/plugin-sdk/approval-handler-runtime";
+import { buildChannelApprovalNativeTargetKey } from "sunclaw/plugin-sdk/approval-native-runtime";
 import {
   buildExecApprovalPendingReplyPayload,
   buildPluginApprovalPendingReplyPayload,
   type ExecApprovalReplyDecision,
-} from "openclaw/plugin-sdk/approval-reply-runtime";
-import { buildPluginApprovalResolvedReplyPayload } from "openclaw/plugin-sdk/approval-runtime";
+} from "sunclaw/plugin-sdk/approval-reply-runtime";
+import { buildPluginApprovalResolvedReplyPayload } from "sunclaw/plugin-sdk/approval-runtime";
 import type {
   ExecApprovalRequest,
   PluginApprovalRequest,
-} from "openclaw/plugin-sdk/approval-runtime";
+} from "sunclaw/plugin-sdk/approval-runtime";
 import {
   listMessageReceiptPlatformIds,
   resolveMessageReceiptPrimaryId,
-} from "openclaw/plugin-sdk/channel-outbound";
-import { normalizeUniqueStringEntries } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/channel-outbound";
+import { normalizeUniqueStringEntries } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import {
   buildMatrixApprovalReactionHint,
   listMatrixApprovalReactionBindings,
@@ -43,8 +43,8 @@ import {
 import { resolveMatrixTargetIdentity } from "./matrix/target-ids.js";
 import type { CoreConfig } from "./types.js";
 
-// OpenClaw Matrix custom event content for capable clients; body and reactions remain fallback.
-const MATRIX_APPROVAL_METADATA_KEY = "com.openclaw.approval" as const;
+// SunClaw Matrix custom event content for capable clients; body and reactions remain fallback.
+const MATRIX_APPROVAL_METADATA_KEY = "com.sunclaw.approval" as const;
 
 type PendingMessage = {
   roomId: string;

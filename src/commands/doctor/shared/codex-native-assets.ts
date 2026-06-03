@@ -2,10 +2,10 @@ import type { Dirent } from "node:fs";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { isRecord as hasRecord } from "@openclaw/normalization-core/record-coerce";
-import { normalizeOptionalLowercaseString as normalizeString } from "@openclaw/normalization-core/string-coerce";
+import { isRecord as hasRecord } from "@sunclaw/normalization-core/record-coerce";
+import { normalizeOptionalLowercaseString as normalizeString } from "@sunclaw/normalization-core/string-coerce";
 import { collectConfiguredAgentHarnessRuntimes } from "../../../agents/harness-runtimes.js";
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../../config/types.sunclaw.js";
 
 export type CodexNativeAssetHit = {
   kind: "skill" | "plugin" | "config" | "hooks";
@@ -107,11 +107,11 @@ async function discoverPluginHits(root: string): Promise<CodexNativeAssetHit[]> 
   return [...hits.values()];
 }
 
-function isCodexRuntimeConfigured(cfg: OpenClawConfig, _env: NodeJS.ProcessEnv): boolean {
+function isCodexRuntimeConfigured(cfg: SunClawConfig, _env: NodeJS.ProcessEnv): boolean {
   return collectConfiguredAgentHarnessRuntimes(cfg).includes("codex");
 }
 
-function isCodexPluginConfigured(cfg: OpenClawConfig): boolean {
+function isCodexPluginConfigured(cfg: SunClawConfig): boolean {
   const plugins = cfg.plugins;
   if (plugins?.enabled === false) {
     return false;
@@ -127,12 +127,12 @@ function isCodexPluginConfigured(cfg: OpenClawConfig): boolean {
   return hasRecord(plugins?.entries?.codex) && plugins.entries.codex.enabled !== false;
 }
 
-function shouldScanCodexNativeAssets(cfg: OpenClawConfig, env: NodeJS.ProcessEnv): boolean {
+function shouldScanCodexNativeAssets(cfg: SunClawConfig, env: NodeJS.ProcessEnv): boolean {
   return isCodexRuntimeConfigured(cfg, env) || isCodexPluginConfigured(cfg);
 }
 
 export async function scanCodexNativeAssets(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   env?: NodeJS.ProcessEnv;
 }): Promise<CodexNativeAssetHit[]> {
   const env = params.env ?? process.env;
@@ -176,7 +176,7 @@ function plural(count: number, singular: string): string {
 }
 
 export async function collectCodexNativeAssetInfoNotes(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   env?: NodeJS.ProcessEnv;
 }): Promise<string[]> {
   const env = params.env ?? process.env;
@@ -192,10 +192,10 @@ export async function collectCodexNativeAssetInfoNotes(params: {
   ];
   return [
     [
-      "- Personal Codex CLI assets were found, but native Codex-mode OpenClaw agents use isolated per-agent Codex homes.",
+      "- Personal Codex CLI assets were found, but native Codex-mode SunClaw agents use isolated per-agent Codex homes.",
       `- Sources: ${resolveCodexHome(env)} and ${resolvePersonalAgentSkillsDir(env)} (${counts.join(", ")}).`,
       "- These assets will not be loaded by the Codex app-server child unless you intentionally promote them.",
-      "- If the Codex plugin is not installed, run `openclaw plugins install npm:@openclaw/codex` first. Then run `openclaw migrate plan codex` to inventory them. Applying that migration copies skills into the current OpenClaw agent workspace; Codex plugins, hooks, and config stay manual-review only.",
+      "- If the Codex plugin is not installed, run `sunclaw plugins install npm:@sunclaw/codex` first. Then run `sunclaw migrate plan codex` to inventory them. Applying that migration copies skills into the current SunClaw agent workspace; Codex plugins, hooks, and config stay manual-review only.",
     ].join("\n"),
   ];
 }

@@ -7,7 +7,7 @@ import { SessionManager } from "./session-manager.js";
 const tempPaths: string[] = [];
 
 async function makeTempDir(): Promise<string> {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-session-manager-"));
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-session-manager-"));
   tempPaths.push(dir);
   return dir;
 }
@@ -27,7 +27,7 @@ describe("SessionManager.open", () => {
       version: 3,
       id: "original-session",
       timestamp: "2026-05-27T00:00:00.000Z",
-      cwd: "/srv/openclaw/main",
+      cwd: "/srv/sunclaw/main",
     };
     const userEntry = {
       type: "message",

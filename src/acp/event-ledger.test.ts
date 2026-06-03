@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import { closeSunClawStateDatabaseForTest } from "../state/sunclaw-state-db.js";
 import { withTempDir } from "../test-helpers/temp-dir.js";
 import {
   createFileAcpEventLedger,
@@ -12,7 +12,7 @@ import {
 
 describe("ACP event ledger", () => {
   afterEach(() => {
-    closeOpenClawStateDatabaseForTest();
+    closeSunClawStateDatabaseForTest();
   });
 
   it("records complete in-memory session updates in sequence", async () => {
@@ -117,7 +117,7 @@ describe("ACP event ledger", () => {
   });
 
   it("persists file-backed replay state across ledger instances", async () => {
-    await withTempDir({ prefix: "openclaw-acp-ledger-" }, async (dir) => {
+    await withTempDir({ prefix: "sunclaw-acp-ledger-" }, async (dir) => {
       const filePath = path.join(dir, "acp", "event-ledger.json");
       const first = createFileAcpEventLedger({ filePath, now: () => 1000 });
       await first.startSession({
@@ -153,8 +153,8 @@ describe("ACP event ledger", () => {
   });
 
   it("persists SQLite-backed replay state across ledger instances", async () => {
-    await withTempDir({ prefix: "openclaw-acp-ledger-" }, async (dir) => {
-      const databasePath = path.join(dir, "openclaw.sqlite");
+    await withTempDir({ prefix: "sunclaw-acp-ledger-" }, async (dir) => {
+      const databasePath = path.join(dir, "sunclaw.sqlite");
       const first = createSqliteAcpEventLedger({ path: databasePath, now: () => 1000 });
       await first.startSession({
         sessionId: "session-1",
@@ -172,7 +172,7 @@ describe("ACP event ledger", () => {
         },
       });
 
-      closeOpenClawStateDatabaseForTest();
+      closeSunClawStateDatabaseForTest();
       const second = createSqliteAcpEventLedger({ path: databasePath });
       const replay = await second.readReplay({
         sessionId: "session-1",
@@ -189,9 +189,9 @@ describe("ACP event ledger", () => {
   });
 
   it("imports legacy file-backed replay state into SQLite", async () => {
-    await withTempDir({ prefix: "openclaw-acp-ledger-" }, async (dir) => {
+    await withTempDir({ prefix: "sunclaw-acp-ledger-" }, async (dir) => {
       const filePath = path.join(dir, "acp", "event-ledger.json");
-      const databasePath = path.join(dir, "openclaw.sqlite");
+      const databasePath = path.join(dir, "sunclaw.sqlite");
       const legacy = createFileAcpEventLedger({ filePath, now: () => 1000 });
       await legacy.startSession({
         sessionId: "session-1",
@@ -235,9 +235,9 @@ describe("ACP event ledger", () => {
   });
 
   it("marks SQLite-backed replay incomplete when event retention truncates history", async () => {
-    await withTempDir({ prefix: "openclaw-acp-ledger-" }, async (dir) => {
+    await withTempDir({ prefix: "sunclaw-acp-ledger-" }, async (dir) => {
       const ledger = createSqliteAcpEventLedger({
-        path: path.join(dir, "openclaw.sqlite"),
+        path: path.join(dir, "sunclaw.sqlite"),
         maxEventsPerSession: 1,
       });
       await ledger.startSession({
@@ -449,7 +449,7 @@ describe("ACP event ledger", () => {
   });
 
   it("keeps the persisted ledger file under the serialized byte budget", async () => {
-    await withTempDir({ prefix: "openclaw-acp-ledger-" }, async (dir) => {
+    await withTempDir({ prefix: "sunclaw-acp-ledger-" }, async (dir) => {
       const filePath = path.join(dir, "acp", "event-ledger.json");
       const ledger = createFileAcpEventLedger({ filePath, maxSerializedBytes: 1024 });
       await ledger.startSession({
@@ -478,7 +478,7 @@ describe("ACP event ledger", () => {
   });
 
   it("ignores corrupt ledger files instead of replaying unknown state", async () => {
-    await withTempDir({ prefix: "openclaw-acp-ledger-" }, async (dir) => {
+    await withTempDir({ prefix: "sunclaw-acp-ledger-" }, async (dir) => {
       const filePath = path.join(dir, "event-ledger.json");
       await fs.writeFile(filePath, "{bad json", "utf8");
       const ledger = createFileAcpEventLedger({ filePath });
@@ -490,7 +490,7 @@ describe("ACP event ledger", () => {
   });
 
   it("reloads file-backed state under lock before writing", async () => {
-    await withTempDir({ prefix: "openclaw-acp-ledger-" }, async (dir) => {
+    await withTempDir({ prefix: "sunclaw-acp-ledger-" }, async (dir) => {
       const filePath = path.join(dir, "acp", "event-ledger.json");
       const first = createFileAcpEventLedger({ filePath });
       const second = createFileAcpEventLedger({ filePath });

@@ -484,7 +484,7 @@ export async function runPreparedCliAgent(
         content: [{ type: "text", text: block.message }],
         timestamp: nowMs,
         idempotencyKey: `hook-block:before_agent_run:user:${params.runId}`,
-        __openclaw: {
+        __sunclaw: {
           beforeAgentRunBlocked: {
             blockedBy: block.pluginId,
             blockedAt: nowMs,
@@ -796,7 +796,7 @@ export async function runPreparedCliAgent(
         if (
           shouldRetryFreshCliSessionAfterFailover({
             error: err,
-            hasHistoryPrompt: Boolean(context.openClawHistoryPrompt),
+            hasHistoryPrompt: Boolean(context.sunClawHistoryPrompt),
           }) &&
           retryableSessionId &&
           params.sessionKey

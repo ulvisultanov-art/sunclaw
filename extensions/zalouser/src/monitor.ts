@@ -1,35 +1,35 @@
-import { mergeAllowlist, summarizeMapping } from "openclaw/plugin-sdk/allow-from";
+import { mergeAllowlist, summarizeMapping } from "sunclaw/plugin-sdk/allow-from";
 import {
   implicitMentionKindWhen,
   resolveInboundMentionDecision,
-} from "openclaw/plugin-sdk/channel-inbound";
-import { resolveStableChannelMessageIngress } from "openclaw/plugin-sdk/channel-ingress-runtime";
-import { createChannelPairingController } from "openclaw/plugin-sdk/channel-pairing";
-import type { MarkdownTableMode, OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { KeyedAsyncQueue } from "openclaw/plugin-sdk/core";
-import { isDangerousNameMatchingEnabled } from "openclaw/plugin-sdk/dangerous-name-runtime";
-import { createDeferred } from "openclaw/plugin-sdk/extension-shared";
+} from "sunclaw/plugin-sdk/channel-inbound";
+import { resolveStableChannelMessageIngress } from "sunclaw/plugin-sdk/channel-ingress-runtime";
+import { createChannelPairingController } from "sunclaw/plugin-sdk/channel-pairing";
+import type { MarkdownTableMode, SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import { KeyedAsyncQueue } from "sunclaw/plugin-sdk/core";
+import { isDangerousNameMatchingEnabled } from "sunclaw/plugin-sdk/dangerous-name-runtime";
+import { createDeferred } from "sunclaw/plugin-sdk/extension-shared";
 import {
   DEFAULT_GROUP_HISTORY_LIMIT,
   type HistoryEntry,
   createChannelHistoryWindow,
-} from "openclaw/plugin-sdk/reply-history";
+} from "sunclaw/plugin-sdk/reply-history";
 import {
   deliverTextOrMediaReply,
   resolveSendableOutboundReplyParts,
   type OutboundReplyPayload,
-} from "openclaw/plugin-sdk/reply-payload";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime";
+} from "sunclaw/plugin-sdk/reply-payload";
+import type { RuntimeEnv } from "sunclaw/plugin-sdk/runtime";
 import {
   resolveDefaultGroupPolicy,
   resolveOpenProviderRuntimeGroupPolicy,
   warnMissingProviderGroupPolicyFallbackOnce,
-} from "openclaw/plugin-sdk/runtime-group-policy";
+} from "sunclaw/plugin-sdk/runtime-group-policy";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
   normalizeStringEntries,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/string-coerce-runtime";
 import {
   buildZalouserGroupCandidates,
   findZalouserGroupEntry,
@@ -53,7 +53,7 @@ import {
 
 export type ZalouserMonitorOptions = {
   account: ResolvedZalouserAccount;
-  config: OpenClawConfig;
+  config: SunClawConfig;
   runtime: RuntimeEnv;
   abortSignal: AbortSignal;
   statusSink?: (patch: { lastInboundAt?: number; lastOutboundAt?: number }) => void;
@@ -132,7 +132,7 @@ function resolveInboundQueueKey(message: ZaloInboundMessage): string {
   return `direct:${senderId || threadId}`;
 }
 
-function resolveZalouserDmSessionScope(config: OpenClawConfig) {
+function resolveZalouserDmSessionScope(config: SunClawConfig) {
   const configured = config.session?.dmScope;
   return configured === "main" || !configured ? "per-channel-peer" : configured;
 }
@@ -173,7 +173,7 @@ function senderScopedZalouserGroupPolicy(params: {
 
 function resolveZalouserInboundSessionKey(params: {
   core: ZalouserCoreRuntime;
-  config: OpenClawConfig;
+  config: SunClawConfig;
   route: { agentId: string; accountId: string; sessionKey: string };
   storePath: string;
   isGroup: boolean;
@@ -265,7 +265,7 @@ async function sendZalouserDeliveryAcks(params: {
 async function processMessage(
   message: ZaloInboundMessage,
   account: ResolvedZalouserAccount,
-  config: OpenClawConfig,
+  config: SunClawConfig,
   core: ZalouserCoreRuntime,
   runtime: RuntimeEnv,
   historyState: ZalouserGroupHistoryState,
@@ -759,7 +759,7 @@ async function deliverZalouserReply(params: {
   isGroup: boolean;
   runtime: RuntimeEnv;
   core: ZalouserCoreRuntime;
-  config: OpenClawConfig;
+  config: SunClawConfig;
   accountId?: string;
   tableMode?: MarkdownTableMode;
 }): Promise<{ visibleReplySent: boolean }> {
@@ -1026,7 +1026,7 @@ export const testing = {
   processMessage: async (params: {
     message: ZaloInboundMessage;
     account: ResolvedZalouserAccount;
-    config: OpenClawConfig;
+    config: SunClawConfig;
     runtime: RuntimeEnv;
     historyState?: {
       historyLimit?: number;

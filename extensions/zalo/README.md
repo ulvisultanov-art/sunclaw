@@ -1,17 +1,17 @@
-# @openclaw/zalo
+# @sunclaw/zalo
 
-Zalo channel plugin for OpenClaw (Bot API).
+Zalo channel plugin for SunClaw (Bot API).
 
 ## Install (local checkout)
 
 ```bash
-openclaw plugins install ./path/to/local/zalo-plugin
+sunclaw plugins install ./path/to/local/zalo-plugin
 ```
 
 ## Install (npm)
 
 ```bash
-openclaw plugins install @openclaw/zalo
+sunclaw plugins install @sunclaw/zalo
 ```
 
 Onboarding: select Zalo and confirm the install prompt to fetch the plugin automatically.

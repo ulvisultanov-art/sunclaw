@@ -1,5 +1,5 @@
 ---
-summary: "Authenticated inbound webhooks that bind external automation to OpenClaw TaskFlows."
+summary: "Authenticated inbound webhooks that bind external automation to SunClaw TaskFlows."
 read_when:
   - You are installing, configuring, or auditing the webhooks plugin
 title: "Webhooks plugin"
@@ -7,12 +7,12 @@ title: "Webhooks plugin"
 
 # Webhooks plugin
 
-Authenticated inbound webhooks that bind external automation to OpenClaw TaskFlows.
+Authenticated inbound webhooks that bind external automation to SunClaw TaskFlows.
 
 ## Distribution
 
-- Package: `@openclaw/webhooks`
-- Install route: included in OpenClaw
+- Package: `@sunclaw/webhooks`
+- Install route: included in SunClaw
 
 ## Surface
 

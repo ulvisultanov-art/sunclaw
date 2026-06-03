@@ -3,7 +3,7 @@ import { constants as fsConstants, type Dirent } from "node:fs";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
 import { satisfiesPluginApiRange } from "../infra/clawhub.js";
 import { packageNameMatchesId } from "../infra/install-safe-path.js";
 import {
@@ -18,8 +18,8 @@ import {
   type ManagedNpmRootPeerDependencySnapshot,
   readManagedNpmRootInstalledDependency,
   readManagedNpmRootPeerDependencySnapshot,
-  readOpenClawManagedNpmRootOverrides,
-  repairManagedNpmRootOpenClawPeer,
+  readSunClawManagedNpmRootOverrides,
+  repairManagedNpmRootSunClawPeer,
   removeManagedNpmRootDependency,
   resolveManagedNpmRootDependencySpec,
   restoreManagedNpmRootPeerDependencySnapshot,
@@ -28,7 +28,7 @@ import {
   type ManagedNpmRootInstalledDependency,
 } from "../infra/npm-managed-root.js";
 import {
-  compareOpenClawReleaseVersions,
+  compareSunClawReleaseVersions,
   formatPrereleaseResolutionError,
   isExactSemverVersion,
   isPrereleaseSemverVersion,
@@ -37,7 +37,7 @@ import {
   validateRegistryNpmSpec,
   type ParsedRegistryNpmSpec,
 } from "../infra/npm-registry-spec.js";
-import { installedPackageNeedsOpenClawPeerLinkRepair } from "../infra/package-update-utils.js";
+import { installedPackageNeedsSunClawPeerLinkRepair } from "../infra/package-update-utils.js";
 import {
   createSafeNpmInstallArgs,
   createSafeNpmInstallEnv,
@@ -59,14 +59,14 @@ import type { InstallSecurityScanResult } from "./install-security-scan.js";
 import type { InstallSafetyOverrides } from "./install-security-scan.js";
 import {
   resolvePackageExtensionEntries,
-  type OpenClawPackageManifest,
+  type SunClawPackageManifest,
   type PackageManifest as PluginPackageManifest,
 } from "./manifest.js";
 import { resolvePackagePluginApiRange } from "./package-compat.js";
 import { validatePackageExtensionEntriesForInstall } from "./package-entry-resolution.js";
 import {
-  linkOpenClawPeerDependencies,
-  relinkOpenClawPeerDependenciesInManagedNpmRoot,
+  linkSunClawPeerDependencies,
+  relinkSunClawPeerDependenciesInManagedNpmRoot,
 } from "./plugin-peer-link.js";
 
 export { resolvePluginInstallDir } from "./install-paths.js";
@@ -90,8 +90,8 @@ type PackageManifest = PluginPackageManifest & {
 };
 type PluginInstallRuntime = Awaited<ReturnType<typeof loadPluginInstallRuntime>>;
 
-function formatUnresolvedOpenClawPeerLinkError(packageName: string): string {
-  return `Installed plugin ${packageName} declares openclaw as a peer dependency, but OpenClaw could not create a plugin-local node_modules/openclaw link. Run from a packaged OpenClaw install or reinstall OpenClaw, then retry.`;
+function formatUnresolvedSunClawPeerLinkError(packageName: string): string {
+  return `Installed plugin ${packageName} declares sunclaw as a peer dependency, but SunClaw could not create a plugin-local node_modules/sunclaw link. Run from a packaged SunClaw install or reinstall SunClaw, then retry.`;
 }
 
 function isNpmAliasOverrideComparatorError(result: { stdout: string; stderr: string }): boolean {
@@ -99,16 +99,16 @@ function isNpmAliasOverrideComparatorError(result: { stdout: string; stderr: str
 }
 
 const MISSING_EXTENSIONS_ERROR =
-  'package.json missing openclaw.extensions; update the plugin package to include openclaw.extensions (for example ["./dist/index.js"]). See https://docs.openclaw.ai/help/troubleshooting#plugin-install-fails-with-missing-openclaw-extensions';
+  'package.json missing sunclaw.extensions; update the plugin package to include sunclaw.extensions (for example ["./dist/index.js"]). See https://docs.sunclaw.complex.az/help/troubleshooting#plugin-install-fails-with-missing-sunclaw-extensions';
 const PLUGIN_ARCHIVE_ROOT_MARKERS = [
   "package.json",
-  "openclaw.plugin.json",
+  "sunclaw.plugin.json",
   ".codex-plugin/plugin.json",
   ".claude-plugin/plugin.json",
   ".cursor-plugin/plugin.json",
 ];
-const MANAGED_NPM_PACK_ARCHIVE_DIR = "_openclaw-pack-archives";
-const MANAGED_NPM_PROJECT_QUARANTINE_DIR = "_openclaw-quarantined-npm-projects";
+const MANAGED_NPM_PACK_ARCHIVE_DIR = "_sunclaw-pack-archives";
+const MANAGED_NPM_PROJECT_QUARANTINE_DIR = "_sunclaw-quarantined-npm-projects";
 const MANAGED_NPM_PROJECT_REBUILD_ARTIFACTS = [
   "node_modules",
   "package-lock.json",
@@ -122,10 +122,10 @@ export const PLUGIN_INSTALL_ERROR_CODE = {
   INCOMPATIBLE_HOST_VERSION: "incompatible_host_version",
   INCOMPATIBLE_PLUGIN_API: "incompatible_plugin_api",
   INVALID_PLUGIN_API: "invalid_plugin_api",
-  MISSING_OPENCLAW_EXTENSIONS: "missing_openclaw_extensions",
+  MISSING_SUNCLAW_EXTENSIONS: "missing_sunclaw_extensions",
   MISSING_PLUGIN_MANIFEST: "missing_plugin_manifest",
-  EMPTY_OPENCLAW_EXTENSIONS: "empty_openclaw_extensions",
-  INVALID_OPENCLAW_EXTENSIONS: "invalid_openclaw_extensions",
+  EMPTY_SUNCLAW_EXTENSIONS: "empty_sunclaw_extensions",
+  INVALID_SUNCLAW_EXTENSIONS: "invalid_sunclaw_extensions",
   NPM_PACKAGE_NOT_FOUND: "npm_package_not_found",
   PLUGIN_ID_MISMATCH: "plugin_id_mismatch",
   SECURITY_SCAN_BLOCKED: "security_scan_blocked",
@@ -150,16 +150,16 @@ export type InstallPluginResult =
 
 type PluginInstallFailureResult = Extract<InstallPluginResult, { ok: false }>;
 
-function validateOpenClawPackageCompatibility(params: {
+function validateSunClawPackageCompatibility(params: {
   pluginId: string;
   currentHostVersion: string;
-  packageMetadata?: OpenClawPackageManifest;
+  packageMetadata?: SunClawPackageManifest;
 }): PluginInstallFailureResult | null {
   const pluginApiRangeCheck = resolvePackagePluginApiRange(params.packageMetadata);
   if (!pluginApiRangeCheck.ok) {
     return {
       ok: false,
-      error: `invalid package.json openclaw.compat.pluginApi: ${pluginApiRangeCheck.error}`,
+      error: `invalid package.json sunclaw.compat.pluginApi: ${pluginApiRangeCheck.error}`,
       code: PLUGIN_INSTALL_ERROR_CODE.INVALID_PLUGIN_API,
     };
   }
@@ -167,7 +167,7 @@ function validateOpenClawPackageCompatibility(params: {
   if (pluginApiRange && !satisfiesPluginApiRange(params.currentHostVersion, pluginApiRange)) {
     return {
       ok: false,
-      error: `plugin "${params.pluginId}" requires plugin API ${pluginApiRange}, but this OpenClaw runtime exposes ${params.currentHostVersion}. Upgrade OpenClaw or install a compatible plugin version and retry.`,
+      error: `plugin "${params.pluginId}" requires plugin API ${pluginApiRange}, but this SunClaw runtime exposes ${params.currentHostVersion}. Upgrade SunClaw or install a compatible plugin version and retry.`,
       code: PLUGIN_INSTALL_ERROR_CODE.INCOMPATIBLE_PLUGIN_API,
     };
   }
@@ -175,10 +175,10 @@ function validateOpenClawPackageCompatibility(params: {
   return null;
 }
 
-function validateOpenClawPackageInstallCompatibility(params: {
+function validateSunClawPackageInstallCompatibility(params: {
   runtime: PluginInstallRuntime;
   pluginId: string;
-  packageMetadata?: OpenClawPackageManifest;
+  packageMetadata?: SunClawPackageManifest;
 }): PluginInstallFailureResult | null {
   const currentHostVersion = params.runtime.resolveCompatibilityHostVersion();
   const minHostVersionCheck = params.runtime.checkMinHostVersion({
@@ -189,25 +189,25 @@ function validateOpenClawPackageInstallCompatibility(params: {
     if (minHostVersionCheck.kind === "invalid") {
       return {
         ok: false,
-        error: `invalid package.json openclaw.install.minHostVersion: ${minHostVersionCheck.error}`,
+        error: `invalid package.json sunclaw.install.minHostVersion: ${minHostVersionCheck.error}`,
         code: PLUGIN_INSTALL_ERROR_CODE.INVALID_MIN_HOST_VERSION,
       };
     }
     if (minHostVersionCheck.kind === "unknown_host_version") {
       return {
         ok: false,
-        error: `plugin "${params.pluginId}" requires OpenClaw >=${minHostVersionCheck.requirement.minimumLabel}, but this host version could not be determined. Re-run from a released build or set OPENCLAW_VERSION and retry.`,
+        error: `plugin "${params.pluginId}" requires SunClaw >=${minHostVersionCheck.requirement.minimumLabel}, but this host version could not be determined. Re-run from a released build or set SUNCLAW_VERSION and retry.`,
         code: PLUGIN_INSTALL_ERROR_CODE.UNKNOWN_HOST_VERSION,
       };
     }
     return {
       ok: false,
-      error: `plugin "${params.pluginId}" requires OpenClaw >=${minHostVersionCheck.requirement.minimumLabel}, but this host is ${minHostVersionCheck.currentVersion}. Upgrade OpenClaw and retry.`,
+      error: `plugin "${params.pluginId}" requires SunClaw >=${minHostVersionCheck.requirement.minimumLabel}, but this host is ${minHostVersionCheck.currentVersion}. Upgrade SunClaw and retry.`,
       code: PLUGIN_INSTALL_ERROR_CODE.INCOMPATIBLE_HOST_VERSION,
     };
   }
 
-  return validateOpenClawPackageCompatibility({
+  return validateSunClawPackageCompatibility({
     pluginId: params.pluginId,
     currentHostVersion,
     packageMetadata: params.packageMetadata,
@@ -247,7 +247,7 @@ type PluginInstallPolicyRequest = {
 
 const defaultLogger: PluginInstallLogger = {};
 
-function ensureOpenClawExtensions(params: { manifest: PackageManifest }):
+function ensureSunClawExtensions(params: { manifest: PackageManifest }):
   | {
       ok: true;
       entries: string[];
@@ -262,21 +262,21 @@ function ensureOpenClawExtensions(params: { manifest: PackageManifest }):
     return {
       ok: false,
       error: MISSING_EXTENSIONS_ERROR,
-      code: PLUGIN_INSTALL_ERROR_CODE.MISSING_OPENCLAW_EXTENSIONS,
+      code: PLUGIN_INSTALL_ERROR_CODE.MISSING_SUNCLAW_EXTENSIONS,
     };
   }
   if (resolved.status === "empty") {
     return {
       ok: false,
-      error: "package.json openclaw.extensions is empty",
-      code: PLUGIN_INSTALL_ERROR_CODE.EMPTY_OPENCLAW_EXTENSIONS,
+      error: "package.json sunclaw.extensions is empty",
+      code: PLUGIN_INSTALL_ERROR_CODE.EMPTY_SUNCLAW_EXTENSIONS,
     };
   }
   if (resolved.status === "invalid") {
     return {
       ok: false,
       error: resolved.error,
-      code: PLUGIN_INSTALL_ERROR_CODE.INVALID_OPENCLAW_EXTENSIONS,
+      code: PLUGIN_INSTALL_ERROR_CODE.INVALID_SUNCLAW_EXTENSIONS,
     };
   }
   return {
@@ -294,7 +294,7 @@ function isNpmPackageNotFoundMessage(error: string): boolean {
 }
 
 function compareNpmSemver(a: string, b: string): number {
-  const releaseCmp = compareOpenClawReleaseVersions(a, b);
+  const releaseCmp = compareSunClawReleaseVersions(a, b);
   if (releaseCmp !== null) {
     return releaseCmp;
   }
@@ -338,7 +338,7 @@ async function resolveTrustedOfficialPrereleaseResolution(params: {
   timeoutMs: number;
   logger: PluginInstallLogger;
 }): Promise<TrustedOfficialPrereleaseResolution | null> {
-  if (!params.spec.name.startsWith("@openclaw/")) {
+  if (!params.spec.name.startsWith("@sunclaw/")) {
     return null;
   }
   const semverVersions = await loadNpmPackageVersions({
@@ -368,12 +368,12 @@ async function resolveTrustedOfficialPrereleaseResolution(params: {
           return null;
         }
         params.logger.warn?.(
-          `Resolved ${params.spec.raw} to prerelease version ${params.resolvedPrereleaseVersion}; using newest prerelease ${prereleaseSpec} because this trusted official OpenClaw package has no stable npm versions yet.`,
+          `Resolved ${params.spec.raw} to prerelease version ${params.resolvedPrereleaseVersion}; using newest prerelease ${prereleaseSpec} because this trusted official SunClaw package has no stable npm versions yet.`,
         );
         return { kind: "prerelease-only", resolution: metadataResult.metadata };
       }
       params.logger.warn?.(
-        `Resolved ${params.spec.raw} to prerelease version ${params.resolvedPrereleaseVersion}; allowing it because this trusted official OpenClaw package has no stable npm versions yet.`,
+        `Resolved ${params.spec.raw} to prerelease version ${params.resolvedPrereleaseVersion}; allowing it because this trusted official SunClaw package has no stable npm versions yet.`,
       );
       return { kind: "allow-prerelease-only" };
     }
@@ -389,7 +389,7 @@ async function resolveTrustedOfficialPrereleaseResolution(params: {
     return null;
   }
   params.logger.warn?.(
-    `Resolved ${params.spec.raw} to prerelease version ${params.resolvedPrereleaseVersion}; falling back to stable ${stableSpec} for this trusted official OpenClaw install.`,
+    `Resolved ${params.spec.raw} to prerelease version ${params.resolvedPrereleaseVersion}; falling back to stable ${stableSpec} for this trusted official SunClaw install.`,
   );
   return { kind: "stable", resolution: metadataResult.metadata };
 }
@@ -437,10 +437,10 @@ function validateNpmResolutionCompatibility(params: {
   expectedPluginId?: string;
   resolution: NpmSpecResolution;
 }): PluginInstallFailureResult | null {
-  return validateOpenClawPackageInstallCompatibility({
+  return validateSunClawPackageInstallCompatibility({
     runtime: params.runtime,
     pluginId: params.expectedPluginId ?? params.resolution.name ?? params.parsedSpec.name,
-    packageMetadata: params.resolution.packageOpenClaw as OpenClawPackageManifest | undefined,
+    packageMetadata: params.resolution.packageSunClaw as SunClawPackageManifest | undefined,
   });
 }
 
@@ -504,7 +504,7 @@ async function resolveLatestCompatibleNpmResolution(params: {
     });
     if (!compatibilityError) {
       params.logger.warn?.(
-        `Resolved ${params.parsedSpec.raw} to ${params.currentResolution.resolvedSpec ?? currentVersion}, but that version is incompatible with this OpenClaw runtime; using newest compatible ${metadataResult.metadata.resolvedSpec ?? spec}.`,
+        `Resolved ${params.parsedSpec.raw} to ${params.currentResolution.resolvedSpec ?? currentVersion}, but that version is incompatible with this SunClaw runtime; using newest compatible ${metadataResult.metadata.resolvedSpec ?? spec}.`,
       );
       return metadataResult.metadata;
     }
@@ -577,7 +577,7 @@ async function rollbackManagedNpmPluginInstall(params: {
         npmRoot: params.npmRoot,
         snapshot: params.snapshot,
       });
-      await relinkOpenClawPeerDependenciesInManagedNpmRoot({
+      await relinkSunClawPeerDependenciesInManagedNpmRoot({
         npmRoot: params.npmRoot,
         logger: params.logger,
       });
@@ -698,21 +698,21 @@ async function rollbackManagedNpmPluginInstall(params: {
       );
     }
   }
-  if (params.packageName !== "openclaw") {
+  if (params.packageName !== "sunclaw") {
     try {
-      await repairManagedNpmRootOpenClawPeer({
+      await repairManagedNpmRootSunClawPeer({
         npmRoot: params.npmRoot,
         timeoutMs: params.timeoutMs,
         logger: params.logger,
       });
     } catch (error) {
       params.logger.warn?.(
-        `Failed to repair managed npm openclaw peer after rollback: ${String(error)}`,
+        `Failed to repair managed npm sunclaw peer after rollback: ${String(error)}`,
       );
     }
   }
   try {
-    await relinkOpenClawPeerDependenciesInManagedNpmRoot({
+    await relinkSunClawPeerDependenciesInManagedNpmRoot({
       npmRoot: params.npmRoot,
       logger: params.logger,
     });
@@ -844,7 +844,7 @@ async function writeOrRemoveRollbackFile(filePath: string, contents: string | un
 async function createManagedNpmPluginInstallRollbackSnapshot(params: {
   npmRoot: string;
 }): Promise<ManagedNpmPluginInstallRollbackSnapshot> {
-  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-npm-plugin-rollback-"));
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-npm-plugin-rollback-"));
   let nodeModulesBackupDir: string | undefined;
   const nodeModulesDir = path.join(params.npmRoot, "node_modules");
   try {
@@ -892,15 +892,15 @@ async function shouldCopyManagedNpmRollbackSnapshotEntry(params: {
   }
 
   const relativeParts = path.relative(params.nodeModulesDir, params.sourcePath).split(path.sep);
-  const isPluginLocalOpenClawPeer =
+  const isPluginLocalSunClawPeer =
     (relativeParts.length === 3 &&
       relativeParts[1] === "node_modules" &&
-      relativeParts[2] === "openclaw") ||
+      relativeParts[2] === "sunclaw") ||
     (relativeParts.length === 4 &&
       relativeParts[0]?.startsWith("@") &&
       relativeParts[2] === "node_modules" &&
-      relativeParts[3] === "openclaw");
-  if (!isPluginLocalOpenClawPeer) {
+      relativeParts[3] === "sunclaw");
+  if (!isPluginLocalSunClawPeer) {
     return true;
   }
 
@@ -1028,7 +1028,7 @@ async function listManagedNpmRootPackageNames(npmRoot: string): Promise<Set<stri
 
   const packageNames = new Set<string>();
   for (const entry of entries.toSorted((left, right) => left.name.localeCompare(right.name))) {
-    if (entry.name === ".bin" || entry.name === "openclaw") {
+    if (entry.name === ".bin" || entry.name === "sunclaw") {
       continue;
     }
     if (entry.name.startsWith("@")) {
@@ -1171,18 +1171,18 @@ async function installPluginFromManagedNpmRoot(
     prepared: ManagedNpmRootPreparedDependency,
   ): Promise<InstallPluginResult> => {
     logger.info?.(`Installing ${params.displaySpec} into ${npmRoot}…`);
-    if (params.packageName !== "openclaw") {
-      const repairedOpenClawPeer = await repairManagedNpmRootOpenClawPeer({
+    if (params.packageName !== "sunclaw") {
+      const repairedSunClawPeer = await repairManagedNpmRootSunClawPeer({
         npmRoot,
         timeoutMs,
         logger,
       });
-      if (repairedOpenClawPeer) {
-        logger.info?.(`Repaired stale openclaw peer dependency in ${npmRoot}`);
+      if (repairedSunClawPeer) {
+        logger.info?.(`Repaired stale sunclaw peer dependency in ${npmRoot}`);
       }
     }
     let preInstallRootPackageNames = await listManagedNpmRootPackageNames(npmRoot);
-    const managedOverrides = await readOpenClawManagedNpmRootOverrides();
+    const managedOverrides = await readSunClawManagedNpmRootOverrides();
     const rollbackPeerDependencySnapshot = await readManagedNpmRootPeerDependencySnapshot({
       npmRoot,
     });
@@ -1307,7 +1307,7 @@ async function installPluginFromManagedNpmRoot(
       } catch (error) {
         return await rollbackFailedManagedNpmInstall({
           ok: false,
-          error: `npm install failed with a managed npm project corruption signature, but OpenClaw could not quarantine ${npmRoot} for rebuild: ${String(error)}. Original npm error: ${originalError}`,
+          error: `npm install failed with a managed npm project corruption signature, but SunClaw could not quarantine ${npmRoot} for rebuild: ${String(error)}. Original npm error: ${originalError}`,
         });
       }
       logger.warn?.(
@@ -1374,31 +1374,31 @@ async function installPluginFromManagedNpmRoot(
           "npm install could not settle managed peer dependencies after 10 sync passes; refusing to leave a partially reconciled plugin dependency tree.",
       });
     }
-    if (params.packageName !== "openclaw") {
-      const repairedOpenClawPeer = await repairManagedNpmRootOpenClawPeer({
+    if (params.packageName !== "sunclaw") {
+      const repairedSunClawPeer = await repairManagedNpmRootSunClawPeer({
         npmRoot,
         timeoutMs,
         logger,
       });
-      if (repairedOpenClawPeer) {
-        logger.info?.(`Repaired stale openclaw peer dependency in ${npmRoot} after npm install`);
+      if (repairedSunClawPeer) {
+        logger.info?.(`Repaired stale sunclaw peer dependency in ${npmRoot} after npm install`);
       }
     }
     try {
-      await relinkOpenClawPeerDependenciesInManagedNpmRoot({
+      await relinkSunClawPeerDependenciesInManagedNpmRoot({
         npmRoot,
         logger,
       });
     } catch (error) {
       return await rollbackFailedManagedNpmInstall({
         ok: false,
-        error: `Failed to repair openclaw peer links after npm install: ${String(error)}`,
+        error: `Failed to repair sunclaw peer links after npm install: ${String(error)}`,
       });
     }
-    if (installedPackageNeedsOpenClawPeerLinkRepair(installRoot)) {
+    if (installedPackageNeedsSunClawPeerLinkRepair(installRoot)) {
       return await rollbackFailedManagedNpmInstall({
         ok: false,
-        error: formatUnresolvedOpenClawPeerLinkError(params.packageName),
+        error: formatUnresolvedSunClawPeerLinkError(params.packageName),
       });
     }
 
@@ -1524,7 +1524,7 @@ async function stageNpmPackArchiveInManagedRoot(params: {
 
   try {
     await fs.access(stableArchivePath);
-    backupTempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-npm-pack-archive-"));
+    backupTempDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-npm-pack-archive-"));
     previousArchiveBackupPath = path.join(backupTempDir, archiveFileName);
     await fs.copyFile(stableArchivePath, previousArchiveBackupPath);
   } catch (error) {
@@ -1679,7 +1679,7 @@ async function runInstallSourceScan(params: {
   } catch (err) {
     return {
       ok: false,
-      error: `${params.subject} installation blocked: code safety scan failed (${String(err)}). Run "openclaw security audit --deep" for details.`,
+      error: `${params.subject} installation blocked: code safety scan failed (${String(err)}). Run "sunclaw security audit --deep" for details.`,
       code: PLUGIN_INSTALL_ERROR_CODE.SECURITY_SCAN_FAILED,
     };
   }
@@ -1855,7 +1855,7 @@ async function installBundleFromSourceDir(
   const packageMetadata = packageManifestResult.manifest
     ? runtime.getPackageManifestMetadata(packageManifestResult.manifest)
     : undefined;
-  const compatibilityError = validateOpenClawPackageInstallCompatibility({
+  const compatibilityError = validateSunClawPackageInstallCompatibility({
     runtime,
     pluginId,
     packageMetadata,
@@ -1944,7 +1944,7 @@ async function detectNativePackageInstallSource(packageDir: string): Promise<boo
 
   try {
     const manifest = await runtime.readJsonFile<PackageManifest>(manifestPath);
-    return ensureOpenClawExtensions({ manifest }).ok;
+    return ensureSunClawExtensions({ manifest }).ok;
   } catch {
     return false;
   }
@@ -1997,7 +1997,7 @@ async function validatePackagePluginInstallSource(params: {
   if (!ocManifestResult.ok && params.requirePluginManifest) {
     return {
       ok: false,
-      error: `package missing valid openclaw.plugin.json: ${ocManifestResult.error}`,
+      error: `package missing valid sunclaw.plugin.json: ${ocManifestResult.error}`,
       code: PLUGIN_INSTALL_ERROR_CODE.MISSING_PLUGIN_MANIFEST,
     };
   }
@@ -2033,7 +2033,7 @@ async function validatePackagePluginInstallSource(params: {
   }
 
   const packageMetadata = params.runtime.getPackageManifestMetadata(manifest);
-  const compatibilityError = validateOpenClawPackageInstallCompatibility({
+  const compatibilityError = validateSunClawPackageInstallCompatibility({
     runtime: params.runtime,
     pluginId,
     packageMetadata,
@@ -2042,7 +2042,7 @@ async function validatePackagePluginInstallSource(params: {
     return compatibilityError;
   }
 
-  const extensionsResult = ensureOpenClawExtensions({
+  const extensionsResult = ensureSunClawExtensions({
     manifest,
   });
   if (!extensionsResult.ok) {
@@ -2064,7 +2064,7 @@ async function validatePackagePluginInstallSource(params: {
     return {
       ok: false,
       error: extensionValidation.error,
-      code: PLUGIN_INSTALL_ERROR_CODE.INVALID_OPENCLAW_EXTENSIONS,
+      code: PLUGIN_INSTALL_ERROR_CODE.INVALID_SUNCLAW_EXTENSIONS,
     };
   }
 
@@ -2140,7 +2140,7 @@ async function scanAndLinkInstalledPackage(params: {
   if (scanResult) {
     return scanResult;
   }
-  const peerLinkRepair = await linkOpenClawPeerDependencies({
+  const peerLinkRepair = await linkSunClawPeerDependencies({
     installedDir: params.installedDir,
     peerDependencies: params.peerDependencies,
     logger: params.logger,
@@ -2148,7 +2148,7 @@ async function scanAndLinkInstalledPackage(params: {
   if (peerLinkRepair.skipped > 0) {
     return {
       ok: false,
-      error: formatUnresolvedOpenClawPeerLinkError(params.pluginId),
+      error: formatUnresolvedSunClawPeerLinkError(params.pluginId),
     };
   }
   return null;
@@ -2309,7 +2309,7 @@ export async function installPluginFromArchive(
 
   return await runtime.withExtractedArchiveRoot({
     archivePath,
-    tempDirPrefix: "openclaw-plugin-",
+    tempDirPrefix: "sunclaw-plugin-",
     timeoutMs,
     logger,
     rootMarkers: PLUGIN_ARCHIVE_ROOT_MARKERS,

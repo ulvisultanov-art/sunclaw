@@ -114,7 +114,7 @@ describe("loadSkills", () => {
               clawhub: {
                 status: "linked",
                 valid: true,
-                registry: "https://clawhub.ai",
+                registry: "https://clawhub.complex.az",
                 slug: "agentreceipt",
                 installedVersion: "1.2.3",
                 installedAt: 123,
@@ -126,10 +126,10 @@ describe("loadSkills", () => {
       }
       if (method === "skills.securityVerdicts") {
         return {
-          schema: "openclaw.skills.security-verdicts.v1",
+          schema: "sunclaw.skills.security-verdicts.v1",
           items: [
             {
-              registry: "https://clawhub.ai",
+              registry: "https://clawhub.complex.az",
               ok: true,
               decision: "pass",
               reasons: [],
@@ -152,7 +152,7 @@ describe("loadSkills", () => {
     expect(request).toHaveBeenNthCalledWith(1, "skills.status", {});
     expect(request).toHaveBeenNthCalledWith(2, "skills.securityVerdicts", {});
     expect(state.clawhubVerdicts).toEqual({
-      "https://clawhub.ai\u0000agentreceipt\u00001.2.3": expect.objectContaining({
+      "https://clawhub.complex.az\u0000agentreceipt\u00001.2.3": expect.objectContaining({
         ok: true,
         decision: "pass",
         securityStatus: "clean",
@@ -181,7 +181,7 @@ describe("loadSkills", () => {
               clawhub: {
                 status: "linked",
                 valid: true,
-                registry: "https://clawhub.ai",
+                registry: "https://clawhub.complex.az",
                 slug: "agentreceipt",
                 installedVersion: "1.2.3",
                 installedAt: 123,
@@ -203,7 +203,7 @@ describe("loadSkills", () => {
     expect(state.skillsLoading).toBe(false);
     expect(state.clawhubVerdictsLoading).toBe(true);
 
-    resolveVerdicts({ schema: "openclaw.skills.security-verdicts.v1", items: [] });
+    resolveVerdicts({ schema: "sunclaw.skills.security-verdicts.v1", items: [] });
     await Promise.resolve();
     await Promise.resolve();
 
@@ -228,7 +228,7 @@ describe("loadSkills", () => {
           clawhub: {
             status: "linked",
             valid: true,
-            registry: "https://clawhub.ai",
+            registry: "https://clawhub.complex.az",
             slug: "agentreceipt",
             installedVersion: "1.2.4",
             installedAt: 456,
@@ -253,7 +253,7 @@ describe("loadSkillCard", () => {
   it("loads local Skill Card content on demand", async () => {
     const { state, request } = createState();
     request.mockResolvedValueOnce({
-      schema: "openclaw.skills.skill-card.v1",
+      schema: "sunclaw.skills.skill-card.v1",
       skillKey: "agentreceipt",
       path: "/tmp/workspace/skills/agentreceipt/skill-card.md",
       sizeBytes: 34,
@@ -331,7 +331,7 @@ describe("loadSkillCard", () => {
           clawhub: {
             status: "linked",
             valid: true,
-            registry: "https://clawhub.ai",
+            registry: "https://clawhub.complex.az",
             slug: "agentreceipt",
             installedVersion: "1.2.3",
             installedAt: 123,
@@ -354,7 +354,7 @@ describe("loadSkillCard", () => {
           clawhub: {
             status: "linked",
             valid: true,
-            registry: "https://clawhub.ai",
+            registry: "https://clawhub.complex.az",
             slug: "agentreceipt",
             installedVersion: "1.2.4",
             installedAt: 456,
@@ -363,7 +363,7 @@ describe("loadSkillCard", () => {
       ],
     };
     resolveCard({
-      schema: "openclaw.skills.skill-card.v1",
+      schema: "sunclaw.skills.skill-card.v1",
       skillKey: "agentreceipt",
       path: "/tmp/workspace/skills/agentreceipt/skill-card.md",
       sizeBytes: 34,
@@ -503,7 +503,7 @@ describe("skill mutations", () => {
         await saveSkillApiKey(state, "github");
       },
       expectedRequest: ["skills.update", { skillKey: "github", apiKey: "sk-test" }],
-      expectedMessage: "API key saved — stored in openclaw.json (skills.entries.github)",
+      expectedMessage: "API key saved — stored in sunclaw.json (skills.entries.github)",
     },
     {
       name: "installs skills and uses server success messages",

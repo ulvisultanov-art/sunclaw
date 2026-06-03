@@ -111,7 +111,7 @@ describe("scripts/changed-lanes", () => {
     const result = spawnSync(process.execPath, ["scripts/check-changed.mjs", "--help"], {
       cwd: repoRoot,
       encoding: "utf8",
-      env: { ...createNestedGitEnv(), OPENCLAW_TESTBOX: "1" },
+      env: { ...createNestedGitEnv(), SUNCLAW_TESTBOX: "1" },
     });
 
     expect(result.status).toBe(0);
@@ -121,7 +121,7 @@ describe("scripts/changed-lanes", () => {
   });
 
   it("includes untracked worktree files in the default local diff", () => {
-    const dir = makeTempRepoRoot(tempDirs, "openclaw-changed-lanes-");
+    const dir = makeTempRepoRoot(tempDirs, "sunclaw-changed-lanes-");
     git(dir, ["init", "-q", "--initial-branch=main"]);
     writeFileSync(path.join(dir, "README.md"), "initial\n", "utf8");
     git(dir, ["add", "README.md"]);
@@ -156,7 +156,7 @@ describe("scripts/changed-lanes", () => {
   });
 
   it("falls back to a two-dot diff when a delegated checkout has no merge base", () => {
-    const dir = makeTempRepoRoot(tempDirs, "openclaw-changed-lanes-no-merge-base-");
+    const dir = makeTempRepoRoot(tempDirs, "sunclaw-changed-lanes-no-merge-base-");
     git(dir, ["init", "-q", "--initial-branch=main"]);
     writeFileSync(path.join(dir, "README.md"), "initial\n", "utf8");
     git(dir, ["add", "README.md"]);
@@ -198,7 +198,7 @@ describe("scripts/changed-lanes", () => {
   });
 
   it("prefers raw sync worktree paths over an implausibly broad no-merge-base diff", () => {
-    const dir = makeTempRepoRoot(tempDirs, "openclaw-changed-lanes-raw-sync-");
+    const dir = makeTempRepoRoot(tempDirs, "sunclaw-changed-lanes-raw-sync-");
     git(dir, ["init", "-q", "--initial-branch=main"]);
     for (let index = 0; index < 250; index += 1) {
       writeFileSync(path.join(dir, `baseline-${index}.txt`), "baseline\n", "utf8");
@@ -230,29 +230,29 @@ describe("scripts/changed-lanes", () => {
     mkdirSync(path.join(dir, "src"), { recursive: true });
     writeFileSync(path.join(dir, "src", "feature.ts"), "export const value = 1;\n", "utf8");
 
-    const previousRawSync = process.env.OPENCLAW_CHANGED_LANES_RAW_SYNC;
-    delete process.env.OPENCLAW_CHANGED_LANES_RAW_SYNC;
+    const previousRawSync = process.env.SUNCLAW_CHANGED_LANES_RAW_SYNC;
+    delete process.env.SUNCLAW_CHANGED_LANES_RAW_SYNC;
     try {
       const normalPaths = listChangedPathsFromGit({ base: "origin/main", cwd: dir });
       expect(normalPaths.length).toBeGreaterThan(200);
       expect(normalPaths).toContain("baseline-0.txt");
       expect(normalPaths).toContain("src/feature.ts");
 
-      process.env.OPENCLAW_CHANGED_LANES_RAW_SYNC = "1";
+      process.env.SUNCLAW_CHANGED_LANES_RAW_SYNC = "1";
       expect(listChangedPathsFromGit({ base: "origin/main", cwd: dir })).toEqual([
         "src/feature.ts",
       ]);
     } finally {
       if (previousRawSync === undefined) {
-        delete process.env.OPENCLAW_CHANGED_LANES_RAW_SYNC;
+        delete process.env.SUNCLAW_CHANGED_LANES_RAW_SYNC;
       } else {
-        process.env.OPENCLAW_CHANGED_LANES_RAW_SYNC = previousRawSync;
+        process.env.SUNCLAW_CHANGED_LANES_RAW_SYNC = previousRawSync;
       }
     }
   });
 
   it("ignores local Crabbox metadata in the default local diff", () => {
-    const dir = makeTempRepoRoot(tempDirs, "openclaw-changed-lanes-crabbox-");
+    const dir = makeTempRepoRoot(tempDirs, "sunclaw-changed-lanes-crabbox-");
     git(dir, ["init", "-q", "--initial-branch=main"]);
     writeFileSync(path.join(dir, ".gitignore"), ".crabbox/\n", "utf8");
     writeFileSync(path.join(dir, "README.md"), "initial\n", "utf8");
@@ -289,7 +289,7 @@ describe("scripts/changed-lanes", () => {
   });
 
   it("includes deleted worktree files in the default local diff", () => {
-    const dir = makeTempRepoRoot(tempDirs, "openclaw-changed-lanes-deleted-");
+    const dir = makeTempRepoRoot(tempDirs, "sunclaw-changed-lanes-deleted-");
     git(dir, ["init", "-q", "--initial-branch=main"]);
     mkdirSync(path.join(dir, "src", "shared"), { recursive: true });
     writeFileSync(
@@ -328,7 +328,7 @@ describe("scripts/changed-lanes", () => {
   });
 
   it("includes deleted staged files in the staged diff", () => {
-    const dir = makeTempRepoRoot(tempDirs, "openclaw-changed-lanes-staged-deleted-");
+    const dir = makeTempRepoRoot(tempDirs, "sunclaw-changed-lanes-staged-deleted-");
     git(dir, ["init", "-q", "--initial-branch=main"]);
     mkdirSync(path.join(dir, "src", "shared"), { recursive: true });
     writeFileSync(
@@ -387,10 +387,10 @@ describe("scripts/changed-lanes", () => {
     expect(plan.commands.map((command) => command.args[0])).toContain("tsgo:core:test");
     expect(plan.commands.find((command) => command.args[0] === "tsgo:core")?.env).toEqual({
       PATH: "/usr/bin",
-      OPENCLAW_OXLINT_SKIP_LOCK: "1",
-      OPENCLAW_TEST_HEAVY_CHECK_LOCK_HELD: "1",
-      OPENCLAW_TSGO_HEAVY_CHECK_LOCK_HELD: "1",
-      OPENCLAW_TSGO_SPARSE_SKIP: "1",
+      SUNCLAW_OXLINT_SKIP_LOCK: "1",
+      SUNCLAW_TEST_HEAVY_CHECK_LOCK_HELD: "1",
+      SUNCLAW_TSGO_HEAVY_CHECK_LOCK_HELD: "1",
+      SUNCLAW_TSGO_SPARSE_SKIP: "1",
     });
     expect(plan.commands.find((command) => command.name === "lint core changed file")).toEqual({
       name: "lint core changed file",
@@ -403,9 +403,9 @@ describe("scripts/changed-lanes", () => {
       ],
       env: {
         PATH: "/usr/bin",
-        OPENCLAW_OXLINT_SKIP_LOCK: "1",
-        OPENCLAW_TEST_HEAVY_CHECK_LOCK_HELD: "1",
-        OPENCLAW_TSGO_HEAVY_CHECK_LOCK_HELD: "1",
+        SUNCLAW_OXLINT_SKIP_LOCK: "1",
+        SUNCLAW_TEST_HEAVY_CHECK_LOCK_HELD: "1",
+        SUNCLAW_TSGO_HEAVY_CHECK_LOCK_HELD: "1",
       },
     });
   });
@@ -472,24 +472,24 @@ describe("scripts/changed-lanes", () => {
   it("reenables local-check policy for changed typecheck commands", () => {
     const result = detectChangedLanes(["packages/normalization-core/src/string-normalization.ts"]);
     const plan = createChangedCheckPlan(result, {
-      env: { OPENCLAW_LOCAL_CHECK: "0", PATH: "/usr/bin" },
+      env: { SUNCLAW_LOCAL_CHECK: "0", PATH: "/usr/bin" },
     });
 
     expect(plan.commands.find((command) => command.args[0] === "tsgo:core")?.env).toEqual({
-      OPENCLAW_LOCAL_CHECK: "1",
-      OPENCLAW_OXLINT_SKIP_LOCK: "1",
-      OPENCLAW_TEST_HEAVY_CHECK_LOCK_HELD: "1",
-      OPENCLAW_TSGO_HEAVY_CHECK_LOCK_HELD: "1",
-      OPENCLAW_TSGO_SPARSE_SKIP: "1",
+      SUNCLAW_LOCAL_CHECK: "1",
+      SUNCLAW_OXLINT_SKIP_LOCK: "1",
+      SUNCLAW_TEST_HEAVY_CHECK_LOCK_HELD: "1",
+      SUNCLAW_TSGO_HEAVY_CHECK_LOCK_HELD: "1",
+      SUNCLAW_TSGO_SPARSE_SKIP: "1",
       PATH: "/usr/bin",
     });
   });
 
   it("marks changed-check children as covered by the parent heavy-check lock", () => {
     expect(createChangedCheckChildEnv({ PATH: "/usr/bin" })).toEqual({
-      OPENCLAW_OXLINT_SKIP_LOCK: "1",
-      OPENCLAW_TEST_HEAVY_CHECK_LOCK_HELD: "1",
-      OPENCLAW_TSGO_HEAVY_CHECK_LOCK_HELD: "1",
+      SUNCLAW_OXLINT_SKIP_LOCK: "1",
+      SUNCLAW_TEST_HEAVY_CHECK_LOCK_HELD: "1",
+      SUNCLAW_TSGO_HEAVY_CHECK_LOCK_HELD: "1",
       PATH: "/usr/bin",
     });
   });
@@ -511,7 +511,7 @@ describe("scripts/changed-lanes", () => {
     );
     const [shimDir] = String(command.env?.PATH ?? "").split(path.delimiter);
 
-    expect(path.basename(shimDir)).toMatch(/^openclaw-corepack-pnpm-/u);
+    expect(path.basename(shimDir)).toMatch(/^sunclaw-corepack-pnpm-/u);
     expect(existsSync(path.join(shimDir, "pnpm"))).toBe(true);
 
     cleanupCorepackPnpmShimDir();
@@ -542,7 +542,7 @@ describe("scripts/changed-lanes", () => {
       "--provider",
       "blacksmith-testbox",
       "--blacksmith-org",
-      "openclaw",
+      "sunclaw",
       "--blacksmith-workflow",
       ".github/workflows/ci-check-testbox.yml",
       "--blacksmith-job",
@@ -556,8 +556,8 @@ describe("scripts/changed-lanes", () => {
       "--timing-json",
       "--",
       "env",
-      "OPENCLAW_CHECK_CHANGED_REMOTE_CHILD=1",
-      "OPENCLAW_CHANGED_LANES_RAW_SYNC=1",
+      "SUNCLAW_CHECK_CHANGED_REMOTE_CHILD=1",
+      "SUNCLAW_CHANGED_LANES_RAW_SYNC=1",
       "CI=1",
       "PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN=false",
       "corepack",
@@ -571,7 +571,7 @@ describe("scripts/changed-lanes", () => {
   });
 
   it("delegates staged changed gates as explicit remote paths", () => {
-    const dir = makeTempRepoRoot(tempDirs, "openclaw-check-changed-staged-delegate-");
+    const dir = makeTempRepoRoot(tempDirs, "sunclaw-check-changed-staged-delegate-");
     git(dir, ["init", "-q", "--initial-branch=main"]);
     writeFileSync(path.join(dir, "README.md"), "initial\n", "utf8");
     git(dir, ["add", "README.md"]);
@@ -602,7 +602,7 @@ describe("scripts/changed-lanes", () => {
   });
 
   it("delegates empty staged changed gates without rediscovering unstaged paths", () => {
-    const dir = makeTempRepoRoot(tempDirs, "openclaw-check-changed-empty-staged-delegate-");
+    const dir = makeTempRepoRoot(tempDirs, "sunclaw-check-changed-empty-staged-delegate-");
     git(dir, ["init", "-q", "--initial-branch=main"]);
     writeFileSync(path.join(dir, "README.md"), "initial\n", "utf8");
     git(dir, ["add", "README.md"]);
@@ -629,7 +629,7 @@ describe("scripts/changed-lanes", () => {
     expect(shouldDelegateChangedCheckToCrabbox([], { GITHUB_ACTIONS: "true" })).toBe(false);
     expect(shouldDelegateChangedCheckToCrabbox([], { CI: "1" })).toBe(false);
     expect(
-      shouldDelegateChangedCheckToCrabbox([], { OPENCLAW_CHECK_CHANGED_REMOTE_CHILD: "1" }),
+      shouldDelegateChangedCheckToCrabbox([], { SUNCLAW_CHECK_CHANGED_REMOTE_CHILD: "1" }),
     ).toBe(false);
   });
 
@@ -639,9 +639,9 @@ describe("scripts/changed-lanes", () => {
     const lintCommand = plan.commands.find((command) => command.args[0] === "lint:extensions");
 
     expect(lintCommand?.env).toEqual({
-      OPENCLAW_OXLINT_SKIP_LOCK: "1",
-      OPENCLAW_TEST_HEAVY_CHECK_LOCK_HELD: "1",
-      OPENCLAW_TSGO_HEAVY_CHECK_LOCK_HELD: "1",
+      SUNCLAW_OXLINT_SKIP_LOCK: "1",
+      SUNCLAW_TEST_HEAVY_CHECK_LOCK_HELD: "1",
+      SUNCLAW_TSGO_HEAVY_CHECK_LOCK_HELD: "1",
       PATH: "/usr/bin",
     });
   });
@@ -743,7 +743,7 @@ describe("scripts/changed-lanes", () => {
       "config/swiftlint.yml",
       "deploy/fly.private.toml",
       "docker-setup.sh",
-      "openclaw.podman.env",
+      "sunclaw.podman.env",
       "setup-podman.sh",
       "skills/pyproject.toml",
     ]);
@@ -835,8 +835,8 @@ describe("scripts/changed-lanes", () => {
     );
     expect(schedulerDryRun?.bin).toBe("node");
     expect(schedulerDryRun?.args).toEqual(["scripts/test-docker-all.mjs"]);
-    expect(schedulerDryRun?.env?.OPENCLAW_DOCKER_ALL_DRY_RUN).toBe("1");
-    expect(schedulerDryRun?.env?.OPENCLAW_DOCKER_ALL_LIVE_MODE).toBe("only");
+    expect(schedulerDryRun?.env?.SUNCLAW_DOCKER_ALL_DRY_RUN).toBe("1");
+    expect(schedulerDryRun?.env?.SUNCLAW_DOCKER_ALL_LIVE_MODE).toBe("only");
   });
 
   it("routes live Docker package script-only changes through the focused gate", () => {
@@ -859,7 +859,7 @@ describe("scripts/changed-lanes", () => {
         scripts: {
           "test:docker:all": "node scripts/test-docker-all.mjs",
           "test:docker:live-acp-bind:droid":
-            "OPENCLAW_LIVE_ACP_BIND_AGENT=droid bash scripts/test-live-acp-bind-docker.sh",
+            "SUNCLAW_LIVE_ACP_BIND_AGENT=droid bash scripts/test-live-acp-bind-docker.sh",
         },
         dependencies: {
           leftpad: "1.0.0",
@@ -883,7 +883,7 @@ describe("scripts/changed-lanes", () => {
   });
 
   it("classifies live Docker package script changes from the git diff", () => {
-    const dir = makeTempRepoRoot(tempDirs, "openclaw-live-docker-package-");
+    const dir = makeTempRepoRoot(tempDirs, "sunclaw-live-docker-package-");
     git(dir, ["init", "-q", "--initial-branch=main"]);
     writeFileSync(
       path.join(dir, "package.json"),
@@ -919,7 +919,7 @@ describe("scripts/changed-lanes", () => {
           scripts: {
             "test:docker:all": "node scripts/test-docker-all.mjs",
             "test:docker:live-acp-bind:droid":
-              "OPENCLAW_LIVE_ACP_BIND_AGENT=droid bash scripts/test-live-acp-bind-docker.sh",
+              "SUNCLAW_LIVE_ACP_BIND_AGENT=droid bash scripts/test-live-acp-bind-docker.sh",
           },
         },
         null,
@@ -945,7 +945,7 @@ describe("scripts/changed-lanes", () => {
   });
 
   it("classifies normal package script changes from the git diff", () => {
-    const dir = makeTempRepoRoot(tempDirs, "openclaw-package-scripts-");
+    const dir = makeTempRepoRoot(tempDirs, "sunclaw-package-scripts-");
     git(dir, ["init", "-q", "--initial-branch=main"]);
     writeFileSync(
       path.join(dir, "package.json"),
@@ -1022,7 +1022,7 @@ describe("scripts/changed-lanes", () => {
         name: "fixture",
         scripts: {
           "test:docker:live-acp-bind:droid":
-            "OPENCLAW_LIVE_ACP_BIND_AGENT=droid bash scripts/test-live-acp-bind-docker.sh",
+            "SUNCLAW_LIVE_ACP_BIND_AGENT=droid bash scripts/test-live-acp-bind-docker.sh",
         },
         dependencies: { leftpad: "1.0.1" },
       },
@@ -1074,7 +1074,7 @@ describe("scripts/changed-lanes", () => {
       "apps/ios/Config/Version.xcconfig",
       "apps/ios/fastlane/metadata/en-US/release_notes.txt",
       "apps/ios/version.json",
-      "apps/macos/Sources/OpenClaw/Resources/Info.plist",
+      "apps/macos/Sources/SunClaw/Resources/Info.plist",
       "docs/.generated/config-baseline.sha256",
       "package.json",
     ]);
@@ -1134,7 +1134,7 @@ describe("scripts/changed-lanes", () => {
   });
 
   it("guards release metadata package changes to the top-level version field", () => {
-    const dir = makeTempRepoRoot(tempDirs, "openclaw-release-metadata-");
+    const dir = makeTempRepoRoot(tempDirs, "sunclaw-release-metadata-");
     git(dir, ["init", "-q", "--initial-branch=main"]);
     writeFileSync(
       path.join(dir, "package.json"),
@@ -1224,7 +1224,7 @@ describe("scripts/changed-lanes", () => {
 
   it("keeps app lint explicit when non-macOS hosts lack SwiftLint", () => {
     const result = detectChangedLanes([
-      "apps/shared/OpenClawKit/Sources/OpenClawProtocol/GatewayModels.swift",
+      "apps/shared/SunClawKit/Sources/SunClawProtocol/GatewayModels.swift",
     ]);
     const plan = createChangedCheckPlan(result, {
       env: { PATH: "/usr/bin" },
@@ -1246,7 +1246,7 @@ describe("scripts/changed-lanes", () => {
 
   it("runs app lint when SwiftLint is available in Testbox", () => {
     const result = detectChangedLanes([
-      "apps/shared/OpenClawKit/Sources/OpenClawProtocol/GatewayModels.swift",
+      "apps/shared/SunClawKit/Sources/SunClawProtocol/GatewayModels.swift",
     ]);
     const plan = createChangedCheckPlan(result, {
       env: { CI: "1", PATH: "/usr/bin" },

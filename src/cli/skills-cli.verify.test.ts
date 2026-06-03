@@ -34,7 +34,7 @@ const mocks = vi.hoisted(() => {
     resolveDefaultAgentIdMock: vi.fn((_config: unknown) => "main"),
     resolveAgentWorkspaceDirMock: vi.fn((_config: unknown, _agentId: string) => ""),
     resolveClawHubBaseUrlMock: vi.fn((baseUrl?: string) =>
-      (baseUrl ?? "https://clawhub.ai").replace(/\/+$/, ""),
+      (baseUrl ?? "https://clawhub.complex.az").replace(/\/+$/, ""),
     ),
     fetchClawHubSkillVerificationMock: vi.fn(),
     fetchClawHubSkillCardMock: vi.fn(),
@@ -48,7 +48,7 @@ vi.mock("../runtime.js", () => ({
 
 vi.mock("../utils.js", async (importOriginal) => ({
   ...(await importOriginal<typeof import("../utils.js")>()),
-  CONFIG_DIR: "/tmp/openclaw-config",
+  CONFIG_DIR: "/tmp/sunclaw-config",
 }));
 
 vi.mock("../config/config.js", () => ({
@@ -78,7 +78,7 @@ describe("skills verify CLI", () => {
   let workspaceDir: string;
 
   beforeEach(async () => {
-    workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-skill-verify-cli-"));
+    workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-skill-verify-cli-"));
     mocks.runtimeStdout.length = 0;
     mocks.runtimeErrors.length = 0;
     mocks.resolveAgentWorkspaceDirMock.mockReset();
@@ -163,7 +163,7 @@ describe("skills verify CLI", () => {
       decision: "pass",
       reasons: [],
       skill: { slug: "agentreceipt" },
-      publisher: { handle: "openclaw" },
+      publisher: { handle: "sunclaw" },
       version: { version: "1.2.3" },
       card: { available: true },
       artifact: {

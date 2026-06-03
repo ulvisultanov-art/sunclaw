@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import { gzipSync } from "node:zlib";
-import type { OpenClawPluginNodeInvokePolicyContext } from "openclaw/plugin-sdk/plugin-entry";
+import type { SunClawPluginNodeInvokePolicyContext } from "sunclaw/plugin-sdk/plugin-entry";
 import { afterAll, afterEach, describe, expect, it, vi } from "vitest";
 import { createFileTransferNodeInvokePolicy } from "./node-invoke-policy.js";
 
@@ -76,12 +76,12 @@ function createCtx(overrides: {
   command?: string;
   params?: Record<string, unknown>;
   pluginConfig?: Record<string, unknown>;
-  approvals?: OpenClawPluginNodeInvokePolicyContext["approvals"];
+  approvals?: SunClawPluginNodeInvokePolicyContext["approvals"];
 }) {
-  const invokeNode = vi.fn<OpenClawPluginNodeInvokePolicyContext["invokeNode"]>(
+  const invokeNode = vi.fn<SunClawPluginNodeInvokePolicyContext["invokeNode"]>(
     async ({
       params,
-    }: Parameters<OpenClawPluginNodeInvokePolicyContext["invokeNode"]>[0] = {}) => ({
+    }: Parameters<SunClawPluginNodeInvokePolicyContext["invokeNode"]>[0] = {}) => ({
       ok: true,
       payload: {
         ok: true,
@@ -135,7 +135,7 @@ function expectResultFields(result: unknown, fields: Record<string, unknown>) {
 }
 
 function requireInvokeParams(
-  invokeNode: ReturnType<typeof vi.fn<OpenClawPluginNodeInvokePolicyContext["invokeNode"]>>,
+  invokeNode: ReturnType<typeof vi.fn<SunClawPluginNodeInvokePolicyContext["invokeNode"]>>,
   callIndex: number,
 ) {
   const call = (invokeNode.mock.calls as unknown[][])[callIndex]?.[0];

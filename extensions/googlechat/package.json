@@ -1,10 +1,10 @@
 {
-  "name": "@openclaw/googlechat",
+  "name": "@sunclaw/googlechat",
   "version": "2026.6.2",
-  "description": "OpenClaw Google Chat channel plugin for spaces and direct messages.",
+  "description": "SunClaw Google Chat channel plugin for spaces and direct messages.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/ulvisultanov-art/sunclaw"
   },
   "type": "module",
   "dependencies": {
@@ -13,18 +13,18 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "2026.5.28"
+    "@sunclaw/plugin-sdk": "workspace:*",
+    "sunclaw": "2026.5.28"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.6.2"
+    "sunclaw": ">=2026.6.2"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "sunclaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ],
@@ -70,7 +70,7 @@
       ]
     },
     "install": {
-      "npmSpec": "@openclaw/googlechat",
+      "npmSpec": "@sunclaw/googlechat",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.4.10"
     },
@@ -78,7 +78,7 @@
       "pluginApi": ">=2026.6.2"
     },
     "build": {
-      "openclawVersion": "2026.6.2"
+      "sunclawVersion": "2026.6.2"
     },
     "release": {
       "publishToClawHub": true,

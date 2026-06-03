@@ -1,11 +1,11 @@
-import { fetchWithRuntimeDispatcherOrMockedGlobal } from "openclaw/plugin-sdk/runtime-fetch";
+import { fetchWithRuntimeDispatcherOrMockedGlobal } from "sunclaw/plugin-sdk/runtime-fetch";
 import {
   closeDispatcher,
   createPinnedDispatcher,
   resolvePinnedHostnameWithPolicy,
   type PinnedDispatcherPolicy,
   type SsrFPolicy,
-} from "openclaw/plugin-sdk/ssrf-dispatcher";
+} from "sunclaw/plugin-sdk/ssrf-dispatcher";
 export { buildTimeoutAbortSignal } from "./timeout-abort-signal.js";
 
 export {

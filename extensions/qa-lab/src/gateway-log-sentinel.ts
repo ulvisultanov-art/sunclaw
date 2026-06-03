@@ -1,7 +1,7 @@
 import {
   isRecord,
   normalizeOptionalString as readNonEmptyString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/string-coerce-runtime";
 
 export type GatewayLogSentinelKind =
   | "plugin-hook-failure"
@@ -20,9 +20,9 @@ export type GatewayLogSentinelVerdict =
 
 export type GatewayLogSentinelOwner =
   | "plugin"
-  | "openclaw-routing"
+  | "sunclaw-routing"
   | "codex-runtime"
-  | "openclaw-cron"
+  | "sunclaw-cron"
   | "environment";
 
 export type GatewayLogSentinelFinding = {
@@ -100,7 +100,7 @@ const GATEWAY_LOG_SENTINEL_RULES: GatewayLogSentinelRule[] = [
   {
     kind: "cron-model-allowlist",
     verdict: "product-bug",
-    owner: "openclaw-cron",
+    owner: "sunclaw-cron",
     productImpact: "P2",
     qaImpact: "P0",
     test: (line) =>
@@ -325,7 +325,7 @@ export function scanDirectReplyTranscriptSentinels(
     {
       kind: "direct-reply-self-message",
       verdict: "product-bug",
-      owner: "openclaw-routing",
+      owner: "sunclaw-routing",
       productImpact: "P1",
       qaImpact: "P0",
       line: 1,

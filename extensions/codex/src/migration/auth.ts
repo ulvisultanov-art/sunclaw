@@ -1,11 +1,11 @@
-import { loadAuthProfileStoreWithoutExternalProfiles } from "openclaw/plugin-sdk/agent-runtime";
+import { loadAuthProfileStoreWithoutExternalProfiles } from "sunclaw/plugin-sdk/agent-runtime";
 import {
   createMigrationItem,
   markMigrationItemConflict,
   markMigrationItemError,
   markMigrationItemSkipped,
-} from "openclaw/plugin-sdk/migration";
-import type { MigrationItem, MigrationProviderContext } from "openclaw/plugin-sdk/plugin-entry";
+} from "sunclaw/plugin-sdk/migration";
+import type { MigrationItem, MigrationProviderContext } from "sunclaw/plugin-sdk/plugin-entry";
 import {
   applyAuthProfileConfig,
   buildApiKeyCredential,
@@ -17,13 +17,13 @@ import {
   updateAuthProfileStoreWithLock,
   type AuthProfileStore,
   type OAuthCredential,
-  type OpenClawConfig,
+  type SunClawConfig,
   type ProviderAuthResult,
-} from "openclaw/plugin-sdk/provider-auth";
+} from "sunclaw/plugin-sdk/provider-auth";
 import {
   isRecord,
   normalizeOptionalString as readString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { readJsonObject } from "./helpers.js";
 import type { CodexSource } from "./source.js";
 import type { resolveCodexMigrationTargets } from "./targets.js";
@@ -40,7 +40,7 @@ const CODEX_CONFIG_PATCH_MODE_RETURN = "return";
 
 type CodexMigrationTargets = ReturnType<typeof resolveCodexMigrationTargets>;
 type AgentDefaultModelConfigs = NonNullable<
-  NonNullable<NonNullable<OpenClawConfig["agents"]>["defaults"]>["models"]
+  NonNullable<NonNullable<SunClawConfig["agents"]>["defaults"]>["models"]
 >;
 type AgentDefaultModelConfigEntry = AgentDefaultModelConfigs[string];
 
@@ -120,7 +120,7 @@ async function buildCodexOAuthCredential(source: CodexSource): Promise<CodexAuth
         models: Object.fromEntries(modelRefs.map((modelRef) => [modelRef, {}])),
       },
     },
-  } satisfies Partial<OpenClawConfig>;
+  } satisfies Partial<SunClawConfig>;
   const result = buildOauthProviderAuthResult({
     providerId: OPENAI_PROVIDER_ID,
     defaultModel: OPENAI_CODEX_DEFAULT_MODEL,
@@ -219,15 +219,15 @@ function itemProfileTarget(
   return { profileId: matched ?? credential.profileId, matchedExisting: Boolean(matched) };
 }
 
-function replaceConfigDraft(draft: OpenClawConfig, next: OpenClawConfig): void {
-  for (const key of Object.keys(draft) as Array<keyof OpenClawConfig>) {
+function replaceConfigDraft(draft: SunClawConfig, next: SunClawConfig): void {
+  for (const key of Object.keys(draft) as Array<keyof SunClawConfig>) {
     delete draft[key];
   }
   Object.assign(draft, next);
 }
 
 function existingAuthProfileConfigIsCompatible(
-  existing: NonNullable<NonNullable<OpenClawConfig["auth"]>["profiles"]>[string],
+  existing: NonNullable<NonNullable<SunClawConfig["auth"]>["profiles"]>[string],
   profile: CodexAuthProfileConfig,
 ): boolean {
   if (existing.provider !== profile.provider || existing.mode !== profile.mode) {
@@ -240,7 +240,7 @@ function existingAuthProfileConfigIsCompatible(
 }
 
 function hasAuthProfileConfigConflict(
-  config: OpenClawConfig,
+  config: SunClawConfig,
   profile: CodexAuthProfileConfig,
   overwrite: boolean,
 ): boolean {
@@ -257,14 +257,14 @@ function hasCurrentAuthProfileConfigConflict(
 ): boolean {
   let config = ctx.config;
   try {
-    config = (ctx.runtime?.config?.current?.() as OpenClawConfig | undefined) ?? config;
+    config = (ctx.runtime?.config?.current?.() as SunClawConfig | undefined) ?? config;
   } catch {
     // Fall back to the planning snapshot; direct config writes recheck inside mutate.
   }
   return hasAuthProfileConfigConflict(config, profile, Boolean(ctx.overwrite));
 }
 
-function applyDefaultModelIfMissing(cfg: OpenClawConfig): OpenClawConfig {
+function applyDefaultModelIfMissing(cfg: SunClawConfig): SunClawConfig {
   const currentModel = cfg.agents?.defaults?.model;
   const primary =
     typeof currentModel === "string"
@@ -301,9 +301,9 @@ function mergeModelConfigEntry(
 }
 
 function applyOAuthModelConfigsToConfig(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   credential: Extract<CodexAuthCredential, { kind: "oauth" }>,
-): OpenClawConfig {
+): SunClawConfig {
   const existingModels = cfg.agents?.defaults?.models ?? {};
   const models: AgentDefaultModelConfigs = credential.result.replaceDefaultModels
     ? { ...credential.modelConfigs }
@@ -326,10 +326,10 @@ function applyOAuthModelConfigsToConfig(
 }
 
 function applyOAuthConfigToConfig(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   credential: Extract<CodexAuthCredential, { kind: "oauth" }>,
   profileId: string,
-): OpenClawConfig {
+): SunClawConfig {
   let next = applyOAuthModelConfigsToConfig(cfg, credential);
   const profile = credential.result.profiles[0];
   if (profile) {
@@ -350,10 +350,10 @@ function applyOAuthConfigToConfig(
 }
 
 function applyApiKeyConfigToConfig(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   credential: Extract<CodexAuthCredential, { kind: "api_key" }>,
   profileId: string,
-): OpenClawConfig {
+): SunClawConfig {
   return applyAuthProfileConfig(cfg, {
     profileId,
     provider: credential.provider,
@@ -412,7 +412,7 @@ function authProfileConfigForCredential(
 async function applyCodexAuthProfileConfig(
   ctx: MigrationProviderContext,
   profile: CodexAuthProfileConfig,
-  applyConfig: (config: OpenClawConfig) => OpenClawConfig,
+  applyConfig: (config: SunClawConfig) => SunClawConfig,
 ): Promise<CodexAuthConfigApplyResult> {
   const configApi = ctx.runtime?.config;
   if (!configApi?.current || !configApi.mutateConfigFile) {

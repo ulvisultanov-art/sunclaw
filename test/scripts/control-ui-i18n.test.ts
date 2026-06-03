@@ -66,7 +66,7 @@ describe("control-ui-i18n process runner", () => {
   it.runIf(process.platform !== "win32")(
     "kills descendant processes after the process timeout",
     async () => {
-      const tempDir = mkdtempSync(path.join(tmpdir(), "openclaw-control-ui-i18n-timeout-"));
+      const tempDir = mkdtempSync(path.join(tmpdir(), "sunclaw-control-ui-i18n-timeout-"));
       try {
         const markerPath = path.join(tempDir, "grandchild.pid");
         const grandchildScript = [

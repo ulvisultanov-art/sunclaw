@@ -1,6 +1,6 @@
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
+import { uniqueStrings } from "@sunclaw/normalization-core/string-normalization";
 import type { SessionEntry } from "../config/sessions.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import {
   externalCliDiscoveryForProviderAuth,
   ensureAuthProfileStore,
@@ -22,7 +22,7 @@ import { normalizeProviderId } from "./model-selection.js";
 
 export function resolveModelAuthLabel(params: {
   provider?: string;
-  cfg?: OpenClawConfig;
+  cfg?: SunClawConfig;
   sessionEntry?: Partial<Pick<SessionEntry, "authProfileOverride">>;
   agentDir?: string;
   workspaceDir?: string;

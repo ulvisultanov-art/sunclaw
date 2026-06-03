@@ -11,8 +11,8 @@ Adds agent-callable tools.
 
 ## Distribution
 
-- Package: `@openclaw/browser-plugin`
-- Install route: included in OpenClaw
+- Package: `@sunclaw/browser-plugin`
+- Install route: included in SunClaw
 
 ## Surface
 

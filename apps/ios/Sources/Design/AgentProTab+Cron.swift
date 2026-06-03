@@ -1,5 +1,5 @@
-import OpenClawKit
-import OpenClawProtocol
+import SunClawKit
+import SunClawProtocol
 import SwiftUI
 
 extension AgentProTab {
@@ -29,7 +29,7 @@ extension AgentProTab {
                 }
             }
         }
-        .padding(.horizontal, OpenClawProMetric.pagePadding)
+        .padding(.horizontal, SunClawProMetric.pagePadding)
     }
 
     var cronNextRunLabel: String {
@@ -57,7 +57,7 @@ extension AgentProTab {
                     }
                 }
             }
-            .padding(.horizontal, OpenClawProMetric.pagePadding)
+            .padding(.horizontal, SunClawProMetric.pagePadding)
         }
     }
 
@@ -80,7 +80,7 @@ extension AgentProTab {
         return HStack(alignment: .top, spacing: 12) {
             ProIconBadge(
                 systemName: job.enabled ? "clock.arrow.circlepath" : "pause.circle",
-                color: job.enabled ? OpenClawBrand.accent : .secondary)
+                color: job.enabled ? SunClawBrand.accent : .secondary)
             VStack(alignment: .leading, spacing: 4) {
                 Text(job.name)
                     .font(.subheadline.weight(.semibold))
@@ -119,7 +119,7 @@ extension AgentProTab {
             } else {
                 Text(self.cronJobState(job))
                     .font(.caption2.weight(.semibold))
-                    .foregroundStyle(job.enabled ? OpenClawBrand.accent : .secondary)
+                    .foregroundStyle(job.enabled ? SunClawBrand.accent : .secondary)
                     .lineLimit(1)
             }
         }

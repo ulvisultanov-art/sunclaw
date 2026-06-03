@@ -1,10 +1,10 @@
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { uniqueStrings } from "@sunclaw/normalization-core/string-normalization";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { loadPluginMetadataSnapshot } from "../plugins/plugin-metadata-snapshot.js";
 export { isSafeChannelEnvVarTriggerName } from "./channel-env-var-names.js";
 
 type ChannelEnvVarLookupParams = {
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
 };

@@ -114,7 +114,7 @@ export async function maybeCompactAgentHarnessSession(
     throw err;
   }
   if (!harness.compact) {
-    if (harness.id !== "openclaw") {
+    if (harness.id !== "sunclaw") {
       return {
         ok: false,
         compacted: false,

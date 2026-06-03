@@ -11,15 +11,15 @@ describe("Control UI build chunking", () => {
       "markdown-runtime",
     );
     expect(
-      controlUiManualChunk("/tmp/openclaw-pnpm-node-modules/dompurify/dist/purify.es.mjs"),
+      controlUiManualChunk("/tmp/sunclaw-pnpm-node-modules/dompurify/dist/purify.es.mjs"),
     ).toBe("markdown-runtime");
-    expect(controlUiManualChunk("/tmp/openclaw-pnpm-node-modules/zod/v4/core/schemas.js")).toBe(
+    expect(controlUiManualChunk("/tmp/sunclaw-pnpm-node-modules/zod/v4/core/schemas.js")).toBe(
       "config-runtime",
     );
-    expect(controlUiManualChunk("/tmp/openclaw-pnpm-node-modules/json5/dist/index.js")).toBe(
+    expect(controlUiManualChunk("/tmp/sunclaw-pnpm-node-modules/json5/dist/index.js")).toBe(
       "config-runtime",
     );
-    expect(controlUiManualChunk("/tmp/openclaw-pnpm-node-modules/@noble/ed25519/index.js")).toBe(
+    expect(controlUiManualChunk("/tmp/sunclaw-pnpm-node-modules/@noble/ed25519/index.js")).toBe(
       "gateway-runtime",
     );
     expect(controlUiManualChunk("/repo/ui/src/ui/app-render.ts")).toBeUndefined();

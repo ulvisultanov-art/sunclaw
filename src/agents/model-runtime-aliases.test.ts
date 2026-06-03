@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { testing as cliBackendsTesting } from "./cli-backends.js";
 import { createModelPickerVisibleProviderPredicate } from "./model-picker-visibility.js";
 import {
@@ -10,8 +10,8 @@ import {
 
 function createAnthropicAuthConfig(params: {
   order?: string[];
-  models?: NonNullable<NonNullable<OpenClawConfig["agents"]>["defaults"]>["models"];
-}): OpenClawConfig {
+  models?: NonNullable<NonNullable<SunClawConfig["agents"]>["defaults"]>["models"];
+}): SunClawConfig {
   return {
     auth: {
       order: params.order ? { anthropic: params.order } : undefined,
@@ -25,7 +25,7 @@ function createAnthropicAuthConfig(params: {
         models: params.models,
       },
     },
-  } as OpenClawConfig;
+  } as SunClawConfig;
 }
 
 describe("resolveCliRuntimeExecutionProvider", () => {
@@ -97,13 +97,13 @@ describe("resolveCliRuntimeExecutionProvider", () => {
     ).toBe("claude-cli");
   });
 
-  it("does not override an explicit OpenClaw model-runtime policy with CLI auth", () => {
+  it("does not override an explicit SunClaw model-runtime policy with CLI auth", () => {
     expect(
       resolveCliRuntimeExecutionProvider({
         cfg: createAnthropicAuthConfig({
           order: ["anthropic:claude-cli"],
           models: {
-            "anthropic/opus-4.7": { agentRuntime: { id: "openclaw" } },
+            "anthropic/opus-4.7": { agentRuntime: { id: "sunclaw" } },
           },
         }),
         provider: "anthropic",

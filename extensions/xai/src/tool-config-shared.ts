@@ -1,4 +1,4 @@
-import { isRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { isRecord } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { normalizeXaiModelId } from "../model-id.js";
 
 export { isRecord };

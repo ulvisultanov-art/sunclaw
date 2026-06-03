@@ -184,7 +184,7 @@ describe("createCopilotAgentHarness", () => {
       reason: "provider is not one of: github-copilot",
     });
     // Legacy aspirational ids should not be claimed by the harness.
-    for (const legacyId of ["github", "openclaw", "copilot"]) {
+    for (const legacyId of ["github", "sunclaw", "copilot"]) {
       expect(
         harness.supports({
           provider: legacyId,
@@ -478,7 +478,7 @@ describe("createCopilotAgentHarness", () => {
       expect(deleteSession).toHaveBeenCalledTimes(1);
     });
 
-    it("does not invoke deleteSession for a session belonging to a different openclawSessionId", async () => {
+    it("does not invoke deleteSession for a session belonging to a different sunclawSessionId", async () => {
       const pool = makePoolMock();
       const deleteSession = vi.fn().mockResolvedValue(undefined);
       const client = { deleteSession } as any;
@@ -520,7 +520,7 @@ describe("createCopilotAgentHarness", () => {
 
   describe("session reuse across turns (dogfood finding #4)", () => {
     // These tests pin the harness's session-reuse contract: subsequent
-    // `runAttempt` calls within the same OpenClaw session should pass
+    // `runAttempt` calls within the same SunClaw session should pass
     // the tracked `sdkSessionId` to the attempt via `initialReplayState`
     // so the SDK can `resumeSession` and keep its prompt cache + thread
     // history warm. Compatibility-fingerprint mismatch (provider/model/

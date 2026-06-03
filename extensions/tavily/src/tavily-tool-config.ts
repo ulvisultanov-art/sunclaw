@@ -1,15 +1,15 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { OpenClawPluginToolContext } from "openclaw/plugin-sdk/plugin-entry";
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-runtime";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import type { SunClawPluginToolContext } from "sunclaw/plugin-sdk/plugin-entry";
+import type { SunClawPluginApi } from "sunclaw/plugin-sdk/plugin-runtime";
 
 export type TavilyToolConfigContext = Pick<
-  OpenClawPluginToolContext,
+  SunClawPluginToolContext,
   "config" | "runtimeConfig" | "getRuntimeConfig"
 >;
 
 export function resolveTavilyToolConfig(
-  api: OpenClawPluginApi,
+  api: SunClawPluginApi,
   ctx?: TavilyToolConfigContext,
-): OpenClawConfig {
+): SunClawConfig {
   return ctx?.getRuntimeConfig?.() ?? ctx?.runtimeConfig ?? ctx?.config ?? api.config;
 }

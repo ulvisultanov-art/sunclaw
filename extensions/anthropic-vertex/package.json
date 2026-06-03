@@ -1,24 +1,24 @@
 {
-  "name": "@openclaw/anthropic-vertex-provider",
+  "name": "@sunclaw/anthropic-vertex-provider",
   "version": "2026.6.2",
-  "description": "OpenClaw Anthropic Vertex provider plugin for Claude models on Google Vertex AI.",
+  "description": "SunClaw Anthropic Vertex provider plugin for Claude models on Google Vertex AI.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/ulvisultanov-art/sunclaw"
   },
   "type": "module",
   "dependencies": {
     "@anthropic-ai/vertex-sdk": "0.16.1"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@sunclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "npmSpec": "@openclaw/anthropic-vertex-provider",
+      "npmSpec": "@sunclaw/anthropic-vertex-provider",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.5.12-beta.1"
     },
@@ -26,7 +26,7 @@
       "pluginApi": ">=2026.6.2"
     },
     "build": {
-      "openclawVersion": "2026.6.2",
+      "sunclawVersion": "2026.6.2",
       "bundledDist": false
     },
     "release": {

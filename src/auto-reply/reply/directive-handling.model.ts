@@ -1,7 +1,7 @@
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@sunclaw/normalization-core/string-coerce";
 import { normalizeOptionalAgentRuntimeId } from "../../agents/agent-runtime-id.js";
 import { resolveAuthStorePathForDisplay } from "../../agents/auth-profiles.js";
 import type { AuthProfileCredential } from "../../agents/auth-profiles/types.js";
@@ -17,7 +17,7 @@ import {
 import { buildAgentRuntimeAuthPlan } from "../../agents/runtime-plan/auth.js";
 import { getChannelPlugin } from "../../channels/plugins/index.js";
 import type { SessionEntry } from "../../config/sessions.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { shortenHomePath } from "../../utils.js";
 import { resolveSelectedAndActiveModel } from "../model-runtime.js";
 import type { ReplyPayload } from "../types.js";
@@ -64,7 +64,7 @@ function resolveStatusAcceptedProfileTypes(params: {
 async function resolveStatusAuthLabel(params: {
   provider: string;
   modelId: string;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   modelsPath: string;
   agentDir: string;
   activeAgentId: string;
@@ -152,7 +152,7 @@ function pushUniqueCatalogEntry(params: {
 }
 
 function buildModelPickerCatalog(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   defaultProvider: string;
   defaultModel: string;
   aliasIndex: ModelAliasIndex;
@@ -288,7 +288,7 @@ function buildModelPickerCatalog(params: {
 }
 
 function filterMissingAuthNestedProviderDuplicates(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   entries: ModelPickerCatalogEntry[];
   authByProvider: Map<string, string>;
 }): ModelPickerCatalogEntry[] {
@@ -329,7 +329,7 @@ function filterMissingAuthNestedProviderDuplicates(params: {
 
 export async function maybeHandleModelDirectiveInfo(params: {
   directives: InlineDirectives;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   agentDir: string;
   activeAgentId: string;
   provider: string;

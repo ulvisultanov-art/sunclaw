@@ -1,13 +1,13 @@
 import {
   optionalNonNegativeIntegerSchema,
   optionalPositiveIntegerSchema,
-} from "openclaw/plugin-sdk/channel-actions";
+} from "sunclaw/plugin-sdk/channel-actions";
 import {
   readNonNegativeIntegerParam,
   readPositiveIntegerParam,
-} from "openclaw/plugin-sdk/param-readers";
+} from "sunclaw/plugin-sdk/param-readers";
 import { Type } from "typebox";
-import type { OpenClawPluginApi } from "../runtime-api.js";
+import type { SunClawPluginApi } from "../runtime-api.js";
 import {
   createEmbeddedLobsterRunner,
   resolveLobsterCwd,
@@ -21,7 +21,7 @@ import {
 } from "./lobster-taskflow.js";
 
 type BoundTaskFlow = ReturnType<
-  NonNullable<OpenClawPluginApi["runtime"]>["tasks"]["managedFlows"]["bindSession"]
+  NonNullable<SunClawPluginApi["runtime"]>["tasks"]["managedFlows"]["bindSession"]
 >;
 
 type JsonLike =
@@ -213,7 +213,7 @@ function resolveManagedFlowToolResult(result: ManagedLobsterFlowResult) {
   return formatManagedFlowResult(result);
 }
 
-export function createLobsterTool(api: OpenClawPluginApi, options?: LobsterToolOptions) {
+export function createLobsterTool(api: SunClawPluginApi, options?: LobsterToolOptions) {
   const runner = options?.runner ?? createEmbeddedLobsterRunner();
   return {
     name: "lobster",

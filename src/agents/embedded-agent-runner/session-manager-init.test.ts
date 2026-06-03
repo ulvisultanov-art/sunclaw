@@ -8,7 +8,7 @@ import { prepareSessionManagerForRun } from "./session-manager-init.js";
 const tempPaths: string[] = [];
 
 async function makeTempFile(): Promise<string> {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-session-manager-init-"));
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-session-manager-init-"));
   tempPaths.push(dir);
   return path.join(dir, "session.jsonl");
 }
@@ -25,13 +25,13 @@ describe("prepareSessionManagerForRun", () => {
     await fs.writeFile(sessionFile, '{"type":"session"}\n', "utf-8");
     const sessionManager = {
       sessionId: "old-session",
-      cwd: "/srv/openclaw/main",
+      cwd: "/srv/sunclaw/main",
       flushed: true,
       fileEntries: [
         {
           type: "session",
           id: "old-session",
-          cwd: "/srv/openclaw/main",
+          cwd: "/srv/sunclaw/main",
         },
         {
           type: "message",
@@ -76,7 +76,7 @@ describe("prepareSessionManagerForRun", () => {
           type: "session",
           id: "parent-session",
           timestamp: "2026-05-27T00:00:00.000Z",
-          cwd: "/srv/openclaw/main",
+          cwd: "/srv/sunclaw/main",
         }),
         JSON.stringify({
           type: "message",
@@ -97,14 +97,14 @@ describe("prepareSessionManagerForRun", () => {
     };
     const sessionManager = {
       sessionId: "parent-session",
-      cwd: "/srv/openclaw/main",
+      cwd: "/srv/sunclaw/main",
       flushed: true,
       fileEntries: [
         {
           type: "session",
           id: "parent-session",
           timestamp: "2026-05-27T00:00:00.000Z",
-          cwd: "/srv/openclaw/main",
+          cwd: "/srv/sunclaw/main",
         },
         assistantEntry,
       ],
@@ -164,13 +164,13 @@ describe("prepareSessionManagerForRun", () => {
     await fs.writeFile(sessionFile, originalTranscript, "utf-8");
     const sessionManager = {
       sessionId: "fresh-session",
-      cwd: "/srv/openclaw/main",
+      cwd: "/srv/sunclaw/main",
       flushed: true,
       fileEntries: [
         {
           type: "session",
           id: "fresh-session",
-          cwd: "/srv/openclaw/main",
+          cwd: "/srv/sunclaw/main",
         },
         {
           type: "message",
@@ -197,7 +197,7 @@ describe("prepareSessionManagerForRun", () => {
       {
         type: "session",
         id: "fresh-session",
-        cwd: "/srv/openclaw/main",
+        cwd: "/srv/sunclaw/main",
       },
       {
         type: "message",

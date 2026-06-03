@@ -1,6 +1,6 @@
-import { assertOkOrThrowProviderError, postJsonRequest } from "openclaw/plugin-sdk/provider-http";
-import { readResponseWithLimit } from "openclaw/plugin-sdk/response-limit-runtime";
-import { trimToUndefined } from "openclaw/plugin-sdk/speech";
+import { assertOkOrThrowProviderError, postJsonRequest } from "sunclaw/plugin-sdk/provider-http";
+import { readResponseWithLimit } from "sunclaw/plugin-sdk/response-limit-runtime";
+import { trimToUndefined } from "sunclaw/plugin-sdk/speech";
 import { XAI_BASE_URL } from "./api.js";
 import { xaiUserAgentHeaderFor } from "./src/xai-user-agent.js";
 export { XAI_BASE_URL };

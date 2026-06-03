@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { findLegacyConfigIssues } from "../../../config/legacy.js";
-import type { OpenClawConfig } from "../../../config/types.js";
+import type { SunClawConfig } from "../../../config/types.js";
 import { normalizeCompatibilityConfigValues } from "./legacy-config-core-migrate.js";
 import { LEGACY_CONFIG_MIGRATIONS } from "./legacy-config-migrations.js";
 
 function migrateLegacyConfigForTest(raw: unknown): {
-  config: OpenClawConfig | null;
+  config: SunClawConfig | null;
   changes: string[];
 } {
   if (!raw || typeof raw !== "object") {
@@ -18,7 +18,7 @@ function migrateLegacyConfigForTest(raw: unknown): {
   }
   return changes.length === 0
     ? { config: null, changes }
-    : { config: next as OpenClawConfig, changes };
+    : { config: next as SunClawConfig, changes };
 }
 
 function expectMigrationChangesToIncludeFragments(changes: string[], fragments: string[]): void {
@@ -38,7 +38,7 @@ describe("compatibility binding repair migrate", () => {
         { agentId: "alpha", match: { channel: "discord" } },
         { agentId: "ghost", match: { channel: "discord" } },
       ],
-    } as OpenClawConfig);
+    } as SunClawConfig);
 
     expect(res.config.bindings).toEqual([{ agentId: "alpha", match: { channel: "discord" } }]);
     expect(res.changes).toContain("Removed 1 binding that referenced missing agents.list ids.");
@@ -53,7 +53,7 @@ describe("compatibility binding repair migrate", () => {
         { agentId: "ghost", match: { channel: "discord" } },
         { agentId: "alpha", match: { channel: "discord" } },
       ],
-    } as unknown as OpenClawConfig;
+    } as unknown as SunClawConfig;
 
     const res = normalizeCompatibilityConfigValues(cfg);
 
@@ -1037,7 +1037,7 @@ describe("legacy migrate mention routing", () => {
         groupChat: {
           requireMention: false,
           historyLimit: 12,
-          mentionPatterns: ["@openclaw"],
+          mentionPatterns: ["@sunclaw"],
         },
       },
       channels: {
@@ -1065,7 +1065,7 @@ describe("legacy migrate mention routing", () => {
     });
     expect(res.config?.messages?.groupChat).toEqual({
       historyLimit: 12,
-      mentionPatterns: ["@openclaw"],
+      mentionPatterns: ["@sunclaw"],
     });
     expect(res.changes).toStrictEqual([
       "Moved routing.allowFrom → channels.whatsapp.allowFrom.",
@@ -1146,7 +1146,7 @@ describe("legacy migrate sandbox scope aliases", () => {
         list: [
           {
             id: "reviewer",
-            agentRuntime: { fallback: "openclaw" },
+            agentRuntime: { fallback: "sunclaw" },
             embeddedHarness: {
               runtime: "codex",
               fallback: "none",
@@ -1229,7 +1229,7 @@ describe("legacy migrate sandbox scope aliases", () => {
           agentRuntime: { id: "claude-cli" },
           model: "anthropic/claude-opus-4-7",
           models: {
-            "anthropic/claude-opus-4-7": { agentRuntime: { id: "openclaw" } },
+            "anthropic/claude-opus-4-7": { agentRuntime: { id: "sunclaw" } },
           },
         },
       },
@@ -1241,7 +1241,7 @@ describe("legacy migrate sandbox scope aliases", () => {
     expect(res.config?.agents?.defaults).toEqual({
       model: "anthropic/claude-opus-4-7",
       models: {
-        "anthropic/claude-opus-4-7": { agentRuntime: { id: "openclaw" } },
+        "anthropic/claude-opus-4-7": { agentRuntime: { id: "sunclaw" } },
       },
     });
   });
@@ -1334,7 +1334,7 @@ describe("legacy migrate sandbox scope aliases", () => {
       agents: {
         list: [
           {
-            id: "openclaw",
+            id: "sunclaw",
             sandbox: {
               perSession: false,
             },
@@ -1390,7 +1390,7 @@ describe("legacy migrate sandbox scope aliases", () => {
 });
 
 describe("legacy migrate MCP server type aliases", () => {
-  it("moves CLI-native http type to OpenClaw streamable HTTP transport", () => {
+  it("moves CLI-native http type to SunClaw streamable HTTP transport", () => {
     const res = migrateLegacyConfigForTest({
       mcp: {
         servers: {

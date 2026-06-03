@@ -1,16 +1,16 @@
-import { formatReasoningMessage } from "openclaw/plugin-sdk/agent-runtime";
-import { logTypingFailure } from "openclaw/plugin-sdk/channel-feedback";
-import { createChannelMessageReplyPipeline } from "openclaw/plugin-sdk/channel-outbound";
+import { formatReasoningMessage } from "sunclaw/plugin-sdk/agent-runtime";
+import { logTypingFailure } from "sunclaw/plugin-sdk/channel-feedback";
+import { createChannelMessageReplyPipeline } from "sunclaw/plugin-sdk/channel-outbound";
 import {
   formatChannelProgressDraftLineForEntry,
   isChannelProgressDraftWorkToolName,
-} from "openclaw/plugin-sdk/channel-outbound";
+} from "sunclaw/plugin-sdk/channel-outbound";
 import {
   resolveSendableOutboundReplyParts,
   resolveTextChunksWithFallback,
   sendMediaWithLeadingCaption,
-} from "openclaw/plugin-sdk/reply-payload";
-import { stripReasoningTagsFromText } from "openclaw/plugin-sdk/text-chunking";
+} from "sunclaw/plugin-sdk/reply-payload";
+import { stripReasoningTagsFromText } from "sunclaw/plugin-sdk/text-chunking";
 import { resolveFeishuRuntimeAccount } from "./accounts.js";
 import { createFeishuClient } from "./client.js";
 import { sendMediaFeishu, shouldSuppressFeishuTextForVoiceMedia } from "./media.js";

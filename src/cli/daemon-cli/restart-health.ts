@@ -1,10 +1,10 @@
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@sunclaw/normalization-core/string-coerce";
 import type { PluginHealthErrorSummary } from "../../commands/health.types.js";
 import { createConfigIO } from "../../config/io.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import type { GatewayServiceRuntime } from "../../daemon/service-runtime.js";
 import type { GatewayService } from "../../daemon/service.js";
 import { resolveGatewayProbeAuthSafeWithSecretInputs } from "../../gateway/probe-auth.js";
@@ -239,9 +239,9 @@ async function confirmGatewayReachable(params: {
   auth?: GatewayRestartProbeAuth;
   env?: NodeJS.ProcessEnv;
 }): Promise<GatewayReachability> {
-  const token = normalizeOptionalString(params.auth?.token ?? process.env.OPENCLAW_GATEWAY_TOKEN);
+  const token = normalizeOptionalString(params.auth?.token ?? process.env.SUNCLAW_GATEWAY_TOKEN);
   const password = normalizeOptionalString(
-    params.auth?.password ?? process.env.OPENCLAW_GATEWAY_PASSWORD,
+    params.auth?.password ?? process.env.SUNCLAW_GATEWAY_PASSWORD,
   );
   const probe = await probeGateway({
     url: `ws://127.0.0.1:${params.port}`,
@@ -277,7 +277,7 @@ async function resolveGatewayRestartProbeAuth(
     suppressFutureVersionWarning: true,
   })
     .readBestEffortConfig()
-    .catch((): OpenClawConfig => ({}));
+    .catch((): SunClawConfig => ({}));
   const resolved = await resolveGatewayProbeAuthSafeWithSecretInputs({
     cfg,
     mode: "local",

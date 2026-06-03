@@ -10,12 +10,12 @@ import { applyMockOpenAiModelConfig } from "../fixtures/mock-openai-config.mjs";
 import { readPluginInstallRecords } from "../plugin-index-sqlite.mjs";
 
 function clickClackHttpTimeoutMs() {
-  return readPositiveInt(process.env.OPENCLAW_RELEASE_USER_JOURNEY_HTTP_TIMEOUT_MS, 5000);
+  return readPositiveInt(process.env.SUNCLAW_RELEASE_USER_JOURNEY_HTTP_TIMEOUT_MS, 5000);
 }
 
 function clickClackHttpBodyMaxBytes() {
   return readPositiveInt(
-    process.env.OPENCLAW_RELEASE_USER_JOURNEY_HTTP_BODY_MAX_BYTES,
+    process.env.SUNCLAW_RELEASE_USER_JOURNEY_HTTP_BODY_MAX_BYTES,
     1024 * 1024,
   );
 }
@@ -83,8 +83,8 @@ function pathsEqual(left, right) {
 
 function configPath() {
   return (
-    process.env.OPENCLAW_CONFIG_PATH ??
-    path.join(process.env.HOME ?? "", ".openclaw", "openclaw.json")
+    process.env.SUNCLAW_CONFIG_PATH ??
+    path.join(process.env.HOME ?? "", ".sunclaw", "sunclaw.json")
   );
 }
 
@@ -104,14 +104,14 @@ function installRecords() {
 
 function assertOnboard() {
   const home = process.argv[3];
-  const stateDir = path.join(home, ".openclaw");
+  const stateDir = path.join(home, ".sunclaw");
   const authPath = path.join(stateDir, "agents", "main", "agent", "auth-profiles.json");
-  assert(fs.existsSync(configPath()), "onboard did not write openclaw.json");
+  assert(fs.existsSync(configPath()), "onboard did not write sunclaw.json");
   const stateRaw =
     fs.readFileSync(configPath(), "utf8") +
     (fs.existsSync(authPath) ? fs.readFileSync(authPath, "utf8") : "");
   assert(
-    !stateRaw.includes("sk-openclaw-release-user-journey"),
+    !stateRaw.includes("sk-sunclaw-release-user-journey"),
     "onboard persisted raw OpenAI key",
   );
 }

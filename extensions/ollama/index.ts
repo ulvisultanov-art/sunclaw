@@ -1,25 +1,25 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { resolvePluginConfigObject } from "openclaw/plugin-sdk/plugin-config-runtime";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import { resolvePluginConfigObject } from "sunclaw/plugin-sdk/plugin-config-runtime";
 import {
   definePluginEntry,
-  type OpenClawPluginApi,
+  type SunClawPluginApi,
   type ProviderAuthContext,
   type ProviderAuthMethodNonInteractiveContext,
   type ProviderAuthResult,
   type ProviderCatalogContext,
   type ProviderReplayPolicy,
   type ProviderRuntimeModel,
-} from "openclaw/plugin-sdk/plugin-entry";
-import { buildApiKeyCredential } from "openclaw/plugin-sdk/provider-auth";
-import { createProviderApiKeyAuthMethod } from "openclaw/plugin-sdk/provider-auth-api-key";
+} from "sunclaw/plugin-sdk/plugin-entry";
+import { buildApiKeyCredential } from "sunclaw/plugin-sdk/provider-auth";
+import { createProviderApiKeyAuthMethod } from "sunclaw/plugin-sdk/provider-auth-api-key";
 import type {
   ModelDefinitionConfig,
   ModelProviderConfig,
-} from "openclaw/plugin-sdk/provider-model-shared";
+} from "sunclaw/plugin-sdk/provider-model-shared";
 import {
   buildOpenAICompatibleReplayPolicy,
   OPENAI_COMPATIBLE_REPLAY_HOOKS,
-} from "openclaw/plugin-sdk/provider-model-shared";
+} from "sunclaw/plugin-sdk/provider-model-shared";
 import {
   OLLAMA_DEFAULT_BASE_URL,
   buildOllamaModelDefinition,
@@ -145,14 +145,14 @@ export default definePluginEntry({
   id: "ollama",
   name: "Ollama Provider",
   description: "Bundled Ollama provider plugin",
-  register(api: OpenClawPluginApi) {
+  register(api: SunClawPluginApi) {
     if (api.registrationMode === "full") {
       void checkWsl2CrashLoopRisk(api.logger);
     }
     api.registerMemoryEmbeddingProvider(ollamaMemoryEmbeddingProviderAdapter);
     api.registerMediaUnderstandingProvider(ollamaMediaUnderstandingProvider);
     const startupPluginConfig = (api.pluginConfig ?? {}) as OllamaPluginConfig;
-    const resolveCurrentPluginConfig = (config?: OpenClawConfig): OllamaPluginConfig => {
+    const resolveCurrentPluginConfig = (config?: SunClawConfig): OllamaPluginConfig => {
       const runtimePluginConfig = resolvePluginConfigObject(config, "ollama");
       if (runtimePluginConfig) {
         return runtimePluginConfig as OllamaPluginConfig;
@@ -231,8 +231,8 @@ export default definePluginEntry({
         /\btruncating input\b.*\btoo long\b/i.test(errorMessage),
       buildUnknownModelHint: () =>
         "Ollama Cloud requires an API key. " +
-        'Set OLLAMA_API_KEY or run "openclaw onboard --auth-choice ollama-cloud". ' +
-        "See: https://docs.openclaw.ai/providers/ollama",
+        'Set OLLAMA_API_KEY or run "sunclaw onboard --auth-choice ollama-cloud". ' +
+        "See: https://docs.sunclaw.complex.az/providers/ollama",
     });
     api.registerProvider({
       id: OLLAMA_PROVIDER_ID,
@@ -405,8 +405,8 @@ export default definePluginEntry({
       },
       buildUnknownModelHint: () =>
         "Ollama requires authentication to be registered as a provider. " +
-        'Set OLLAMA_API_KEY="ollama-local" (any value works) or run "openclaw configure". ' +
-        "See: https://docs.openclaw.ai/providers/ollama",
+        'Set OLLAMA_API_KEY="ollama-local" (any value works) or run "sunclaw configure". ' +
+        "See: https://docs.sunclaw.complex.az/providers/ollama",
     });
   },
 });

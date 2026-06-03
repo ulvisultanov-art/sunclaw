@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
-import { lowercasePreservingWhitespace } from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { lowercasePreservingWhitespace } from "@sunclaw/normalization-core/string-coerce";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { isPathInside } from "../infra/path-guards.js";
 import { normalizeAgentId } from "../routing/session-key.js";
 import { listAgentEntries, resolveAgentWorkspaceDir } from "./agent-scope.js";
@@ -29,7 +29,7 @@ function workspacePathsOverlap(left: string, right: string): boolean {
 }
 
 export function findOverlappingWorkspaceAgentIds(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   agentId: string,
   workspaceDir: string,
 ): string[] {

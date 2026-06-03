@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type { SkillStatusEntry, SkillStatusReport } from "../skills/discovery/status.js";
 
 export function collectUnavailableAgentSkills(report: SkillStatusReport): SkillStatusEntry[] {
@@ -12,9 +12,9 @@ export function collectUnavailableAgentSkills(report: SkillStatusReport): SkillS
 }
 
 export function disableUnavailableSkillsInConfig(
-  config: OpenClawConfig,
+  config: SunClawConfig,
   skills: readonly SkillStatusEntry[],
-): OpenClawConfig {
+): SunClawConfig {
   if (skills.length === 0) {
     return config;
   }

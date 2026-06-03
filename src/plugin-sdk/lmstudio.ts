@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.js";
+import type { SunClawConfig } from "../config/types.js";
 import type {
   ProviderAuthMethodNonInteractiveContext,
   ProviderAuthResult,
@@ -9,7 +9,7 @@ import type {
 import type { WizardPrompter } from "../wizard/prompts.js";
 
 export type {
-  OpenClawPluginApi,
+  SunClawPluginApi,
   ProviderAuthContext,
   ProviderAuthMethodNonInteractiveContext,
   ProviderAuthResult,
@@ -48,7 +48,7 @@ export {
 import { loadBundledPluginPublicSurfaceModuleSync } from "./facade-runtime.js";
 
 type LmstudioInteractiveParams = {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   prompter?: WizardPrompter;
   secretInputMode?: unknown;
   allowSecretRefPrompt?: boolean;
@@ -67,7 +67,7 @@ type FacadeModule = {
   ) => Promise<ProviderAuthResult>;
   configureLmstudioNonInteractive: (
     ctx: ProviderAuthMethodNonInteractiveContext,
-  ) => Promise<OpenClawConfig | null>;
+  ) => Promise<SunClawConfig | null>;
   discoverLmstudioProvider: (
     ctx: ProviderCatalogContext,
   ) => Promise<{ provider: import("../config/types.js").ModelProviderConfig } | null>;

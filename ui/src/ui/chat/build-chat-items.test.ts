@@ -3,7 +3,7 @@ import type { MessageGroup } from "../types/chat-types.ts";
 import { buildChatItems, type BuildChatItemsProps } from "./build-chat-items.ts";
 
 const SENDER_METADATA_BLOCK =
-  'Sender (untrusted metadata):\n```json\n{"label":"openclaw-control-ui","id":"openclaw-control-ui"}\n```';
+  'Sender (untrusted metadata):\n```json\n{"label":"sunclaw-control-ui","id":"sunclaw-control-ui"}\n```';
 
 function createProps(overrides: Partial<BuildChatItemsProps> = {}): BuildChatItemsProps {
   return {
@@ -288,7 +288,7 @@ describe("buildChatItems", () => {
         {
           role: "user",
           content: SENDER_METADATA_BLOCK,
-          senderLabel: "openclaw-control-ui",
+          senderLabel: "sunclaw-control-ui",
           timestamp: 1,
         },
       ],
@@ -662,7 +662,7 @@ describe("buildChatItems", () => {
             view: {
               backend: "canvas",
               id: "cv_nearest_turn",
-              url: "/__openclaw__/canvas/documents/cv_nearest_turn/index.html",
+              url: "/__sunclaw__/canvas/documents/cv_nearest_turn/index.html",
               title: "Nearest turn demo",
               preferred_height: 320,
             },
@@ -700,7 +700,7 @@ describe("buildChatItems", () => {
             view: {
               backend: "canvas",
               id: "cv_empty_anchor",
-              url: "/__openclaw__/canvas/documents/cv_empty_anchor/index.html",
+              url: "/__sunclaw__/canvas/documents/cv_empty_anchor/index.html",
               title: "Empty anchor demo",
               preferred_height: 320,
             },
@@ -743,7 +743,7 @@ describe("buildChatItems", () => {
               view: {
                 backend: "canvas",
                 id: "cv_generic_inline",
-                url: "/__openclaw__/canvas/documents/cv_generic_inline/index.html",
+                url: "/__sunclaw__/canvas/documents/cv_generic_inline/index.html",
                 title: "Inline generic preview",
                 preferred_height: 420,
               },
@@ -787,7 +787,7 @@ describe("buildChatItems", () => {
                 view: {
                   backend: "canvas",
                   id: "cv_streamed_artifact",
-                  url: "/__openclaw__/canvas/documents/cv_streamed_artifact/index.html",
+                  url: "/__sunclaw__/canvas/documents/cv_streamed_artifact/index.html",
                   title: "Streamed demo",
                   preferred_height: 320,
                 },
@@ -819,7 +819,7 @@ describe("buildChatItems", () => {
           {
             role: "system",
             timestamp: 2_000,
-            __openclaw: {
+            __sunclaw: {
               kind: "compaction",
               id: "checkpoint-1",
             },
@@ -864,7 +864,7 @@ function createAssistantCanvasBlock(params: { suffix: string }) {
       render: "url",
       viewId,
       title: "Inline demo",
-      url: `/__openclaw__/canvas/documents/${viewId}/index.html`,
+      url: `/__sunclaw__/canvas/documents/${viewId}/index.html`,
       preferredHeight: 360,
     },
   };

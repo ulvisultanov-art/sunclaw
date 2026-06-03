@@ -4,11 +4,11 @@ import {
   type EmbeddedRunAttemptParams,
   type NativeHookRelayEvent,
   type NativeHookRelayRegistrationHandle,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
+} from "sunclaw/plugin-sdk/agent-harness-runtime";
 import {
   addTimerTimeoutGraceMs,
   finiteSecondsToTimerSafeMilliseconds,
-} from "openclaw/plugin-sdk/number-runtime";
+} from "sunclaw/plugin-sdk/number-runtime";
 import type { CodexAppServerRuntimeOptions } from "./config.js";
 import type { JsonObject, JsonValue } from "./protocol.js";
 
@@ -160,7 +160,7 @@ export function resolveCodexNativeHookRelayEvents(params: {
   // Codex emits PermissionRequest before the app-server approval reviewer has
   // resolved the command. In native approval modes, let Codex's app-server
   // approval bridge own the real escalation instead of surfacing a stale
-  // pre-guardian OpenClaw plugin approval prompt.
+  // pre-guardian SunClaw plugin approval prompt.
   return params.appServer.approvalPolicy === "never"
     ? CODEX_NATIVE_HOOK_RELAY_EVENTS
     : CODEX_NATIVE_HOOK_RELAY_EVENTS_WITH_APP_SERVER_APPROVALS;
@@ -189,7 +189,7 @@ export function buildCodexNativeHookRelayId(params: {
   sessionKey: string | undefined;
 }): string {
   const hash = createHash("sha256");
-  hash.update("openclaw:codex:native-hook-relay:v1");
+  hash.update("sunclaw:codex:native-hook-relay:v1");
   hash.update("\0");
   hash.update(params.agentId?.trim() || "");
   hash.update("\0");
@@ -258,7 +258,7 @@ export function buildCodexNativeHookRelayConfig(params: {
             command,
             timeout,
             async: false,
-            statusMessage: "OpenClaw native hook relay",
+            statusMessage: "SunClaw native hook relay",
           },
         ],
       },
@@ -269,7 +269,7 @@ export function buildCodexNativeHookRelayConfig(params: {
         event,
         command,
         timeout,
-        statusMessage: "OpenClaw native hook relay",
+        statusMessage: "SunClaw native hook relay",
       }),
     };
     for (const sourcePath of CODEX_SESSION_FLAGS_HOOK_SOURCE_PATHS) {

@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
 import type { AgentRouteBinding } from "../config/types.agents.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { resolveFirstBoundAccountId } from "./bound-account-read.js";
 
-function cfgWithBindings(bindings: AgentRouteBinding[]): OpenClawConfig {
-  return { bindings } as unknown as OpenClawConfig;
+function cfgWithBindings(bindings: AgentRouteBinding[]): SunClawConfig {
+  return { bindings } as unknown as SunClawConfig;
 }
 
 describe("resolveFirstBoundAccountId", () => {

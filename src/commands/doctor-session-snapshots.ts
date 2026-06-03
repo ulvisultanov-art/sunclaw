@@ -1,7 +1,7 @@
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord } from "@sunclaw/normalization-core/record-coerce";
 import { note } from "../../packages/terminal-core/src/note.js";
 import { resolveStateDir } from "../config/paths.js";
 import {
@@ -10,7 +10,7 @@ import {
 } from "../config/sessions/skill-prompt-blobs.js";
 import { resolveAllAgentSessionStoreTargetsSync } from "../config/sessions/targets.js";
 import type { SessionEntry } from "../config/sessions/types.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { expandHomePrefix } from "../infra/home-dir.js";
 import { writeTextAtomic } from "../infra/json-files.js";
 import { resolveBundledSkillsDir } from "../skills/loading/bundled-dir.js";
@@ -127,13 +127,13 @@ function isWindowsAbsolutePath(value: string): boolean {
     (/^[a-z]:/i.test(value) && ["/", "\\"].includes(value.slice(2, 3))) || value.startsWith("\\\\")
   );
 }
-function isTempBackedOpenClawRoot(segments: readonly string[]): boolean {
+function isTempBackedSunClawRoot(segments: readonly string[]): boolean {
   const lower = segments.map((segment) => segment.toLowerCase());
-  const openclawIndex = lower.lastIndexOf("openclaw");
-  if (openclawIndex < 1) {
+  const sunclawIndex = lower.lastIndexOf("sunclaw");
+  if (sunclawIndex < 1) {
     return false;
   }
-  return lower[openclawIndex - 1] === "tmp" || lower[openclawIndex - 1] === "temp";
+  return lower[sunclawIndex - 1] === "tmp" || lower[sunclawIndex - 1] === "temp";
 }
 
 function isBundledRuntimeSkillsPath(cachedPath: string, skillRootIndex: number): boolean {
@@ -142,8 +142,8 @@ function isBundledRuntimeSkillsPath(cachedPath: string, skillRootIndex: number):
   return (
     lower.some(
       (segment) =>
-        segment === "dist-runtime" || segment === "node_modules" || segment.startsWith("openclaw@"),
-    ) || isTempBackedOpenClawRoot(beforeSkillRoot)
+        segment === "dist-runtime" || segment === "node_modules" || segment.startsWith("sunclaw@"),
+    ) || isTempBackedSunClawRoot(beforeSkillRoot)
   );
 }
 function extractBundledSkillRelativeSegments(cachedPath: string): string[] | undefined {
@@ -262,7 +262,7 @@ async function listSessionStorePaths(stateDir: string): Promise<string[]> {
 }
 
 function resolveSessionStorePaths(params: {
-  cfg?: OpenClawConfig;
+  cfg?: SunClawConfig;
   env?: NodeJS.ProcessEnv;
 }): string[] | undefined {
   if (!params.cfg) {
@@ -320,7 +320,7 @@ function replaceStalePathsInText(text: string, finding: StaleSessionSnapshotPath
 export async function noteSessionSnapshotHealth(params?: {
   storePaths?: string[];
   bundledSkillsDir?: string;
-  cfg?: OpenClawConfig;
+  cfg?: SunClawConfig;
   env?: NodeJS.ProcessEnv;
   shouldRepair?: boolean;
 }) {

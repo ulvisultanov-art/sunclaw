@@ -1,16 +1,16 @@
 import path from "node:path";
-import { isPassThroughRemoteMediaSource } from "@openclaw/media-core/media-source-url";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
+import { isPassThroughRemoteMediaSource } from "@sunclaw/media-core/media-source-url";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
+import { uniqueStrings } from "@sunclaw/normalization-core/string-normalization";
 import { resolveAgentWorkspaceDir } from "../agents/agent-scope.js";
 import {
   resolveEffectiveToolFsRootExpansionAllowed,
   resolveEffectiveToolFsWorkspaceOnly,
 } from "../agents/tool-fs-policy.js";
 import { resolveStateDir } from "../config/paths.js";
-import type { OpenClawConfig } from "../config/types.js";
+import type { SunClawConfig } from "../config/types.js";
 import { safeFileURLToPath } from "../infra/local-file-access.js";
-import { resolvePreferredOpenClawTmpDir } from "../infra/tmp-openclaw-dir.js";
+import { resolvePreferredSunClawTmpDir } from "../infra/tmp-sunclaw-dir.js";
 import { resolveConfigDir, resolveUserPath } from "../utils.js";
 
 type BuildMediaLocalRootsOptions = {
@@ -23,7 +23,7 @@ const WINDOWS_DRIVE_RE = /^[A-Za-z]:[\\/]/;
 
 function resolveCachedPreferredTmpDir(): string {
   if (!cachedPreferredTmpDir) {
-    cachedPreferredTmpDir = resolvePreferredOpenClawTmpDir();
+    cachedPreferredTmpDir = resolvePreferredSunClawTmpDir();
   }
   return cachedPreferredTmpDir;
 }
@@ -53,7 +53,7 @@ export function getDefaultMediaLocalRoots(): readonly string[] {
 }
 
 export function getAgentScopedMediaLocalRoots(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   agentId?: string,
 ): readonly string[] {
   const roots = buildMediaLocalRoots(resolveStateDir(), resolveConfigDir());
@@ -116,7 +116,7 @@ export function appendLocalMediaParentRoots(
 }
 
 export function getAgentScopedMediaLocalRootsForSources(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   agentId?: string;
   mediaSources?: readonly string[];
 }): readonly string[] {

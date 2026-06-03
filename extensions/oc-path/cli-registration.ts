@@ -1,6 +1,6 @@
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
+import type { SunClawPluginApi } from "sunclaw/plugin-sdk/plugin-entry";
 
-export function registerOcPathCli(api: OpenClawPluginApi): void {
+export function registerOcPathCli(api: SunClawPluginApi): void {
   api.registerCli(
     async ({ program }) => {
       const { registerPathCli } = await import("./src/cli.js");

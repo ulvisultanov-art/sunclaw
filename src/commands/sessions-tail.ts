@@ -97,7 +97,7 @@ function toOptionalString(value: unknown): string | undefined {
 function isTrajectoryEvent(value: unknown): value is TrajectoryEvent {
   return (
     isRecord(value) &&
-    value.traceSchema === "openclaw-trajectory" &&
+    value.traceSchema === "sunclaw-trajectory" &&
     value.schemaVersion === 1 &&
     typeof value.type === "string" &&
     typeof value.ts === "string" &&

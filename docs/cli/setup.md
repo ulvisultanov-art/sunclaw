@@ -1,5 +1,5 @@
 ---
-summary: "CLI reference for `openclaw setup` (initialize config plus workspace, optionally run onboarding)"
+summary: "CLI reference for `sunclaw setup` (initialize config plus workspace, optionally run onboarding)"
 read_when:
   - You're doing first-run setup without full CLI onboarding
   - You want to set the default workspace path
@@ -7,19 +7,19 @@ read_when:
 title: "Setup"
 ---
 
-# `openclaw setup`
+# `sunclaw setup`
 
 Initialize the baseline config and agent workspace. With any onboarding flag present, also runs the wizard.
 
 <Note>
-`openclaw setup` is for mutable config installs. In Nix mode (`OPENCLAW_NIX_MODE=1`) OpenClaw refuses setup writes because the config file is managed by Nix. Use the first-party [nix-openclaw Quick Start](https://github.com/openclaw/nix-openclaw#quick-start) or the equivalent source config for another Nix package.
+`sunclaw setup` is for mutable config installs. In Nix mode (`SUNCLAW_NIX_MODE=1`) SunClaw refuses setup writes because the config file is managed by Nix. Use the first-party [nix-sunclaw Quick Start](https://github.com/sunclaw/nix-sunclaw#quick-start) or the equivalent source config for another Nix package.
 </Note>
 
 ## Options
 
 | Flag                       | Description                                                                                         |
 | -------------------------- | --------------------------------------------------------------------------------------------------- |
-| `--workspace <dir>`        | Agent workspace directory (default `~/.openclaw/workspace`; stored as `agents.defaults.workspace`). |
+| `--workspace <dir>`        | Agent workspace directory (default `~/.sunclaw/workspace`; stored as `agents.defaults.workspace`). |
 | `--wizard`                 | Run interactive onboarding.                                                                         |
 | `--non-interactive`        | Run onboarding without prompts.                                                                     |
 | `--accept-risk`            | Acknowledge full-system agent access risk; required with `--non-interactive`.                       |
@@ -32,24 +32,24 @@ Initialize the baseline config and agent workspace. With any onboarding flag pre
 
 ### Wizard auto-trigger
 
-`openclaw setup` runs the wizard when any of these flags are explicitly present, even without `--wizard`:
+`sunclaw setup` runs the wizard when any of these flags are explicitly present, even without `--wizard`:
 
 `--wizard`, `--non-interactive`, `--accept-risk`, `--mode`, `--import-from`, `--import-source`, `--import-secrets`, `--remote-url`, `--remote-token`.
 
 ## Examples
 
 ```bash
-openclaw setup
-openclaw setup --workspace ~/.openclaw/workspace
-openclaw setup --wizard
-openclaw setup --wizard --import-from hermes --import-source ~/.hermes
-openclaw setup --non-interactive --accept-risk --mode remote --remote-url wss://gateway-host:18789 --remote-token <token>
+sunclaw setup
+sunclaw setup --workspace ~/.sunclaw/workspace
+sunclaw setup --wizard
+sunclaw setup --wizard --import-from hermes --import-source ~/.hermes
+sunclaw setup --non-interactive --accept-risk --mode remote --remote-url wss://gateway-host:18789 --remote-token <token>
 ```
 
 ## Notes
 
-- Plain `openclaw setup` initializes config and workspace without running the full onboarding flow.
-- After plain setup, run `openclaw onboard` for the full guided journey, `openclaw configure` for targeted changes, or `openclaw channels add` to add channel accounts.
+- Plain `sunclaw setup` initializes config and workspace without running the full onboarding flow.
+- After plain setup, run `sunclaw onboard` for the full guided journey, `sunclaw configure` for targeted changes, or `sunclaw channels add` to add channel accounts.
 - If Hermes state is detected, interactive onboarding can offer migration automatically. Import onboarding requires a fresh setup; use [Migrate](/cli/migrate) for dry-run plans, backups, and overwrite mode outside onboarding.
 
 ## Related

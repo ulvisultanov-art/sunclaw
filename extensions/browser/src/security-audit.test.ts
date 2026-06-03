@@ -8,8 +8,8 @@ function collectFindings(
     config,
     sourceConfig: config,
     env: {} as NodeJS.ProcessEnv,
-    stateDir: "/tmp/openclaw-state",
-    configPath: "/tmp/openclaw.json",
+    stateDir: "/tmp/sunclaw-state",
+    configPath: "/tmp/sunclaw.json",
   });
 }
 

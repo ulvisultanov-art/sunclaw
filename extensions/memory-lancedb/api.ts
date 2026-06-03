@@ -1,2 +1,2 @@
-export { definePluginEntry, type OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
-export { resolveStateDir } from "openclaw/plugin-sdk/state-paths";
+export { definePluginEntry, type SunClawPluginApi } from "sunclaw/plugin-sdk/plugin-entry";
+export { resolveStateDir } from "sunclaw/plugin-sdk/state-paths";

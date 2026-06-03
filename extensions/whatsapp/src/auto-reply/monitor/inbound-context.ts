@@ -1,5 +1,5 @@
-import { filterChannelInboundQuoteContext } from "openclaw/plugin-sdk/channel-inbound";
-import { filterSupplementalContextItems } from "openclaw/plugin-sdk/security-runtime";
+import { filterChannelInboundQuoteContext } from "sunclaw/plugin-sdk/channel-inbound";
+import { filterSupplementalContextItems } from "sunclaw/plugin-sdk/security-runtime";
 import {
   getComparableIdentityValues,
   getReplyContext,

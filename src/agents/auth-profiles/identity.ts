@@ -1,5 +1,5 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import type { AuthProfileStore } from "./types.js";
 
 function resolveStoredMetadata(store: AuthProfileStore | undefined, profileId: string) {
@@ -25,7 +25,7 @@ export function buildAuthProfileId(params: {
 }
 
 export function resolveAuthProfileMetadata(params: {
-  cfg?: OpenClawConfig;
+  cfg?: SunClawConfig;
   store?: AuthProfileStore;
   profileId: string;
 }): { displayName?: string; email?: string } {

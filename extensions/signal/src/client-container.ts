@@ -8,13 +8,13 @@
 
 import fs from "node:fs/promises";
 import nodePath from "node:path";
-import { resolveFetch } from "openclaw/plugin-sdk/fetch-runtime";
-import { detectMime, parseMediaContentLength } from "openclaw/plugin-sdk/media-runtime";
+import { resolveFetch } from "sunclaw/plugin-sdk/fetch-runtime";
+import { detectMime, parseMediaContentLength } from "sunclaw/plugin-sdk/media-runtime";
 import {
   parseStrictNonNegativeInteger,
   resolveTimerTimeoutMs,
-} from "openclaw/plugin-sdk/number-runtime";
-import { readResponseWithLimit } from "openclaw/plugin-sdk/response-limit-runtime";
+} from "sunclaw/plugin-sdk/number-runtime";
+import { readResponseWithLimit } from "sunclaw/plugin-sdk/response-limit-runtime";
 import WebSocket from "ws";
 
 export type ContainerRpcOptions = {

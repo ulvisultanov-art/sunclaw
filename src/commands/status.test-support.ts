@@ -73,7 +73,7 @@ export const baseStatusOverviewScanFields = {
 const baseStatusGatewayService = {
   label: "LaunchAgent",
   installed: true,
-  managedByOpenClaw: true,
+  managedBySunClaw: true,
   loadedText: "loaded",
   runtimeShort: "running",
 };
@@ -119,7 +119,7 @@ const baseStatusSummary = {
         configuredModel: "openai/gpt-5.5",
         selectedModel: "openai/gpt-5.5",
         modelSelectionReason: null,
-        runtime: "OpenClaw Default",
+        runtime: "SunClaw Default",
         totalTokens: 12_000,
         totalTokensFresh: true,
         remainingTokens: 4_000,

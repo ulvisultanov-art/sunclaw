@@ -23,7 +23,7 @@ import {
 const tempRoots = new Set<string>();
 
 function createTempExtensionRoot(extensionId = "demo") {
-  const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-boundary-canary-"));
+  const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "sunclaw-boundary-canary-"));
   tempRoots.add(rootDir);
   const extensionRoot = path.join(rootDir, "extensions", extensionId);
   fs.mkdirSync(extensionRoot, { recursive: true });
@@ -85,7 +85,7 @@ describe("check-extension-package-tsc-boundary", () => {
   });
 
   it("cleans stale artifacts for every extension id passed to the cleanup hook", () => {
-    const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-boundary-canary-"));
+    const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "sunclaw-boundary-canary-"));
     tempRoots.add(rootDir);
     fs.mkdirSync(path.join(rootDir, "extensions", "demo-a"), { recursive: true });
     fs.mkdirSync(path.join(rootDir, "extensions", "demo-b"), { recursive: true });
@@ -107,13 +107,13 @@ describe("check-extension-package-tsc-boundary", () => {
   });
 
   it("parses extension boundary compile concurrency strictly", () => {
-    expect(resolveCompileConcurrency({ OPENCLAW_EXTENSION_BOUNDARY_CONCURRENCY: "4" }, 32)).toBe(4);
+    expect(resolveCompileConcurrency({ SUNCLAW_EXTENSION_BOUNDARY_CONCURRENCY: "4" }, 32)).toBe(4);
     expect(resolveCompileConcurrency({}, 12)).toBe(6);
     expect(resolveCompileConcurrency({}, 3)).toBe(1);
     for (const value of ["4x", "0", "1e3"]) {
       expect(() =>
-        resolveCompileConcurrency({ OPENCLAW_EXTENSION_BOUNDARY_CONCURRENCY: value }, 32),
-      ).toThrow("OPENCLAW_EXTENSION_BOUNDARY_CONCURRENCY must be a positive integer");
+        resolveCompileConcurrency({ SUNCLAW_EXTENSION_BOUNDARY_CONCURRENCY: value }, 32),
+      ).toThrow("SUNCLAW_EXTENSION_BOUNDARY_CONCURRENCY must be a positive integer");
     }
   });
 

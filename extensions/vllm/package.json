@@ -1,13 +1,13 @@
 {
-  "name": "@openclaw/vllm-provider",
+  "name": "@sunclaw/vllm-provider",
   "version": "2026.6.2",
   "private": true,
-  "description": "OpenClaw vLLM provider plugin",
+  "description": "SunClaw vLLM provider plugin",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@sunclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ]

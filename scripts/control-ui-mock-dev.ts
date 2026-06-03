@@ -217,7 +217,7 @@ function createChatPickerScenario(): ControlUiMockGatewayScenario {
       updatedAtMs: baseTime - 30_000,
     },
   ];
-  const workspaceListCases = ["main", "alpha", "openclaw-mock"].map((agentId) => ({
+  const workspaceListCases = ["main", "alpha", "sunclaw-mock"].map((agentId) => ({
     match: { agentId },
     response: {
       agentId,
@@ -239,7 +239,7 @@ function createChatPickerScenario(): ControlUiMockGatewayScenario {
       "# Context notes\n\nThe right rail should feel like workspace context, not a modal pasted beside the chat.\n\n## Current focus\n\n- Markdown previews need readable dark-mode chrome.\n- Empty or unavailable content should show a quiet state instead of an empty card.\n- File previews should load from the same mock scenario as the file list.\n",
     ],
   ]);
-  const workspaceFileCases = ["main", "alpha", "openclaw-mock"].flatMap((agentId) =>
+  const workspaceFileCases = ["main", "alpha", "sunclaw-mock"].flatMap((agentId) =>
     workspaceFiles.map((file) => ({
       match: { agentId, name: file.name },
       response: {
@@ -276,9 +276,9 @@ function createChatPickerScenario(): ControlUiMockGatewayScenario {
     modelProvider: "anthropic",
   });
   return {
-    assistantAgentId: "openclaw-mock",
-    assistantName: "OpenClaw mock",
-    defaultAgentId: "openclaw-mock",
+    assistantAgentId: "sunclaw-mock",
+    assistantName: "SunClaw mock",
+    defaultAgentId: "sunclaw-mock",
     historyMessages: buildScrollableChatHistory(baseTime),
     methodResponses: {
       "agents.files.get": {
@@ -322,11 +322,11 @@ function createMockGatewayPlugin(scenario: ControlUiMockGatewayScenario): Plugin
         res.end(bootstrapBody);
       });
     },
-    name: "openclaw-control-ui-mock-gateway",
+    name: "sunclaw-control-ui-mock-gateway",
     transformIndexHtml(html) {
       return html.replace(
         "</head>",
-        `    <script data-openclaw-control-ui-mock-gateway>\n${initScript}\n    </script>\n  </head>`,
+        `    <script data-sunclaw-control-ui-mock-gateway>\n${initScript}\n    </script>\n  </head>`,
       );
     },
   };
@@ -361,7 +361,7 @@ const server = await createServer({
   clearScreen: false,
   configFile: path.join(uiRoot, "vite.config.ts"),
   define: {
-    OPENCLAW_CONTROL_UI_BUILD_ID: JSON.stringify("mock"),
+    SUNCLAW_CONTROL_UI_BUILD_ID: JSON.stringify("mock"),
   },
   logLevel: "error",
   optimizeDeps: {

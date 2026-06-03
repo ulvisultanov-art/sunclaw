@@ -1,5 +1,5 @@
-import { MAX_TIMER_TIMEOUT_MS } from "openclaw/plugin-sdk/number-runtime";
-import type { PluginRuntime } from "openclaw/plugin-sdk/plugin-runtime";
+import { MAX_TIMER_TIMEOUT_MS } from "sunclaw/plugin-sdk/number-runtime";
+import type { PluginRuntime } from "sunclaw/plugin-sdk/plugin-runtime";
 import { describe, expect, it, vi } from "vitest";
 import { callBrowserProxyOnNode } from "./chrome-browser-proxy.js";
 

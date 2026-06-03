@@ -1,17 +1,17 @@
 import { expect } from "vitest";
-import type { OpenClawConfig } from "../api.js";
+import type { SunClawConfig } from "../api.js";
 import { createMemoryGetTool, createMemorySearchTool } from "./tools.js";
 
-export function asOpenClawConfig(config: Partial<OpenClawConfig>): OpenClawConfig {
+export function asSunClawConfig(config: Partial<SunClawConfig>): SunClawConfig {
   return config;
 }
 
-export function createDefaultMemoryToolConfig(): OpenClawConfig {
-  return asOpenClawConfig({ agents: { list: [{ id: "main", default: true }] } });
+export function createDefaultMemoryToolConfig(): SunClawConfig {
+  return asSunClawConfig({ agents: { list: [{ id: "main", default: true }] } });
 }
 
 export function createMemorySearchToolOrThrow(params?: {
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   agentId?: string;
   agentSessionKey?: string;
 }) {
@@ -27,7 +27,7 @@ export function createMemorySearchToolOrThrow(params?: {
 }
 
 export function createMemoryGetToolOrThrow(
-  config: OpenClawConfig = createDefaultMemoryToolConfig(),
+  config: SunClawConfig = createDefaultMemoryToolConfig(),
 ) {
   const tool = createMemoryGetTool({ config });
   if (!tool) {
@@ -38,7 +38,7 @@ export function createMemoryGetToolOrThrow(
 
 export function createAutoCitationsMemorySearchTool(agentSessionKey: string) {
   return createMemorySearchToolOrThrow({
-    config: asOpenClawConfig({
+    config: asSunClawConfig({
       memory: { citations: "auto" },
       agents: { list: [{ id: "main", default: true }] },
     }),

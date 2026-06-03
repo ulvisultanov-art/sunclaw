@@ -55,11 +55,11 @@ export { UploadDailyLimitExceededError } from "../api/media-chunked.js";
 // ============ Plugin User-Agent ============
 
 let pluginVersion = "unknown";
-let openclawVersion = "unknown";
+let sunclawVersion = "unknown";
 
 /** Build the User-Agent string from the current plugin and framework versions. */
 function buildUserAgent(): string {
-  return `QQBotPlugin/${pluginVersion} (Node/${process.versions.node}; ${os.platform()}; OpenClaw/${openclawVersion})`;
+  return `QQBotPlugin/${pluginVersion} (Node/${process.versions.node}; ${os.platform()}; SunClaw/${sunclawVersion})`;
 }
 
 /** Return the current User-Agent string. */
@@ -71,19 +71,19 @@ export function getPluginUserAgent(): string {
  * Initialize sender with the plugin version.
  * Must be called once during startup before any API calls.
  */
-export function initSender(options: { pluginVersion?: string; openclawVersion?: string }): void {
+export function initSender(options: { pluginVersion?: string; sunclawVersion?: string }): void {
   if (options.pluginVersion) {
     pluginVersion = options.pluginVersion;
   }
-  if (options.openclawVersion) {
-    openclawVersion = options.openclawVersion;
+  if (options.sunclawVersion) {
+    sunclawVersion = options.sunclawVersion;
   }
 }
 
-/** Update the OpenClaw framework version in the User-Agent (called after runtime injection). */
-export function setOpenClawVersion(version: string): void {
+/** Update the SunClaw framework version in the User-Agent (called after runtime injection). */
+export function setSunClawVersion(version: string): void {
   if (version) {
-    openclawVersion = version;
+    sunclawVersion = version;
   }
 }
 

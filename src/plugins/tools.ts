@@ -1,8 +1,8 @@
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord } from "@sunclaw/normalization-core/record-coerce";
 import {
   normalizeUniqueStringEntries,
   uniqueStrings,
-} from "@openclaw/normalization-core/string-normalization";
+} from "@sunclaw/normalization-core/string-normalization";
 import { compileGlobPatterns, matchesAnyGlobPattern } from "../agents/glob-pattern.js";
 import { DEFAULT_PLUGIN_TOOLS_ALLOWLIST_ENTRY, normalizeToolName } from "../agents/tool-policy.js";
 import type { AnyAgentTool } from "../agents/tools/common.js";
@@ -34,7 +34,7 @@ import {
   type PluginToolDescriptorConfigCacheKeyMemo,
   writeCachedPluginToolDescriptors,
 } from "./tool-descriptor-cache.js";
-import type { OpenClawPluginToolContext } from "./types.js";
+import type { SunClawPluginToolContext } from "./types.js";
 
 export {
   resetPluginToolDescriptorCache,
@@ -189,7 +189,7 @@ function wrapPluginToolFactoryResult(
   return isAgentTool(result) ? wrapPluginToolCallbacks(entry, result) : result;
 }
 
-function resolvePluginToolFactory(entry: PluginToolRegistration, ctx: OpenClawPluginToolContext) {
+function resolvePluginToolFactory(entry: PluginToolRegistration, ctx: SunClawPluginToolContext) {
   return runWithPluginToolScope(entry, () =>
     wrapPluginToolFactoryResult(entry, entry.factory(ctx)),
   );
@@ -362,7 +362,7 @@ function createPluginToolFactoryTiming(params: {
 
 function resolvePluginToolFactoryEntry(params: {
   entry: PluginToolRegistration;
-  ctx: OpenClawPluginToolContext;
+  ctx: SunClawPluginToolContext;
   declaredNames: string[];
   factoryTimingStartedAt: number;
   logError: (message: string) => void;
@@ -628,7 +628,7 @@ function readPluginCacheSource(plugin: PluginManifestRecord): string {
 
 function buildPluginDescriptorCacheKey(params: {
   plugin: PluginManifestRecord;
-  ctx: OpenClawPluginToolContext;
+  ctx: SunClawPluginToolContext;
   currentRuntimeConfig?: PluginLoadOptions["config"] | null;
   configCacheKeyMemo?: PluginToolDescriptorConfigCacheKeyMemo;
 }): string {
@@ -656,7 +656,7 @@ function cachedDescriptorsCoverToolNames(params: {
 function createCachedDescriptorPluginTool(params: {
   descriptor: CachedPluginToolDescriptor;
   plugin: PluginManifestRecord;
-  ctx: OpenClawPluginToolContext;
+  ctx: SunClawPluginToolContext;
   loadContext: ReturnType<typeof resolvePluginRuntimeLoadContext>;
   runtimeOptions: PluginLoadOptions["runtimeOptions"];
 }): AnyAgentTool {
@@ -746,7 +746,7 @@ function resolveCachedPluginTools(params: {
   onlyPluginIds: readonly string[];
   existing: Set<string>;
   existingNormalized: Set<string>;
-  ctx: OpenClawPluginToolContext;
+  ctx: SunClawPluginToolContext;
   loadContext: ReturnType<typeof resolvePluginRuntimeLoadContext>;
   runtimeOptions: PluginLoadOptions["runtimeOptions"];
   currentRuntimeConfig?: PluginLoadOptions["config"] | null;
@@ -939,7 +939,7 @@ function registryHasScopedPluginTools(
 }
 
 function resolvePluginToolLoadState(params: {
-  context: OpenClawPluginToolContext;
+  context: SunClawPluginToolContext;
   toolAllowlist?: string[];
   toolDenylist?: string[];
   allowGatewaySubagentBinding?: boolean;
@@ -995,7 +995,7 @@ function resolvePluginToolLoadState(params: {
 }
 
 export function ensureStandalonePluginToolRegistryLoaded(params: {
-  context: OpenClawPluginToolContext;
+  context: SunClawPluginToolContext;
   toolAllowlist?: string[];
   toolDenylist?: string[];
   allowGatewaySubagentBinding?: boolean;
@@ -1014,7 +1014,7 @@ export function ensureStandalonePluginToolRegistryLoaded(params: {
 }
 
 export function resolvePluginTools(params: {
-  context: OpenClawPluginToolContext;
+  context: SunClawPluginToolContext;
   existingToolNames?: Set<string>;
   toolAllowlist?: string[];
   toolDenylist?: string[];

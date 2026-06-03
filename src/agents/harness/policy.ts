@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { AUTO_AGENT_RUNTIME_ID, type EmbeddedAgentRuntime } from "../agent-runtime-id.js";
 import { normalizeOptionalAgentRuntimeId } from "../agent-runtime-id.js";
 import { resolveModelRuntimePolicy } from "../model-runtime-policy.js";
@@ -12,7 +12,7 @@ export type AgentHarnessPolicy = {
 export function resolveAgentHarnessPolicy(params: {
   provider?: string;
   modelId?: string;
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   agentId?: string;
   sessionKey?: string;
   env?: NodeJS.ProcessEnv;

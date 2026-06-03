@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@sunclaw/normalization-core/string-coerce";
 import { VERSION } from "../version.js";
 import { assertFutureConfigActionAllowed } from "./future-config-guard.js";
 import {
@@ -96,9 +96,9 @@ function mergeGatewayServiceEnv(
     ...command.environment,
   };
   for (const key of [
-    "OPENCLAW_LAUNCHD_LABEL",
-    "OPENCLAW_SYSTEMD_UNIT",
-    "OPENCLAW_WINDOWS_TASK_NAME",
+    "SUNCLAW_LAUNCHD_LABEL",
+    "SUNCLAW_SYSTEMD_UNIT",
+    "SUNCLAW_WINDOWS_TASK_NAME",
   ]) {
     const value = baseEnv[key]?.trim();
     if (value) {
@@ -139,11 +139,11 @@ function collectGatewayServiceStartRepairIssues(
     return [];
   }
   const issues: GatewayServiceStartRepairIssue[] = [];
-  const serviceVersion = command.environment?.OPENCLAW_SERVICE_VERSION?.trim();
+  const serviceVersion = command.environment?.SUNCLAW_SERVICE_VERSION?.trim();
   if (serviceVersion && serviceVersion !== VERSION) {
     issues.push({
       code: "version-mismatch",
-      message: `service was installed by OpenClaw ${serviceVersion}, current CLI is ${VERSION}`,
+      message: `service was installed by SunClaw ${serviceVersion}, current CLI is ${VERSION}`,
     });
   }
   for (const candidate of command.programArguments.slice(0, 2)) {

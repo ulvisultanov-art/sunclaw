@@ -1,5 +1,5 @@
-import type { StreamFn } from "openclaw/plugin-sdk/agent-core";
-import { createAssistantMessageEventStream } from "openclaw/plugin-sdk/llm";
+import type { StreamFn } from "sunclaw/plugin-sdk/agent-core";
+import { createAssistantMessageEventStream } from "sunclaw/plugin-sdk/llm";
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { resetLmstudioPreloadCooldownForTest, wrapLmstudioInferencePreload } from "./stream.js";
 

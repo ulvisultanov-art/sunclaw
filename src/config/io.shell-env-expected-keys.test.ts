@@ -40,8 +40,8 @@ describe("config io shell env expected keys", () => {
       "DISCORD_BOT_TOKEN",
       "SLACK_BOT_TOKEN",
       "SLACK_APP_TOKEN",
-      "OPENCLAW_GATEWAY_TOKEN",
-      "OPENCLAW_GATEWAY_PASSWORD",
+      "SUNCLAW_GATEWAY_TOKEN",
+      "SUNCLAW_GATEWAY_PASSWORD",
     ]);
   });
 });

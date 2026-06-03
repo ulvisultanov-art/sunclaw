@@ -6,16 +6,16 @@ describe("formatCliFailureLines", () => {
     const lines = formatCliFailureLines({
       title: "Could not start the CLI.",
       error: new Error("config file is invalid"),
-      argv: ["node", "openclaw", "status"],
+      argv: ["node", "sunclaw", "status"],
       env: {},
     });
 
     expect(lines).toEqual([
-      "[openclaw] Could not start the CLI.",
-      "[openclaw] Reason: config file is invalid",
-      "[openclaw] Debug: set OPENCLAW_DEBUG=1 to include the stack trace.",
-      "[openclaw] Try: openclaw doctor",
-      "[openclaw] Help: openclaw --help",
+      "[sunclaw] Could not start the CLI.",
+      "[sunclaw] Reason: config file is invalid",
+      "[sunclaw] Debug: set SUNCLAW_DEBUG=1 to include the stack trace.",
+      "[sunclaw] Try: sunclaw doctor",
+      "[sunclaw] Help: sunclaw --help",
     ]);
   });
 
@@ -23,14 +23,14 @@ describe("formatCliFailureLines", () => {
     const lines = formatCliFailureLines({
       title: "The CLI command failed.",
       error: new Error("boom"),
-      env: { OPENCLAW_DEBUG: "1" },
+      env: { SUNCLAW_DEBUG: "1" },
     });
 
     expect(lines.slice(0, 4)).toEqual([
-      "[openclaw] The CLI command failed.",
-      "[openclaw] Reason: boom",
-      "[openclaw] Stack:",
-      "[openclaw] Error: boom",
+      "[sunclaw] The CLI command failed.",
+      "[sunclaw] Reason: boom",
+      "[sunclaw] Stack:",
+      "[sunclaw] Error: boom",
     ]);
     expect(lines.join("\n")).toContain("Error: boom");
   });

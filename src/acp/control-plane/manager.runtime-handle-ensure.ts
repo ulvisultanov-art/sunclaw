@@ -6,10 +6,10 @@ import {
   resolveRuntimeHandleIdentifiersFromIdentity,
   resolveRuntimeResumeSessionId,
   resolveSessionIdentityFromMeta,
-} from "@openclaw/acp-core/runtime/session-identity";
-import type { AcpRuntime, AcpRuntimeHandle } from "@openclaw/acp-core/runtime/types";
+} from "@sunclaw/acp-core/runtime/session-identity";
+import type { AcpRuntime, AcpRuntimeHandle } from "@sunclaw/acp-core/runtime/types";
 import { resolveRuntimeConfigCacheKey } from "../../config/runtime-snapshot.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { logVerbose } from "../../globals.js";
 import { toAcpRuntimeError, withAcpRuntimeErrorBoundary } from "../runtime/errors.js";
 import type { ManagerRuntimeHandleCache } from "./manager.runtime-handle-cache.js";
@@ -27,12 +27,12 @@ import {
 } from "./runtime-options.js";
 
 export async function ensureManagerRuntimeHandle(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   sessionKey: string;
   meta: SessionAcpMeta;
   deps: Pick<AcpSessionManagerDeps, "requireRuntimeBackend">;
   runtimeHandles: ManagerRuntimeHandleCache;
-  enforceConcurrentSessionLimit: (params: { cfg: OpenClawConfig; sessionKey: string }) => void;
+  enforceConcurrentSessionLimit: (params: { cfg: SunClawConfig; sessionKey: string }) => void;
   writeSessionMeta: WriteManagerSessionMeta;
 }): Promise<{ runtime: AcpRuntime; handle: AcpRuntimeHandle; meta: SessionAcpMeta }> {
   const agent =

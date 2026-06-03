@@ -1,16 +1,16 @@
 import { normalizeChatChannelId } from "../channels/ids.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { setPluginEnabledInConfig } from "./toggle-config.js";
 
 export type PluginEnableResult = {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   enabled: boolean;
   pluginId: string;
   reason?: string;
 };
 
 export function enablePluginInConfig(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   pluginId: string,
   options: { updateChannelConfig?: boolean } = {},
 ): PluginEnableResult {

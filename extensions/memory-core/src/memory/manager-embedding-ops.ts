@@ -1,12 +1,12 @@
 import fs from "node:fs/promises";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
+import { formatErrorMessage } from "sunclaw/plugin-sdk/error-runtime";
 import {
   enforceEmbeddingMaxInputTokens,
   hasNonTextEmbeddingParts,
   type EmbeddingInput,
   type MemoryEmbeddingProviderRuntime,
-} from "openclaw/plugin-sdk/memory-core-host-engine-embeddings";
-import { createSubsystemLogger } from "openclaw/plugin-sdk/memory-core-host-engine-foundation";
+} from "sunclaw/plugin-sdk/memory-core-host-engine-embeddings";
+import { createSubsystemLogger } from "sunclaw/plugin-sdk/memory-core-host-engine-foundation";
 import {
   buildMultimodalChunkForIndexing,
   chunkMarkdown,
@@ -15,8 +15,8 @@ import {
   retryTransientMemoryRead,
   type MemoryChunk,
   type MemorySource,
-} from "openclaw/plugin-sdk/memory-core-host-engine-storage";
-import { MAX_TIMER_TIMEOUT_MS, resolveTimerTimeoutMs } from "openclaw/plugin-sdk/number-runtime";
+} from "sunclaw/plugin-sdk/memory-core-host-engine-storage";
+import { MAX_TIMER_TIMEOUT_MS, resolveTimerTimeoutMs } from "sunclaw/plugin-sdk/number-runtime";
 import {
   MEMORY_BATCH_FAILURE_LIMIT,
   recordMemoryBatchFailure,

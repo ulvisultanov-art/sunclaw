@@ -1,31 +1,31 @@
 {
-  "name": "@openclaw/pixverse-provider",
+  "name": "@sunclaw/pixverse-provider",
   "version": "2026.6.2",
-  "description": "OpenClaw PixVerse video generation provider plugin.",
+  "description": "SunClaw PixVerse video generation provider plugin.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/ulvisultanov-art/sunclaw"
   },
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "2026.5.28"
+    "@sunclaw/plugin-sdk": "workspace:*",
+    "sunclaw": "2026.5.28"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.6.2"
+    "sunclaw": ">=2026.6.2"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "sunclaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "clawhubSpec": "clawhub:@openclaw/pixverse-provider",
-      "npmSpec": "@openclaw/pixverse-provider",
+      "clawhubSpec": "clawhub:@sunclaw/pixverse-provider",
+      "npmSpec": "@sunclaw/pixverse-provider",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.5.26"
     },
@@ -33,7 +33,7 @@
       "pluginApi": ">=2026.6.2"
     },
     "build": {
-      "openclawVersion": "2026.6.2",
+      "sunclawVersion": "2026.6.2",
       "bundledDist": false
     },
     "release": {

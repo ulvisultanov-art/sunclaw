@@ -1,7 +1,7 @@
-import type { BaseProbeResult, BaseTokenResolution } from "openclaw/plugin-sdk/channel-contract";
-import { expectDirectoryIds } from "openclaw/plugin-sdk/channel-test-helpers";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { withEnvAsync } from "openclaw/plugin-sdk/test-env";
+import type { BaseProbeResult, BaseTokenResolution } from "sunclaw/plugin-sdk/channel-contract";
+import { expectDirectoryIds } from "sunclaw/plugin-sdk/channel-test-helpers";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import { withEnvAsync } from "sunclaw/plugin-sdk/test-env";
 import { describe, expect, expectTypeOf, it } from "vitest";
 import {
   listTelegramDirectoryGroupsFromConfig,
@@ -26,7 +26,7 @@ describe("Telegram directory contract", () => {
           groups: { "-1001": {}, "*": {} },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as SunClawConfig;
 
     await expectDirectoryIds(
       listTelegramDirectoryPeersFromConfig,
@@ -53,7 +53,7 @@ describe("Telegram directory contract", () => {
             },
           },
         },
-      } as unknown as OpenClawConfig;
+      } as unknown as SunClawConfig;
 
       await expectDirectoryIds(listTelegramDirectoryPeersFromConfig, cfg, ["@alice"]);
       await expectDirectoryIds(listTelegramDirectoryGroupsFromConfig, cfg, ["-1001"]);
@@ -74,7 +74,7 @@ describe("Telegram directory contract", () => {
           groups: { "-1001": {} },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as SunClawConfig;
 
     await expectDirectoryIds(listTelegramDirectoryPeersFromConfig, cfg, ["@alice"]);
     await expectDirectoryIds(listTelegramDirectoryGroupsFromConfig, cfg, ["-1001"]);
@@ -88,7 +88,7 @@ describe("Telegram directory contract", () => {
           groups: { "-1001": {}, "-1002": {}, "-2001": {} },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as SunClawConfig;
 
     const groups = await listTelegramDirectoryGroupsFromConfig({
       cfg,

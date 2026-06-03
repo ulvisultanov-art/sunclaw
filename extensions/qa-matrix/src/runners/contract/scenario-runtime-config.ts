@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
-import { replaceFileAtomic } from "openclaw/plugin-sdk/security-runtime";
-import { isRecord as isMatrixQaPlainRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { replaceFileAtomic } from "sunclaw/plugin-sdk/security-runtime";
+import { isRecord as isMatrixQaPlainRecord } from "sunclaw/plugin-sdk/string-coerce-runtime";
 
 export { isMatrixQaPlainRecord };
 

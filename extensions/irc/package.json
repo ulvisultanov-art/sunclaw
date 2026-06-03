@@ -1,12 +1,12 @@
 {
-  "name": "@openclaw/irc",
+  "name": "@sunclaw/irc",
   "version": "2026.6.2",
-  "description": "OpenClaw IRC channel plugin",
+  "description": "SunClaw IRC channel plugin",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@sunclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ],

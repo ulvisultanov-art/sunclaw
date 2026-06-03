@@ -20,9 +20,9 @@ export {
   sanitizeTextContent,
   stripToolMessages,
 } from "./chat-history-text.js";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
 import { getRuntimeConfig } from "../../config/config.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 
 export type SessionKind = "main" | "group" | "cron" | "hook" | "node" | "other";
 
@@ -82,7 +82,7 @@ export type SessionListRow = {
 export function resolveSessionToolContext(opts?: {
   agentSessionKey?: string;
   sandboxed?: boolean;
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
 }) {
   const cfg = opts?.config ?? getRuntimeConfig();
   return {

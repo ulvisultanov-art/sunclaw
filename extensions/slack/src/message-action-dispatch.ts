@@ -1,11 +1,11 @@
-import type { AgentToolResult } from "openclaw/plugin-sdk/agent-core";
-import { readBooleanParam } from "openclaw/plugin-sdk/boolean-param";
-import type { ChannelMessageActionContext } from "openclaw/plugin-sdk/channel-contract";
+import type { AgentToolResult } from "sunclaw/plugin-sdk/agent-core";
+import { readBooleanParam } from "sunclaw/plugin-sdk/boolean-param";
+import type { ChannelMessageActionContext } from "sunclaw/plugin-sdk/channel-contract";
 import {
   normalizeInteractiveReply,
   normalizeMessagePresentation,
-} from "openclaw/plugin-sdk/interactive-runtime";
-import { readPositiveIntegerParam, readStringParam } from "openclaw/plugin-sdk/param-readers";
+} from "sunclaw/plugin-sdk/interactive-runtime";
+import { readPositiveIntegerParam, readStringParam } from "sunclaw/plugin-sdk/param-readers";
 import {
   buildSlackInteractiveBlocks,
   buildSlackPresentationBlocks,

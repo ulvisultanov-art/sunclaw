@@ -166,7 +166,7 @@ export function execDockerRaw(
 }
 
 import { formatCliCommand } from "../../cli/command-format.js";
-import { markOpenClawExecEnv } from "../../infra/openclaw-exec-env.js";
+import { markSunClawExecEnv } from "../../infra/sunclaw-exec-env.js";
 import { defaultRuntime } from "../../runtime.js";
 import {
   computeSandboxConfigHash,
@@ -356,7 +356,7 @@ export async function ensureDockerImage(image: string) {
   }
   if (image === DEFAULT_SANDBOX_IMAGE) {
     throw new Error(
-      `Sandbox image not found: ${image}. Build it with scripts/sandbox-setup.sh before enabling Docker sandboxing. The default image includes python3 for sandbox write/edit helpers; OpenClaw will not substitute plain debian:bookworm-slim.`,
+      `Sandbox image not found: ${image}. Build it with scripts/sandbox-setup.sh before enabling Docker sandboxing. The default image includes python3 for sandbox write/edit helpers; SunClaw will not substitute plain debian:bookworm-slim.`,
     );
   }
   throw new Error(`Sandbox image not found: ${image}. Build or pull it first.`);
@@ -452,12 +452,12 @@ export function buildSandboxCreateArgs(params: {
 
   const createdAtMs = params.createdAtMs ?? Date.now();
   const args = ["create", "--name", params.name];
-  args.push("--label", "openclaw.sandbox=1");
-  args.push("--label", `openclaw.sessionKey=${params.scopeKey}`);
-  args.push("--label", `openclaw.createdAtMs=${createdAtMs}`);
-  args.push("--label", `openclaw.mountFormatVersion=${SANDBOX_MOUNT_FORMAT_VERSION}`);
+  args.push("--label", "sunclaw.sandbox=1");
+  args.push("--label", `sunclaw.sessionKey=${params.scopeKey}`);
+  args.push("--label", `sunclaw.createdAtMs=${createdAtMs}`);
+  args.push("--label", `sunclaw.mountFormatVersion=${SANDBOX_MOUNT_FORMAT_VERSION}`);
   if (params.configHash) {
-    args.push("--label", `openclaw.configHash=${params.configHash}`);
+    args.push("--label", `sunclaw.configHash=${params.configHash}`);
   }
   for (const [key, value] of Object.entries(params.labels ?? {})) {
     if (key && value) {
@@ -487,7 +487,7 @@ export function buildSandboxCreateArgs(params: {
       `Suspicious configured sandbox environment variables: ${envSanitization.warnings.join(", ")}`,
     );
   }
-  for (const [key, value] of Object.entries(markOpenClawExecEnv(envSanitization.allowed))) {
+  for (const [key, value] of Object.entries(markSunClawExecEnv(envSanitization.allowed))) {
     args.push("--env", `${key}=${value}`);
   }
   for (const cap of params.cfg.capDrop) {
@@ -600,18 +600,18 @@ async function createSandboxContainer(params: {
 }
 
 async function readContainerConfigHash(containerName: string): Promise<string | null> {
-  return await readDockerContainerLabel(containerName, "openclaw.configHash");
+  return await readDockerContainerLabel(containerName, "sunclaw.configHash");
 }
 
 function formatSandboxRecreateHint(params: { scope: SandboxConfig["scope"]; sessionKey: string }) {
   if (params.scope === "session") {
-    return formatCliCommand(`openclaw sandbox recreate --session ${params.sessionKey}`);
+    return formatCliCommand(`sunclaw sandbox recreate --session ${params.sessionKey}`);
   }
   if (params.scope === "agent") {
     const agentId = resolveSandboxAgentId(params.sessionKey) ?? "main";
-    return formatCliCommand(`openclaw sandbox recreate --agent ${agentId}`);
+    return formatCliCommand(`sunclaw sandbox recreate --agent ${agentId}`);
   }
-  return formatCliCommand("openclaw sandbox recreate --all");
+  return formatCliCommand("sunclaw sandbox recreate --all");
 }
 
 export async function ensureSandboxContainer(params: {

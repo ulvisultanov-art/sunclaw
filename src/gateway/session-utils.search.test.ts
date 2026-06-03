@@ -6,7 +6,7 @@ import {
   addSubagentRunForTests,
   resetSubagentRegistryForTests,
 } from "../agents/subagent-registry.test-helpers.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { SunClawConfig } from "../config/config.js";
 import type { SessionEntry } from "../config/sessions.js";
 import { registerAgentRunContext, resetAgentRunContextForTest } from "../infra/agent-events.js";
 import { buildGatewaySessionInfo, listSessionsFromStore } from "./session-utils.js";
@@ -49,7 +49,7 @@ const FREE_OPENAI_USAGE: TranscriptUsageFixture = {
 function createModelDefaultsConfig(params: {
   primary: string;
   models?: Record<string, Record<string, never>>;
-}): OpenClawConfig {
+}): SunClawConfig {
   return {
     agents: {
       defaults: {
@@ -57,12 +57,12 @@ function createModelDefaultsConfig(params: {
         models: params.models,
       },
     },
-  } as OpenClawConfig;
+  } as SunClawConfig;
 }
 
 function createLegacyRuntimeListConfig(
   models?: Record<string, Record<string, never>>,
-): OpenClawConfig {
+): SunClawConfig {
   return createModelDefaultsConfig({
     primary: "google-gemini-cli/gemini-3.1-pro-preview",
     ...(models ? { models } : {}),
@@ -83,7 +83,7 @@ function createOpenAiPricingConfig(params: {
   id: string;
   label: string;
   cost: { input: number; output: number; cacheRead: number; cacheWrite: number };
-}): OpenClawConfig {
+}): SunClawConfig {
   return {
     session: { mainKey: "main" },
     agents: { list: [{ id: "main", default: true }] },
@@ -101,7 +101,7 @@ function createOpenAiPricingConfig(params: {
         },
       },
     },
-  } as unknown as OpenClawConfig;
+  } as unknown as SunClawConfig;
 }
 
 type DefaultTranscriptFixtureParams<T> = {
@@ -152,7 +152,7 @@ const withAnthropicTranscriptFixture = <T>(params: DefaultTranscriptFixtureParam
 const withFreeOpenAiTranscriptFixture = <T>(params: DefaultTranscriptFixtureParams<T>) =>
   withTranscriptFixture(FREE_OPENAI_USAGE, params);
 
-function createAnthropicContext1mConfig(): OpenClawConfig {
+function createAnthropicContext1mConfig(): SunClawConfig {
   return {
     session: { mainKey: "main" },
     agents: {
@@ -163,11 +163,11 @@ function createAnthropicContext1mConfig(): OpenClawConfig {
         },
       },
     },
-  } as unknown as OpenClawConfig;
+  } as unknown as SunClawConfig;
 }
 
 function listSingleSession(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   storePath: string;
   key: string;
   entry: SessionEntry;
@@ -182,7 +182,7 @@ function listSingleSession(params: {
   });
 }
 
-function listMainSession(params: { cfg: OpenClawConfig; storePath: string; entry: SessionEntry }) {
+function listMainSession(params: { cfg: SunClawConfig; storePath: string; entry: SessionEntry }) {
   return listSingleSession({
     cfg: params.cfg,
     storePath: params.storePath,
@@ -331,7 +331,7 @@ describe("listSessionsFromStore search", () => {
   const baseCfg = {
     session: { mainKey: "main" },
     agents: { list: [{ id: "main", default: true }] },
-  } as OpenClawConfig;
+  } as SunClawConfig;
 
   const makeStore = (): Record<string, SessionEntry> => ({
     "agent:main:work-project": {
@@ -356,7 +356,7 @@ describe("listSessionsFromStore search", () => {
 
   function listSearchSessions(params: {
     opts: Parameters<typeof listSessionsFromStore>[0]["opts"];
-    cfg?: OpenClawConfig;
+    cfg?: SunClawConfig;
     store?: Record<string, SessionEntry>;
   }) {
     return listSessionsFromStore({
@@ -367,7 +367,7 @@ describe("listSessionsFromStore search", () => {
     });
   }
 
-  function listConfiguredMainSession(cfg: OpenClawConfig, entry: SessionEntry) {
+  function listConfiguredMainSession(cfg: SunClawConfig, entry: SessionEntry) {
     return listSearchSessions({
       cfg,
       store: mainSessionStore(entry),
@@ -593,7 +593,7 @@ describe("listSessionsFromStore search", () => {
 
   test("prefers persisted estimated session cost from the store", () => {
     withAnthropicTranscriptFixture({
-      prefix: "openclaw-session-utils-store-cost-",
+      prefix: "sunclaw-session-utils-store-cost-",
       run: ({ storePath, now }) => {
         const result = listMainSession({
           cfg: baseCfg,
@@ -624,7 +624,7 @@ describe("listSessionsFromStore search", () => {
 
   test("falls back to transcript usage for totalTokens and zero estimatedCostUsd", () => {
     withFreeOpenAiTranscriptFixture({
-      prefix: "openclaw-session-utils-zero-cost-",
+      prefix: "sunclaw-session-utils-zero-cost-",
       run: ({ storePath, now }) => {
         const result = listMainSession({
           cfg: baseCfg,
@@ -644,7 +644,7 @@ describe("listSessionsFromStore search", () => {
 
   test("falls back to transcript usage for totalTokens and estimatedCostUsd, and derives contextTokens from the resolved model", () => {
     withAnthropicTranscriptFixture({
-      prefix: "openclaw-session-utils-",
+      prefix: "sunclaw-session-utils-",
       run: ({ storePath, now }) => {
         const result = listMainSession({
           cfg: createAnthropicContext1mConfig(),
@@ -662,7 +662,7 @@ describe("listSessionsFromStore search", () => {
 
   test("chat history session metadata keeps model-derived contextTokens without transcript usage", () => {
     withAnthropicTranscriptFixture({
-      prefix: "openclaw-session-info-context-",
+      prefix: "sunclaw-session-info-context-",
       run: ({ storePath, now }) => {
         const row = buildGatewaySessionInfo({
           cfg: {
@@ -673,7 +673,7 @@ describe("listSessionsFromStore search", () => {
                 },
               },
             },
-          } as unknown as OpenClawConfig,
+          } as unknown as SunClawConfig,
           storePath,
           key: MAIN_SESSION_KEY,
           store: {
@@ -696,7 +696,7 @@ describe("listSessionsFromStore search", () => {
 
   test("uses subagent run model immediately for child sessions while transcript usage fills live totals", () => {
     withAnthropicTranscriptFixture({
-      prefix: "openclaw-session-utils-subagent-",
+      prefix: "sunclaw-session-utils-subagent-",
       transcriptId: "sess-child",
       run: ({ storePath, now }) => {
         registerRunningSubagent({
@@ -726,7 +726,7 @@ describe("listSessionsFromStore search", () => {
 
   test("keeps a running subagent model when transcript fallback still reflects an older run", () => {
     withAnthropicTranscriptFixture({
-      prefix: "openclaw-session-utils-subagent-stale-model-",
+      prefix: "sunclaw-session-utils-subagent-stale-model-",
       transcriptId: "sess-child-stale",
       run: ({ storePath, now }) => {
         registerRunningSubagent({
@@ -756,7 +756,7 @@ describe("listSessionsFromStore search", () => {
 
   test("keeps the selected override model when runtime identity was intentionally cleared", () => {
     withAnthropicTranscriptFixture({
-      prefix: "openclaw-session-utils-cleared-runtime-model-",
+      prefix: "sunclaw-session-utils-cleared-runtime-model-",
       transcriptId: "sess-override",
       run: ({ storePath, now }) => {
         const result = listMainSession({
@@ -776,7 +776,7 @@ describe("listSessionsFromStore search", () => {
 
   test("does not replace the current runtime model when transcript fallback is only for missing pricing", () => {
     withAnthropicTranscriptFixture({
-      prefix: "openclaw-session-utils-pricing-",
+      prefix: "sunclaw-session-utils-pricing-",
       transcriptId: "sess-pricing",
       run: ({ storePath, now }) => {
         const result = listMainSession({
@@ -785,7 +785,7 @@ describe("listSessionsFromStore search", () => {
             agents: {
               list: [{ id: "main", default: true }],
             },
-          } as unknown as OpenClawConfig,
+          } as unknown as SunClawConfig,
           storePath,
           entry: anthropicUsageEntry(now, {
             sessionId: "sess-pricing",

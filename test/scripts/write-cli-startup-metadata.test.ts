@@ -18,7 +18,7 @@ function writeStartupMetadataSourceSignatureFixture(rootDir: string): void {
     ["extensions/canvas/src/a2ui-jsonl.ts", "export const a2uiJsonl = 'canvas';\n"],
     ["extensions/canvas/src/cli-helpers.ts", "export const canvasHelpers = 'canvas';\n"],
     ["extensions/canvas/src/cli.ts", "export const canvasCliHelp = 'canvas';\n"],
-    ["src/cli/banner.ts", "export const banner = 'openclaw';\n"],
+    ["src/cli/banner.ts", "export const banner = 'sunclaw';\n"],
     [
       "src/cli/daemon-cli/register-service-commands.ts",
       "export const gatewayServiceCommands = 'gateway';\n",
@@ -105,7 +105,7 @@ describe("write-cli-startup-metadata", () => {
   it.runIf(process.platform !== "win32")(
     "kills descendant processes when command help rendering times out",
     async () => {
-      const tempRoot = createTempDir("openclaw-startup-metadata-timeout-");
+      const tempRoot = createTempDir("sunclaw-startup-metadata-timeout-");
       const markerPath = path.join(tempRoot, "grandchild.pid");
       const grandchildScript = [
         "process.on('SIGTERM', () => {});",
@@ -137,7 +137,7 @@ describe("write-cli-startup-metadata", () => {
   );
 
   it("writes startup metadata with populated root help text when dist falls back to source rendering", async () => {
-    const tempRoot = createTempDir("openclaw-startup-metadata-");
+    const tempRoot = createTempDir("sunclaw-startup-metadata-");
     const distDir = path.join(tempRoot, "dist");
     const extensionsDir = path.join(tempRoot, "extensions");
     const outputPath = path.join(distDir, "cli-startup-metadata.json");
@@ -147,7 +147,7 @@ describe("write-cli-startup-metadata", () => {
     writeFileSync(
       path.join(extensionsDir, "matrix", "package.json"),
       JSON.stringify({
-        openclaw: {
+        sunclaw: {
           channel: {
             id: "matrix",
             order: 120,
@@ -165,15 +165,15 @@ describe("write-cli-startup-metadata", () => {
       renderBundledRootHelpText: async () => {
         throw new Error("dist root help unavailable");
       },
-      renderSourceRootHelpText: () => "Usage: openclaw\n",
-      renderSourceBrowserHelpText: () => "Usage: openclaw browser\n",
-      renderSourceSecretsHelpText: () => "Usage: openclaw secrets\n",
-      renderSourceNodesHelpText: () => "Usage: openclaw nodes\n",
+      renderSourceRootHelpText: () => "Usage: sunclaw\n",
+      renderSourceBrowserHelpText: () => "Usage: sunclaw browser\n",
+      renderSourceSecretsHelpText: () => "Usage: sunclaw secrets\n",
+      renderSourceNodesHelpText: () => "Usage: sunclaw nodes\n",
       renderSourceSubcommandHelpTextRecord: () => ({
-        doctor: "Usage: openclaw doctor\n",
-        gateway: "Usage: openclaw gateway\n",
-        models: "Usage: openclaw models\n",
-        plugins: "Usage: openclaw plugins\n",
+        doctor: "Usage: sunclaw doctor\n",
+        gateway: "Usage: sunclaw gateway\n",
+        models: "Usage: sunclaw models\n",
+        plugins: "Usage: sunclaw plugins\n",
       }),
     });
 
@@ -194,21 +194,21 @@ describe("write-cli-startup-metadata", () => {
     expect(written.channelOptions).toContain("matrix");
     expect(written.generatorSignature).toMatch(/^[a-f0-9]{40}$/u);
     expect(written.browserHelpText).toContain("Usage:");
-    expect(written.browserHelpText).toContain("openclaw browser");
+    expect(written.browserHelpText).toContain("sunclaw browser");
     expect(written.secretsHelpText).toContain("Usage:");
-    expect(written.secretsHelpText).toContain("openclaw secrets");
+    expect(written.secretsHelpText).toContain("sunclaw secrets");
     expect(written.nodesHelpText).toContain("Usage:");
-    expect(written.nodesHelpText).toContain("openclaw nodes");
+    expect(written.nodesHelpText).toContain("sunclaw nodes");
     expect(written.rootHelpText).toContain("Usage:");
-    expect(written.rootHelpText).toContain("openclaw");
-    expect(written.subcommandHelpText.doctor).toContain("openclaw doctor");
-    expect(written.subcommandHelpText.gateway).toContain("openclaw gateway");
-    expect(written.subcommandHelpText.models).toContain("openclaw models");
-    expect(written.subcommandHelpText.plugins).toContain("openclaw plugins");
+    expect(written.rootHelpText).toContain("sunclaw");
+    expect(written.subcommandHelpText.doctor).toContain("sunclaw doctor");
+    expect(written.subcommandHelpText.gateway).toContain("sunclaw gateway");
+    expect(written.subcommandHelpText.models).toContain("sunclaw models");
+    expect(written.subcommandHelpText.plugins).toContain("sunclaw plugins");
   });
 
   it("renders independent startup help snapshots concurrently", async () => {
-    const tempRoot = createTempDir("openclaw-startup-metadata-concurrency-");
+    const tempRoot = createTempDir("sunclaw-startup-metadata-concurrency-");
     const distDir = path.join(tempRoot, "dist");
     const extensionsDir = path.join(tempRoot, "extensions");
     const outputPath = path.join(distDir, "cli-startup-metadata.json");
@@ -248,20 +248,20 @@ describe("write-cli-startup-metadata", () => {
       outputPath,
       extensionsDir,
       sourceRootDir: tempRoot,
-      renderBundledRootHelpText: async () => "Usage: openclaw\n",
-      renderSourceBrowserHelpText: renderAfterUnblock("browser", "Usage: openclaw browser\n"),
-      renderSourceSecretsHelpText: renderAfterUnblock("secrets", "Usage: openclaw secrets\n"),
-      renderSourceNodesHelpText: renderAfterUnblock("nodes", "Usage: openclaw nodes\n"),
+      renderBundledRootHelpText: async () => "Usage: sunclaw\n",
+      renderSourceBrowserHelpText: renderAfterUnblock("browser", "Usage: sunclaw browser\n"),
+      renderSourceSecretsHelpText: renderAfterUnblock("secrets", "Usage: sunclaw secrets\n"),
+      renderSourceNodesHelpText: renderAfterUnblock("nodes", "Usage: sunclaw nodes\n"),
       renderSourceSubcommandHelpTextRecord: async () => {
         started.push("subcommands");
         await new Promise<void>((resolve) => {
           unblockers.set("subcommands", resolve);
         });
         return {
-          doctor: "Usage: openclaw doctor\n",
-          gateway: "Usage: openclaw gateway\n",
-          models: "Usage: openclaw models\n",
-          plugins: "Usage: openclaw plugins\n",
+          doctor: "Usage: sunclaw doctor\n",
+          gateway: "Usage: sunclaw gateway\n",
+          models: "Usage: sunclaw models\n",
+          plugins: "Usage: sunclaw plugins\n",
         };
       },
     });
@@ -277,13 +277,13 @@ describe("write-cli-startup-metadata", () => {
       nodesHelpText: string;
       secretsHelpText: string;
     };
-    expect(written.browserHelpText).toContain("openclaw browser");
-    expect(written.secretsHelpText).toContain("openclaw secrets");
-    expect(written.nodesHelpText).toContain("openclaw nodes");
+    expect(written.browserHelpText).toContain("sunclaw browser");
+    expect(written.secretsHelpText).toContain("sunclaw secrets");
+    expect(written.nodesHelpText).toContain("sunclaw nodes");
   });
 
   it("regenerates nodes help when bundled canvas CLI help sources change", async () => {
-    const tempRoot = createTempDir("openclaw-startup-metadata-signature-");
+    const tempRoot = createTempDir("sunclaw-startup-metadata-signature-");
     const distDir = path.join(tempRoot, "dist");
     const extensionsDir = path.join(tempRoot, "extensions");
     const outputPath = path.join(distDir, "cli-startup-metadata.json");
@@ -298,18 +298,18 @@ describe("write-cli-startup-metadata", () => {
         outputPath,
         extensionsDir,
         sourceRootDir: tempRoot,
-        renderBundledRootHelpText: async () => "Usage: openclaw\n",
-        renderSourceBrowserHelpText: () => "Usage: openclaw browser\n",
-        renderSourceSecretsHelpText: () => "Usage: openclaw secrets\n",
+        renderBundledRootHelpText: async () => "Usage: sunclaw\n",
+        renderSourceBrowserHelpText: () => "Usage: sunclaw browser\n",
+        renderSourceSecretsHelpText: () => "Usage: sunclaw secrets\n",
         renderSourceNodesHelpText: () => {
           nodesRenderCount += 1;
-          return `Usage: openclaw nodes ${nodesRenderCount}\n`;
+          return `Usage: sunclaw nodes ${nodesRenderCount}\n`;
         },
         renderSourceSubcommandHelpTextRecord: () => ({
-          doctor: "Usage: openclaw doctor\n",
-          gateway: "Usage: openclaw gateway\n",
-          models: "Usage: openclaw models\n",
-          plugins: "Usage: openclaw plugins\n",
+          doctor: "Usage: sunclaw doctor\n",
+          gateway: "Usage: sunclaw gateway\n",
+          models: "Usage: sunclaw models\n",
+          plugins: "Usage: sunclaw plugins\n",
         }),
       });
     };
@@ -340,6 +340,6 @@ describe("write-cli-startup-metadata", () => {
       nodesHelpText: string;
     };
     expect(nodesRenderCount).toBe(3);
-    expect(written.nodesHelpText).toContain("openclaw nodes 3");
+    expect(written.nodesHelpText).toContain("sunclaw nodes 3");
   });
 });

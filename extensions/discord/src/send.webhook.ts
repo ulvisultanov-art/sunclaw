@@ -1,6 +1,6 @@
-import { recordChannelActivity } from "openclaw/plugin-sdk/channel-activity-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { recordChannelActivity } from "sunclaw/plugin-sdk/channel-activity-runtime";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import { normalizeOptionalString } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { resolveDiscordClientAccountContext } from "./client.js";
 import {
   DiscordError,
@@ -14,7 +14,7 @@ import { createDiscordSendResult } from "./send.receipt.js";
 import type { DiscordSendResult } from "./send.types.js";
 
 type DiscordWebhookSendOpts = {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   webhookId: string;
   webhookToken: string;
   accountId?: string;

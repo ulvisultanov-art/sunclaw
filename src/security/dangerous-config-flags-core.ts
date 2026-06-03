@@ -1,5 +1,5 @@
 import { DANGEROUS_SANDBOX_DOCKER_BOOLEAN_KEYS } from "../agents/sandbox/config.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { isRecord } from "../utils.js";
 import { collectCoreInsecureOrDangerousFlags } from "./core-dangerous-config-flags.js";
 
@@ -58,7 +58,7 @@ function collectExactPluginConfigContractMatches({
 }
 
 export function collectEnabledInsecureOrDangerousFlagsFromContracts(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   inputs: DangerousConfigFlagContractInputs = {},
 ): string[] {
   const enabledFlags = collectCoreInsecureOrDangerousFlags(cfg);

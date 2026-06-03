@@ -1,5 +1,5 @@
-import { resolveTimerTimeoutMs } from "@openclaw/normalization-core/number-coercion";
-import { asNullableRecord } from "@openclaw/normalization-core/record-coerce";
+import { resolveTimerTimeoutMs } from "@sunclaw/normalization-core/number-coercion";
+import { asNullableRecord } from "@sunclaw/normalization-core/record-coerce";
 import { styleHealthChannelLine } from "../../packages/terminal-core/src/health-style.js";
 import { isRich } from "../../packages/terminal-core/src/theme.js";
 import { resolveDefaultAgentId } from "../agents/agent-scope.js";
@@ -16,7 +16,7 @@ import type { ChannelAccountSnapshot } from "../channels/plugins/types.public.js
 import { probeGatewayStatus } from "../cli/daemon-cli/probe.js";
 import { withProgress } from "../cli/progress.js";
 import { resolveStorePath } from "../config/sessions/paths.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { listContextEngineQuarantines } from "../context-engine/registry.js";
 import {
   buildGatewayConnectionDetails,
@@ -68,7 +68,7 @@ export type {
 const DEFAULT_TIMEOUT_MS = 10_000;
 
 const debugHealth = (...args: unknown[]) => {
-  if (isTruthyEnvValue(process.env.OPENCLAW_DEBUG_HEALTH)) {
+  if (isTruthyEnvValue(process.env.SUNCLAW_DEBUG_HEALTH)) {
     console.warn("[health:debug]", ...args);
   }
 };
@@ -193,10 +193,10 @@ export function formatContextEngineHealthLine(summary: HealthSummary): string | 
   return `Context engine: warning (${quarantined.length} quarantined; downgraded to legacy: ${engines})`;
 }
 
-const resolveHeartbeatSummary = (cfg: OpenClawConfig, agentId: string) =>
+const resolveHeartbeatSummary = (cfg: SunClawConfig, agentId: string) =>
   resolveHeartbeatSummaryForAgent(cfg, agentId);
 
-const resolveAgentOrder = (cfg: OpenClawConfig) => {
+const resolveAgentOrder = (cfg: SunClawConfig) => {
   const defaultAgentId = resolveDefaultAgentId(cfg);
   const entries = Array.isArray(cfg.agents?.list) ? cfg.agents.list : [];
   const seen = new Set<string>();
@@ -295,7 +295,7 @@ const hasAccountValue = (account: unknown): boolean => account !== null && accou
 
 function resolveProbeAccountEnabled(params: {
   plugin: ChannelPlugin;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   accountId: string;
   account: unknown;
   diagnostics: string[];
@@ -317,7 +317,7 @@ function resolveProbeAccountEnabled(params: {
 
 async function resolveProbeAccountConfigured(params: {
   plugin: ChannelPlugin;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   accountId: string;
   account: unknown;
   diagnostics: string[];
@@ -340,7 +340,7 @@ async function resolveProbeAccountConfigured(params: {
 
 async function resolveHealthAccountContext(params: {
   plugin: ChannelPlugin;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   accountId: string;
 }): Promise<{
   probeAccount: unknown;
@@ -628,7 +628,7 @@ export async function healthCommand(
     json?: boolean;
     timeoutMs?: number;
     verbose?: boolean;
-    config?: OpenClawConfig;
+    config?: SunClawConfig;
     token?: string;
     password?: string;
   },
@@ -701,7 +701,7 @@ export async function healthCommand(
   if (opts.json) {
     writeRuntimeJson(runtime, summary);
   } else {
-    const debugEnabled = isTruthyEnvValue(process.env.OPENCLAW_DEBUG_HEALTH);
+    const debugEnabled = isTruthyEnvValue(process.env.SUNCLAW_DEBUG_HEALTH);
     const rich = isRich();
     if (opts.verbose) {
       const details = buildGatewayConnectionDetails({ config: cfg });
@@ -942,12 +942,12 @@ export async function healthCommand(
   }
 }
 
-async function readBestEffortHealthConfig(): Promise<OpenClawConfig> {
+async function readBestEffortHealthConfig(): Promise<SunClawConfig> {
   const { readBestEffortConfig } = await loadConfigRuntime();
   return await readBestEffortConfig();
 }
 
-async function readRuntimeHealthConfig(): Promise<OpenClawConfig> {
+async function readRuntimeHealthConfig(): Promise<SunClawConfig> {
   const { getRuntimeConfig } = await loadConfigRuntime();
   return getRuntimeConfig();
 }

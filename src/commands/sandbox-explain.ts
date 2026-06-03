@@ -1,7 +1,7 @@
 import {
   normalizeOptionalLowercaseString,
   normalizeStringifiedEntries,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@sunclaw/normalization-core/string-coerce";
 import { formatDocsLink } from "../../packages/terminal-core/src/links.js";
 import { colorize, isRich, theme } from "../../packages/terminal-core/src/theme.js";
 import { resolveAgentConfig } from "../agents/agent-scope.js";
@@ -15,7 +15,7 @@ import {
   resolveMainSessionKey,
   resolveStorePath,
 } from "../config/sessions.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import {
   buildAgentMainSessionKey,
   normalizeAgentId,
@@ -32,10 +32,10 @@ type SandboxExplainOptions = {
   json: boolean;
 };
 
-const SANDBOX_DOCS_URL = "https://docs.openclaw.ai/sandbox";
+const SANDBOX_DOCS_URL = "https://docs.sunclaw.complex.az/sandbox";
 
 function normalizeExplainSessionKey(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   agentId: string;
   session?: string;
 }): string {
@@ -59,7 +59,7 @@ function normalizeExplainSessionKey(params: {
 }
 
 function inferProviderFromSessionKey(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   sessionKey: string;
 }): string | undefined {
   const parsed = parseAgentSessionKey(params.sessionKey);
@@ -89,7 +89,7 @@ function inferProviderFromSessionKey(params: {
 }
 
 function resolveActiveChannel(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   agentId: string;
   sessionKey: string;
 }): string | undefined {
@@ -338,7 +338,7 @@ export async function sandboxExplainCommand(
     lines.push(`  - ${keyLocal}`);
   }
   lines.push("");
-  lines.push(`${key("Docs:")} ${formatDocsLink("/sandbox", "docs.openclaw.ai/sandbox")}`);
+  lines.push(`${key("Docs:")} ${formatDocsLink("/sandbox", "docs.sunclaw.complex.az/sandbox")}`);
 
   runtime.log(`${lines.join("\n")}\n`);
 }

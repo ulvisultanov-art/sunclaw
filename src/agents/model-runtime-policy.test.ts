@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, it } from "vitest";
 import type { ModelDefinitionConfig } from "../config/types.models.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { resolveModelRuntimePolicy } from "./model-runtime-policy.js";
 
-const ORIGINAL_BUILD_PRIVATE_QA = process.env.OPENCLAW_BUILD_PRIVATE_QA;
-const ORIGINAL_QA_FORCE_RUNTIME = process.env.OPENCLAW_QA_FORCE_RUNTIME;
+const ORIGINAL_BUILD_PRIVATE_QA = process.env.SUNCLAW_BUILD_PRIVATE_QA;
+const ORIGINAL_QA_FORCE_RUNTIME = process.env.SUNCLAW_QA_FORCE_RUNTIME;
 
 const createModelConfig = (agentRuntimeId: string): ModelDefinitionConfig => ({
   id: "qwen-local",
@@ -23,7 +23,7 @@ const createModelConfig = (agentRuntimeId: string): ModelDefinitionConfig => ({
 });
 
 function restoreEnv(
-  name: "OPENCLAW_BUILD_PRIVATE_QA" | "OPENCLAW_QA_FORCE_RUNTIME",
+  name: "SUNCLAW_BUILD_PRIVATE_QA" | "SUNCLAW_QA_FORCE_RUNTIME",
   value: string | undefined,
 ): void {
   if (value == null) {
@@ -33,7 +33,7 @@ function restoreEnv(
   process.env[name] = value;
 }
 
-function makeProviderRuntimeConfig(runtime: string): OpenClawConfig {
+function makeProviderRuntimeConfig(runtime: string): SunClawConfig {
   return {
     models: {
       providers: {
@@ -44,18 +44,18 @@ function makeProviderRuntimeConfig(runtime: string): OpenClawConfig {
         },
       },
     },
-  } as OpenClawConfig;
+  } as SunClawConfig;
 }
 
 afterEach(() => {
-  restoreEnv("OPENCLAW_BUILD_PRIVATE_QA", ORIGINAL_BUILD_PRIVATE_QA);
-  restoreEnv("OPENCLAW_QA_FORCE_RUNTIME", ORIGINAL_QA_FORCE_RUNTIME);
+  restoreEnv("SUNCLAW_BUILD_PRIVATE_QA", ORIGINAL_BUILD_PRIVATE_QA);
+  restoreEnv("SUNCLAW_QA_FORCE_RUNTIME", ORIGINAL_QA_FORCE_RUNTIME);
 });
 
 describe("resolveModelRuntimePolicy", () => {
   it("ignores the QA force-runtime override when the private QA gate is unset", () => {
-    delete process.env.OPENCLAW_BUILD_PRIVATE_QA;
-    process.env.OPENCLAW_QA_FORCE_RUNTIME = "openclaw";
+    delete process.env.SUNCLAW_BUILD_PRIVATE_QA;
+    process.env.SUNCLAW_QA_FORCE_RUNTIME = "sunclaw";
 
     expect(
       resolveModelRuntimePolicy({
@@ -70,8 +70,8 @@ describe("resolveModelRuntimePolicy", () => {
   });
 
   it("respects the QA force-runtime override when the private QA gate is set", () => {
-    process.env.OPENCLAW_BUILD_PRIVATE_QA = "1";
-    process.env.OPENCLAW_QA_FORCE_RUNTIME = "openclaw";
+    process.env.SUNCLAW_BUILD_PRIVATE_QA = "1";
+    process.env.SUNCLAW_QA_FORCE_RUNTIME = "sunclaw";
 
     expect(
       resolveModelRuntimePolicy({
@@ -80,14 +80,14 @@ describe("resolveModelRuntimePolicy", () => {
         modelId: "gpt-5.5",
       }),
     ).toEqual({
-      policy: { id: "openclaw" },
+      policy: { id: "sunclaw" },
       source: "model",
     });
   });
 
   it("ignores invalid QA force-runtime values even when the private QA gate is set", () => {
-    process.env.OPENCLAW_BUILD_PRIVATE_QA = "1";
-    process.env.OPENCLAW_QA_FORCE_RUNTIME = "bogus";
+    process.env.SUNCLAW_BUILD_PRIVATE_QA = "1";
+    process.env.SUNCLAW_QA_FORCE_RUNTIME = "bogus";
 
     expect(
       resolveModelRuntimePolicy({
@@ -106,11 +106,11 @@ describe("resolveModelRuntimePolicy", () => {
       agents: {
         defaults: {
           models: {
-            "vllm/*": { agentRuntime: { id: "openclaw" } },
+            "vllm/*": { agentRuntime: { id: "sunclaw" } },
           },
         },
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
 
     expect(
       resolveModelRuntimePolicy({
@@ -119,7 +119,7 @@ describe("resolveModelRuntimePolicy", () => {
         modelId: "qwen-local",
       }),
     ).toEqual({
-      policy: { id: "openclaw" },
+      policy: { id: "sunclaw" },
       source: "model",
       matchedProvider: "vllm",
     });
@@ -130,11 +130,11 @@ describe("resolveModelRuntimePolicy", () => {
       agents: {
         defaults: {
           models: {
-            "vllm/*": { agentRuntime: { id: "openclaw" } },
+            "vllm/*": { agentRuntime: { id: "sunclaw" } },
           },
         },
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
 
     expect(
       resolveModelRuntimePolicy({
@@ -142,7 +142,7 @@ describe("resolveModelRuntimePolicy", () => {
         provider: "vllm",
       }),
     ).toEqual({
-      policy: { id: "openclaw" },
+      policy: { id: "sunclaw" },
       source: "model",
       matchedProvider: "vllm",
     });
@@ -153,12 +153,12 @@ describe("resolveModelRuntimePolicy", () => {
       agents: {
         defaults: {
           models: {
-            "vllm/*": { agentRuntime: { id: "openclaw" } },
+            "vllm/*": { agentRuntime: { id: "sunclaw" } },
             "vllm/qwen-local": { agentRuntime: { id: "codex" } },
           },
         },
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
 
     expect(
       resolveModelRuntimePolicy({
@@ -178,7 +178,7 @@ describe("resolveModelRuntimePolicy", () => {
       agents: {
         defaults: {
           models: {
-            "vllm/*": { agentRuntime: { id: "openclaw" } },
+            "vllm/*": { agentRuntime: { id: "sunclaw" } },
           },
         },
       },
@@ -190,7 +190,7 @@ describe("resolveModelRuntimePolicy", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
 
     expect(
       resolveModelRuntimePolicy({
@@ -209,7 +209,7 @@ describe("resolveModelRuntimePolicy", () => {
       agents: {
         defaults: {
           models: {
-            "vllm/*": { agentRuntime: { id: "openclaw" } },
+            "vllm/*": { agentRuntime: { id: "sunclaw" } },
           },
         },
       },
@@ -222,7 +222,7 @@ describe("resolveModelRuntimePolicy", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
 
     expect(
       resolveModelRuntimePolicy({
@@ -231,7 +231,7 @@ describe("resolveModelRuntimePolicy", () => {
         modelId: "qwen-local",
       }),
     ).toEqual({
-      policy: { id: "openclaw" },
+      policy: { id: "sunclaw" },
       source: "model",
       matchedProvider: "vllm",
     });
@@ -246,7 +246,7 @@ describe("resolveModelRuntimePolicy", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
 
     expect(
       resolveModelRuntimePolicy({
@@ -270,7 +270,7 @@ describe("resolveModelRuntimePolicy", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
 
     expect(
       resolveModelRuntimePolicy({
@@ -290,7 +290,7 @@ describe("resolveModelRuntimePolicy", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
 
     expect(
       resolveModelRuntimePolicy({
@@ -322,7 +322,7 @@ describe("resolveModelRuntimePolicy", () => {
           },
         ],
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
 
     expect(
       resolveModelRuntimePolicy({
@@ -349,7 +349,7 @@ describe("resolveModelRuntimePolicy", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
 
     expect(
       resolveModelRuntimePolicy({

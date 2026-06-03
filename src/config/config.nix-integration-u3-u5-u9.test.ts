@@ -22,103 +22,103 @@ describe("Nix integration (U3, U5, U9)", () => {
   });
 
   describe("U3: isNixMode env var detection", () => {
-    it("isNixMode is false when OPENCLAW_NIX_MODE is not set", () => {
-      expect(resolveIsNixMode(envWith({ OPENCLAW_NIX_MODE: undefined }))).toBe(false);
+    it("isNixMode is false when SUNCLAW_NIX_MODE is not set", () => {
+      expect(resolveIsNixMode(envWith({ SUNCLAW_NIX_MODE: undefined }))).toBe(false);
     });
 
-    it("isNixMode is false when OPENCLAW_NIX_MODE is empty", () => {
-      expect(resolveIsNixMode(envWith({ OPENCLAW_NIX_MODE: "" }))).toBe(false);
+    it("isNixMode is false when SUNCLAW_NIX_MODE is empty", () => {
+      expect(resolveIsNixMode(envWith({ SUNCLAW_NIX_MODE: "" }))).toBe(false);
     });
 
-    it("isNixMode is false when OPENCLAW_NIX_MODE is not '1'", () => {
-      expect(resolveIsNixMode(envWith({ OPENCLAW_NIX_MODE: "true" }))).toBe(false);
+    it("isNixMode is false when SUNCLAW_NIX_MODE is not '1'", () => {
+      expect(resolveIsNixMode(envWith({ SUNCLAW_NIX_MODE: "true" }))).toBe(false);
     });
 
-    it("isNixMode is true when OPENCLAW_NIX_MODE=1", () => {
-      expect(resolveIsNixMode(envWith({ OPENCLAW_NIX_MODE: "1" }))).toBe(true);
+    it("isNixMode is true when SUNCLAW_NIX_MODE=1", () => {
+      expect(resolveIsNixMode(envWith({ SUNCLAW_NIX_MODE: "1" }))).toBe(true);
     });
   });
 
   describe("U5: CONFIG_PATH and STATE_DIR env var overrides", () => {
-    it("STATE_DIR defaults to ~/.openclaw when env not set", () => {
-      expect(resolveStateDir(envWith({ OPENCLAW_STATE_DIR: undefined }))).toMatch(/\.openclaw$/);
+    it("STATE_DIR defaults to ~/.sunclaw when env not set", () => {
+      expect(resolveStateDir(envWith({ SUNCLAW_STATE_DIR: undefined }))).toMatch(/\.sunclaw$/);
     });
 
-    it("STATE_DIR respects OPENCLAW_STATE_DIR override", () => {
-      expect(resolveStateDir(envWith({ OPENCLAW_STATE_DIR: "/custom/state/dir" }))).toBe(
+    it("STATE_DIR respects SUNCLAW_STATE_DIR override", () => {
+      expect(resolveStateDir(envWith({ SUNCLAW_STATE_DIR: "/custom/state/dir" }))).toBe(
         path.resolve("/custom/state/dir"),
       );
     });
 
-    it("STATE_DIR respects OPENCLAW_HOME when state override is unset", () => {
+    it("STATE_DIR respects SUNCLAW_HOME when state override is unset", () => {
       const customHome = path.join(path.sep, "custom", "home");
       expect(
-        resolveStateDir(envWith({ OPENCLAW_HOME: customHome, OPENCLAW_STATE_DIR: undefined })),
-      ).toBe(path.join(path.resolve(customHome), ".openclaw"));
+        resolveStateDir(envWith({ SUNCLAW_HOME: customHome, SUNCLAW_STATE_DIR: undefined })),
+      ).toBe(path.join(path.resolve(customHome), ".sunclaw"));
     });
 
-    it("CONFIG_PATH defaults to OPENCLAW_HOME/.openclaw/openclaw.json", () => {
+    it("CONFIG_PATH defaults to SUNCLAW_HOME/.sunclaw/sunclaw.json", () => {
       const customHome = path.join(path.sep, "custom", "home");
       expect(
         resolveConfigPathCandidate(
           envWith({
-            OPENCLAW_HOME: customHome,
-            OPENCLAW_CONFIG_PATH: undefined,
-            OPENCLAW_STATE_DIR: undefined,
+            SUNCLAW_HOME: customHome,
+            SUNCLAW_CONFIG_PATH: undefined,
+            SUNCLAW_STATE_DIR: undefined,
           }),
         ),
-      ).toBe(path.join(path.resolve(customHome), ".openclaw", "openclaw.json"));
+      ).toBe(path.join(path.resolve(customHome), ".sunclaw", "sunclaw.json"));
     });
 
-    it("CONFIG_PATH defaults to ~/.openclaw/openclaw.json when env not set", () => {
+    it("CONFIG_PATH defaults to ~/.sunclaw/sunclaw.json when env not set", () => {
       expect(
         resolveConfigPathCandidate(
-          envWith({ OPENCLAW_CONFIG_PATH: undefined, OPENCLAW_STATE_DIR: undefined }),
+          envWith({ SUNCLAW_CONFIG_PATH: undefined, SUNCLAW_STATE_DIR: undefined }),
         ),
-      ).toMatch(/\.openclaw[\\/]openclaw\.json$/);
+      ).toMatch(/\.sunclaw[\\/]sunclaw\.json$/);
     });
 
-    it("CONFIG_PATH respects OPENCLAW_CONFIG_PATH override", () => {
+    it("CONFIG_PATH respects SUNCLAW_CONFIG_PATH override", () => {
       expect(
         resolveConfigPathCandidate(
-          envWith({ OPENCLAW_CONFIG_PATH: "/nix/store/abc/openclaw.json" }),
+          envWith({ SUNCLAW_CONFIG_PATH: "/nix/store/abc/sunclaw.json" }),
         ),
-      ).toBe(path.resolve("/nix/store/abc/openclaw.json"));
+      ).toBe(path.resolve("/nix/store/abc/sunclaw.json"));
     });
 
-    it("CONFIG_PATH expands ~ in OPENCLAW_CONFIG_PATH override", async () => {
+    it("CONFIG_PATH expands ~ in SUNCLAW_CONFIG_PATH override", async () => {
       await withTempHome(async (home) => {
         expect(
           resolveConfigPathCandidate(
-            envWith({ OPENCLAW_HOME: home, OPENCLAW_CONFIG_PATH: "~/.openclaw/custom.json" }),
+            envWith({ SUNCLAW_HOME: home, SUNCLAW_CONFIG_PATH: "~/.sunclaw/custom.json" }),
             () => home,
           ),
-        ).toBe(path.join(home, ".openclaw", "custom.json"));
+        ).toBe(path.join(home, ".sunclaw", "custom.json"));
       });
     });
 
     it("CONFIG_PATH uses STATE_DIR when only state dir is overridden", () => {
       expect(
         resolveConfigPathCandidate(
-          envWith({ OPENCLAW_STATE_DIR: "/custom/state", OPENCLAW_TEST_FAST: "1" }),
-          () => path.join(path.sep, "tmp", "openclaw-config-home"),
+          envWith({ SUNCLAW_STATE_DIR: "/custom/state", SUNCLAW_TEST_FAST: "1" }),
+          () => path.join(path.sep, "tmp", "sunclaw-config-home"),
         ),
-      ).toBe(path.join(path.resolve("/custom/state"), "openclaw.json"));
+      ).toBe(path.join(path.resolve("/custom/state"), "sunclaw.json"));
     });
   });
 
   describe("U6: gateway port resolution", () => {
     it("uses default when env and config are unset", () => {
-      expect(resolveGatewayPort({}, envWith({ OPENCLAW_GATEWAY_PORT: undefined }))).toBe(
+      expect(resolveGatewayPort({}, envWith({ SUNCLAW_GATEWAY_PORT: undefined }))).toBe(
         DEFAULT_GATEWAY_PORT,
       );
     });
 
-    it("prefers OPENCLAW_GATEWAY_PORT over config", () => {
+    it("prefers SUNCLAW_GATEWAY_PORT over config", () => {
       expect(
         resolveGatewayPort(
           { gateway: { port: 19002 } },
-          envWith({ OPENCLAW_GATEWAY_PORT: "19001" }),
+          envWith({ SUNCLAW_GATEWAY_PORT: "19001" }),
         ),
       ).toBe(19001);
     });
@@ -127,7 +127,7 @@ describe("Nix integration (U3, U5, U9)", () => {
       expect(
         resolveGatewayPort(
           { gateway: { port: 19003 } },
-          envWith({ OPENCLAW_GATEWAY_PORT: "nope" }),
+          envWith({ SUNCLAW_GATEWAY_PORT: "nope" }),
         ),
       ).toBe(19003);
     });

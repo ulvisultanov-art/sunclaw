@@ -1,8 +1,8 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 
 /** Resolve the config path prefix for a channel account, falling back to the root channel section. */
 export function resolveChannelAccountConfigBasePath(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   channelKey: string;
   accountId: string;
 }): string {

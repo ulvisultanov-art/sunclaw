@@ -1,14 +1,14 @@
 import {
   extractInternalRuntimeContext,
-  OPENCLAW_NEXT_TURN_RUNTIME_CONTEXT_HEADER,
-  OPENCLAW_RUNTIME_CONTEXT_CUSTOM_TYPE,
-  OPENCLAW_RUNTIME_CONTEXT_NOTICE,
-  OPENCLAW_RUNTIME_EVENT_HEADER,
+  SUNCLAW_NEXT_TURN_RUNTIME_CONTEXT_HEADER,
+  SUNCLAW_RUNTIME_CONTEXT_CUSTOM_TYPE,
+  SUNCLAW_RUNTIME_CONTEXT_NOTICE,
+  SUNCLAW_RUNTIME_EVENT_HEADER,
 } from "../../internal-runtime-context.js";
 import type { CurrentInboundPromptContext } from "./params.js";
-export { OPENCLAW_RUNTIME_CONTEXT_CUSTOM_TYPE };
+export { SUNCLAW_RUNTIME_CONTEXT_CUSTOM_TYPE };
 
-const OPENCLAW_RUNTIME_EVENT_USER_PROMPT = "Continue the OpenClaw runtime event.";
+const SUNCLAW_RUNTIME_EVENT_USER_PROMPT = "Continue the SunClaw runtime event.";
 
 type RuntimeContextPromptParts = {
   prompt: string;
@@ -23,7 +23,7 @@ export type RuntimeContextCustomMessage = {
   customType: string;
   content: string;
   display: false;
-  details: { source: "openclaw-runtime-context" };
+  details: { source: "sunclaw-runtime-context" };
   timestamp: number;
 };
 
@@ -113,8 +113,8 @@ export function resolveRuntimeContextPromptParts(params: {
   if (!prompt.trim()) {
     return runtimeContext
       ? {
-          prompt: OPENCLAW_RUNTIME_EVENT_USER_PROMPT,
-          ...(modelPromptText.trim() && modelPromptText !== OPENCLAW_RUNTIME_EVENT_USER_PROMPT
+          prompt: SUNCLAW_RUNTIME_EVENT_USER_PROMPT,
+          ...(modelPromptText.trim() && modelPromptText !== SUNCLAW_RUNTIME_EVENT_USER_PROMPT
             ? { modelPrompt: modelPromptText }
             : {}),
           runtimeContext,
@@ -142,9 +142,9 @@ function buildRuntimeContextMessageContent(params: {
 }): string {
   return [
     params.kind === "runtime-event"
-      ? OPENCLAW_RUNTIME_EVENT_HEADER
-      : OPENCLAW_NEXT_TURN_RUNTIME_CONTEXT_HEADER,
-    OPENCLAW_RUNTIME_CONTEXT_NOTICE,
+      ? SUNCLAW_RUNTIME_EVENT_HEADER
+      : SUNCLAW_NEXT_TURN_RUNTIME_CONTEXT_HEADER,
+    SUNCLAW_RUNTIME_CONTEXT_NOTICE,
     "",
     params.runtimeContext,
   ].join("\n");
@@ -167,10 +167,10 @@ export function buildRuntimeContextCustomMessage(
   }
   return {
     role: "custom",
-    customType: OPENCLAW_RUNTIME_CONTEXT_CUSTOM_TYPE,
+    customType: SUNCLAW_RUNTIME_CONTEXT_CUSTOM_TYPE,
     content: buildRuntimeContextSystemContext(trimmedRuntimeContext),
     display: false,
-    details: { source: "openclaw-runtime-context" },
+    details: { source: "sunclaw-runtime-context" },
     timestamp: Date.now(),
   };
 }

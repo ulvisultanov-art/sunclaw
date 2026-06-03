@@ -30,7 +30,7 @@ describe("resetCommand", () => {
 
     expect(
       cleanupCommandLogMessages(runtime).some((message) =>
-        message.includes("openclaw backup create"),
+        message.includes("sunclaw backup create"),
       ),
     ).toBe(true);
   });
@@ -45,7 +45,7 @@ describe("resetCommand", () => {
 
     expect(
       cleanupCommandLogMessages(runtime).some((message) =>
-        message.includes("openclaw backup create"),
+        message.includes("sunclaw backup create"),
       ),
     ).toBe(false);
   });
@@ -59,7 +59,7 @@ describe("resetCommand", () => {
     });
 
     expect(removeWorkspaceAttestationPaths).toHaveBeenCalledWith(
-      ["/tmp/.openclaw/workspace"],
+      ["/tmp/.sunclaw/workspace"],
       runtime,
       { dryRun: true },
     );

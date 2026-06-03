@@ -2,12 +2,12 @@ import {
   logAckFailure,
   removeAckReactionHandleAfterReply,
   type AckReactionHandle,
-} from "openclaw/plugin-sdk/channel-feedback";
+} from "sunclaw/plugin-sdk/channel-feedback";
 import {
   runChannelInboundEvent,
   type CommandTurnContext,
-} from "openclaw/plugin-sdk/channel-inbound";
-import { recordInboundSession } from "openclaw/plugin-sdk/conversation-runtime";
+} from "sunclaw/plugin-sdk/channel-inbound";
+import { recordInboundSession } from "sunclaw/plugin-sdk/conversation-runtime";
 import {
   createInternalHookEvent,
   deriveInboundMessageHookContext,
@@ -16,9 +16,9 @@ import {
   toPluginMessageContext,
   toPluginMessageReceivedEvent,
   triggerInternalHook,
-} from "openclaw/plugin-sdk/hook-runtime";
-import { getGlobalHookRunner } from "openclaw/plugin-sdk/plugin-runtime";
-import { resolveBatchedReplyThreadingPolicy } from "openclaw/plugin-sdk/reply-reference";
+} from "sunclaw/plugin-sdk/hook-runtime";
+import { getGlobalHookRunner } from "sunclaw/plugin-sdk/plugin-runtime";
+import { resolveBatchedReplyThreadingPolicy } from "sunclaw/plugin-sdk/reply-reference";
 import { getPrimaryIdentityId, getSelfIdentity, getSenderIdentity } from "../../identity.js";
 import {
   resolveWhatsAppCommandAuthorized,

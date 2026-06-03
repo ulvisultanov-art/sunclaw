@@ -1,6 +1,6 @@
 export {
   definePluginEntry,
-  type OpenClawPluginApi,
+  type SunClawPluginApi,
   type PluginLogger,
   type PluginRuntime,
-} from "openclaw/plugin-sdk/core";
+} from "sunclaw/plugin-sdk/core";

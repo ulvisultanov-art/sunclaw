@@ -65,7 +65,7 @@ function writeFixtureServerShims(binDir: string, pidPath: string): void {
     path.join(binDir, "node"),
     [
       "#!/bin/bash",
-      'printf "%s\\n" "$$" >"$OPENCLAW_TEST_FIXTURE_SERVER_PID"',
+      'printf "%s\\n" "$$" >"$SUNCLAW_TEST_FIXTURE_SERVER_PID"',
       "trap 'exit 0' TERM",
       "while true; do /bin/sleep 1; done",
       "",
@@ -110,26 +110,26 @@ describe("plugins Docker assertions", () => {
       encoding: "utf8",
       env: {
         ...process.env,
-        CLAWHUB_PLUGIN_SPEC: "clawhub:@openclaw/kitchen-sink",
-        OPENCLAW_PLUGINS_E2E_CLAWHUB_PREFLIGHT_TIMEOUT_MS: "1e3",
+        CLAWHUB_PLUGIN_SPEC: "clawhub:@sunclaw/kitchen-sink",
+        SUNCLAW_PLUGINS_E2E_CLAWHUB_PREFLIGHT_TIMEOUT_MS: "1e3",
       },
     });
     expect(timeoutResult.status).not.toBe(0);
     expect(timeoutResult.stderr).toContain(
-      "invalid OPENCLAW_PLUGINS_E2E_CLAWHUB_PREFLIGHT_TIMEOUT_MS: 1e3",
+      "invalid SUNCLAW_PLUGINS_E2E_CLAWHUB_PREFLIGHT_TIMEOUT_MS: 1e3",
     );
 
     const bodyLimitResult = spawnSync(process.execPath, [ASSERTIONS_SCRIPT, "clawhub-preflight"], {
       encoding: "utf8",
       env: {
         ...process.env,
-        CLAWHUB_PLUGIN_SPEC: "clawhub:@openclaw/kitchen-sink",
-        OPENCLAW_PLUGINS_E2E_CLAWHUB_PREFLIGHT_BODY_MAX_BYTES: "1000bytes",
+        CLAWHUB_PLUGIN_SPEC: "clawhub:@sunclaw/kitchen-sink",
+        SUNCLAW_PLUGINS_E2E_CLAWHUB_PREFLIGHT_BODY_MAX_BYTES: "1000bytes",
       },
     });
     expect(bodyLimitResult.status).not.toBe(0);
     expect(bodyLimitResult.stderr).toContain(
-      "invalid OPENCLAW_PLUGINS_E2E_CLAWHUB_PREFLIGHT_BODY_MAX_BYTES: 1000bytes",
+      "invalid SUNCLAW_PLUGINS_E2E_CLAWHUB_PREFLIGHT_BODY_MAX_BYTES: 1000bytes",
     );
   });
 
@@ -142,27 +142,27 @@ describe("plugins Docker assertions", () => {
 
     for (const scriptPath of scripts) {
       const script = readFileSync(scriptPath, "utf8");
-      const scriptWithoutDefaultScratch = script.replace('mktemp -d "/tmp/openclaw-plugins.XXXXXX"', "");
-      expect(script).toContain("OPENCLAW_PLUGINS_TMP_DIR");
+      const scriptWithoutDefaultScratch = script.replace('mktemp -d "/tmp/sunclaw-plugins.XXXXXX"', "");
+      expect(script).toContain("SUNCLAW_PLUGINS_TMP_DIR");
       expect(scriptWithoutDefaultScratch).not.toMatch(
-        /\/tmp\/(?:plugins|marketplace|demo-plugin|is-number|openclaw-plugin|openclaw-clawhub)/,
+        /\/tmp\/(?:plugins|marketplace|demo-plugin|is-number|sunclaw-plugin|sunclaw-clawhub)/,
       );
     }
   });
 
   it("cleans the default plugin sweep scratch root", () => {
-    const root = mkdtempSync(path.join(tmpdir(), "openclaw-plugin-sweep-cleanup-"));
+    const root = mkdtempSync(path.join(tmpdir(), "sunclaw-plugin-sweep-cleanup-"));
     const marker = path.join(root, "scratch-path.txt");
     try {
       const result = runPluginsSweepShell(
         `
 set -euo pipefail
-export OPENCLAW_PLUGINS_SWEEP_SOURCE_ONLY=1
+export SUNCLAW_PLUGINS_SWEEP_SOURCE_ONLY=1
 source scripts/e2e/lib/plugins/sweep.sh
-printf '%s\\n' "$OPENCLAW_PLUGINS_TMP_DIR" > "$MARKER"
-test -d "$OPENCLAW_PLUGINS_TMP_DIR"
-cleanup_openclaw_plugins_sweep
-test ! -e "$OPENCLAW_PLUGINS_TMP_DIR"
+printf '%s\\n' "$SUNCLAW_PLUGINS_TMP_DIR" > "$MARKER"
+test -d "$SUNCLAW_PLUGINS_TMP_DIR"
+cleanup_sunclaw_plugins_sweep
+test ! -e "$SUNCLAW_PLUGINS_TMP_DIR"
 `,
         { MARKER: marker },
       );
@@ -171,7 +171,7 @@ test ! -e "$OPENCLAW_PLUGINS_TMP_DIR"
       expect(result.stderr).toBe("");
       expect(result.status).toBe(0);
       const scratchRoot = readFileSync(marker, "utf8").trim();
-      expect(scratchRoot).toContain("/tmp/openclaw-plugins.");
+      expect(scratchRoot).toContain("/tmp/sunclaw-plugins.");
       expect(existsSync(scratchRoot)).toBe(false);
     } finally {
       rmSync(root, { force: true, recursive: true });
@@ -179,18 +179,18 @@ test ! -e "$OPENCLAW_PLUGINS_TMP_DIR"
   });
 
   it("preserves caller-provided plugin sweep scratch roots", () => {
-    const root = mkdtempSync(path.join(tmpdir(), "openclaw-plugin-sweep-caller-"));
+    const root = mkdtempSync(path.join(tmpdir(), "sunclaw-plugin-sweep-caller-"));
     const scratchRoot = path.join(root, "scratch");
     try {
       const result = runPluginsSweepShell(
         `
 set -euo pipefail
-export OPENCLAW_PLUGINS_SWEEP_SOURCE_ONLY=1
-export OPENCLAW_PLUGINS_TMP_DIR="$SCRATCH_ROOT"
+export SUNCLAW_PLUGINS_SWEEP_SOURCE_ONLY=1
+export SUNCLAW_PLUGINS_TMP_DIR="$SCRATCH_ROOT"
 source scripts/e2e/lib/plugins/sweep.sh
-test -d "$OPENCLAW_PLUGINS_TMP_DIR"
-cleanup_openclaw_plugins_sweep
-test -d "$OPENCLAW_PLUGINS_TMP_DIR"
+test -d "$SUNCLAW_PLUGINS_TMP_DIR"
+cleanup_sunclaw_plugins_sweep
+test -d "$SUNCLAW_PLUGINS_TMP_DIR"
 `,
         { SCRATCH_ROOT: scratchRoot },
       );
@@ -205,7 +205,7 @@ test -d "$OPENCLAW_PLUGINS_TMP_DIR"
   });
 
   it("cleans npm fixture registry children when readiness times out", () => {
-    const root = mkdtempSync(path.join(tmpdir(), "openclaw-plugin-npm-fixture-cleanup-"));
+    const root = mkdtempSync(path.join(tmpdir(), "sunclaw-plugin-npm-fixture-cleanup-"));
     try {
       const binDir = path.join(root, "bin");
       const fixtureDir = path.join(root, "fixture");
@@ -233,7 +233,7 @@ test -d "$OPENCLAW_PLUGINS_TMP_DIR"
           encoding: "utf8",
           env: {
             ...process.env,
-            OPENCLAW_TEST_FIXTURE_SERVER_PID: pidPath,
+            SUNCLAW_TEST_FIXTURE_SERVER_PID: pidPath,
             PATH: `${binDir}${path.delimiter}/usr/bin${path.delimiter}/bin`,
           },
         },
@@ -250,7 +250,7 @@ test -d "$OPENCLAW_PLUGINS_TMP_DIR"
   });
 
   it("cleans ClawHub fixture children when readiness times out", () => {
-    const root = mkdtempSync(path.join(tmpdir(), "openclaw-plugin-clawhub-fixture-cleanup-"));
+    const root = mkdtempSync(path.join(tmpdir(), "sunclaw-plugin-clawhub-fixture-cleanup-"));
     try {
       const binDir = path.join(root, "bin");
       const cleanupPath = path.join(root, "caller-cleanup");
@@ -279,9 +279,9 @@ test -d "$OPENCLAW_PLUGINS_TMP_DIR"
           encoding: "utf8",
           env: {
             ...process.env,
-            OPENCLAW_PLUGINS_E2E_LIVE_CLAWHUB: "0",
-            OPENCLAW_PLUGINS_TMP_DIR: tmpDir,
-            OPENCLAW_TEST_FIXTURE_SERVER_PID: pidPath,
+            SUNCLAW_PLUGINS_E2E_LIVE_CLAWHUB: "0",
+            SUNCLAW_PLUGINS_TMP_DIR: tmpDir,
+            SUNCLAW_TEST_FIXTURE_SERVER_PID: pidPath,
             PATH: `${binDir}${path.delimiter}/usr/bin${path.delimiter}/bin`,
           },
         },
@@ -298,7 +298,7 @@ test -d "$OPENCLAW_PLUGINS_TMP_DIR"
   });
 
   it("uses the configured scratch root and resolves Windows home-relative install paths", () => {
-    const root = mkdtempSync(path.join(tmpdir(), "openclaw-plugins-assertions-"));
+    const root = mkdtempSync(path.join(tmpdir(), "sunclaw-plugins-assertions-"));
     const home = path.join(root, "home");
     const scratchRoot = path.join(root, "scratch");
     const installPath = path.join(home, "managed-plugin");
@@ -311,7 +311,7 @@ test -d "$OPENCLAW_PLUGINS_TMP_DIR"
       writeJson(path.join(scratchRoot, "plugins2-inspect.json"), {
         gatewayMethods: ["demo.tgz"],
       });
-      writeJson(path.join(home, ".openclaw", "plugins", "installs.json"), {
+      writeJson(path.join(home, ".sunclaw", "plugins", "installs.json"), {
         installRecords: {
           "demo-plugin-tgz": {
             source: "archive",
@@ -325,8 +325,8 @@ test -d "$OPENCLAW_PLUGINS_TMP_DIR"
         env: {
           ...process.env,
           HOME: home,
-          OPENCLAW_PLUGINS_E2E_CLAWHUB_PREFLIGHT_TIMEOUT_MS: "1e3",
-          OPENCLAW_PLUGINS_TMP_DIR: scratchRoot,
+          SUNCLAW_PLUGINS_E2E_CLAWHUB_PREFLIGHT_TIMEOUT_MS: "1e3",
+          SUNCLAW_PLUGINS_TMP_DIR: scratchRoot,
         },
       });
 
@@ -337,13 +337,13 @@ test -d "$OPENCLAW_PLUGINS_TMP_DIR"
   });
 
   it("compares local plugin source paths by canonical path", () => {
-    const root = mkdtempSync(path.join(tmpdir(), "openclaw-plugins-assertions-"));
+    const root = mkdtempSync(path.join(tmpdir(), "sunclaw-plugins-assertions-"));
     const home = path.join(root, "home");
     const scratchRoot = path.join(root, "scratch");
     const sourceParent = path.join(root, "source");
     const sourcePath = `${sourceParent}//plugin`;
     const normalizedSourcePath = path.join(sourceParent, "plugin");
-    const installPath = path.join(home, ".openclaw", "extensions", "demo-plugin-dir");
+    const installPath = path.join(home, ".sunclaw", "extensions", "demo-plugin-dir");
     mkdirSync(sourcePath, { recursive: true });
     mkdirSync(installPath, { recursive: true });
 
@@ -354,7 +354,7 @@ test -d "$OPENCLAW_PLUGINS_TMP_DIR"
       writeJson(path.join(scratchRoot, "plugins3-inspect.json"), {
         gatewayMethods: ["demo.dir"],
       });
-      writeJson(path.join(home, ".openclaw", "plugins", "installs.json"), {
+      writeJson(path.join(home, ".sunclaw", "plugins", "installs.json"), {
         installRecords: {
           "demo-plugin-dir": {
             source: "path",
@@ -369,7 +369,7 @@ test -d "$OPENCLAW_PLUGINS_TMP_DIR"
         env: {
           ...process.env,
           HOME: home,
-          OPENCLAW_PLUGINS_TMP_DIR: scratchRoot,
+          SUNCLAW_PLUGINS_TMP_DIR: scratchRoot,
         },
       });
 
@@ -380,16 +380,16 @@ test -d "$OPENCLAW_PLUGINS_TMP_DIR"
   });
 
   it("still requires archive managed install directories to be removed", () => {
-    const root = mkdtempSync(path.join(tmpdir(), "openclaw-plugins-assertions-"));
+    const root = mkdtempSync(path.join(tmpdir(), "sunclaw-plugins-assertions-"));
     const home = path.join(root, "home");
     const scratchRoot = path.join(root, "scratch");
-    const installPath = path.join(home, ".openclaw", "extensions", "demo-plugin-tgz");
+    const installPath = path.join(home, ".sunclaw", "extensions", "demo-plugin-tgz");
     mkdirSync(installPath, { recursive: true });
 
     try {
       writeJson(path.join(scratchRoot, "plugins2-uninstalled.json"), { plugins: [] });
       writeFileSync(path.join(scratchRoot, "plugins2-install-path.txt"), installPath, "utf8");
-      writeJson(path.join(home, ".openclaw", "plugins", "installs.json"), {
+      writeJson(path.join(home, ".sunclaw", "plugins", "installs.json"), {
         installRecords: {},
       });
 
@@ -398,7 +398,7 @@ test -d "$OPENCLAW_PLUGINS_TMP_DIR"
         env: {
           ...process.env,
           HOME: home,
-          OPENCLAW_PLUGINS_TMP_DIR: scratchRoot,
+          SUNCLAW_PLUGINS_TMP_DIR: scratchRoot,
         },
       });
 
@@ -421,15 +421,15 @@ test -d "$OPENCLAW_PLUGINS_TMP_DIR"
         throw new Error("expected TCP server address");
       }
       const result = await runAssertionAsync(["clawhub-preflight"], {
-        CLAWHUB_PLUGIN_ID: "openclaw-kitchen-sink-fixture",
-        CLAWHUB_PLUGIN_SPEC: "clawhub:@openclaw/kitchen-sink",
-        OPENCLAW_CLAWHUB_URL: `http://127.0.0.1:${address.port}`,
-        OPENCLAW_PLUGINS_E2E_CLAWHUB_PREFLIGHT_TIMEOUT_MS: "25",
+        CLAWHUB_PLUGIN_ID: "sunclaw-kitchen-sink-fixture",
+        CLAWHUB_PLUGIN_SPEC: "clawhub:@sunclaw/kitchen-sink",
+        SUNCLAW_CLAWHUB_URL: `http://127.0.0.1:${address.port}`,
+        SUNCLAW_PLUGINS_E2E_CLAWHUB_PREFLIGHT_TIMEOUT_MS: "25",
       });
 
       expect(result.status).not.toBe(0);
       expect(result.stderr).toContain(
-        "ClawHub package preflight for @openclaw/kitchen-sink timed out after 25ms",
+        "ClawHub package preflight for @sunclaw/kitchen-sink timed out after 25ms",
       );
     } finally {
       await new Promise<void>((resolve) => {
@@ -454,15 +454,15 @@ test -d "$OPENCLAW_PLUGINS_TMP_DIR"
         throw new Error("expected TCP server address");
       }
       const result = await runAssertionAsync(["clawhub-preflight"], {
-        CLAWHUB_PLUGIN_ID: "openclaw-kitchen-sink-fixture",
-        CLAWHUB_PLUGIN_SPEC: "clawhub:@openclaw/kitchen-sink",
-        OPENCLAW_CLAWHUB_URL: `http://127.0.0.1:${address.port}`,
-        OPENCLAW_PLUGINS_E2E_CLAWHUB_PREFLIGHT_TIMEOUT_MS: "75",
+        CLAWHUB_PLUGIN_ID: "sunclaw-kitchen-sink-fixture",
+        CLAWHUB_PLUGIN_SPEC: "clawhub:@sunclaw/kitchen-sink",
+        SUNCLAW_CLAWHUB_URL: `http://127.0.0.1:${address.port}`,
+        SUNCLAW_PLUGINS_E2E_CLAWHUB_PREFLIGHT_TIMEOUT_MS: "75",
       });
 
       expect(result.status).not.toBe(0);
       expect(result.stderr).toContain(
-        "ClawHub package preflight response for @openclaw/kitchen-sink timed out after 75ms",
+        "ClawHub package preflight response for @sunclaw/kitchen-sink timed out after 75ms",
       );
     } finally {
       await new Promise<void>((resolve) => {
@@ -486,16 +486,16 @@ test -d "$OPENCLAW_PLUGINS_TMP_DIR"
         throw new Error("expected TCP server address");
       }
       const result = await runAssertionAsync(["clawhub-preflight"], {
-        CLAWHUB_PLUGIN_ID: "openclaw-kitchen-sink-fixture",
-        CLAWHUB_PLUGIN_SPEC: "clawhub:@openclaw/kitchen-sink",
-        OPENCLAW_CLAWHUB_URL: `http://127.0.0.1:${address.port}`,
-        OPENCLAW_PLUGINS_E2E_CLAWHUB_PREFLIGHT_BODY_MAX_BYTES: "16",
-        OPENCLAW_PLUGINS_E2E_CLAWHUB_PREFLIGHT_TIMEOUT_MS: "1000",
+        CLAWHUB_PLUGIN_ID: "sunclaw-kitchen-sink-fixture",
+        CLAWHUB_PLUGIN_SPEC: "clawhub:@sunclaw/kitchen-sink",
+        SUNCLAW_CLAWHUB_URL: `http://127.0.0.1:${address.port}`,
+        SUNCLAW_PLUGINS_E2E_CLAWHUB_PREFLIGHT_BODY_MAX_BYTES: "16",
+        SUNCLAW_PLUGINS_E2E_CLAWHUB_PREFLIGHT_TIMEOUT_MS: "1000",
       });
 
       expect(result.status).not.toBe(0);
       expect(result.stderr).toContain(
-        "ClawHub package preflight response for @openclaw/kitchen-sink response body exceeded 16 bytes",
+        "ClawHub package preflight response for @sunclaw/kitchen-sink response body exceeded 16 bytes",
       );
       expect(result.stderr).not.toContain("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
     } finally {

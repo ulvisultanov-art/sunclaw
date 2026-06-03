@@ -1,5 +1,5 @@
 ---
-summary: "Adds GitHub Copilot model provider support to OpenClaw."
+summary: "Adds GitHub Copilot model provider support to SunClaw."
 read_when:
   - You are installing, configuring, or auditing the github-copilot plugin
 title: "GitHub Copilot plugin"
@@ -7,12 +7,12 @@ title: "GitHub Copilot plugin"
 
 # GitHub Copilot plugin
 
-Adds GitHub Copilot model provider support to OpenClaw.
+Adds GitHub Copilot model provider support to SunClaw.
 
 ## Distribution
 
-- Package: `@openclaw/github-copilot-provider`
-- Install route: included in OpenClaw
+- Package: `@sunclaw/github-copilot-provider`
+- Install route: included in SunClaw
 
 ## Surface
 

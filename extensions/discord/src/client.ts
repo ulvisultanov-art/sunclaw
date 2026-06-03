@@ -1,9 +1,9 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { requireRuntimeConfig } from "openclaw/plugin-sdk/plugin-config-runtime";
-import type { RetryConfig, RetryRunner } from "openclaw/plugin-sdk/retry-runtime";
-import { normalizeAccountId } from "openclaw/plugin-sdk/routing";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import { requireRuntimeConfig } from "sunclaw/plugin-sdk/plugin-config-runtime";
+import type { RetryConfig, RetryRunner } from "sunclaw/plugin-sdk/retry-runtime";
+import { normalizeAccountId } from "sunclaw/plugin-sdk/routing";
+import type { RuntimeEnv } from "sunclaw/plugin-sdk/runtime-env";
+import { normalizeOptionalString } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import {
   mergeDiscordAccountConfig,
   resolveDiscordAccount,
@@ -17,7 +17,7 @@ import type { DiscordRuntimeAccountContext } from "./send.types.js";
 import { normalizeDiscordToken } from "./token.js";
 
 export type DiscordClientOpts = {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   token?: string;
   accountId?: string;
   rest?: RequestClient;
@@ -26,7 +26,7 @@ export type DiscordClientOpts = {
 };
 
 export function createDiscordRuntimeAccountContext(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   accountId: string;
 }): DiscordRuntimeAccountContext {
   return {
@@ -73,7 +73,7 @@ function resolveToken(params: {
 function resolveRest(
   token: string,
   account: ResolvedDiscordAccount,
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   rest?: RequestClient,
   proxyFetch?: typeof fetch,
 ) {
@@ -88,7 +88,7 @@ function resolveRest(
 }
 
 function resolveAccountWithoutToken(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   accountId?: string;
 }): ResolvedDiscordAccount {
   const accountId = normalizeAccountId(params.accountId);

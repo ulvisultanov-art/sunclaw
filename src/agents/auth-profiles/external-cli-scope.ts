@@ -1,10 +1,10 @@
-import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
+import { normalizeProviderId } from "@sunclaw/model-catalog-core/provider-id";
 import {
   resolveAgentModelFallbackValues,
   resolveAgentModelPrimaryValue,
 } from "../../config/model-input.js";
 import type { AgentModelConfig } from "../../config/types.agents-shared.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 
 export type ExternalCliAuthScope = {
   providerIds: string[];
@@ -68,7 +68,7 @@ function addExternalCliRuntimeScopeFromModelMap(
 }
 
 export function resolveExternalCliAuthScopeFromConfig(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
 ): ExternalCliAuthScope | undefined {
   const providerIds = new Set<string>();
   const profileIds = new Set<string>();

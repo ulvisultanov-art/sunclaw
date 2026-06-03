@@ -1,25 +1,25 @@
 {
-  "name": "@openclaw/migrate-hermes",
+  "name": "@sunclaw/migrate-hermes",
   "version": "2026.6.2",
   "private": true,
-  "description": "Hermes to OpenClaw migration provider",
+  "description": "Hermes to SunClaw migration provider",
   "type": "module",
   "dependencies": {
     "yaml": "2.9.0"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "2026.5.28"
+    "@sunclaw/plugin-sdk": "workspace:*",
+    "sunclaw": "2026.5.28"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.6.2"
+    "sunclaw": ">=2026.6.2"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "sunclaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ]

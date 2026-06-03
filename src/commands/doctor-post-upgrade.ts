@@ -158,7 +158,7 @@ export async function runPostUpgradeProbes(params: {
       level: "error",
       code: "plugin.index_unavailable",
       message:
-        "Installed plugin index is missing, unreadable, or malformed. Run `openclaw plugins registry --refresh` to rebuild it before post-upgrade validation.",
+        "Installed plugin index is missing, unreadable, or malformed. Run `sunclaw plugins registry --refresh` to rebuild it before post-upgrade validation.",
     });
     return buildReport(findings);
   }
@@ -178,7 +178,7 @@ export async function runPostUpgradeProbes(params: {
         );
         continue;
       }
-      const entries = pkg.openclaw?.extensions ?? [];
+      const entries = pkg.sunclaw?.extensions ?? [];
       if (entries.length > 0) {
         // Delegate to the install-time resolver so the probe enforces the same
         // contract as plugin install/discovery: runtimeExtensions shape, plugin-root
@@ -208,7 +208,7 @@ export async function runPostUpgradeProbes(params: {
         findings.push({
           level: "warn",
           code: "plugin.manifest_drift",
-          message: `Plugin ${record.pluginId} manifest hash drifted from installs.json snapshot. Run \`openclaw plugins registry --refresh\` to re-sync.`,
+          message: `Plugin ${record.pluginId} manifest hash drifted from installs.json snapshot. Run \`sunclaw plugins registry --refresh\` to re-sync.`,
           plugin: record.pluginId,
         });
       }

@@ -1,5 +1,5 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import { sortUniqueStrings, uniqueValues } from "@openclaw/normalization-core/string-normalization";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
+import { sortUniqueStrings, uniqueValues } from "@sunclaw/normalization-core/string-normalization";
 import { Type, type TSchema } from "typebox";
 import {
   GATEWAY_CLIENT_IDS,
@@ -30,7 +30,7 @@ import { resolveCommandSecretRefsViaGateway } from "../../cli/command-secret-gat
 import { getScopedChannelsCommandSecretTargets } from "../../cli/command-secret-targets.js";
 import { resolveMessageSecretScope } from "../../cli/message-secret-scope.js";
 import { getRuntimeConfig } from "../../config/config.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import {
   getBootEchoContextForSession,
   stripBootEchoFromOutboundText,
@@ -749,8 +749,8 @@ type MessageToolOptions = {
   runId?: string;
   sessionId?: string;
   agentId?: string;
-  config?: OpenClawConfig;
-  getRuntimeConfig?: () => OpenClawConfig;
+  config?: SunClawConfig;
+  getRuntimeConfig?: () => SunClawConfig;
   getScopedChannelsCommandSecretTargets?: typeof getScopedChannelsCommandSecretTargets;
   resolveCommandSecretRefsViaGateway?: typeof resolveCommandSecretRefsViaGateway;
   runMessageAction?: typeof runMessageAction;
@@ -772,7 +772,7 @@ type MessageToolOptions = {
 };
 
 type MessageToolDiscoveryParams = {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   currentChannelProvider?: string;
   currentChannelId?: string;
   currentThreadTs?: string;
@@ -786,7 +786,7 @@ type MessageToolDiscoveryParams = {
 };
 
 type MessageActionDiscoveryInput = Omit<ChannelMessageActionDiscoveryInput, "cfg" | "channel"> & {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   channel?: string;
 };
 
@@ -1005,7 +1005,7 @@ function resolveAgentAccountId(value?: string): string | undefined {
 }
 
 function buildMessageToolDescription(options?: {
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   currentChannel?: string;
   currentChannelId?: string;
   currentThreadTs?: string;

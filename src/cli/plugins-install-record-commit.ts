@@ -11,7 +11,7 @@ import {
   type TransformConfigFileWithRetryParams,
 } from "../config/config.js";
 import type { ConfigWriteOptions } from "../config/io.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
 import {
   loadInstalledPluginIndexInstallRecords,
@@ -28,13 +28,13 @@ function mergeUnsetPaths(
   return merged.length > 0 ? merged : undefined;
 }
 
-export function hasPendingPluginInstallRecords(config: OpenClawConfig): boolean {
+export function hasPendingPluginInstallRecords(config: SunClawConfig): boolean {
   return Object.keys(config.plugins?.installs ?? {}).length > 0;
 }
 
 export function unchangedPendingPluginInstallRecordIds(
-  config: OpenClawConfig,
-  baseConfig: OpenClawConfig,
+  config: SunClawConfig,
+  baseConfig: SunClawConfig,
 ): string[] {
   const pendingInstalls = config.plugins?.installs ?? {};
   return Object.entries(baseConfig.plugins?.installs ?? {})
@@ -43,9 +43,9 @@ export function unchangedPendingPluginInstallRecordIds(
 }
 
 export function stripPendingPluginInstallRecords(
-  config: OpenClawConfig,
+  config: SunClawConfig,
   pluginIds?: Iterable<string>,
-): OpenClawConfig {
+): SunClawConfig {
   if (!pluginIds) {
     return withoutPluginInstallRecords(config);
   }
@@ -69,7 +69,7 @@ export function stripPendingPluginInstallRecords(
 }
 
 type ConfigCommit = (
-  config: OpenClawConfig,
+  config: SunClawConfig,
   writeOptions?: ConfigWriteOptions,
 ) => Promise<ConfigReplaceResult | void>;
 const PLUGIN_SOURCE_CHANGED_RESTART_REASON = "plugin source changed";
@@ -90,7 +90,7 @@ function mergeAfterWrite(
 async function commitPluginInstallRecordsWithWriter(params: {
   previousInstallRecords?: Record<string, PluginInstallRecord>;
   nextInstallRecords: Record<string, PluginInstallRecord>;
-  nextConfig: OpenClawConfig;
+  nextConfig: SunClawConfig;
   writeOptions?: ConfigWriteOptions;
   commit: ConfigCommit;
 }): Promise<ConfigReplaceResult | void> {
@@ -127,7 +127,7 @@ async function commitPluginInstallRecordsWithWriter(params: {
 export async function commitPluginInstallRecordsWithConfig(params: {
   previousInstallRecords?: Record<string, PluginInstallRecord>;
   nextInstallRecords: Record<string, PluginInstallRecord>;
-  nextConfig: OpenClawConfig;
+  nextConfig: SunClawConfig;
   baseHash?: string;
   writeOptions?: ConfigWriteOptions;
 }): Promise<void> {
@@ -144,11 +144,11 @@ export async function commitPluginInstallRecordsWithConfig(params: {
 }
 
 export async function commitConfigWriteWithPendingPluginInstalls(params: {
-  nextConfig: OpenClawConfig;
+  nextConfig: SunClawConfig;
   writeOptions?: ConfigWriteOptions;
   commit: ConfigCommit;
 }): Promise<{
-  config: OpenClawConfig;
+  config: SunClawConfig;
   installRecords: Record<string, PluginInstallRecord>;
   movedInstallRecords: boolean;
   persistedHash: string | null;
@@ -188,11 +188,11 @@ export async function commitConfigWriteWithPendingPluginInstalls(params: {
 }
 
 export async function commitConfigWithPendingPluginInstalls(params: {
-  nextConfig: OpenClawConfig;
+  nextConfig: SunClawConfig;
   baseHash?: string;
   writeOptions?: ConfigWriteOptions;
 }): Promise<{
-  config: OpenClawConfig;
+  config: SunClawConfig;
   installRecords: Record<string, PluginInstallRecord>;
   movedInstallRecords: boolean;
   persistedHash: string | null;
@@ -248,7 +248,7 @@ export async function transformConfigWithPendingPluginInstalls<T = void>(
 
 export async function mutateConfigWithPendingPluginInstalls<T = void>(
   params: Omit<TransformConfigFileWithRetryParams<T>, "commit" | "transform"> & {
-    mutate: (draft: OpenClawConfig, context: ConfigMutationContext) => Promise<T | void> | T | void;
+    mutate: (draft: SunClawConfig, context: ConfigMutationContext) => Promise<T | void> | T | void;
   },
 ): Promise<ConfigMutationResult<T>> {
   return await transformConfigWithPendingPluginInstalls<T>({

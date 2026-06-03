@@ -1,4 +1,4 @@
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@sunclaw/normalization-core/string-coerce";
 import type { Command } from "commander";
 import { formatDocsLink } from "../../../packages/terminal-core/src/links.js";
 import { theme } from "../../../packages/terminal-core/src/theme.js";
@@ -67,28 +67,28 @@ export function registerAgentTurnCommand(
         `
 ${theme.heading("Examples:")}
 ${formatHelpExamples([
-  ['openclaw agent --to +15555550123 --message "status update"', "Start a new session."],
-  ['openclaw agent --agent ops --message "Summarize logs"', "Use a specific agent."],
+  ['sunclaw agent --to +15555550123 --message "status update"', "Start a new session."],
+  ['sunclaw agent --agent ops --message "Summarize logs"', "Use a specific agent."],
   [
-    'openclaw agent --session-key agent:ops:incident-42 --message "Summarize status"',
+    'sunclaw agent --session-key agent:ops:incident-42 --message "Summarize status"',
     "Target an exact session key.",
   ],
   [
-    'openclaw agent --session-id 1234 --message "Summarize inbox" --thinking medium',
+    'sunclaw agent --session-id 1234 --message "Summarize inbox" --thinking medium',
     "Target a session with explicit thinking level.",
   ],
   [
-    'openclaw agent --to +15555550123 --message "Trace logs" --verbose on --json',
+    'sunclaw agent --to +15555550123 --message "Trace logs" --verbose on --json',
     "Enable verbose logging and JSON output.",
   ],
-  ['openclaw agent --to +15555550123 --message "Summon reply" --deliver', "Deliver reply."],
+  ['sunclaw agent --to +15555550123 --message "Summon reply" --deliver', "Deliver reply."],
   [
-    'openclaw agent --agent ops --message "Generate report" --deliver --reply-channel slack --reply-to "#reports"',
+    'sunclaw agent --agent ops --message "Generate report" --deliver --reply-channel slack --reply-to "#reports"',
     "Send reply to a different channel/target.",
   ],
 ])}
 
-${theme.muted("Docs:")} ${formatDocsLink("/cli/agent", "docs.openclaw.ai/cli/agent")}`,
+${theme.muted("Docs:")} ${formatDocsLink("/cli/agent", "docs.sunclaw.complex.az/cli/agent")}`,
     )
     .action(async (opts): Promise<void> => {
       const verboseLevel =

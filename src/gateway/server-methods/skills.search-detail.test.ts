@@ -22,7 +22,7 @@ vi.mock("../../skills/lifecycle/clawhub.js", () => ({
 
 vi.mock("../../infra/clawhub.js", () => ({
   fetchClawHubSkillDetail: (...args: unknown[]) => fetchClawHubSkillDetailMock(...args),
-  resolveClawHubBaseUrl: vi.fn(() => "https://clawhub.ai"),
+  resolveClawHubBaseUrl: vi.fn(() => "https://clawhub.complex.az"),
   searchClawHubSkills: vi.fn(),
   downloadClawHubSkillArchive: vi.fn(),
 }));
@@ -164,8 +164,8 @@ describe("skills.detail handler", () => {
         createdAt: 1700000000,
       },
       owner: {
-        handle: "openclaw",
-        displayName: "OpenClaw",
+        handle: "sunclaw",
+        displayName: "SunClaw",
       },
     };
     fetchClawHubSkillDetailMock.mockResolvedValue(detail);

@@ -1,15 +1,15 @@
-import { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
+import { definePluginEntry } from "sunclaw/plugin-sdk/plugin-entry";
 import {
   resolveOAuthApiKeyMarker,
   type ProviderAuthContext,
   type ProviderAuthResult,
-} from "openclaw/plugin-sdk/provider-auth";
-import { buildOauthProviderAuthResult } from "openclaw/plugin-sdk/provider-auth";
-import { createProviderApiKeyAuthMethod } from "openclaw/plugin-sdk/provider-auth-api-key";
+} from "sunclaw/plugin-sdk/provider-auth";
+import { buildOauthProviderAuthResult } from "sunclaw/plugin-sdk/provider-auth";
+import { createProviderApiKeyAuthMethod } from "sunclaw/plugin-sdk/provider-auth-api-key";
 import {
   normalizeOptionalString,
   readStringValue,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { loginChutes } from "./oauth.js";
 import {
   CHUTES_DEFAULT_MODEL_REF,

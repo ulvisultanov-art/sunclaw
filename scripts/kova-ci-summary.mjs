@@ -19,7 +19,7 @@ const keyMetricIds = [
   "peakRssMb",
   "resourcePeakGatewayRssMb",
   "cpuPercentMax",
-  "openclawEventLoopMaxMs",
+  "sunclawEventLoopMaxMs",
   "agentTurnP95Ms",
   "coldAgentTurnMs",
   "warmAgentTurnMs",
@@ -51,7 +51,7 @@ function renderSummary(reportLocal, options) {
       .map(([status, count]) => `${status}: ${value(count)}`)
       .join(", ") || "unknown";
 
-  lines.push(`# OpenClaw Performance Report`);
+  lines.push(`# SunClaw Performance Report`);
   lines.push("");
   lines.push(`- Lane: ${options.lane}`);
   lines.push(`- Run: ${value(reportLocal.runId)}`);

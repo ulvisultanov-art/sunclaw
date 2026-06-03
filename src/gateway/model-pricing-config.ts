@@ -1,5 +1,5 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 
-export function isGatewayModelPricingEnabled(config: OpenClawConfig): boolean {
+export function isGatewayModelPricingEnabled(config: SunClawConfig): boolean {
   return config.models?.pricing?.enabled !== false;
 }

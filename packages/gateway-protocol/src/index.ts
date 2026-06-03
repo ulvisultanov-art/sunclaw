@@ -1351,6 +1351,6 @@ type SessionsPatchResult = {
 
 type GatewayAgentRuntime = {
   id: string;
-  fallback?: "openclaw" | "none";
+  fallback?: "sunclaw" | "none";
   source: "env" | "agent" | "defaults" | "model" | "provider" | "implicit" | "session-key";
 };

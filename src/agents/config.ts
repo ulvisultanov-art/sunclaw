@@ -31,7 +31,7 @@ export const isBunBinary =
  */
 export function getPackageDir(): string {
   // Allow override via environment variable (useful for Nix/Guix where store paths tokenize poorly)
-  const envDir = process.env.OPENCLAW_PACKAGE_DIR;
+  const envDir = process.env.SUNCLAW_PACKAGE_DIR;
   if (envDir) {
     if (envDir === "~") {
       return homedir();
@@ -98,13 +98,13 @@ export function getExamplesPath(): string {
 }
 
 // =============================================================================
-// App Config (from package.json openclawConfig)
+// App Config (from package.json sunclawConfig)
 // =============================================================================
 
 interface PackageJson {
   name?: string;
   version?: string;
-  openclawConfig?: {
+  sunclawConfig?: {
     name?: string;
     configDir?: string;
   };
@@ -112,9 +112,9 @@ interface PackageJson {
 
 const pkg = JSON.parse(readFileSync(getPackageJsonPath(), "utf-8")) as PackageJson;
 
-const openClawConfigName: string | undefined = pkg.openclawConfig?.name;
-export const APP_NAME: string = openClawConfigName || "openclaw";
-export const CONFIG_DIR_NAME: string = pkg.openclawConfig?.configDir || ".openclaw";
+const sunClawConfigName: string | undefined = pkg.sunclawConfig?.name;
+export const APP_NAME: string = sunClawConfigName || "sunclaw";
+export const CONFIG_DIR_NAME: string = pkg.sunclawConfig?.configDir || ".sunclaw";
 export const VERSION: string = pkg.version || "0.0.0";
 
 export const ENV_AGENT_DIR = `${APP_NAME.toUpperCase()}_AGENT_DIR`;
@@ -130,10 +130,10 @@ export function expandTildePath(path: string): string {
 }
 
 // =============================================================================
-// User Config Paths (~/.openclaw/agent/*)
+// User Config Paths (~/.sunclaw/agent/*)
 // =============================================================================
 
-/** Get the agent config directory (e.g., ~/.openclaw/agent/) */
+/** Get the agent config directory (e.g., ~/.sunclaw/agent/) */
 export function getAgentDir(): string {
   const envDir = process.env[ENV_AGENT_DIR];
   if (envDir) {

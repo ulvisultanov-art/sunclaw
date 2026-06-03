@@ -1,15 +1,15 @@
-import { describeAccountSnapshot } from "openclaw/plugin-sdk/account-helpers";
-import { DEFAULT_ACCOUNT_ID } from "openclaw/plugin-sdk/account-id";
-import { createHybridChannelConfigAdapter } from "openclaw/plugin-sdk/channel-config-helpers";
-import { createChatChannelPlugin, type ChannelPlugin } from "openclaw/plugin-sdk/channel-core";
-import { createChannelMessageAdapterFromOutbound } from "openclaw/plugin-sdk/channel-outbound";
-import { createRuntimeOutboundDelegates } from "openclaw/plugin-sdk/channel-outbound";
-import type { ChannelOutboundAdapter } from "openclaw/plugin-sdk/channel-send-result";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
+import { describeAccountSnapshot } from "sunclaw/plugin-sdk/account-helpers";
+import { DEFAULT_ACCOUNT_ID } from "sunclaw/plugin-sdk/account-id";
+import { createHybridChannelConfigAdapter } from "sunclaw/plugin-sdk/channel-config-helpers";
+import { createChatChannelPlugin, type ChannelPlugin } from "sunclaw/plugin-sdk/channel-core";
+import { createChannelMessageAdapterFromOutbound } from "sunclaw/plugin-sdk/channel-outbound";
+import { createRuntimeOutboundDelegates } from "sunclaw/plugin-sdk/channel-outbound";
+import type { ChannelOutboundAdapter } from "sunclaw/plugin-sdk/channel-send-result";
+import { createLazyRuntimeModule } from "sunclaw/plugin-sdk/lazy-runtime";
 import {
   createComputedAccountStatusAdapter,
   createDefaultChannelRuntimeState,
-} from "openclaw/plugin-sdk/status-helpers";
+} from "sunclaw/plugin-sdk/status-helpers";
 import { tlonChannelConfigSchema } from "./config-schema.js";
 import { tlonDoctor } from "./doctor.js";
 import { resolveTlonOutboundSessionRoute } from "./session-route.js";

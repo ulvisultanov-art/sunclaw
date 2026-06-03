@@ -1,6 +1,6 @@
-import { createScopedDmSecurityResolver } from "openclaw/plugin-sdk/channel-config-helpers";
-import { createOpenProviderConfiguredRouteWarningCollector } from "openclaw/plugin-sdk/channel-policy";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
+import { createScopedDmSecurityResolver } from "sunclaw/plugin-sdk/channel-config-helpers";
+import { createOpenProviderConfiguredRouteWarningCollector } from "sunclaw/plugin-sdk/channel-policy";
+import { createLazyRuntimeModule } from "sunclaw/plugin-sdk/lazy-runtime";
 import {
   resolveSlackAccountAllowFrom,
   resolveSlackAccountDmPolicy,

@@ -44,7 +44,7 @@ describe("node host invoke", () => {
   it.runIf(process.platform !== "win32")(
     "rejects blocked forwarded env overrides in system.run.prepare",
     async () => {
-      const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-prepare-env-"));
+      const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "sunclaw-prepare-env-"));
       const toolPath = path.join(tempDir, "tool");
       fs.writeFileSync(toolPath, "#!/bin/sh\nexit 0\n");
       fs.chmodSync(toolPath, 0o755);

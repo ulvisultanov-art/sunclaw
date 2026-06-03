@@ -3,13 +3,13 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { Readable, Transform } from "node:stream";
 import { pipeline } from "node:stream/promises";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { runPluginCommandWithTimeout } from "openclaw/plugin-sdk/run-command";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
-import { CONFIG_DIR, extractArchive, resolveBrewExecutable } from "openclaw/plugin-sdk/setup-tools";
-import { fetchWithSsrFGuard } from "openclaw/plugin-sdk/ssrf-runtime";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { resolvePreferredOpenClawTmpDir } from "openclaw/plugin-sdk/temp-path";
+import { formatErrorMessage } from "sunclaw/plugin-sdk/error-runtime";
+import { runPluginCommandWithTimeout } from "sunclaw/plugin-sdk/run-command";
+import type { RuntimeEnv } from "sunclaw/plugin-sdk/runtime-env";
+import { CONFIG_DIR, extractArchive, resolveBrewExecutable } from "sunclaw/plugin-sdk/setup-tools";
+import { fetchWithSsrFGuard } from "sunclaw/plugin-sdk/ssrf-runtime";
+import { normalizeLowercaseStringOrEmpty } from "sunclaw/plugin-sdk/string-coerce-runtime";
+import { resolvePreferredSunClawTmpDir } from "sunclaw/plugin-sdk/temp-path";
 
 export type ReleaseAsset = {
   name?: string;
@@ -287,7 +287,7 @@ export async function installSignalCliFromRelease(
     auditContext: "signal-cli-release-info",
     init: {
       headers: {
-        "User-Agent": "openclaw",
+        "User-Agent": "sunclaw",
         Accept: "application/vnd.github+json",
       },
     },
@@ -323,7 +323,7 @@ export async function installSignalCliFromRelease(
     };
   }
 
-  const tmpDir = await fs.mkdtemp(path.join(resolvePreferredOpenClawTmpDir(), "openclaw-signal-"));
+  const tmpDir = await fs.mkdtemp(path.join(resolvePreferredSunClawTmpDir(), "sunclaw-signal-"));
   const archivePath = path.join(tmpDir, asset.name);
 
   runtime.log(`Downloading signal-cli ${version} (${asset.name})…`);

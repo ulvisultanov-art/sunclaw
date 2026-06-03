@@ -13,4 +13,4 @@ export {
   safeRealpathSync,
   safeStatSync,
   splitSafeRelativePath,
-} from "@openclaw/fs-safe/path";
+} from "@sunclaw/fs-safe/path";

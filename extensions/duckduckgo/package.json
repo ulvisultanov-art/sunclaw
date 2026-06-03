@@ -1,13 +1,13 @@
 {
-  "name": "@openclaw/duckduckgo-plugin",
+  "name": "@sunclaw/duckduckgo-plugin",
   "version": "2026.6.2",
   "private": true,
-  "description": "OpenClaw DuckDuckGo plugin",
+  "description": "SunClaw DuckDuckGo plugin",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@sunclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ]

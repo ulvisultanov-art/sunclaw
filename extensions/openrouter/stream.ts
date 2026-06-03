@@ -1,13 +1,13 @@
-import type { StreamFn } from "openclaw/plugin-sdk/agent-core";
-import type { ProviderWrapStreamFnContext } from "openclaw/plugin-sdk/plugin-entry";
-import { OPENROUTER_THINKING_STREAM_HOOKS } from "openclaw/plugin-sdk/provider-stream-family";
+import type { StreamFn } from "sunclaw/plugin-sdk/agent-core";
+import type { ProviderWrapStreamFnContext } from "sunclaw/plugin-sdk/plugin-entry";
+import { OPENROUTER_THINKING_STREAM_HOOKS } from "sunclaw/plugin-sdk/provider-stream-family";
 import {
   createDeepSeekV4OpenAICompatibleThinkingWrapper,
   type DeepSeekV4ReasoningEffort,
   type DeepSeekV4ThinkingLevel,
   createPayloadPatchStreamWrapper,
-} from "openclaw/plugin-sdk/provider-stream-shared";
-import { createSubsystemLogger } from "openclaw/plugin-sdk/runtime-env";
+} from "sunclaw/plugin-sdk/provider-stream-shared";
+import { createSubsystemLogger } from "sunclaw/plugin-sdk/runtime-env";
 import { isOpenRouterDeepSeekV4ModelId } from "./models.js";
 import {
   isOpenRouterProxyReasoningUnsupportedModel,

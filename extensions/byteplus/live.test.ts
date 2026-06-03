@@ -1,9 +1,9 @@
-import { completeSimple, type Model } from "openclaw/plugin-sdk/llm";
+import { completeSimple, type Model } from "sunclaw/plugin-sdk/llm";
 import {
   createSingleUserPromptMessage,
   extractNonEmptyAssistantText,
   isLiveTestEnabled,
-} from "openclaw/plugin-sdk/test-env";
+} from "sunclaw/plugin-sdk/test-env";
 import { describe, expect, it } from "vitest";
 import { BYTEPLUS_CODING_BASE_URL, BYTEPLUS_DEFAULT_COST } from "./models.js";
 

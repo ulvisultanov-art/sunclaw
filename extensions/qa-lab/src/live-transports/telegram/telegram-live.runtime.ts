@@ -3,15 +3,15 @@ import { randomUUID } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { promisify } from "node:util";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import { formatErrorMessage } from "sunclaw/plugin-sdk/error-runtime";
 import {
   parseStrictPositiveInteger,
   resolveTimerTimeoutMs,
-} from "openclaw/plugin-sdk/number-runtime";
-import { fetchWithSsrFGuard } from "openclaw/plugin-sdk/ssrf-runtime";
-import { isRecord, uniqueStrings } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { resolvePreferredOpenClawTmpDir } from "openclaw/plugin-sdk/temp-path";
+} from "sunclaw/plugin-sdk/number-runtime";
+import { fetchWithSsrFGuard } from "sunclaw/plugin-sdk/ssrf-runtime";
+import { isRecord, uniqueStrings } from "sunclaw/plugin-sdk/string-coerce-runtime";
+import { resolvePreferredSunClawTmpDir } from "sunclaw/plugin-sdk/temp-path";
 import { z } from "zod";
 import { startQaGatewayChild } from "../../gateway-child.js";
 import { DEFAULT_QA_LIVE_PROVIDER_MODE } from "../../providers/index.js";
@@ -315,13 +315,13 @@ const TELEGRAM_QA_SCENARIOS: TelegramQaScenarioDefinition[] = [
     id: "telegram-status-command",
     title: "Telegram status command reply",
     rationale: "Recent Telegram group regressions broke /status while normal chat still worked.",
-    regressionRefs: ["openclaw/openclaw#74698"],
+    regressionRefs: ["sunclaw/sunclaw#74698"],
     timeoutMs: 45_000,
     buildRun: (sutUsername) =>
       telegramQaStepRun({
         expectReply: true,
         input: `/status@${sutUsername}`,
-        expectedTextIncludes: ["OpenClaw", "Model:", "Session:", "Activation:"],
+        expectedTextIncludes: ["SunClaw", "Model:", "Session:", "Activation:"],
       }),
   },
   {
@@ -342,7 +342,7 @@ const TELEGRAM_QA_SCENARIOS: TelegramQaScenarioDefinition[] = [
           driverGroupAuthorization: "allow",
           expectReply: true,
           input: `/status@${sutUsername}`,
-          expectedTextIncludes: ["OpenClaw", "Session:"],
+          expectedTextIncludes: ["SunClaw", "Session:"],
         },
         {
           expectReply: true,
@@ -366,7 +366,7 @@ const TELEGRAM_QA_SCENARIOS: TelegramQaScenarioDefinition[] = [
     buildRun: () =>
       telegramQaStepRun({
         expectReply: false,
-        input: "/status@OpenClawQaOtherBot",
+        input: "/status@SunClawQaOtherBot",
       }),
   },
   {
@@ -403,7 +403,7 @@ const TELEGRAM_QA_SCENARIOS: TelegramQaScenarioDefinition[] = [
     defaultEnabled: false,
     rationale:
       "Opt-in real Telegram proof that /usage tokens decorates message-tool-only visible replies.",
-    regressionRefs: ["openclaw/openclaw#87392"],
+    regressionRefs: ["sunclaw/sunclaw#87392"],
     timeoutMs: 90_000,
     buildRun: (sutUsername) => {
       const marker = `QA-TELEGRAM-USAGE-FOOTER-${randomUUID().slice(0, 8).toUpperCase()}`;
@@ -464,7 +464,7 @@ const TELEGRAM_QA_SCENARIOS: TelegramQaScenarioDefinition[] = [
     defaultEnabled: false,
     defaultProviderModes: ["mock-openai"],
     rationale: "Opt-in regression guard for duplicate final replies from Telegram streaming paths.",
-    regressionRefs: ["openclaw/openclaw#39905"],
+    regressionRefs: ["sunclaw/sunclaw#39905"],
     timeoutMs: 75_000,
     buildRun: (sutUsername) =>
       telegramQaStepRun({
@@ -482,7 +482,7 @@ const TELEGRAM_QA_SCENARIOS: TelegramQaScenarioDefinition[] = [
     title: "Telegram long final reuses the preview message",
     defaultProviderModes: ["mock-openai"],
     rationale: "Regression guard for long streamed finals leaving stale preview messages behind.",
-    regressionRefs: ["openclaw/openclaw#39905"],
+    regressionRefs: ["sunclaw/sunclaw#39905"],
     timeoutMs: 60_000,
     buildRun: (sutUsername) =>
       telegramQaStepRun({
@@ -501,7 +501,7 @@ const TELEGRAM_QA_SCENARIOS: TelegramQaScenarioDefinition[] = [
     title: "Telegram three-chunk final keeps only final chunks",
     defaultEnabled: false,
     rationale: "Opt-in stress probe for Telegram long final chunk accounting.",
-    regressionRefs: ["openclaw/openclaw#39905"],
+    regressionRefs: ["sunclaw/sunclaw#39905"],
     timeoutMs: 60_000,
     buildRun: (sutUsername) =>
       telegramQaStepRun({
@@ -541,13 +541,13 @@ const TELEGRAM_QA_STANDARD_SCENARIO_IDS = collectLiveTransportStandardScenarioCo
 });
 
 const TELEGRAM_QA_ENV_KEYS = [
-  "OPENCLAW_QA_TELEGRAM_GROUP_ID",
-  "OPENCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN",
-  "OPENCLAW_QA_TELEGRAM_SUT_BOT_TOKEN",
+  "SUNCLAW_QA_TELEGRAM_GROUP_ID",
+  "SUNCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN",
+  "SUNCLAW_QA_TELEGRAM_SUT_BOT_TOKEN",
 ] as const;
-const TELEGRAM_QA_CAPTURE_CONTENT_ENV = "OPENCLAW_QA_TELEGRAM_CAPTURE_CONTENT";
-const QA_REDACT_PUBLIC_METADATA_ENV = "OPENCLAW_QA_REDACT_PUBLIC_METADATA";
-const QA_SUITE_PROGRESS_ENV = "OPENCLAW_QA_SUITE_PROGRESS";
+const TELEGRAM_QA_CAPTURE_CONTENT_ENV = "SUNCLAW_QA_TELEGRAM_CAPTURE_CONTENT";
+const QA_REDACT_PUBLIC_METADATA_ENV = "SUNCLAW_QA_REDACT_PUBLIC_METADATA";
+const QA_SUITE_PROGRESS_ENV = "SUNCLAW_QA_SUITE_PROGRESS";
 const TELEGRAM_QA_PROGRESS_DETAIL_LIMIT = 240;
 const TELEGRAM_QA_PROGRESS_PREFIX = "[qa-telegram-live]";
 const execFileAsync = promisify(execFile);
@@ -616,7 +616,7 @@ function parsePositiveTelegramQaEnvMs(env: NodeJS.ProcessEnv, name: string, fall
 function resolveTelegramQaCanaryTimeoutMs(env: NodeJS.ProcessEnv = process.env) {
   return parsePositiveTelegramQaEnvMs(
     env,
-    "OPENCLAW_QA_TELEGRAM_CANARY_TIMEOUT_MS",
+    "SUNCLAW_QA_TELEGRAM_CANARY_TIMEOUT_MS",
     DEFAULT_TELEGRAM_QA_CANARY_TIMEOUT_MS,
   );
 }
@@ -625,7 +625,7 @@ function resolveTelegramQaScenarioTimeoutMs(
   fallbackMs: number,
   env: NodeJS.ProcessEnv = process.env,
 ) {
-  return parsePositiveTelegramQaEnvMs(env, "OPENCLAW_QA_TELEGRAM_SCENARIO_TIMEOUT_MS", fallbackMs);
+  return parsePositiveTelegramQaEnvMs(env, "SUNCLAW_QA_TELEGRAM_SCENARIO_TIMEOUT_MS", fallbackMs);
 }
 
 function formatTelegramQaTimeoutSeconds(timeoutMs: number) {
@@ -662,14 +662,14 @@ function formatTelegramQaProgressDetails(details: string): string {
 }
 
 function resolveTelegramQaRuntimeEnv(env: NodeJS.ProcessEnv = process.env): TelegramQaRuntimeEnv {
-  const groupId = resolveEnvValue(env, "OPENCLAW_QA_TELEGRAM_GROUP_ID");
+  const groupId = resolveEnvValue(env, "SUNCLAW_QA_TELEGRAM_GROUP_ID");
   if (!/^-?\d+$/u.test(groupId)) {
-    throw new Error("OPENCLAW_QA_TELEGRAM_GROUP_ID must be a numeric Telegram chat id.");
+    throw new Error("SUNCLAW_QA_TELEGRAM_GROUP_ID must be a numeric Telegram chat id.");
   }
   return {
     groupId,
-    driverToken: resolveEnvValue(env, "OPENCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN"),
-    sutToken: resolveEnvValue(env, "OPENCLAW_QA_TELEGRAM_SUT_BOT_TOKEN"),
+    driverToken: resolveEnvValue(env, "SUNCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN"),
+    sutToken: resolveEnvValue(env, "SUNCLAW_QA_TELEGRAM_SUT_BOT_TOKEN"),
   };
 }
 
@@ -737,14 +737,14 @@ function normalizeTelegramObservedMessage(update: TelegramUpdate): TelegramObser
 }
 
 function buildTelegramQaConfig(
-  baseCfg: OpenClawConfig,
+  baseCfg: SunClawConfig,
   params: {
     groupId: string;
     sutToken: string;
     driverBotId: number;
     sutAccountId: string;
   },
-): OpenClawConfig {
+): SunClawConfig {
   const pluginAllow = uniqueStrings([...(baseCfg.plugins?.allow ?? []), "telegram"]);
   const pluginEntries = {
     ...baseCfg.plugins?.entries,
@@ -760,7 +760,7 @@ function buildTelegramQaConfig(
           ...baseCfg.agents?.defaults?.models,
           "openai/gpt-5.5": {
             ...baseCfg.agents?.defaults?.models?.["openai/gpt-5.5"],
-            agentRuntime: { id: "openclaw" },
+            agentRuntime: { id: "sunclaw" },
           },
         },
         skipBootstrap: true,
@@ -1591,33 +1591,33 @@ function canaryFailureMessage(params: {
   ].join("\n");
 }
 
-async function runInstalledOpenClawTelegramOnboardingPreflight(params: {
-  openClawCommand: string;
+async function runInstalledSunClawTelegramOnboardingPreflight(params: {
+  sunClawCommand: string;
   providerMode: ReturnType<typeof normalizeQaProviderMode>;
   sutToken: string;
 }) {
   const tempRoot = await fs.mkdtemp(
-    path.join(resolvePreferredOpenClawTmpDir(), "openclaw-npm-telegram-"),
+    path.join(resolvePreferredSunClawTmpDir(), "sunclaw-npm-telegram-"),
   );
   const homeDir = path.join(tempRoot, "home");
-  const stateDir = path.join(homeDir, ".openclaw");
+  const stateDir = path.join(homeDir, ".sunclaw");
   await fs.mkdir(stateDir, { recursive: true });
   const tokenPath = path.join(tempRoot, "sut-token.txt");
   await fs.writeFile(tokenPath, params.sutToken, { encoding: "utf8", mode: 0o600 });
   const env = {
     ...process.env,
     HOME: homeDir,
-    OPENCLAW_HOME: stateDir,
-    OPENCLAW_CONFIG_PATH: path.join(stateDir, "openclaw.json"),
-    OPENCLAW_STATE_DIR: stateDir,
-    OPENCLAW_GATEWAY_TOKEN: "npm-telegram-live-onboard",
+    SUNCLAW_HOME: stateDir,
+    SUNCLAW_CONFIG_PATH: path.join(stateDir, "sunclaw.json"),
+    SUNCLAW_STATE_DIR: stateDir,
+    SUNCLAW_GATEWAY_TOKEN: "npm-telegram-live-onboard",
     ...(params.providerMode === "live-frontier"
       ? {}
-      : { OPENAI_API_KEY: process.env.OPENAI_API_KEY ?? "sk-openclaw-npm-telegram-preflight" }),
+      : { OPENAI_API_KEY: process.env.OPENAI_API_KEY ?? "sk-sunclaw-npm-telegram-preflight" }),
   };
   try {
     await execFileAsync(
-      params.openClawCommand,
+      params.sunClawCommand,
       [
         "onboard",
         "--non-interactive",
@@ -1641,11 +1641,11 @@ async function runInstalledOpenClawTelegramOnboardingPreflight(params: {
       { env },
     );
     await execFileAsync(
-      params.openClawCommand,
+      params.sunClawCommand,
       ["channels", "add", "--channel", "telegram", "--token-file", tokenPath],
       { env },
     );
-    await execFileAsync(params.openClawCommand, ["doctor", "--non-interactive"], { env });
+    await execFileAsync(params.sunClawCommand, ["doctor", "--non-interactive"], { env });
   } finally {
     await fs.rm(tempRoot, { recursive: true, force: true }).catch(() => {});
   }
@@ -1654,7 +1654,7 @@ async function runInstalledOpenClawTelegramOnboardingPreflight(params: {
 export async function runTelegramQaLive(params: {
   repoRoot?: string;
   outputDir?: string;
-  sutOpenClawCommand?: string;
+  sutSunClawCommand?: string;
   preflightInstalledOnboarding?: boolean;
   providerMode?: QaProviderModeInput;
   primaryModel?: string;
@@ -1715,10 +1715,10 @@ export async function runTelegramQaLive(params: {
   let preservedGatewayDebugArtifacts = false;
   let canaryFailure: string | null = null;
   try {
-    if (params.sutOpenClawCommand && params.preflightInstalledOnboarding === true) {
+    if (params.sutSunClawCommand && params.preflightInstalledOnboarding === true) {
       writeTelegramQaProgress(progressEnabled, "installed package onboarding preflight start");
-      await runInstalledOpenClawTelegramOnboardingPreflight({
-        openClawCommand: params.sutOpenClawCommand,
+      await runInstalledSunClawTelegramOnboardingPreflight({
+        sunClawCommand: params.sutSunClawCommand,
         providerMode,
         sutToken: runtimeEnv.sutToken,
       });
@@ -1743,9 +1743,9 @@ export async function runTelegramQaLive(params: {
 
     const gatewayHarness = await startQaLiveLaneGateway({
       repoRoot,
-      command: params.sutOpenClawCommand
+      command: params.sutSunClawCommand
         ? {
-            executablePath: params.sutOpenClawCommand,
+            executablePath: params.sutSunClawCommand,
             usePackagedPlugins: true,
           }
         : undefined,

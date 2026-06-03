@@ -1,5 +1,5 @@
-import type { AnyAgentTool, OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
-import { createTestPluginApi } from "openclaw/plugin-sdk/plugin-test-api";
+import type { AnyAgentTool, SunClawPluginApi } from "sunclaw/plugin-sdk/plugin-entry";
+import { createTestPluginApi } from "sunclaw/plugin-sdk/plugin-test-api";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import canvasPlugin from "./index.js";
 
@@ -45,13 +45,13 @@ vi.mock("./src/tool.js", () => ({
 }));
 
 function registerCanvas() {
-  const routes: Array<Parameters<OpenClawPluginApi["registerHttpRoute"]>[0]> = [];
-  const services: Array<Parameters<OpenClawPluginApi["registerService"]>[0]> = [];
-  const resolvers: Array<Parameters<OpenClawPluginApi["registerHostedMediaResolver"]>[0]> = [];
-  const tools: Array<Parameters<OpenClawPluginApi["registerTool"]>[0]> = [];
+  const routes: Array<Parameters<SunClawPluginApi["registerHttpRoute"]>[0]> = [];
+  const services: Array<Parameters<SunClawPluginApi["registerService"]>[0]> = [];
+  const resolvers: Array<Parameters<SunClawPluginApi["registerHostedMediaResolver"]>[0]> = [];
+  const tools: Array<Parameters<SunClawPluginApi["registerTool"]>[0]> = [];
   const cliFeatures: Array<{
-    registrar: Parameters<OpenClawPluginApi["registerNodeCliFeature"]>[0];
-    opts: Parameters<OpenClawPluginApi["registerNodeCliFeature"]>[1];
+    registrar: Parameters<SunClawPluginApi["registerNodeCliFeature"]>[0];
+    opts: Parameters<SunClawPluginApi["registerNodeCliFeature"]>[1];
   }> = [];
   canvasPlugin.register?.(
     createTestPluginApi({
@@ -84,7 +84,7 @@ describe("Canvas plugin entry", () => {
     await services[0]?.stop?.({} as never);
     expect(mocks.createCanvasHttpRouteHandler).not.toHaveBeenCalled();
 
-    await routes[0]?.handler({ url: "/__openclaw__/canvas" } as never, {} as never);
+    await routes[0]?.handler({ url: "/__sunclaw__/canvas" } as never, {} as never);
     expect(mocks.createCanvasHttpRouteHandler).toHaveBeenCalledTimes(1);
     expect(mocks.httpHandler.handleHttpRequest).toHaveBeenCalledTimes(1);
 
@@ -102,7 +102,7 @@ describe("Canvas plugin entry", () => {
     expect(mocks.createDefaultCanvasCliDependencies).not.toHaveBeenCalled();
     expect(mocks.createCanvasTool).not.toHaveBeenCalled();
 
-    await expect(resolvers[0]?.("/__openclaw__/canvas/documents/id/index.html")).resolves.toBe(
+    await expect(resolvers[0]?.("/__sunclaw__/canvas/documents/id/index.html")).resolves.toBe(
       "/tmp/canvas-asset",
     );
     expect(mocks.resolveCanvasHttpPathToLocalPath).toHaveBeenCalledTimes(1);

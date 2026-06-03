@@ -1,11 +1,11 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { OpenKeyedStoreOptions } from "openclaw/plugin-sdk/plugin-state-runtime";
+import type { OpenKeyedStoreOptions } from "sunclaw/plugin-sdk/plugin-state-runtime";
 import {
   createPluginStateSyncKeyedStoreForTests,
   resetPluginStateStoreForTests,
-} from "openclaw/plugin-sdk/plugin-state-test-runtime";
+} from "sunclaw/plugin-sdk/plugin-state-test-runtime";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { VoiceCallConfigSchema } from "../config.js";
 import type { VoiceCallProvider } from "../providers/base.js";
@@ -56,7 +56,7 @@ afterEach(async () => {
 });
 
 function createContext(overrides: Partial<CallManagerContext> = {}): CallManagerContext {
-  const storePath = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-voice-call-events-test-"));
+  const storePath = fs.mkdtempSync(path.join(os.tmpdir(), "sunclaw-voice-call-events-test-"));
   const ctx: CallManagerContext = {
     activeCalls: new Map(),
     providerCallIdMap: new Map(),

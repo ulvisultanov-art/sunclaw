@@ -1,8 +1,8 @@
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+} from "@sunclaw/normalization-core/string-coerce";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { getActivePluginChannelRegistry } from "../../plugins/runtime.js";
 
 type CommandSurfaceParams = {
@@ -18,7 +18,7 @@ type CommandSurfaceParams = {
 };
 
 type ChannelAccountParams = {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   ctx: {
     OriginatingChannel?: string;
     Surface?: string;

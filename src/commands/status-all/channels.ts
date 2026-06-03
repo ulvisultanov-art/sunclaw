@@ -1,6 +1,6 @@
 import fs from "node:fs";
-import { asRecord } from "@openclaw/normalization-core/record-coerce";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { asRecord } from "@sunclaw/normalization-core/record-coerce";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
 import { sanitizeForLog } from "../../../packages/terminal-core/src/ansi.js";
 import { resolveInspectedChannelAccount } from "../../channels/account-inspection.js";
 import { hasConfiguredUnavailableCredentialStatus } from "../../channels/account-snapshot-fields.js";
@@ -21,7 +21,7 @@ import {
   hasRuntimeCredentialAvailable,
   markConfiguredUnavailableCredentialStatusesAvailable,
 } from "../../channels/status/read-model.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { listExplicitConfiguredChannelIdsForConfig } from "../../plugins/channel-plugin-ids.js";
 import { resolveMissingOfficialExternalChannelPluginRepairHint } from "../../plugins/official-external-plugin-repair-hints.js";
 import {
@@ -45,8 +45,8 @@ type ChannelAccountRow = ChannelAccountTokenSummaryRow & {
 
 type ResolvedChannelAccountRowParams = {
   plugin: ChannelPlugin;
-  cfg: OpenClawConfig;
-  sourceConfig: OpenClawConfig;
+  cfg: SunClawConfig;
+  sourceConfig: SunClawConfig;
   accountId: string;
 };
 
@@ -93,7 +93,7 @@ const formatAccountLabel = (params: { accountId: string; name?: string }) => {
 
 const buildAccountNotes = (params: {
   plugin: ChannelPlugin;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   entry: ChannelAccountRow;
   liveCredentialAvailable?: boolean;
   credentialResolutionSkipped?: boolean;
@@ -211,16 +211,16 @@ function formatLoadFailureDetail(message: string): string {
   const reason = isLikelyDependencyTreeCorruption(message)
     ? "dependency tree corrupted"
     : "registration failed";
-  return `plugin load failed: ${reason}; run openclaw doctor --fix`;
+  return `plugin load failed: ${reason}; run sunclaw doctor --fix`;
 }
 
 // `status --all` channels table.
 // Keep this generic: channel-specific rules belong in the channel plugin.
 export async function buildChannelsTable(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   opts?: {
     showSecrets?: boolean;
-    sourceConfig?: OpenClawConfig;
+    sourceConfig?: SunClawConfig;
     includeSetupFallbackPlugins?: boolean;
     liveChannelStatus?: unknown;
     credentialResolutionSkipped?: boolean;

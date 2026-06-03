@@ -1,8 +1,8 @@
 import type { MarkdownTableMode } from "./types.base.js";
-import type { OpenClawConfig } from "./types.openclaw.js";
+import type { SunClawConfig } from "./types.sunclaw.js";
 
 export type ResolveMarkdownTableModeParams = {
-  cfg?: Partial<OpenClawConfig>;
+  cfg?: Partial<SunClawConfig>;
   channel?: string | null;
   accountId?: string | null;
 };

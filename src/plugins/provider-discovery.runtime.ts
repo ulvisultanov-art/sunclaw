@@ -1,8 +1,8 @@
 import path from "node:path";
-import type { NormalizedModelCatalogRow } from "@openclaw/model-catalog-core/model-catalog-types";
-import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
+import type { NormalizedModelCatalogRow } from "@sunclaw/model-catalog-core/model-catalog-types";
+import { normalizeProviderId } from "@sunclaw/model-catalog-core/provider-id";
 import type { ModelDefinitionConfig, ModelProviderConfig } from "../config/types.models.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { planManifestModelCatalogRows } from "../model-catalog/manifest-planner.js";
 import { sortUniqueStrings } from "../../packages/normalization-core/src/string-normalization.js";
 import { loadManifestMetadataSnapshot } from "./manifest-contract-eligibility.js";
@@ -266,7 +266,7 @@ function resolveRuntimeManifestCatalogPluginIds(
 }
 
 function resolveProviderDiscoveryEntryPlugins(params: {
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   onlyPluginIds?: string[];
@@ -418,7 +418,7 @@ function withoutFullLoadedPluginEntries(
 }
 
 export function resolvePluginDiscoveryProvidersRuntime(params: {
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   bundledProviderVitestCompat?: boolean;

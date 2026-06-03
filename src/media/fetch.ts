@@ -1,11 +1,11 @@
-import { MAX_DOCUMENT_BYTES } from "@openclaw/media-core/constants";
-import { parseMediaContentLength } from "@openclaw/media-core/content-length";
-import { basenameFromAnyPath, extnameFromAnyPath } from "@openclaw/media-core/file-name";
-import { detectMime, extensionForMime } from "@openclaw/media-core/mime";
+import { MAX_DOCUMENT_BYTES } from "@sunclaw/media-core/constants";
+import { parseMediaContentLength } from "@sunclaw/media-core/content-length";
+import { basenameFromAnyPath, extnameFromAnyPath } from "@sunclaw/media-core/file-name";
+import { detectMime, extensionForMime } from "@sunclaw/media-core/mime";
 import {
   readResponseTextSnippet,
   readResponseWithLimit,
-} from "@openclaw/media-core/read-response-with-limit";
+} from "@sunclaw/media-core/read-response-with-limit";
 import { formatErrorMessage } from "../infra/errors.js";
 import {
   fetchWithSsrFGuard,

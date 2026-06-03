@@ -4,8 +4,8 @@ import {
   resolveCronStyleNow,
   SILENT_REPLY_TOKEN,
   type MemoryFlushPlan,
-  type OpenClawConfig,
-} from "openclaw/plugin-sdk/memory-core-host-runtime-core";
+  type SunClawConfig,
+} from "sunclaw/plugin-sdk/memory-core-host-runtime-core";
 import { resolveMemoryCoreNowMs } from "./time.js";
 
 export const DEFAULT_MEMORY_FLUSH_SOFT_TOKENS = 4000;
@@ -95,7 +95,7 @@ function appendCurrentTimeLine(text: string, timeLine: string): string {
 
 export function buildMemoryFlushPlan(
   params: {
-    cfg?: OpenClawConfig;
+    cfg?: SunClawConfig;
     nowMs?: number;
   } = {},
 ): MemoryFlushPlan | null {

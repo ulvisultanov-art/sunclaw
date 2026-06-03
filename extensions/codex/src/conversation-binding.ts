@@ -1,29 +1,29 @@
 import {
   formatErrorMessage,
   resolveSandboxContext,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
-import { resolveSessionAgentIds } from "openclaw/plugin-sdk/agent-runtime";
-import { loadExecApprovals } from "openclaw/plugin-sdk/exec-approvals-runtime";
+} from "sunclaw/plugin-sdk/agent-harness-runtime";
+import { resolveSessionAgentIds } from "sunclaw/plugin-sdk/agent-runtime";
+import { loadExecApprovals } from "sunclaw/plugin-sdk/exec-approvals-runtime";
 import type {
   PluginConversationBindingResolvedEvent,
   PluginHookInboundClaimContext,
   PluginHookInboundClaimEvent,
-} from "openclaw/plugin-sdk/plugin-entry";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-payload";
+} from "sunclaw/plugin-sdk/plugin-entry";
+import type { ReplyPayload } from "sunclaw/plugin-sdk/reply-payload";
 import {
   loadSessionStore,
   resolveSessionStoreEntry,
   resolveStorePath,
-} from "openclaw/plugin-sdk/session-store-runtime";
+} from "sunclaw/plugin-sdk/session-store-runtime";
 import { resolveCodexAppServerAuthProfileIdForAgent } from "./app-server/auth-bridge.js";
 import { CODEX_CONTROL_METHODS } from "./app-server/capabilities.js";
 import {
   codexSandboxPolicyForTurn,
-  resolveOpenClawExecPolicyForCodexAppServer,
+  resolveSunClawExecPolicyForCodexAppServer,
   resolveCodexAppServerRuntimeOptions,
   type CodexAppServerApprovalPolicy,
   type CodexAppServerSandboxMode,
-  type OpenClawExecPolicyForCodexAppServer,
+  type SunClawExecPolicyForCodexAppServer,
 } from "./app-server/config.js";
 import type {
   CodexServiceTier,
@@ -64,7 +64,7 @@ import { resumeCodexCliSessionOnNode } from "./node-cli-sessions.js";
 
 const DEFAULT_BOUND_TURN_TIMEOUT_MS = 20 * 60_000;
 const NATIVE_CONVERSATION_INTERACTIVE_APPROVALS_UNAVAILABLE =
-  "OpenClaw native Codex conversation binding cannot route interactive approvals yet; use the Codex harness or explicit /acp spawn codex for that workflow.";
+  "SunClaw native Codex conversation binding cannot route interactive approvals yet; use the Codex harness or explicit /acp spawn codex for that workflow.";
 
 export {
   createCodexCliNodeConversationBindingData,
@@ -118,7 +118,7 @@ async function resolveConversationAppServerRuntime(params: {
   sessionKey?: string;
   workspaceDir: string;
 }): Promise<{
-  execPolicy?: OpenClawExecPolicyForCodexAppServer;
+  execPolicy?: SunClawExecPolicyForCodexAppServer;
   runtime: ReturnType<typeof resolveCodexAppServerRuntimeOptions>;
 }> {
   const execPolicy = resolveConversationExecPolicy({
@@ -137,13 +137,13 @@ async function resolveConversationAppServerRuntime(params: {
   const runtime = resolveCodexAppServerRuntimeOptions({
     pluginConfig: params.pluginConfig,
     execPolicy,
-    openClawSandboxActive: Boolean(sandboxForPolicy?.enabled),
+    sunClawSandboxActive: Boolean(sandboxForPolicy?.enabled),
   });
   assertNativeConversationApprovalPolicySupported({ execPolicy, runtime });
   return { execPolicy, runtime };
 }
 
-const CODEX_CONVERSATION_GLOBAL_STATE = Symbol.for("openclaw.codex.conversationBinding");
+const CODEX_CONVERSATION_GLOBAL_STATE = Symbol.for("sunclaw.codex.conversationBinding");
 
 function getGlobalState(): CodexConversationGlobalState {
   const globalState = globalThis as typeof globalThis & {
@@ -447,7 +447,7 @@ async function createThread(params: CodexThreadBindingParams): Promise<void> {
         personality: CODEX_NATIVE_PERSONALITY_NONE,
         ...buildThreadRequestRuntimeOptions(params, resolved),
         developerInstructions:
-          "This Codex thread is bound to an OpenClaw conversation. Answer normally; OpenClaw will deliver your final response back to the conversation.",
+          "This Codex thread is bound to an SunClaw conversation. Answer normally; SunClaw will deliver your final response back to the conversation.",
         experimentalRawEvents: true,
         persistExtendedHistory: true,
       },
@@ -500,7 +500,7 @@ async function runBoundTurn(params: {
           contentItems: [
             {
               type: "inputText",
-              text: "OpenClaw native Codex conversation binding does not expose dynamic OpenClaw tools yet.",
+              text: "SunClaw native Codex conversation binding does not expose dynamic SunClaw tools yet.",
             },
           ],
           success: false,
@@ -513,7 +513,7 @@ async function runBoundTurn(params: {
         return {
           decision: "decline",
           reason:
-            "OpenClaw native Codex conversation binding cannot route interactive approvals yet; use the Codex harness or explicit /acp spawn codex for that workflow.",
+            "SunClaw native Codex conversation binding cannot route interactive approvals yet; use the Codex harness or explicit /acp spawn codex for that workflow.",
         };
       }
       if (request.method === "item/permissions/requestApproval") {
@@ -523,7 +523,7 @@ async function runBoundTurn(params: {
         return {
           decision: "decline",
           reason:
-            "OpenClaw native Codex conversation binding cannot route interactive approvals yet; use the Codex harness or explicit /acp spawn codex for that workflow.",
+            "SunClaw native Codex conversation binding cannot route interactive approvals yet; use the Codex harness or explicit /acp spawn codex for that workflow.",
         };
       }
       return undefined;
@@ -581,7 +581,7 @@ async function runBoundTurn(params: {
 }
 
 function assertNativeConversationApprovalPolicySupported(params: {
-  execPolicy?: OpenClawExecPolicyForCodexAppServer;
+  execPolicy?: SunClawExecPolicyForCodexAppServer;
   runtime: ReturnType<typeof resolveCodexAppServerRuntimeOptions>;
 }): void {
   if (params.execPolicy?.touched === true && params.runtime.approvalPolicy !== "never") {
@@ -642,7 +642,7 @@ function resolveConversationExecPolicy(params: {
           config: params.config,
         }).sessionAgentId
       : undefined);
-  return resolveOpenClawExecPolicyForCodexAppServer({
+  return resolveSunClawExecPolicyForCodexAppServer({
     config: params.config,
     agentId,
     execOverrides: readSessionExecOverrides({

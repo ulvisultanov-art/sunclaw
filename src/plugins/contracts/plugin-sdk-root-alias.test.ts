@@ -11,7 +11,7 @@ const rootSdk = require(rootAliasPath) as Record<string, unknown>;
 const rootAliasSource = fs.readFileSync(rootAliasPath, "utf-8");
 const compatPath = fileURLToPath(new URL("../../plugin-sdk/compat.ts", import.meta.url));
 const packageJsonPath = fileURLToPath(new URL("../../../package.json", import.meta.url));
-const diagnosticEventsStateKey = Symbol.for("openclaw.diagnosticEvents.state.v1");
+const diagnosticEventsStateKey = Symbol.for("sunclaw.diagnosticEvents.state.v1");
 const legacyRootExportNames = [
   "registerContextEngine",
   "buildMemorySystemPromptAddition",
@@ -25,7 +25,7 @@ const legacyRootExportNames = [
   "createTypingCallbacks",
   "createChannelReplyPipeline",
   "resolveChannelSourceReplyDeliveryMode",
-  "resolvePreferredOpenClawTmpDir",
+  "resolvePreferredSunClawTmpDir",
 ] as const;
 
 type EmptySchema = {
@@ -145,7 +145,7 @@ function loadRootAliasWithStubs(options?: {
     if (id === "node:os") {
       return {
         tmpdir: () =>
-          context.process.env.TMPDIR ?? options?.defaultTmpDir ?? "/tmp/openclaw-root-alias-test",
+          context.process.env.TMPDIR ?? options?.defaultTmpDir ?? "/tmp/sunclaw-root-alias-test",
       };
     }
     if (id === "jiti") {
@@ -209,7 +209,7 @@ function ensureDiagnosticEventsStateFixture(
   }
   const state = vm.runInNewContext(
     `({
-      marker: Symbol.for("openclaw.diagnosticEvents.state.v1"),
+      marker: Symbol.for("sunclaw.diagnosticEvents.state.v1"),
       enabled: true,
       seq: 0,
       listeners: new Set(),
@@ -358,7 +358,7 @@ describe("plugin-sdk root alias", () => {
     expect(lazyModule.jitiLoadCalls).toBe(1);
     expect(lazyModule.createJitiOptions.at(-1)?.tryNative).toBe(false);
     expect(lazyModule.createJitiOptions.at(-1)?.fsCache).toBe(
-      path.join("/tmp/openclaw-root-alias-test", "jiti", "openclaw", "3.4.5", "12345-678"),
+      path.join("/tmp/sunclaw-root-alias-test", "jiti", "sunclaw", "3.4.5", "12345-678"),
     );
     expect((lazyRootSdk.slowHelper as () => string)()).toBe("loaded");
     expect(Object.keys(lazyRootSdk)).toContain("slowHelper");
@@ -367,15 +367,15 @@ describe("plugin-sdk root alias", () => {
 
   it("preserves jiti's tmpdir guard when root-alias TMPDIR resolves to cwd", () => {
     const lazyModule = loadRootAliasWithStubs({
-      cwd: "/tmp/openclaw-root-alias-cwd",
-      defaultTmpDir: "/tmp/openclaw-root-alias-fallback",
-      env: { TMPDIR: "/tmp/openclaw-root-alias-cwd" },
+      cwd: "/tmp/sunclaw-root-alias-cwd",
+      defaultTmpDir: "/tmp/sunclaw-root-alias-fallback",
+      env: { TMPDIR: "/tmp/sunclaw-root-alias-cwd" },
       packageVersion: "3.4.5",
     });
 
     expect("slowHelper" in lazyModule.moduleExports).toBe(true);
     expect(lazyModule.createJitiOptions.at(-1)?.fsCache).toBe(
-      path.join("/tmp/openclaw-root-alias-fallback", "jiti", "openclaw", "3.4.5", "12345-678"),
+      path.join("/tmp/sunclaw-root-alias-fallback", "jiti", "sunclaw", "3.4.5", "12345-678"),
     );
   });
 
@@ -478,12 +478,12 @@ describe("plugin-sdk root alias", () => {
 
     expect((lazyModule.moduleExports.slowHelper as () => string)()).toBe("loaded");
     const aliasMap = (lazyModule.createJitiOptions.at(-1)?.alias ?? {}) as Record<string, string>;
-    expect(aliasMap["openclaw/plugin-sdk"]).toBe(rootAliasPath);
-    expect(aliasMap["@openclaw/plugin-sdk"]).toBe(rootAliasPath);
-    expect(aliasMap["openclaw/plugin-sdk/group-access"]).toContain(
+    expect(aliasMap["sunclaw/plugin-sdk"]).toBe(rootAliasPath);
+    expect(aliasMap["@sunclaw/plugin-sdk"]).toBe(rootAliasPath);
+    expect(aliasMap["sunclaw/plugin-sdk/group-access"]).toContain(
       path.join("src", "plugin-sdk", "group-access.ts"),
     );
-    expect(aliasMap["@openclaw/plugin-sdk/group-access"]).toContain(
+    expect(aliasMap["@sunclaw/plugin-sdk/group-access"]).toContain(
       path.join("src", "plugin-sdk", "group-access.ts"),
     );
   });
@@ -500,7 +500,7 @@ describe("plugin-sdk root alias", () => {
 
     expect((lazyModule.moduleExports.slowHelper as () => string)()).toBe("loaded");
     const aliasMap = (lazyModule.createJitiOptions.at(-1)?.alias ?? {}) as Record<string, string>;
-    expect(aliasMap["@openclaw/llm-core"]).toBe(sourceLlmCorePath);
+    expect(aliasMap["@sunclaw/llm-core"]).toBe(sourceLlmCorePath);
   });
 
   it("keeps bootstrap plugin-sdk aliases deterministic and ignores unsafe subpaths", () => {
@@ -521,19 +521,19 @@ describe("plugin-sdk root alias", () => {
       (lazyModule.createJitiOptions.at(-1)?.alias ?? {}) as Record<string, string>,
     );
     expect(aliasKeys).toEqual([
-      "openclaw/plugin-sdk/alpha",
-      "@openclaw/plugin-sdk/alpha",
-      "openclaw/plugin-sdk/group-access",
-      "@openclaw/plugin-sdk/group-access",
-      "openclaw/plugin-sdk/zeta",
-      "@openclaw/plugin-sdk/zeta",
-      "@openclaw/llm-core",
-      "@openclaw/llm-core/diagnostics",
-      "@openclaw/llm-core/event-stream",
-      "@openclaw/llm-core/types",
-      "@openclaw/llm-core/validation",
-      "openclaw/plugin-sdk",
-      "@openclaw/plugin-sdk",
+      "sunclaw/plugin-sdk/alpha",
+      "@sunclaw/plugin-sdk/alpha",
+      "sunclaw/plugin-sdk/group-access",
+      "@sunclaw/plugin-sdk/group-access",
+      "sunclaw/plugin-sdk/zeta",
+      "@sunclaw/plugin-sdk/zeta",
+      "@sunclaw/llm-core",
+      "@sunclaw/llm-core/diagnostics",
+      "@sunclaw/llm-core/event-stream",
+      "@sunclaw/llm-core/types",
+      "@sunclaw/llm-core/validation",
+      "sunclaw/plugin-sdk",
+      "@sunclaw/plugin-sdk",
     ]);
   });
 
@@ -547,7 +547,7 @@ describe("plugin-sdk root alias", () => {
       "ssrf-runtime-internal.ts",
     );
     const lazyModule = loadRootAliasWithStubs({
-      env: { OPENCLAW_ENABLE_PRIVATE_QA_CLI: "1" },
+      env: { SUNCLAW_ENABLE_PRIVATE_QA_CLI: "1" },
       privateLocalOnlySubpaths: ["qa-lab", "../escape", "nested/path", "ssrf-runtime-internal"],
       existingPaths: [qaLabPath, ssrfRuntimeInternalPath],
       monolithicExports: {
@@ -557,12 +557,12 @@ describe("plugin-sdk root alias", () => {
 
     expect((lazyModule.moduleExports.slowHelper as () => string)()).toBe("loaded");
     const aliasMap = (lazyModule.createJitiOptions.at(-1)?.alias ?? {}) as Record<string, string>;
-    expect(aliasMap["openclaw/plugin-sdk/qa-lab"]).toBe(qaLabPath);
-    expect(aliasMap["@openclaw/plugin-sdk/qa-lab"]).toBe(qaLabPath);
-    expect(aliasMap).not.toHaveProperty("openclaw/plugin-sdk/../escape");
-    expect(aliasMap).not.toHaveProperty("openclaw/plugin-sdk/nested/path");
-    expect(aliasMap).not.toHaveProperty("openclaw/plugin-sdk/ssrf-runtime-internal");
-    expect(aliasMap).not.toHaveProperty("@openclaw/plugin-sdk/ssrf-runtime-internal");
+    expect(aliasMap["sunclaw/plugin-sdk/qa-lab"]).toBe(qaLabPath);
+    expect(aliasMap["@sunclaw/plugin-sdk/qa-lab"]).toBe(qaLabPath);
+    expect(aliasMap).not.toHaveProperty("sunclaw/plugin-sdk/../escape");
+    expect(aliasMap).not.toHaveProperty("sunclaw/plugin-sdk/nested/path");
+    expect(aliasMap).not.toHaveProperty("sunclaw/plugin-sdk/ssrf-runtime-internal");
+    expect(aliasMap).not.toHaveProperty("@sunclaw/plugin-sdk/ssrf-runtime-internal");
   });
 
   it("keeps non-QA private local-only plugin-sdk subpaths out of the CJS root alias", () => {
@@ -584,9 +584,9 @@ describe("plugin-sdk root alias", () => {
 
     expect((lazyModule.moduleExports.slowHelper as () => string)()).toBe("loaded");
     const aliasMap = (lazyModule.createJitiOptions.at(-1)?.alias ?? {}) as Record<string, string>;
-    expect(aliasMap).not.toHaveProperty("openclaw/plugin-sdk/codex-mcp-projection");
-    expect(aliasMap).not.toHaveProperty("@openclaw/plugin-sdk/codex-mcp-projection");
-    expect(aliasMap).not.toHaveProperty("openclaw/plugin-sdk/qa-runtime");
+    expect(aliasMap).not.toHaveProperty("sunclaw/plugin-sdk/codex-mcp-projection");
+    expect(aliasMap).not.toHaveProperty("@sunclaw/plugin-sdk/codex-mcp-projection");
+    expect(aliasMap).not.toHaveProperty("sunclaw/plugin-sdk/qa-runtime");
   });
 
   it("builds source plugin-sdk subpath aliases through the wider source extension family", () => {
@@ -603,10 +603,10 @@ describe("plugin-sdk root alias", () => {
 
     expect((lazyModule.moduleExports.slowHelper as () => string)()).toBe("loaded");
     const aliasMap = (lazyModule.createJitiOptions.at(-1)?.alias ?? {}) as Record<string, string>;
-    expect(aliasMap["openclaw/plugin-sdk/channel-runtime"]).toBe(
+    expect(aliasMap["sunclaw/plugin-sdk/channel-runtime"]).toBe(
       path.join(packageRoot, "src", "plugin-sdk", "channel-runtime.mts"),
     );
-    expect(aliasMap["@openclaw/plugin-sdk/channel-runtime"]).toBe(
+    expect(aliasMap["@sunclaw/plugin-sdk/channel-runtime"]).toBe(
       path.join(packageRoot, "src", "plugin-sdk", "channel-runtime.mts"),
     );
   });
@@ -783,7 +783,7 @@ describe("plugin-sdk root alias", () => {
     )((event) => {
       seen.push(event.type);
     });
-    const state = lazyModule.globalContext[Symbol.for("openclaw.diagnosticEvents.state.v1")] as {
+    const state = lazyModule.globalContext[Symbol.for("sunclaw.diagnosticEvents.state.v1")] as {
       listeners: Set<(event: { type: string }, metadata: { trusted: boolean }) => void>;
     };
 

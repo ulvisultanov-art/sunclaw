@@ -3,9 +3,9 @@ import fs from "node:fs";
 import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
-  closeOpenClawStateDatabaseForTest,
-  runOpenClawStateWriteTransaction,
-} from "../state/openclaw-state-db.js";
+  closeSunClawStateDatabaseForTest,
+  runSunClawStateWriteTransaction,
+} from "../state/sunclaw-state-db.js";
 import type { PluginCandidate } from "./discovery.js";
 import {
   readPersistedInstalledPluginIndex,
@@ -44,19 +44,19 @@ import { cleanupTrackedTempDirs, makeTrackedTempDir } from "./test-helpers/fs-fi
 const tempDirs: string[] = [];
 
 afterEach(() => {
-  closeOpenClawStateDatabaseForTest();
+  closeSunClawStateDatabaseForTest();
   clearPluginMetadataLifecycleCaches();
   cleanupTrackedTempDirs(tempDirs);
 });
 
 function makeTempDir() {
-  return makeTrackedTempDir("openclaw-plugin-registry", tempDirs);
+  return makeTrackedTempDir("sunclaw-plugin-registry", tempDirs);
 }
 
 function hermeticEnv(overrides: NodeJS.ProcessEnv = {}): NodeJS.ProcessEnv {
   return {
-    OPENCLAW_BUNDLED_PLUGINS_DIR: undefined,
-    OPENCLAW_VERSION: "2026.4.25",
+    SUNCLAW_BUNDLED_PLUGINS_DIR: undefined,
+    SUNCLAW_VERSION: "2026.4.25",
     VITEST: "true",
     ...overrides,
   };
@@ -73,7 +73,7 @@ function createCandidate(rootDir: string, pluginId = "demo"): PluginCandidate {
     "utf8",
   );
   fs.writeFileSync(
-    path.join(rootDir, "openclaw.plugin.json"),
+    path.join(rootDir, "sunclaw.plugin.json"),
     JSON.stringify({
       id: pluginId,
       name: pluginId,
@@ -137,7 +137,7 @@ function createIndex(
     plugins: [
       {
         pluginId,
-        manifestPath: path.join(pluginRoot, "openclaw.plugin.json"),
+        manifestPath: path.join(pluginRoot, "sunclaw.plugin.json"),
         manifestHash: "manifest-hash",
         rootDir: pluginRoot,
         origin: "global",
@@ -227,8 +227,8 @@ describe("plugin registry facade", () => {
     const absolute = path.resolve(pluginRoot, "..", "outside.txt");
 
     expect(resolvePluginPath(absolute, pluginRoot)).toBe(resolvePluginPath(absolute, undefined));
-    expect(resolvePluginPath("~/openclaw/plugin.txt", pluginRoot)).toBe(
-      resolvePluginPath("~/openclaw/plugin.txt", undefined),
+    expect(resolvePluginPath("~/sunclaw/plugin.txt", pluginRoot)).toBe(
+      resolvePluginPath("~/sunclaw/plugin.txt", undefined),
     );
   });
 
@@ -341,7 +341,7 @@ describe("plugin registry facade", () => {
       env,
       index,
     });
-    fs.unlinkSync(path.join(rootDir, "openclaw.plugin.json"));
+    fs.unlinkSync(path.join(rootDir, "sunclaw.plugin.json"));
 
     expect(listPluginContributionIds({ lookUpTable, contribution: "providers" })).toEqual(["demo"]);
     expect(resolveProviderOwners({ lookUpTable, providerId: "DEMO" })).toEqual(["demo"]);
@@ -380,7 +380,7 @@ describe("plugin registry facade", () => {
     const rootDir = makeTempDir();
     fs.writeFileSync(path.join(rootDir, "index.ts"), "", "utf8");
     fs.writeFileSync(
-      path.join(rootDir, "openclaw.plugin.json"),
+      path.join(rootDir, "sunclaw.plugin.json"),
       JSON.stringify({
         id: "openai",
         legacyPluginIds: ["openai-codex"],
@@ -394,7 +394,7 @@ describe("plugin registry facade", () => {
       plugins: [
         {
           ...createIndex("openai").plugins[0],
-          manifestPath: path.join(rootDir, "openclaw.plugin.json"),
+          manifestPath: path.join(rootDir, "sunclaw.plugin.json"),
           source: path.join(rootDir, "index.ts"),
           rootDir,
         },
@@ -435,7 +435,7 @@ describe("plugin registry facade", () => {
       env,
       index,
     });
-    fs.unlinkSync(path.join(rootDir, "openclaw.plugin.json"));
+    fs.unlinkSync(path.join(rootDir, "sunclaw.plugin.json"));
 
     const normalizePluginId = createPluginRegistryIdNormalizer(index, {
       manifestRegistry: lookUpTable.manifestRegistry,
@@ -460,7 +460,7 @@ describe("plugin registry facade", () => {
     const config = {} as const;
     fs.writeFileSync(path.join(persistedRootDir, "index.ts"), "", "utf8");
     fs.writeFileSync(
-      path.join(persistedRootDir, "openclaw.plugin.json"),
+      path.join(persistedRootDir, "sunclaw.plugin.json"),
       JSON.stringify({ id: "persisted", configSchema: { type: "object" } }),
       "utf8",
     );
@@ -470,8 +470,8 @@ describe("plugin registry facade", () => {
         plugins: [
           {
             ...createIndex("persisted").plugins[0],
-            manifestPath: path.join(persistedRootDir, "openclaw.plugin.json"),
-            manifestHash: hashFile(path.join(persistedRootDir, "openclaw.plugin.json")),
+            manifestPath: path.join(persistedRootDir, "sunclaw.plugin.json"),
+            manifestHash: hashFile(path.join(persistedRootDir, "sunclaw.plugin.json")),
             source: path.join(persistedRootDir, "index.ts"),
             rootDir: persistedRootDir,
           },
@@ -531,7 +531,7 @@ describe("plugin registry facade", () => {
     });
     await writePersistedInstalledPluginIndex(persisted, { stateDir });
     fs.writeFileSync(
-      path.join(rootDir, "openclaw.plugin.json"),
+      path.join(rootDir, "sunclaw.plugin.json"),
       JSON.stringify({
         id: "demo",
         name: "Demo",
@@ -642,7 +642,7 @@ describe("plugin registry facade", () => {
         plugins: [
           {
             ...createIndex("persisted").plugins[0],
-            manifestPath: path.join(staleBundledRootDir, "openclaw.plugin.json"),
+            manifestPath: path.join(staleBundledRootDir, "sunclaw.plugin.json"),
             source: path.join(staleBundledRootDir, "index.ts"),
             rootDir: staleBundledRootDir,
             origin: "bundled",
@@ -655,7 +655,7 @@ describe("plugin registry facade", () => {
     const result = loadPluginRegistrySnapshotWithMetadata({
       stateDir,
       candidates: [candidate],
-      env: hermeticEnv({ OPENCLAW_BUNDLED_PLUGINS_DIR: rootDir }),
+      env: hermeticEnv({ SUNCLAW_BUNDLED_PLUGINS_DIR: rootDir }),
     });
 
     expect(result.source).toBe("derived");
@@ -724,7 +724,7 @@ describe("plugin registry facade", () => {
     const rootDir = path.join(bundledRoot, "demo");
     fs.mkdirSync(rootDir, { recursive: true });
     createCandidate(rootDir);
-    const env = hermeticEnv({ OPENCLAW_BUNDLED_PLUGINS_DIR: bundledRoot });
+    const env = hermeticEnv({ SUNCLAW_BUNDLED_PLUGINS_DIR: bundledRoot });
     const config = { plugins: { entries: { demo: { enabled: true } } } } as const;
     const readFileSyncSpy = vi.spyOn(fs, "readFileSync");
 
@@ -735,7 +735,7 @@ describe("plugin registry facade", () => {
       env,
     });
     const manifestReadsAfterFirst = readFileSyncSpy.mock.calls.filter((call) =>
-      String(call[0]).endsWith("openclaw.plugin.json"),
+      String(call[0]).endsWith("sunclaw.plugin.json"),
     ).length;
 
     const second = loadPluginRegistrySnapshotWithMetadata({
@@ -745,7 +745,7 @@ describe("plugin registry facade", () => {
       env,
     });
     const manifestReadsAfterSecond = readFileSyncSpy.mock.calls.filter((call) =>
-      String(call[0]).endsWith("openclaw.plugin.json"),
+      String(call[0]).endsWith("sunclaw.plugin.json"),
     ).length;
 
     expect(first.source).toBe("derived");
@@ -762,8 +762,8 @@ describe("plugin registry facade", () => {
     fs.mkdirSync(firstRoot, { recursive: true });
     createCandidate(firstRoot, "first");
     const env = hermeticEnv({
-      OPENCLAW_CONFIG_PATH: path.join(configDir, "openclaw.json"),
-      OPENCLAW_DISABLE_BUNDLED_PLUGINS: "1",
+      SUNCLAW_CONFIG_PATH: path.join(configDir, "sunclaw.json"),
+      SUNCLAW_DISABLE_BUNDLED_PLUGINS: "1",
     });
 
     const first = loadPluginRegistrySnapshotWithMetadata({ stateDir, env });
@@ -789,14 +789,14 @@ describe("plugin registry facade", () => {
     const first = loadPluginRegistrySnapshotWithMetadata({
       stateDir,
       config,
-      env: hermeticEnv({ OPENCLAW_BUNDLED_PLUGINS_DIR: bundledRoot }),
+      env: hermeticEnv({ SUNCLAW_BUNDLED_PLUGINS_DIR: bundledRoot }),
     });
     const second = loadPluginRegistrySnapshotWithMetadata({
       stateDir,
       config,
       env: hermeticEnv({
-        OPENCLAW_BUNDLED_PLUGINS_DIR: bundledRoot,
-        OPENCLAW_VERSION: "2026.4.26",
+        SUNCLAW_BUNDLED_PLUGINS_DIR: bundledRoot,
+        SUNCLAW_VERSION: "2026.4.26",
       }),
     });
 
@@ -825,7 +825,7 @@ describe("plugin registry facade", () => {
     await writePersistedInstalledPluginIndex(createPersistableIndex("first"), { stateDir });
     const first = loadPluginRegistrySnapshotWithMetadata({ stateDir, env });
     const external = createPersistableIndex("second-external");
-    runOpenClawStateWriteTransaction(
+    runSunClawStateWriteTransaction(
       ({ db }) => {
         db.prepare(
           `
@@ -843,7 +843,7 @@ describe("plugin registry facade", () => {
           Date.now(),
         );
       },
-      { env: { ...env, OPENCLAW_STATE_DIR: stateDir } },
+      { env: { ...env, SUNCLAW_STATE_DIR: stateDir } },
     );
     const second = loadPluginRegistrySnapshotWithMetadata({ stateDir, env });
 

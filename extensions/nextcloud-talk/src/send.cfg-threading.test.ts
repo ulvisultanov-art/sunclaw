@@ -1,9 +1,9 @@
-import { verifyChannelMessageAdapterCapabilityProofs } from "openclaw/plugin-sdk/channel-outbound";
+import { verifyChannelMessageAdapterCapabilityProofs } from "sunclaw/plugin-sdk/channel-outbound";
 import {
   createSendCfgThreadingRuntime,
   expectProvidedCfgSkipsRuntimeLoad,
-} from "openclaw/plugin-sdk/channel-test-helpers";
-import type { OpenClawConfig as CoreConfig } from "openclaw/plugin-sdk/config-contracts";
+} from "sunclaw/plugin-sdk/channel-test-helpers";
+import type { SunClawConfig as CoreConfig } from "sunclaw/plugin-sdk/config-contracts";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const hoisted = vi.hoisted(() => ({

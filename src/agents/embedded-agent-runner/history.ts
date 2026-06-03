@@ -1,6 +1,6 @@
-import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
-import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import { normalizeProviderId } from "@sunclaw/model-catalog-core/provider-id";
+import { normalizeOptionalLowercaseString } from "@sunclaw/normalization-core/string-coerce";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import type { AgentMessage } from "../runtime/index.js";
 
 const THREAD_SUFFIX_REGEX = /^(.*)(?::(?:thread|topic):\d+)$/i;
@@ -44,7 +44,7 @@ export function limitHistoryTurns(
  */
 export function getHistoryLimitFromSessionKey(
   sessionKey: string | undefined,
-  config: OpenClawConfig | undefined,
+  config: SunClawConfig | undefined,
 ): number | undefined {
   if (!sessionKey || !config) {
     return undefined;
@@ -63,7 +63,7 @@ export function getHistoryLimitFromSessionKey(
   const userId = stripThreadSuffix(userIdRaw);
 
   const resolveProviderConfig = (
-    cfg: OpenClawConfig | undefined,
+    cfg: SunClawConfig | undefined,
     providerId: string,
   ):
     | {

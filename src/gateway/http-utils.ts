@@ -3,7 +3,7 @@ import type { IncomingMessage } from "node:http";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@sunclaw/normalization-core/string-coerce";
 import { resolveDefaultAgentId } from "../agents/agent-scope.js";
 import { modelKey, parseModelRef, resolveDefaultModelForAgent } from "../agents/model-selection.js";
 import { createModelVisibilityPolicy } from "../agents/model-visibility-policy.js";
@@ -31,13 +31,13 @@ export {
   type GatewayHttpRequestAuthCheckResult,
 } from "./http-auth-utils.js";
 
-export const OPENCLAW_MODEL_ID = "openclaw";
-export const OPENCLAW_DEFAULT_MODEL_ID = "openclaw/default";
+export const SUNCLAW_MODEL_ID = "sunclaw";
+export const SUNCLAW_DEFAULT_MODEL_ID = "sunclaw/default";
 
 function resolveAgentIdFromHeader(req: IncomingMessage): string | undefined {
   const raw =
-    normalizeOptionalString(getHeader(req, "x-openclaw-agent-id")) ||
-    normalizeOptionalString(getHeader(req, "x-openclaw-agent")) ||
+    normalizeOptionalString(getHeader(req, "x-sunclaw-agent-id")) ||
+    normalizeOptionalString(getHeader(req, "x-sunclaw-agent")) ||
     "";
   if (!raw) {
     return undefined;
@@ -54,12 +54,12 @@ export function resolveAgentIdFromModel(
     return undefined;
   }
   const lowered = normalizeLowercaseStringOrEmpty(raw);
-  if (lowered === OPENCLAW_MODEL_ID || lowered === OPENCLAW_DEFAULT_MODEL_ID) {
+  if (lowered === SUNCLAW_MODEL_ID || lowered === SUNCLAW_DEFAULT_MODEL_ID) {
     return resolveDefaultAgentId(cfg);
   }
 
   const m =
-    raw.match(/^openclaw[:/](?<agentId>[a-z0-9][a-z0-9_-]{0,63})$/i) ??
+    raw.match(/^sunclaw[:/](?<agentId>[a-z0-9][a-z0-9_-]{0,63})$/i) ??
     raw.match(/^agent:(?<agentId>[a-z0-9][a-z0-9_-]{0,63})$/i);
   const agentId = m?.groups?.agentId;
   if (!agentId) {
@@ -76,11 +76,11 @@ export async function resolveOpenAiCompatModelOverride(params: {
   const requestModel = params.model?.trim();
   if (requestModel && !resolveAgentIdFromModel(requestModel)) {
     return {
-      errorMessage: "Invalid `model`. Use `openclaw` or `openclaw/<agentId>`.",
+      errorMessage: "Invalid `model`. Use `sunclaw` or `sunclaw/<agentId>`.",
     };
   }
 
-  const raw = getHeader(params.req, "x-openclaw-model")?.trim();
+  const raw = getHeader(params.req, "x-sunclaw-model")?.trim();
   if (!raw) {
     return {};
   }
@@ -101,7 +101,7 @@ export async function resolveOpenAiCompatModelOverride(params: {
     ...modelManifestContext,
   });
   if (!parsed) {
-    return { errorMessage: "Invalid `x-openclaw-model`." };
+    return { errorMessage: "Invalid `x-sunclaw-model`." };
   }
 
   const catalog = await loadGatewayModelCatalog();
@@ -144,7 +144,7 @@ function resolveSessionKey(params: {
   user?: string | undefined;
   prefix: string;
 }): string {
-  const explicit = getHeader(params.req, "x-openclaw-session-key")?.trim();
+  const explicit = getHeader(params.req, "x-sunclaw-session-key")?.trim();
   if (explicit) {
     return explicit;
   }
@@ -171,7 +171,7 @@ export function resolveGatewayRequestContext(params: {
   });
 
   const messageChannel = params.useMessageChannelHeader
-    ? (normalizeMessageChannel(getHeader(params.req, "x-openclaw-message-channel")) ??
+    ? (normalizeMessageChannel(getHeader(params.req, "x-sunclaw-message-channel")) ??
       params.defaultMessageChannel)
     : params.defaultMessageChannel;
 

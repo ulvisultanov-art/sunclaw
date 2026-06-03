@@ -1,4 +1,4 @@
-import { normalizeStringEntries } from "@openclaw/normalization-core/string-normalization";
+import { normalizeStringEntries } from "@sunclaw/normalization-core/string-normalization";
 import { resolveMessagePresentationActionValue } from "../../../interactive/payload.js";
 import type {
   MessagePresentation,

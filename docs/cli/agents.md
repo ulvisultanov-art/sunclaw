@@ -1,11 +1,11 @@
 ---
-summary: "CLI reference for `openclaw agents` (list/add/delete/bindings/bind/unbind/set identity)"
+summary: "CLI reference for `sunclaw agents` (list/add/delete/bindings/bind/unbind/set identity)"
 read_when:
   - You want multiple isolated agents (workspaces + routing + auth)
 title: "Agents"
 ---
 
-# `openclaw agents`
+# `sunclaw agents`
 
 Manage isolated agents (workspaces + auth + routing).
 
@@ -18,48 +18,48 @@ Related:
 ## Examples
 
 ```bash
-openclaw agents list
-openclaw agents list --bindings
-openclaw agents add work --workspace ~/.openclaw/workspace-work
-openclaw agents add work --workspace ~/.openclaw/workspace-work --bind telegram:*
-openclaw agents add ops --workspace ~/.openclaw/workspace-ops --bind telegram:ops --non-interactive
-openclaw agents bindings
-openclaw agents bind --agent work --bind telegram:ops
-openclaw agents unbind --agent work --bind telegram:ops
-openclaw agents set-identity --workspace ~/.openclaw/workspace --from-identity
-openclaw agents set-identity --agent main --avatar avatars/openclaw.png
-openclaw agents delete work
+sunclaw agents list
+sunclaw agents list --bindings
+sunclaw agents add work --workspace ~/.sunclaw/workspace-work
+sunclaw agents add work --workspace ~/.sunclaw/workspace-work --bind telegram:*
+sunclaw agents add ops --workspace ~/.sunclaw/workspace-ops --bind telegram:ops --non-interactive
+sunclaw agents bindings
+sunclaw agents bind --agent work --bind telegram:ops
+sunclaw agents unbind --agent work --bind telegram:ops
+sunclaw agents set-identity --workspace ~/.sunclaw/workspace --from-identity
+sunclaw agents set-identity --agent main --avatar avatars/sunclaw.png
+sunclaw agents delete work
 ```
 
 ## Routing bindings
 
 Use routing bindings to pin inbound channel traffic to a specific agent.
 
-If you also want different visible skills per agent, configure `agents.defaults.skills` and `agents.list[].skills` in `openclaw.json`. See [Skills config](/tools/skills-config) and [Configuration reference](/gateway/config-agents#agents-defaults-skills).
+If you also want different visible skills per agent, configure `agents.defaults.skills` and `agents.list[].skills` in `sunclaw.json`. See [Skills config](/tools/skills-config) and [Configuration reference](/gateway/config-agents#agents-defaults-skills).
 
 List bindings:
 
 ```bash
-openclaw agents bindings
-openclaw agents bindings --agent work
-openclaw agents bindings --json
+sunclaw agents bindings
+sunclaw agents bindings --agent work
+sunclaw agents bindings --json
 ```
 
 Add bindings:
 
 ```bash
-openclaw agents bind --agent work --bind telegram:ops --bind discord:guild-a
+sunclaw agents bind --agent work --bind telegram:ops --bind discord:guild-a
 ```
 
 You can also add bindings when creating an agent:
 
 ```bash
-openclaw agents add work --workspace ~/.openclaw/workspace-work --bind telegram:* --bind discord:*
+sunclaw agents add work --workspace ~/.sunclaw/workspace-work --bind telegram:* --bind discord:*
 ```
 
-If you omit `accountId` (`--bind <channel>`), OpenClaw resolves it from plugin setup hooks, forced account binding, or the channel's configured account count.
+If you omit `accountId` (`--bind <channel>`), SunClaw resolves it from plugin setup hooks, forced account binding, or the channel's configured account count.
 
-If you omit `--agent` for `bind` or `unbind`, OpenClaw targets the current default agent.
+If you omit `--agent` for `bind` or `unbind`, SunClaw targets the current default agent.
 
 ### `--bind` format
 
@@ -73,22 +73,22 @@ If you omit `--agent` for `bind` or `unbind`, OpenClaw targets the current defau
 
 - A stored binding without `accountId` matches the channel default account only.
 - `accountId: "*"` is the channel-wide fallback (all accounts) and is less specific than an explicit account binding.
-- If the same agent already has a matching channel binding without `accountId`, and you later bind with an explicit or resolved `accountId`, OpenClaw upgrades that existing binding in place instead of adding a duplicate.
+- If the same agent already has a matching channel binding without `accountId`, and you later bind with an explicit or resolved `accountId`, SunClaw upgrades that existing binding in place instead of adding a duplicate.
 
 Examples:
 
 ```bash
 # match all accounts on the channel
-openclaw agents bind --agent work --bind telegram:*
+sunclaw agents bind --agent work --bind telegram:*
 
 # match a specific account
-openclaw agents bind --agent work --bind telegram:ops
+sunclaw agents bind --agent work --bind telegram:ops
 
 # initial channel-only binding
-openclaw agents bind --agent work --bind telegram
+sunclaw agents bind --agent work --bind telegram
 
 # later upgrade to account-scoped binding
-openclaw agents bind --agent work --bind telegram:alerts
+sunclaw agents bind --agent work --bind telegram:alerts
 ```
 
 After the upgrade, routing for that binding is scoped to `telegram:alerts`. If you also want default-account routing, add it explicitly (for example `--bind telegram:default`).
@@ -96,8 +96,8 @@ After the upgrade, routing for that binding is scoped to `telegram:alerts`. If y
 Remove bindings:
 
 ```bash
-openclaw agents unbind --agent work --bind telegram:ops
-openclaw agents unbind --agent work --all
+sunclaw agents unbind --agent work --bind telegram:ops
+sunclaw agents unbind --agent work --all
 ```
 
 `unbind` accepts either `--all` or one or more `--bind` values, not both.
@@ -106,7 +106,7 @@ openclaw agents unbind --agent work --all
 
 ### `agents`
 
-Running `openclaw agents` with no subcommand is equivalent to `openclaw agents list`.
+Running `sunclaw agents` with no subcommand is equivalent to `sunclaw agents list`.
 
 ### `agents list`
 
@@ -182,7 +182,7 @@ Notes:
 
 Each agent workspace can include an `IDENTITY.md` at the workspace root:
 
-- Example path: `~/.openclaw/workspace/IDENTITY.md`
+- Example path: `~/.sunclaw/workspace/IDENTITY.md`
 - `set-identity --from-identity` reads from the workspace root (or an explicit `--identity-file`)
 
 Avatar paths resolve relative to the workspace root.
@@ -217,13 +217,13 @@ Notes:
 Load from `IDENTITY.md`:
 
 ```bash
-openclaw agents set-identity --workspace ~/.openclaw/workspace --from-identity
+sunclaw agents set-identity --workspace ~/.sunclaw/workspace --from-identity
 ```
 
 Override fields explicitly:
 
 ```bash
-openclaw agents set-identity --agent main --name "OpenClaw" --emoji "🦞" --avatar avatars/openclaw.png
+sunclaw agents set-identity --agent main --name "SunClaw" --emoji "🦞" --avatar avatars/sunclaw.png
 ```
 
 Config sample:
@@ -235,10 +235,10 @@ Config sample:
       {
         id: "main",
         identity: {
-          name: "OpenClaw",
+          name: "SunClaw",
           theme: "space lobster",
           emoji: "🦞",
-          avatar: "avatars/openclaw.png",
+          avatar: "avatars/sunclaw.png",
         },
       },
     ],

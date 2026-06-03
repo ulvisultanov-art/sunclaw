@@ -1,11 +1,11 @@
-import { expectProviderOnboardPrimaryAndFallbacks } from "openclaw/plugin-sdk/provider-test-contracts";
+import { expectProviderOnboardPrimaryAndFallbacks } from "sunclaw/plugin-sdk/provider-test-contracts";
 import { describe, expect, it } from "vitest";
 import { applyOpencodeGoConfig, applyOpencodeGoProviderConfig } from "./onboard.js";
 
 const MODEL_REF = "opencode-go/kimi-k2.6";
 
 describe("opencode-go onboard", () => {
-  it("leaves model aliases to the OpenClaw catalog", () => {
+  it("leaves model aliases to the SunClaw catalog", () => {
     const cfg = {
       agents: {
         defaults: {

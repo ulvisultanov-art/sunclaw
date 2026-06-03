@@ -189,15 +189,15 @@ function buildPrivateQaEnv(env, qaState) {
       ? {
           HOME: qaState.home,
           USERPROFILE: qaState.home,
-          OPENCLAW_HOME: qaState.home,
-          OPENCLAW_STATE_DIR: qaState.stateDir,
-          OPENCLAW_CONFIG_PATH: qaState.configPath,
+          SUNCLAW_HOME: qaState.home,
+          SUNCLAW_STATE_DIR: qaState.stateDir,
+          SUNCLAW_CONFIG_PATH: qaState.configPath,
         }
       : {}),
-    OPENCLAW_BUILD_PRIVATE_QA: "1",
-    OPENCLAW_ENABLE_PRIVATE_QA_CLI: "1",
-    OPENCLAW_RUN_NODE_SKIP_DTS_BUILD: env.OPENCLAW_RUN_NODE_SKIP_DTS_BUILD ?? "1",
-    OPENCLAW_TEST_DISABLE_UPDATE_CHECK: env.OPENCLAW_TEST_DISABLE_UPDATE_CHECK ?? "1",
+    SUNCLAW_BUILD_PRIVATE_QA: "1",
+    SUNCLAW_ENABLE_PRIVATE_QA_CLI: "1",
+    SUNCLAW_RUN_NODE_SKIP_DTS_BUILD: env.SUNCLAW_RUN_NODE_SKIP_DTS_BUILD ?? "1",
+    SUNCLAW_TEST_DISABLE_UPDATE_CHECK: env.SUNCLAW_TEST_DISABLE_UPDATE_CHECK ?? "1",
   };
 }
 
@@ -206,7 +206,7 @@ function createQaState(outputDir) {
   const home = path.join(root, "home");
   const stateDir = path.join(root, "state");
   return {
-    configPath: path.join(stateDir, "openclaw.json"),
+    configPath: path.join(stateDir, "sunclaw.json"),
     home,
     root,
     stateDir,
@@ -278,7 +278,7 @@ async function runGatewayCpuScenarios(options, params = {}) {
   if (!options.skipQa) {
     const qaCommand = pnpmCommand(
       [
-        "openclaw",
+        "sunclaw",
         "qa",
         "suite",
         "--provider-mode",

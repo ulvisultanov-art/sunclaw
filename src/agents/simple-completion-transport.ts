@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { getApiProvider } from "../llm/api-registry.js";
 import type { Api, Model } from "../llm/types.js";
 import { createAnthropicVertexStreamFnForModel } from "./anthropic-vertex-stream.js";
@@ -7,14 +7,14 @@ import { prepareGoogleSimpleCompletionModel } from "./google-simple-completion-s
 import { registerProviderStreamForModel } from "./provider-stream.js";
 import {
   buildTransportAwareSimpleStreamFn,
-  createOpenClawTransportStreamFnForModel,
+  createSunClawTransportStreamFnForModel,
   prepareTransportAwareSimpleModel,
   resolveTransportAwareSimpleApi,
 } from "./provider-transport-stream.js";
 
 function resolveAnthropicVertexSimpleApi(baseUrl?: string): Api {
   const suffix = baseUrl?.trim() ? encodeURIComponent(baseUrl.trim()) : "default";
-  return `openclaw-anthropic-vertex-simple:${suffix}`;
+  return `sunclaw-anthropic-vertex-simple:${suffix}`;
 }
 
 function normalizeCodexResponsesBaseUrlForOpenAISdk(baseUrl?: string): string {
@@ -51,20 +51,20 @@ function normalizeCodexResponsesBaseUrlForOpenAISdk(baseUrl?: string): string {
 
 function prepareCodexSimpleTransportModel<TApi extends Api>(
   model: Model<TApi>,
-  cfg?: OpenClawConfig,
+  cfg?: SunClawConfig,
 ): Model | undefined {
   if (model.provider !== "openai" || model.api !== "openai-chatgpt-responses") {
     return undefined;
   }
 
   // Static Codex provider catalogs intentionally omit credentials; the simple
-  // completion path must use OpenClaw's transport so resolved request auth is applied.
+  // completion path must use SunClaw's transport so resolved request auth is applied.
   const transportModel = {
     ...model,
     baseUrl: normalizeCodexResponsesBaseUrlForOpenAISdk(model.baseUrl),
   } as Model;
   const api = resolveTransportAwareSimpleApi(model.api);
-  const streamFn = createOpenClawTransportStreamFnForModel(transportModel, { cfg });
+  const streamFn = createSunClawTransportStreamFnForModel(transportModel, { cfg });
   if (!api || !streamFn) {
     return undefined;
   }
@@ -78,7 +78,7 @@ function prepareCodexSimpleTransportModel<TApi extends Api>(
 
 export function prepareModelForSimpleCompletion<TApi extends Api>(params: {
   model: Model<TApi>;
-  cfg?: OpenClawConfig;
+  cfg?: SunClawConfig;
 }): Model {
   const { model, cfg } = params;
   // Only provider-owned custom APIs need runtime stream registration here.

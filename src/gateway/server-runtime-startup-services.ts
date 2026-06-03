@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type { ChannelHealthMonitor } from "./channel-health-monitor.js";
 import { startChannelHealthMonitor } from "./channel-health-monitor.js";
 import {
@@ -11,7 +11,7 @@ export type GatewayChannelManager = Parameters<
 >[0]["channelManager"];
 
 export function startGatewayChannelHealthMonitor(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   channelManager: GatewayChannelManager;
 }): ChannelHealthMonitor | null {
   const healthCheckMinutes = params.cfg.gateway?.channelHealthCheckMinutes;
@@ -32,7 +32,7 @@ export function startGatewayChannelHealthMonitor(params: {
 
 export function startGatewayRuntimeServices(params: {
   minimalTestGateway: boolean;
-  cfgAtStart: OpenClawConfig;
+  cfgAtStart: SunClawConfig;
   channelManager: GatewayChannelManager;
   log: GatewayRuntimeServiceLogger;
 }): {

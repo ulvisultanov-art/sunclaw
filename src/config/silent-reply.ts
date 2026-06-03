@@ -1,4 +1,4 @@
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@sunclaw/normalization-core/string-coerce";
 import {
   classifySilentReplyConversationType,
   resolveSilentReplyPolicyFromPolicies,
@@ -6,10 +6,10 @@ import {
   type SilentReplyPolicy,
   type SilentReplyPolicyShape,
 } from "../shared/silent-reply-policy.js";
-import type { OpenClawConfig } from "./types.openclaw.js";
+import type { SunClawConfig } from "./types.sunclaw.js";
 
 type ResolveSilentReplyParams = {
-  cfg?: OpenClawConfig;
+  cfg?: SunClawConfig;
   sessionKey?: string;
   surface?: string;
   conversationType?: SilentReplyConversationType;

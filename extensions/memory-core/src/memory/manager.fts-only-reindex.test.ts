@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { DatabaseSync } from "node:sqlite";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/memory-core-host-engine-foundation";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/memory-core-host-engine-foundation";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { closeAllMemorySearchManagers, getMemorySearchManager } from "./index.js";
 import type { MemoryIndexMeta } from "./manager-reindex-state.js";
@@ -31,7 +31,7 @@ describe("memory manager FTS-only reindex", () => {
   let manager: MemoryIndexManager | null = null;
 
   beforeAll(async () => {
-    fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-mem-fts-only-"));
+    fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-mem-fts-only-"));
   });
 
   beforeEach(async () => {
@@ -81,7 +81,7 @@ describe("memory manager FTS-only reindex", () => {
         },
         list: [{ id: "main", default: true }],
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
     const result = await getMemorySearchManager({ cfg, agentId: "main" });
     if (!result.manager) {
       throw new Error(result.error ?? "manager missing");

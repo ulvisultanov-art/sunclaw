@@ -1,4 +1,4 @@
-import type { AgentMessage, NormalizedUsage } from "openclaw/plugin-sdk/agent-harness-runtime";
+import type { AgentMessage, NormalizedUsage } from "sunclaw/plugin-sdk/agent-harness-runtime";
 
 type AssistantMessage = Extract<AgentMessage, { role: "assistant" }>;
 type AssistantUsage = NonNullable<AssistantMessage["usage"]>;

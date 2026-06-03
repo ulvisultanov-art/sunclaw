@@ -1,11 +1,11 @@
-# OpenClaw Slack
+# SunClaw Slack
 
-Official OpenClaw channel plugin for Slack channels, DMs, commands, and app events.
+Official SunClaw channel plugin for Slack channels, DMs, commands, and app events.
 
-Install from OpenClaw:
+Install from SunClaw:
 
 ```bash
-openclaw plugin add @openclaw/slack
+sunclaw plugin add @sunclaw/slack
 ```
 
-Configure the Slack app credentials and allowed workspaces/channels in OpenClaw. The plugin lets agents receive Slack events and reply through the configured Slack app.
+Configure the Slack app credentials and allowed workspaces/channels in SunClaw. The plugin lets agents receive Slack events and reply through the configured Slack app.

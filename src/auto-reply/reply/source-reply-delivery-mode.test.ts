@@ -1,24 +1,24 @@
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import type { CommandTurnContext } from "../command-turn-context.js";
 import {
   resolveSourceReplyDeliveryMode,
   resolveSourceReplyVisibilityPolicy,
 } from "./source-reply-delivery-mode.js";
 
-const emptyConfig = {} as OpenClawConfig;
+const emptyConfig = {} as SunClawConfig;
 const automaticGroupReplyConfig = {
   messages: {
     groupChat: {
       visibleReplies: "automatic",
     },
   },
-} as const satisfies OpenClawConfig;
+} as const satisfies SunClawConfig;
 const globalToolOnlyReplyConfig = {
   messages: {
     visibleReplies: "message_tool",
   },
-} as const satisfies OpenClawConfig;
+} as const satisfies SunClawConfig;
 
 function expectPolicyFields(
   policy: ReturnType<typeof resolveSourceReplyVisibilityPolicy>,

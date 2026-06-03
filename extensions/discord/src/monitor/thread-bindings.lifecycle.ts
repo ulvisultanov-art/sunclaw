@@ -1,10 +1,10 @@
-import { readAcpSessionEntry, type AcpSessionStoreEntry } from "openclaw/plugin-sdk/acp-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import { readAcpSessionEntry, type AcpSessionStoreEntry } from "sunclaw/plugin-sdk/acp-runtime";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
   uniqueStrings,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { parseDiscordTarget } from "../targets.js";
 import { resolveChannelIdForBinding } from "./thread-bindings.discord-api.js";
 import { getThreadBindingManager } from "./thread-bindings.manager.js";
@@ -38,7 +38,7 @@ export type AcpThreadBindingReconciliationResult = {
 export type AcpThreadBindingHealthStatus = "healthy" | "stale" | "uncertain";
 
 export type AcpThreadBindingHealthProbe = (params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   accountId: string;
   sessionKey: string;
   binding: ThreadBindingRecord;
@@ -99,7 +99,7 @@ export function listThreadBindingsBySessionKey(params: {
 }
 
 export async function autoBindSpawnedDiscordSubagent(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   accountId?: string;
   channel?: string;
   to?: string;
@@ -234,7 +234,7 @@ function resolveStoredAcpBindingHealth(params: {
 }
 
 export async function reconcileAcpThreadBindingsOnStartup(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   accountId?: string;
   sendFarewell?: boolean;
   healthProbe?: AcpThreadBindingHealthProbe;

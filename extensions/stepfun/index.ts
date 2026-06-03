@@ -1,10 +1,10 @@
 import {
   definePluginEntry,
-  type OpenClawConfig,
+  type SunClawConfig,
   type ProviderCatalogContext,
-} from "openclaw/plugin-sdk/plugin-entry";
-import { createProviderApiKeyAuthMethod } from "openclaw/plugin-sdk/provider-auth-api-key";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/plugin-entry";
+import { createProviderApiKeyAuthMethod } from "sunclaw/plugin-sdk/provider-auth-api-key";
+import { normalizeLowercaseStringOrEmpty } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import {
   applyStepFunPlanConfig,
   applyStepFunPlanConfigCn,
@@ -131,7 +131,7 @@ function createStepFunApiKeyMethod(params: {
   choiceId: string;
   choiceLabel: string;
   choiceHint: string;
-  applyConfig: (cfg: OpenClawConfig) => OpenClawConfig;
+  applyConfig: (cfg: SunClawConfig) => SunClawConfig;
 }) {
   return createProviderApiKeyAuthMethod({
     providerId: params.providerId,

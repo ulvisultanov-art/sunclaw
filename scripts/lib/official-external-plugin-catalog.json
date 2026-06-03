@@ -1,28 +1,28 @@
 {
   "entries": [
     {
-      "name": "@openclaw/acpx",
-      "description": "OpenClaw ACP runtime backend",
+      "name": "@sunclaw/acpx",
+      "description": "SunClaw ACP runtime backend",
       "source": "official",
       "kind": "plugin",
-      "openclaw": {
+      "sunclaw": {
         "plugin": {
           "id": "acpx",
           "label": "ACPX Runtime"
         },
         "install": {
-          "npmSpec": "@openclaw/acpx",
+          "npmSpec": "@sunclaw/acpx",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.25"
         }
       }
     },
     {
-      "name": "@openclaw/brave-plugin",
-      "description": "OpenClaw Brave plugin",
+      "name": "@sunclaw/brave-plugin",
+      "description": "SunClaw Brave plugin",
       "source": "official",
       "kind": "plugin",
-      "openclaw": {
+      "sunclaw": {
         "plugin": {
           "id": "brave",
           "label": "Brave"
@@ -37,13 +37,13 @@
             "envVars": ["BRAVE_API_KEY"],
             "placeholder": "BSA...",
             "signupUrl": "https://api-dashboard.search.brave.com/app/keys",
-            "docsUrl": "https://docs.openclaw.ai/tools/brave-search",
+            "docsUrl": "https://docs.sunclaw.complex.az/tools/brave-search",
             "credentialPath": "plugins.entries.brave.config.webSearch.apiKey",
             "autoDetectOrder": 10
           }
         ],
         "install": {
-          "npmSpec": "@openclaw/brave-plugin",
+          "npmSpec": "@sunclaw/brave-plugin",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.10",
           "allowInvalidConfigRecovery": true
@@ -51,210 +51,210 @@
       }
     },
     {
-      "name": "@openclaw/copilot",
-      "description": "OpenClaw GitHub Copilot agent runtime plugin",
+      "name": "@sunclaw/copilot",
+      "description": "SunClaw GitHub Copilot agent runtime plugin",
       "source": "official",
       "kind": "plugin",
-      "openclaw": {
+      "sunclaw": {
         "plugin": {
           "id": "copilot",
           "label": "GitHub Copilot agent runtime"
         },
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/copilot",
-          "npmSpec": "@openclaw/copilot",
+          "clawhubSpec": "clawhub:@sunclaw/copilot",
+          "npmSpec": "@sunclaw/copilot",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.5.28"
         }
       }
     },
     {
-      "name": "@openclaw/diagnostics-otel",
-      "description": "OpenClaw diagnostics OpenTelemetry exporter",
+      "name": "@sunclaw/diagnostics-otel",
+      "description": "SunClaw diagnostics OpenTelemetry exporter",
       "source": "official",
       "kind": "plugin",
-      "openclaw": {
+      "sunclaw": {
         "plugin": {
           "id": "diagnostics-otel",
           "label": "Diagnostics OpenTelemetry"
         },
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/diagnostics-otel",
-          "npmSpec": "@openclaw/diagnostics-otel",
+          "clawhubSpec": "clawhub:@sunclaw/diagnostics-otel",
+          "npmSpec": "@sunclaw/diagnostics-otel",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.25"
         }
       }
     },
     {
-      "name": "@openclaw/diagnostics-prometheus",
-      "description": "OpenClaw diagnostics Prometheus exporter",
+      "name": "@sunclaw/diagnostics-prometheus",
+      "description": "SunClaw diagnostics Prometheus exporter",
       "source": "official",
       "kind": "plugin",
-      "openclaw": {
+      "sunclaw": {
         "plugin": {
           "id": "diagnostics-prometheus",
           "label": "Diagnostics Prometheus"
         },
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/diagnostics-prometheus",
-          "npmSpec": "@openclaw/diagnostics-prometheus",
+          "clawhubSpec": "clawhub:@sunclaw/diagnostics-prometheus",
+          "npmSpec": "@sunclaw/diagnostics-prometheus",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.25"
         }
       }
     },
     {
-      "name": "@openclaw/diffs",
-      "description": "OpenClaw diff viewer plugin",
+      "name": "@sunclaw/diffs",
+      "description": "SunClaw diff viewer plugin",
       "source": "official",
       "kind": "plugin",
-      "openclaw": {
+      "sunclaw": {
         "plugin": {
           "id": "diffs",
           "label": "Diffs"
         },
         "install": {
-          "npmSpec": "@openclaw/diffs",
+          "npmSpec": "@sunclaw/diffs",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.30"
         }
       }
     },
     {
-      "name": "@openclaw/diffs-language-pack",
-      "description": "OpenClaw diffs viewer syntax highlighting language pack",
+      "name": "@sunclaw/diffs-language-pack",
+      "description": "SunClaw diffs viewer syntax highlighting language pack",
       "source": "official",
       "kind": "plugin",
-      "openclaw": {
+      "sunclaw": {
         "plugin": {
           "id": "diffs-language-pack",
           "label": "Diff Viewer Language Pack"
         },
         "install": {
-          "npmSpec": "@openclaw/diffs-language-pack",
-          "clawhubSpec": "clawhub:@openclaw/diffs-language-pack",
+          "npmSpec": "@sunclaw/diffs-language-pack",
+          "clawhubSpec": "clawhub:@sunclaw/diffs-language-pack",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.5.27"
         }
       }
     },
     {
-      "name": "@openclaw/google-meet",
-      "description": "OpenClaw Google Meet participant plugin",
+      "name": "@sunclaw/google-meet",
+      "description": "SunClaw Google Meet participant plugin",
       "source": "official",
       "kind": "plugin",
-      "openclaw": {
+      "sunclaw": {
         "plugin": {
           "id": "google-meet",
           "label": "Google Meet"
         },
         "install": {
-          "npmSpec": "@openclaw/google-meet",
+          "npmSpec": "@sunclaw/google-meet",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.20"
         }
       }
     },
     {
-      "name": "@openclaw/lobster",
+      "name": "@sunclaw/lobster",
       "description": "Lobster workflow tool plugin (typed pipelines + resumable approvals)",
       "source": "official",
       "kind": "plugin",
-      "openclaw": {
+      "sunclaw": {
         "plugin": {
           "id": "lobster",
           "label": "Lobster"
         },
         "install": {
-          "npmSpec": "@openclaw/lobster",
+          "npmSpec": "@sunclaw/lobster",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.25"
         }
       }
     },
     {
-      "name": "@openclaw/memory-lancedb",
-      "description": "OpenClaw LanceDB-backed long-term memory plugin with auto-recall/capture",
+      "name": "@sunclaw/memory-lancedb",
+      "description": "SunClaw LanceDB-backed long-term memory plugin with auto-recall/capture",
       "source": "official",
       "kind": "plugin",
-      "openclaw": {
+      "sunclaw": {
         "plugin": {
           "id": "memory-lancedb",
           "label": "Memory LanceDB"
         },
         "install": {
-          "npmSpec": "@openclaw/memory-lancedb",
+          "npmSpec": "@sunclaw/memory-lancedb",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.5.31"
         }
       }
     },
     {
-      "name": "@openclaw/openshell-sandbox",
-      "description": "OpenClaw OpenShell sandbox backend",
+      "name": "@sunclaw/openshell-sandbox",
+      "description": "SunClaw OpenShell sandbox backend",
       "source": "official",
       "kind": "plugin",
-      "openclaw": {
+      "sunclaw": {
         "plugin": {
           "id": "openshell",
           "label": "OpenShell Sandbox"
         },
         "install": {
-          "npmSpec": "@openclaw/openshell-sandbox",
+          "npmSpec": "@sunclaw/openshell-sandbox",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.5.12-beta.1"
         }
       }
     },
     {
-      "name": "@openclaw/pixverse-provider",
-      "description": "OpenClaw PixVerse video generation provider plugin",
+      "name": "@sunclaw/pixverse-provider",
+      "description": "SunClaw PixVerse video generation provider plugin",
       "source": "official",
       "kind": "plugin",
-      "openclaw": {
+      "sunclaw": {
         "plugin": {
           "id": "pixverse",
           "label": "PixVerse"
         },
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/pixverse-provider",
-          "npmSpec": "@openclaw/pixverse-provider",
+          "clawhubSpec": "clawhub:@sunclaw/pixverse-provider",
+          "npmSpec": "@sunclaw/pixverse-provider",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.5.26"
         }
       }
     },
     {
-      "name": "@openclaw/tokenjuice",
-      "description": "OpenClaw tokenjuice exec output compaction plugin",
+      "name": "@sunclaw/tokenjuice",
+      "description": "SunClaw tokenjuice exec output compaction plugin",
       "source": "official",
       "kind": "plugin",
-      "openclaw": {
+      "sunclaw": {
         "plugin": {
           "id": "tokenjuice",
           "label": "Tokenjuice"
         },
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/tokenjuice",
-          "npmSpec": "@openclaw/tokenjuice",
+          "clawhubSpec": "clawhub:@sunclaw/tokenjuice",
+          "npmSpec": "@sunclaw/tokenjuice",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.5.28"
         }
       }
     },
     {
-      "name": "@openclaw/voice-call",
-      "description": "OpenClaw voice-call plugin",
+      "name": "@sunclaw/voice-call",
+      "description": "SunClaw voice-call plugin",
       "source": "official",
       "kind": "plugin",
-      "openclaw": {
+      "sunclaw": {
         "plugin": {
           "id": "voice-call",
           "label": "Voice Call"
         },
         "install": {
-          "npmSpec": "@openclaw/voice-call",
+          "npmSpec": "@sunclaw/voice-call",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.10"
         }

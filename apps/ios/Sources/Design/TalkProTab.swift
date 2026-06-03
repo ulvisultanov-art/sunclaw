@@ -36,7 +36,7 @@ struct TalkProTab: View {
                     .padding(.top, 16)
                     .padding(.bottom, 18)
                 }
-                .safeAreaPadding(.bottom, OpenClawProMetric.bottomScrollInset)
+                .safeAreaPadding(.bottom, SunClawProMetric.bottomScrollInset)
             }
             .navigationBarHidden(true)
         }
@@ -59,14 +59,14 @@ struct TalkProTab: View {
                     }
             }
             .presentationDetents([.medium, .large])
-            .openClawSheetChrome()
+            .sunClawSheetChrome()
         }
         .onAppear { self.alignPersistedTalkState() }
     }
 
     private var header: some View {
         HStack(alignment: .center, spacing: 11) {
-            OpenClawProMark(size: 31, shadowRadius: 9)
+            SunClawProMark(size: 31, shadowRadius: 9)
             VStack(alignment: .leading, spacing: 2) {
                 Text("Talk")
                     .font(.system(size: 27, weight: .bold, design: .rounded))
@@ -78,7 +78,7 @@ struct TalkProTab: View {
             Spacer(minLength: 8)
             self.statusChip
         }
-        .padding(.horizontal, OpenClawProMetric.pagePadding)
+        .padding(.horizontal, SunClawProMetric.pagePadding)
     }
 
     private var statusChip: some View {
@@ -138,7 +138,7 @@ struct TalkProTab: View {
                 .disabled(self.state.primaryAction == .waiting)
             }
         }
-        .padding(.horizontal, OpenClawProMetric.pagePadding)
+        .padding(.horizontal, SunClawProMetric.pagePadding)
     }
 
     private var conversationCard: some View {
@@ -158,7 +158,7 @@ struct TalkProTab: View {
                 self.infoRow(icon: self.state.icon, title: "Runtime", value: self.appModel.talkMode.statusText)
             }
         }
-        .padding(.horizontal, OpenClawProMetric.pagePadding)
+        .padding(.horizontal, SunClawProMetric.pagePadding)
     }
 
     private var voiceModeCard: some View {
@@ -167,7 +167,7 @@ struct TalkProTab: View {
                 self.cardHeader(
                     title: "Voice mode",
                     value: "Settings ›",
-                    color: OpenClawBrand.accent,
+                    color: SunClawBrand.accent,
                     action: self.openSettings)
                     .padding(.horizontal, 12)
                     .padding(.top, 11)
@@ -181,7 +181,7 @@ struct TalkProTab: View {
                 self.infoRow(icon: "globe", title: "Speech language", value: self.speechLocaleText)
             }
         }
-        .padding(.horizontal, OpenClawProMetric.pagePadding)
+        .padding(.horizontal, SunClawProMetric.pagePadding)
     }
 
     private var controlsCard: some View {
@@ -214,7 +214,7 @@ struct TalkProTab: View {
                 .buttonStyle(.plain)
             }
         }
-        .padding(.horizontal, OpenClawProMetric.pagePadding)
+        .padding(.horizontal, SunClawProMetric.pagePadding)
     }
 
     private func cardHeader(
@@ -393,7 +393,7 @@ struct TalkProState: Equatable {
         if self.isSpeaking { return "Speaking" }
         if self.isListening { return "Listening" }
         if self.normalizedStatus.contains("connecting") { return "Connecting" }
-        if self.normalizedStatus.contains("thinking") { return "Asking OpenClaw" }
+        if self.normalizedStatus.contains("thinking") { return "Asking SunClaw" }
         if self.isEnabled { return "Ready to talk" }
         return "Talk is off"
     }
@@ -443,11 +443,11 @@ struct TalkProState: Equatable {
         if !self.gatewayConnected { return .secondary }
         switch self.permissionState {
         case .requestFailed, .loadFailed:
-            return OpenClawBrand.danger
+            return SunClawBrand.danger
         case .missingScope, .requestingUpgrade, .upgradeRequested, .apiKeyMissing:
-            return OpenClawBrand.warn
+            return SunClawBrand.warn
         default:
-            return self.isEnabled ? OpenClawBrand.ok : OpenClawBrand.accentHot
+            return self.isEnabled ? SunClawBrand.ok : SunClawBrand.accentHot
         }
     }
 
@@ -488,12 +488,12 @@ struct TalkProState: Equatable {
     var primaryButtonFill: AnyShapeStyle {
         switch self.primaryAction {
         case .stop:
-            AnyShapeStyle(OpenClawBrand.danger)
+            AnyShapeStyle(SunClawBrand.danger)
         case .waiting:
-            AnyShapeStyle(OpenClawBrand.warn.opacity(0.72))
+            AnyShapeStyle(SunClawBrand.warn.opacity(0.72))
         default:
             AnyShapeStyle(LinearGradient(
-                colors: [self.color.opacity(0.95), OpenClawBrand.accent],
+                colors: [self.color.opacity(0.95), SunClawBrand.accent],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing))
         }

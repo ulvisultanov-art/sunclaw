@@ -10,7 +10,7 @@ import {
 import { buildQaGatewayConfig } from "./qa-gateway-config.js";
 
 const QA_LAB_INTERNAL_PORT = 43123;
-const QA_LAB_UI_OVERLAY_DIR = "/opt/openclaw-qa-lab-ui";
+const QA_LAB_UI_OVERLAY_DIR = "/opt/sunclaw-qa-lab-ui";
 
 function toPosixRelative(fromDir: string, toPath: string): string {
   return path.relative(fromDir, toPath).split(path.sep).join("/");
@@ -26,7 +26,7 @@ function renderImageBlock(params: {
     return `    image: ${params.imageName}\n`;
   }
   const context = toPosixRelative(params.outputDir, params.repoRoot) || ".";
-  return `    build:\n      context: ${context}\n      dockerfile: Dockerfile\n      args:\n        OPENCLAW_EXTENSIONS: "qa-channel qa-lab"\n`;
+  return `    build:\n      context: ${context}\n      dockerfile: Dockerfile\n      args:\n        SUNCLAW_EXTENSIONS: "qa-channel qa-lab"\n`;
 }
 
 function renderCompose(params: {
@@ -75,7 +75,7 @@ ${imageBlock}    pull_policy: never
     ports:
       - "127.0.0.1:${params.qaLabPort}:${QA_LAB_INTERNAL_PORT}"
     volumes:
-      - ./state:/opt/openclaw-scaffold:ro
+      - ./state:/opt/sunclaw-scaffold:ro
 ${params.bindUiDist ? `      - ${qaLabUiMount}:${QA_LAB_UI_OVERLAY_DIR}:ro\n` : ""}    healthcheck:
       test:
         - CMD
@@ -87,36 +87,36 @@ ${params.bindUiDist ? `      - ${qaLabUiMount}:${QA_LAB_UI_OVERLAY_DIR}:ro\n` : 
       retries: 6
       start_period: 5s
     environment:
-      OPENCLAW_SKIP_GMAIL_WATCHER: "1"
-      OPENCLAW_SKIP_BROWSER_CONTROL_SERVER: "1"
-      OPENCLAW_SKIP_CANVAS_HOST: "1"
-      OPENCLAW_PROFILE: ""
+      SUNCLAW_SKIP_GMAIL_WATCHER: "1"
+      SUNCLAW_SKIP_BROWSER_CONTROL_SERVER: "1"
+      SUNCLAW_SKIP_CANVAS_HOST: "1"
+      SUNCLAW_PROFILE: ""
     command:
       - sh
       - -lc
-      - OPENCLAW_QA_CONTROL_UI_PROXY_TOKEN="$(node -e 'const fs=require("node:fs");const cfg=JSON.parse(fs.readFileSync("/opt/openclaw-scaffold/openclaw.json","utf8"));process.stdout.write(cfg.gateway?.auth?.token ?? "")')" exec node dist/index.js qa ui --host 0.0.0.0 --port ${QA_LAB_INTERNAL_PORT} --advertise-host 127.0.0.1 --advertise-port ${params.qaLabPort} --control-ui-url http://127.0.0.1:${params.gatewayPort}/ --control-ui-proxy-target http://openclaw-qa-gateway:18789/${params.bindUiDist ? ` --ui-dist-dir ${QA_LAB_UI_OVERLAY_DIR}` : ""} --auto-kickoff-target direct --send-kickoff-on-start --embedded-gateway disabled
+      - SUNCLAW_QA_CONTROL_UI_PROXY_TOKEN="$(node -e 'const fs=require("node:fs");const cfg=JSON.parse(fs.readFileSync("/opt/sunclaw-scaffold/sunclaw.json","utf8"));process.stdout.write(cfg.gateway?.auth?.token ?? "")')" exec node dist/index.js qa ui --host 0.0.0.0 --port ${QA_LAB_INTERNAL_PORT} --advertise-host 127.0.0.1 --advertise-port ${params.qaLabPort} --control-ui-url http://127.0.0.1:${params.gatewayPort}/ --control-ui-proxy-target http://sunclaw-qa-gateway:18789/${params.bindUiDist ? ` --ui-dist-dir ${QA_LAB_UI_OVERLAY_DIR}` : ""} --auto-kickoff-target direct --send-kickoff-on-start --embedded-gateway disabled
     depends_on:
       qa-mock-openai:
         condition: service_healthy
 `
     : ""
-}  openclaw-qa-gateway:
+}  sunclaw-qa-gateway:
 ${imageBlock}    pull_policy: never
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
       - "127.0.0.1:${params.gatewayPort}:18789"
     environment:
-      OPENCLAW_CONFIG_PATH: /tmp/openclaw/openclaw.json
-      OPENCLAW_STATE_DIR: /tmp/openclaw/state
-      OPENCLAW_NO_RESPAWN: "1"
-      OPENCLAW_SKIP_GMAIL_WATCHER: "1"
-      OPENCLAW_SKIP_BROWSER_CONTROL_SERVER: "1"
-      OPENCLAW_SKIP_CANVAS_HOST: "1"
-      OPENCLAW_PROFILE: ""
+      SUNCLAW_CONFIG_PATH: /tmp/sunclaw/sunclaw.json
+      SUNCLAW_STATE_DIR: /tmp/sunclaw/state
+      SUNCLAW_NO_RESPAWN: "1"
+      SUNCLAW_SKIP_GMAIL_WATCHER: "1"
+      SUNCLAW_SKIP_BROWSER_CONTROL_SERVER: "1"
+      SUNCLAW_SKIP_CANVAS_HOST: "1"
+      SUNCLAW_PROFILE: ""
     volumes:
-      - ./state:/opt/openclaw-scaffold:ro
-      - ${repoMount}:/opt/openclaw-repo:ro
+      - ./state:/opt/sunclaw-scaffold:ro
+      - ${repoMount}:/opt/sunclaw-repo:ro
     healthcheck:
       test:
         - CMD
@@ -139,7 +139,7 @@ ${
     command:
       - sh
       - -lc
-      - mkdir -p /tmp/openclaw/workspace /tmp/openclaw/state && cp /opt/openclaw-scaffold/openclaw.json /tmp/openclaw/openclaw.json && cp -R /opt/openclaw-scaffold/seed-workspace/. /tmp/openclaw/workspace/ && ln -snf /opt/openclaw-repo /tmp/openclaw/workspace/repo && exec node dist/index.js gateway run --port 18789 --bind lan --allow-unconfigured
+      - mkdir -p /tmp/sunclaw/workspace /tmp/sunclaw/state && cp /opt/sunclaw-scaffold/sunclaw.json /tmp/sunclaw/sunclaw.json && cp -R /opt/sunclaw-scaffold/seed-workspace/. /tmp/sunclaw/workspace/ && ln -snf /opt/sunclaw-repo /tmp/sunclaw/workspace/repo && exec node dist/index.js gateway run --port 18789 --bind lan --allow-unconfigured
 `;
 }
 
@@ -152,7 +152,7 @@ function renderEnvExample(params: {
   includeQaLabUi: boolean;
 }) {
   return `# QA Docker harness example env
-OPENCLAW_GATEWAY_TOKEN=${params.gatewayToken}
+SUNCLAW_GATEWAY_TOKEN=${params.gatewayToken}
 QA_GATEWAY_PORT=${params.gatewayPort}
 QA_BUS_BASE_URL=${params.qaBusBaseUrl}
 QA_PROVIDER_BASE_URL=${params.providerBaseUrl}
@@ -174,12 +174,12 @@ Files:
 
 - \`docker-compose.qa.yml\`
 - \`.env.example\`
-- \`state/openclaw.json\`
+- \`state/sunclaw.json\`
 
 Suggested flow:
 
 1. Build the prebaked image once:
-   - \`docker build -t openclaw:qa-local-prebaked --build-arg OPENCLAW_EXTENSIONS="qa-channel qa-lab" -f Dockerfile .\`
+   - \`docker build -t sunclaw:qa-local-prebaked --build-arg SUNCLAW_EXTENSIONS="qa-channel qa-lab" -f Dockerfile .\`
 2. Start the stack:
    - \`docker compose -f docker-compose.qa.yml up${params.usePrebuiltImage ? "" : " --build"} -d\`
 3. Open the QA dashboard:
@@ -227,7 +227,7 @@ export async function writeQaDockerHarnessFiles(params: {
   const gatewayToken = params.gatewayToken ?? `qa-token-${randomUUID()}`;
   const providerBaseUrl = params.providerBaseUrl ?? "http://qa-mock-openai:44080/v1";
   const qaBusBaseUrl = params.qaBusBaseUrl ?? "http://qa-lab:43123";
-  const imageName = params.imageName ?? "openclaw:qa-local-prebaked";
+  const imageName = params.imageName ?? "sunclaw:qa-local-prebaked";
   const usePrebuiltImage = params.usePrebuiltImage ?? false;
   const bindUiDist = params.bindUiDist ?? false;
   const includeQaLabUi = params.includeQaLabUi ?? true;
@@ -243,7 +243,7 @@ export async function writeQaDockerHarnessFiles(params: {
     gatewayPort: 18789,
     gatewayToken,
     providerBaseUrl,
-    workspaceDir: "/tmp/openclaw/workspace",
+    workspaceDir: "/tmp/sunclaw/workspace",
     controlUiRoot: "/app/dist/control-ui",
     transportPluginIds: QA_CHANNEL_REQUIRED_PLUGIN_IDS,
     transportConfig: createQaChannelGatewayConfig({
@@ -255,7 +255,7 @@ export async function writeQaDockerHarnessFiles(params: {
     path.join(params.outputDir, "docker-compose.qa.yml"),
     path.join(params.outputDir, ".env.example"),
     path.join(params.outputDir, "README.md"),
-    path.join(params.outputDir, "state", "openclaw.json"),
+    path.join(params.outputDir, "state", "sunclaw.json"),
   ];
 
   await Promise.all([
@@ -297,7 +297,7 @@ export async function writeQaDockerHarnessFiles(params: {
       "utf8",
     ),
     fs.writeFile(
-      path.join(params.outputDir, "state", "openclaw.json"),
+      path.join(params.outputDir, "state", "sunclaw.json"),
       `${JSON.stringify(config, null, 2)}\n`,
       "utf8",
     ),
@@ -329,7 +329,7 @@ export async function buildQaDockerHarnessImage(
     ) => Promise<{ stdout: string; stderr: string }>;
   },
 ) {
-  const imageName = params.imageName ?? "openclaw:qa-local-prebaked";
+  const imageName = params.imageName ?? "sunclaw:qa-local-prebaked";
   const runCommand =
     deps?.runCommand ??
     (async (command: string, args: string[], cwd: string) => {
@@ -351,7 +351,7 @@ export async function buildQaDockerHarnessImage(
       "-t",
       imageName,
       "--build-arg",
-      "OPENCLAW_EXTENSIONS=qa-channel qa-lab",
+      "SUNCLAW_EXTENSIONS=qa-channel qa-lab",
       "-f",
       "Dockerfile",
       ".",

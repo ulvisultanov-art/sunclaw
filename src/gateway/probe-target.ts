@@ -1,5 +1,5 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 
 export type GatewayProbeTargetResolution = {
   gatewayMode: "local" | "remote";
@@ -7,7 +7,7 @@ export type GatewayProbeTargetResolution = {
   remoteUrlMissing: boolean;
 };
 
-export function resolveGatewayProbeTarget(cfg: OpenClawConfig): GatewayProbeTargetResolution {
+export function resolveGatewayProbeTarget(cfg: SunClawConfig): GatewayProbeTargetResolution {
   const gatewayMode = cfg.gateway?.mode === "remote" ? "remote" : "local";
   const remoteUrlRaw = normalizeOptionalString(cfg.gateway?.remote?.url) ?? "";
   const remoteUrlMissing = gatewayMode === "remote" && !remoteUrlRaw;

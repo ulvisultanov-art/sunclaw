@@ -1,10 +1,10 @@
-import type { StreamFn } from "openclaw/plugin-sdk/agent-core";
+import type { StreamFn } from "sunclaw/plugin-sdk/agent-core";
 import {
   createAssistantMessageEventStream,
   type AssistantMessage,
   type Context,
   type Model,
-} from "openclaw/plugin-sdk/llm";
+} from "sunclaw/plugin-sdk/llm";
 import { describe, expect, it } from "vitest";
 import {
   applyPluginTextReplacements,

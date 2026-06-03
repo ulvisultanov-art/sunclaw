@@ -1,4 +1,4 @@
-import { parseStrictNonNegativeInteger } from "openclaw/plugin-sdk/number-runtime";
+import { parseStrictNonNegativeInteger } from "sunclaw/plugin-sdk/number-runtime";
 
 export type TelegramTarget = {
   chatId: string;

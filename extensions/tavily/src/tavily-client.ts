@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
 import {
   DEFAULT_CACHE_TTL_MINUTES,
   normalizeCacheKey,
@@ -6,8 +6,8 @@ import {
   readCache,
   resolveCacheTtlMs,
   writeCache,
-} from "openclaw/plugin-sdk/provider-web-search";
-import { wrapExternalContent, wrapWebContent } from "openclaw/plugin-sdk/security-runtime";
+} from "sunclaw/plugin-sdk/provider-web-search";
+import { wrapExternalContent, wrapWebContent } from "sunclaw/plugin-sdk/security-runtime";
 import {
   DEFAULT_TAVILY_BASE_URL,
   resolveTavilyApiKey,
@@ -27,7 +27,7 @@ const EXTRACT_CACHE = new Map<
 const DEFAULT_SEARCH_COUNT = 5;
 
 export type TavilySearchParams = {
-  cfg?: OpenClawConfig;
+  cfg?: SunClawConfig;
   query: string;
   searchDepth?: string;
   topic?: string;
@@ -40,7 +40,7 @@ export type TavilySearchParams = {
 };
 
 export type TavilyExtractParams = {
-  cfg?: OpenClawConfig;
+  cfg?: SunClawConfig;
   urls: string[];
   query?: string;
   extractDepth?: string;
@@ -80,7 +80,7 @@ async function postTavilyJson(params: {
       apiKey: params.apiKey,
       body: params.body,
       errorLabel: params.errorLabel,
-      extraHeaders: { "X-Client-Source": "openclaw" },
+      extraHeaders: { "X-Client-Source": "sunclaw" },
     },
     async (response) => readTavilyJsonResponse(response, params.errorLabel),
   );

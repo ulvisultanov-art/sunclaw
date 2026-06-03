@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
-import { extensionForMime } from "openclaw/plugin-sdk/media-mime";
-import { isProviderApiKeyConfigured } from "openclaw/plugin-sdk/provider-auth";
-import { resolveApiKeyForProvider } from "openclaw/plugin-sdk/provider-auth-runtime";
+import { extensionForMime } from "sunclaw/plugin-sdk/media-mime";
+import { isProviderApiKeyConfigured } from "sunclaw/plugin-sdk/provider-auth";
+import { resolveApiKeyForProvider } from "sunclaw/plugin-sdk/provider-auth-runtime";
 import {
   assertOkOrThrowHttpError,
   createProviderOperationDeadline,
@@ -12,18 +12,18 @@ import {
   resolveProviderHttpRequestConfig,
   sanitizeConfiguredModelProviderRequest,
   type ProviderOperationDeadline,
-} from "openclaw/plugin-sdk/provider-http";
+} from "sunclaw/plugin-sdk/provider-http";
 import {
   asFiniteNumber,
   asSafeIntegerInRange,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/string-coerce-runtime";
 import type {
   GeneratedVideoAsset,
   VideoGenerationProvider,
   VideoGenerationRequest,
   VideoGenerationSourceAsset,
-} from "openclaw/plugin-sdk/video-generation";
+} from "sunclaw/plugin-sdk/video-generation";
 import {
   DEFAULT_PIXVERSE_MODEL_ID,
   DEFAULT_PIXVERSE_REGION,

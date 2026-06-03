@@ -1,5 +1,5 @@
-import { isSingleUseReplyToMode } from "openclaw/plugin-sdk/reply-reference";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { isSingleUseReplyToMode } from "sunclaw/plugin-sdk/reply-reference";
+import { normalizeLowercaseStringOrEmpty } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { parseSlackTarget } from "./targets.js";
 
 export function resolveSlackAutoThreadId(params: {

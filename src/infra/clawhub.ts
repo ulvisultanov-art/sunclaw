@@ -2,28 +2,28 @@ import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { readResponseWithLimit } from "@openclaw/media-core/read-response-with-limit";
+import { readResponseWithLimit } from "@sunclaw/media-core/read-response-with-limit";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
-import { normalizeStringEntries } from "@openclaw/normalization-core/string-normalization";
+} from "@sunclaw/normalization-core/string-coerce";
+import { normalizeStringEntries } from "@sunclaw/normalization-core/string-normalization";
 import { parseStrictPositiveInteger } from "./parse-finite-number.js";
 import { isAtLeast, parseSemver } from "./runtime-guard.js";
 import { compareComparableSemver, parseComparableSemver } from "./semver-compare.js";
 import { createTempDownloadTarget } from "./temp-download.js";
 export { parseClawHubPluginSpec } from "./clawhub-spec.js";
 
-const DEFAULT_CLAWHUB_URL = "https://clawhub.ai";
+const DEFAULT_CLAWHUB_URL = "https://clawhub.complex.az";
 const DEFAULT_FETCH_TIMEOUT_MS = 30_000;
 const SKILL_CARD_MAX_BYTES = 256 * 1024;
 
 export type ClawHubPackageFamily = "skill" | "code-plugin" | "bundle-plugin";
 export type ClawHubPackageChannel = "official" | "community" | "private";
-// Keep aligned with @openclaw/plugin-package-contract ExternalPluginCompatibility.
+// Keep aligned with @sunclaw/plugin-package-contract ExternalPluginCompatibility.
 export type ClawHubPackageCompatibility = {
   pluginApiRange?: string;
-  builtWithOpenClawVersion?: string;
+  builtWithSunClawVersion?: string;
   pluginSdkVersion?: string;
   minGatewayVersion?: string;
 };
@@ -154,11 +154,11 @@ export type ClawHubPackageReadinessPhase =
   | "legacy-zip-only"
   | "metadata-ready"
   | "blocked"
-  | "ready-for-openclaw"
+  | "ready-for-sunclaw"
   | (string & {});
 export type ClawHubPackageReadiness = {
   ready?: boolean | null;
-  readyForOpenClaw?: boolean | null;
+  readyForSunClaw?: boolean | null;
   installReady?: boolean | null;
   phase?: ClawHubPackageReadinessPhase | null;
   status?: ClawHubPackageReadinessPhase | null;
@@ -430,7 +430,7 @@ export class ClawHubRequestError extends Error {
 
 function normalizeBaseUrl(baseUrl?: string): string {
   const envValue =
-    normalizeOptionalString(process.env.OPENCLAW_CLAWHUB_URL) ||
+    normalizeOptionalString(process.env.SUNCLAW_CLAWHUB_URL) ||
     normalizeOptionalString(process.env.CLAWHUB_URL) ||
     DEFAULT_CLAWHUB_URL;
   const value = (normalizeOptionalString(baseUrl) || envValue).replace(/\/+$/, "");
@@ -456,7 +456,7 @@ function extractTokenFromClawHubConfig(value: unknown): string | undefined {
 
 function resolveClawHubConfigPaths(): string[] {
   const explicit =
-    normalizeOptionalString(process.env.OPENCLAW_CLAWHUB_CONFIG_PATH) ||
+    normalizeOptionalString(process.env.SUNCLAW_CLAWHUB_CONFIG_PATH) ||
     normalizeOptionalString(process.env.CLAWHUB_CONFIG_PATH) ||
     normalizeOptionalString(process.env.CLAWDHUB_CONFIG_PATH); // legacy misspelling from older clawhub CLI builds; keep for back-compat
   if (explicit) {
@@ -480,7 +480,7 @@ function resolveClawHubConfigPaths(): string[] {
 
 export async function resolveClawHubAuthToken(): Promise<string | undefined> {
   const envToken =
-    normalizeOptionalString(process.env.OPENCLAW_CLAWHUB_TOKEN) ||
+    normalizeOptionalString(process.env.SUNCLAW_CLAWHUB_TOKEN) ||
     normalizeOptionalString(process.env.CLAWHUB_TOKEN) ||
     normalizeOptionalString(process.env.CLAWHUB_AUTH_TOKEN);
   if (envToken) {
@@ -612,18 +612,18 @@ function satisfiesSemverRange(version: string, range: string): boolean {
   return tokens.every((token) => satisfiesComparator(version, token));
 }
 
-const OPENCLAW_CALVER_STABLE_CORRECTION_PATTERN =
+const SUNCLAW_CALVER_STABLE_CORRECTION_PATTERN =
   /^[vV]?(\d{4}\.\d{1,2}\.\d{1,2})(?:-\d+|-(?:alpha|beta|rc)\.\d+)$/i;
-const OPENCLAW_CALVER_NUMERIC_CORRECTION_PATTERN = /^[vV]?(\d{4}\.\d{1,2}\.\d{1,2})-\d+$/;
+const SUNCLAW_CALVER_NUMERIC_CORRECTION_PATTERN = /^[vV]?(\d{4}\.\d{1,2}\.\d{1,2})-\d+$/;
 
 function normalizeCalVerNumericCorrectionForPluginApi(
   pluginApiVersion: string,
 ): string | undefined {
-  return OPENCLAW_CALVER_NUMERIC_CORRECTION_PATTERN.exec(pluginApiVersion.trim())?.[1];
+  return SUNCLAW_CALVER_NUMERIC_CORRECTION_PATTERN.exec(pluginApiVersion.trim())?.[1];
 }
 
 function normalizeCalVerCorrectionForPluginApi(pluginApiVersion: string): string {
-  const match = OPENCLAW_CALVER_STABLE_CORRECTION_PATTERN.exec(pluginApiVersion.trim());
+  const match = SUNCLAW_CALVER_STABLE_CORRECTION_PATTERN.exec(pluginApiVersion.trim());
   return match?.[1] ?? pluginApiVersion;
 }
 
@@ -1168,7 +1168,7 @@ export async function downloadClawHubPackageArchive(params: {
     const rawSpecVersion = response.headers.get("X-ClawHub-ClawPack-Spec-Version");
     const specVersion = parseStrictPositiveInteger(rawSpecVersion);
     const target = await createTempDownloadTarget({
-      prefix: "openclaw-clawhub-clawpack",
+      prefix: "sunclaw-clawhub-clawpack",
       fileName: npmTarballName,
       tmpDir: os.tmpdir(),
     });
@@ -1211,7 +1211,7 @@ export async function downloadClawHubPackageArchive(params: {
   });
   const sha256Hex = formatSha256Hex(bytes);
   const target = await createTempDownloadTarget({
-    prefix: "openclaw-clawhub-package",
+    prefix: "sunclaw-clawhub-package",
     fileName: `${params.name}.zip`,
     tmpDir: os.tmpdir(),
   });
@@ -1256,7 +1256,7 @@ export async function downloadClawHubSkillArchive(params: {
   });
   const sha256Hex = formatSha256Hex(bytes);
   const target = await createTempDownloadTarget({
-    prefix: "openclaw-clawhub-skill",
+    prefix: "sunclaw-clawhub-skill",
     fileName: `${params.slug}.zip`,
     tmpDir: os.tmpdir(),
   });

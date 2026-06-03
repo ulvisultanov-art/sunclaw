@@ -1,7 +1,7 @@
-import type { Model } from "openclaw/plugin-sdk/llm";
+import type { Model } from "sunclaw/plugin-sdk/llm";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/config.js";
-import { OPENCLAW_EMBEDDED_CONTEXT_ENGINE_HOST } from "../../context-engine/host-compat.js";
+import type { SunClawConfig } from "../../config/config.js";
+import { SUNCLAW_EMBEDDED_CONTEXT_ENGINE_HOST } from "../../context-engine/host-compat.js";
 import type { ContextEngine } from "../../context-engine/types.js";
 import { testing as cliBackendsTesting } from "../cli-backends.js";
 import type {
@@ -19,18 +19,18 @@ import {
 import type { AgentHarness } from "./types.js";
 
 const agentRunAttempt = vi.fn<AgentHarness["runAttempt"]>(async () =>
-  createAttemptResult("openclaw"),
+  createAttemptResult("sunclaw"),
 );
 const compactAuthMocks = vi.hoisted(() => ({
   getApiKeyForModel: vi.fn(),
   resolveModelAsync: vi.fn(),
 }));
 
-vi.mock("./builtin-openclaw.js", () => ({
-  createOpenClawAgentHarness: (): AgentHarness => ({
-    id: "openclaw",
-    label: "OpenClaw embedded agent",
-    contextEngineHostCapabilities: OPENCLAW_EMBEDDED_CONTEXT_ENGINE_HOST.capabilities,
+vi.mock("./builtin-sunclaw.js", () => ({
+  createSunClawAgentHarness: (): AgentHarness => ({
+    id: "sunclaw",
+    label: "SunClaw embedded agent",
+    contextEngineHostCapabilities: SUNCLAW_EMBEDDED_CONTEXT_ENGINE_HOST.capabilities,
     supports: () => ({ supported: true, priority: 0 }),
     runAttempt: agentRunAttempt,
   }),
@@ -42,7 +42,7 @@ vi.mock("../embedded-agent-runner/model.js", () => ({
   resolveModelAsync: compactAuthMocks.resolveModelAsync,
 }));
 
-const originalRuntime = process.env.OPENCLAW_AGENT_RUNTIME;
+const originalRuntime = process.env.SUNCLAW_AGENT_RUNTIME;
 
 beforeEach(() => {
   clearAgentHarnesses();
@@ -82,13 +82,13 @@ afterEach(() => {
   compactAuthMocks.resolveModelAsync.mockReset();
   compactAuthMocks.getApiKeyForModel.mockReset();
   if (originalRuntime == null) {
-    delete process.env.OPENCLAW_AGENT_RUNTIME;
+    delete process.env.SUNCLAW_AGENT_RUNTIME;
   } else {
-    process.env.OPENCLAW_AGENT_RUNTIME = originalRuntime;
+    process.env.SUNCLAW_AGENT_RUNTIME = originalRuntime;
   }
 });
 
-function createAttemptParams(config?: OpenClawConfig): EmbeddedRunAttemptParams {
+function createAttemptParams(config?: SunClawConfig): EmbeddedRunAttemptParams {
   return {
     prompt: "hello",
     sessionId: "session-1",
@@ -185,7 +185,7 @@ function registerSuccessfulCodexHarness(): void {
   );
 }
 
-function groupSenderDenyAllConfig(): OpenClawConfig {
+function groupSenderDenyAllConfig(): SunClawConfig {
   return {
     channels: {
       telegram: {
@@ -198,10 +198,10 @@ function groupSenderDenyAllConfig(): OpenClawConfig {
         },
       },
     },
-  } as OpenClawConfig;
+  } as SunClawConfig;
 }
 
-function groupDenyAllConfig(): OpenClawConfig {
+function groupDenyAllConfig(): SunClawConfig {
   return {
     channels: {
       telegram: {
@@ -212,10 +212,10 @@ function groupDenyAllConfig(): OpenClawConfig {
         },
       },
     },
-  } as OpenClawConfig;
+  } as SunClawConfig;
 }
 
-function providerRuntimeConfig(provider: string, runtime: string): OpenClawConfig {
+function providerRuntimeConfig(provider: string, runtime: string): SunClawConfig {
   return {
     models: {
       providers: {
@@ -226,14 +226,14 @@ function providerRuntimeConfig(provider: string, runtime: string): OpenClawConfi
         },
       },
     },
-  } as OpenClawConfig;
+  } as SunClawConfig;
 }
 
 function agentModelRuntimeConfig(
   modelRef: string,
   runtime: string,
   agentId?: string,
-): OpenClawConfig {
+): SunClawConfig {
   if (agentId) {
     return {
       agents: {
@@ -242,7 +242,7 @@ function agentModelRuntimeConfig(
           { id: agentId, models: { [modelRef]: { agentRuntime: { id: runtime } } } },
         ],
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
   }
   return {
     agents: {
@@ -252,12 +252,12 @@ function agentModelRuntimeConfig(
         },
       },
     },
-  } as OpenClawConfig;
+  } as SunClawConfig;
 }
 
 describe("runAgentHarnessAttempt", () => {
   it("fails when a forced plugin harness is unavailable and fallback is omitted", async () => {
-    process.env.OPENCLAW_AGENT_RUNTIME = "codex";
+    process.env.SUNCLAW_AGENT_RUNTIME = "codex";
 
     await expect(
       runAgentHarnessAttempt(createAttemptParams(providerRuntimeConfig("codex", "codex"))),
@@ -265,24 +265,24 @@ describe("runAgentHarnessAttempt", () => {
     expect(agentRunAttempt).not.toHaveBeenCalled();
   });
 
-  it("falls back to the OpenClaw harness in auto mode when no plugin harness matches", async () => {
+  it("falls back to the SunClaw harness in auto mode when no plugin harness matches", async () => {
     const result = await runAgentHarnessAttempt(createAttemptParams());
 
-    expect(result.sessionIdUsed).toBe("openclaw");
+    expect(result.sessionIdUsed).toBe("sunclaw");
     expect(agentRunAttempt).toHaveBeenCalledTimes(1);
   });
 
-  it("allows the selected OpenClaw harness to satisfy context-engine pre-prompt assembly", async () => {
+  it("allows the selected SunClaw harness to satisfy context-engine pre-prompt assembly", async () => {
     const result = await runAgentHarnessAttempt({
-      ...createAttemptParams(providerRuntimeConfig("codex", "openclaw")),
+      ...createAttemptParams(providerRuntimeConfig("codex", "sunclaw")),
       contextEngine: createContextEngineRequiringAssembly(),
     });
 
-    expect(result.sessionIdUsed).toBe("openclaw");
+    expect(result.sessionIdUsed).toBe("sunclaw");
     expect(agentRunAttempt).toHaveBeenCalledTimes(1);
   });
 
-  it("surfaces an auto-selected plugin harness failure instead of replaying through OpenClaw", async () => {
+  it("surfaces an auto-selected plugin harness failure instead of replaying through SunClaw", async () => {
     registerFailingCodexHarness();
 
     await expect(runAgentHarnessAttempt(createAttemptParams())).rejects.toThrow(
@@ -300,7 +300,7 @@ describe("runAgentHarnessAttempt", () => {
     expect(agentRunAttempt).not.toHaveBeenCalled();
   });
 
-  it("surfaces a forced plugin harness failure instead of replaying through OpenClaw", async () => {
+  it("surfaces a forced plugin harness failure instead of replaying through SunClaw", async () => {
     registerFailingCodexHarness();
 
     await expect(
@@ -358,13 +358,13 @@ describe("runAgentHarnessAttempt", () => {
     expect(agentRunAttempt).not.toHaveBeenCalled();
   });
 
-  it("falls back to OpenClaw when the implicit OpenAI Codex harness is unavailable", async () => {
+  it("falls back to SunClaw when the implicit OpenAI Codex harness is unavailable", async () => {
     expect(resolveAgentHarnessPolicy({ provider: "openai", modelId: "gpt-5.4" })).toEqual({
       runtime: "codex",
       runtimeSource: "implicit",
     });
     expect(resolveAvailableAgentHarnessPolicy({ provider: "openai", modelId: "gpt-5.4" })).toEqual({
-      runtime: "openclaw",
+      runtime: "sunclaw",
       runtimeSource: "implicit",
     });
 
@@ -374,29 +374,29 @@ describe("runAgentHarnessAttempt", () => {
       modelId: "gpt-5.4",
     });
 
-    expect(result.sessionIdUsed).toBe("openclaw");
+    expect(result.sessionIdUsed).toBe("sunclaw");
     expect(agentRunAttempt).toHaveBeenCalledTimes(1);
   });
 
-  it("honors explicit OpenClaw runtime for OpenAI agent model runs", async () => {
+  it("honors explicit SunClaw runtime for OpenAI agent model runs", async () => {
     const result = await runAgentHarnessAttempt({
-      ...createAttemptParams(providerRuntimeConfig("openai", "openclaw")),
+      ...createAttemptParams(providerRuntimeConfig("openai", "sunclaw")),
       provider: "openai",
       modelId: "gpt-5.4",
     });
-    expect(result.sessionIdUsed).toBe("openclaw");
+    expect(result.sessionIdUsed).toBe("sunclaw");
     expect(agentRunAttempt).toHaveBeenCalledTimes(1);
   });
 
-  it("honors provider wildcard OpenClaw runtime policy for OpenAI agent model runs", async () => {
+  it("honors provider wildcard SunClaw runtime policy for OpenAI agent model runs", async () => {
     registerSuccessfulCodexHarness();
 
     const result = await runAgentHarnessAttempt({
-      ...createAttemptParams(agentModelRuntimeConfig("openai/*", "openclaw")),
+      ...createAttemptParams(agentModelRuntimeConfig("openai/*", "sunclaw")),
       provider: "openai",
       modelId: "gpt-5.4",
     });
-    expect(result.sessionIdUsed).toBe("openclaw");
+    expect(result.sessionIdUsed).toBe("sunclaw");
     expect(agentRunAttempt).toHaveBeenCalledTimes(1);
   });
 
@@ -480,7 +480,7 @@ describe("runAgentHarnessAttempt", () => {
     expect(attempt?.extraSystemPrompt).toContain("this chat is not allowed by policy");
   });
 
-  it("leaves OpenClaw harness params unchanged for channel group sender deny-all policy", async () => {
+  it("leaves SunClaw harness params unchanged for channel group sender deny-all policy", async () => {
     await runAgentHarnessAttempt({
       ...createAttemptParams(groupSenderDenyAllConfig()),
       sessionKey: "agent:main:telegram:group:test-deny-room",
@@ -500,7 +500,7 @@ describe("runAgentHarnessAttempt", () => {
     expect(agentRunAttempt).not.toHaveBeenCalled();
   });
 
-  it("does not let a strict agent model plugin runtime fall back to OpenClaw", async () => {
+  it("does not let a strict agent model plugin runtime fall back to SunClaw", async () => {
     await expect(
       runAgentHarnessAttempt({
         ...createAttemptParams(agentModelRuntimeConfig("codex/gpt-5.4", "codex", "strict")),
@@ -584,7 +584,7 @@ describe("selectAgentHarness", () => {
     expect(unsupportedSupports).toHaveBeenCalledTimes(1);
   });
 
-  it("ignores session-level OpenClaw pins when selecting a harness", () => {
+  it("ignores session-level SunClaw pins when selecting a harness", () => {
     const supports = vi.fn(() => ({ supported: true as const, priority: 100 }));
     registerAgentHarness({
       id: "codex",
@@ -596,34 +596,34 @@ describe("selectAgentHarness", () => {
     const harness = selectAgentHarness({
       provider: "codex",
       modelId: "gpt-5.4",
-      agentHarnessId: "openclaw",
+      agentHarnessId: "sunclaw",
     });
 
     expect(harness.id).toBe("codex");
     expect(supports).toHaveBeenCalledTimes(1);
   });
 
-  it("honors explicit OpenClaw runtime overrides when selecting a harness", async () => {
+  it("honors explicit SunClaw runtime overrides when selecting a harness", async () => {
     registerSuccessfulCodexHarness();
 
     const harness = selectAgentHarness({
       provider: "openai",
       modelId: "gpt-5.4",
-      agentHarnessRuntimeOverride: "openclaw",
+      agentHarnessRuntimeOverride: "sunclaw",
     });
 
-    expect(harness.id).toBe("openclaw");
+    expect(harness.id).toBe("sunclaw");
 
     const result = await runAgentHarnessAttempt({
       ...createAttemptParams(),
       provider: "openai",
       modelId: "gpt-5.4",
-      agentHarnessRuntimeOverride: "openclaw",
+      agentHarnessRuntimeOverride: "sunclaw",
     });
-    expect(result.sessionIdUsed).toBe("openclaw");
+    expect(result.sessionIdUsed).toBe("sunclaw");
   });
 
-  it("treats legacy PI runtime overrides as the built-in OpenClaw harness", async () => {
+  it("treats legacy PI runtime overrides as the built-in SunClaw harness", async () => {
     registerSuccessfulCodexHarness();
 
     const harness = selectAgentHarness({
@@ -632,7 +632,7 @@ describe("selectAgentHarness", () => {
       agentHarnessRuntimeOverride: "pi",
     });
 
-    expect(harness.id).toBe("openclaw");
+    expect(harness.id).toBe("sunclaw");
 
     const result = await runAgentHarnessAttempt({
       ...createAttemptParams(),
@@ -640,7 +640,7 @@ describe("selectAgentHarness", () => {
       modelId: "gpt-5.4",
       agentHarnessRuntimeOverride: "pi",
     });
-    expect(result.sessionIdUsed).toBe("openclaw");
+    expect(result.sessionIdUsed).toBe("sunclaw");
   });
 
   it("allows per-agent model runtime policy overrides", () => {
@@ -655,12 +655,12 @@ describe("selectAgentHarness", () => {
       }),
     ).toThrow('Requested agent harness "codex" is not registered');
     expect(selectAgentHarness({ provider: "anthropic", modelId: "sonnet-4.6", config }).id).toBe(
-      "openclaw",
+      "sunclaw",
     );
   });
 
-  it("selects OpenClaw when the implicit OpenAI Codex harness is unavailable", () => {
-    expect(selectAgentHarness({ provider: "openai", modelId: "gpt-5.4" }).id).toBe("openclaw");
+  it("selects SunClaw when the implicit OpenAI Codex harness is unavailable", () => {
+    expect(selectAgentHarness({ provider: "openai", modelId: "gpt-5.4" }).id).toBe("sunclaw");
   });
 
   it("ignores legacy agentRuntime as a runtime policy source", () => {
@@ -670,7 +670,7 @@ describe("selectAgentHarness", () => {
           agentRuntime: { id: "codex" },
         },
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
 
     expect(
       selectAgentHarness({
@@ -678,12 +678,12 @@ describe("selectAgentHarness", () => {
         modelId: "sonnet-4.6",
         config,
       }).id,
-    ).toBe("openclaw");
+    ).toBe("sunclaw");
   });
 
   it("ignores legacy agent CLI runtime aliases for OpenAI agent model runs", async () => {
     registerSuccessfulCodexHarness();
-    const config: OpenClawConfig = {
+    const config: SunClawConfig = {
       agents: {
         defaults: {
           agentRuntime: { id: "claude-cli" },
@@ -702,21 +702,21 @@ describe("selectAgentHarness", () => {
     expect(agentRunAttempt).not.toHaveBeenCalled();
   });
 
-  it("ignores existing session OpenClaw pins when provider policy forces a plugin harness", () => {
+  it("ignores existing session SunClaw pins when provider policy forces a plugin harness", () => {
     registerFailingCodexHarness();
 
     expect(
       selectAgentHarness({
         provider: "codex",
         modelId: "gpt-5.4",
-        agentHarnessId: "openclaw",
+        agentHarnessId: "sunclaw",
         config: providerRuntimeConfig("codex", "codex"),
       }).id,
     ).toBe("codex");
   });
 
-  it("ignores env-forced OpenClaw for OpenAI default runtime selection", () => {
-    process.env.OPENCLAW_AGENT_RUNTIME = "openclaw";
+  it("ignores env-forced SunClaw for OpenAI default runtime selection", () => {
+    process.env.SUNCLAW_AGENT_RUNTIME = "sunclaw";
     registerFailingCodexHarness();
 
     expect(
@@ -803,11 +803,11 @@ describe("selectAgentHarness", () => {
             list: [{ id: "main", default: true, agentDir: "/tmp/main-agent" }],
             defaults: {
               models: {
-                "openai/gpt-5.5": { agentRuntime: { id: "openclaw" } },
+                "openai/gpt-5.5": { agentRuntime: { id: "sunclaw" } },
               },
             },
           },
-        } as OpenClawConfig,
+        } as SunClawConfig,
       }),
     ).resolves.toEqual({ ok: true, compacted: false });
     expect(compact).toHaveBeenCalledTimes(1);
@@ -845,7 +845,7 @@ describe("selectAgentHarness", () => {
         model: "gpt-5.5",
         authProfileId: "deleted-profile",
         agentHarnessId: "codex",
-        config: agentModelRuntimeConfig("openai/gpt-5.5", "openclaw"),
+        config: agentModelRuntimeConfig("openai/gpt-5.5", "sunclaw"),
       }),
     ).resolves.toEqual({ ok: true, compacted: false });
     expect(compact).toHaveBeenCalledTimes(1);
@@ -862,7 +862,7 @@ describe("selectAgentHarness", () => {
     );
   });
 
-  it("does not compact a selected plugin harness through OpenClaw when the plugin has no compactor", async () => {
+  it("does not compact a selected plugin harness through SunClaw when the plugin has no compactor", async () => {
     registerFailingCodexHarness();
 
     await expect(
@@ -986,7 +986,7 @@ describe("selectAgentHarness", () => {
     { provider: "anthropic", modelId: "sonnet-4.6", alias: "claude-cli" },
     { provider: "google", modelId: "gemini-3-pro-preview", alias: "google-gemini-cli" },
   ])(
-    "returns OpenClaw for explicit CLI runtime alias $alias on $provider instead of throwing MissingAgentHarnessError",
+    "returns SunClaw for explicit CLI runtime alias $alias on $provider instead of throwing MissingAgentHarnessError",
     ({ provider, modelId, alias }) => {
       expect(
         selectAgentHarness({
@@ -994,7 +994,7 @@ describe("selectAgentHarness", () => {
           modelId,
           agentHarnessRuntimeOverride: alias,
         }).id,
-      ).toBe("openclaw");
+      ).toBe("sunclaw");
     },
   );
 
@@ -1007,7 +1007,7 @@ describe("selectAgentHarness", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
 
     expect(() =>
       selectAgentHarness({

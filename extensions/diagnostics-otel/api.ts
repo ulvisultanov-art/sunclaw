@@ -11,10 +11,10 @@ export {
   type DiagnosticEventMetadata,
   type DiagnosticEventPayload,
   type DiagnosticTraceContext,
-} from "openclaw/plugin-sdk/diagnostic-runtime";
-export { emptyPluginConfigSchema, type OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
+} from "sunclaw/plugin-sdk/diagnostic-runtime";
+export { emptyPluginConfigSchema, type SunClawPluginApi } from "sunclaw/plugin-sdk/plugin-entry";
 export type {
-  OpenClawPluginService,
-  OpenClawPluginServiceContext,
-} from "openclaw/plugin-sdk/plugin-entry";
-export { redactSensitiveText } from "openclaw/plugin-sdk/security-runtime";
+  SunClawPluginService,
+  SunClawPluginServiceContext,
+} from "sunclaw/plugin-sdk/plugin-entry";
+export { redactSensitiveText } from "sunclaw/plugin-sdk/security-runtime";

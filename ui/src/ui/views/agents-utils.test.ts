@@ -108,7 +108,7 @@ describe("sortLocaleStrings", () => {
 describe("agentLogoUrl", () => {
   it("keeps base-mounted control UI logo paths absolute to the mount", () => {
     expect(agentLogoUrl("/ui")).toBe("/ui/favicon.svg");
-    expect(agentLogoUrl("/apps/openclaw/")).toBe("/apps/openclaw/favicon.svg");
+    expect(agentLogoUrl("/apps/sunclaw/")).toBe("/apps/sunclaw/favicon.svg");
   });
 
   it("uses a root-relative fallback when no basePath is configured", () => {

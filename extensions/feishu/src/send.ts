@@ -1,11 +1,11 @@
-import { resolveMarkdownTableMode } from "openclaw/plugin-sdk/markdown-table-runtime";
-import { parseStrictNonNegativeInteger } from "openclaw/plugin-sdk/number-runtime";
+import { resolveMarkdownTableMode } from "sunclaw/plugin-sdk/markdown-table-runtime";
+import { parseStrictNonNegativeInteger } from "sunclaw/plugin-sdk/number-runtime";
 import {
   isRecord,
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
-import { convertMarkdownTables } from "openclaw/plugin-sdk/text-chunking";
+} from "sunclaw/plugin-sdk/string-coerce-runtime";
+import { convertMarkdownTables } from "sunclaw/plugin-sdk/text-chunking";
 import type { ClawdbotConfig } from "../runtime-api.js";
 import { resolveFeishuRuntimeAccount } from "./accounts.js";
 import { createFeishuClient } from "./client.js";

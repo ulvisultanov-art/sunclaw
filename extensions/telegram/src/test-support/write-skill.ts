@@ -1,1 +1,1 @@
-export { writeSkill } from "openclaw/plugin-sdk/test-fixtures";
+export { writeSkill } from "sunclaw/plugin-sdk/test-fixtures";

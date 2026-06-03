@@ -1,17 +1,17 @@
 {
-  "name": "@openclaw/xai-plugin",
+  "name": "@sunclaw/xai-plugin",
   "version": "2026.6.2",
   "private": true,
-  "description": "OpenClaw xAI plugin",
+  "description": "SunClaw xAI plugin",
   "type": "module",
   "dependencies": {
     "typebox": "1.1.39"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
+    "@sunclaw/plugin-sdk": "workspace:*",
     "ws": "8.21.0"
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ]

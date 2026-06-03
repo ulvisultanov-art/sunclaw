@@ -1,8 +1,8 @@
 {
-  "name": "@openclaw/memory-core",
+  "name": "@sunclaw/memory-core",
   "version": "2026.6.2",
   "private": true,
-  "description": "OpenClaw core memory search plugin",
+  "description": "SunClaw core memory search plugin",
   "type": "module",
   "dependencies": {
     "chokidar": "5.0.0",
@@ -10,18 +10,18 @@
     "typebox": "1.1.39"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "2026.5.28"
+    "@sunclaw/plugin-sdk": "workspace:*",
+    "sunclaw": "2026.5.28"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.6.2"
+    "sunclaw": ">=2026.6.2"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "sunclaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ]

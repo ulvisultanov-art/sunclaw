@@ -1,6 +1,6 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
 import type { AcpTurnAttachment as AgentTurnAttachment } from "../../acp/control-plane/manager.types.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { logVerbose } from "../../globals.js";
 import type { MediaAttachment } from "../../media-understanding/types.js";
 import { createLazyImportLoader } from "../../shared/lazy-promise.js";
@@ -47,7 +47,7 @@ export function hasPotentialAgentTurnAttachments(ctx: MsgContext): boolean {
 
 export async function resolveAgentTurnAttachments(params: {
   ctx: MsgContext;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   runtime?: AgentTurnAttachmentRuntime;
   includeRecentHistoryImages?: boolean;
 }): Promise<{
@@ -153,7 +153,7 @@ export async function resolveAgentTurnAttachments(params: {
 
 export async function resolveAgentAttachments(params: {
   ctx: MsgContext;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   runtime?: AgentTurnAttachmentRuntime;
 }): Promise<AgentTurnAttachment[]> {
   return (await resolveAgentTurnAttachments(params)).attachments;

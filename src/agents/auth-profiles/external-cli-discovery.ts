@@ -1,5 +1,5 @@
-import { normalizeTrimmedStringList } from "@openclaw/normalization-core/string-normalization";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import { normalizeTrimmedStringList } from "@sunclaw/normalization-core/string-normalization";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import {
   resolveExternalCliAuthScopeFromConfig,
   type ExternalCliAuthScope,
@@ -9,23 +9,23 @@ export type ExternalCliAuthDiscovery =
   | {
       mode: "none";
       allowKeychainPrompt?: false;
-      config?: OpenClawConfig;
+      config?: SunClawConfig;
     }
   | {
       mode: "existing";
       allowKeychainPrompt?: boolean;
-      config?: OpenClawConfig;
+      config?: SunClawConfig;
     }
   | {
       mode: "scoped";
       allowKeychainPrompt?: boolean;
-      config?: OpenClawConfig;
+      config?: SunClawConfig;
       providerIds?: Iterable<string>;
       profileIds?: Iterable<string>;
     };
 
 type ProviderAuthDiscoveryParams = {
-  cfg?: OpenClawConfig;
+  cfg?: SunClawConfig;
   provider: string;
   profileId?: string;
   preferredProfile?: string;
@@ -33,12 +33,12 @@ type ProviderAuthDiscoveryParams = {
 };
 
 type ConfigStatusDiscoveryParams = {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   allowKeychainPrompt?: false;
 };
 
 type ProviderSetDiscoveryParams = {
-  cfg?: OpenClawConfig;
+  cfg?: SunClawConfig;
   providers: Iterable<string>;
   allowKeychainPrompt?: false;
 };
@@ -48,7 +48,7 @@ function normalizeStringList(values: Iterable<string | undefined>): string[] {
 }
 
 export function externalCliDiscoveryNone(params?: {
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
 }): ExternalCliAuthDiscovery {
   return {
     mode: "none",
@@ -58,7 +58,7 @@ export function externalCliDiscoveryNone(params?: {
 }
 
 export function externalCliDiscoveryExisting(params?: {
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   allowKeychainPrompt?: boolean;
 }): ExternalCliAuthDiscovery {
   return {
@@ -71,7 +71,7 @@ export function externalCliDiscoveryExisting(params?: {
 }
 
 export function externalCliDiscoveryScoped(params: {
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   providerIds?: Iterable<string>;
   profileIds?: Iterable<string>;
   allowKeychainPrompt?: boolean;
@@ -125,7 +125,7 @@ export function externalCliDiscoveryForProviders(
 }
 
 function externalCliDiscoveryFromScope(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   scope: ExternalCliAuthScope | undefined;
   allowKeychainPrompt: false;
 }): ExternalCliAuthDiscovery {

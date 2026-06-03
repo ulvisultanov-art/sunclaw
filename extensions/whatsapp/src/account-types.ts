@@ -1,5 +1,5 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
 
 export type WhatsAppAccountConfig = NonNullable<
-  NonNullable<NonNullable<OpenClawConfig["channels"]>["whatsapp"]>["accounts"]
+  NonNullable<NonNullable<SunClawConfig["channels"]>["whatsapp"]>["accounts"]
 >[string];

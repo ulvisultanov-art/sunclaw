@@ -4,7 +4,7 @@ import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { saveSessionStore } from "../config/sessions/store.js";
 import type { SessionEntry } from "../config/sessions/types.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type { Skill } from "../skills/loading/skill-contract.js";
 
 const note = vi.hoisted(() => vi.fn());
@@ -71,7 +71,7 @@ describe("doctor session snapshot stale runtime metadata", () => {
 
   beforeEach(async () => {
     note.mockClear();
-    root = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-doctor-session-snapshots-"));
+    root = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-doctor-session-snapshots-"));
     bundledSkillsDir = path.join(root, "current", "skills");
     await fs.mkdir(path.join(bundledSkillsDir, "doctor"), { recursive: true });
     await fs.writeFile(path.join(bundledSkillsDir, "doctor", "SKILL.md"), "# Doctor\n");
@@ -86,7 +86,7 @@ describe("doctor session snapshot stale runtime metadata", () => {
       root,
       "old-runtime",
       "node_modules",
-      "openclaw",
+      "sunclaw",
       "skills",
       "doctor",
       "SKILL.md",
@@ -95,7 +95,7 @@ describe("doctor session snapshot stale runtime metadata", () => {
       path.sep,
       "private",
       "tmp",
-      "openclaw",
+      "sunclaw",
       "skills",
       "doctor",
       "SKILL.md",
@@ -136,7 +136,7 @@ describe("doctor session snapshot stale runtime metadata", () => {
 
   it("expands home-relative cached bundled skill locations before classifying them", () => {
     const homeDir = path.join(root, "home");
-    const stalePath = "~/old-runtime/node_modules/openclaw/skills/doctor/SKILL.md";
+    const stalePath = "~/old-runtime/node_modules/sunclaw/skills/doctor/SKILL.md";
 
     const findings = scanSessionStoreForStaleRuntimeSnapshotPaths({
       bundledSkillsDir,
@@ -164,10 +164,10 @@ describe("doctor session snapshot stale runtime metadata", () => {
   it("ignores current bundled locations and unrelated workspace skill locations", () => {
     const currentPath = path.join(bundledSkillsDir, "doctor", "SKILL.md");
     const workspacePath = path.join(root, "workspace", "skills", "doctor", "SKILL.md");
-    const openClawWorkspacePath = path.join(
+    const sunClawWorkspacePath = path.join(
       root,
       "projects",
-      "openclaw",
+      "sunclaw",
       "skills",
       "doctor",
       "SKILL.md",
@@ -181,9 +181,9 @@ describe("doctor session snapshot stale runtime metadata", () => {
         "agent:workspace": sessionEntry({
           skillsSnapshot: { prompt: skillPrompt(workspacePath), skills: [{ name: "doctor" }] },
         }),
-        "agent:openclaw-workspace": sessionEntry({
+        "agent:sunclaw-workspace": sessionEntry({
           skillsSnapshot: {
-            prompt: skillPrompt(openClawWorkspacePath),
+            prompt: skillPrompt(sunClawWorkspacePath),
             skills: [{ name: "doctor" }],
           },
         }),
@@ -199,10 +199,10 @@ describe("doctor session snapshot stale runtime metadata", () => {
       "C:\\",
       "Users",
       "alice",
-      ".openclaw",
+      ".sunclaw",
       "lib",
       "node_modules",
-      "openclaw",
+      "sunclaw",
       "skills",
     );
     const currentPath = path.win32.join(windowsBundledSkillsDir, "doctor", "SKILL.md");
@@ -210,7 +210,7 @@ describe("doctor session snapshot stale runtime metadata", () => {
       "C:\\",
       "opt",
       "node_modules",
-      "openclaw",
+      "sunclaw",
       "skills",
       "doctor",
       "SKILL.md",
@@ -244,7 +244,7 @@ describe("doctor session snapshot stale runtime metadata", () => {
       root,
       "old-runtime",
       "node_modules",
-      "openclaw",
+      "sunclaw",
       "skills",
       "doctor",
       "SKILL.md",
@@ -276,7 +276,7 @@ describe("doctor session snapshot stale runtime metadata", () => {
       root,
       "old-runtime",
       "node_modules",
-      "openclaw",
+      "sunclaw",
       "skills",
       "doctor",
       "SKILL.md",
@@ -306,7 +306,7 @@ describe("doctor session snapshot stale runtime metadata", () => {
       root,
       "old-runtime",
       "node_modules",
-      "openclaw",
+      "sunclaw",
       "skills",
       "doctor",
       "SKILL.md",
@@ -343,7 +343,7 @@ describe("doctor session snapshot stale runtime metadata", () => {
       root,
       "old-runtime",
       "node_modules",
-      "openclaw",
+      "sunclaw",
       "skills",
       "doctor",
       "SKILL.md",
@@ -362,9 +362,9 @@ describe("doctor session snapshot stale runtime metadata", () => {
     });
 
     await noteSessionSnapshotHealth({
-      cfg: { session: { store: configuredStorePath } } as OpenClawConfig,
+      cfg: { session: { store: configuredStorePath } } as SunClawConfig,
       bundledSkillsDir,
-      env: { OPENCLAW_STATE_DIR: stateDir },
+      env: { SUNCLAW_STATE_DIR: stateDir },
     });
 
     expect(note).toHaveBeenCalledTimes(1);
@@ -379,7 +379,7 @@ describe("doctor session snapshot stale runtime metadata", () => {
       root,
       "old-runtime",
       "node_modules",
-      "openclaw",
+      "sunclaw",
       "skills",
       "doctor",
       "SKILL.md",
@@ -399,9 +399,9 @@ describe("doctor session snapshot stale runtime metadata", () => {
       cfg: {
         session: { store: templatedStore },
         agents: { list: [{ id: "main" }, { id: "ops" }] },
-      } as OpenClawConfig,
+      } as SunClawConfig,
       bundledSkillsDir,
-      env: { OPENCLAW_STATE_DIR: path.join(root, "state") },
+      env: { SUNCLAW_STATE_DIR: path.join(root, "state") },
     });
 
     expect(note).toHaveBeenCalledTimes(1);
@@ -418,7 +418,7 @@ describe("doctor session snapshot repair (shouldRepair)", () => {
 
   beforeEach(async () => {
     note.mockClear();
-    root = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-doctor-repair-"));
+    root = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-doctor-repair-"));
     bundledSkillsDir = path.join(root, "current", "skills");
     await fs.mkdir(path.join(bundledSkillsDir, "doctor"), { recursive: true });
     await fs.writeFile(path.join(bundledSkillsDir, "doctor", "SKILL.md"), "# Doctor\n");
@@ -433,7 +433,7 @@ describe("doctor session snapshot repair (shouldRepair)", () => {
       root,
       "old-runtime",
       "node_modules",
-      "openclaw",
+      "sunclaw",
       "skills",
       "doctor",
       "SKILL.md",
@@ -467,7 +467,7 @@ describe("doctor session snapshot repair (shouldRepair)", () => {
       root,
       "old-runtime",
       "node_modules",
-      "openclaw",
+      "sunclaw",
       "skills",
       "doctor",
       "SKILL.md",
@@ -510,7 +510,7 @@ describe("doctor session snapshot repair (shouldRepair)", () => {
       root,
       "old-runtime",
       "node_modules",
-      "openclaw",
+      "sunclaw",
       "skills",
       "doctor",
       "SKILL.md",
@@ -547,7 +547,7 @@ describe("doctor session snapshot repair (shouldRepair)", () => {
       root,
       "old-runtime",
       "node_modules",
-      "openclaw",
+      "sunclaw",
       "skills",
       "doctor",
       "SKILL.md",
@@ -588,7 +588,7 @@ describe("doctor session snapshot repair (shouldRepair)", () => {
       root,
       "old-runtime",
       "node_modules",
-      "openclaw",
+      "sunclaw",
       "skills",
       "doctor",
       "SKILL.md",
@@ -630,7 +630,7 @@ describe("doctor session snapshot repair (shouldRepair)", () => {
       root,
       "old-runtime",
       "node_modules",
-      "openclaw",
+      "sunclaw",
       "skills",
       "doctor",
       "SKILL.md",
@@ -678,7 +678,7 @@ describe("doctor session snapshot repair (shouldRepair)", () => {
       root,
       "old-runtime",
       "node_modules",
-      "openclaw",
+      "sunclaw",
       "skills",
       "doctor",
       "SKILL.md",
@@ -715,7 +715,7 @@ describe("doctor session snapshot repair (shouldRepair)", () => {
       root,
       "old-runtime",
       "node_modules",
-      "openclaw",
+      "sunclaw",
       "skills",
       "doctor",
       "SKILL.md",
@@ -750,7 +750,7 @@ describe("doctor session snapshot repair (shouldRepair)", () => {
       root,
       "old-runtime",
       "node_modules",
-      "openclaw",
+      "sunclaw",
       "skills",
       "doctor",
       "SKILL.md",

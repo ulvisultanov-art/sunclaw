@@ -87,7 +87,7 @@ describe("scripts/test-docker-all scheduler", () => {
     expect(result.status).toBe(0);
     expect(result.stderr).toBe("");
     expect(result.stdout).toContain("Usage: node scripts/test-docker-all.mjs [--plan-json]");
-    expect(result.stdout).toContain("OPENCLAW_DOCKER_ALL_* env vars");
+    expect(result.stdout).toContain("SUNCLAW_DOCKER_ALL_* env vars");
   });
 
   it("rejects unknown CLI options without a stack trace", () => {
@@ -109,36 +109,36 @@ describe("scripts/test-docker-all scheduler", () => {
       encoding: "utf8",
       env: {
         ...process.env,
-        OPENCLAW_DOCKER_ALL_PARALLELISM: "1e3",
+        SUNCLAW_DOCKER_ALL_PARALLELISM: "1e3",
       },
     });
 
     expect(result.status).toBe(1);
     expect(result.stdout).toBe("");
-    expect(result.stderr).toContain("OPENCLAW_DOCKER_ALL_PARALLELISM must be a positive integer");
+    expect(result.stderr).toContain("SUNCLAW_DOCKER_ALL_PARALLELISM must be a positive integer");
     expect(result.stderr).not.toContain("at ");
   });
 
   it("rejects loose numeric resource limit env vars before scheduling lanes", () => {
-    const logDir = mkdtempSync(`${tmpdir()}/openclaw-docker-all-`);
+    const logDir = mkdtempSync(`${tmpdir()}/sunclaw-docker-all-`);
     try {
       const result = spawnSync(process.execPath, ["scripts/test-docker-all.mjs"], {
         cwd: process.cwd(),
         encoding: "utf8",
         env: {
           ...process.env,
-          OPENCLAW_DOCKER_ALL_BUILD: "0",
-          OPENCLAW_DOCKER_ALL_DOCKER_LIMIT: "1e3",
-          OPENCLAW_DOCKER_ALL_DRY_RUN: "1",
-          OPENCLAW_DOCKER_ALL_LOG_DIR: logDir,
-          OPENCLAW_DOCKER_ALL_PREFLIGHT: "0",
-          OPENCLAW_DOCKER_ALL_TIMINGS: "0",
+          SUNCLAW_DOCKER_ALL_BUILD: "0",
+          SUNCLAW_DOCKER_ALL_DOCKER_LIMIT: "1e3",
+          SUNCLAW_DOCKER_ALL_DRY_RUN: "1",
+          SUNCLAW_DOCKER_ALL_LOG_DIR: logDir,
+          SUNCLAW_DOCKER_ALL_PREFLIGHT: "0",
+          SUNCLAW_DOCKER_ALL_TIMINGS: "0",
         },
       });
 
       expect(result.status).toBe(1);
       expect(result.stderr).toContain(
-        "OPENCLAW_DOCKER_ALL_DOCKER_LIMIT must be a positive integer",
+        "SUNCLAW_DOCKER_ALL_DOCKER_LIMIT must be a positive integer",
       );
       expect(result.stderr).not.toContain("at ");
     } finally {
@@ -284,22 +284,22 @@ describe("scripts/test-docker-all scheduler", () => {
   it("cleans stale stopped containers from all named Docker E2E lanes", () => {
     expect(
       dockerPreflightContainerNames(`
-openclaw-gateway-e2e-123 Exited (1) 2 minutes ago
-openclaw-config-reload-e2e-234 Created
-openclaw-plugin-binding-command-escape-e2e-345 Dead
-openclaw-kitchen-sink-rpc-e2e-456 Exited (137) 10 seconds ago
-openclaw-openwebui-gateway-567 Exited (1) 3 minutes ago
-openclaw-openwebui-678 Created
-openclaw-not-an-e2e-container Exited (1) 2 minutes ago
+sunclaw-gateway-e2e-123 Exited (1) 2 minutes ago
+sunclaw-config-reload-e2e-234 Created
+sunclaw-plugin-binding-command-escape-e2e-345 Dead
+sunclaw-kitchen-sink-rpc-e2e-456 Exited (137) 10 seconds ago
+sunclaw-openwebui-gateway-567 Exited (1) 3 minutes ago
+sunclaw-openwebui-678 Created
+sunclaw-not-an-e2e-container Exited (1) 2 minutes ago
 postgres Created
 `),
     ).toEqual([
-      "openclaw-gateway-e2e-123",
-      "openclaw-config-reload-e2e-234",
-      "openclaw-plugin-binding-command-escape-e2e-345",
-      "openclaw-kitchen-sink-rpc-e2e-456",
-      "openclaw-openwebui-gateway-567",
-      "openclaw-openwebui-678",
+      "sunclaw-gateway-e2e-123",
+      "sunclaw-config-reload-e2e-234",
+      "sunclaw-plugin-binding-command-escape-e2e-345",
+      "sunclaw-kitchen-sink-rpc-e2e-456",
+      "sunclaw-openwebui-gateway-567",
+      "sunclaw-openwebui-678",
     ]);
   });
 
@@ -313,7 +313,7 @@ postgres Created
   });
 
   it("reads bounded lane log tails instead of full noisy logs", async () => {
-    const root = mkdtempSync(path.join(tmpdir(), "openclaw-docker-all-log-tail-"));
+    const root = mkdtempSync(path.join(tmpdir(), "sunclaw-docker-all-log-tail-"));
     try {
       const logPath = path.join(root, "lane.log");
       writeFileSync(
@@ -333,7 +333,7 @@ postgres Created
   });
 
   posixIt("kills timed-out shell command groups when the leader exits first", async () => {
-    const root = mkdtempSync(path.join(tmpdir(), "openclaw-docker-all-timeout-"));
+    const root = mkdtempSync(path.join(tmpdir(), "sunclaw-docker-all-timeout-"));
     const scriptPath = path.join(root, "leader-exits.mjs");
     const grandchildPidPath = path.join(root, "grandchild.pid");
     let grandchildPid = 0;

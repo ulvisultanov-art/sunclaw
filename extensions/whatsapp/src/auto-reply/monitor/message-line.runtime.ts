@@ -1,11 +1,11 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
 
 export {
   formatInboundEnvelope,
   type EnvelopeFormatOptions,
-} from "openclaw/plugin-sdk/channel-inbound";
+} from "sunclaw/plugin-sdk/channel-inbound";
 
-type WhatsAppMessagePrefixConfig = OpenClawConfig;
+type WhatsAppMessagePrefixConfig = SunClawConfig;
 
 function normalizeAgentId(agentId: string): string {
   return agentId.trim().toLowerCase() || "main";
@@ -34,5 +34,5 @@ export function resolveMessagePrefix(
   if (opts?.hasAllowFrom === true) {
     return "";
   }
-  return resolveIdentityNamePrefix(cfg, agentId) ?? opts?.fallback ?? "[openclaw]";
+  return resolveIdentityNamePrefix(cfg, agentId) ?? opts?.fallback ?? "[sunclaw]";
 }

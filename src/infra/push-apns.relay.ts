@@ -1,9 +1,9 @@
 import { URL } from "node:url";
-import { resolveTimerTimeoutMs } from "@openclaw/normalization-core/number-coercion";
+import { resolveTimerTimeoutMs } from "@sunclaw/normalization-core/number-coercion";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@sunclaw/normalization-core/string-coerce";
 import type { GatewayConfig } from "../config/types.gateway.js";
 import {
   loadOrCreateDeviceIdentity,
@@ -54,11 +54,11 @@ export type ApnsRelayRequestSender = (params: {
 }) => Promise<ApnsRelayPushResponse>;
 
 /** Hosted APNs relay origin used only when registrations prove they were minted there. */
-export const DEFAULT_APNS_RELAY_BASE_URL = "https://ios-push-relay.openclaw.ai";
+export const DEFAULT_APNS_RELAY_BASE_URL = "https://ios-push-relay.docs.sunclaw.complex.az";
 const DEFAULT_APNS_RELAY_TIMEOUT_MS = 10_000;
-const GATEWAY_DEVICE_ID_HEADER = "x-openclaw-gateway-device-id";
-const GATEWAY_SIGNATURE_HEADER = "x-openclaw-gateway-signature";
-const GATEWAY_SIGNED_AT_HEADER = "x-openclaw-gateway-signed-at-ms";
+const GATEWAY_DEVICE_ID_HEADER = "x-sunclaw-gateway-device-id";
+const GATEWAY_SIGNATURE_HEADER = "x-sunclaw-gateway-signature";
+const GATEWAY_SIGNED_AT_HEADER = "x-sunclaw-gateway-signed-at-ms";
 
 function normalizeNonEmptyString(value: string | undefined): string | null {
   const trimmed = normalizeOptionalString(value) ?? "";
@@ -114,9 +114,9 @@ export function normalizeApnsRelayBaseUrl(
       throw new Error("host required");
     }
     // Plain HTTP is only for local relay development; production relay URLs must use TLS.
-    if (parsed.protocol === "http:" && !readAllowHttp(env.OPENCLAW_APNS_RELAY_ALLOW_HTTP)) {
+    if (parsed.protocol === "http:" && !readAllowHttp(env.SUNCLAW_APNS_RELAY_ALLOW_HTTP)) {
       throw new Error(
-        "http relay URLs require OPENCLAW_APNS_RELAY_ALLOW_HTTP=true (development only)",
+        "http relay URLs require SUNCLAW_APNS_RELAY_ALLOW_HTTP=true (development only)",
       );
     }
     if (parsed.protocol === "http:" && !isLoopbackRelayHostname(parsed.hostname)) {
@@ -141,7 +141,7 @@ function buildRelayGatewaySignaturePayload(params: {
 }): string {
   // Domain-separate relay send signatures from other gateway/device signatures.
   return [
-    "openclaw-relay-send-v1",
+    "sunclaw-relay-send-v1",
     params.gatewayDeviceId.trim(),
     String(Math.trunc(params.signedAtMs)),
     params.bodyJson,
@@ -155,7 +155,7 @@ export function resolveApnsRelayConfigFromEnv(
   options: ApnsRelayConfigResolutionOptions = {},
 ): ApnsRelayConfigResolution {
   const configuredRelay = gatewayConfig?.push?.apns?.relay;
-  const envBaseUrl = normalizeNonEmptyString(env.OPENCLAW_APNS_RELAY_BASE_URL);
+  const envBaseUrl = normalizeNonEmptyString(env.SUNCLAW_APNS_RELAY_BASE_URL);
   const configBaseUrl = normalizeNonEmptyString(configuredRelay?.baseUrl);
   const explicitBaseUrl = envBaseUrl ?? configBaseUrl;
   const normalizedRegistrationOrigin = options.registrationRelayOrigin
@@ -174,7 +174,7 @@ export function resolveApnsRelayConfigFromEnv(
       ? DEFAULT_APNS_RELAY_BASE_URL
       : undefined);
   const baseUrlSource = envBaseUrl
-    ? "OPENCLAW_APNS_RELAY_BASE_URL"
+    ? "SUNCLAW_APNS_RELAY_BASE_URL"
     : configBaseUrl
       ? "gateway.push.apns.relay.baseUrl"
       : "default APNs relay base URL";
@@ -182,7 +182,7 @@ export function resolveApnsRelayConfigFromEnv(
     return {
       ok: false,
       error:
-        "APNs relay config missing: set gateway.push.apns.relay.baseUrl or OPENCLAW_APNS_RELAY_BASE_URL for relay registrations without the hosted relay origin",
+        "APNs relay config missing: set gateway.push.apns.relay.baseUrl or SUNCLAW_APNS_RELAY_BASE_URL for relay registrations without the hosted relay origin",
     };
   }
 
@@ -207,7 +207,7 @@ export function resolveApnsRelayConfigFromEnv(
     value: {
       baseUrl: normalizedBaseUrl.value,
       timeoutMs: normalizeTimeoutMs(
-        env.OPENCLAW_APNS_RELAY_TIMEOUT_MS ?? configuredRelay?.timeoutMs,
+        env.SUNCLAW_APNS_RELAY_TIMEOUT_MS ?? configuredRelay?.timeoutMs,
       ),
     },
   };

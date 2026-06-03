@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import {
   getRuntimeEmbeddingProviderAdapter,
   listRuntimeEmbeddingProviderAdapters,
@@ -20,7 +20,7 @@ export function listRegisteredEmbeddingProviderAdapters(): EmbeddingProviderAdap
   return listRegisteredEmbeddingProviders().map((entry) => entry.adapter);
 }
 
-export function listEmbeddingProviders(cfg?: OpenClawConfig): EmbeddingProviderAdapter[] {
+export function listEmbeddingProviders(cfg?: SunClawConfig): EmbeddingProviderAdapter[] {
   return listRuntimeEmbeddingProviderAdapters({
     key: "embeddingProviders",
     cfg,
@@ -30,7 +30,7 @@ export function listEmbeddingProviders(cfg?: OpenClawConfig): EmbeddingProviderA
 
 function resolveConfiguredEmbeddingProviderId(
   providerId: string,
-  cfg?: OpenClawConfig,
+  cfg?: SunClawConfig,
 ): string | undefined {
   return readConfiguredProviderApiId({
     providerId,
@@ -44,7 +44,7 @@ function resolveConfiguredEmbeddingProviderId(
   });
 }
 
-function resolveEmbeddingProviderLookupIds(id: string, cfg?: OpenClawConfig): string[] {
+function resolveEmbeddingProviderLookupIds(id: string, cfg?: SunClawConfig): string[] {
   return resolveRuntimeEmbeddingProviderLookupIds({
     id,
     cfg,
@@ -54,7 +54,7 @@ function resolveEmbeddingProviderLookupIds(id: string, cfg?: OpenClawConfig): st
 
 export function getEmbeddingProvider(
   id: string,
-  cfg?: OpenClawConfig,
+  cfg?: SunClawConfig,
 ): EmbeddingProviderAdapter | undefined {
   return getRuntimeEmbeddingProviderAdapter({
     key: "embeddingProviders",

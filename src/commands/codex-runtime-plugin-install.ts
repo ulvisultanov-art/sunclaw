@@ -1,5 +1,5 @@
 import { modelSelectionShouldEnsureCodexPlugin } from "../agents/openai-routing.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import {
   createRuntimePluginModelSelectionHelpers,
   type RuntimePluginInstallResult,
@@ -7,7 +7,7 @@ import {
 
 export const CODEX_RUNTIME_PLUGIN_ID = "codex";
 const CODEX_RUNTIME_PLUGIN_LABEL = "Codex";
-const CODEX_RUNTIME_PLUGIN_NPM_SPEC = "@openclaw/codex";
+const CODEX_RUNTIME_PLUGIN_NPM_SPEC = "@sunclaw/codex";
 const CODEX_RUNTIME_PLUGIN_DESCRIPTOR = {
   pluginId: CODEX_RUNTIME_PLUGIN_ID,
   label: CODEX_RUNTIME_PLUGIN_LABEL,
@@ -18,7 +18,7 @@ const CODEX_RUNTIME_PLUGIN_DESCRIPTOR = {
 export type CodexRuntimePluginInstallResult = RuntimePluginInstallResult;
 
 export function selectedModelShouldEnsureCodexRuntimePlugin(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   model?: string;
 }): boolean {
   return modelSelectionShouldEnsureCodexPlugin({

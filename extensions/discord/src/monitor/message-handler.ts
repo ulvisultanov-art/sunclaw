@@ -1,9 +1,9 @@
 import {
   createChannelInboundDebouncer,
   shouldDebounceTextInbound,
-} from "openclaw/plugin-sdk/channel-inbound";
-import { danger, logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { resolveOpenProviderRuntimeGroupPolicy } from "openclaw/plugin-sdk/runtime-group-policy";
+} from "sunclaw/plugin-sdk/channel-inbound";
+import { danger, logVerbose } from "sunclaw/plugin-sdk/runtime-env";
+import { resolveOpenProviderRuntimeGroupPolicy } from "sunclaw/plugin-sdk/runtime-group-policy";
 import type { Client } from "../internal/discord.js";
 import {
   buildDiscordInboundReplayKey,

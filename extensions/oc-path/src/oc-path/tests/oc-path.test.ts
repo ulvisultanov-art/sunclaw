@@ -72,8 +72,8 @@ describe("parseOcPath", () => {
   });
 
   it("normalizes deep JSON paths into dotted subsegments", () => {
-    expect(parseOcPath("oc://openclaw.json/agents/list/8/tools/exec/security")).toEqual({
-      file: "openclaw.json",
+    expect(parseOcPath("oc://sunclaw.json/agents/list/8/tools/exec/security")).toEqual({
+      file: "sunclaw.json",
       section: "agents.list.8.tools",
       item: "exec",
       field: "security",

@@ -1,10 +1,10 @@
 {
-  "name": "@openclaw/amazon-bedrock-provider",
+  "name": "@sunclaw/amazon-bedrock-provider",
   "version": "2026.6.2",
-  "description": "OpenClaw Amazon Bedrock provider plugin with model discovery, embeddings, and guardrail support.",
+  "description": "SunClaw Amazon Bedrock provider plugin with model discovery, embeddings, and guardrail support.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/ulvisultanov-art/sunclaw"
   },
   "type": "module",
   "dependencies": {
@@ -16,14 +16,14 @@
     "@smithy/types": "4.14.2"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@sunclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "npmSpec": "@openclaw/amazon-bedrock-provider",
+      "npmSpec": "@sunclaw/amazon-bedrock-provider",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.5.12-beta.1"
     },
@@ -31,7 +31,7 @@
       "pluginApi": ">=2026.6.2"
     },
     "build": {
-      "openclawVersion": "2026.6.2",
+      "sunclawVersion": "2026.6.2",
       "bundledDist": false
     },
     "release": {

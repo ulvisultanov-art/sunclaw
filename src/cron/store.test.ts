@@ -22,7 +22,7 @@ let fixtureRoot = "";
 let caseId = 0;
 
 beforeAll(async () => {
-  fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-cron-store-"));
+  fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-cron-store-"));
 });
 
 afterAll(async () => {
@@ -82,12 +82,12 @@ describe("resolveCronStorePath", () => {
     vi.unstubAllEnvs();
   });
 
-  it("uses OPENCLAW_HOME for tilde expansion", () => {
-    vi.stubEnv("OPENCLAW_HOME", "/srv/openclaw-home");
+  it("uses SUNCLAW_HOME for tilde expansion", () => {
+    vi.stubEnv("SUNCLAW_HOME", "/srv/sunclaw-home");
     vi.stubEnv("HOME", "/home/other");
 
     const result = resolveCronStorePath("~/cron/jobs.json");
-    expect(result).toBe(path.resolve("/srv/openclaw-home", "cron", "jobs.json"));
+    expect(result).toBe(path.resolve("/srv/sunclaw-home", "cron", "jobs.json"));
   });
 });
 

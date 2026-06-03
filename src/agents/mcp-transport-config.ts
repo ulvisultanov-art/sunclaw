@@ -1,6 +1,6 @@
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@sunclaw/normalization-core/string-coerce";
 import { sanitizeForLog } from "../../packages/terminal-core/src/ansi.js";
-import { resolveOpenClawMcpTransportAlias } from "../config/mcp-config-normalize.js";
+import { resolveSunClawMcpTransportAlias } from "../config/mcp-config-normalize.js";
 import { logWarn } from "../logger.js";
 import {
   describeHttpMcpServerLaunchConfig,
@@ -130,7 +130,7 @@ function getRequestedTransportAlias(rawServer: unknown): HttpMcpTransportType | 
   ) {
     return "";
   }
-  return resolveOpenClawMcpTransportAlias((rawServer as { type?: string }).type) ?? "";
+  return resolveSunClawMcpTransportAlias((rawServer as { type?: string }).type) ?? "";
 }
 
 function resolveHttpTransportConfig(

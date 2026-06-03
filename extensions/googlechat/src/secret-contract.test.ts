@@ -1,9 +1,9 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
 import {
   applyResolvedAssignments,
   createResolverContext,
   resolveSecretRefValues,
-} from "openclaw/plugin-sdk/secret-ref-runtime";
+} from "sunclaw/plugin-sdk/secret-ref-runtime";
 import { describe, expect, it } from "vitest";
 import { collectRuntimeConfigAssignments } from "./secret-contract.js";
 
@@ -25,8 +25,8 @@ describe("googlechat secret contract", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
-    const resolvedConfig: OpenClawConfig = structuredClone(sourceConfig);
+    } satisfies SunClawConfig;
+    const resolvedConfig: SunClawConfig = structuredClone(sourceConfig);
     const context = createResolverContext({
       sourceConfig,
       env: {

@@ -1,5 +1,5 @@
 import type http2 from "node:http2";
-import { MAX_TIMER_TIMEOUT_MS } from "@openclaw/normalization-core/number-coercion";
+import { MAX_TIMER_TIMEOUT_MS } from "@sunclaw/normalization-core/number-coercion";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { HttpConnectTunnelParams } from "./net/http-connect-tunnel.js";
 import {
@@ -260,8 +260,8 @@ describe("connectApnsHttp2Session", () => {
     expect(fakeSession.request).toHaveBeenCalledWith({
       ":method": "POST",
       ":path": `/3/device/${"0".repeat(64)}`,
-      authorization: "bearer intentionally.invalid.openclaw.proxy.validation",
-      "apns-topic": "ai.openclaw.ios",
+      authorization: "bearer intentionally.invalid.sunclaw.proxy.validation",
+      "apns-topic": "ai.sunclaw.ios",
       "apns-push-type": "alert",
       "apns-priority": "10",
     });

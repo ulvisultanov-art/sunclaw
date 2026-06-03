@@ -3,7 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { getSessionEntry, upsertSessionEntry } from "../../config/sessions.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import {
   formatGoalContinuationPrompt,
   handleGoalCommand,
@@ -21,14 +21,14 @@ afterEach(async () => {
 });
 
 async function createStorePath(): Promise<string> {
-  const root = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-goal-command-"));
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-goal-command-"));
   tempRoots.push(root);
   return path.join(root, "sessions.json");
 }
 
 function buildGoalParams(commandBodyNormalized: string, storePath: string): HandleCommandsParams {
   return {
-    cfg: {} as OpenClawConfig,
+    cfg: {} as SunClawConfig,
     ctx: {
       Provider: "web",
       Surface: "web",

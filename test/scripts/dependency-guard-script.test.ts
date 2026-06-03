@@ -202,7 +202,7 @@ describe("dependency guard script", () => {
       findTrustedDependencyGuardActor({
         candidates: untrustedAuthorCandidate,
         isDependencyApprover: async (login) =>
-          login === "security-user" || login === "repo-admin" ? "openclaw-secops" : null,
+          login === "security-user" || login === "repo-admin" ? "sunclaw-secops" : null,
       }),
     ).resolves.toBeNull();
     await expect(
@@ -222,7 +222,7 @@ describe("dependency guard script", () => {
       headSha,
     });
 
-    expect(body).toContain("<!-- openclaw:dependency-graph-guard -->");
+    expect(body).toContain("<!-- sunclaw:dependency-graph-guard -->");
     expect(body).toContain("Dependency graph changes noted");
     expect(body).toContain("informational");
     expect(body).toContain("@repo-admin");
@@ -311,26 +311,26 @@ describe("dependency guard script", () => {
 
   it("trusts only configured dependency guard marker comment authors", () => {
     const trustedAuthors = dependencyGuardCommentAuthors(
-      "github-actions[bot], openclaw-autoscrub[bot]",
+      "github-actions[bot], sunclaw-autoscrub[bot]",
     );
 
     expect(
       isDependencyGuardMarkerComment(
         {
-          body: "<!-- openclaw:dependency-graph-guard -->",
-          user: { login: "openclaw-autoscrub[bot]" },
+          body: "<!-- sunclaw:dependency-graph-guard -->",
+          user: { login: "sunclaw-autoscrub[bot]" },
         },
-        "<!-- openclaw:dependency-graph-guard -->",
+        "<!-- sunclaw:dependency-graph-guard -->",
         trustedAuthors,
       ),
     ).toBe(true);
     expect(
       isDependencyGuardMarkerComment(
         {
-          body: "<!-- openclaw:dependency-graph-guard -->",
+          body: "<!-- sunclaw:dependency-graph-guard -->",
           user: { login: "contributor" },
         },
-        "<!-- openclaw:dependency-graph-guard -->",
+        "<!-- sunclaw:dependency-graph-guard -->",
         trustedAuthors,
       ),
     ).toBe(false);
@@ -340,7 +340,7 @@ describe("dependency guard script", () => {
           body: "no marker",
           user: { login: "github-actions[bot]" },
         },
-        "<!-- openclaw:dependency-graph-guard -->",
+        "<!-- sunclaw:dependency-graph-guard -->",
         trustedAuthors,
       ),
     ).toBe(false);
@@ -359,7 +359,7 @@ describe("dependency guard script", () => {
       ],
     });
 
-    expect(body).toContain("<!-- openclaw:dependency-graph-guard -->");
+    expect(body).toContain("<!-- sunclaw:dependency-graph-guard -->");
     expect(body).toContain("Dependency graph changes are blocked");
     expect(body).toContain("`pnpm-lock.yaml` changed.");
     expect(body).toContain("`extensions/slack/npm-shrinkwrap.json` changed.");
@@ -430,14 +430,14 @@ describe("dependency guard script", () => {
     const sameRepoPullRequest = {
       head: {
         ref: "contributor/change",
-        repo: { full_name: "openclaw/openclaw" },
+        repo: { full_name: "sunclaw/sunclaw" },
         sha: headSha,
       },
     };
     const forkPullRequest = {
       head: {
         ref: "contributor/change",
-        repo: { full_name: "external/openclaw" },
+        repo: { full_name: "external/sunclaw" },
         sha: headSha,
       },
     };
@@ -445,29 +445,29 @@ describe("dependency guard script", () => {
       maintainer_can_modify: true,
       head: {
         ref: "contributor/change",
-        repo: { full_name: "external/openclaw" },
+        repo: { full_name: "external/sunclaw" },
         sha: headSha,
       },
     };
 
     expect(
       canAutoscrubPullRequest({
-        owner: "openclaw",
-        repo: "openclaw",
+        owner: "sunclaw",
+        repo: "sunclaw",
         pullRequest: sameRepoPullRequest,
       }),
     ).toBe(true);
     expect(
       canAutoscrubPullRequest({
-        owner: "openclaw",
-        repo: "openclaw",
+        owner: "sunclaw",
+        repo: "sunclaw",
         pullRequest: forkPullRequest,
       }),
     ).toBe(false);
     expect(
       canAutoscrubPullRequest({
-        owner: "openclaw",
-        repo: "openclaw",
+        owner: "sunclaw",
+        repo: "sunclaw",
         pullRequest: editableForkPullRequest,
       }),
     ).toBe(true);
@@ -480,7 +480,7 @@ describe("dependency guard script", () => {
       lockfileChanges: ["pnpm-lock.yaml", "extensions/slack/npm-shrinkwrap.json"],
     });
 
-    expect(body).toContain("<!-- openclaw:dependency-graph-guard -->");
+    expect(body).toContain("<!-- sunclaw:dependency-graph-guard -->");
     expect(body).toContain("Dependency lockfile changes were removed");
     expect(body).toContain("did not change dependency graph fields in package manifests");
     expect(body).toContain("`pnpm-lock.yaml`");
@@ -562,26 +562,26 @@ describe("dependency guard script", () => {
     const commit = await createAutoscrubCommit(
       { baseApi, writeApi },
       {
-        owner: "openclaw",
-        repo: "openclaw",
+        owner: "sunclaw",
+        repo: "sunclaw",
         pullRequest: {
           base: { sha: "base-sha" },
           head: { ref: "contributor/change", sha: headSha },
         },
         lockfileChanges: ["pnpm-lock.yaml"],
-        targetRepository: { owner: "contributor", repo: "openclaw" },
+        targetRepository: { owner: "contributor", repo: "sunclaw" },
       },
     );
 
     expect(commit).toEqual({ sha: staleSha });
     expect(calls.map((call) => `${call.api}:${call.path}`)).toEqual([
-      "base:/repos/openclaw/openclaw/contents/pnpm-lock.yaml?ref=base-sha",
+      "base:/repos/sunclaw/sunclaw/contents/pnpm-lock.yaml?ref=base-sha",
       "write:graphql",
     ]);
     expect(calls[1].variables).toMatchObject({
       input: {
         branch: {
-          repositoryNameWithOwner: "contributor/openclaw",
+          repositoryNameWithOwner: "contributor/sunclaw",
           branchName: "contributor/change",
         },
         expectedHeadOid: headSha,
@@ -601,7 +601,7 @@ describe("dependency guard script", () => {
   it("renders a cleared guard comment that preserves approval freshness", () => {
     const body = renderClearedDependencyGuardComment({ headSha });
 
-    expect(body).toContain("<!-- openclaw:dependency-graph-guard -->");
+    expect(body).toContain("<!-- sunclaw:dependency-graph-guard -->");
     expect(body).toContain("Dependency graph guard cleared");
     expect(body).toContain(headSha);
     expect(body).toContain("requires a fresh `/allow-dependencies-change` comment");
@@ -659,7 +659,7 @@ describe("dependency guard script", () => {
       )) as typeof fetch;
 
     try {
-      await expect(githubApi("token").request("/repos/openclaw/openclaw")).rejects.toMatchObject({
+      await expect(githubApi("token").request("/repos/sunclaw/sunclaw")).rejects.toMatchObject({
         message: `403 Forbidden: GitHub error response body exceeded ${GITHUB_ERROR_BODY_MAX_BYTES} bytes`,
         status: 403,
       });
@@ -683,9 +683,9 @@ describe("dependency guard script", () => {
         markFetchStarted();
         return new Promise(() => {});
       }) as typeof fetch,
-    }).request("/repos/openclaw/openclaw");
+    }).request("/repos/sunclaw/sunclaw");
     const rejection = expect(request).rejects.toThrow(
-      /GitHub API GET \/repos\/openclaw\/openclaw exceeded timeout 5ms/u,
+      /GitHub API GET \/repos\/sunclaw\/sunclaw exceeded timeout 5ms/u,
     );
 
     await fetchStarted;
@@ -717,9 +717,9 @@ describe("dependency guard script", () => {
           ),
         );
       }) as typeof fetch,
-    }).request("/repos/openclaw/openclaw");
+    }).request("/repos/sunclaw/sunclaw");
     const rejection = expect(request).rejects.toThrow(
-      /GitHub API GET \/repos\/openclaw\/openclaw exceeded timeout 5ms/u,
+      /GitHub API GET \/repos\/sunclaw\/sunclaw exceeded timeout 5ms/u,
     );
 
     await fetchStarted;

@@ -14,8 +14,8 @@ export function resetAcpManagerTaskStateForTests(): void {
 export async function withAcpManagerTaskStateDir(
   run: (root: string) => Promise<void>,
 ): Promise<void> {
-  await withTempDir({ prefix: "openclaw-acp-manager-task-" }, async (root) => {
-    process.env.OPENCLAW_STATE_DIR = root;
+  await withTempDir({ prefix: "sunclaw-acp-manager-task-" }, async (root) => {
+    process.env.SUNCLAW_STATE_DIR = root;
     resetAcpManagerTaskStateForTests();
     installInMemoryTaskRegistryRuntime();
     configureTaskFlowRegistryRuntime({

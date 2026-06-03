@@ -11,7 +11,7 @@ const PLUGIN_UPDATE_PROBE_SCRIPT = "scripts/e2e/lib/plugin-update/probe.mjs";
 const CORRUPT_PLUGIN_ID = "demo-corrupt-plugin";
 
 function runProbe(command: string, payload: unknown): void {
-  const root = mkdtempSync(path.join(tmpdir(), "openclaw-plugin-update-probe-"));
+  const root = mkdtempSync(path.join(tmpdir(), "sunclaw-plugin-update-probe-"));
   const payloadPath = path.join(root, "payload.json");
   try {
     writeFileSync(payloadPath, `${JSON.stringify(payload, null, 2)}\n`);
@@ -28,7 +28,7 @@ function runProbeStatus(
   command: string,
   payload: unknown,
 ): { status: number | null; stderr: string } {
-  const root = mkdtempSync(path.join(tmpdir(), "openclaw-plugin-update-probe-"));
+  const root = mkdtempSync(path.join(tmpdir(), "sunclaw-plugin-update-probe-"));
   const payloadPath = path.join(root, "payload.json");
   try {
     writeFileSync(payloadPath, `${JSON.stringify(payload, null, 2)}\n`);
@@ -54,9 +54,9 @@ describe("plugin update unchanged Docker E2E", () => {
 
     expect(runner).toContain("scripts/e2e/lib/plugin-update/unchanged-scenario.sh");
     expect(scenario).toContain('node "$probe" seed');
-    expect(probe).toContain("writeJson(process.env.OPENCLAW_CONFIG_PATH, { plugins: {} });");
+    expect(probe).toContain("writeJson(process.env.SUNCLAW_CONFIG_PATH, { plugins: {} });");
     expect(probe).not.toContain(
-      "writeJson(process.env.OPENCLAW_CONFIG_PATH, { plugins: { installs",
+      "writeJson(process.env.SUNCLAW_CONFIG_PATH, { plugins: { installs",
     );
     expect(probe).toContain("installRecords: {");
     expect(probe).toContain('"lossless-claw": {');
@@ -65,9 +65,9 @@ describe("plugin update unchanged Docker E2E", () => {
   it("bounds the update command and prints diagnostics on hangs", () => {
     const script = readFileSync(PLUGIN_UPDATE_SCENARIO_SCRIPT, "utf8");
 
-    expect(script).toContain("OPENCLAW_PLUGIN_UPDATE_TIMEOUT_SECONDS");
+    expect(script).toContain("SUNCLAW_PLUGIN_UPDATE_TIMEOUT_SECONDS");
     expect(script).toContain(
-      'openclaw_e2e_maybe_timeout "${plugin_update_timeout_seconds}s" node "$entry" plugins update',
+      'sunclaw_e2e_maybe_timeout "${plugin_update_timeout_seconds}s" node "$entry" plugins update',
     );
     expect(script).not.toMatch(
       /^\s*timeout "\$\{plugin_update_timeout_seconds\}s" node "\$entry"/mu,
@@ -79,27 +79,27 @@ describe("plugin update unchanged Docker E2E", () => {
   it("waits for the local registry process during cleanup", () => {
     const script = readFileSync(PLUGIN_UPDATE_SCENARIO_SCRIPT, "utf8");
 
-    expect(script).toContain('openclaw_e2e_stop_process "${registry_pid:-}"');
+    expect(script).toContain('sunclaw_e2e_stop_process "${registry_pid:-}"');
     expect(script).not.toContain('kill "$registry_pid"');
   });
 
   it("bounds corrupt plugin update commands and prints diagnostics on hangs", () => {
     const script = readFileSync(CORRUPT_UPDATE_SCENARIO_SCRIPT, "utf8");
 
-    expect(script).toContain("OPENCLAW_UPDATE_CORRUPT_PLUGIN_TIMEOUT_SECONDS");
+    expect(script).toContain("SUNCLAW_UPDATE_CORRUPT_PLUGIN_TIMEOUT_SECONDS");
     expect(
-      script.match(/openclaw_e2e_maybe_timeout "\$\{update_timeout_seconds\}s" \\/gu)?.length,
+      script.match(/sunclaw_e2e_maybe_timeout "\$\{update_timeout_seconds\}s" \\/gu)?.length,
     ).toBe(2);
     expect(script).toContain("--channel beta");
-    expect(script).toContain("OPENCLAW_UPDATE_POST_CORE=1");
+    expect(script).toContain("SUNCLAW_UPDATE_POST_CORE=1");
     expect(script).not.toContain(
-      'node "$entry" update --channel beta --tag "${OPENCLAW_CURRENT_PACKAGE_TGZ',
+      'node "$entry" update --channel beta --tag "${SUNCLAW_CURRENT_PACKAGE_TGZ',
     );
     expect(script).toContain(
-      "openclaw update failed or timed out after ${update_timeout_seconds}s",
+      "sunclaw update failed or timed out after ${update_timeout_seconds}s",
     );
     expect(script).toContain(
-      "updated OpenClaw entry failed or timed out after ${update_timeout_seconds}s",
+      "updated SunClaw entry failed or timed out after ${update_timeout_seconds}s",
     );
   });
 
@@ -111,7 +111,7 @@ describe("plugin update unchanged Docker E2E", () => {
           {
             pluginId: CORRUPT_PLUGIN_ID,
             status: "skipped",
-            message: `Disabled "${CORRUPT_PLUGIN_ID}" after plugin update failure; OpenClaw will continue without it. Failed to update ${CORRUPT_PLUGIN_ID}: registry timeout`,
+            message: `Disabled "${CORRUPT_PLUGIN_ID}" after plugin update failure; SunClaw will continue without it. Failed to update ${CORRUPT_PLUGIN_ID}: registry timeout`,
           },
         ],
       },
@@ -131,8 +131,8 @@ describe("plugin update unchanged Docker E2E", () => {
             message:
               `Plugin "${CORRUPT_PLUGIN_ID}" could not be processed after the core update: ` +
               disabledAfterFailure.npm.outcomes[0].message +
-              " Run openclaw doctor --fix to attempt automatic repair. " +
-              `Run openclaw plugins inspect ${CORRUPT_PLUGIN_ID} --runtime --json for details.`,
+              " Run sunclaw doctor --fix to attempt automatic repair. " +
+              `Run sunclaw plugins inspect ${CORRUPT_PLUGIN_ID} --runtime --json for details.`,
           },
         ],
       }),

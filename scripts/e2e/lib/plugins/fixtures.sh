@@ -1,11 +1,11 @@
-OPENCLAW_PLUGINS_FIXTURE_PID_FILES=()
-OPENCLAW_PLUGINS_FIXTURE_EXIT_TRAP_INSTALLED=0
-OPENCLAW_PLUGINS_FIXTURE_PREVIOUS_EXIT_ACTION=""
+SUNCLAW_PLUGINS_FIXTURE_PID_FILES=()
+SUNCLAW_PLUGINS_FIXTURE_EXIT_TRAP_INSTALLED=0
+SUNCLAW_PLUGINS_FIXTURE_PREVIOUS_EXIT_ACTION=""
 
-openclaw_plugins_cleanup_fixture_servers() {
+sunclaw_plugins_cleanup_fixture_servers() {
   local pid_file
   local pid
-  for pid_file in "${OPENCLAW_PLUGINS_FIXTURE_PID_FILES[@]:-}"; do
+  for pid_file in "${SUNCLAW_PLUGINS_FIXTURE_PID_FILES[@]:-}"; do
     [[ -f "$pid_file" ]] || continue
     pid="$(cat "$pid_file" 2>/dev/null || true)"
     if [[ "$pid" =~ ^[0-9]+$ ]]; then
@@ -15,34 +15,34 @@ openclaw_plugins_cleanup_fixture_servers() {
   done
 }
 
-openclaw_plugins_register_fixture_pid_file() {
+sunclaw_plugins_register_fixture_pid_file() {
   local pid_file="$1"
-  OPENCLAW_PLUGINS_FIXTURE_PID_FILES+=("$pid_file")
-  openclaw_plugins_install_fixture_cleanup_trap
+  SUNCLAW_PLUGINS_FIXTURE_PID_FILES+=("$pid_file")
+  sunclaw_plugins_install_fixture_cleanup_trap
 }
 
-openclaw_plugins_install_fixture_cleanup_trap() {
-  if [[ "${OPENCLAW_PLUGINS_FIXTURE_EXIT_TRAP_INSTALLED:-0}" = "1" ]]; then
+sunclaw_plugins_install_fixture_cleanup_trap() {
+  if [[ "${SUNCLAW_PLUGINS_FIXTURE_EXIT_TRAP_INSTALLED:-0}" = "1" ]]; then
     return
   fi
 
   local existing_trap
   existing_trap="$(trap -p EXIT || true)"
-  if [[ -n "$existing_trap" && "$existing_trap" != *openclaw_plugins_fixture_exit_trap* ]]; then
+  if [[ -n "$existing_trap" && "$existing_trap" != *sunclaw_plugins_fixture_exit_trap* ]]; then
     local existing_action="${existing_trap#trap -- }"
     existing_action="${existing_action% EXIT}"
-    eval "OPENCLAW_PLUGINS_FIXTURE_PREVIOUS_EXIT_ACTION=$existing_action"
+    eval "SUNCLAW_PLUGINS_FIXTURE_PREVIOUS_EXIT_ACTION=$existing_action"
   fi
 
-  OPENCLAW_PLUGINS_FIXTURE_EXIT_TRAP_INSTALLED=1
-  trap openclaw_plugins_fixture_exit_trap EXIT
+  SUNCLAW_PLUGINS_FIXTURE_EXIT_TRAP_INSTALLED=1
+  trap sunclaw_plugins_fixture_exit_trap EXIT
 }
 
-openclaw_plugins_fixture_exit_trap() {
+sunclaw_plugins_fixture_exit_trap() {
   local status="$?"
-  openclaw_plugins_cleanup_fixture_servers
-  if [[ -n "${OPENCLAW_PLUGINS_FIXTURE_PREVIOUS_EXIT_ACTION:-}" ]]; then
-    eval "$OPENCLAW_PLUGINS_FIXTURE_PREVIOUS_EXIT_ACTION"
+  sunclaw_plugins_cleanup_fixture_servers
+  if [[ -n "${SUNCLAW_PLUGINS_FIXTURE_PREVIOUS_EXIT_ACTION:-}" ]]; then
+    eval "$SUNCLAW_PLUGINS_FIXTURE_PREVIOUS_EXIT_ACTION"
   fi
   exit "$status"
 }
@@ -150,7 +150,7 @@ import fs from "node:fs";
 
 const packageJsonPath = process.argv[2];
 const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
-packageJson.openclaw.extensions = ["./index.js", " "];
+packageJson.sunclaw.extensions = ["./index.js", " "];
 fs.writeFileSync(packageJsonPath, `${JSON.stringify(packageJson, null, 2)}\n`, "utf8");
 NODE
   tar -czf "$output_tgz" -C "$pack_dir" package
@@ -170,7 +170,7 @@ start_npm_fixture_registry() {
   node scripts/e2e/lib/plugins/npm-registry-server.mjs "$server_port_file" "$package_name" "$version" "$tarball" "$@" >"$server_log" 2>&1 &
   local server_pid="$!"
   echo "$server_pid" >"$server_pid_file"
-  openclaw_plugins_register_fixture_pid_file "$server_pid_file"
+  sunclaw_plugins_register_fixture_pid_file "$server_pid_file"
 
   for _ in $(seq 1 100); do
     if [[ -s "$server_port_file" ]]; then

@@ -8,13 +8,13 @@ import {
   type MessageReceipt,
   type MessageReceiptPartKind,
   type MessageReceiptSourceResult,
-} from "openclaw/plugin-sdk/channel-outbound";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { resolveMarkdownTableMode } from "openclaw/plugin-sdk/markdown-table-runtime";
-import { kindFromMime, resolveOutboundAttachmentFromUrl } from "openclaw/plugin-sdk/media-runtime";
-import { requireRuntimeConfig } from "openclaw/plugin-sdk/plugin-config-runtime";
-import { convertMarkdownTables } from "openclaw/plugin-sdk/text-chunking";
-import { stripInlineDirectiveTagsForDelivery } from "openclaw/plugin-sdk/text-chunking";
+} from "sunclaw/plugin-sdk/channel-outbound";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import { resolveMarkdownTableMode } from "sunclaw/plugin-sdk/markdown-table-runtime";
+import { kindFromMime, resolveOutboundAttachmentFromUrl } from "sunclaw/plugin-sdk/media-runtime";
+import { requireRuntimeConfig } from "sunclaw/plugin-sdk/plugin-config-runtime";
+import { convertMarkdownTables } from "sunclaw/plugin-sdk/text-chunking";
+import { stripInlineDirectiveTagsForDelivery } from "sunclaw/plugin-sdk/text-chunking";
 import { resolveIMessageAccount, type ResolvedIMessageAccount } from "./accounts.js";
 import {
   appendIMessageApprovalReactionHintForOutboundMessage,
@@ -51,7 +51,7 @@ type IMessageSendOpts = {
   timeoutMs?: number;
   chatId?: number;
   client?: IMessageRpcClient;
-  config: OpenClawConfig;
+  config: SunClawConfig;
   account?: ResolvedIMessageAccount;
   resolveAttachmentImpl?: (
     mediaUrl: string,

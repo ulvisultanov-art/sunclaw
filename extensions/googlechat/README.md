@@ -1,11 +1,11 @@
-# OpenClaw Google Chat
+# SunClaw Google Chat
 
-Official OpenClaw channel plugin for Google Chat spaces and direct messages.
+Official SunClaw channel plugin for Google Chat spaces and direct messages.
 
-Install from OpenClaw:
+Install from SunClaw:
 
 ```bash
-openclaw plugin add @openclaw/googlechat
+sunclaw plugin add @sunclaw/googlechat
 ```
 
-Configure the Google Chat app credentials and allowed spaces in OpenClaw. The plugin lets agents receive Google Chat events and reply through the configured app.
+Configure the Google Chat app credentials and allowed spaces in SunClaw. The plugin lets agents receive Google Chat events and reply through the configured app.

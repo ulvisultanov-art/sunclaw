@@ -8,13 +8,13 @@ import {
 import { createScriptTestHarness } from "./test-helpers.js";
 
 const { createTempDir } = createScriptTestHarness();
-const originalOpenClawCodexRepo = process.env.OPENCLAW_CODEX_REPO;
+const originalSunClawCodexRepo = process.env.SUNCLAW_CODEX_REPO;
 
 afterEach(() => {
-  if (originalOpenClawCodexRepo === undefined) {
-    delete process.env.OPENCLAW_CODEX_REPO;
+  if (originalSunClawCodexRepo === undefined) {
+    delete process.env.SUNCLAW_CODEX_REPO;
   } else {
-    process.env.OPENCLAW_CODEX_REPO = originalOpenClawCodexRepo;
+    process.env.SUNCLAW_CODEX_REPO = originalSunClawCodexRepo;
   }
 });
 
@@ -42,11 +42,11 @@ describe("codex app-server protocol source resolver", () => {
     });
   });
 
-  it("uses OPENCLAW_CODEX_REPO when provided", async () => {
-    const root = createTempDir("openclaw-protocol-source-root-");
-    const codexRepo = createTempDir("openclaw-protocol-source-codex-");
+  it("uses SUNCLAW_CODEX_REPO when provided", async () => {
+    const root = createTempDir("sunclaw-protocol-source-root-");
+    const codexRepo = createTempDir("sunclaw-protocol-source-codex-");
     createProtocolSchema(codexRepo);
-    process.env.OPENCLAW_CODEX_REPO = codexRepo;
+    process.env.SUNCLAW_CODEX_REPO = codexRepo;
 
     await expect(resolveCodexAppServerProtocolSource(root)).resolves.toEqual({
       codexRepo,
@@ -55,20 +55,20 @@ describe("codex app-server protocol source resolver", () => {
   });
 
   it("finds the primary checkout sibling from a git worktree", async () => {
-    const parentDir = createTempDir("openclaw-protocol-source-parent-");
-    const primaryOpenClaw = path.join(parentDir, "openclaw");
+    const parentDir = createTempDir("sunclaw-protocol-source-parent-");
+    const primarySunClaw = path.join(parentDir, "sunclaw");
     const codexRepo = path.join(parentDir, "codex");
-    const worktreeRoot = createTempDir("openclaw-protocol-source-worktree-");
-    fs.mkdirSync(path.join(primaryOpenClaw, ".git", "worktrees", "codex-harness"), {
+    const worktreeRoot = createTempDir("sunclaw-protocol-source-worktree-");
+    fs.mkdirSync(path.join(primarySunClaw, ".git", "worktrees", "codex-harness"), {
       recursive: true,
     });
     fs.mkdirSync(worktreeRoot, { recursive: true });
     fs.writeFileSync(
       path.join(worktreeRoot, ".git"),
-      `gitdir: ${path.join(primaryOpenClaw, ".git", "worktrees", "codex-harness")}\n`,
+      `gitdir: ${path.join(primarySunClaw, ".git", "worktrees", "codex-harness")}\n`,
     );
     createProtocolSchema(codexRepo);
-    delete process.env.OPENCLAW_CODEX_REPO;
+    delete process.env.SUNCLAW_CODEX_REPO;
 
     await expect(resolveCodexAppServerProtocolSource(worktreeRoot)).resolves.toEqual({
       codexRepo,

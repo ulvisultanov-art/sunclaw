@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { emptyPluginConfigSchema } from "../plugins/config-schema.js";
 import type {
   AnyAgentTool,
@@ -15,22 +15,22 @@ import type {
   MigrationProviderContext,
   MigrationProviderPlugin,
   MigrationSummary,
-  OpenClawPluginApi,
-  OpenClawPluginCommandDefinition,
-  OpenClawPluginConfigSchema,
-  OpenClawPluginDefinition,
-  OpenClawPluginHttpRouteHandler,
-  OpenClawPluginNodeHostCommand,
-  OpenClawPluginNodeInvokePolicy,
-  OpenClawPluginNodeInvokePolicyContext,
-  OpenClawPluginNodeInvokePolicyResult,
-  OpenClawPluginReloadRegistration,
-  OpenClawPluginSecurityAuditCollector,
-  OpenClawPluginSecurityAuditContext,
-  OpenClawPluginService,
-  OpenClawPluginServiceContext,
-  OpenClawPluginToolContext,
-  OpenClawPluginToolFactory,
+  SunClawPluginApi,
+  SunClawPluginCommandDefinition,
+  SunClawPluginConfigSchema,
+  SunClawPluginDefinition,
+  SunClawPluginHttpRouteHandler,
+  SunClawPluginNodeHostCommand,
+  SunClawPluginNodeInvokePolicy,
+  SunClawPluginNodeInvokePolicyContext,
+  SunClawPluginNodeInvokePolicyResult,
+  SunClawPluginReloadRegistration,
+  SunClawPluginSecurityAuditCollector,
+  SunClawPluginSecurityAuditContext,
+  SunClawPluginService,
+  SunClawPluginServiceContext,
+  SunClawPluginToolContext,
+  SunClawPluginToolFactory,
   PluginLogger,
   ProviderAugmentModelCatalogContext,
   ProviderAuthContext,
@@ -85,8 +85,8 @@ import type {
   ProviderWrapStreamFnContext,
   UnifiedModelCatalogProviderContext,
   UnifiedModelCatalogProviderPlugin,
-  OpenClawGatewayDiscoveryAdvertiseContext,
-  OpenClawGatewayDiscoveryService,
+  SunClawGatewayDiscoveryAdvertiseContext,
+  SunClawGatewayDiscoveryService,
   SpeechProviderPlugin,
   PluginCommandContext,
   PluginCommandResult,
@@ -137,16 +137,16 @@ export type {
   MigrationProviderContext,
   MigrationProviderPlugin,
   MigrationSummary,
-  OpenClawPluginApi,
-  OpenClawPluginNodeHostCommand,
-  OpenClawPluginNodeInvokePolicy,
-  OpenClawPluginNodeInvokePolicyContext,
-  OpenClawPluginNodeInvokePolicyResult,
-  OpenClawPluginReloadRegistration,
-  OpenClawPluginSecurityAuditCollector,
-  OpenClawPluginSecurityAuditContext,
-  OpenClawPluginToolContext,
-  OpenClawPluginToolFactory,
+  SunClawPluginApi,
+  SunClawPluginNodeHostCommand,
+  SunClawPluginNodeInvokePolicy,
+  SunClawPluginNodeInvokePolicyContext,
+  SunClawPluginNodeInvokePolicyResult,
+  SunClawPluginReloadRegistration,
+  SunClawPluginSecurityAuditCollector,
+  SunClawPluginSecurityAuditContext,
+  SunClawPluginToolContext,
+  SunClawPluginToolFactory,
   PluginCommandContext,
   PluginCommandResult,
   PluginAgentEventEmitParams,
@@ -178,8 +178,8 @@ export type {
   PluginSessionExtensionProjection,
   PluginToolMetadataRegistration,
   PluginTrustedToolPolicyRegistration,
-  OpenClawPluginConfigSchema,
-  OpenClawPluginHttpRouteHandler,
+  SunClawPluginConfigSchema,
+  SunClawPluginHttpRouteHandler,
   ProviderDiscoveryContext,
   ProviderCatalogContext,
   ProviderCatalogResult,
@@ -229,17 +229,17 @@ export type {
   ProviderWrapStreamFnContext,
   UnifiedModelCatalogProviderContext,
   UnifiedModelCatalogProviderPlugin,
-  OpenClawGatewayDiscoveryAdvertiseContext,
-  OpenClawGatewayDiscoveryService,
-  OpenClawPluginService,
-  OpenClawPluginServiceContext,
+  SunClawGatewayDiscoveryAdvertiseContext,
+  SunClawGatewayDiscoveryService,
+  SunClawPluginService,
+  SunClawPluginServiceContext,
   ProviderAuthContext,
   ProviderAuthDoctorHintContext,
   ProviderAuthMethodNonInteractiveContext,
   ProviderAuthMethod,
   ProviderAuthResult,
-  OpenClawPluginCommandDefinition,
-  OpenClawPluginDefinition,
+  SunClawPluginCommandDefinition,
+  SunClawPluginDefinition,
   PluginLogger,
 };
 export type {
@@ -258,8 +258,8 @@ export type {
   UnifiedModelCatalogEntry,
   UnifiedModelCatalogKind,
   UnifiedModelCatalogSource,
-} from "@openclaw/model-catalog-core/model-catalog-types";
-export type { OpenClawConfig };
+} from "@sunclaw/model-catalog-core/model-catalog-types";
+export type { SunClawConfig };
 
 export {
   buildJsonPluginConfigSchema,
@@ -273,27 +273,27 @@ type DefinePluginEntryOptions = {
   name: string;
   description: string;
   /**
-   * @deprecated Declare exclusive plugin kind in `openclaw.plugin.json` via
+   * @deprecated Declare exclusive plugin kind in `sunclaw.plugin.json` via
    * manifest `kind`. Runtime-entry `kind` remains only as a compatibility
    * fallback for older plugins.
    */
-  kind?: OpenClawPluginDefinition["kind"];
-  configSchema?: OpenClawPluginConfigSchema | (() => OpenClawPluginConfigSchema);
-  reload?: OpenClawPluginDefinition["reload"];
-  nodeHostCommands?: OpenClawPluginDefinition["nodeHostCommands"];
-  securityAuditCollectors?: OpenClawPluginDefinition["securityAuditCollectors"];
-  register: (api: OpenClawPluginApi) => void;
+  kind?: SunClawPluginDefinition["kind"];
+  configSchema?: SunClawPluginConfigSchema | (() => SunClawPluginConfigSchema);
+  reload?: SunClawPluginDefinition["reload"];
+  nodeHostCommands?: SunClawPluginDefinition["nodeHostCommands"];
+  securityAuditCollectors?: SunClawPluginDefinition["securityAuditCollectors"];
+  register: (api: SunClawPluginApi) => void;
 };
 
-/** Normalized object shape that OpenClaw loads from a plugin entry module. */
+/** Normalized object shape that SunClaw loads from a plugin entry module. */
 type DefinedPluginEntry = {
   id: string;
   name: string;
   description: string;
-  configSchema: OpenClawPluginConfigSchema;
-  register: NonNullable<OpenClawPluginDefinition["register"]>;
+  configSchema: SunClawPluginConfigSchema;
+  register: NonNullable<SunClawPluginDefinition["register"]>;
 } & Pick<
-  OpenClawPluginDefinition,
+  SunClawPluginDefinition,
   "kind" | "reload" | "nodeHostCommands" | "securityAuditCollectors"
 >;
 
@@ -302,7 +302,7 @@ type DefinedPluginEntry = {
  *
  * Use this for provider, tool, command, service, memory, and context-engine
  * plugins. Channel plugins should use `defineChannelPluginEntry(...)` from
- * `openclaw/plugin-sdk/core` so they inherit the channel capability wiring.
+ * `sunclaw/plugin-sdk/core` so they inherit the channel capability wiring.
  */
 export function definePluginEntry({
   id,

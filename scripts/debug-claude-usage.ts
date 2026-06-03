@@ -61,7 +61,7 @@ const parseArgs = (): Args => {
 };
 
 const loadAuthProfiles = (agentId: string) => {
-  const stateRoot = process.env.OPENCLAW_STATE_DIR?.trim() || path.join(os.homedir(), ".openclaw");
+  const stateRoot = process.env.SUNCLAW_STATE_DIR?.trim() || path.join(os.homedir(), ".sunclaw");
   const authPath = path.join(stateRoot, "agents", agentId, "agent", "auth-profiles.json");
   if (!fs.existsSync(authPath)) {
     throw new Error(`Missing: ${authPath}`);
@@ -94,10 +94,10 @@ const pickAnthropicTokens = (store: {
   return found;
 };
 
-const resolveFetchTimeoutMs = (raw = process.env.OPENCLAW_DEBUG_CLAUDE_USAGE_FETCH_TIMEOUT_MS) => {
+const resolveFetchTimeoutMs = (raw = process.env.SUNCLAW_DEBUG_CLAUDE_USAGE_FETCH_TIMEOUT_MS) => {
   return parseStrictIntegerOption({
     fallback: DEFAULT_FETCH_TIMEOUT_MS,
-    label: "OPENCLAW_DEBUG_CLAUDE_USAGE_FETCH_TIMEOUT_MS",
+    label: "SUNCLAW_DEBUG_CLAUDE_USAGE_FETCH_TIMEOUT_MS",
     min: 1,
     raw,
   });
@@ -162,7 +162,7 @@ const fetchAnthropicOAuthUsage = async (token: string, options: FetchOptions = {
         Accept: "application/json",
         "anthropic-version": "2023-06-01",
         "anthropic-beta": "oauth-2025-04-20",
-        "User-Agent": "openclaw-debug",
+        "User-Agent": "sunclaw-debug",
       },
     },
     options,

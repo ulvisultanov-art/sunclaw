@@ -1,13 +1,13 @@
 {
-  "name": "@openclaw/kimi-provider",
+  "name": "@sunclaw/kimi-provider",
   "version": "2026.6.2",
   "private": true,
-  "description": "OpenClaw Kimi provider plugin",
+  "description": "SunClaw Kimi provider plugin",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@sunclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ]

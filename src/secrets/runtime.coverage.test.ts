@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
 import type { AuthProfileStore } from "../agents/auth-profiles.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { SunClawConfig } from "../config/config.js";
 import type {
   PluginOrigin,
   PluginWebFetchProviderEntry,
@@ -22,7 +22,7 @@ function createCoverageWebSearchProvider(params: {
   order: number;
 }): PluginWebSearchProviderEntry {
   const credentialPath = `plugins.entries.${params.pluginId}.config.webSearch.apiKey`;
-  const readConfiguredCredential = (config?: OpenClawConfig): unknown =>
+  const readConfiguredCredential = (config?: SunClawConfig): unknown =>
     (config?.plugins?.entries?.[params.pluginId]?.config as { webSearch?: { apiKey?: unknown } })
       ?.webSearch?.apiKey;
   return {
@@ -56,7 +56,7 @@ function createCoverageWebFetchProvider(params: {
   envVar: string;
 }): PluginWebFetchProviderEntry {
   const credentialPath = `plugins.entries.${params.pluginId}.config.webFetch.apiKey`;
-  const readConfiguredCredential = (config?: OpenClawConfig): unknown =>
+  const readConfiguredCredential = (config?: SunClawConfig): unknown =>
     (config?.plugins?.entries?.[params.pluginId]?.config as { webFetch?: { apiKey?: unknown } })
       ?.webFetch?.apiKey;
   return {
@@ -190,7 +190,7 @@ vi.mock("../plugins/web-provider-public-artifacts.explicit.js", () => ({
 
 type SecretRegistryEntry = {
   id: string;
-  configFile: "openclaw.json" | "auth-profiles.json";
+  configFile: "sunclaw.json" | "auth-profiles.json";
   pathPattern: string;
   refPathPattern?: string;
   secretShape: "secret_input" | "sibling_ref";
@@ -201,7 +201,7 @@ type SecretRegistryEntry = {
 type SecretRefCredentialMatrix = {
   entries: Array<{
     id: string;
-    configFile: "openclaw.json" | "auth-profiles.json";
+    configFile: "sunclaw.json" | "auth-profiles.json";
     path: string;
     refPath?: string;
     secretShape: SecretRegistryEntry["secretShape"];
@@ -230,11 +230,11 @@ function loadCoverageRegistryEntries(): SecretRegistryEntry[] {
 }
 
 const COVERAGE_REGISTRY_ENTRIES = loadCoverageRegistryEntries();
-const DEBUG_COVERAGE_BATCHES = process.env.OPENCLAW_DEBUG_RUNTIME_COVERAGE === "1";
+const DEBUG_COVERAGE_BATCHES = process.env.SUNCLAW_DEBUG_RUNTIME_COVERAGE === "1";
 const RUNTIME_COVERAGE_TEST_TIMEOUT_MS = 240_000;
 const COVERAGE_LOADABLE_PLUGIN_ORIGINS =
   buildCoverageLoadablePluginOrigins(COVERAGE_REGISTRY_ENTRIES);
-const PLUGIN_OWNED_OPENCLAW_COVERAGE_EXCLUSIONS = new Set([
+const PLUGIN_OWNED_SUNCLAW_COVERAGE_EXCLUSIONS = new Set([
   "channels.googlechat.accounts.*.serviceAccount",
   // Doctor migrates legacy web search config into plugin-owned webSearch config.
   "tools.web.search.apiKey",
@@ -248,22 +248,22 @@ let collectConfigAssignments: typeof import("./runtime-config-collectors.js").co
 let createResolverContext: typeof import("./runtime-shared.js").createResolverContext;
 let resolveSecretRefValues: typeof import("./resolve.js").resolveSecretRefValues;
 let resolveRuntimeWebTools: typeof import("./runtime-web-tools.js").resolveRuntimeWebTools;
-const previousBundledPluginsDir = process.env.OPENCLAW_BUNDLED_PLUGINS_DIR;
-const previousTrustBundledPluginsDir = process.env.OPENCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR;
+const previousBundledPluginsDir = process.env.SUNCLAW_BUNDLED_PLUGINS_DIR;
+const previousTrustBundledPluginsDir = process.env.SUNCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR;
 
-process.env.OPENCLAW_BUNDLED_PLUGINS_DIR ??= "extensions";
-process.env.OPENCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR ??= "1";
+process.env.SUNCLAW_BUNDLED_PLUGINS_DIR ??= "extensions";
+process.env.SUNCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR ??= "1";
 
 afterAll(() => {
   if (previousBundledPluginsDir === undefined) {
-    delete process.env.OPENCLAW_BUNDLED_PLUGINS_DIR;
+    delete process.env.SUNCLAW_BUNDLED_PLUGINS_DIR;
   } else {
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = previousBundledPluginsDir;
+    process.env.SUNCLAW_BUNDLED_PLUGINS_DIR = previousBundledPluginsDir;
   }
   if (previousTrustBundledPluginsDir === undefined) {
-    delete process.env.OPENCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR;
+    delete process.env.SUNCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR;
   } else {
-    process.env.OPENCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR = previousTrustBundledPluginsDir;
+    process.env.SUNCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR = previousTrustBundledPluginsDir;
   }
 });
 
@@ -455,19 +455,19 @@ function batchUsesRuntimeWebToolsOnly(batch: readonly SecretRegistryEntry[]): bo
   );
 }
 
-function collectOpenClawCoverageEntries(options: {
+function collectSunClawCoverageEntries(options: {
   includePluginEntries: boolean;
 }): SecretRegistryEntry[] {
   return COVERAGE_REGISTRY_ENTRIES.filter(
     (entry) =>
-      entry.configFile === "openclaw.json" &&
+      entry.configFile === "sunclaw.json" &&
       entry.id.startsWith("plugins.entries.") === options.includePluginEntries &&
-      !PLUGIN_OWNED_OPENCLAW_COVERAGE_EXCLUSIONS.has(entry.id),
+      !PLUGIN_OWNED_SUNCLAW_COVERAGE_EXCLUSIONS.has(entry.id),
   );
 }
 
-function applyConfigForOpenClawTarget(
-  config: OpenClawConfig,
+function applyConfigForSunClawTarget(
+  config: SunClawConfig,
   entry: SecretRegistryEntry,
   envId: string,
   wildcardToken: string,
@@ -651,7 +651,7 @@ function applyAuthStoreTarget(
 }
 
 async function prepareConfigCoverageSnapshot(params: {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   env: NodeJS.ProcessEnv;
   loadablePluginOrigins?: ReadonlyMap<string, PluginOrigin>;
   includeRuntimeWebTools?: boolean;
@@ -704,7 +704,7 @@ async function prepareConfigCoverageSnapshot(params: {
 }
 
 async function prepareAuthCoverageSnapshot(params: {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   env: NodeJS.ProcessEnv;
   agentDirs: string[];
   loadAuthStore: (agentDir?: string) => AuthProfileStore;
@@ -747,20 +747,20 @@ async function prepareAuthCoverageSnapshot(params: {
   };
 }
 
-async function expectOpenClawCoverageBatchResolved(
+async function expectSunClawCoverageBatchResolved(
   label: string,
   batch: readonly SecretRegistryEntry[],
 ): Promise<void> {
   logCoverageBatch(label, batch);
-  const config = {} as OpenClawConfig;
+  const config = {} as SunClawConfig;
   const env: Record<string, string> = {};
   for (const [index, entry] of batch.entries()) {
-    const envId = `OPENCLAW_SECRET_TARGET_${entry.id}`;
+    const envId = `SUNCLAW_SECRET_TARGET_${entry.id}`;
     const runtimeEnvId = resolveCoverageEnvId(entry, envId);
     const expectedValue = `resolved-${entry.id}`;
     const wildcardToken = resolveCoverageWildcardToken(index);
     env[runtimeEnvId] = expectedValue;
-    applyConfigForOpenClawTarget(config, entry, envId, wildcardToken);
+    applyConfigForSunClawTarget(config, entry, envId, wildcardToken);
   }
   const snapshot = await prepareConfigCoverageSnapshot({
     config,
@@ -778,11 +778,11 @@ async function expectOpenClawCoverageBatchResolved(
   }
 }
 
-const OPENCLAW_CORE_COVERAGE_BATCHES = buildCoverageBatches(
-  collectOpenClawCoverageEntries({ includePluginEntries: false }),
+const SUNCLAW_CORE_COVERAGE_BATCHES = buildCoverageBatches(
+  collectSunClawCoverageEntries({ includePluginEntries: false }),
 );
-const OPENCLAW_PLUGIN_COVERAGE_BATCHES = buildCoverageBatches(
-  collectOpenClawCoverageEntries({ includePluginEntries: true }),
+const SUNCLAW_PLUGIN_COVERAGE_BATCHES = buildCoverageBatches(
+  collectSunClawCoverageEntries({ includePluginEntries: true }),
 );
 const AUTH_PROFILE_COVERAGE_BATCHES = buildCoverageBatches(
   COVERAGE_REGISTRY_ENTRIES.filter((entry) => entry.configFile === "auth-profiles.json"),
@@ -817,29 +817,29 @@ describe("secrets runtime target coverage", () => {
     ({ collectAuthStoreAssignments } = authCollectors);
     ({ resolveRuntimeWebTools } = runtimeWebTools);
 
-    const googleChatBatch = OPENCLAW_CORE_COVERAGE_BATCHES.find((batch) =>
+    const googleChatBatch = SUNCLAW_CORE_COVERAGE_BATCHES.find((batch) =>
       batch.some((entry) => entry.id === "channels.googlechat.serviceAccount"),
     );
     if (googleChatBatch) {
-      await expectOpenClawCoverageBatchResolved("openclaw.json core", googleChatBatch);
+      await expectSunClawCoverageBatchResolved("sunclaw.json core", googleChatBatch);
     }
   });
 
-  describe("openclaw.json core and channel registry targets", () => {
-    test.each(OPENCLAW_CORE_COVERAGE_BATCHES.map(toCoverageBatchCase))(
+  describe("sunclaw.json core and channel registry targets", () => {
+    test.each(SUNCLAW_CORE_COVERAGE_BATCHES.map(toCoverageBatchCase))(
       "handles $name",
       async ({ batch }) => {
-        await expectOpenClawCoverageBatchResolved("openclaw.json core", batch);
+        await expectSunClawCoverageBatchResolved("sunclaw.json core", batch);
       },
       RUNTIME_COVERAGE_TEST_TIMEOUT_MS,
     );
   });
 
-  describe("openclaw.json plugin registry targets", () => {
-    test.each(OPENCLAW_PLUGIN_COVERAGE_BATCHES.map(toCoverageBatchCase))(
+  describe("sunclaw.json plugin registry targets", () => {
+    test.each(SUNCLAW_PLUGIN_COVERAGE_BATCHES.map(toCoverageBatchCase))(
       "handles $name",
       async ({ batch }) => {
-        await expectOpenClawCoverageBatchResolved("openclaw.json plugins", batch);
+        await expectSunClawCoverageBatchResolved("sunclaw.json plugins", batch);
       },
       RUNTIME_COVERAGE_TEST_TIMEOUT_MS,
     );
@@ -856,14 +856,14 @@ describe("secrets runtime target coverage", () => {
           profiles: {},
         };
         for (const [index, entry] of batch.entries()) {
-          const envId = `OPENCLAW_AUTH_SECRET_TARGET_${entry.id}`;
+          const envId = `SUNCLAW_AUTH_SECRET_TARGET_${entry.id}`;
           env[envId] = `resolved-${entry.id}`;
           applyAuthStoreTarget(authStore, entry, envId, resolveCoverageWildcardToken(index));
         }
         const snapshot = await prepareAuthCoverageSnapshot({
-          config: {} as OpenClawConfig,
+          config: {} as SunClawConfig,
           env,
-          agentDirs: ["/tmp/openclaw-agent-main"],
+          agentDirs: ["/tmp/sunclaw-agent-main"],
           loadAuthStore: () => authStore,
         });
         const resolvedStore = snapshot.authStores[0]?.store;

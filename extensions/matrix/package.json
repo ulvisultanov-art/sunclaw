@@ -1,10 +1,10 @@
 {
-  "name": "@openclaw/matrix",
+  "name": "@sunclaw/matrix",
   "version": "2026.6.2",
-  "description": "OpenClaw Matrix channel plugin for rooms and direct messages.",
+  "description": "SunClaw Matrix channel plugin for rooms and direct messages.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/ulvisultanov-art/sunclaw"
   },
   "type": "module",
   "dependencies": {
@@ -18,18 +18,18 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "2026.5.28"
+    "@sunclaw/plugin-sdk": "workspace:*",
+    "sunclaw": "2026.5.28"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.6.2"
+    "sunclaw": ">=2026.6.2"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "sunclaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ],
@@ -81,8 +81,8 @@
       }
     },
     "install": {
-      "clawhubSpec": "clawhub:@openclaw/matrix",
-      "npmSpec": "@openclaw/matrix",
+      "clawhubSpec": "clawhub:@sunclaw/matrix",
+      "npmSpec": "@sunclaw/matrix",
       "defaultChoice": "clawhub",
       "minHostVersion": ">=2026.4.10",
       "allowInvalidConfigRecovery": true
@@ -91,7 +91,7 @@
       "pluginApi": ">=2026.6.2"
     },
     "build": {
-      "openclawVersion": "2026.6.2"
+      "sunclawVersion": "2026.6.2"
     },
     "release": {
       "publishToClawHub": true,

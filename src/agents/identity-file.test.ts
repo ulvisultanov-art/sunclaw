@@ -22,7 +22,7 @@ describe("parseIdentityMarkdown", () => {
 - **Creature:** Robot
 - **Vibe:** Warm
 - **Emoji:** :robot:
-- **Avatar:** avatars/openclaw.png
+- **Avatar:** avatars/sunclaw.png
 `;
     const parsed = parseIdentityMarkdown(content);
     expect(parsed).toEqual({
@@ -30,7 +30,7 @@ describe("parseIdentityMarkdown", () => {
       creature: "Robot",
       vibe: "Warm",
       emoji: ":robot:",
-      avatar: "avatars/openclaw.png",
+      avatar: "avatars/sunclaw.png",
     });
   });
 
@@ -38,13 +38,13 @@ describe("parseIdentityMarkdown", () => {
     const content = [
       "- **Name:** `Samantha`",
       "- `Creature`: Robot",
-      "- **`Avatar`**: `avatars/openclaw.png`",
+      "- **`Avatar`**: `avatars/sunclaw.png`",
     ].join("\n");
     const parsed = parseIdentityMarkdown(content);
     expect(parsed).toEqual({
       name: "Samantha",
       creature: "Robot",
-      avatar: "avatars/openclaw.png",
+      avatar: "avatars/sunclaw.png",
     });
   });
 

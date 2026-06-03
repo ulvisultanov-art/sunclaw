@@ -1,5 +1,5 @@
-import type { AgentMessage } from "openclaw/plugin-sdk/agent-core";
-import { SessionManager } from "openclaw/plugin-sdk/agent-sessions";
+import type { AgentMessage } from "sunclaw/plugin-sdk/agent-core";
+import { SessionManager } from "sunclaw/plugin-sdk/agent-sessions";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { MAX_TIMER_TIMEOUT_MS } from "../shared/number-coercion.js";
 import { flushPendingToolResultsAfterIdle } from "./embedded-agent-runner/wait-for-idle-before-flush.js";

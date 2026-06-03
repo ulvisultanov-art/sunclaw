@@ -5,7 +5,7 @@ import { resetPluginRuntimeStateForTest, setActivePluginRegistry } from "../plug
 
 const mocks = vi.hoisted(() => ({
   getCurrentPluginMetadataSnapshot: vi.fn(),
-  loadOpenClawPlugins: vi.fn<typeof import("../plugins/loader.js").loadOpenClawPlugins>(),
+  loadSunClawPlugins: vi.fn<typeof import("../plugins/loader.js").loadSunClawPlugins>(),
 }));
 
 vi.mock("../plugins/current-plugin-metadata-snapshot.js", () => ({
@@ -16,8 +16,8 @@ vi.mock("../plugins/loader.js", async (importOriginal) => {
   const actual = await importOriginal<typeof import("../plugins/loader.js")>();
   return {
     ...actual,
-    loadOpenClawPlugins: (...args: Parameters<typeof mocks.loadOpenClawPlugins>) =>
-      mocks.loadOpenClawPlugins(...args),
+    loadSunClawPlugins: (...args: Parameters<typeof mocks.loadSunClawPlugins>) =>
+      mocks.loadSunClawPlugins(...args),
   };
 });
 
@@ -37,7 +37,7 @@ function createRegistryWithPlugin(pluginId: string): PluginRegistry {
 
 beforeEach(() => {
   mocks.getCurrentPluginMetadataSnapshot.mockReset();
-  mocks.loadOpenClawPlugins.mockReset();
+  mocks.loadSunClawPlugins.mockReset();
 });
 
 afterEach(() => {
@@ -69,7 +69,7 @@ describe("ensureRuntimePluginsLoaded registry reuse", () => {
         pluginIds: ["telegram"],
       },
     });
-    mocks.loadOpenClawPlugins.mockImplementation(() => {
+    mocks.loadSunClawPlugins.mockImplementation(() => {
       throw new Error("dispatch should reuse the active gateway startup registry");
     });
 
@@ -82,6 +82,6 @@ describe("ensureRuntimePluginsLoaded registry reuse", () => {
       config,
       workspaceDir: "/tmp/workspace",
     });
-    expect(mocks.loadOpenClawPlugins).not.toHaveBeenCalled();
+    expect(mocks.loadSunClawPlugins).not.toHaveBeenCalled();
   });
 });

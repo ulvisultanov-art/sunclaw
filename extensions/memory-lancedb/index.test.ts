@@ -18,8 +18,8 @@ import {
   listActiveMemoryPublicArtifacts,
   registerMemoryCapability,
   type MemoryPluginCapability,
-} from "openclaw/plugin-sdk/memory-host-core";
-import { MAX_TIMER_TIMEOUT_MS } from "openclaw/plugin-sdk/number-runtime";
+} from "sunclaw/plugin-sdk/memory-host-core";
+import { MAX_TIMER_TIMEOUT_MS } from "sunclaw/plugin-sdk/number-runtime";
 import { afterEach, describe, test, expect, vi } from "vitest";
 import memoryPlugin, {
   detectCategory,
@@ -155,7 +155,7 @@ async function withMockedOpenAiMemoryPlugin<T>(params: {
     });
 
   vi.resetModules();
-  vi.doMock("openclaw/plugin-sdk/runtime-env", () => ({
+  vi.doMock("sunclaw/plugin-sdk/runtime-env", () => ({
     ensureGlobalUndiciEnvProxyDispatcher: params.ensureGlobalUndiciEnvProxyDispatcher,
   }));
   vi.doMock("openai", () => ({
@@ -171,7 +171,7 @@ async function withMockedOpenAiMemoryPlugin<T>(params: {
     const { default: dynamicMemoryPlugin } = await import("./index.js");
     return await params.run(dynamicMemoryPlugin);
   } finally {
-    vi.doUnmock("openclaw/plugin-sdk/runtime-env");
+    vi.doUnmock("sunclaw/plugin-sdk/runtime-env");
     vi.doUnmock("openai");
     vi.doUnmock("./lancedb-runtime.js");
     vi.resetModules();
@@ -179,7 +179,7 @@ async function withMockedOpenAiMemoryPlugin<T>(params: {
 }
 
 describe("memory plugin e2e", () => {
-  const { getDbPath, getTmpDir } = installTmpDirHarness({ prefix: "openclaw-memory-test-" });
+  const { getDbPath, getTmpDir } = installTmpDirHarness({ prefix: "sunclaw-memory-test-" });
 
   afterEach(() => {
     clearMemoryPluginState();
@@ -548,7 +548,7 @@ describe("memory plugin e2e", () => {
     }));
 
     vi.resetModules();
-    vi.doMock("openclaw/plugin-sdk/memory-core-host-engine-embeddings", () => ({
+    vi.doMock("sunclaw/plugin-sdk/memory-core-host-engine-embeddings", () => ({
       getMemoryEmbeddingProvider,
     }));
     vi.doMock("openai", () => ({
@@ -589,7 +589,7 @@ describe("memory plugin e2e", () => {
             current: () => cfg,
           },
           agent: {
-            resolveAgentDir: vi.fn(() => "/tmp/openclaw-agent"),
+            resolveAgentDir: vi.fn(() => "/tmp/sunclaw-agent"),
           },
         },
         logger: {
@@ -622,7 +622,7 @@ describe("memory plugin e2e", () => {
         "provider options",
       );
       expect(providerOptions.config).toBe(cfg);
-      expect(providerOptions.agentDir).toBe("/tmp/openclaw-agent");
+      expect(providerOptions.agentDir).toBe("/tmp/sunclaw-agent");
       expect(providerOptions.provider).toBe("openai");
       expect(providerOptions.fallback).toBe("none");
       expect(providerOptions.model).toBe("text-embedding-3-small");
@@ -631,7 +631,7 @@ describe("memory plugin e2e", () => {
         signal: expect.any(AbortSignal),
       });
     } finally {
-      vi.doUnmock("openclaw/plugin-sdk/memory-core-host-engine-embeddings");
+      vi.doUnmock("sunclaw/plugin-sdk/memory-core-host-engine-embeddings");
       vi.doUnmock("openai");
       vi.doUnmock("./lancedb-runtime.js");
       vi.resetModules();
@@ -866,7 +866,7 @@ describe("memory plugin e2e", () => {
           const program = new Command();
           (registrar as (params: { program: Command }) => void)({ program });
 
-          await program.parseAsync(["node", "openclaw", "ltm", "list", "--limit", "+03"]);
+          await program.parseAsync(["node", "sunclaw", "ltm", "list", "--limit", "+03"]);
 
           expect(limit).toHaveBeenCalledWith(3);
         } finally {
@@ -1252,7 +1252,7 @@ describe("memory plugin e2e", () => {
     };
 
     vi.resetModules();
-    vi.doMock("openclaw/plugin-sdk/runtime-env", () => ({
+    vi.doMock("sunclaw/plugin-sdk/runtime-env", () => ({
       ensureGlobalUndiciEnvProxyDispatcher,
     }));
     vi.doMock("openai", () => ({
@@ -1340,7 +1340,7 @@ describe("memory plugin e2e", () => {
       expect(result?.prependContext).toContain("I prefer Helix for editing code.");
       expect(logger.info).toHaveBeenCalledWith("memory-lancedb: injecting 1 memories into context");
     } finally {
-      vi.doUnmock("openclaw/plugin-sdk/runtime-env");
+      vi.doUnmock("sunclaw/plugin-sdk/runtime-env");
       vi.doUnmock("openai");
       vi.doUnmock("./lancedb-runtime.js");
       vi.resetModules();
@@ -1382,7 +1382,7 @@ describe("memory plugin e2e", () => {
     };
 
     vi.resetModules();
-    vi.doMock("openclaw/plugin-sdk/runtime-env", () => ({
+    vi.doMock("sunclaw/plugin-sdk/runtime-env", () => ({
       ensureGlobalUndiciEnvProxyDispatcher,
     }));
     vi.doMock("openai", () => ({
@@ -1465,7 +1465,7 @@ describe("memory plugin e2e", () => {
       expect(embeddingsCreate).not.toHaveBeenCalled();
       expect(loadLanceDbModule).not.toHaveBeenCalled();
     } finally {
-      vi.doUnmock("openclaw/plugin-sdk/runtime-env");
+      vi.doUnmock("sunclaw/plugin-sdk/runtime-env");
       vi.doUnmock("openai");
       vi.doUnmock("./lancedb-runtime.js");
       vi.resetModules();
@@ -1507,7 +1507,7 @@ describe("memory plugin e2e", () => {
     };
 
     vi.resetModules();
-    vi.doMock("openclaw/plugin-sdk/runtime-env", () => ({
+    vi.doMock("sunclaw/plugin-sdk/runtime-env", () => ({
       ensureGlobalUndiciEnvProxyDispatcher,
     }));
     vi.doMock("openai", () => ({
@@ -1578,7 +1578,7 @@ describe("memory plugin e2e", () => {
       expect(embeddingsCreate).not.toHaveBeenCalled();
       expect(loadLanceDbModule).not.toHaveBeenCalled();
     } finally {
-      vi.doUnmock("openclaw/plugin-sdk/runtime-env");
+      vi.doUnmock("sunclaw/plugin-sdk/runtime-env");
       vi.doUnmock("openai");
       vi.doUnmock("./lancedb-runtime.js");
       vi.resetModules();
@@ -1608,7 +1608,7 @@ describe("memory plugin e2e", () => {
     }));
 
     vi.resetModules();
-    vi.doMock("openclaw/plugin-sdk/runtime-env", () => ({
+    vi.doMock("sunclaw/plugin-sdk/runtime-env", () => ({
       ensureGlobalUndiciEnvProxyDispatcher,
     }));
     vi.doMock("openai", () => ({
@@ -1685,7 +1685,7 @@ describe("memory plugin e2e", () => {
       expect(memory.importance).toBe(0.7);
       expect(memory.category).toBe("preference");
     } finally {
-      vi.doUnmock("openclaw/plugin-sdk/runtime-env");
+      vi.doUnmock("sunclaw/plugin-sdk/runtime-env");
       vi.doUnmock("openai");
       vi.doUnmock("./lancedb-runtime.js");
       vi.resetModules();
@@ -1732,7 +1732,7 @@ describe("memory plugin e2e", () => {
     };
 
     vi.resetModules();
-    vi.doMock("openclaw/plugin-sdk/runtime-env", () => ({
+    vi.doMock("sunclaw/plugin-sdk/runtime-env", () => ({
       ensureGlobalUndiciEnvProxyDispatcher,
     }));
     vi.doMock("openai", () => ({
@@ -1823,7 +1823,7 @@ describe("memory plugin e2e", () => {
       expect(memory.importance).toBe(0.7);
       expect(memory.category).toBe("preference");
     } finally {
-      vi.doUnmock("openclaw/plugin-sdk/runtime-env");
+      vi.doUnmock("sunclaw/plugin-sdk/runtime-env");
       vi.doUnmock("openai");
       vi.doUnmock("./lancedb-runtime.js");
       vi.resetModules();
@@ -1866,7 +1866,7 @@ describe("memory plugin e2e", () => {
     };
 
     vi.resetModules();
-    vi.doMock("openclaw/plugin-sdk/runtime-env", () => ({
+    vi.doMock("sunclaw/plugin-sdk/runtime-env", () => ({
       ensureGlobalUndiciEnvProxyDispatcher,
     }));
     vi.doMock("openai", () => ({
@@ -1950,7 +1950,7 @@ describe("memory plugin e2e", () => {
       expect(loadLanceDbModule).not.toHaveBeenCalled();
       expect(add).not.toHaveBeenCalled();
     } finally {
-      vi.doUnmock("openclaw/plugin-sdk/runtime-env");
+      vi.doUnmock("sunclaw/plugin-sdk/runtime-env");
       vi.doUnmock("openai");
       vi.doUnmock("./lancedb-runtime.js");
       vi.resetModules();
@@ -1993,7 +1993,7 @@ describe("memory plugin e2e", () => {
     };
 
     vi.resetModules();
-    vi.doMock("openclaw/plugin-sdk/runtime-env", () => ({
+    vi.doMock("sunclaw/plugin-sdk/runtime-env", () => ({
       ensureGlobalUndiciEnvProxyDispatcher,
     }));
     vi.doMock("openai", () => ({
@@ -2065,7 +2065,7 @@ describe("memory plugin e2e", () => {
       expect(loadLanceDbModule).not.toHaveBeenCalled();
       expect(add).not.toHaveBeenCalled();
     } finally {
-      vi.doUnmock("openclaw/plugin-sdk/runtime-env");
+      vi.doUnmock("sunclaw/plugin-sdk/runtime-env");
       vi.doUnmock("openai");
       vi.doUnmock("./lancedb-runtime.js");
       vi.resetModules();
@@ -2100,7 +2100,7 @@ describe("memory plugin e2e", () => {
     }));
 
     vi.resetModules();
-    vi.doMock("openclaw/plugin-sdk/runtime-env", () => ({
+    vi.doMock("sunclaw/plugin-sdk/runtime-env", () => ({
       ensureGlobalUndiciEnvProxyDispatcher,
     }));
     vi.doMock("openai", () => ({
@@ -2164,7 +2164,7 @@ describe("memory plugin e2e", () => {
   }
 
   async function cleanupAutoCaptureCursorHarness() {
-    vi.doUnmock("openclaw/plugin-sdk/runtime-env");
+    vi.doUnmock("sunclaw/plugin-sdk/runtime-env");
     vi.doUnmock("openai");
     vi.doUnmock("./lancedb-runtime.js");
     vi.resetModules();
@@ -2350,7 +2350,7 @@ describe("memory plugin e2e", () => {
     }));
 
     vi.resetModules();
-    vi.doMock("openclaw/plugin-sdk/runtime-env", () => ({
+    vi.doMock("sunclaw/plugin-sdk/runtime-env", () => ({
       ensureGlobalUndiciEnvProxyDispatcher,
     }));
     vi.doMock("openai", () => ({
@@ -2416,7 +2416,7 @@ describe("memory plugin e2e", () => {
         dimensions: 1024,
       });
     } finally {
-      vi.doUnmock("openclaw/plugin-sdk/runtime-env");
+      vi.doUnmock("sunclaw/plugin-sdk/runtime-env");
       vi.doUnmock("openai");
       vi.doUnmock("./lancedb-runtime.js");
       vi.resetModules();
@@ -2447,7 +2447,7 @@ describe("memory plugin e2e", () => {
       });
 
     vi.resetModules();
-    vi.doMock("openclaw/plugin-sdk/runtime-env", () => ({
+    vi.doMock("sunclaw/plugin-sdk/runtime-env", () => ({
       ensureGlobalUndiciEnvProxyDispatcher,
     }));
     vi.doMock("openai", () => ({
@@ -2509,7 +2509,7 @@ describe("memory plugin e2e", () => {
       expect(loadLanceDbModule).toHaveBeenCalledTimes(2);
       expect(embeddingsCreate).toHaveBeenCalledTimes(2);
     } finally {
-      vi.doUnmock("openclaw/plugin-sdk/runtime-env");
+      vi.doUnmock("sunclaw/plugin-sdk/runtime-env");
       vi.doUnmock("openai");
       vi.doUnmock("./lancedb-runtime.js");
       vi.resetModules();
@@ -3185,10 +3185,10 @@ describe("memory plugin e2e", () => {
     );
     expect(
       sanitizeForMemoryCapture(
-        "[Discord OpenClaw #dev channel id:456 +5m] Alice: I prefer dark mode",
+        "[Discord SunClaw #dev channel id:456 +5m] Alice: I prefer dark mode",
       ),
     ).toBe("I prefer dark mode");
-    expect(sanitizeForMemoryCapture("[Telegram OpenClaw id:-100] Alice: I prefer dark mode")).toBe(
+    expect(sanitizeForMemoryCapture("[Telegram SunClaw id:-100] Alice: I prefer dark mode")).toBe(
       "I prefer dark mode",
     );
     expect(sanitizeForMemoryCapture("[Signal Signal Group id:123] Bob (42): ping")).toBe("ping");
@@ -3760,7 +3760,7 @@ describe("memory plugin e2e", () => {
   test("escapeMemoryForPrompt strips media attached annotations before escaping", () => {
     expect(
       escapeMemoryForPrompt(
-        "User sent image [media attached: /Users/alex/.openclaw/media/photo.jpg (image/jpeg)] and said hello",
+        "User sent image [media attached: /Users/alex/.sunclaw/media/photo.jpg (image/jpeg)] and said hello",
       ),
     ).toBe("User sent image and said hello");
 

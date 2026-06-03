@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "./types.openclaw.js";
+import type { SunClawConfig } from "./types.sunclaw.js";
 
 export type PluginAutoEnableCandidate =
   | {
@@ -50,7 +50,7 @@ export type PluginAutoEnableCandidate =
     };
 
 export type PluginAutoEnableResult = {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   changes: string[];
   autoEnabledReasons: Record<string, string[]>;
 };

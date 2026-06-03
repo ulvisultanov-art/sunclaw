@@ -17,7 +17,7 @@ function splitTokens(raw) {
 function sanitizeLabel(value) {
   return (
     String(value)
-      .replace(/^openclaw@/u, "")
+      .replace(/^sunclaw@/u, "")
       .replace(/[^A-Za-z0-9._-]+/g, "-")
       .replace(/^-+|-+$/g, "") || "targeted"
   );
@@ -80,7 +80,7 @@ if (isMain) {
       planTargetedDockerLaneGroups({
         groupSize: process.env.GROUP_SIZE,
         lanes: process.env.LANES,
-        upgradeSurvivorBaselines: process.env.OPENCLAW_UPGRADE_SURVIVOR_BASELINE_SPECS,
+        upgradeSurvivorBaselines: process.env.SUNCLAW_UPGRADE_SURVIVOR_BASELINE_SPECS,
       }),
     ),
   );

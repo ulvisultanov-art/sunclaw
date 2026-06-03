@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/types.js";
+import type { SunClawConfig } from "../config/types.js";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
 import { detectPluginVersionDrift } from "./plugin-version-drift.js";
 
@@ -7,7 +7,7 @@ function npmRecord(
   version: string,
   overrides: Partial<PluginInstallRecord> = {},
 ): PluginInstallRecord {
-  const resolvedName = overrides.resolvedName ?? "@openclaw/whatsapp";
+  const resolvedName = overrides.resolvedName ?? "@sunclaw/whatsapp";
   return {
     source: "npm",
     spec: `${resolvedName}@latest`,
@@ -23,8 +23,8 @@ function clawhubRecord(
 ): PluginInstallRecord {
   return {
     source: "clawhub",
-    spec: "clawhub:@openclaw/whatsapp",
-    clawhubPackage: "@openclaw/whatsapp",
+    spec: "clawhub:@sunclaw/whatsapp",
+    clawhubPackage: "@sunclaw/whatsapp",
     resolvedVersion: version,
     ...overrides,
   };
@@ -36,7 +36,7 @@ describe("detectPluginVersionDrift", () => {
       gatewayVersion: "2026.5.4",
       installRecords: {
         whatsapp: npmRecord("2026.5.4"),
-        discord: npmRecord("2026.5.4", { resolvedName: "@openclaw/discord" }),
+        discord: npmRecord("2026.5.4", { resolvedName: "@sunclaw/discord" }),
       },
     });
 
@@ -49,10 +49,10 @@ describe("detectPluginVersionDrift", () => {
       gatewayVersion: "2026.5.4",
       installRecords: {
         whatsapp: npmRecord("2026.5.3", {
-          resolvedName: "@openclaw/whatsapp",
-          spec: "@openclaw/whatsapp@2026.5.3",
+          resolvedName: "@sunclaw/whatsapp",
+          spec: "@sunclaw/whatsapp@2026.5.3",
         }),
-        discord: npmRecord("2026.5.4", { resolvedName: "@openclaw/discord" }),
+        discord: npmRecord("2026.5.4", { resolvedName: "@sunclaw/discord" }),
       },
     });
 
@@ -62,8 +62,8 @@ describe("detectPluginVersionDrift", () => {
       installedVersion: "2026.5.3",
       gatewayVersion: "2026.5.4",
       source: "npm",
-      packageName: "@openclaw/whatsapp",
-      spec: "@openclaw/whatsapp@2026.5.3",
+      packageName: "@sunclaw/whatsapp",
+      spec: "@sunclaw/whatsapp@2026.5.3",
     });
   });
 
@@ -73,7 +73,7 @@ describe("detectPluginVersionDrift", () => {
       installRecords: {
         whatsapp: npmRecord("2026.5.4"),
         // ...and the inverse direction
-        discord: npmRecord("2026.5.4-1", { resolvedName: "@openclaw/discord" }),
+        discord: npmRecord("2026.5.4-1", { resolvedName: "@sunclaw/discord" }),
       },
     });
 
@@ -97,10 +97,10 @@ describe("detectPluginVersionDrift", () => {
       gatewayVersion: "2026.5.4",
       installRecords: {
         discord: clawhubRecord("2026.5.3", {
-          spec: "clawhub:@openclaw/discord",
-          clawhubPackage: "@openclaw/discord",
+          spec: "clawhub:@sunclaw/discord",
+          clawhubPackage: "@sunclaw/discord",
           clawhubChannel: "official",
-          clawhubUrl: "https://clawhub.ai",
+          clawhubUrl: "https://clawhub.complex.az",
         }),
       },
     });
@@ -140,9 +140,9 @@ describe("detectPluginVersionDrift", () => {
     const result = detectPluginVersionDrift({
       gatewayVersion: "2026.5.4",
       installRecords: {
-        "openclaw-plugin-yuanbao": npmRecord("2.13.1", {
-          resolvedName: "openclaw-plugin-yuanbao",
-          spec: "openclaw-plugin-yuanbao@2.13.1",
+        "sunclaw-plugin-yuanbao": npmRecord("2.13.1", {
+          resolvedName: "sunclaw-plugin-yuanbao",
+          spec: "sunclaw-plugin-yuanbao@2.13.1",
         }),
       },
     });
@@ -154,9 +154,9 @@ describe("detectPluginVersionDrift", () => {
     const result = detectPluginVersionDrift({
       gatewayVersion: "2026.5.7",
       installRecords: {
-        "wecom-openclaw-plugin": npmRecord("2026.5.6", {
-          resolvedName: "@wecom/wecom-openclaw-plugin",
-          spec: "@wecom/wecom-openclaw-plugin@2026.5.6",
+        "wecom-sunclaw-plugin": npmRecord("2026.5.6", {
+          resolvedName: "@wecom/wecom-sunclaw-plugin",
+          spec: "@wecom/wecom-sunclaw-plugin@2026.5.6",
         }),
       },
     });
@@ -173,19 +173,19 @@ describe("detectPluginVersionDrift", () => {
         // bump alone.
         archive: {
           source: "archive",
-          resolvedName: "@openclaw/whatsapp",
+          resolvedName: "@sunclaw/whatsapp",
           resolvedVersion: "2026.5.3",
-          spec: "@openclaw/whatsapp@archive",
+          spec: "@sunclaw/whatsapp@archive",
         },
         local: {
           source: "path",
-          resolvedName: "@openclaw/whatsapp",
+          resolvedName: "@sunclaw/whatsapp",
           resolvedVersion: "2026.5.3",
           spec: "/tmp/local-plugin",
         },
         forked: {
           source: "git",
-          resolvedName: "@openclaw/whatsapp",
+          resolvedName: "@sunclaw/whatsapp",
           resolvedVersion: "2026.5.3",
           spec: "git+ssh://example/forked",
         },
@@ -201,8 +201,8 @@ describe("detectPluginVersionDrift", () => {
       installRecords: {
         whatsapp: {
           source: "npm",
-          spec: "@openclaw/whatsapp@latest",
-          resolvedName: "@openclaw/whatsapp",
+          spec: "@sunclaw/whatsapp@latest",
+          resolvedName: "@sunclaw/whatsapp",
           version: "2026.5.3",
         },
       },
@@ -216,7 +216,7 @@ describe("detectPluginVersionDrift", () => {
     const result = detectPluginVersionDrift({
       gatewayVersion: "2026.5.4",
       installRecords: {
-        whatsapp: { source: "npm", spec: "@openclaw/whatsapp@latest" },
+        whatsapp: { source: "npm", spec: "@sunclaw/whatsapp@latest" },
       },
     });
 
@@ -224,20 +224,20 @@ describe("detectPluginVersionDrift", () => {
   });
 
   it("skips plugins that are explicitly disabled in config", () => {
-    const config: OpenClawConfig = {
+    const config: SunClawConfig = {
       plugins: {
         entries: {
           whatsapp: { enabled: false },
           discord: { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
 
     const result = detectPluginVersionDrift({
       gatewayVersion: "2026.5.4",
       installRecords: {
         whatsapp: npmRecord("2026.5.3"),
-        discord: npmRecord("2026.5.3", { resolvedName: "@openclaw/discord" }),
+        discord: npmRecord("2026.5.3", { resolvedName: "@sunclaw/discord" }),
       },
       config,
     });
@@ -246,11 +246,11 @@ describe("detectPluginVersionDrift", () => {
   });
 
   it("skips plugins disabled by the global plugin activation policy", () => {
-    const config: OpenClawConfig = {
+    const config: SunClawConfig = {
       plugins: {
         enabled: false,
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
 
     const result = detectPluginVersionDrift({
       gatewayVersion: "2026.5.4",
@@ -273,7 +273,7 @@ describe("detectPluginVersionDrift", () => {
         plugins: {
           deny: ["whatsapp"],
         },
-      } as OpenClawConfig,
+      } as SunClawConfig,
     });
     const notAllowed = detectPluginVersionDrift({
       gatewayVersion: "2026.5.4",
@@ -284,7 +284,7 @@ describe("detectPluginVersionDrift", () => {
         plugins: {
           allow: ["discord"],
         },
-      } as OpenClawConfig,
+      } as SunClawConfig,
     });
 
     expect(denied.drifts).toEqual([]);
@@ -292,7 +292,7 @@ describe("detectPluginVersionDrift", () => {
   });
 
   it("includes plugins with no entry in config (default-enabled)", () => {
-    const config: OpenClawConfig = { plugins: { entries: {} } } as OpenClawConfig;
+    const config: SunClawConfig = { plugins: { entries: {} } } as SunClawConfig;
     const result = detectPluginVersionDrift({
       gatewayVersion: "2026.5.4",
       installRecords: {
@@ -309,8 +309,8 @@ describe("detectPluginVersionDrift", () => {
       gatewayVersion: "2026.5.4",
       installRecords: {
         whatsapp: npmRecord("2026.5.3"),
-        discord: npmRecord("2026.5.3", { resolvedName: "@openclaw/discord" }),
-        matrix: npmRecord("2026.5.3", { resolvedName: "@openclaw/matrix" }),
+        discord: npmRecord("2026.5.3", { resolvedName: "@sunclaw/discord" }),
+        matrix: npmRecord("2026.5.3", { resolvedName: "@sunclaw/matrix" }),
       },
     });
 

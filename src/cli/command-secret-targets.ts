@@ -1,8 +1,8 @@
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import { sortUniqueStrings } from "@openclaw/normalization-core/string-normalization";
+import { isRecord } from "@sunclaw/normalization-core/record-coerce";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
+import { sortUniqueStrings } from "@sunclaw/normalization-core/string-normalization";
 import { listReadOnlyChannelPluginsForConfig } from "../channels/plugins/read-only.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type {
   PluginWebFetchProviderEntry,
   PluginWebSearchProviderEntry,
@@ -164,14 +164,14 @@ function isConfiguredSecretCandidate(value: unknown): boolean {
   return value !== undefined && value !== null;
 }
 
-function resolveFetchConfig(config: OpenClawConfig): Record<string, unknown> | undefined {
+function resolveFetchConfig(config: SunClawConfig): Record<string, unknown> | undefined {
   const fetch = config.tools?.web?.fetch;
   return fetch && typeof fetch === "object" && !Array.isArray(fetch)
     ? (fetch as Record<string, unknown>)
     : undefined;
 }
 
-function resolveSearchConfig(config: OpenClawConfig): Record<string, unknown> | undefined {
+function resolveSearchConfig(config: SunClawConfig): Record<string, unknown> | undefined {
   const search = config.tools?.web?.search;
   return search && typeof search === "object" && !Array.isArray(search)
     ? (search as Record<string, unknown>)
@@ -234,7 +234,7 @@ function addConfigPathTargets(params: {
 }
 
 function addConfiguredConfigPathTargets(params: {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   path: string;
   targetIds: Set<string>;
   targetPaths: Set<string>;
@@ -269,7 +269,7 @@ function modelProviderCredentialFallbackPathForWebSearchProvider(
 }
 
 function discoverForcedActivePaths(
-  config: OpenClawConfig,
+  config: SunClawConfig,
   targetIds: ReadonlySet<string>,
   allowedPaths?: ReadonlySet<string>,
 ): Set<string> | undefined {
@@ -284,7 +284,7 @@ function discoverForcedActivePaths(
 }
 
 function discoverConfiguredAllowedPaths(
-  config: OpenClawConfig,
+  config: SunClawConfig,
   targetIds: ReadonlySet<string>,
 ): Set<string> | undefined {
   const allowedPaths = new Set<string>();
@@ -295,7 +295,7 @@ function discoverConfiguredAllowedPaths(
 }
 
 function mergeConfiguredAllowedPaths(params: {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   baseTargetIds: ReadonlySet<string>;
   concreteFallbackPaths: ReadonlySet<string>;
 }): Set<string> | undefined {
@@ -310,7 +310,7 @@ function mergeConfiguredAllowedPaths(params: {
 }
 
 function resolveSelectedWebFetchProviderId(
-  config: OpenClawConfig,
+  config: SunClawConfig,
   providerId?: string | null,
 ): string | undefined {
   return (
@@ -319,7 +319,7 @@ function resolveSelectedWebFetchProviderId(
 }
 
 function resolveSelectedWebSearchProviderId(
-  config: OpenClawConfig,
+  config: SunClawConfig,
   providerId?: string | null,
 ): string | undefined {
   return (
@@ -328,10 +328,10 @@ function resolveSelectedWebSearchProviderId(
 }
 
 function withSelectedWebProviderForDiscovery(
-  config: OpenClawConfig,
+  config: SunClawConfig,
   kind: "search" | "fetch",
   providerId: string | undefined,
-): OpenClawConfig {
+): SunClawConfig {
   if (!providerId) {
     return config;
   }
@@ -348,7 +348,7 @@ function withSelectedWebProviderForDiscovery(
 
 function hasConfiguredFetchCredential(params: {
   provider: PluginWebFetchProviderEntry;
-  config: OpenClawConfig;
+  config: SunClawConfig;
 }): boolean {
   return (
     isConfiguredSecretCandidate(params.provider.getConfiguredCredentialValue?.(params.config)) ||
@@ -360,7 +360,7 @@ function hasConfiguredFetchCredential(params: {
 
 function hasConfiguredSearchCredential(params: {
   provider: PluginWebSearchProviderEntry;
-  config: OpenClawConfig;
+  config: SunClawConfig;
 }): boolean {
   return (
     isConfiguredSecretCandidate(params.provider.getConfiguredCredentialValue?.(params.config)) ||
@@ -371,7 +371,7 @@ function hasConfiguredSearchCredential(params: {
 }
 
 function addConfiguredSearchCredentialTargetIds(params: {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   provider: PluginWebSearchProviderEntry;
   targetIds: Set<string>;
   targetPaths: Set<string>;
@@ -402,7 +402,7 @@ function addConfiguredSearchCredentialTargetIds(params: {
 }
 
 function addConfiguredFetchCredentialTargetIds(params: {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   provider: PluginWebFetchProviderEntry;
   targetIds: Set<string>;
   targetPaths: Set<string>;
@@ -509,11 +509,11 @@ function addFallbackPathTargets(
 function addSelectedProviderCredentialTargets<
   Provider extends CapabilityWebCredentialProvider,
 >(params: {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   provider: Provider;
   state: SelectedProviderTargetState;
   addConfiguredCredentialTargetIds: (targetParams: {
-    config: OpenClawConfig;
+    config: SunClawConfig;
     provider: Provider;
     targetIds: Set<string>;
     targetPaths: Set<string>;
@@ -557,7 +557,7 @@ function addSelectedProviderCredentialTargets<
 }
 
 function getCapabilityWebSearchSelectedProviderTargetIds(
-  config: OpenClawConfig,
+  config: SunClawConfig,
   providerId?: string | null,
 ): SelectedProviderTargetIds {
   const selectedProviderId = resolveSelectedWebSearchProviderId(config, providerId);
@@ -604,7 +604,7 @@ function getCapabilityWebSearchSelectedProviderTargetIds(
 }
 
 function getCapabilityWebFetchSelectedProviderTargetIds(
-  config: OpenClawConfig,
+  config: SunClawConfig,
   providerId?: string | null,
 ): SelectedProviderTargetIds {
   const selectedProviderId = resolveSelectedWebFetchProviderId(config, providerId);
@@ -635,7 +635,7 @@ function getCapabilityWebFetchSelectedProviderTargetIds(
 function getCapabilityWebProviderAutoDetectTargets<
   Provider extends CapabilityWebCredentialProvider,
 >(params: {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   baseTargetIds: ReadonlySet<string>;
   providers: readonly Provider[];
   hasConfiguredCredential: (provider: Provider) => boolean;
@@ -679,7 +679,7 @@ function getCapabilityWebProviderAutoDetectTargets<
   };
 }
 
-function getCapabilityWebSearchAutoDetectTargets(config: OpenClawConfig): CommandSecretTargetScope {
+function getCapabilityWebSearchAutoDetectTargets(config: SunClawConfig): CommandSecretTargetScope {
   return getCapabilityWebProviderAutoDetectTargets({
     config,
     baseTargetIds: getCapabilityWebSearchCommandSecretTargetIds(),
@@ -692,7 +692,7 @@ function getCapabilityWebSearchAutoDetectTargets(config: OpenClawConfig): Comman
   });
 }
 
-function getCapabilityWebFetchAutoDetectTargets(config: OpenClawConfig): CommandSecretTargetScope {
+function getCapabilityWebFetchAutoDetectTargets(config: SunClawConfig): CommandSecretTargetScope {
   return getCapabilityWebProviderAutoDetectTargets({
     config,
     baseTargetIds: getCapabilityWebFetchCommandSecretTargetIds(),
@@ -732,7 +732,7 @@ function isScopedChannelSecretTargetEntry(params: {
   const allowedPrefix = `channels.${channelId}.`;
   return (
     params.entry.id.startsWith(allowedPrefix) &&
-    params.entry.configFile === "openclaw.json" &&
+    params.entry.configFile === "sunclaw.json" &&
     typeof params.entry.pathPattern === "string" &&
     params.entry.pathPattern.startsWith(allowedPrefix) &&
     (params.entry.refPathPattern === undefined ||
@@ -741,7 +741,7 @@ function isScopedChannelSecretTargetEntry(params: {
 }
 
 function getConfiguredChannelSecretTargetIds(
-  config: OpenClawConfig,
+  config: SunClawConfig,
   env: NodeJS.ProcessEnv = process.env,
 ): string[] {
   const targetIds = new Set<string>();
@@ -817,7 +817,7 @@ function pathTargetsScopedChannelAccount(params: {
 }
 
 export function getScopedChannelsCommandSecretTargets(params: {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   channel?: string | null;
   accountId?: string | null;
 }): {
@@ -855,7 +855,7 @@ export function getChannelsCommandSecretTargetIds(): Set<string> {
 }
 
 export function getConfiguredChannelsCommandSecretTargetIds(
-  config: OpenClawConfig,
+  config: SunClawConfig,
   env?: NodeJS.ProcessEnv,
 ): Set<string> {
   return toTargetIdSet(getConfiguredChannelSecretTargetIds(config, env));
@@ -887,17 +887,17 @@ export function getCapabilityWebFetchCommandSecretTargetIds(): Set<string> {
 }
 
 type CapabilityWebCommandSecretTargetParams = {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   providerId?: string | null;
   disabled: boolean;
   baseTargetIds: () => Set<string>;
   resolveSelectedProviderId: (
-    config: OpenClawConfig,
+    config: SunClawConfig,
     providerId?: string | null,
   ) => string | undefined;
-  autoDetectTargets: (config: OpenClawConfig) => CommandSecretTargetScope;
+  autoDetectTargets: (config: SunClawConfig) => CommandSecretTargetScope;
   selectedProviderTargetIds: (
-    config: OpenClawConfig,
+    config: SunClawConfig,
     providerId?: string | null,
   ) => SelectedProviderTargetIds;
 };
@@ -934,7 +934,7 @@ function getCapabilityWebCommandSecretTargets(
 }
 
 export function getCapabilityWebFetchCommandSecretTargets(
-  config: OpenClawConfig,
+  config: SunClawConfig,
   options?: {
     providerId?: string | null;
   },
@@ -955,7 +955,7 @@ export function getCapabilityWebSearchCommandSecretTargetIds(): Set<string> {
 }
 
 export function getCapabilityWebSearchCommandSecretTargets(
-  config: OpenClawConfig,
+  config: SunClawConfig,
   options?: {
     providerId?: string | null;
   },
@@ -972,7 +972,7 @@ export function getCapabilityWebSearchCommandSecretTargets(
 }
 
 export function getStatusCommandSecretTargetIds(
-  config?: OpenClawConfig,
+  config?: SunClawConfig,
   env?: NodeJS.ProcessEnv,
   options?: { includeChannelTargets?: boolean },
 ): Set<string> {

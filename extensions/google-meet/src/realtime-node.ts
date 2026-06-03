@@ -1,10 +1,10 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import type { PluginRuntime, RuntimeLogger } from "openclaw/plugin-sdk/plugin-runtime";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import { formatErrorMessage } from "sunclaw/plugin-sdk/error-runtime";
+import type { PluginRuntime, RuntimeLogger } from "sunclaw/plugin-sdk/plugin-runtime";
 import type {
   RealtimeTranscriptionProviderPlugin,
   RealtimeTranscriptionSession,
-} from "openclaw/plugin-sdk/realtime-transcription";
+} from "sunclaw/plugin-sdk/realtime-transcription";
 import {
   createRealtimeVoiceAgentTalkbackQueue,
   createTalkSessionController,
@@ -17,9 +17,9 @@ import {
   type TalkEvent,
   type TalkEventInput,
   type TalkSessionController,
-} from "openclaw/plugin-sdk/realtime-voice";
+} from "sunclaw/plugin-sdk/realtime-voice";
 import {
-  consultOpenClawAgentForGoogleMeet,
+  consultSunClawAgentForGoogleMeet,
   handleGoogleMeetRealtimeConsultToolCall,
   resolveGoogleMeetRealtimeTools,
 } from "./agent-consult.js";
@@ -164,7 +164,7 @@ function startGoogleMeetNodeAudioInputLoop(params: {
 
 export async function startNodeAgentAudioBridge(params: {
   config: GoogleMeetConfig;
-  fullConfig: OpenClawConfig;
+  fullConfig: SunClawConfig;
   runtime: PluginRuntime;
   meetingSessionId: string;
   requesterSessionKey?: string;
@@ -291,7 +291,7 @@ export async function startNodeAgentAudioBridge(params: {
       responseStyle: "Brief, natural spoken answer for a live meeting.",
       fallbackText: "I hit an error while checking that. Please try again.",
       consult: ({ question, responseStyle }) =>
-        consultOpenClawAgentForGoogleMeet({
+        consultSunClawAgentForGoogleMeet({
           config: params.config,
           fullConfig: params.fullConfig,
           runtime: params.runtime,
@@ -371,7 +371,7 @@ export async function startNodeAgentAudioBridge(params: {
 
 export async function startNodeRealtimeAudioBridge(params: {
   config: GoogleMeetConfig;
-  fullConfig: OpenClawConfig;
+  fullConfig: SunClawConfig;
   runtime: PluginRuntime;
   meetingSessionId: string;
   requesterSessionKey?: string;
@@ -466,7 +466,7 @@ export async function startNodeRealtimeAudioBridge(params: {
       responseStyle: "Brief, natural spoken answer for a live meeting.",
       fallbackText: "I hit an error while checking that. Please try again.",
       consult: ({ question, responseStyle }) =>
-        consultOpenClawAgentForGoogleMeet({
+        consultSunClawAgentForGoogleMeet({
           config: params.config,
           fullConfig: params.fullConfig,
           runtime: params.runtime,

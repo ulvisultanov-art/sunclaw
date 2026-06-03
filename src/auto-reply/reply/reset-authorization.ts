@@ -1,11 +1,11 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { isInternalMessageChannel } from "../../utils/message-channel.js";
 import { resolveCommandAuthorization } from "../command-auth.js";
 import type { MsgContext } from "../templating.js";
 
 export function isResetAuthorizedForContext(params: {
   ctx: MsgContext;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   commandAuthorized: boolean;
 }): boolean {
   const auth = resolveCommandAuthorization(params);

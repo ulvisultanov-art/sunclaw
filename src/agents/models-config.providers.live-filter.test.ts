@@ -37,8 +37,8 @@ describe("resolveProviderDiscoveryFilterForTest", () => {
     expect(
       resolveProviderDiscoveryFilterForTest({
         env: liveFilterEnv({
-          OPENCLAW_LIVE_TEST: "1",
-          OPENCLAW_LIVE_PROVIDERS: "claude-cli",
+          SUNCLAW_LIVE_TEST: "1",
+          SUNCLAW_LIVE_PROVIDERS: "claude-cli",
         }),
         resolveOwners,
       }),
@@ -49,8 +49,8 @@ describe("resolveProviderDiscoveryFilterForTest", () => {
     expect(
       resolveProviderDiscoveryFilterForTest({
         env: liveFilterEnv({
-          OPENCLAW_LIVE_TEST: "1",
-          OPENCLAW_LIVE_GATEWAY_PROVIDERS: "claude-cli",
+          SUNCLAW_LIVE_TEST: "1",
+          SUNCLAW_LIVE_GATEWAY_PROVIDERS: "claude-cli",
         }),
         resolveOwners,
       }),
@@ -61,8 +61,8 @@ describe("resolveProviderDiscoveryFilterForTest", () => {
     expect(
       resolveProviderDiscoveryFilterForTest({
         env: liveFilterEnv({
-          OPENCLAW_LIVE_TEST: "1",
-          OPENCLAW_LIVE_PROVIDERS: "openrouter",
+          SUNCLAW_LIVE_TEST: "1",
+          SUNCLAW_LIVE_PROVIDERS: "openrouter",
         }),
         resolveOwners,
       }),
@@ -83,8 +83,8 @@ describe("resolveProviderDiscoveryFilterForTest", () => {
     expect(
       resolveProviderDiscoveryFilterForTest({
         env: liveFilterEnv({
-          OPENCLAW_LIVE_TEST: "1",
-          OPENCLAW_LIVE_PROVIDERS: "claude-cli",
+          SUNCLAW_LIVE_TEST: "1",
+          SUNCLAW_LIVE_PROVIDERS: "claude-cli",
         }),
         resolveOwners: resolveMetadataOwners,
       }),
@@ -104,8 +104,8 @@ describe("resolveProviderDiscoveryFilterForTest", () => {
     expect(
       resolveProviderDiscoveryFilterForTest({
         env: liveFilterEnv({
-          OPENCLAW_LIVE_TEST: "1",
-          OPENCLAW_LIVE_PROVIDERS: "Claude-CLI",
+          SUNCLAW_LIVE_TEST: "1",
+          SUNCLAW_LIVE_PROVIDERS: "Claude-CLI",
         }),
         resolveOwners: (provider) => resolvePluginMetadataProviderOwnersForTest(snapshot, provider),
       }),
@@ -123,8 +123,8 @@ describe("resolveProviderDiscoveryFilterForTest", () => {
     expect(
       resolveProviderDiscoveryFilterForTest({
         env: liveFilterEnv({
-          OPENCLAW_LIVE_TEST: "1",
-          OPENCLAW_LIVE_PROVIDERS: "bytedance",
+          SUNCLAW_LIVE_TEST: "1",
+          SUNCLAW_LIVE_PROVIDERS: "bytedance",
         }),
         resolveOwners: (provider) => resolvePluginMetadataProviderOwnersForTest(snapshot, provider),
       }),

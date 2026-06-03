@@ -104,7 +104,7 @@ describe("compileMemoryWikiVault", () => {
       "[Alpha](sources/alpha.md)",
     );
     const agentDigest = JSON.parse(
-      await fs.readFile(path.join(rootDir, ".openclaw-wiki", "cache", "agent-digest.json"), "utf8"),
+      await fs.readFile(path.join(rootDir, ".sunclaw-wiki", "cache", "agent-digest.json"), "utf8"),
     ) as {
       claimCount: number;
       pages: Array<{ path: string; claimCount: number; topClaims: Array<{ text: string }> }>;
@@ -116,7 +116,7 @@ describe("compileMemoryWikiVault", () => {
       "Alpha is the canonical source page.",
     ]);
     await expect(
-      fs.readFile(path.join(rootDir, ".openclaw-wiki", "cache", "claims.jsonl"), "utf8"),
+      fs.readFile(path.join(rootDir, ".sunclaw-wiki", "cache", "claims.jsonl"), "utf8"),
     ).resolves.toContain('"text":"Alpha is the canonical source page."');
   });
 
@@ -420,7 +420,7 @@ describe("compileMemoryWikiVault", () => {
       fs.readFile(path.join(rootDir, "reports", "stale-pages.md"), "utf8"),
     ).resolves.toContain("[Alpha](entities/alpha.md): missing updatedAt");
     const agentDigest = JSON.parse(
-      await fs.readFile(path.join(rootDir, ".openclaw-wiki", "cache", "agent-digest.json"), "utf8"),
+      await fs.readFile(path.join(rootDir, ".sunclaw-wiki", "cache", "agent-digest.json"), "utf8"),
     ) as {
       claimHealth: { missingEvidence: number; freshness: { unknown: number } };
       contradictionClusters: Array<{ key: string }>;
@@ -532,7 +532,7 @@ describe("compileMemoryWikiVault", () => {
     ).resolves.toContain("confirm-before-use");
 
     const agentDigest = JSON.parse(
-      await fs.readFile(path.join(rootDir, ".openclaw-wiki", "cache", "agent-digest.json"), "utf8"),
+      await fs.readFile(path.join(rootDir, ".sunclaw-wiki", "cache", "agent-digest.json"), "utf8"),
     ) as {
       pages: Array<{
         path: string;
@@ -548,7 +548,7 @@ describe("compileMemoryWikiVault", () => {
     expect(bradPage.personCard?.lane).toBe("Microsoft Teams");
     expect(bradPage.relationshipCount).toBe(1);
     await expect(
-      fs.readFile(path.join(rootDir, ".openclaw-wiki", "cache", "claims.jsonl"), "utf8"),
+      fs.readFile(path.join(rootDir, ".sunclaw-wiki", "cache", "claims.jsonl"), "utf8"),
     ).resolves.toContain('"evidenceKinds":["maintainer-whois"]');
   });
 

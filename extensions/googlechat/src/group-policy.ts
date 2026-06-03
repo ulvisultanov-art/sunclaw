@@ -1,8 +1,8 @@
-import { resolveChannelGroupRequireMention } from "openclaw/plugin-sdk/channel-policy";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/core";
+import { resolveChannelGroupRequireMention } from "sunclaw/plugin-sdk/channel-policy";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/core";
 
 type GoogleChatGroupContext = {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   accountId?: string | null;
   groupId?: string | null;
 };

@@ -32,11 +32,11 @@ permissions:
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
   PNPM_CONFIG_CHILD_CONCURRENCY: "1"
-  PNPM_CONFIG_MODULES_DIR: "/var/tmp/openclaw-pnpm-node-modules"
+  PNPM_CONFIG_MODULES_DIR: "/var/tmp/sunclaw-pnpm-node-modules"
   PNPM_CONFIG_NETWORK_CONCURRENCY: "1"
-  PNPM_CONFIG_STORE_DIR: "/var/tmp/openclaw-pnpm-store"
+  PNPM_CONFIG_STORE_DIR: "/var/tmp/sunclaw-pnpm-store"
   PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN: "false"
-  PNPM_CONFIG_VIRTUAL_STORE_DIR: "/var/tmp/openclaw-pnpm-virtual-store"
+  PNPM_CONFIG_VIRTUAL_STORE_DIR: "/var/tmp/sunclaw-pnpm-virtual-store"
 
 jobs:
   hydrate:
@@ -126,7 +126,7 @@ jobs:
               return
             fi
             case "$path" in
-              /var/tmp/openclaw-pnpm-*) rm -rf "$path" ;;
+              /var/tmp/sunclaw-pnpm-*) rm -rf "$path" ;;
             esac
           }
           reset_crabbox_pnpm_path "${PNPM_CONFIG_MODULES_DIR:-}"
@@ -183,10 +183,10 @@ jobs:
           if ! command -v docker >/dev/null 2>&1; then
             echo "docker not found; installing fallback engine"
             curl --fail --show-error --location \
-              --connect-timeout "${OPENCLAW_CRABBOX_HYDRATE_DOWNLOAD_CONNECT_TIMEOUT_SECONDS:-15}" \
-              --max-time "${OPENCLAW_CRABBOX_HYDRATE_DOWNLOAD_TIMEOUT_SECONDS:-300}" \
-              --retry "${OPENCLAW_CRABBOX_HYDRATE_DOWNLOAD_RETRIES:-3}" \
-              --retry-delay "${OPENCLAW_CRABBOX_HYDRATE_DOWNLOAD_RETRY_DELAY_SECONDS:-5}" \
+              --connect-timeout "${SUNCLAW_CRABBOX_HYDRATE_DOWNLOAD_CONNECT_TIMEOUT_SECONDS:-15}" \
+              --max-time "${SUNCLAW_CRABBOX_HYDRATE_DOWNLOAD_TIMEOUT_SECONDS:-300}" \
+              --retry "${SUNCLAW_CRABBOX_HYDRATE_DOWNLOAD_RETRIES:-3}" \
+              --retry-delay "${SUNCLAW_CRABBOX_HYDRATE_DOWNLOAD_RETRY_DELAY_SECONDS:-5}" \
               --retry-all-errors \
               https://get.docker.com | sudo sh
           fi
@@ -214,10 +214,10 @@ jobs:
             buildx_version="${DOCKER_BUILDX_VERSION:-v0.15.1}"
             mkdir -p "$HOME/.docker/cli-plugins"
             curl --fail --show-error --location \
-              --connect-timeout "${OPENCLAW_CRABBOX_HYDRATE_DOWNLOAD_CONNECT_TIMEOUT_SECONDS:-15}" \
-              --max-time "${OPENCLAW_CRABBOX_HYDRATE_DOWNLOAD_TIMEOUT_SECONDS:-300}" \
-              --retry "${OPENCLAW_CRABBOX_HYDRATE_DOWNLOAD_RETRIES:-3}" \
-              --retry-delay "${OPENCLAW_CRABBOX_HYDRATE_DOWNLOAD_RETRY_DELAY_SECONDS:-5}" \
+              --connect-timeout "${SUNCLAW_CRABBOX_HYDRATE_DOWNLOAD_CONNECT_TIMEOUT_SECONDS:-15}" \
+              --max-time "${SUNCLAW_CRABBOX_HYDRATE_DOWNLOAD_TIMEOUT_SECONDS:-300}" \
+              --retry "${SUNCLAW_CRABBOX_HYDRATE_DOWNLOAD_RETRIES:-3}" \
+              --retry-delay "${SUNCLAW_CRABBOX_HYDRATE_DOWNLOAD_RETRY_DELAY_SECONDS:-5}" \
               --retry-all-errors \
               "https://github.com/docker/buildx/releases/download/${buildx_version}/buildx-${buildx_version}.linux-${buildx_arch}" \
               -o "$HOME/.docker/cli-plugins/docker-buildx"
@@ -372,8 +372,8 @@ jobs:
           $env:XDG_CACHE_HOME = Join-Path $cacheRoot "cache"
           $env:COREPACK_HOME = Join-Path $env:XDG_CACHE_HOME "corepack"
           $env:PNPM_HOME = Join-Path $cacheRoot "pnpm-home"
-          $env:PNPM_CONFIG_STORE_DIR = Join-Path $cacheRoot "openclaw-pnpm-store"
-          $env:PNPM_CONFIG_MODULES_DIR = Join-Path $cacheRoot "openclaw-pnpm-node-modules"
+          $env:PNPM_CONFIG_STORE_DIR = Join-Path $cacheRoot "sunclaw-pnpm-store"
+          $env:PNPM_CONFIG_MODULES_DIR = Join-Path $cacheRoot "sunclaw-pnpm-node-modules"
           $env:PNPM_CONFIG_VIRTUAL_STORE_DIR = Join-Path $env:PNPM_CONFIG_MODULES_DIR ".pnpm"
           $env:PNPM_CONFIG_CHILD_CONCURRENCY = "4"
           $env:PNPM_CONFIG_NETWORK_CONCURRENCY = "8"
@@ -429,7 +429,7 @@ jobs:
           $installArgs = @(
             "install",
             "--filter",
-            "openclaw",
+            "sunclaw",
             "--prefer-offline",
             "--ignore-scripts=true",
             "--config.engine-strict=false",
@@ -595,10 +595,10 @@ jobs:
           if ! command -v docker >/dev/null 2>&1; then
             echo "docker not found; installing fallback engine"
             curl --fail --show-error --location \
-              --connect-timeout "${OPENCLAW_CRABBOX_HYDRATE_DOWNLOAD_CONNECT_TIMEOUT_SECONDS:-15}" \
-              --max-time "${OPENCLAW_CRABBOX_HYDRATE_DOWNLOAD_TIMEOUT_SECONDS:-300}" \
-              --retry "${OPENCLAW_CRABBOX_HYDRATE_DOWNLOAD_RETRIES:-3}" \
-              --retry-delay "${OPENCLAW_CRABBOX_HYDRATE_DOWNLOAD_RETRY_DELAY_SECONDS:-5}" \
+              --connect-timeout "${SUNCLAW_CRABBOX_HYDRATE_DOWNLOAD_CONNECT_TIMEOUT_SECONDS:-15}" \
+              --max-time "${SUNCLAW_CRABBOX_HYDRATE_DOWNLOAD_TIMEOUT_SECONDS:-300}" \
+              --retry "${SUNCLAW_CRABBOX_HYDRATE_DOWNLOAD_RETRIES:-3}" \
+              --retry-delay "${SUNCLAW_CRABBOX_HYDRATE_DOWNLOAD_RETRY_DELAY_SECONDS:-5}" \
               --retry-all-errors \
               https://get.docker.com | sudo sh
           fi
@@ -626,10 +626,10 @@ jobs:
             buildx_version="${DOCKER_BUILDX_VERSION:-v0.15.1}"
             mkdir -p "$HOME/.docker/cli-plugins"
             curl --fail --show-error --location \
-              --connect-timeout "${OPENCLAW_CRABBOX_HYDRATE_DOWNLOAD_CONNECT_TIMEOUT_SECONDS:-15}" \
-              --max-time "${OPENCLAW_CRABBOX_HYDRATE_DOWNLOAD_TIMEOUT_SECONDS:-300}" \
-              --retry "${OPENCLAW_CRABBOX_HYDRATE_DOWNLOAD_RETRIES:-3}" \
-              --retry-delay "${OPENCLAW_CRABBOX_HYDRATE_DOWNLOAD_RETRY_DELAY_SECONDS:-5}" \
+              --connect-timeout "${SUNCLAW_CRABBOX_HYDRATE_DOWNLOAD_CONNECT_TIMEOUT_SECONDS:-15}" \
+              --max-time "${SUNCLAW_CRABBOX_HYDRATE_DOWNLOAD_TIMEOUT_SECONDS:-300}" \
+              --retry "${SUNCLAW_CRABBOX_HYDRATE_DOWNLOAD_RETRIES:-3}" \
+              --retry-delay "${SUNCLAW_CRABBOX_HYDRATE_DOWNLOAD_RETRY_DELAY_SECONDS:-5}" \
               --retry-all-errors \
               "https://github.com/docker/buildx/releases/download/${buildx_version}/buildx-${buildx_version}.linux-${buildx_arch}" \
               -o "$HOME/.docker/cli-plugins/docker-buildx"

@@ -1,4 +1,4 @@
-import { hasConfiguredAccountValue } from "openclaw/plugin-sdk/account-resolution";
+import { hasConfiguredAccountValue } from "sunclaw/plugin-sdk/account-resolution";
 import type { ResolvedSlackAccount } from "./accounts.js";
 
 export function isSlackPluginAccountConfigured(account: ResolvedSlackAccount): boolean {

@@ -1,7 +1,7 @@
 import {
   describeImageWithModel,
   describeImagesWithModel,
-} from "openclaw/plugin-sdk/media-understanding";
+} from "sunclaw/plugin-sdk/media-understanding";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   openrouterMediaUnderstandingProvider,
@@ -20,7 +20,7 @@ const { assertOkOrThrowHttpErrorMock, postJsonRequestMock, resolveProviderHttpRe
     })),
   }));
 
-vi.mock("openclaw/plugin-sdk/provider-http", () => ({
+vi.mock("sunclaw/plugin-sdk/provider-http", () => ({
   assertOkOrThrowHttpError: assertOkOrThrowHttpErrorMock,
   postJsonRequest: postJsonRequestMock,
   requireTranscriptionText: (value: string | undefined, message: string) => {
@@ -92,8 +92,8 @@ describe("openrouter media understanding provider", () => {
       defaultHeaders: {
         Authorization: "Bearer sk-openrouter",
         "Content-Type": "application/json",
-        "HTTP-Referer": "https://openclaw.ai",
-        "X-OpenRouter-Title": "OpenClaw",
+        "HTTP-Referer": "https://docs.sunclaw.complex.az",
+        "X-OpenRouter-Title": "SunClaw",
       },
       provider: "openrouter",
       api: "openrouter-stt",
@@ -122,8 +122,8 @@ describe("openrouter media understanding provider", () => {
       throw new Error("expected OpenRouter request headers");
     }
     expect(headers.get("authorization")).toBe("Bearer sk-openrouter");
-    expect(headers.get("http-referer")).toBe("https://openclaw.ai");
-    expect(headers.get("x-openrouter-title")).toBe("OpenClaw");
+    expect(headers.get("http-referer")).toBe("https://docs.sunclaw.complex.az");
+    expect(headers.get("x-openrouter-title")).toBe("SunClaw");
     expect(release).toHaveBeenCalledOnce();
   });
 

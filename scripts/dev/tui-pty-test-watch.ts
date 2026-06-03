@@ -188,12 +188,12 @@ async function main(): Promise<void> {
       detached: process.platform !== "win32",
       env: {
         ...process.env,
-        OPENCLAW_TUI_PTY_MIRROR_PATH: options.mirrorPath,
-        OPENCLAW_TUI_PTY_INCLUDE_LOCAL: options.mode === "fake" ? "0" : "1",
-        OPENCLAW_TUI_PTY_COLS: currentTerminalDimension(process.stdout.columns, DEFAULT_PTY_COLS),
-        OPENCLAW_TUI_PTY_ROWS: currentTerminalDimension(process.stdout.rows, DEFAULT_PTY_ROWS),
-        OPENCLAW_TUI_PTY_TYPE_CHUNK_SIZE: process.env.OPENCLAW_TUI_PTY_TYPE_CHUNK_SIZE ?? "4",
-        OPENCLAW_TUI_PTY_TYPE_DELAY_MS: process.env.OPENCLAW_TUI_PTY_TYPE_DELAY_MS ?? "25",
+        SUNCLAW_TUI_PTY_MIRROR_PATH: options.mirrorPath,
+        SUNCLAW_TUI_PTY_INCLUDE_LOCAL: options.mode === "fake" ? "0" : "1",
+        SUNCLAW_TUI_PTY_COLS: currentTerminalDimension(process.stdout.columns, DEFAULT_PTY_COLS),
+        SUNCLAW_TUI_PTY_ROWS: currentTerminalDimension(process.stdout.rows, DEFAULT_PTY_ROWS),
+        SUNCLAW_TUI_PTY_TYPE_CHUNK_SIZE: process.env.SUNCLAW_TUI_PTY_TYPE_CHUNK_SIZE ?? "4",
+        SUNCLAW_TUI_PTY_TYPE_DELAY_MS: process.env.SUNCLAW_TUI_PTY_TYPE_DELAY_MS ?? "25",
       },
       stdio: ["ignore", "pipe", "pipe"],
     },
@@ -291,7 +291,7 @@ async function main(): Promise<void> {
     process.stdout.write(
       [
         "\x1b[2J\x1b[H",
-        "openclaw TUI PTY tests",
+        "sunclaw TUI PTY tests",
         "",
         `Mode: ${options.mode}`,
         `Waiting for the first TUI frame... ${elapsedSeconds}s`,

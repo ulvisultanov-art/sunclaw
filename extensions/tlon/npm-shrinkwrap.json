@@ -1,11 +1,11 @@
 {
-  "name": "@openclaw/tlon",
+  "name": "@sunclaw/tlon",
   "version": "2026.6.2",
   "lockfileVersion": 3,
   "requires": true,
   "packages": {
     "": {
-      "name": "@openclaw/tlon",
+      "name": "@sunclaw/tlon",
       "version": "2026.6.2",
       "dependencies": {
         "@aws-sdk/client-s3": "3.1056.0",
@@ -15,10 +15,10 @@
         "zod": "4.4.3"
       },
       "peerDependencies": {
-        "openclaw": ">=2026.6.2"
+        "sunclaw": ">=2026.6.2"
       },
       "peerDependenciesMeta": {
-        "openclaw": {
+        "sunclaw": {
           "optional": true
         }
       }

@@ -1,29 +1,29 @@
 import { describe, expect, it } from "vitest";
-import { isOpenClawManagedMatrixDevice, summarizeMatrixDeviceHealth } from "./device-health.js";
+import { isSunClawManagedMatrixDevice, summarizeMatrixDeviceHealth } from "./device-health.js";
 
 describe("matrix device health", () => {
-  it("detects OpenClaw-managed device names", () => {
-    expect(isOpenClawManagedMatrixDevice("OpenClaw Gateway")).toBe(true);
-    expect(isOpenClawManagedMatrixDevice("OpenClaw Debug")).toBe(true);
-    expect(isOpenClawManagedMatrixDevice("Element iPhone")).toBe(false);
-    expect(isOpenClawManagedMatrixDevice(null)).toBe(false);
+  it("detects SunClaw-managed device names", () => {
+    expect(isSunClawManagedMatrixDevice("SunClaw Gateway")).toBe(true);
+    expect(isSunClawManagedMatrixDevice("SunClaw Debug")).toBe(true);
+    expect(isSunClawManagedMatrixDevice("Element iPhone")).toBe(false);
+    expect(isSunClawManagedMatrixDevice(null)).toBe(false);
   });
 
-  it("summarizes stale OpenClaw-managed devices separately from the current device", () => {
+  it("summarizes stale SunClaw-managed devices separately from the current device", () => {
     const summary = summarizeMatrixDeviceHealth([
       {
         deviceId: "du314Zpw3A",
-        displayName: "OpenClaw Gateway",
+        displayName: "SunClaw Gateway",
         current: true,
       },
       {
         deviceId: "BritdXC6iL",
-        displayName: "OpenClaw Gateway",
+        displayName: "SunClaw Gateway",
         current: false,
       },
       {
         deviceId: "G6NJU9cTgs",
-        displayName: "OpenClaw Debug",
+        displayName: "SunClaw Debug",
         current: false,
       },
       {
@@ -35,22 +35,22 @@ describe("matrix device health", () => {
 
     expect(summary).toEqual({
       currentDeviceId: "du314Zpw3A",
-      currentOpenClawDevices: [
+      currentSunClawDevices: [
         {
           deviceId: "du314Zpw3A",
-          displayName: "OpenClaw Gateway",
+          displayName: "SunClaw Gateway",
           current: true,
         },
       ],
-      staleOpenClawDevices: [
+      staleSunClawDevices: [
         {
           deviceId: "BritdXC6iL",
-          displayName: "OpenClaw Gateway",
+          displayName: "SunClaw Gateway",
           current: false,
         },
         {
           deviceId: "G6NJU9cTgs",
-          displayName: "OpenClaw Debug",
+          displayName: "SunClaw Debug",
           current: false,
         },
       ],

@@ -1,9 +1,9 @@
 import type {
-  OpenClawPluginApi,
+  SunClawPluginApi,
   ProviderReasoningOutputModeContext,
-} from "openclaw/plugin-sdk/plugin-entry";
-import { createProviderApiKeyAuthMethod } from "openclaw/plugin-sdk/provider-auth-api-key";
-import type { ProviderPlugin } from "openclaw/plugin-sdk/provider-model-shared";
+} from "sunclaw/plugin-sdk/plugin-entry";
+import { createProviderApiKeyAuthMethod } from "sunclaw/plugin-sdk/provider-auth-api-key";
+import type { ProviderPlugin } from "sunclaw/plugin-sdk/provider-model-shared";
 import { normalizeGoogleModelId } from "./model-id.js";
 import { GOOGLE_GEMINI_DEFAULT_MODEL, applyGoogleGeminiModelDefault } from "./onboard.js";
 import {
@@ -105,6 +105,6 @@ export function buildGoogleProvider(): ProviderPlugin {
   };
 }
 
-export function registerGoogleProvider(api: OpenClawPluginApi) {
+export function registerGoogleProvider(api: SunClawPluginApi) {
   api.registerProvider(buildGoogleProvider());
 }

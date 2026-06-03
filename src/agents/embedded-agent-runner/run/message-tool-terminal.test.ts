@@ -1,4 +1,4 @@
-import type { Agent, AfterToolCallContext } from "openclaw/plugin-sdk/agent-core";
+import type { Agent, AfterToolCallContext } from "sunclaw/plugin-sdk/agent-core";
 import { describe, expect, it, vi } from "vitest";
 import {
   installMessageToolOnlyTerminalHook,

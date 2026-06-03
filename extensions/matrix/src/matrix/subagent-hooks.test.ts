@@ -1,8 +1,8 @@
-import type { OpenClawPluginApi as MatrixEntryPluginApi } from "openclaw/plugin-sdk/channel-entry-contract";
+import type { SunClawPluginApi as MatrixEntryPluginApi } from "sunclaw/plugin-sdk/channel-entry-contract";
 import {
   getRequiredHookHandler,
   registerHookHandlersForTest,
-} from "openclaw/plugin-sdk/channel-test-helpers";
+} from "sunclaw/plugin-sdk/channel-test-helpers";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { registerMatrixSubagentHooks } from "../../subagent-hooks-api.js";
 
@@ -17,7 +17,7 @@ const removeBindingRecordMock = vi.hoisted(() => vi.fn(() => false));
 const resolveMatrixBaseConfigMock = vi.hoisted(() => vi.fn((): any => ({})));
 const findMatrixAccountConfigMock = vi.hoisted(() => vi.fn((): any => undefined));
 
-vi.mock("openclaw/plugin-sdk/conversation-binding-runtime", () => ({
+vi.mock("sunclaw/plugin-sdk/conversation-binding-runtime", () => ({
   getSessionBindingService: () => ({
     bind: bindMock,
     getCapabilities: getCapabilitiesMock,

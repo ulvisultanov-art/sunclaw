@@ -1,10 +1,10 @@
 {
-  "name": "@openclaw/lmstudio-provider",
+  "name": "@sunclaw/lmstudio-provider",
   "version": "2026.6.2",
   "private": true,
-  "description": "OpenClaw LM Studio provider plugin",
+  "description": "SunClaw LM Studio provider plugin",
   "type": "module",
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ]

@@ -3,7 +3,7 @@ import path from "node:path";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { resolveWorkspaceAttestationPath } from "../agents/workspace.js";
 import { loadSessionStore, resolveStorePath, saveSessionStore } from "../config/sessions.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { withStateDirEnv } from "../test-helpers/state-dir-env.js";
 import { baseConfigSnapshot, createTestRuntime } from "./test-runtime-config-helpers.js";
 
@@ -52,7 +52,7 @@ const runtime = createTestRuntime();
 
 async function arrangeAgentsDeleteTest(params: {
   stateDir: string;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   deletedAgentId?: string;
   sessions: Record<string, { sessionId: string; updatedAt: number }>;
 }) {
@@ -116,16 +116,16 @@ describe("agents delete command", () => {
   });
 
   it("routes deletion through the Gateway when reachable", async () => {
-    await withStateDirEnv("openclaw-agents-delete-gateway-", async ({ stateDir }) => {
+    await withStateDirEnv("sunclaw-agents-delete-gateway-", async ({ stateDir }) => {
       const now = Date.now();
-      const cfg: OpenClawConfig = {
+      const cfg: SunClawConfig = {
         agents: {
           list: [
             { id: "main", workspace: path.join(stateDir, "workspace-main") },
             { id: "ops", workspace: path.join(stateDir, "workspace-ops") },
           ],
         },
-      } satisfies OpenClawConfig;
+      } satisfies SunClawConfig;
       const sessions = {
         "agent:ops:main": { sessionId: "sess-ops-main", updatedAt: now + 1 },
         "agent:main:main": { sessionId: "sess-main", updatedAt: now + 2 },
@@ -159,16 +159,16 @@ describe("agents delete command", () => {
   });
 
   it("falls back to local deletion when the optional Gateway probe needs credentials", async () => {
-    await withStateDirEnv("openclaw-agents-delete-gateway-auth-", async ({ stateDir }) => {
+    await withStateDirEnv("sunclaw-agents-delete-gateway-auth-", async ({ stateDir }) => {
       const now = Date.now();
-      const cfg: OpenClawConfig = {
+      const cfg: SunClawConfig = {
         agents: {
           list: [
             { id: "main", workspace: path.join(stateDir, "workspace-shared") },
             { id: "ops", workspace: path.join(stateDir, "workspace-shared") },
           ],
         },
-      } satisfies OpenClawConfig;
+      } satisfies SunClawConfig;
       await arrangeAgentsDeleteTest({
         stateDir,
         cfg,
@@ -184,7 +184,7 @@ describe("agents delete command", () => {
           {
             name: "GatewayCredentialsRequiredError",
             method: "agents.delete",
-            configPath: path.join(stateDir, "openclaw.json"),
+            configPath: path.join(stateDir, "sunclaw.json"),
           },
         ),
       );
@@ -203,16 +203,16 @@ describe("agents delete command", () => {
   });
 
   it("purges deleted agent entries from the session store", async () => {
-    await withStateDirEnv("openclaw-agents-delete-", async ({ stateDir }) => {
+    await withStateDirEnv("sunclaw-agents-delete-", async ({ stateDir }) => {
       const now = Date.now();
-      const cfg: OpenClawConfig = {
+      const cfg: SunClawConfig = {
         agents: {
           list: [
             { id: "main", workspace: path.join(stateDir, "workspace-main") },
             { id: "ops", workspace: path.join(stateDir, "workspace-ops") },
           ],
         },
-      } satisfies OpenClawConfig;
+      } satisfies SunClawConfig;
       const storePath = await arrangeAgentsDeleteTest({
         stateDir,
         cfg,
@@ -228,7 +228,7 @@ describe("agents delete command", () => {
       expect(runtime.exit).not.toHaveBeenCalled();
       expect(configMocks.replaceConfigFile).toHaveBeenCalledOnce();
       const replaceConfigFileCalls = configMocks.replaceConfigFile.mock.calls as unknown as Array<
-        [{ nextConfig: OpenClawConfig }]
+        [{ nextConfig: SunClawConfig }]
       >;
       expect(replaceConfigFileCalls[0]?.[0].nextConfig).toEqual({
         agents: { list: [{ id: "main", workspace: path.join(stateDir, "workspace-main") }] },
@@ -240,15 +240,15 @@ describe("agents delete command", () => {
   });
 
   it("trashes workspace attestations during local deletion", async () => {
-    await withStateDirEnv("openclaw-agents-delete-attestation-", async ({ stateDir }) => {
-      const cfg: OpenClawConfig = {
+    await withStateDirEnv("sunclaw-agents-delete-attestation-", async ({ stateDir }) => {
+      const cfg: SunClawConfig = {
         agents: {
           list: [
             { id: "main", workspace: path.join(stateDir, "workspace-main") },
             { id: "ops", workspace: path.join(stateDir, "workspace-ops") },
           ],
         },
-      } satisfies OpenClawConfig;
+      } satisfies SunClawConfig;
       await arrangeAgentsDeleteTest({
         stateDir,
         cfg,
@@ -259,7 +259,7 @@ describe("agents delete command", () => {
       await fs.mkdir(path.dirname(attestationPath), { recursive: true });
       await fs.writeFile(
         attestationPath,
-        `openclaw-workspace-attestation:v1\n${new Date().toISOString()}\n`,
+        `sunclaw-workspace-attestation:v1\n${new Date().toISOString()}\n`,
       );
       const resolvedAttestationPath = path.join(
         await fs.realpath(path.dirname(attestationPath)),
@@ -274,9 +274,9 @@ describe("agents delete command", () => {
   });
 
   it("purges legacy main-alias entries owned by the deleted default agent", async () => {
-    await withStateDirEnv("openclaw-agents-delete-main-alias-", async ({ stateDir }) => {
+    await withStateDirEnv("sunclaw-agents-delete-main-alias-", async ({ stateDir }) => {
       const now = Date.now();
-      const cfg: OpenClawConfig = {
+      const cfg: SunClawConfig = {
         agents: {
           list: [{ id: "ops", default: true, workspace: path.join(stateDir, "workspace-ops") }],
         },
@@ -309,9 +309,9 @@ describe("agents delete command", () => {
   });
 
   it("preserves shared-store legacy default keys when deleting another agent", async () => {
-    await withStateDirEnv("openclaw-agents-delete-shared-store-", async ({ stateDir }) => {
+    await withStateDirEnv("sunclaw-agents-delete-shared-store-", async ({ stateDir }) => {
       const now = Date.now();
-      const cfg: OpenClawConfig = {
+      const cfg: SunClawConfig = {
         session: { store: path.join(stateDir, "sessions.json") },
         agents: {
           list: [
@@ -342,25 +342,25 @@ describe("agents delete command", () => {
   });
 
   it("skips workspace removal when another agent shares the same workspace (#70890)", async () => {
-    await withStateDirEnv("openclaw-agents-delete-shared-workspace-", async ({ stateDir }) => {
+    await withStateDirEnv("sunclaw-agents-delete-shared-workspace-", async ({ stateDir }) => {
       const sharedWorkspace = path.join(stateDir, "workspace-shared");
       await fs.mkdir(sharedWorkspace, { recursive: true });
       const attestationPath = resolveWorkspaceAttestationPath(sharedWorkspace);
       await fs.mkdir(path.dirname(attestationPath), { recursive: true });
       await fs.writeFile(
         attestationPath,
-        `openclaw-workspace-attestation:v1\n${new Date().toISOString()}\n`,
+        `sunclaw-workspace-attestation:v1\n${new Date().toISOString()}\n`,
       );
 
       const now = Date.now();
-      const cfg: OpenClawConfig = {
+      const cfg: SunClawConfig = {
         agents: {
           list: [
             { id: "main", workspace: sharedWorkspace },
             { id: "ops", workspace: sharedWorkspace },
           ],
         },
-      } satisfies OpenClawConfig;
+      } satisfies SunClawConfig;
       await arrangeAgentsDeleteTest({
         stateDir,
         cfg,
@@ -390,20 +390,20 @@ describe("agents delete command", () => {
   });
 
   it("skips workspace removal when another agent workspace overlaps a child path (#70890)", async () => {
-    await withStateDirEnv("openclaw-agents-delete-overlapping-workspace-", async ({ stateDir }) => {
+    await withStateDirEnv("sunclaw-agents-delete-overlapping-workspace-", async ({ stateDir }) => {
       const sharedWorkspace = path.join(stateDir, "workspace-shared");
       const childWorkspace = path.join(sharedWorkspace, "ops-child");
       await fs.mkdir(childWorkspace, { recursive: true });
 
       const now = Date.now();
-      const cfg: OpenClawConfig = {
+      const cfg: SunClawConfig = {
         agents: {
           list: [
             { id: "main", workspace: sharedWorkspace },
             { id: "ops", workspace: childWorkspace },
           ],
         },
-      } satisfies OpenClawConfig;
+      } satisfies SunClawConfig;
       await arrangeAgentsDeleteTest({
         stateDir,
         cfg,
@@ -425,20 +425,20 @@ describe("agents delete command", () => {
   });
 
   it("skips workspace removal when deleting a parent workspace that contains another agent workspace (#70890)", async () => {
-    await withStateDirEnv("openclaw-agents-delete-parent-workspace-", async ({ stateDir }) => {
+    await withStateDirEnv("sunclaw-agents-delete-parent-workspace-", async ({ stateDir }) => {
       const sharedWorkspace = path.join(stateDir, "workspace-shared");
       const childWorkspace = path.join(sharedWorkspace, "main-child");
       await fs.mkdir(childWorkspace, { recursive: true });
 
       const now = Date.now();
-      const cfg: OpenClawConfig = {
+      const cfg: SunClawConfig = {
         agents: {
           list: [
             { id: "main", workspace: childWorkspace },
             { id: "ops", workspace: sharedWorkspace },
           ],
         },
-      } satisfies OpenClawConfig;
+      } satisfies SunClawConfig;
       await arrangeAgentsDeleteTest({
         stateDir,
         cfg,
@@ -462,21 +462,21 @@ describe("agents delete command", () => {
   it.runIf(process.platform !== "win32")(
     "skips workspace removal when another agent reaches the same directory through a symlink (#70890)",
     async () => {
-      await withStateDirEnv("openclaw-agents-delete-symlink-workspace-", async ({ stateDir }) => {
+      await withStateDirEnv("sunclaw-agents-delete-symlink-workspace-", async ({ stateDir }) => {
         const realWorkspace = path.join(stateDir, "workspace-real");
         const aliasWorkspace = path.join(stateDir, "workspace-alias");
         await fs.mkdir(realWorkspace, { recursive: true });
         await fs.symlink(realWorkspace, aliasWorkspace, "dir");
 
         const now = Date.now();
-        const cfg: OpenClawConfig = {
+        const cfg: SunClawConfig = {
           agents: {
             list: [
               { id: "main", workspace: realWorkspace },
               { id: "ops", workspace: aliasWorkspace },
             ],
           },
-        } satisfies OpenClawConfig;
+        } satisfies SunClawConfig;
         await arrangeAgentsDeleteTest({
           stateDir,
           cfg,
@@ -501,21 +501,21 @@ describe("agents delete command", () => {
   );
 
   it("trashes workspace when no other agent shares it", async () => {
-    await withStateDirEnv("openclaw-agents-delete-unique-workspace-", async ({ stateDir }) => {
+    await withStateDirEnv("sunclaw-agents-delete-unique-workspace-", async ({ stateDir }) => {
       const opsWorkspace = path.join(stateDir, "workspace-ops");
       const mainWorkspace = path.join(stateDir, "workspace-main");
       await fs.mkdir(opsWorkspace, { recursive: true });
       await fs.mkdir(mainWorkspace, { recursive: true });
 
       const now = Date.now();
-      const cfg: OpenClawConfig = {
+      const cfg: SunClawConfig = {
         agents: {
           list: [
             { id: "main", workspace: mainWorkspace },
             { id: "ops", workspace: opsWorkspace },
           ],
         },
-      } satisfies OpenClawConfig;
+      } satisfies SunClawConfig;
       await arrangeAgentsDeleteTest({
         stateDir,
         cfg,

@@ -2,15 +2,15 @@
  * Signal reactions via signal-cli JSON-RPC API
  */
 
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { requireRuntimeConfig } from "openclaw/plugin-sdk/plugin-config-runtime";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import { requireRuntimeConfig } from "sunclaw/plugin-sdk/plugin-config-runtime";
+import { normalizeLowercaseStringOrEmpty } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { resolveSignalAccount } from "./accounts.js";
 import { signalRpcRequest } from "./client-adapter.js";
 import { resolveSignalRpcContext } from "./rpc-context.js";
 
 export type SignalReactionOpts = {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   baseUrl?: string;
   account?: string;
   accountId?: string;

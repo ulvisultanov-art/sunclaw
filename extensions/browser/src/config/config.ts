@@ -6,5 +6,5 @@ export {
   replaceConfigFile,
   type BrowserConfig,
   type BrowserProfileConfig,
-  type OpenClawConfig,
+  type SunClawConfig,
 } from "../sdk-config.js";

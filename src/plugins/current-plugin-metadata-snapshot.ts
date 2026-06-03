@@ -1,5 +1,5 @@
-import { setCurrentManifestModelIdNormalizationRecords } from "@openclaw/model-catalog-core/provider-model-id-normalization";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { setCurrentManifestModelIdNormalizationRecords } from "@sunclaw/model-catalog-core/provider-model-id-normalization";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import {
   clearCurrentPluginMetadataSnapshotState,
   getCurrentPluginMetadataSnapshotState,
@@ -18,14 +18,14 @@ import type {
 import { normalizePluginIdScope, serializePluginIdScope } from "./plugin-scope.js";
 
 type CurrentPluginMetadataSnapshotState = ReturnType<typeof getCurrentPluginMetadataSnapshotState>;
-let currentPluginMetadataConfigIdentityCache = new WeakSet<OpenClawConfig>();
+let currentPluginMetadataConfigIdentityCache = new WeakSet<SunClawConfig>();
 
 registerPluginMetadataProcessMemoLifecycleClear(() => {
   setCurrentManifestModelIdNormalizationRecords(undefined);
 });
 
 export function resolvePluginMetadataControlPlaneFingerprint(
-  config?: OpenClawConfig,
+  config?: SunClawConfig,
   options: Omit<ResolvePluginControlPlaneContextParams, "config"> = {},
 ): string {
   return resolvePluginControlPlaneFingerprint({
@@ -45,8 +45,8 @@ export function isReusableCurrentPluginMetadataSnapshot(
 export function setCurrentPluginMetadataSnapshot(
   snapshot: PluginMetadataSnapshot | undefined,
   options: {
-    config?: OpenClawConfig;
-    compatibleConfigs?: readonly OpenClawConfig[];
+    config?: SunClawConfig;
+    compatibleConfigs?: readonly SunClawConfig[];
     env?: NodeJS.ProcessEnv;
     workspaceDir?: string;
   } = {},
@@ -160,7 +160,7 @@ export function restoreCurrentPluginMetadataSnapshotState(
 
 export function getCurrentPluginMetadataSnapshot(
   params: {
-    config?: OpenClawConfig;
+    config?: SunClawConfig;
     env?: NodeJS.ProcessEnv;
     allowScopedSnapshot?: boolean;
     pluginIds?: readonly string[];

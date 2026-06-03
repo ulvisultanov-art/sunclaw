@@ -1,4 +1,4 @@
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@sunclaw/normalization-core/string-coerce";
 import { Chalk } from "chalk";
 import type { Logger as TsLogger } from "tslog";
 import { clearActiveProgressLine } from "../../packages/terminal-core/src/progress-line.js";
@@ -126,7 +126,7 @@ const CHANNEL_SUBSYSTEM_PREFIXES = new Set([
   "msteams",
   "nextcloud-talk",
   "nostr",
-  "openclaw-weixin",
+  "sunclaw-weixin",
   "qqbot",
   "signal",
   "slack",

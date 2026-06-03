@@ -2,32 +2,32 @@ import type {
   ChannelMessageActionAdapter,
   ChannelMessageActionName,
   ChannelMessageToolDiscovery,
-} from "openclaw/plugin-sdk/channel-contract";
-import { createChatChannelPlugin } from "openclaw/plugin-sdk/channel-core";
-import { createChannelMessageAdapterFromOutbound } from "openclaw/plugin-sdk/channel-outbound";
-import { createLoggedPairingApprovalNotifier } from "openclaw/plugin-sdk/channel-pairing";
-import { createRestrictSendersChannelSecurity } from "openclaw/plugin-sdk/channel-policy";
+} from "sunclaw/plugin-sdk/channel-contract";
+import { createChatChannelPlugin } from "sunclaw/plugin-sdk/channel-core";
+import { createChannelMessageAdapterFromOutbound } from "sunclaw/plugin-sdk/channel-outbound";
+import { createLoggedPairingApprovalNotifier } from "sunclaw/plugin-sdk/channel-pairing";
+import { createRestrictSendersChannelSecurity } from "sunclaw/plugin-sdk/channel-policy";
 import {
   attachChannelToResult,
   createAttachedChannelResultAdapter,
   type ChannelOutboundAdapter,
-} from "openclaw/plugin-sdk/channel-send-result";
-import { createChannelDirectoryAdapter } from "openclaw/plugin-sdk/directory-runtime";
-import { buildPassiveProbedChannelStatusSummary } from "openclaw/plugin-sdk/extension-shared";
+} from "sunclaw/plugin-sdk/channel-send-result";
+import { createChannelDirectoryAdapter } from "sunclaw/plugin-sdk/directory-runtime";
+import { buildPassiveProbedChannelStatusSummary } from "sunclaw/plugin-sdk/extension-shared";
 import {
   type MessagePresentation,
   normalizeMessagePresentation,
   renderMessagePresentationFallbackText,
   resolveMessagePresentationControlValue,
-} from "openclaw/plugin-sdk/interactive-runtime";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
-import { resolvePayloadMediaUrls, sendTextMediaPayload } from "openclaw/plugin-sdk/reply-payload";
-import { isPrivateNetworkOptInEnabled } from "openclaw/plugin-sdk/ssrf-runtime";
+} from "sunclaw/plugin-sdk/interactive-runtime";
+import { createLazyRuntimeModule } from "sunclaw/plugin-sdk/lazy-runtime";
+import { resolvePayloadMediaUrls, sendTextMediaPayload } from "sunclaw/plugin-sdk/reply-payload";
+import { isPrivateNetworkOptInEnabled } from "sunclaw/plugin-sdk/ssrf-runtime";
 import {
   createComputedAccountStatusAdapter,
   createDefaultChannelRuntimeState,
-} from "openclaw/plugin-sdk/status-helpers";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/status-helpers";
+import { normalizeOptionalString } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { mattermostApprovalAuth } from "./approval-auth.js";
 import {
   chunkTextForOutbound,
@@ -728,7 +728,7 @@ export const mattermostPlugin: ChannelPlugin<ResolvedMattermostAccount> = create
   pairing: {
     text: {
       idLabel: "mattermostUserId",
-      message: "OpenClaw: your access has been approved.",
+      message: "SunClaw: your access has been approved.",
       normalizeAllowEntry: (entry) => normalizeAllowEntry(entry),
       notify: createLoggedPairingApprovalNotifier(
         ({ id }) => `[mattermost] User ${id} approved for pairing`,

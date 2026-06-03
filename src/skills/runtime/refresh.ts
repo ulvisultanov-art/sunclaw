@@ -1,9 +1,9 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
 import chokidar, { type FSWatcher } from "chokidar";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { createSubsystemLogger } from "../../logging/subsystem.js";
 import { CONFIG_DIR, resolveUserPath } from "../../utils.js";
 import { resolvePluginSkillDirs } from "../loading/plugin-skills.js";
@@ -84,16 +84,16 @@ export const DEFAULT_SKILLS_WATCH_IGNORED: RegExp[] = [
   /(^|[\\/])\.cache([\\/]|$)/,
 ];
 
-function resolveWatchTargets(workspaceDir: string, config?: OpenClawConfig): WatchTarget[] {
+function resolveWatchTargets(workspaceDir: string, config?: SunClawConfig): WatchTarget[] {
   const baseRoots: Array<{ path: string; source: string }> = [];
   if (workspaceDir.trim()) {
-    baseRoots.push({ path: path.join(workspaceDir, "skills"), source: "openclaw-workspace" });
+    baseRoots.push({ path: path.join(workspaceDir, "skills"), source: "sunclaw-workspace" });
     baseRoots.push({
       path: path.join(workspaceDir, ".agents", "skills"),
       source: "agents-skills-project",
     });
   }
-  baseRoots.push({ path: path.join(CONFIG_DIR, "skills"), source: "openclaw-managed" });
+  baseRoots.push({ path: path.join(CONFIG_DIR, "skills"), source: "sunclaw-managed" });
   baseRoots.push({
     path: path.join(os.homedir(), ".agents", "skills"),
     source: "agents-skills-personal",
@@ -145,7 +145,7 @@ function resolveWatchTargets(workspaceDir: string, config?: OpenClawConfig): Wat
     addTrustedSymlinkSkillWatchTargets(
       targets,
       resolved,
-      "openclaw-extra",
+      "sunclaw-extra",
       allowedSymlinkTargetRealPaths,
       rootDepth,
       resolved,
@@ -153,7 +153,7 @@ function resolveWatchTargets(workspaceDir: string, config?: OpenClawConfig): Wat
     addTrustedSymlinkSkillWatchTargets(
       targets,
       path.join(resolved, "skills"),
-      "openclaw-extra",
+      "sunclaw-extra",
       allowedSymlinkTargetRealPaths,
       GROUPED_SKILLS_WATCH_DEPTH,
       resolved,
@@ -166,7 +166,7 @@ function resolveWatchTargets(workspaceDir: string, config?: OpenClawConfig): Wat
     addTrustedSymlinkSkillWatchTargets(
       targets,
       dir,
-      "openclaw-plugin",
+      "sunclaw-plugin",
       allowedSymlinkTargetRealPaths,
       rootDepth,
       dir,
@@ -174,7 +174,7 @@ function resolveWatchTargets(workspaceDir: string, config?: OpenClawConfig): Wat
     addTrustedSymlinkSkillWatchTargets(
       targets,
       path.join(dir, "skills"),
-      "openclaw-plugin",
+      "sunclaw-plugin",
       allowedSymlinkTargetRealPaths,
       GROUPED_SKILLS_WATCH_DEPTH,
       dir,
@@ -335,7 +335,7 @@ function isTrustedSymlinkSkillTarget(
   targetRealPath: string,
   allowedSymlinkTargetRealPaths: readonly string[],
 ): boolean {
-  if (source === "openclaw-managed" || source === "agents-skills-personal") {
+  if (source === "sunclaw-managed" || source === "agents-skills-personal") {
     return true;
   }
   return (
@@ -358,7 +358,7 @@ function watchDepthForPath(raw: string, depth: number): number {
   return depth + missingSegments;
 }
 
-function resolveAllowedSymlinkTargetRealPaths(config?: OpenClawConfig): string[] {
+function resolveAllowedSymlinkTargetRealPaths(config?: SunClawConfig): string[] {
   const rawTargets = config?.skills?.load?.allowSymlinkTargets ?? [];
   return rawTargets
     .map((dir) => normalizeOptionalString(dir) ?? "")
@@ -403,7 +403,7 @@ export function shouldIgnoreSkillsWatchPath(
   return path.posix.basename(normalized) !== "SKILL.md";
 }
 
-function resolveWatchDebounceMs(config?: OpenClawConfig): number {
+function resolveWatchDebounceMs(config?: SunClawConfig): number {
   const raw = config?.skills?.load?.watchDebounceMs;
   return typeof raw === "number" && Number.isFinite(raw) ? Math.max(0, raw) : 250;
 }
@@ -556,7 +556,7 @@ function evictIdleWorkspaceWatchStates(now: number): void {
   }
 }
 
-export function ensureSkillsWatcher(params: { workspaceDir: string; config?: OpenClawConfig }) {
+export function ensureSkillsWatcher(params: { workspaceDir: string; config?: SunClawConfig }) {
   const workspaceDir = params.workspaceDir.trim();
   if (!workspaceDir) {
     return;

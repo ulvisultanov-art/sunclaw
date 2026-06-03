@@ -6,7 +6,7 @@ import type {
   PluginStateEntry,
   PluginStateKeyedStore,
 } from "../../plugin-state/plugin-state-store.types.js";
-import { closeOpenClawStateDatabaseForTest } from "../../state/openclaw-state-db.js";
+import { closeSunClawStateDatabaseForTest } from "../../state/sunclaw-state-db.js";
 import { createDurableInboundReceiveJournalFromQueue } from "./durable-receive.js";
 import { createDurableInboundReceiveJournal } from "./durable-receive.js";
 import { createChannelIngressQueue } from "./ingress-queue.js";
@@ -72,11 +72,11 @@ function createMemoryStore<T>(): PluginStateKeyedStore<T> {
 }
 
 async function withTempState<T>(fn: (stateDir: string) => Promise<T>): Promise<T> {
-  const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-durable-receive-"));
+  const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-durable-receive-"));
   try {
     return await fn(stateDir);
   } finally {
-    closeOpenClawStateDatabaseForTest();
+    closeSunClawStateDatabaseForTest();
     await fs.rm(stateDir, { recursive: true, force: true });
   }
 }

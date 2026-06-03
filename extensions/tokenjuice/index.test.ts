@@ -1,37 +1,37 @@
 import fs from "node:fs";
-import { createTestPluginApi } from "openclaw/plugin-sdk/plugin-test-api";
+import { createTestPluginApi } from "sunclaw/plugin-sdk/plugin-test-api";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const { tokenjuiceFactory, createTokenjuiceOpenClawEmbeddedExtension } = vi.hoisted(() => {
+const { tokenjuiceFactory, createTokenjuiceSunClawEmbeddedExtension } = vi.hoisted(() => {
   const tokenjuiceFactoryLocal = vi.fn();
-  const createTokenjuiceOpenClawEmbeddedExtensionLocal = vi.fn(() => tokenjuiceFactoryLocal);
+  const createTokenjuiceSunClawEmbeddedExtensionLocal = vi.fn(() => tokenjuiceFactoryLocal);
   return {
     tokenjuiceFactory: tokenjuiceFactoryLocal,
-    createTokenjuiceOpenClawEmbeddedExtension: createTokenjuiceOpenClawEmbeddedExtensionLocal,
+    createTokenjuiceSunClawEmbeddedExtension: createTokenjuiceSunClawEmbeddedExtensionLocal,
   };
 });
 
 vi.mock("./runtime-api.js", () => ({
-  createTokenjuiceOpenClawEmbeddedExtension,
+  createTokenjuiceSunClawEmbeddedExtension,
 }));
 
 import plugin from "./index.js";
 
 describe("tokenjuice plugin", () => {
   beforeEach(() => {
-    createTokenjuiceOpenClawEmbeddedExtension.mockClear();
+    createTokenjuiceSunClawEmbeddedExtension.mockClear();
     tokenjuiceFactory.mockClear();
   });
 
   it("is opt-in by default", () => {
     const manifest = JSON.parse(
-      fs.readFileSync(new URL("./openclaw.plugin.json", import.meta.url), "utf8"),
+      fs.readFileSync(new URL("./sunclaw.plugin.json", import.meta.url), "utf8"),
     ) as { enabledByDefault?: unknown };
 
     expect(manifest.enabledByDefault).toBeUndefined();
   });
 
-  it("registers tokenjuice tool result middleware for OpenClaw and Codex runtimes", () => {
+  it("registers tokenjuice tool result middleware for SunClaw and Codex runtimes", () => {
     const registerAgentToolResultMiddleware = vi.fn();
 
     plugin.register(
@@ -46,10 +46,10 @@ describe("tokenjuice plugin", () => {
       }),
     );
 
-    expect(createTokenjuiceOpenClawEmbeddedExtension).toHaveBeenCalledTimes(1);
+    expect(createTokenjuiceSunClawEmbeddedExtension).toHaveBeenCalledTimes(1);
     expect(tokenjuiceFactory).toHaveBeenCalledTimes(1);
     const registration = registerAgentToolResultMiddleware.mock.calls[0];
     expect(typeof registration?.[0]).toBe("function");
-    expect(registration?.[1]).toEqual({ runtimes: ["openclaw", "codex"] });
+    expect(registration?.[1]).toEqual({ runtimes: ["sunclaw", "codex"] });
   });
 });

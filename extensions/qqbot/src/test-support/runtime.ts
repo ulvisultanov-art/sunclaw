@@ -1,16 +1,16 @@
-import type { PluginRuntime } from "openclaw/plugin-sdk/core";
-import type { OpenKeyedStoreOptions } from "openclaw/plugin-sdk/plugin-state-runtime";
+import type { PluginRuntime } from "sunclaw/plugin-sdk/core";
+import type { OpenKeyedStoreOptions } from "sunclaw/plugin-sdk/plugin-state-runtime";
 import {
   createPluginStateKeyedStoreForTests,
   createPluginStateSyncKeyedStoreForTests,
   resetPluginStateStoreForTests,
-} from "openclaw/plugin-sdk/plugin-state-test-runtime";
+} from "sunclaw/plugin-sdk/plugin-state-test-runtime";
 import { resetQQBotRuntimeForTest, setQQBotRuntime } from "../bridge/runtime.js";
 
 function stateEnv(stateDir: string, env?: NodeJS.ProcessEnv): NodeJS.ProcessEnv {
   return {
     ...(env ?? process.env),
-    OPENCLAW_STATE_DIR: stateDir,
+    SUNCLAW_STATE_DIR: stateDir,
   };
 }
 

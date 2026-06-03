@@ -1,10 +1,10 @@
-import { asFiniteNumber } from "@openclaw/normalization-core/number-coercion";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { asFiniteNumber } from "@sunclaw/normalization-core/number-coercion";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
 import { modelKey } from "../../agents/model-ref-shared.js";
 import { normalizeModelRef } from "../../agents/model-selection.js";
 import type { NormalizedUsage, UsageLike } from "../../agents/usage.js";
 import { normalizeUsage } from "../../agents/usage.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import type { Api, Message } from "../../llm/types.js";
 import { getChildLogger } from "../../logging.js";
 import { normalizeAgentId } from "../../routing/session-key.js";
@@ -36,7 +36,7 @@ export type RuntimeLlmAuthority = {
 };
 
 export type CreateRuntimeLlmOptions = {
-  getConfig?: () => OpenClawConfig | undefined;
+  getConfig?: () => SunClawConfig | undefined;
   authority?: RuntimeLlmAuthority;
   logger?: RuntimeLogger;
 };
@@ -87,7 +87,7 @@ function resolveTrustedCaller(authority?: RuntimeLlmAuthority): LlmCompleteCalle
   return normalizeCaller(authority?.caller);
 }
 
-function resolveRuntimeConfig(options: CreateRuntimeLlmOptions): OpenClawConfig {
+function resolveRuntimeConfig(options: CreateRuntimeLlmOptions): SunClawConfig {
   const cfg = options.getConfig?.();
   if (!cfg) {
     throw new Error("Plugin LLM completion requires an injected runtime config scope.");
@@ -97,7 +97,7 @@ function resolveRuntimeConfig(options: CreateRuntimeLlmOptions): OpenClawConfig 
 
 async function resolveAgentId(params: {
   request: LlmCompleteParams;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   authority?: RuntimeLlmAuthority;
   allowAgentIdOverride: boolean;
 }): Promise<string> {
@@ -190,7 +190,7 @@ function readExplicitCostUsd(raw: unknown): number | undefined {
 function buildUsage(params: {
   rawUsage: unknown;
   normalized: NormalizedUsage | undefined;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   provider: string;
   model: string;
 }): LlmCompleteUsage {
@@ -285,7 +285,7 @@ function resolvePluginPolicyId(
 }
 
 function resolvePluginLlmOverridePolicy(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   pluginId: string | undefined,
 ): RuntimeLlmOverridePolicy | undefined {
   if (!pluginId) {

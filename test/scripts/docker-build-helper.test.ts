@@ -116,10 +116,10 @@ describe("docker build helper", () => {
     expect(helper).toContain("docker_build_run()");
     expect(helper).toContain("docker buildx build --load");
     expect(helper).toContain("docker_build_transient_failure()");
-    expect(helper).toContain("OPENCLAW_DOCKER_BUILD_RETRIES");
-    expect(helper).toContain("OPENCLAW_DOCKER_BUILD_TIMEOUT");
+    expect(helper).toContain("SUNCLAW_DOCKER_BUILD_RETRIES");
+    expect(helper).toContain("SUNCLAW_DOCKER_BUILD_TIMEOUT");
     expect(helper).toContain('docker_build_run_logged "$label" "$timeout_value" "$log_file"');
-    expect(helper).toContain("OPENCLAW_DOCKER_BUILD_REQUIRE_TIMEOUT");
+    expect(helper).toContain("SUNCLAW_DOCKER_BUILD_REQUIRE_TIMEOUT");
     expect(helper).toContain("frontend grpc server closed unexpectedly");
   });
 
@@ -139,7 +139,7 @@ describe("docker build helper", () => {
 
     expect(cleanupSmoke).toContain('source "$ROOT_DIR/scripts/lib/docker-e2e-container.sh"');
     expect(cleanupSmoke).toContain(
-      'DOCKER_COMMAND_TIMEOUT="${DOCKER_COMMAND_TIMEOUT:-${OPENCLAW_CLEANUP_SMOKE_DOCKER_TIMEOUT:-600s}}"',
+      'DOCKER_COMMAND_TIMEOUT="${DOCKER_COMMAND_TIMEOUT:-${SUNCLAW_CLEANUP_SMOKE_DOCKER_TIMEOUT:-600s}}"',
     );
     expect(cleanupSmoke).toContain(
       'docker_e2e_docker_run_cmd run --rm --platform "$PLATFORM" -t "$IMAGE_NAME"',
@@ -148,7 +148,7 @@ describe("docker build helper", () => {
 
     expect(installE2eSmoke).toContain('source "$ROOT_DIR/scripts/lib/docker-e2e-container.sh"');
     expect(installE2eSmoke).toContain(
-      'DOCKER_COMMAND_TIMEOUT="${DOCKER_COMMAND_TIMEOUT:-${OPENCLAW_INSTALL_E2E_DOCKER_TIMEOUT:-2700s}}"',
+      'DOCKER_COMMAND_TIMEOUT="${DOCKER_COMMAND_TIMEOUT:-${SUNCLAW_INSTALL_E2E_DOCKER_TIMEOUT:-2700s}}"',
     );
     expect(installE2eSmoke).toContain("docker_e2e_docker_run_cmd run --rm \\");
     expect(installE2eSmoke).not.toContain("docker run --rm \\");
@@ -161,18 +161,18 @@ describe("docker build helper", () => {
     const liveCliBackend = readFileSync(LIVE_CLI_BACKEND_DOCKER_PATH, "utf8");
 
     expect(helper).toContain("docker_build_on_missing_enabled()");
-    expect(helper).toContain("OPENCLAW_DOCKER_BUILD_ON_MISSING");
-    expect(helper).toContain("OPENCLAW_TESTBOX");
+    expect(helper).toContain("SUNCLAW_DOCKER_BUILD_ON_MISSING");
+    expect(helper).toContain("SUNCLAW_TESTBOX");
     expect(e2eImageHelper).toContain("docker_build_on_missing_enabled");
     expect(e2eImageHelper).toContain("Docker image not available; building");
     expect(e2eImageHelper).toContain('docker_e2e_docker_cmd image inspect "$image_name"');
     expect(e2eImageHelper).toContain('docker_e2e_docker_cmd pull "$image_name"');
     expect(liveBuild).toContain('source "$SCRIPT_ROOT_DIR/scripts/lib/docker-e2e-container.sh"');
     expect(liveBuild).toContain(
-      'DOCKER_COMMAND_TIMEOUT="${DOCKER_COMMAND_TIMEOUT:-${OPENCLAW_LIVE_DOCKER_PULL_TIMEOUT:-180s}}"',
+      'DOCKER_COMMAND_TIMEOUT="${DOCKER_COMMAND_TIMEOUT:-${SUNCLAW_LIVE_DOCKER_PULL_TIMEOUT:-180s}}"',
     );
     expect(liveBuild).toContain(
-      'LIVE_IMAGE_PULL_ATTEMPTS="${OPENCLAW_LIVE_DOCKER_PULL_ATTEMPTS:-3}"',
+      'LIVE_IMAGE_PULL_ATTEMPTS="${SUNCLAW_LIVE_DOCKER_PULL_ATTEMPTS:-3}"',
     );
     expect(liveBuild).toContain('docker_e2e_docker_cmd image inspect "$LIVE_IMAGE_NAME"');
     expect(liveBuild).toContain('docker_e2e_docker_cmd pull "$LIVE_IMAGE_NAME"');
@@ -186,17 +186,17 @@ describe("docker build helper", () => {
       'timeout "$DOCKER_PULL_TIMEOUT" docker pull "$OPENWEBUI_IMAGE"',
     );
     expect(liveCliBackend).toContain(
-      'OPENCLAW_LIVE_DOCKER_REPO_ROOT="$ROOT_DIR" "$TRUSTED_HARNESS_DIR/scripts/test-live-build-docker.sh"',
+      'SUNCLAW_LIVE_DOCKER_REPO_ROOT="$ROOT_DIR" "$TRUSTED_HARNESS_DIR/scripts/test-live-build-docker.sh"',
     );
     expect(liveCliBackend).toContain("codex-cli is no longer a bundled CLI backend");
     expect(liveCliBackend).not.toContain("==> Direct Codex CLI probe ok");
     expect(liveCliBackend).not.toContain(
-      'echo "==> Reuse live-test image: $LIVE_IMAGE_NAME (OPENCLAW_SKIP_DOCKER_BUILD=1)"',
+      'echo "==> Reuse live-test image: $LIVE_IMAGE_NAME (SUNCLAW_SKIP_DOCKER_BUILD=1)"',
     );
   });
 
   it("wraps centralized Docker builds with the timeout helper", () => {
-    const workDir = mkdtempSync(join(tmpdir(), "openclaw-docker-build-timeout-"));
+    const workDir = mkdtempSync(join(tmpdir(), "sunclaw-docker-build-timeout-"));
 
     try {
       const binDir = join(workDir, "bin");
@@ -228,7 +228,7 @@ ROOT_DIR=${shellQuote(rootDir)}
 TMPDIR=${shellQuote(workDir)}
 export ROOT_DIR TMPDIR
 export PATH="$TMPDIR/bin:$PATH"
-export OPENCLAW_DOCKER_BUILD_TIMEOUT=17s
+export SUNCLAW_DOCKER_BUILD_TIMEOUT=17s
 
 source "$ROOT_DIR/scripts/lib/docker-build.sh"
 
@@ -245,7 +245,7 @@ grep -q '^build -t demo-image .$' "$TMPDIR/docker-seen"
   });
 
   it("prints heartbeat progress for long successful centralized Docker builds", () => {
-    const workDir = mkdtempSync(join(tmpdir(), "openclaw-docker-build-heartbeat-"));
+    const workDir = mkdtempSync(join(tmpdir(), "sunclaw-docker-build-heartbeat-"));
 
     try {
       const binDir = join(workDir, "bin");
@@ -277,7 +277,7 @@ ROOT_DIR=${shellQuote(rootDir)}
 TMPDIR=${shellQuote(workDir)}
 export ROOT_DIR TMPDIR
 export PATH="$TMPDIR/bin:$PATH"
-export OPENCLAW_DOCKER_BUILD_HEARTBEAT_SECONDS=1
+export SUNCLAW_DOCKER_BUILD_HEARTBEAT_SECONDS=1
 
 source "$ROOT_DIR/scripts/lib/docker-build.sh"
 
@@ -294,7 +294,7 @@ output="$(docker_build_run e2e-build -t demo-image .)"
   });
 
   it("does not delay fast successful centralized Docker builds until the next heartbeat", () => {
-    const workDir = mkdtempSync(join(tmpdir(), "openclaw-docker-build-fast-heartbeat-"));
+    const workDir = mkdtempSync(join(tmpdir(), "sunclaw-docker-build-fast-heartbeat-"));
 
     try {
       const binDir = join(workDir, "bin");
@@ -325,7 +325,7 @@ ROOT_DIR=${shellQuote(rootDir)}
 TMPDIR=${shellQuote(workDir)}
 export ROOT_DIR TMPDIR
 export PATH="$TMPDIR/bin:$PATH"
-export OPENCLAW_DOCKER_BUILD_HEARTBEAT_SECONDS=30
+export SUNCLAW_DOCKER_BUILD_HEARTBEAT_SECONDS=30
 
 source "$ROOT_DIR/scripts/lib/docker-build.sh"
 
@@ -348,7 +348,7 @@ output="$(docker_build_run e2e-build -t demo-image .)"
 set -euo pipefail
 ROOT_DIR=${shellQuote(rootDir)}
 export ROOT_DIR
-export OPENCLAW_DOCKER_BUILD_HEARTBEAT_SECONDS=08
+export SUNCLAW_DOCKER_BUILD_HEARTBEAT_SECONDS=08
 
 source "$ROOT_DIR/scripts/lib/docker-build.sh"
 
@@ -359,7 +359,7 @@ source "$ROOT_DIR/scripts/lib/docker-build.sh"
   });
 
   it("fails centralized Docker builds fast when timeout is unavailable", () => {
-    const workDir = mkdtempSync(join(tmpdir(), "openclaw-docker-build-timeout-required-"));
+    const workDir = mkdtempSync(join(tmpdir(), "sunclaw-docker-build-timeout-required-"));
 
     try {
       mkdirSync(join(workDir, "bin"));
@@ -370,7 +370,7 @@ ROOT_DIR=${shellQuote(rootDir)}
 TMPDIR=${shellQuote(workDir)}
 export ROOT_DIR TMPDIR
 export PATH="$TMPDIR/bin"
-export OPENCLAW_DOCKER_BUILD_TIMEOUT=19s
+export SUNCLAW_DOCKER_BUILD_TIMEOUT=19s
 
 dirname() {
   /usr/bin/dirname "$@"
@@ -417,7 +417,7 @@ stdout="$(<"$TMPDIR/stdout")"
   });
 
   it("keeps setup-style Docker builds compatible when timeout is unavailable", () => {
-    const workDir = mkdtempSync(join(tmpdir(), "openclaw-docker-build-timeout-optional-"));
+    const workDir = mkdtempSync(join(tmpdir(), "sunclaw-docker-build-timeout-optional-"));
 
     try {
       const binDir = join(workDir, "bin");
@@ -453,7 +453,7 @@ ROOT_DIR=${shellQuote(rootDir)}
 TMPDIR=${shellQuote(workDir)}
 export ROOT_DIR TMPDIR
 export PATH="$TMPDIR/bin"
-export OPENCLAW_DOCKER_BUILD_TIMEOUT=23s
+export SUNCLAW_DOCKER_BUILD_TIMEOUT=23s
 
 dirname() {
   /usr/bin/dirname "$@"
@@ -486,7 +486,7 @@ docker_build_exec -t setup-image .
   });
 
   it("keeps reused Docker image probes behind the timeout-aware helper", () => {
-    const workDir = mkdtempSync(join(tmpdir(), "openclaw-docker-image-reuse-timeout-"));
+    const workDir = mkdtempSync(join(tmpdir(), "sunclaw-docker-image-reuse-timeout-"));
 
     try {
       const rootDir = process.cwd();
@@ -496,7 +496,7 @@ ROOT_DIR=${shellQuote(rootDir)}
 TMPDIR=${shellQuote(workDir)}
 export ROOT_DIR TMPDIR
 export DOCKER_COMMAND_TIMEOUT=3s
-export OPENCLAW_SKIP_DOCKER_BUILD=1
+export SUNCLAW_SKIP_DOCKER_BUILD=1
 
 mkdir -p "$TMPDIR/bin"
 cat >"$TMPDIR/bin/timeout" <<'SH'
@@ -525,7 +525,7 @@ docker() {
     "image inspect")
       return 1
       ;;
-    "pull openclaw-reuse-image")
+    "pull sunclaw-reuse-image")
       return 0
       ;;
     *)
@@ -538,15 +538,15 @@ export -f docker
 source "$ROOT_DIR/scripts/lib/docker-e2e-image.sh"
 
 docker_e2e_build_or_reuse \\
-  openclaw-reuse-image \\
+  sunclaw-reuse-image \\
   reuse-timeout-proof \\
   "$ROOT_DIR/scripts/e2e/Dockerfile" \\
   "$ROOT_DIR" \\
   functional
 
 test "$(grep -c '^--kill-after=30s 3s|' "$TMPDIR/timeout-seen")" = "2"
-grep -q '^image inspect openclaw-reuse-image$' "$TMPDIR/docker-seen"
-grep -q '^pull openclaw-reuse-image$' "$TMPDIR/docker-seen"
+grep -q '^image inspect sunclaw-reuse-image$' "$TMPDIR/docker-seen"
+grep -q '^pull sunclaw-reuse-image$' "$TMPDIR/docker-seen"
 `;
 
       execFileSync("bash", ["-lc", script], { encoding: "utf8" });
@@ -556,7 +556,7 @@ grep -q '^pull openclaw-reuse-image$' "$TMPDIR/docker-seen"
   });
 
   it("fails Docker commands fast when timeout is unavailable", () => {
-    const workDir = mkdtempSync(join(tmpdir(), "openclaw-docker-timeout-required-"));
+    const workDir = mkdtempSync(join(tmpdir(), "sunclaw-docker-timeout-required-"));
 
     try {
       mkdirSync(join(workDir, "bin"));
@@ -594,7 +594,7 @@ stderr="$(<"$TMPDIR/stderr")"
   });
 
   it("uses a Node watchdog for Docker commands when timeout is unavailable", () => {
-    const workDir = mkdtempSync(join(tmpdir(), "openclaw-docker-node-timeout-"));
+    const workDir = mkdtempSync(join(tmpdir(), "sunclaw-docker-node-timeout-"));
 
     try {
       const binDir = join(workDir, "bin");
@@ -642,7 +642,7 @@ stderr="$(<"$TMPDIR/stderr")"
     ["HUP", "129"],
   ] as const) {
     it(`escalates Docker watchdog children that ignore parent SIG${shellSignal}`, () => {
-      const workDir = mkdtempSync(join(tmpdir(), "openclaw-docker-node-signal-"));
+      const workDir = mkdtempSync(join(tmpdir(), "sunclaw-docker-node-signal-"));
 
       try {
         const binDir = join(workDir, "bin");
@@ -670,7 +670,7 @@ TMPDIR=${shellQuote(workDir)}
 export ROOT_DIR TMPDIR
 export PATH="$TMPDIR/bin"
 export DOCKER_COMMAND_TIMEOUT=30s
-export OPENCLAW_DOCKER_TIMEOUT_KILL_GRACE_MS=100
+export SUNCLAW_DOCKER_TIMEOUT_KILL_GRACE_MS=100
 
 source "$ROOT_DIR/scripts/lib/docker-e2e-container.sh"
 
@@ -705,7 +705,7 @@ exit 1
   }
 
   it("uses plain timeout when kill-after is unsupported", () => {
-    const workDir = mkdtempSync(join(tmpdir(), "openclaw-docker-plain-timeout-"));
+    const workDir = mkdtempSync(join(tmpdir(), "sunclaw-docker-plain-timeout-"));
 
     try {
       const binDir = join(workDir, "bin");
@@ -752,7 +752,7 @@ grep -q '^image inspect demo$' "$TMPDIR/docker-seen"
   });
 
   it("uses gtimeout when timeout is unavailable", () => {
-    const workDir = mkdtempSync(join(tmpdir(), "openclaw-docker-gtimeout-"));
+    const workDir = mkdtempSync(join(tmpdir(), "sunclaw-docker-gtimeout-"));
 
     try {
       const binDir = join(workDir, "bin");
@@ -777,7 +777,7 @@ ROOT_DIR=${shellQuote(rootDir)}
 TMPDIR=${shellQuote(workDir)}
 export ROOT_DIR TMPDIR
 export PATH="$TMPDIR/bin"
-export OPENCLAW_DOCKER_E2E_RUN_TIMEOUT=13s
+export SUNCLAW_DOCKER_E2E_RUN_TIMEOUT=13s
 
 docker() {
   printf "%s\\n" "$*" >>"$TMPDIR/docker-seen"
@@ -799,7 +799,7 @@ docker_e2e_docker_run_cmd run demo
   });
 
   it("keeps package-backed Docker runs bounded without the shared timeout helper", () => {
-    const workDir = mkdtempSync(join(tmpdir(), "openclaw-docker-package-timeout-required-"));
+    const workDir = mkdtempSync(join(tmpdir(), "sunclaw-docker-package-timeout-required-"));
 
     try {
       mkdirSync(join(workDir, "bin"));
@@ -810,7 +810,7 @@ ROOT_DIR=${shellQuote(rootDir)}
 TMPDIR=${shellQuote(workDir)}
 export ROOT_DIR TMPDIR
 export PATH="$TMPDIR/bin"
-export OPENCLAW_DOCKER_E2E_RUN_TIMEOUT=11s
+export SUNCLAW_DOCKER_E2E_RUN_TIMEOUT=11s
 
 dirname() {
   /usr/bin/dirname "$@"
@@ -845,7 +845,7 @@ stderr="$(<"$TMPDIR/stderr")"
   });
 
   it("uses gtimeout for package-backed Docker runs without the shared timeout helper", () => {
-    const workDir = mkdtempSync(join(tmpdir(), "openclaw-docker-package-gtimeout-"));
+    const workDir = mkdtempSync(join(tmpdir(), "sunclaw-docker-package-gtimeout-"));
 
     try {
       const binDir = join(workDir, "bin");
@@ -870,7 +870,7 @@ ROOT_DIR=${shellQuote(rootDir)}
 TMPDIR=${shellQuote(workDir)}
 export ROOT_DIR TMPDIR
 export PATH="$TMPDIR/bin"
-export OPENCLAW_DOCKER_E2E_RUN_TIMEOUT=15s
+export SUNCLAW_DOCKER_E2E_RUN_TIMEOUT=15s
 
 dirname() {
   /usr/bin/dirname "$@"
@@ -900,7 +900,7 @@ docker_e2e_docker_run_cmd run demo
   });
 
   it("removes functional Docker build package inputs after the build", () => {
-    const workDir = mkdtempSync(join(tmpdir(), "openclaw-docker-build-cleanup-"));
+    const workDir = mkdtempSync(join(tmpdir(), "sunclaw-docker-build-cleanup-"));
 
     try {
       const rootDir = process.cwd();
@@ -913,7 +913,7 @@ export ROOT_DIR TMPDIR
 node() {
   local script="$1"
   shift
-  if [[ "$script" != "$ROOT_DIR/scripts/package-openclaw-for-docker.mjs" ]]; then
+  if [[ "$script" != "$ROOT_DIR/scripts/package-sunclaw-for-docker.mjs" ]]; then
     command node "$script" "$@"
     return
   fi
@@ -949,19 +949,19 @@ docker_build_run() {
   local arg
   for arg in "$@"; do
     case "$arg" in
-      openclaw_package=*)
-        build_context="\${arg#openclaw_package=}"
+      sunclaw_package=*)
+        build_context="\${arg#sunclaw_package=}"
         ;;
     esac
   done
 
   test -n "$build_context"
-  test -f "$build_context/openclaw-current.tgz"
+  test -f "$build_context/sunclaw-current.tgz"
   printf "%s\\n" "$build_context" >"$TMPDIR/build-context-seen"
 }
 
 docker_e2e_build_or_reuse \\
-  openclaw-test-image \\
+  sunclaw-test-image \\
   cleanup-proof \\
   "$ROOT_DIR/scripts/e2e/Dockerfile" \\
   "$ROOT_DIR" \\
@@ -969,8 +969,8 @@ docker_e2e_build_or_reuse \\
 
 test -f "$TMPDIR/build-context-seen"
 leftovers="$(find "$TMPDIR" -maxdepth 1 \\( \\
-  -name 'openclaw-docker-e2e-pack.*' \\
-  -o -name 'openclaw-docker-e2e-package-context.*' \\
+  -name 'sunclaw-docker-e2e-pack.*' \\
+  -o -name 'sunclaw-docker-e2e-package-context.*' \\
 \\) -print)"
 if [[ -n "$leftovers" ]]; then
   printf 'leftover functional build inputs:\\n%s\\n' "$leftovers" >&2
@@ -985,7 +985,7 @@ fi
   });
 
   it("keeps caller-provided functional Docker build packages", () => {
-    const workDir = mkdtempSync(join(tmpdir(), "openclaw-docker-build-external-package-"));
+    const workDir = mkdtempSync(join(tmpdir(), "sunclaw-docker-build-external-package-"));
 
     try {
       const rootDir = process.cwd();
@@ -997,9 +997,9 @@ export ROOT_DIR TMPDIR
 
 external_dir="$TMPDIR/external-package"
 mkdir -p "$external_dir"
-printf fixture >"$external_dir/openclaw-current.tgz"
-OPENCLAW_CURRENT_PACKAGE_TGZ="$external_dir/openclaw-current.tgz"
-export OPENCLAW_CURRENT_PACKAGE_TGZ
+printf fixture >"$external_dir/sunclaw-current.tgz"
+SUNCLAW_CURRENT_PACKAGE_TGZ="$external_dir/sunclaw-current.tgz"
+export SUNCLAW_CURRENT_PACKAGE_TGZ
 
 source "$ROOT_DIR/scripts/lib/docker-e2e-image.sh"
 
@@ -1008,27 +1008,27 @@ docker_build_run() {
   local arg
   for arg in "$@"; do
     case "$arg" in
-      openclaw_package=*)
-        build_context="\${arg#openclaw_package=}"
+      sunclaw_package=*)
+        build_context="\${arg#sunclaw_package=}"
         ;;
     esac
   done
 
   test -n "$build_context"
-  test -f "$build_context/openclaw-current.tgz"
+  test -f "$build_context/sunclaw-current.tgz"
   printf "%s\\n" "$build_context" >"$TMPDIR/build-context-seen"
 }
 
 docker_e2e_build_or_reuse \\
-  openclaw-test-image \\
+  sunclaw-test-image \\
   external-package-proof \\
   "$ROOT_DIR/scripts/e2e/Dockerfile" \\
   "$ROOT_DIR" \\
   functional
 
 test -f "$TMPDIR/build-context-seen"
-test -f "$OPENCLAW_CURRENT_PACKAGE_TGZ"
-leftovers="$(find "$TMPDIR" -maxdepth 1 -name 'openclaw-docker-e2e-package-context.*' -print)"
+test -f "$SUNCLAW_CURRENT_PACKAGE_TGZ"
+leftovers="$(find "$TMPDIR" -maxdepth 1 -name 'sunclaw-docker-e2e-package-context.*' -print)"
 if [[ -n "$leftovers" ]]; then
   printf 'leftover functional build context:\\n%s\\n' "$leftovers" >&2
   exit 1
@@ -1042,7 +1042,7 @@ fi
   });
 
   it("cleans generated package mounts after harness Docker runs", () => {
-    const workDir = mkdtempSync(join(tmpdir(), "openclaw-docker-package-mount-cleanup-"));
+    const workDir = mkdtempSync(join(tmpdir(), "sunclaw-docker-package-mount-cleanup-"));
 
     try {
       const rootDir = process.cwd();
@@ -1080,7 +1080,7 @@ export PATH="$TMPDIR/bin:$PATH"
 node() {
   local script="$1"
   shift
-  if [[ "$script" != "$ROOT_DIR/scripts/package-openclaw-for-docker.mjs" ]]; then
+  if [[ "$script" != "$ROOT_DIR/scripts/package-sunclaw-for-docker.mjs" ]]; then
     command node "$script" "$@"
     return
   fi
@@ -1164,18 +1164,18 @@ test "$(cat "$TMPDIR/docker-timeout-seen")" = "--kill-after=30s 3s"
 grep -qx "container-7" "$TMPDIR/docker-rm-seen"
 test -f "$TMPDIR/package-mount-seen"
 test ! -e "$pack_dir"
-test -z "$(find "$TMPDIR" -maxdepth 1 -name 'openclaw-docker-e2e-container.*' -print)"
+test -z "$(find "$TMPDIR" -maxdepth 1 -name 'sunclaw-docker-e2e-container.*' -print)"
 
 external_dir="$TMPDIR/external-package"
 mkdir -p "$external_dir"
-printf fixture >"$external_dir/openclaw-current.tgz"
-docker_e2e_package_mount_args "$external_dir/openclaw-current.tgz"
+printf fixture >"$external_dir/sunclaw-current.tgz"
+docker_e2e_package_mount_args "$external_dir/sunclaw-current.tgz"
 unset DOCKER_COMMAND_TIMEOUT
 rm -f "$TMPDIR/docker-timeout-seen"
 docker_e2e_run_with_harness image-name bash -lc true
 test "$(cat "$TMPDIR/docker-timeout-seen")" = "--kill-after=30s 3600s"
 grep -qx "container-" "$TMPDIR/docker-rm-seen"
-test -f "$external_dir/openclaw-current.tgz"
+test -f "$external_dir/sunclaw-current.tgz"
 `;
 
       execFileSync("bash", ["-lc", script], { encoding: "utf8" });
@@ -1185,7 +1185,7 @@ test -f "$external_dir/openclaw-current.tgz"
   });
 
   it("propagates shared E2E command timeouts into package-backed containers", () => {
-    const workDir = mkdtempSync(join(tmpdir(), "openclaw-docker-package-timeout-env-"));
+    const workDir = mkdtempSync(join(tmpdir(), "sunclaw-docker-package-timeout-env-"));
 
     try {
       const rootDir = process.cwd();
@@ -1196,17 +1196,17 @@ TMPDIR=${shellQuote(workDir)}
 export ROOT_DIR TMPDIR
 source "$ROOT_DIR/scripts/lib/docker-e2e-package.sh"
 
-package="$TMPDIR/openclaw-current.tgz"
+package="$TMPDIR/sunclaw-current.tgz"
 printf fixture >"$package"
-export OPENCLAW_E2E_NPM_INSTALL_TIMEOUT=42s
-export OPENCLAW_E2E_COMMAND_TIMEOUT=23s
+export SUNCLAW_E2E_NPM_INSTALL_TIMEOUT=42s
+export SUNCLAW_E2E_COMMAND_TIMEOUT=23s
 docker_e2e_package_mount_args "$package"
 printf "%s\\n" "\${DOCKER_E2E_PACKAGE_ARGS[@]}" >"$TMPDIR/package-args"
 
 grep -qx -- "-e" "$TMPDIR/package-args"
-grep -qx -- "OPENCLAW_CURRENT_PACKAGE_TGZ=/tmp/openclaw-current.tgz" "$TMPDIR/package-args"
-grep -qx -- "OPENCLAW_E2E_NPM_INSTALL_TIMEOUT=42s" "$TMPDIR/package-args"
-grep -qx -- "OPENCLAW_E2E_COMMAND_TIMEOUT=23s" "$TMPDIR/package-args"
+grep -qx -- "SUNCLAW_CURRENT_PACKAGE_TGZ=/tmp/sunclaw-current.tgz" "$TMPDIR/package-args"
+grep -qx -- "SUNCLAW_E2E_NPM_INSTALL_TIMEOUT=42s" "$TMPDIR/package-args"
+grep -qx -- "SUNCLAW_E2E_COMMAND_TIMEOUT=23s" "$TMPDIR/package-args"
 `;
 
       execFileSync("bash", ["-lc", script], { encoding: "utf8" });
@@ -1218,15 +1218,15 @@ grep -qx -- "OPENCLAW_E2E_COMMAND_TIMEOUT=23s" "$TMPDIR/package-args"
   it("passes plugin lifecycle sampler timeout overrides into Docker", () => {
     const runner = readFileSync(PLUGIN_LIFECYCLE_MATRIX_DOCKER_E2E_PATH, "utf8");
 
-    expect(runner).toContain('if [ -n "${OPENCLAW_PLUGIN_LIFECYCLE_PHASE_TIMEOUT_MS:-}" ]; then');
+    expect(runner).toContain('if [ -n "${SUNCLAW_PLUGIN_LIFECYCLE_PHASE_TIMEOUT_MS:-}" ]; then');
     expect(runner).toContain(
-      'DOCKER_ENV_ARGS+=(-e "OPENCLAW_PLUGIN_LIFECYCLE_PHASE_TIMEOUT_MS=$OPENCLAW_PLUGIN_LIFECYCLE_PHASE_TIMEOUT_MS")',
+      'DOCKER_ENV_ARGS+=(-e "SUNCLAW_PLUGIN_LIFECYCLE_PHASE_TIMEOUT_MS=$SUNCLAW_PLUGIN_LIFECYCLE_PHASE_TIMEOUT_MS")',
     );
     expect(runner).toContain(
-      'if [ -n "${OPENCLAW_PLUGIN_LIFECYCLE_TIMEOUT_KILL_GRACE_MS:-}" ]; then',
+      'if [ -n "${SUNCLAW_PLUGIN_LIFECYCLE_TIMEOUT_KILL_GRACE_MS:-}" ]; then',
     );
     expect(runner).toContain(
-      'DOCKER_ENV_ARGS+=(-e "OPENCLAW_PLUGIN_LIFECYCLE_TIMEOUT_KILL_GRACE_MS=$OPENCLAW_PLUGIN_LIFECYCLE_TIMEOUT_KILL_GRACE_MS")',
+      'DOCKER_ENV_ARGS+=(-e "SUNCLAW_PLUGIN_LIFECYCLE_TIMEOUT_KILL_GRACE_MS=$SUNCLAW_PLUGIN_LIFECYCLE_TIMEOUT_KILL_GRACE_MS")',
     );
     expect(runner).toContain('docker_e2e_run_with_harness \\\n  "${DOCKER_ENV_ARGS[@]}"');
   });
@@ -1235,9 +1235,9 @@ grep -qx -- "OPENCLAW_E2E_COMMAND_TIMEOUT=23s" "$TMPDIR/package-args"
     const sweep = readFileSync(PLUGIN_LIFECYCLE_MATRIX_SWEEP_PATH, "utf8");
 
     expect(sweep).toContain("cleanup() {");
-    expect(sweep).toContain("openclaw_plugins_cleanup_fixture_servers");
+    expect(sweep).toContain("sunclaw_plugins_cleanup_fixture_servers");
     expect(sweep).toContain(
-      'resource_dir="$(mktemp -d "/tmp/openclaw-plugin-lifecycle-matrix.XXXXXX")"',
+      'resource_dir="$(mktemp -d "/tmp/sunclaw-plugin-lifecycle-matrix.XXXXXX")"',
     );
     expect(sweep).toContain('tarball_v1="$resource_dir/lifecycle-claw-1.0.0.tgz"');
     expect(sweep).toContain('tarball_v2="$resource_dir/lifecycle-claw-2.0.0.tgz"');
@@ -1245,7 +1245,7 @@ grep -qx -- "OPENCLAW_E2E_COMMAND_TIMEOUT=23s" "$TMPDIR/package-args"
     expect(sweep).toContain('pack_root="$(mktemp -d "$resource_dir/pack.XXXXXX")"');
     expect(sweep).toContain('registry_root="$(mktemp -d "$resource_dir/registry.XXXXXX")"');
     expect(sweep).toContain('rm -rf "$resource_dir"');
-    expect(sweep).not.toContain('resource_dir="/tmp/openclaw-plugin-lifecycle-matrix"');
+    expect(sweep).not.toContain('resource_dir="/tmp/sunclaw-plugin-lifecycle-matrix"');
     expect(sweep).not.toContain("/tmp/lifecycle-claw-1.0.0.tgz");
     expect(sweep).not.toContain("/tmp/lifecycle-claw-2.0.0.tgz");
     expect(sweep).not.toContain("/tmp/plugin-lifecycle-inspect-v1.json");
@@ -1261,23 +1261,23 @@ grep -qx -- "OPENCLAW_E2E_COMMAND_TIMEOUT=23s" "$TMPDIR/package-args"
     const pluginCorrupt = readFileSync(PLUGIN_UPDATE_CORRUPT_SCENARIO_PATH, "utf8");
 
     expect(multiNode).toContain(
-      'openclaw_e2e_install_package "$ARTIFACTS/install-a.log" "OpenClaw package under node-A prefix" "$NPM_PREFIX_A"',
+      'sunclaw_e2e_install_package "$ARTIFACTS/install-a.log" "SunClaw package under node-A prefix" "$NPM_PREFIX_A"',
     );
     expect(updateChannel).toContain(
-      'openclaw_e2e_maybe_timeout "${OPENCLAW_E2E_NPM_INSTALL_TIMEOUT:-600s}" npm install --omit=optional --no-fund --no-audit',
+      'sunclaw_e2e_maybe_timeout "${SUNCLAW_E2E_NPM_INSTALL_TIMEOUT:-600s}" npm install --omit=optional --no-fund --no-audit',
     );
     expect(updateChannel).toContain(
-      'openclaw_e2e_maybe_timeout "${OPENCLAW_E2E_NPM_INSTALL_TIMEOUT:-600s}" npm install -g --prefix /tmp/npm-prefix --omit=optional "$pkg_tgz_path"',
+      'sunclaw_e2e_maybe_timeout "${SUNCLAW_E2E_NPM_INSTALL_TIMEOUT:-600s}" npm install -g --prefix /tmp/npm-prefix --omit=optional "$pkg_tgz_path"',
     );
     expect(doctorSwitch).toContain(
-      'openclaw_e2e_maybe_timeout "${OPENCLAW_E2E_NPM_INSTALL_TIMEOUT:-600s}" npm install --omit=optional --no-fund --no-audit',
+      'sunclaw_e2e_maybe_timeout "${SUNCLAW_E2E_NPM_INSTALL_TIMEOUT:-600s}" npm install --omit=optional --no-fund --no-audit',
     );
     expect(doctorSwitch).toContain(
-      'openclaw_e2e_maybe_timeout "${OPENCLAW_E2E_NPM_INSTALL_TIMEOUT:-600s}" npm install -g --prefix /tmp/npm-prefix --omit=optional "$package_tgz"',
+      'sunclaw_e2e_maybe_timeout "${SUNCLAW_E2E_NPM_INSTALL_TIMEOUT:-600s}" npm install -g --prefix /tmp/npm-prefix --omit=optional "$package_tgz"',
     );
     for (const script of [releaseUpgrade, upgradeSurvivor, pluginCorrupt]) {
       expect(script).toContain(
-        'openclaw_e2e_maybe_timeout "${OPENCLAW_E2E_NPM_INSTALL_TIMEOUT:-600s}" npm install -g',
+        'sunclaw_e2e_maybe_timeout "${SUNCLAW_E2E_NPM_INSTALL_TIMEOUT:-600s}" npm install -g',
       );
     }
   });
@@ -1287,24 +1287,24 @@ grep -qx -- "OPENCLAW_E2E_COMMAND_TIMEOUT=23s" "$TMPDIR/package-args"
     const publishedRunner = readFileSync(UPGRADE_SURVIVOR_RUN_SCRIPT, "utf8");
 
     for (const script of [runner, publishedRunner]) {
-      expect(script).toContain("openclaw-upgrade-survivor-runtime");
-      expect(script).toContain("OPENCLAW_UPGRADE_SURVIVOR_TMPDIR");
-      expect(script).toContain("OPENCLAW_UPGRADE_SURVIVOR_TEST_STATE_TMPDIR");
+      expect(script).toContain("sunclaw-upgrade-survivor-runtime");
+      expect(script).toContain("SUNCLAW_UPGRADE_SURVIVOR_TMPDIR");
+      expect(script).toContain("SUNCLAW_UPGRADE_SURVIVOR_TEST_STATE_TMPDIR");
       expect(script).toContain(
-        'export npm_config_cache="${OPENCLAW_UPGRADE_SURVIVOR_NPM_CACHE:-$OPENCLAW_UPGRADE_SURVIVOR_RUNTIME_ROOT/npm-cache}"',
+        'export npm_config_cache="${SUNCLAW_UPGRADE_SURVIVOR_NPM_CACHE:-$SUNCLAW_UPGRADE_SURVIVOR_RUNTIME_ROOT/npm-cache}"',
       );
       expect(script).toContain('export NPM_CONFIG_CACHE="$npm_config_cache"');
       expect(script).toContain('chmod 700 "$npm_config_cache" || true');
       expect(script).not.toContain('export TMPDIR="$ARTIFACT_ROOT/tmp"');
-      expect(script).not.toContain('export TMPDIR="$OPENCLAW_UPGRADE_SURVIVOR_ARTIFACT_ROOT/tmp"');
+      expect(script).not.toContain('export TMPDIR="$SUNCLAW_UPGRADE_SURVIVOR_ARTIFACT_ROOT/tmp"');
       expect(script).not.toContain('export npm_config_cache="$ARTIFACT_ROOT/npm-cache"');
       expect(script).not.toContain(
-        'export npm_config_cache="$OPENCLAW_UPGRADE_SURVIVOR_ARTIFACT_ROOT/npm-cache"',
+        'export npm_config_cache="$SUNCLAW_UPGRADE_SURVIVOR_ARTIFACT_ROOT/npm-cache"',
       );
     }
   });
 
-  it("wraps package-backed scenario OpenClaw CLI calls with the shared timeout helper", () => {
+  it("wraps package-backed scenario SunClaw CLI calls with the shared timeout helper", () => {
     const paths = [
       CODEX_ON_DEMAND_DOCKER_E2E_PATH,
       CODEX_MEDIA_PATH_SCENARIO_PATH,
@@ -1322,10 +1322,10 @@ grep -qx -- "OPENCLAW_E2E_COMMAND_TIMEOUT=23s" "$TMPDIR/package-args"
     for (const path of paths) {
       const script = readFileSync(path, "utf8");
 
-      expect(script, path).toContain("openclaw_e2e_enable_openclaw_cli_timeout");
+      expect(script, path).toContain("sunclaw_e2e_enable_sunclaw_cli_timeout");
     }
     expect(readFileSync(RELEASE_UPGRADE_USER_JOURNEY_SCENARIO_PATH, "utf8")).toContain(
-      'openclaw_e2e_run_command node "$baseline_entry" onboard',
+      'sunclaw_e2e_run_command node "$baseline_entry" onboard',
     );
   });
 
@@ -1334,7 +1334,7 @@ grep -qx -- "OPENCLAW_E2E_COMMAND_TIMEOUT=23s" "$TMPDIR/package-args"
       {
         path: RELEASE_TYPED_ONBOARDING_SCENARIO_PATH,
         scratch:
-          'scenario_tmp="$(mktemp -d "${TMPDIR:-/tmp}/openclaw-release-typed-onboarding.XXXXXX")"',
+          'scenario_tmp="$(mktemp -d "${TMPDIR:-/tmp}/sunclaw-release-typed-onboarding.XXXXXX")"',
         logDir: 'LOG_DIR="$scenario_tmp/logs"',
         requestLog: 'MOCK_REQUEST_LOG="$scenario_tmp/openai-requests.jsonl"',
         expectedPaths: [
@@ -1345,18 +1345,18 @@ grep -qx -- "OPENCLAW_E2E_COMMAND_TIMEOUT=23s" "$TMPDIR/package-args"
           'input_fifo_dir="$(mktemp -d "$scenario_tmp/input.XXXXXX")"',
         ],
         removed: [
-          "/tmp/openclaw-release-typed-onboarding-openai.jsonl",
-          "/tmp/openclaw-release-typed-onboarding-install.log",
-          "/tmp/openclaw-release-typed-onboarding.log",
-          "/tmp/openclaw-release-typed-onboarding-openai.log",
-          "/tmp/openclaw-release-typed-onboarding-agent.log",
-          'mktemp -d "/tmp/openclaw-release-typed-onboarding.XXXXXX"',
+          "/tmp/sunclaw-release-typed-onboarding-openai.jsonl",
+          "/tmp/sunclaw-release-typed-onboarding-install.log",
+          "/tmp/sunclaw-release-typed-onboarding.log",
+          "/tmp/sunclaw-release-typed-onboarding-openai.log",
+          "/tmp/sunclaw-release-typed-onboarding-agent.log",
+          'mktemp -d "/tmp/sunclaw-release-typed-onboarding.XXXXXX"',
         ],
       },
       {
         path: RELEASE_USER_JOURNEY_SCENARIO_PATH,
         scratch:
-          'scenario_tmp="$(mktemp -d "${TMPDIR:-/tmp}/openclaw-release-user-journey.XXXXXX")"',
+          'scenario_tmp="$(mktemp -d "${TMPDIR:-/tmp}/sunclaw-release-user-journey.XXXXXX")"',
         logDir: 'LOG_DIR="$scenario_tmp/logs"',
         requestLog: 'MOCK_REQUEST_LOG="$scenario_tmp/openai-requests.jsonl"',
         extraState: 'CLICKCLACK_STATE="$scenario_tmp/clickclack.json"',
@@ -1371,21 +1371,21 @@ grep -qx -- "OPENCLAW_E2E_COMMAND_TIMEOUT=23s" "$TMPDIR/package-args"
           'plugin_b_dir="$(mktemp -d "$scenario_tmp/plugin-b.XXXXXX")"',
         ],
         removed: [
-          "/tmp/openclaw-release-user-journey-openai.jsonl",
-          "/tmp/openclaw-release-user-journey-clickclack.json",
-          "/tmp/openclaw-release-user-journey-install.log",
-          "/tmp/openclaw-release-user-journey-onboard.log",
-          "/tmp/openclaw-release-user-journey-agent.log",
-          "/tmp/openclaw-release-user-journey-plugin-a-install-path.txt",
-          "/tmp/openclaw-release-user-journey-plugin-a-source-path.txt",
-          'mktemp -d "/tmp/openclaw-release-journey-plugin-a.XXXXXX"',
-          'mktemp -d "/tmp/openclaw-release-journey-plugin-b.XXXXXX"',
+          "/tmp/sunclaw-release-user-journey-openai.jsonl",
+          "/tmp/sunclaw-release-user-journey-clickclack.json",
+          "/tmp/sunclaw-release-user-journey-install.log",
+          "/tmp/sunclaw-release-user-journey-onboard.log",
+          "/tmp/sunclaw-release-user-journey-agent.log",
+          "/tmp/sunclaw-release-user-journey-plugin-a-install-path.txt",
+          "/tmp/sunclaw-release-user-journey-plugin-a-source-path.txt",
+          'mktemp -d "/tmp/sunclaw-release-journey-plugin-a.XXXXXX"',
+          'mktemp -d "/tmp/sunclaw-release-journey-plugin-b.XXXXXX"',
         ],
       },
       {
         path: RELEASE_UPGRADE_USER_JOURNEY_SCENARIO_PATH,
         scratch:
-          'scenario_tmp="$(mktemp -d "${TMPDIR:-/tmp}/openclaw-release-upgrade-user-journey.XXXXXX")"',
+          'scenario_tmp="$(mktemp -d "${TMPDIR:-/tmp}/sunclaw-release-upgrade-user-journey.XXXXXX")"',
         logDir: 'LOG_DIR="$scenario_tmp/logs"',
         requestLog: 'MOCK_REQUEST_LOG="$scenario_tmp/openai-requests.jsonl"',
         extraState: 'CLICKCLACK_STATE="$scenario_tmp/clickclack.json"',
@@ -1399,21 +1399,21 @@ grep -qx -- "OPENCLAW_E2E_COMMAND_TIMEOUT=23s" "$TMPDIR/package-args"
           'plugin_dir="$(mktemp -d "$scenario_tmp/plugin.XXXXXX")"',
         ],
         removed: [
-          "/tmp/openclaw-release-upgrade-user-journey-openai.jsonl",
-          "/tmp/openclaw-release-upgrade-user-journey-clickclack.json",
-          "/tmp/openclaw-release-upgrade-baseline-install.log",
-          "/tmp/openclaw-release-upgrade-candidate-install.log",
-          "/tmp/openclaw-release-upgrade-onboard.log",
-          "/tmp/openclaw-release-upgrade-agent.log",
-          'mktemp -d "/tmp/openclaw-release-upgrade-plugin.XXXXXX"',
+          "/tmp/sunclaw-release-upgrade-user-journey-openai.jsonl",
+          "/tmp/sunclaw-release-upgrade-user-journey-clickclack.json",
+          "/tmp/sunclaw-release-upgrade-baseline-install.log",
+          "/tmp/sunclaw-release-upgrade-candidate-install.log",
+          "/tmp/sunclaw-release-upgrade-onboard.log",
+          "/tmp/sunclaw-release-upgrade-agent.log",
+          'mktemp -d "/tmp/sunclaw-release-upgrade-plugin.XXXXXX"',
         ],
       },
       {
         path: NPM_ONBOARD_CHANNEL_AGENT_DOCKER_E2E_PATH,
         scratch:
-          'scenario_tmp="$(mktemp -d "${TMPDIR:-/tmp}/openclaw-npm-onboard-channel-agent.XXXXXX")"',
+          'scenario_tmp="$(mktemp -d "${TMPDIR:-/tmp}/sunclaw-npm-onboard-channel-agent.XXXXXX")"',
         requestLog: 'MOCK_REQUEST_LOG="$scenario_tmp/mock-openai-requests.jsonl"',
-        removed: ["/tmp/openclaw-mock-openai-requests.jsonl"],
+        removed: ["/tmp/sunclaw-mock-openai-requests.jsonl"],
       },
     ];
 
@@ -1443,7 +1443,7 @@ grep -qx -- "OPENCLAW_E2E_COMMAND_TIMEOUT=23s" "$TMPDIR/package-args"
       for (const stalePath of removed) {
         expect(script, path).not.toContain(stalePath);
       }
-      expect(script, path).not.toMatch(/\/tmp\/openclaw-release-[\w-]+\.(?:log|json|err|txt)/u);
+      expect(script, path).not.toMatch(/\/tmp\/sunclaw-release-[\w-]+\.(?:log|json|err|txt)/u);
     }
   });
 
@@ -1465,85 +1465,85 @@ grep -qx -- "OPENCLAW_E2E_COMMAND_TIMEOUT=23s" "$TMPDIR/package-args"
     const multiNode = readFileSync(MULTI_NODE_UPDATE_DOCKER_E2E_PATH, "utf8");
 
     expect(multiNode).toContain(
-      'RUN_ID="${OPENCLAW_MULTI_NODE_RUN_ID:-$(date -u +%Y%m%dT%H%M%SZ)-$$}"',
+      'RUN_ID="${SUNCLAW_MULTI_NODE_RUN_ID:-$(date -u +%Y%m%dT%H%M%SZ)-$$}"',
     );
     expect(multiNode).toContain(
-      'ARTIFACT_DIR="${OPENCLAW_MULTI_NODE_ARTIFACT_DIR:-$ROOT_DIR/.artifacts/multi-node-update/$RUN_ID}"',
+      'ARTIFACT_DIR="${SUNCLAW_MULTI_NODE_ARTIFACT_DIR:-$ROOT_DIR/.artifacts/multi-node-update/$RUN_ID}"',
     );
     expect(multiNode).toContain('-v "$ARTIFACT_DIR:/tmp/artifacts"');
     expect(multiNode).not.toContain(
-      'ARTIFACT_DIR="${OPENCLAW_MULTI_NODE_ARTIFACT_DIR:-$ROOT_DIR/.artifacts/multi-node-update}"',
+      'ARTIFACT_DIR="${SUNCLAW_MULTI_NODE_ARTIFACT_DIR:-$ROOT_DIR/.artifacts/multi-node-update}"',
     );
   });
 
-  it("bounds upgrade survivor foreground OpenClaw CLI calls", () => {
+  it("bounds upgrade survivor foreground SunClaw CLI calls", () => {
     const runner = readFileSync(UPGRADE_SURVIVOR_DOCKER_E2E_PATH, "utf8");
     const publishedRunner = readFileSync(UPGRADE_SURVIVOR_RUN_SCRIPT, "utf8");
     const updateRestartAuth = readFileSync(UPGRADE_SURVIVOR_UPDATE_RESTART_AUTH_PATH, "utf8");
 
     expect(runner).toContain(
-      'COMMAND_TIMEOUT="${OPENCLAW_UPGRADE_SURVIVOR_COMMAND_TIMEOUT:-900s}"',
+      'COMMAND_TIMEOUT="${SUNCLAW_UPGRADE_SURVIVOR_COMMAND_TIMEOUT:-900s}"',
     );
-    expect(runner).toContain('-e OPENCLAW_UPGRADE_SURVIVOR_COMMAND_TIMEOUT="$COMMAND_TIMEOUT"');
+    expect(runner).toContain('-e SUNCLAW_UPGRADE_SURVIVOR_COMMAND_TIMEOUT="$COMMAND_TIMEOUT"');
     expect(runner).toContain(
-      'command_timeout="${OPENCLAW_UPGRADE_SURVIVOR_COMMAND_TIMEOUT:-900s}"',
-    );
-    expect(runner).toContain(
-      'openclaw_e2e_maybe_timeout "$command_timeout" env -u OPENCLAW_GATEWAY_TOKEN',
+      'command_timeout="${SUNCLAW_UPGRADE_SURVIVOR_COMMAND_TIMEOUT:-900s}"',
     );
     expect(runner).toContain(
-      'openclaw_e2e_maybe_timeout "$command_timeout" openclaw doctor --fix --non-interactive',
+      'sunclaw_e2e_maybe_timeout "$command_timeout" env -u SUNCLAW_GATEWAY_TOKEN',
     );
     expect(runner).toContain(
-      'openclaw_e2e_maybe_timeout "$command_timeout" openclaw config validate',
+      'sunclaw_e2e_maybe_timeout "$command_timeout" sunclaw doctor --fix --non-interactive',
     );
     expect(runner).toContain(
-      'openclaw_e2e_maybe_timeout "$command_timeout" openclaw gateway status',
+      'sunclaw_e2e_maybe_timeout "$command_timeout" sunclaw config validate',
     );
     expect(runner).toContain(
-      'openclaw gateway --port "$PORT" --bind loopback --allow-unconfigured',
+      'sunclaw_e2e_maybe_timeout "$command_timeout" sunclaw gateway status',
+    );
+    expect(runner).toContain(
+      'sunclaw gateway --port "$PORT" --bind loopback --allow-unconfigured',
     );
 
     expect(publishedRunner).toContain(
-      'COMMAND_TIMEOUT="${OPENCLAW_UPGRADE_SURVIVOR_COMMAND_TIMEOUT:-900s}"',
+      'COMMAND_TIMEOUT="${SUNCLAW_UPGRADE_SURVIVOR_COMMAND_TIMEOUT:-900s}"',
     );
     expect(publishedRunner).toContain(
-      'openclaw_e2e_maybe_timeout "$COMMAND_TIMEOUT" env -u OPENCLAW_GATEWAY_TOKEN',
+      'sunclaw_e2e_maybe_timeout "$COMMAND_TIMEOUT" env -u SUNCLAW_GATEWAY_TOKEN',
     );
     expect(publishedRunner).toContain(
-      'openclaw_e2e_maybe_timeout "$COMMAND_TIMEOUT" openclaw --version',
+      'sunclaw_e2e_maybe_timeout "$COMMAND_TIMEOUT" sunclaw --version',
     );
     expect(publishedRunner).toContain(
-      'openclaw_e2e_maybe_timeout "$COMMAND_TIMEOUT" openclaw config validate >"$BASELINE_CONFIG_VALIDATE_LOG"',
+      'sunclaw_e2e_maybe_timeout "$COMMAND_TIMEOUT" sunclaw config validate >"$BASELINE_CONFIG_VALIDATE_LOG"',
     );
     expect(publishedRunner).toContain(
-      'openclaw_e2e_maybe_timeout "$COMMAND_TIMEOUT" "${update_env[@]}" openclaw',
+      'sunclaw_e2e_maybe_timeout "$COMMAND_TIMEOUT" "${update_env[@]}" sunclaw',
     );
     expect(publishedRunner).toContain(
-      'openclaw_e2e_maybe_timeout "$COMMAND_TIMEOUT" "${root_cli_env[@]}" openclaw',
+      'sunclaw_e2e_maybe_timeout "$COMMAND_TIMEOUT" "${root_cli_env[@]}" sunclaw',
     );
     expect(publishedRunner).toContain(
-      'openclaw_e2e_maybe_timeout "$COMMAND_TIMEOUT" openclaw doctor --fix --non-interactive',
+      'sunclaw_e2e_maybe_timeout "$COMMAND_TIMEOUT" sunclaw doctor --fix --non-interactive',
     );
     expect(publishedRunner).toContain(
-      'openclaw_e2e_maybe_timeout "$COMMAND_TIMEOUT" openclaw config validate',
+      'sunclaw_e2e_maybe_timeout "$COMMAND_TIMEOUT" sunclaw config validate',
     );
     expect(publishedRunner).toContain(
-      'openclaw_e2e_maybe_timeout "$COMMAND_TIMEOUT" openclaw gateway status',
+      'sunclaw_e2e_maybe_timeout "$COMMAND_TIMEOUT" sunclaw gateway status',
     );
-    expect(publishedRunner).toContain('openclaw gateway --port "$port" --bind loopback');
+    expect(publishedRunner).toContain('sunclaw gateway --port "$port" --bind loopback');
 
     expect(updateRestartAuth).toContain(
-      'command_timeout="${OPENCLAW_UPGRADE_SURVIVOR_COMMAND_TIMEOUT:-900s}"',
+      'command_timeout="${SUNCLAW_UPGRADE_SURVIVOR_COMMAND_TIMEOUT:-900s}"',
     );
     expect(updateRestartAuth).toContain(
-      'openclaw_e2e_maybe_timeout "$command_timeout" env -u OPENCLAW_GATEWAY_TOKEN',
+      'sunclaw_e2e_maybe_timeout "$command_timeout" env -u SUNCLAW_GATEWAY_TOKEN',
     );
-    expect(updateRestartAuth).toContain('openclaw gateway --port "$port" --bind loopback');
+    expect(updateRestartAuth).toContain('sunclaw gateway --port "$port" --bind loopback');
   });
 
   it("keeps the harness run wrapper available with pre-sourced Docker command helpers", () => {
-    const workDir = mkdtempSync(join(tmpdir(), "openclaw-docker-package-helper-guard-"));
+    const workDir = mkdtempSync(join(tmpdir(), "sunclaw-docker-package-helper-guard-"));
 
     try {
       const rootDir = process.cwd();
@@ -1657,13 +1657,13 @@ test -f "$TMPDIR/docker-cmd-seen"
 
     expect(helper).toContain("docker_e2e_run_logged_print_with_harness()");
     expect(helper).toContain("run_logged_print_heartbeat \\");
-    expect(helper).toContain("OPENCLAW_DOCKER_E2E_LOG_HEARTBEAT_SECONDS");
+    expect(helper).toContain("SUNCLAW_DOCKER_E2E_LOG_HEARTBEAT_SECONDS");
     expect(runner).toContain("docker_e2e_run_logged_print_with_harness \\");
     expect(runner).not.toContain("docker_e2e_run_logged_with_harness plugins-run");
   });
 
   it("prints heartbeat progress for long successful Docker E2E log captures", () => {
-    const workDir = mkdtempSync(join(tmpdir(), "openclaw-docker-e2e-log-heartbeat-"));
+    const workDir = mkdtempSync(join(tmpdir(), "sunclaw-docker-e2e-log-heartbeat-"));
 
     try {
       const rootDir = process.cwd();
@@ -1688,7 +1688,7 @@ output="$(run_logged_print_heartbeat plugins-run 1 bash -c 'printf "captured con
   });
 
   it("does not delay fast successful Docker E2E log captures until the next heartbeat", () => {
-    const workDir = mkdtempSync(join(tmpdir(), "openclaw-docker-e2e-log-fast-heartbeat-"));
+    const workDir = mkdtempSync(join(tmpdir(), "sunclaw-docker-e2e-log-fast-heartbeat-"));
 
     try {
       const rootDir = process.cwd();
@@ -1714,7 +1714,7 @@ output="$(run_logged_print_heartbeat plugins-run 30 bash -c 'printf "quick conta
   });
 
   it("normalizes zero-padded Docker E2E log heartbeat intervals", () => {
-    const workDir = mkdtempSync(join(tmpdir(), "openclaw-docker-e2e-log-zero-heartbeat-"));
+    const workDir = mkdtempSync(join(tmpdir(), "sunclaw-docker-e2e-log-zero-heartbeat-"));
 
     try {
       const rootDir = process.cwd();
@@ -1747,12 +1747,12 @@ output="$(run_logged_print_heartbeat plugins-run 08 bash -c 'printf "captured co
   it("keeps onboarding Docker E2E resource-guarded", () => {
     const runner = readFileSync(ONBOARD_DOCKER_E2E_PATH, "utf8");
 
-    expect(runner).toContain("OPENCLAW_ONBOARD_MAX_MEMORY_MIB");
-    expect(runner).toContain("OPENCLAW_ONBOARD_MAX_CPU_PERCENT");
+    expect(runner).toContain("SUNCLAW_ONBOARD_MAX_MEMORY_MIB");
+    expect(runner).toContain("SUNCLAW_ONBOARD_MAX_CPU_PERCENT");
     expect(runner).toContain(
-      'COMMAND_TIMEOUT="${OPENCLAW_ONBOARD_COMMAND_TIMEOUT:-${OPENCLAW_E2E_COMMAND_TIMEOUT:-300s}}"',
+      'COMMAND_TIMEOUT="${SUNCLAW_ONBOARD_COMMAND_TIMEOUT:-${SUNCLAW_E2E_COMMAND_TIMEOUT:-300s}}"',
     );
-    expect(runner).toContain('-e "OPENCLAW_E2E_COMMAND_TIMEOUT=$COMMAND_TIMEOUT"');
+    expect(runner).toContain('-e "SUNCLAW_E2E_COMMAND_TIMEOUT=$COMMAND_TIMEOUT"');
     expect(runner).toContain('--name "$CONTAINER_NAME"');
     expect(runner).toContain("docker_e2e_sample_stats_until_exit \\");
     expect(runner).toContain('"$STATS_LOG" \\');
@@ -1775,7 +1775,7 @@ output="$(run_logged_print_heartbeat plugins-run 08 bash -c 'printf "captured co
       expect(runner, path).toContain(
         'DOCKER_COMMAND_TIMEOUT="$DOCKER_RUN_TIMEOUT" docker_e2e_docker_run_cmd run --name "$CONTAINER_NAME"',
       );
-      expect(runner, path).toContain('DOCKER_RUN_TIMEOUT="${OPENCLAW_');
+      expect(runner, path).toContain('DOCKER_RUN_TIMEOUT="${SUNCLAW_');
       expect(runner, path).toContain("docker_e2e_sample_stats_until_exit \\");
       expect(runner, path).toContain('"$STATS_LOG" \\');
       expect(runner, path).toContain('"$RUN_LOG" \\');
@@ -1795,21 +1795,21 @@ output="$(run_logged_print_heartbeat plugins-run 08 bash -c 'printf "captured co
     const sweep = readFileSync("scripts/e2e/lib/kitchen-sink-plugin/sweep.sh", "utf8");
 
     expect(runner).toContain(
-      'KITCHEN_SINK_CLI_TIMEOUT="${OPENCLAW_KITCHEN_SINK_PLUGIN_CLI_TIMEOUT:-${KITCHEN_SINK_CLI_TIMEOUT:-180s}}"',
+      'KITCHEN_SINK_CLI_TIMEOUT="${SUNCLAW_KITCHEN_SINK_PLUGIN_CLI_TIMEOUT:-${KITCHEN_SINK_CLI_TIMEOUT:-180s}}"',
     );
     expect(runner).toContain('-e "KITCHEN_SINK_CLI_TIMEOUT=$KITCHEN_SINK_CLI_TIMEOUT"');
     expect(sweep).toContain('KITCHEN_SINK_CLI_TIMEOUT="${KITCHEN_SINK_CLI_TIMEOUT:-180s}"');
-    expect(sweep).toContain("run_kitchen_sink_openclaw_logged()");
-    expect(sweep).toContain("run_kitchen_sink_openclaw_capture()");
+    expect(sweep).toContain("run_kitchen_sink_sunclaw_logged()");
+    expect(sweep).toContain("run_kitchen_sink_sunclaw_capture()");
     expect(sweep).toContain(
-      'run_logged_print "$label" openclaw_e2e_maybe_timeout "$KITCHEN_SINK_CLI_TIMEOUT" node "$OPENCLAW_ENTRY" "$@"',
+      'run_logged_print "$label" sunclaw_e2e_maybe_timeout "$KITCHEN_SINK_CLI_TIMEOUT" node "$SUNCLAW_ENTRY" "$@"',
     );
     for (const line of sweep.split("\n")) {
-      if (!line.includes('node "$OPENCLAW_ENTRY" plugins')) {
+      if (!line.includes('node "$SUNCLAW_ENTRY" plugins')) {
         continue;
       }
 
-      expect(line).toContain("openclaw_e2e_maybe_timeout");
+      expect(line).toContain("sunclaw_e2e_maybe_timeout");
     }
   });
 
@@ -1870,7 +1870,7 @@ output="$(run_logged_print_heartbeat plugins-run 08 bash -c 'printf "captured co
     expect(scheduler).toContain("path.dirname(process.execPath)");
     expect(scheduler).toContain("env.PATH = [...new Set(pathEntries)].join(path.delimiter)");
     expect(scheduler).toContain("withResolvedPnpmCommand");
-    expect(scheduler).toContain("OPENCLAW_DOCKER_ALL_PNPM_COMMAND");
+    expect(scheduler).toContain("SUNCLAW_DOCKER_ALL_PNPM_COMMAND");
   });
 
   it("runs release installer E2E against the npm beta tag", () => {
@@ -1878,16 +1878,16 @@ output="$(run_logged_print_heartbeat plugins-run 08 bash -c 'printf "captured co
     const openWebUiRunner = readFileSync(OPENWEBUI_DOCKER_E2E_PATH, "utf8");
 
     expect(scenarios).toContain(
-      '"OPENCLAW_INSTALL_TAG=beta OPENCLAW_E2E_MODELS=openai OPENCLAW_INSTALL_E2E_IMAGE=openclaw-install-e2e-openai:local OPENCLAW_INSTALL_E2E_AGENT_TOOL_SMOKE=0 OPENCLAW_INSTALL_E2E_OPENAI_MODEL=openai/gpt-5.4-mini OPENCLAW_INSTALL_E2E_AGENT_TURN_TIMEOUT_SECONDS=120 OPENCLAW_INSTALL_E2E_OPENAI_PROVIDER_TIMEOUT_SECONDS=120 pnpm test:install:e2e"',
+      '"SUNCLAW_INSTALL_TAG=beta SUNCLAW_E2E_MODELS=openai SUNCLAW_INSTALL_E2E_IMAGE=sunclaw-install-e2e-openai:local SUNCLAW_INSTALL_E2E_AGENT_TOOL_SMOKE=0 SUNCLAW_INSTALL_E2E_OPENAI_MODEL=openai/gpt-5.4-mini SUNCLAW_INSTALL_E2E_AGENT_TURN_TIMEOUT_SECONDS=120 SUNCLAW_INSTALL_E2E_OPENAI_PROVIDER_TIMEOUT_SECONDS=120 pnpm test:install:e2e"',
     );
     expect(scenarios).toContain(
-      '"OPENCLAW_INSTALL_TAG=beta OPENCLAW_E2E_MODELS=anthropic OPENCLAW_INSTALL_E2E_IMAGE=openclaw-install-e2e-anthropic:local pnpm test:install:e2e"',
+      '"SUNCLAW_INSTALL_TAG=beta SUNCLAW_E2E_MODELS=anthropic SUNCLAW_INSTALL_E2E_IMAGE=sunclaw-install-e2e-anthropic:local pnpm test:install:e2e"',
     );
     expect(scenarios).toContain(
-      '"OPENCLAW_OPENWEBUI_MODEL=openai/gpt-5.4-mini OPENWEBUI_SMOKE_MODE=models OPENCLAW_OPENWEBUI_PROVIDER_TIMEOUT_SECONDS=300 OPENCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:openwebui"',
+      '"SUNCLAW_OPENWEBUI_MODEL=openai/gpt-5.4-mini OPENWEBUI_SMOKE_MODE=models SUNCLAW_OPENWEBUI_PROVIDER_TIMEOUT_SECONDS=300 SUNCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:openwebui"',
     );
     expect(openWebUiRunner).toContain(
-      'SMOKE_MODE="${OPENWEBUI_SMOKE_MODE:-${OPENCLAW_OPENWEBUI_SMOKE_MODE:-chat}}"',
+      'SMOKE_MODE="${OPENWEBUI_SMOKE_MODE:-${SUNCLAW_OPENWEBUI_SMOKE_MODE:-chat}}"',
     );
     expect(openWebUiRunner).toContain('-e "OPENWEBUI_SMOKE_MODE=$SMOKE_MODE"');
   });
@@ -1897,7 +1897,7 @@ output="$(run_logged_print_heartbeat plugins-run 08 bash -c 'printf "captured co
     const wrapper = readFileSync("scripts/test-install-sh-e2e-docker.sh", "utf8");
 
     expect(runner).toContain(
-      'AGENT_TURNS_PARALLEL="${OPENCLAW_INSTALL_E2E_AGENT_TURNS_PARALLEL:-1}"',
+      'AGENT_TURNS_PARALLEL="${SUNCLAW_INSTALL_E2E_AGENT_TURNS_PARALLEL:-1}"',
     );
     expect(runner).toContain("time_phase");
     expect(runner).toContain("phase_mark_start");
@@ -1908,15 +1908,15 @@ output="$(run_logged_print_heartbeat plugins-run 08 bash -c 'printf "captured co
     expect(runner).not.toContain('run_agent_turn_bg "read proof"');
     expect(runner).toContain('run_agent_turn_bg "image write"');
     expect(runner).toContain('run_agent_turn_logged_or_skip_profile "read proof copy"');
-    expect(wrapper).toContain("OPENCLAW_INSTALL_E2E_AGENT_TURNS_PARALLEL");
-    expect(wrapper).toContain("OPENCLAW_INSTALL_E2E_AGENT_TOOL_SMOKE");
-    expect(wrapper).toContain("OPENCLAW_INSTALL_E2E_OPENAI_MODEL");
-    expect(wrapper).toContain("OPENCLAW_INSTALL_E2E_OPENAI_PROVIDER_TIMEOUT_SECONDS");
-    expect(wrapper).toContain("OPENCLAW_INSTALL_E2E_AGENT_TURN_TIMEOUT_SECONDS:-300");
-    expect(runner).toContain("OPENCLAW_INSTALL_E2E_OPENAI_MODEL");
-    expect(runner).toContain("OPENCLAW_INSTALL_E2E_OPENAI_PROVIDER_TIMEOUT_SECONDS");
+    expect(wrapper).toContain("SUNCLAW_INSTALL_E2E_AGENT_TURNS_PARALLEL");
+    expect(wrapper).toContain("SUNCLAW_INSTALL_E2E_AGENT_TOOL_SMOKE");
+    expect(wrapper).toContain("SUNCLAW_INSTALL_E2E_OPENAI_MODEL");
+    expect(wrapper).toContain("SUNCLAW_INSTALL_E2E_OPENAI_PROVIDER_TIMEOUT_SECONDS");
+    expect(wrapper).toContain("SUNCLAW_INSTALL_E2E_AGENT_TURN_TIMEOUT_SECONDS:-300");
+    expect(runner).toContain("SUNCLAW_INSTALL_E2E_OPENAI_MODEL");
+    expect(runner).toContain("SUNCLAW_INSTALL_E2E_OPENAI_PROVIDER_TIMEOUT_SECONDS");
     expect(runner).toContain(
-      'AGENT_TURN_TIMEOUT_SECONDS="${OPENCLAW_INSTALL_E2E_AGENT_TURN_TIMEOUT_SECONDS:-300}"',
+      'AGENT_TURN_TIMEOUT_SECONDS="${SUNCLAW_INSTALL_E2E_AGENT_TURN_TIMEOUT_SECONDS:-300}"',
     );
   });
 
@@ -1926,7 +1926,7 @@ output="$(run_logged_print_heartbeat plugins-run 08 bash -c 'printf "captured co
     expect(scenarios).toContain('"plugins-offline"');
     expect(scenarios).toContain("`bundled-plugin-install-uninstall-${index}`");
     expect(scenarios).toContain("pnpm test:docker:bundled-plugin-install-uninstall");
-    expect(scenarios).toContain("OPENCLAW_PLUGINS_E2E_CLAWHUB=0");
+    expect(scenarios).toContain("SUNCLAW_PLUGINS_E2E_CLAWHUB=0");
   });
 
   it("allows plugin update smoke to tolerate config metadata migrations", () => {
@@ -1953,7 +1953,7 @@ output="$(run_logged_print_heartbeat plugins-run 08 bash -c 'printf "captured co
     expect(runner).toContain('if [ "$GATEWAY_START_FAILED" -ne 0 ]; then');
     expect(runner).toContain('if [ "$GATEWAY_HEALTH_FAILED" -ne 0 ]; then');
     expect(runner).toContain("ActiveState=active");
-    expect(runner).toContain("OPENCLAW_NO_RESPAWN=1");
+    expect(runner).toContain("SUNCLAW_NO_RESPAWN=1");
     expect(runner).toContain("is-enabled)");
     expect(runner).toContain("/healthz");
     expect(runner).toContain("FAIL: gateway install failed before update");
@@ -1997,7 +1997,7 @@ output="$(run_logged_print_heartbeat plugins-run 08 bash -c 'printf "captured co
     expect(doctorScenario).toContain("scripts/e2e/lib/package-compat.mjs");
     expect(pluginsSweep).toContain("scripts/e2e/lib/package-compat.mjs");
     expect(pluginUpdateProbe).toContain("../package-compat.mjs");
-    expect(scripts.join("\n")).toContain("OPENCLAW_PACKAGE_ACCEPTANCE_LEGACY_COMPAT");
+    expect(scripts.join("\n")).toContain("SUNCLAW_PACKAGE_ACCEPTANCE_LEGACY_COMPAT");
     expect(scripts.join("\n")).toContain(
       "Package $package_version must support gateway install --wrapper.",
     );
@@ -2010,30 +2010,30 @@ output="$(run_logged_print_heartbeat plugins-run 08 bash -c 'printf "captured co
     const scenario = readFileSync(DOCTOR_SWITCH_SCENARIO_PATH, "utf8");
 
     expect(scenario).toContain(
-      'command_timeout="${OPENCLAW_DOCKER_DOCTOR_SWITCH_COMMAND_TIMEOUT:-900s}"',
+      'command_timeout="${SUNCLAW_DOCKER_DOCTOR_SWITCH_COMMAND_TIMEOUT:-900s}"',
     );
     expect(scenario).toContain(
-      'openclaw_e2e_maybe_timeout "$command_timeout" bash -c "$install_cmd"',
+      'sunclaw_e2e_maybe_timeout "$command_timeout" bash -c "$install_cmd"',
     );
     expect(scenario).toContain(
-      'openclaw_e2e_maybe_timeout "$command_timeout" bash -c "$doctor_cmd"',
+      'sunclaw_e2e_maybe_timeout "$command_timeout" bash -c "$doctor_cmd"',
     );
     expect(scenario).toContain(
-      'openclaw_e2e_maybe_timeout "$command_timeout" "$npm_bin" gateway install --wrapper "$wrapper" --force',
+      'sunclaw_e2e_maybe_timeout "$command_timeout" "$npm_bin" gateway install --wrapper "$wrapper" --force',
     );
     expect(scenario).toContain(
-      'openclaw_e2e_maybe_timeout "$command_timeout" node "$git_cli" doctor --repair --force --yes',
+      'sunclaw_e2e_maybe_timeout "$command_timeout" node "$git_cli" doctor --repair --force --yes',
     );
     expect(scenario).not.toMatch(/^\s*if ! timeout "\$command_timeout"/mu);
   });
 
   it("prepares pnpm workspace package fixtures without package dependencies", () => {
-    const root = mkdtempSync(join(tmpdir(), "openclaw-update-channel-fixture-"));
+    const root = mkdtempSync(join(tmpdir(), "sunclaw-update-channel-fixture-"));
     try {
       mkdirSync(join(root, "patches"));
       writeFileSync(
         join(root, "package.json"),
-        `${JSON.stringify({ name: "openclaw", version: "2026.5.6", scripts: {} }, null, 2)}\n`,
+        `${JSON.stringify({ name: "sunclaw", version: "2026.5.6", scripts: {} }, null, 2)}\n`,
         "utf8",
       );
       writeFileSync(
@@ -2078,20 +2078,20 @@ output="$(run_logged_print_heartbeat plugins-run 08 bash -c 'printf "captured co
     const probe = readFileSync(BUNDLED_PLUGIN_INSTALL_UNINSTALL_PROBE_PATH, "utf8");
     const runtimeSmoke = readFileSync(BUNDLED_PLUGIN_INSTALL_UNINSTALL_RUNTIME_SMOKE_PATH, "utf8");
 
-    expect(runner).toContain("OPENCLAW_BUNDLED_PLUGIN_SWEEP_TOTAL");
-    expect(runner).toContain("OPENCLAW_BUNDLED_PLUGIN_SWEEP_INDEX");
-    expect(runner).toContain("OPENCLAW_BUNDLED_PLUGIN_SWEEP_COMMAND_TIMEOUT");
-    expect(runner).toContain("OPENCLAW_BUNDLED_PLUGIN_RUNTIME_READY_MS");
-    expect(runner).toContain("OPENCLAW_PLUGIN_LIFECYCLE_TRACE");
+    expect(runner).toContain("SUNCLAW_BUNDLED_PLUGIN_SWEEP_TOTAL");
+    expect(runner).toContain("SUNCLAW_BUNDLED_PLUGIN_SWEEP_INDEX");
+    expect(runner).toContain("SUNCLAW_BUNDLED_PLUGIN_SWEEP_COMMAND_TIMEOUT");
+    expect(runner).toContain("SUNCLAW_BUNDLED_PLUGIN_RUNTIME_READY_MS");
+    expect(runner).toContain("SUNCLAW_PLUGIN_LIFECYCLE_TRACE");
     expect(runner).toContain("scripts/e2e/lib/bundled-plugin-install-uninstall/sweep.sh");
     expect(runner).toContain('tee "$RUN_LOG"');
     expect(runner).not.toContain('cat "$RUN_LOG"');
-    expect(probe).toContain('"openclaw.plugin.json"');
-    expect(runtimeSmoke).toContain("process.env.OPENCLAW_BUNDLED_PLUGIN_RUNTIME_READY_MS");
+    expect(probe).toContain('"sunclaw.plugin.json"');
+    expect(runtimeSmoke).toContain("process.env.SUNCLAW_BUNDLED_PLUGIN_RUNTIME_READY_MS");
     expect(runtimeSmoke).toContain("900000");
     expect(sweep).toContain("read -r plugin_id plugin_dir requires_config");
-    expect(sweep).toContain('node "$OPENCLAW_ENTRY" plugins install "$plugin_id"');
-    expect(sweep).toContain('node "$OPENCLAW_ENTRY" plugins uninstall "$plugin_id" --force');
+    expect(sweep).toContain('node "$SUNCLAW_ENTRY" plugins install "$plugin_id"');
+    expect(sweep).toContain('node "$SUNCLAW_ENTRY" plugins uninstall "$plugin_id" --force');
     expect(sweep).toContain("now_ms()");
     expect(sweep).toContain("lifecycle_trace_enabled()");
     expect(sweep).toContain("if lifecycle_trace_enabled; then");
@@ -2105,11 +2105,11 @@ output="$(run_logged_print_heartbeat plugins-run 08 bash -c 'printf "captured co
   it("passes installer tag env to bash, not curl", () => {
     const runner = readFileSync(INSTALL_E2E_RUNNER_PATH, "utf8");
 
-    expect(runner).toContain('curl -fsSL "$INSTALL_URL" | OPENCLAW_BETA=1 bash');
-    expect(runner).toContain('curl -fsSL "$INSTALL_URL" | OPENCLAW_VERSION="$INSTALL_TAG" bash');
-    expect(runner).not.toContain('OPENCLAW_BETA=1 curl -fsSL "$INSTALL_URL" | bash');
+    expect(runner).toContain('curl -fsSL "$INSTALL_URL" | SUNCLAW_BETA=1 bash');
+    expect(runner).toContain('curl -fsSL "$INSTALL_URL" | SUNCLAW_VERSION="$INSTALL_TAG" bash');
+    expect(runner).not.toContain('SUNCLAW_BETA=1 curl -fsSL "$INSTALL_URL" | bash');
     expect(runner).not.toContain(
-      'OPENCLAW_VERSION="$INSTALL_TAG" curl -fsSL "$INSTALL_URL" | bash',
+      'SUNCLAW_VERSION="$INSTALL_TAG" curl -fsSL "$INSTALL_URL" | bash',
     );
   });
 
@@ -2148,13 +2148,13 @@ output="$(run_logged_print_heartbeat plugins-run 08 bash -c 'printf "captured co
   it("cleans OpenAI web search smoke processes through the E2E helpers", () => {
     const scenario = readFileSync(OPENAI_WEB_SEARCH_MINIMAL_SCENARIO_PATH, "utf8");
 
-    expect(scenario).toContain('openclaw_e2e_terminate_gateways "${gateway_pid:-}"');
-    expect(scenario).toContain('openclaw_e2e_stop_process "${mock_pid:-}"');
+    expect(scenario).toContain('sunclaw_e2e_terminate_gateways "${gateway_pid:-}"');
+    expect(scenario).toContain('sunclaw_e2e_stop_process "${mock_pid:-}"');
     expect(scenario).toContain(
-      'gateway_pid="$(openclaw_e2e_start_gateway "$entry" "$PORT" "$GATEWAY_LOG")"',
+      'gateway_pid="$(sunclaw_e2e_start_gateway "$entry" "$PORT" "$GATEWAY_LOG")"',
     );
-    expect(scenario).toContain('openclaw_e2e_wait_mock_openai "$MOCK_PORT"');
-    expect(scenario).toContain('openclaw_e2e_wait_gateway_ready "$gateway_pid" "$GATEWAY_LOG" 360');
+    expect(scenario).toContain('sunclaw_e2e_wait_mock_openai "$MOCK_PORT"');
+    expect(scenario).toContain('sunclaw_e2e_wait_gateway_ready "$gateway_pid" "$GATEWAY_LOG" 360');
     expect(scenario).not.toContain("fetch('http://127.0.0.1:${MOCK_PORT}/health')");
     expect(scenario).not.toContain('kill "$gateway_pid"');
     expect(scenario).not.toContain('kill "$mock_pid"');
@@ -2165,7 +2165,7 @@ output="$(run_logged_print_heartbeat plugins-run 08 bash -c 'printf "captured co
     const scenario = readFileSync(OPENAI_WEB_SEARCH_MINIMAL_SCENARIO_PATH, "utf8");
 
     expect(scenario).toContain(
-      'scenario_tmp="$(mktemp -d "${TMPDIR:-/tmp}/openclaw-openai-web-search-minimal.XXXXXX")"',
+      'scenario_tmp="$(mktemp -d "${TMPDIR:-/tmp}/sunclaw-openai-web-search-minimal.XXXXXX")"',
     );
     expect(scenario).toContain('MOCK_REQUEST_LOG="$scenario_tmp/requests.jsonl"');
     expect(scenario).toContain('GATEWAY_LOG="$scenario_tmp/gateway.log"');
@@ -2173,9 +2173,9 @@ output="$(run_logged_print_heartbeat plugins-run 08 bash -c 'printf "captured co
     expect(scenario).toContain('CLIENT_SUCCESS_LOG="$scenario_tmp/client-success.log"');
     expect(scenario).toContain('CLIENT_REJECT_LOG="$scenario_tmp/client-reject.log"');
     expect(scenario).toContain('rm -rf "$scenario_tmp"');
-    expect(scenario).not.toContain("/tmp/openclaw-openai-web-search-minimal-requests.jsonl");
-    expect(scenario).not.toContain("/tmp/openclaw-openai-web-search-minimal-client-success.log");
-    expect(scenario).not.toContain("/tmp/openclaw-openai-web-search-minimal-client-reject.log");
+    expect(scenario).not.toContain("/tmp/sunclaw-openai-web-search-minimal-requests.jsonl");
+    expect(scenario).not.toContain("/tmp/sunclaw-openai-web-search-minimal-client-success.log");
+    expect(scenario).not.toContain("/tmp/sunclaw-openai-web-search-minimal-client-reject.log");
   });
 
   it("keeps ClawHub plugin Docker smoke hermetic by default", () => {
@@ -2184,16 +2184,16 @@ output="$(run_logged_print_heartbeat plugins-run 08 bash -c 'printf "captured co
     const clawhub = readFileSync(PLUGINS_DOCKER_CLAWHUB_PATH, "utf8");
 
     expect(runner).toContain("scripts/e2e/lib/plugins/sweep.sh");
-    expect(runner).toContain("OPENCLAW_PLUGINS_E2E_LIVE_CLAWHUB");
+    expect(runner).toContain("SUNCLAW_PLUGINS_E2E_LIVE_CLAWHUB");
     expect(sweep).toContain("scripts/e2e/lib/plugins/clawhub.sh");
     expect(clawhub).toContain("start_clawhub_fixture_server()");
-    expect(clawhub).toContain('OPENCLAW_CLAWHUB_URL="http://127.0.0.1:');
-    expect(clawhub).toContain("OPENCLAW_PLUGINS_E2E_LIVE_CLAWHUB");
-    expect(clawhub).toContain("OPENCLAW_PLUGINS_E2E_LIVE_NPM_REGISTRY");
+    expect(clawhub).toContain('SUNCLAW_CLAWHUB_URL="http://127.0.0.1:');
+    expect(clawhub).toContain("SUNCLAW_PLUGINS_E2E_LIVE_CLAWHUB");
+    expect(clawhub).toContain("SUNCLAW_PLUGINS_E2E_LIVE_NPM_REGISTRY");
     expect(clawhub).toContain("live ClawHub can rate-limit CI");
-    expect(clawhub).toContain('[[ -n "${OPENCLAW_CLAWHUB_URL:-}" || -n "${CLAWHUB_URL:-}" ]]');
+    expect(clawhub).toContain('[[ -n "${SUNCLAW_CLAWHUB_URL:-}" || -n "${CLAWHUB_URL:-}" ]]');
     expect(clawhub).toContain("Ignoring ambient ClawHub URL for fixture-mode plugin E2E");
-    expect(clawhub).toContain("unset OPENCLAW_CLAWHUB_URL CLAWHUB_URL");
+    expect(clawhub).toContain("unset SUNCLAW_CLAWHUB_URL CLAWHUB_URL");
   });
 
   it("keeps the plugin binding command escape Docker smoke focused", () => {
@@ -2203,7 +2203,7 @@ output="$(run_logged_print_heartbeat plugins-run 08 bash -c 'printf "captured co
     expect(runner).toContain("--reporter=verbose -t");
     expect(runner).not.toContain("-- --reporter=verbose");
     expect(runner).toContain(
-      'DOCKER_RUN_TIMEOUT="${OPENCLAW_PLUGIN_BINDING_COMMAND_ESCAPE_DOCKER_RUN_TIMEOUT:-900s}"',
+      'DOCKER_RUN_TIMEOUT="${SUNCLAW_PLUGIN_BINDING_COMMAND_ESCAPE_DOCKER_RUN_TIMEOUT:-900s}"',
     );
     expect(runner).toContain(
       'DOCKER_COMMAND_TIMEOUT="$DOCKER_RUN_TIMEOUT" docker_e2e_docker_run_cmd run --rm',
@@ -2217,9 +2217,9 @@ output="$(run_logged_print_heartbeat plugins-run 08 bash -c 'printf "captured co
       "keeps unauthorized plugin-owned binding slash text routed to the bound plugin",
     );
     expect(runner).toContain("expected focused Vitest summary for exactly 3 passed tests");
-    expect(dockerfile).toContain("OPENCLAW_DISABLE_BUNDLED_PLUGIN_POSTINSTALL=1");
+    expect(dockerfile).toContain("SUNCLAW_DISABLE_BUNDLED_PLUGIN_POSTINSTALL=1");
     expect(dockerfile).toContain(
-      "pnpm install --frozen-lockfile --ignore-scripts --filter openclaw",
+      "pnpm install --frozen-lockfile --ignore-scripts --filter sunclaw",
     );
   });
 
@@ -2238,15 +2238,15 @@ output="$(run_logged_print_heartbeat plugins-run 08 bash -c 'printf "captured co
     const assertions = readFileSync(PLUGINS_DOCKER_ASSERTIONS_PATH, "utf8");
     const npmRegistry = readFileSync(PLUGINS_DOCKER_NPM_REGISTRY_PATH, "utf8");
 
-    expect(sweep).toContain('OPENCLAW_PLUGINS_CLI_TIMEOUT="${OPENCLAW_PLUGINS_CLI_TIMEOUT:-180s}"');
+    expect(sweep).toContain('SUNCLAW_PLUGINS_CLI_TIMEOUT="${SUNCLAW_PLUGINS_CLI_TIMEOUT:-180s}"');
     expect(sweep).toContain(
-      'run_logged "$label" openclaw_e2e_maybe_timeout "$OPENCLAW_PLUGINS_CLI_TIMEOUT" node "$OPENCLAW_ENTRY" "$@"',
+      'run_logged "$label" sunclaw_e2e_maybe_timeout "$SUNCLAW_PLUGINS_CLI_TIMEOUT" node "$SUNCLAW_ENTRY" "$@"',
     );
-    expect(sweep).toContain("run_plugins_openclaw_capture()");
+    expect(sweep).toContain("run_plugins_sunclaw_capture()");
     expect(sweep).toContain(
-      'openclaw_e2e_maybe_timeout "$OPENCLAW_PLUGINS_CLI_TIMEOUT" node "$OPENCLAW_ENTRY" "$@" >"$output_file"',
+      'sunclaw_e2e_maybe_timeout "$SUNCLAW_PLUGINS_CLI_TIMEOUT" node "$SUNCLAW_ENTRY" "$@" >"$output_file"',
     );
-    expect(sweep).not.toContain('run_logged install-npm node "$OPENCLAW_ENTRY"');
+    expect(sweep).not.toContain('run_logged install-npm node "$SUNCLAW_ENTRY"');
     for (const [path, script] of [
       [PLUGINS_DOCKER_SWEEP_PATH, sweep],
       [PLUGINS_DOCKER_MARKETPLACE_PATH, marketplace],
@@ -2254,8 +2254,8 @@ output="$(run_logged_print_heartbeat plugins-run 08 bash -c 'printf "captured co
     ] as const) {
       const unboundedPluginCliLines = script
         .split("\n")
-        .filter((line) => line.includes('node "$OPENCLAW_ENTRY" plugins'))
-        .filter((line) => !line.includes("openclaw_e2e_maybe_timeout"));
+        .filter((line) => line.includes('node "$SUNCLAW_ENTRY" plugins'))
+        .filter((line) => !line.includes("sunclaw_e2e_maybe_timeout"));
 
       expect(unboundedPluginCliLines, path).toEqual([]);
     }
@@ -2265,7 +2265,7 @@ output="$(run_logged_print_heartbeat plugins-run 08 bash -c 'printf "captured co
     expect(assertions).toContain('Skipping "demo-plugin-dir" (source: path).');
 
     expect(sweep).toContain("start_npm_fixture_registry");
-    expect(sweep).toContain('plugins install "npm:@openclaw/demo-plugin-npm@0.0.1"');
+    expect(sweep).toContain('plugins install "npm:@sunclaw/demo-plugin-npm@0.0.1"');
     expect(sweep).toContain("plugins update demo-plugin-npm");
     expect(assertions).toContain("demo-plugin-npm is up to date (0.0.1).");
     expect(npmRegistry).toContain('"dist-tags": { latest: entry.latestVersion }');
@@ -2278,9 +2278,9 @@ output="$(run_logged_print_heartbeat plugins-run 08 bash -c 'printf "captured co
 
     expect(clawhub).toContain('plugins install "$CLAWHUB_PLUGIN_SPEC"');
     expect(clawhub).toContain('plugins update "$CLAWHUB_PLUGIN_ID"');
-    expect(clawhub).toContain("run_plugins_openclaw_logged install-clawhub");
-    expect(clawhub).toContain('openclaw_e2e_maybe_timeout "$OPENCLAW_PLUGINS_CLI_TIMEOUT"');
-    expect(clawhub).toContain("clawhub:@openclaw/kitchen-sink");
+    expect(clawhub).toContain("run_plugins_sunclaw_logged install-clawhub");
+    expect(clawhub).toContain('sunclaw_e2e_maybe_timeout "$SUNCLAW_PLUGINS_CLI_TIMEOUT"');
+    expect(clawhub).toContain("clawhub:@sunclaw/kitchen-sink");
     expect(assertions).toContain("clawhub-updated");
     expect(assertions).toContain("record.clawpackSha256");
     expect(assertions).toContain("record.artifactKind");

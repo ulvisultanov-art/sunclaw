@@ -1,4 +1,4 @@
-import { resolveDefaultAgentDir } from "openclaw/plugin-sdk/agent-runtime";
+import { resolveDefaultAgentDir } from "sunclaw/plugin-sdk/agent-runtime";
 import {
   applyCodexAppServerAuthProfile,
   bridgeCodexAppServerStartOptions,
@@ -37,7 +37,7 @@ type KeyedSharedCodexAppServerClientState = {
   leasedReleases?: unknown;
 };
 
-const SHARED_CODEX_APP_SERVER_CLIENT_STATE = Symbol.for("openclaw.codexAppServerClientState");
+const SHARED_CODEX_APP_SERVER_CLIENT_STATE = Symbol.for("sunclaw.codexAppServerClientState");
 
 function getSharedCodexAppServerClientState(): SharedCodexAppServerClientState {
   const globalState = globalThis as typeof globalThis & {

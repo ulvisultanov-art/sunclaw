@@ -1,4 +1,4 @@
-import type { AcpRuntimeEvent } from "@openclaw/acp-core/runtime/types";
+import type { AcpRuntimeEvent } from "@sunclaw/acp-core/runtime/types";
 import { sanitizeForLog } from "../../../packages/terminal-core/src/ansi.js";
 import { formatAcpErrorChain } from "../../acp/runtime/errors.js";
 import { normalizeReplyPayload } from "../../auto-reply/reply/normalize-reply.js";
@@ -9,7 +9,7 @@ import {
   resolveSessionTranscriptFile,
 } from "../../config/sessions/transcript.js";
 import type { SessionEntry } from "../../config/sessions/types.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { emitAgentEvent } from "../../infra/agent-events.js";
 import { readErrorName } from "../../infra/errors.js";
 import { redactSensitiveText } from "../../logging/redact.js";
@@ -110,7 +110,7 @@ type PersistTextTurnTranscriptParams = {
   sessionAgentId: string;
   threadId?: string | number;
   sessionCwd: string;
-  config: OpenClawConfig;
+  config: SunClawConfig;
   embeddedAssistantGapFill?: boolean;
   assistant: {
     api: string;
@@ -143,7 +143,7 @@ function resolveProfileAuthFromStore(params: { agentDir: string; profileId: stri
 }
 
 function resolveHarnessAuthProfileSelection(params: {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   agentDir: string;
   workspaceDir: string;
   provider: string;
@@ -333,13 +333,13 @@ export async function persistAcpTurnTranscript(params: {
   sessionAgentId: string;
   threadId?: string | number;
   sessionCwd: string;
-  config: OpenClawConfig;
+  config: SunClawConfig;
 }): Promise<SessionEntry | undefined> {
   return await persistTextTurnTranscript({
     ...params,
     assistant: {
       api: "openai-responses",
-      provider: "openclaw",
+      provider: "sunclaw",
       model: "acp-runtime",
     },
   });
@@ -358,7 +358,7 @@ export async function persistCliTurnTranscript(params: {
   sessionAgentId: string;
   threadId?: string | number;
   sessionCwd: string;
-  config: OpenClawConfig;
+  config: SunClawConfig;
   embeddedAssistantGapFill?: boolean;
 }): Promise<SessionEntry | undefined> {
   const replyText = resolveCliTranscriptReplyText(params.result);
@@ -394,7 +394,7 @@ export function runAgentAttempt(params: {
   providerOverride: string;
   modelOverride: string;
   originalProvider: string;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   sessionEntry: SessionEntry | undefined;
   sessionId: string;
   sessionKey: string | undefined;
@@ -456,7 +456,7 @@ export function runAgentAttempt(params: {
   );
   const bootstrapPromptWarningSignature =
     bootstrapPromptWarningSignaturesSeen[bootstrapPromptWarningSignaturesSeen.length - 1];
-  const requestedAgentHarnessId = isRawModelRun ? "openclaw" : undefined;
+  const requestedAgentHarnessId = isRawModelRun ? "sunclaw" : undefined;
   const cliExecutionProvider = isRawModelRun
     ? params.providerOverride
     : (resolveCliRuntimeExecutionProvider({
@@ -467,7 +467,7 @@ export function runAgentAttempt(params: {
         authProfileId: params.sessionEntry?.authProfileOverride,
       }) ?? params.providerOverride);
   const agentHarnessPolicy = isRawModelRun
-    ? ({ runtime: "openclaw", runtimeSource: "model" } as const)
+    ? ({ runtime: "sunclaw", runtimeSource: "model" } as const)
     : resolveAvailableAgentHarnessPolicy({
         provider: params.providerOverride,
         modelId: params.modelOverride,
@@ -514,8 +514,8 @@ export function runAgentAttempt(params: {
   });
   const embeddedAgentHarnessOverride =
     requestedAgentHarnessId ??
-    (agentHarnessPolicy.runtime === "openclaw" && agentHarnessPolicy.runtimeSource !== "implicit"
-      ? "openclaw"
+    (agentHarnessPolicy.runtime === "sunclaw" && agentHarnessPolicy.runtimeSource !== "implicit"
+      ? "sunclaw"
       : undefined);
   if (!isRawModelRun && isCliProvider(cliExecutionProvider, params.cfg)) {
     const cliSessionBinding = getCliSessionBinding(params.sessionEntry, cliExecutionProvider);

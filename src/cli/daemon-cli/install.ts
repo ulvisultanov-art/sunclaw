@@ -1,4 +1,4 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
 import { resolveNodeStartupTlsEnvironment } from "../../bootstrap/node-startup-env.js";
 import { buildGatewayInstallPlan } from "../../commands/daemon-install-helpers.js";
 import {
@@ -11,8 +11,8 @@ import { resolveFutureConfigActionBlock } from "../../config/future-version-guar
 import { readConfigFileSnapshotForWrite } from "../../config/io.js";
 import { replaceConfigFile } from "../../config/mutate.js";
 import { resolveGatewayPort } from "../../config/paths.js";
-import type { OpenClawConfig } from "../../config/types.js";
-import { OPENCLAW_WRAPPER_ENV_KEY, resolveOpenClawWrapperPath } from "../../daemon/program-args.js";
+import type { SunClawConfig } from "../../config/types.js";
+import { SUNCLAW_WRAPPER_ENV_KEY, resolveSunClawWrapperPath } from "../../daemon/program-args.js";
 import { readEmbeddedGatewayToken } from "../../daemon/service-audit.js";
 import { resolveGatewayService } from "../../daemon/service.js";
 import type { GatewayServiceCommandConfig } from "../../daemon/service.js";
@@ -47,10 +47,10 @@ export function mergeInstallInvocationEnv(params: {
       continue;
     }
     const upper = key.toUpperCase();
-    if (upper === OPENCLAW_WRAPPER_ENV_KEY) {
+    if (upper === SUNCLAW_WRAPPER_ENV_KEY) {
       const value = rawValue.trim();
       if (value) {
-        preservedServiceEnv[OPENCLAW_WRAPPER_ENV_KEY] = value;
+        preservedServiceEnv[SUNCLAW_WRAPPER_ENV_KEY] = value;
       }
       continue;
     }
@@ -58,7 +58,7 @@ export function mergeInstallInvocationEnv(params: {
       upper === "HOME" ||
       upper === "PATH" ||
       upper === "TMPDIR" ||
-      upper.startsWith("OPENCLAW_")
+      upper.startsWith("SUNCLAW_")
     ) {
       continue;
     }
@@ -112,7 +112,7 @@ export async function runDaemonInstall(opts: DaemonInstallOptions) {
   let wrapperPath: string | undefined;
   if (opts.wrapper !== undefined) {
     try {
-      wrapperPath = await resolveOpenClawWrapperPath(opts.wrapper);
+      wrapperPath = await resolveSunClawWrapperPath(opts.wrapper);
       if (!wrapperPath) {
         fail("Invalid --wrapper");
         return;
@@ -173,9 +173,9 @@ export async function runDaemonInstall(opts: DaemonInstallOptions) {
   });
   if (!wrapperPath) {
     try {
-      wrapperPath = await resolveOpenClawWrapperPath(installEnv[OPENCLAW_WRAPPER_ENV_KEY]);
+      wrapperPath = await resolveSunClawWrapperPath(installEnv[SUNCLAW_WRAPPER_ENV_KEY]);
     } catch (err) {
-      fail(`Invalid ${OPENCLAW_WRAPPER_ENV_KEY}: ${String(err)}`);
+      fail(`Invalid ${SUNCLAW_WRAPPER_ENV_KEY}: ${String(err)}`);
       return;
     }
   }
@@ -208,7 +208,7 @@ export async function runDaemonInstall(opts: DaemonInstallOptions) {
         if (!json) {
           defaultRuntime.log(`Gateway service already ${service.loadedText}.`);
           defaultRuntime.log(
-            `Reinstall with: ${formatCliCommand("openclaw gateway install --force")}`,
+            `Reinstall with: ${formatCliCommand("sunclaw gateway install --force")}`,
           );
         }
         return;
@@ -283,7 +283,7 @@ async function getGatewayServiceAutoRefreshMessage(params: {
   wrapperPath?: string;
   existingEnvironment?: Record<string, string | undefined>;
   existingEnvironmentValueSources?: GatewayServiceCommandConfig["environmentValueSources"];
-  config: OpenClawConfig;
+  config: SunClawConfig;
 }): Promise<string | undefined> {
   try {
     const currentCommand = params.currentCommand;
@@ -303,14 +303,14 @@ async function getGatewayServiceAutoRefreshMessage(params: {
         config: params.config,
       });
       const plannedEmbeddedToken = normalizeOptionalString(
-        plannedInstall.environment.OPENCLAW_GATEWAY_TOKEN,
+        plannedInstall.environment.SUNCLAW_GATEWAY_TOKEN,
       );
       if (currentEmbeddedToken !== plannedEmbeddedToken) {
-        return "Gateway service OPENCLAW_GATEWAY_TOKEN differs from the current install plan; refreshing the install.";
+        return "Gateway service SUNCLAW_GATEWAY_TOKEN differs from the current install plan; refreshing the install.";
       }
     }
     const wrapperRequested = Boolean(
-      params.wrapperPath || normalizeOptionalString(params.installEnv[OPENCLAW_WRAPPER_ENV_KEY]),
+      params.wrapperPath || normalizeOptionalString(params.installEnv[SUNCLAW_WRAPPER_ENV_KEY]),
     );
     if (wrapperRequested) {
       const plannedInstall = await buildGatewayInstallPlan({
@@ -330,13 +330,13 @@ async function getGatewayServiceAutoRefreshMessage(params: {
         return "Gateway service command differs from the current wrapper install plan; refreshing the install.";
       }
       const plannedWrapperPath = normalizeOptionalString(
-        plannedInstall.environment[OPENCLAW_WRAPPER_ENV_KEY],
+        plannedInstall.environment[SUNCLAW_WRAPPER_ENV_KEY],
       );
       const currentWrapperPath = normalizeOptionalString(
-        currentCommand.environment?.[OPENCLAW_WRAPPER_ENV_KEY],
+        currentCommand.environment?.[SUNCLAW_WRAPPER_ENV_KEY],
       );
       if (plannedWrapperPath !== currentWrapperPath) {
-        return `Gateway service ${OPENCLAW_WRAPPER_ENV_KEY} differs from the current wrapper install plan; refreshing the install.`;
+        return `Gateway service ${SUNCLAW_WRAPPER_ENV_KEY} differs from the current wrapper install plan; refreshing the install.`;
       }
     }
     const currentExecPath = currentCommand.programArguments[0]?.trim();

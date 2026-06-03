@@ -1,8 +1,8 @@
 import { createHash } from "node:crypto";
 import os from "node:os";
 import path from "node:path";
-import { loadJsonFile } from "openclaw/plugin-sdk/json-store";
-import type { PluginStateSyncKeyedStore } from "openclaw/plugin-sdk/plugin-state-runtime";
+import { loadJsonFile } from "sunclaw/plugin-sdk/json-store";
+import type { PluginStateSyncKeyedStore } from "sunclaw/plugin-sdk/plugin-state-runtime";
 import {
   releaseFeishuMessageProcessing,
   tryBeginFeishuMessageProcessing,
@@ -35,14 +35,14 @@ function normalizeNamespace(namespace?: string): string {
 }
 
 function resolveLegacyStateDir(env: NodeJS.ProcessEnv = process.env): string {
-  const stateOverride = env.OPENCLAW_STATE_DIR?.trim();
+  const stateOverride = env.SUNCLAW_STATE_DIR?.trim();
   if (stateOverride) {
     return stateOverride;
   }
   if (env.VITEST || env.NODE_ENV === "test") {
-    return path.join(os.tmpdir(), ["openclaw-vitest", String(process.pid)].join("-"));
+    return path.join(os.tmpdir(), ["sunclaw-vitest", String(process.pid)].join("-"));
   }
-  return path.join(os.homedir(), ".openclaw");
+  return path.join(os.homedir(), ".sunclaw");
 }
 
 function resolveLegacyNamespaceFilePath(namespace: string): string {

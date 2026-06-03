@@ -1,49 +1,49 @@
 import path from "node:path";
 import { MessageFlags } from "discord-api-types/v10";
-import { resolveAckReaction, resolveHumanDelayConfig } from "openclaw/plugin-sdk/agent-runtime";
+import { resolveAckReaction, resolveHumanDelayConfig } from "sunclaw/plugin-sdk/agent-runtime";
 import {
   createStatusReactionController,
   DEFAULT_TIMING,
   logAckFailure,
   shouldAckReaction as shouldAckReactionGate,
-} from "openclaw/plugin-sdk/channel-feedback";
+} from "sunclaw/plugin-sdk/channel-feedback";
 import {
   dispatchChannelInboundReply,
   hasFinalInboundReplyDispatch,
   recordChannelBotPairLoopAndCheckSuppression,
-} from "openclaw/plugin-sdk/channel-inbound";
+} from "sunclaw/plugin-sdk/channel-inbound";
 import {
   createChannelMessageReplyPipeline,
   defineFinalizableLivePreviewAdapter,
   deliverWithFinalizableLivePreviewAdapter,
   resolveChannelMessageSourceReplyDeliveryMode,
-} from "openclaw/plugin-sdk/channel-outbound";
+} from "sunclaw/plugin-sdk/channel-outbound";
 import {
   buildChannelProgressDraftLine,
   buildChannelProgressDraftLineForEntry,
   resolveChannelStreamingBlockEnabled,
   resolveTranscriptBackedChannelFinalText,
-} from "openclaw/plugin-sdk/channel-outbound";
-import { recordInboundSession } from "openclaw/plugin-sdk/conversation-runtime";
-import { resolveMarkdownTableMode } from "openclaw/plugin-sdk/markdown-table-runtime";
-import { getAgentScopedMediaLocalRoots } from "openclaw/plugin-sdk/media-runtime";
-import { resolveChunkMode } from "openclaw/plugin-sdk/reply-chunking";
-import { createChannelHistoryWindow } from "openclaw/plugin-sdk/reply-history";
+} from "sunclaw/plugin-sdk/channel-outbound";
+import { recordInboundSession } from "sunclaw/plugin-sdk/conversation-runtime";
+import { resolveMarkdownTableMode } from "sunclaw/plugin-sdk/markdown-table-runtime";
+import { getAgentScopedMediaLocalRoots } from "sunclaw/plugin-sdk/media-runtime";
+import { resolveChunkMode } from "sunclaw/plugin-sdk/reply-chunking";
+import { createChannelHistoryWindow } from "sunclaw/plugin-sdk/reply-history";
 import {
   buildTtsSupplementMediaPayload,
   getReplyPayloadTtsSupplement,
   isReplyPayloadNonTerminalToolErrorWarning,
   resolveSendableOutboundReplyParts,
-} from "openclaw/plugin-sdk/reply-payload";
-import type { ReplyDispatchKind, ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
-import { danger, logVerbose, shouldLogVerbose } from "openclaw/plugin-sdk/runtime-env";
+} from "sunclaw/plugin-sdk/reply-payload";
+import type { ReplyDispatchKind, ReplyPayload } from "sunclaw/plugin-sdk/reply-runtime";
+import { danger, logVerbose, shouldLogVerbose } from "sunclaw/plugin-sdk/runtime-env";
 import {
   loadSessionStore,
   readLatestAssistantTextFromSessionTranscript,
   resolveAndPersistSessionFile,
   resolveSessionStoreEntry,
   resolveStorePath,
-} from "openclaw/plugin-sdk/session-store-runtime";
+} from "sunclaw/plugin-sdk/session-store-runtime";
 import { resolveDiscordAccount, resolveDiscordMaxLinesPerMessage } from "../accounts.js";
 import { createDiscordRestClient } from "../client.js";
 import { beginDiscordInboundEventDeliveryCorrelation } from "../inbound-event-delivery.js";
@@ -79,10 +79,10 @@ function sleep(ms: number): Promise<void> {
   });
 }
 
-let replyRuntimePromise: Promise<typeof import("openclaw/plugin-sdk/reply-runtime")> | undefined;
+let replyRuntimePromise: Promise<typeof import("sunclaw/plugin-sdk/reply-runtime")> | undefined;
 
 async function loadReplyRuntime() {
-  replyRuntimePromise ??= import("openclaw/plugin-sdk/reply-runtime");
+  replyRuntimePromise ??= import("sunclaw/plugin-sdk/reply-runtime");
   return await replyRuntimePromise;
 }
 

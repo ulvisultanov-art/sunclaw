@@ -1,7 +1,7 @@
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { SunClawConfig } from "../config/config.js";
 
-const ensureOpenClawModelsJsonMock = vi.fn<
+const ensureSunClawModelsJsonMock = vi.fn<
   (
     config: unknown,
     agentDir: unknown,
@@ -17,8 +17,8 @@ vi.mock("../agents/agent-scope.js", () => ({
 }));
 
 vi.mock("../agents/models-config.js", () => ({
-  ensureOpenClawModelsJson: (config: unknown, agentDir: unknown, options?: unknown) =>
-    ensureOpenClawModelsJsonMock(config, agentDir, options),
+  ensureSunClawModelsJson: (config: unknown, agentDir: unknown, options?: unknown) =>
+    ensureSunClawModelsJsonMock(config, agentDir, options),
 }));
 
 vi.mock("../agents/embedded-agent-runner/model.js", () => ({
@@ -28,9 +28,9 @@ vi.mock("../agents/embedded-agent-runner/model.js", () => ({
 let prewarmConfiguredPrimaryModel: typeof import("./server-startup-post-attach.js").testing.prewarmConfiguredPrimaryModel;
 let shouldSkipStartupModelPrewarm: typeof import("./server-startup-post-attach.js").testing.shouldSkipStartupModelPrewarm;
 
-function expectModelsJsonPrewarmCall(cfg: OpenClawConfig) {
-  expect(ensureOpenClawModelsJsonMock).toHaveBeenCalledTimes(1);
-  const [calledConfig, agentDir, options] = ensureOpenClawModelsJsonMock.mock.calls.at(0) ?? [];
+function expectModelsJsonPrewarmCall(cfg: SunClawConfig) {
+  expect(ensureSunClawModelsJsonMock).toHaveBeenCalledTimes(1);
+  const [calledConfig, agentDir, options] = ensureSunClawModelsJsonMock.mock.calls.at(0) ?? [];
   expect(calledConfig).toBe(cfg);
   expect(agentDir).toBe("/tmp/agent");
   expect(options).toEqual({
@@ -49,7 +49,7 @@ describe("gateway startup primary model warmup", () => {
   });
 
   beforeEach(() => {
-    ensureOpenClawModelsJsonMock.mockClear();
+    ensureSunClawModelsJsonMock.mockClear();
     resolveModelMock.mockClear();
   });
 
@@ -62,7 +62,7 @@ describe("gateway startup primary model warmup", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
 
     await prewarmConfiguredPrimaryModel({
       cfg,
@@ -75,11 +75,11 @@ describe("gateway startup primary model warmup", () => {
 
   it("skips warmup when no explicit primary model is configured", async () => {
     await prewarmConfiguredPrimaryModel({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as SunClawConfig,
       log: { warn: vi.fn() },
     });
 
-    expect(ensureOpenClawModelsJsonMock).not.toHaveBeenCalled();
+    expect(ensureSunClawModelsJsonMock).not.toHaveBeenCalled();
     expect(resolveModelMock).not.toHaveBeenCalled();
   });
 
@@ -87,12 +87,12 @@ describe("gateway startup primary model warmup", () => {
     expect(shouldSkipStartupModelPrewarm({})).toBe(false);
     expect(
       shouldSkipStartupModelPrewarm({
-        OPENCLAW_SKIP_STARTUP_MODEL_PREWARM: "1",
+        SUNCLAW_SKIP_STARTUP_MODEL_PREWARM: "1",
       }),
     ).toBe(true);
     expect(
       shouldSkipStartupModelPrewarm({
-        OPENCLAW_SKIP_STARTUP_MODEL_PREWARM: "true",
+        SUNCLAW_SKIP_STARTUP_MODEL_PREWARM: "true",
       }),
     ).toBe(true);
   });
@@ -113,16 +113,16 @@ describe("gateway startup primary model warmup", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as SunClawConfig,
       log: { warn: vi.fn() },
     });
 
-    expect(ensureOpenClawModelsJsonMock).not.toHaveBeenCalled();
+    expect(ensureSunClawModelsJsonMock).not.toHaveBeenCalled();
     expect(resolveModelMock).not.toHaveBeenCalled();
   });
 
   it("warns when scoped models.json preparation fails", async () => {
-    ensureOpenClawModelsJsonMock.mockRejectedValueOnce(new Error("models write failed"));
+    ensureSunClawModelsJsonMock.mockRejectedValueOnce(new Error("models write failed"));
     const warn = vi.fn();
 
     await prewarmConfiguredPrimaryModel({
@@ -134,7 +134,7 @@ describe("gateway startup primary model warmup", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as SunClawConfig,
       log: { warn },
     });
 

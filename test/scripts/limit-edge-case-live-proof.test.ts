@@ -6,7 +6,7 @@ import { withProofTempRoot } from "../../scripts/repro/limit-edge-case-live-proo
 
 describe("limit-edge-case live proof", () => {
   it("cleans the generated session-log temp root", async () => {
-    const tempRoot = mkdtempSync(path.join(tmpdir(), "openclaw-limit-proof-test-"));
+    const tempRoot = mkdtempSync(path.join(tmpdir(), "sunclaw-limit-proof-test-"));
     try {
       const originalTmpdir = process.env.TMPDIR;
       process.env.TMPDIR = tempRoot;
@@ -27,7 +27,7 @@ describe("limit-edge-case live proof", () => {
 
       expect(proofRoot).not.toBe("");
       expect(existsSync(proofRoot)).toBe(false);
-      expect(readdirSync(tempRoot).filter((entry) => entry.startsWith("openclaw-proof-"))).toEqual(
+      expect(readdirSync(tempRoot).filter((entry) => entry.startsWith("sunclaw-proof-"))).toEqual(
         [],
       );
     } finally {

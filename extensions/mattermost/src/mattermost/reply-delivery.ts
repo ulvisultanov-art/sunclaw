@@ -1,11 +1,11 @@
-import type { OpenClawConfig, PluginRuntime } from "openclaw/plugin-sdk/core";
-import { getAgentScopedMediaLocalRoots } from "openclaw/plugin-sdk/media-runtime";
+import type { SunClawConfig, PluginRuntime } from "sunclaw/plugin-sdk/core";
+import { getAgentScopedMediaLocalRoots } from "sunclaw/plugin-sdk/media-runtime";
 import {
   deliverTextOrMediaReply,
   isReasoningReplyPayload,
   resolveSendableOutboundReplyParts,
-} from "openclaw/plugin-sdk/reply-payload";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
+} from "sunclaw/plugin-sdk/reply-payload";
+import type { ReplyPayload } from "sunclaw/plugin-sdk/reply-runtime";
 
 type MarkdownTableMode = Parameters<PluginRuntime["channel"]["text"]["convertMarkdownTables"]>[1];
 
@@ -13,7 +13,7 @@ type SendMattermostMessage = (
   to: string,
   text: string,
   opts: {
-    cfg: OpenClawConfig;
+    cfg: SunClawConfig;
     accountId?: string;
     mediaUrl?: string;
     mediaLocalRoots?: readonly string[];
@@ -31,7 +31,7 @@ export type MattermostReplyDeliveryOutcome = "reasoning_skipped" | "empty" | "te
 
 export async function deliverMattermostReplyPayload(params: {
   core: PluginRuntime;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   payload: ReplyPayload;
   to: string;
   accountId: string;

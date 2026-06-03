@@ -1,17 +1,17 @@
 import {
   DEFAULT_TIMING,
   type StatusReactionController,
-} from "openclaw/plugin-sdk/channel-feedback";
+} from "sunclaw/plugin-sdk/channel-feedback";
 import {
   buildChannelInboundEventContext,
   type CommandTurnContext,
   toInboundMediaFacts,
-} from "openclaw/plugin-sdk/channel-inbound";
-import { hasVisibleInboundReplyDispatch } from "openclaw/plugin-sdk/channel-inbound";
-import { deliverInboundReplyWithMessageSendContext } from "openclaw/plugin-sdk/channel-outbound";
-import { buildInboundHistoryFromEntries } from "openclaw/plugin-sdk/reply-history";
-import type { FinalizedMsgContext } from "openclaw/plugin-sdk/reply-runtime";
-import { normalizeStringEntries } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/channel-inbound";
+import { hasVisibleInboundReplyDispatch } from "sunclaw/plugin-sdk/channel-inbound";
+import { deliverInboundReplyWithMessageSendContext } from "sunclaw/plugin-sdk/channel-outbound";
+import { buildInboundHistoryFromEntries } from "sunclaw/plugin-sdk/reply-history";
+import type { FinalizedMsgContext } from "sunclaw/plugin-sdk/reply-runtime";
+import { normalizeStringEntries } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import {
   type DeliverableWhatsAppOutboundPayload,
   normalizeWhatsAppOutboundPayload,

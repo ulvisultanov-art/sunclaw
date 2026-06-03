@@ -16,7 +16,7 @@ try {
       {
         env: {
           ...process.env,
-          OPENCLAW_CONFIG_PATH: path.join(root, "openclaw.json"),
+          SUNCLAW_CONFIG_PATH: path.join(root, "sunclaw.json"),
         },
       },
       9,
@@ -29,7 +29,7 @@ try {
       {
         env: {
           ...process.env,
-          OPENCLAW_CONFIG_PATH: path.join(root, "openclaw.json"),
+          SUNCLAW_CONFIG_PATH: path.join(root, "sunclaw.json"),
         },
       },
       9,

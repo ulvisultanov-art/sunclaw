@@ -1,21 +1,21 @@
 {
-  "name": "@openclaw/line",
+  "name": "@sunclaw/line",
   "version": "2026.6.2",
   "lockfileVersion": 3,
   "requires": true,
   "packages": {
     "": {
-      "name": "@openclaw/line",
+      "name": "@sunclaw/line",
       "version": "2026.6.2",
       "dependencies": {
         "@line/bot-sdk": "11.0.1",
         "zod": "4.4.3"
       },
       "peerDependencies": {
-        "openclaw": ">=2026.6.2"
+        "sunclaw": ">=2026.6.2"
       },
       "peerDependenciesMeta": {
-        "openclaw": {
+        "sunclaw": {
           "optional": true
         }
       }

@@ -1,7 +1,7 @@
 import type { Dirent } from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
-import type { PluginDoctorStateMigration } from "openclaw/plugin-sdk/runtime-doctor";
+import type { PluginDoctorStateMigration } from "sunclaw/plugin-sdk/runtime-doctor";
 
 type NostrBusState = {
   version: 2;

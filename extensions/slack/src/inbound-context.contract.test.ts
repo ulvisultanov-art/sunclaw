@@ -1,6 +1,6 @@
-import { expectChannelInboundContextContract } from "openclaw/plugin-sdk/channel-contract-testing";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { createTempHomeEnv } from "openclaw/plugin-sdk/test-env";
+import { expectChannelInboundContextContract } from "sunclaw/plugin-sdk/channel-contract-testing";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import { createTempHomeEnv } from "sunclaw/plugin-sdk/test-env";
 import { describe, it } from "vitest";
 import {
   createInboundSlackTestContext,
@@ -37,12 +37,12 @@ function createSlackMessage(overrides: Partial<SlackMessageEvent>): SlackMessage
 
 describe("Slack inbound context contract", () => {
   it("keeps inbound context finalized", async () => {
-    const tempHome = await createTempHomeEnv("openclaw-slack-inbound-contract-");
+    const tempHome = await createTempHomeEnv("sunclaw-slack-inbound-contract-");
     try {
       const ctx = createInboundSlackTestContext({
         cfg: {
           channels: { slack: { enabled: true } },
-        } as OpenClawConfig,
+        } as SunClawConfig,
       });
       ctx.resolveUserName = async () => ({ name: "Alice" }) as never;
 

@@ -29,11 +29,11 @@ import type {
   ToolCallLocation,
   ToolKind,
 } from "@agentclientprotocol/sdk";
-import { readBool, readNonNegativeInteger, readString } from "@openclaw/acp-core/meta";
-import { defaultAcpSessionStore, type AcpSessionStore } from "@openclaw/acp-core/session";
-import { toAcpSessionLineageMeta } from "@openclaw/acp-core/session-lineage-meta";
-import { timestampMsToIsoString } from "@openclaw/normalization-core/number-coercion";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { readBool, readNonNegativeInteger, readString } from "@sunclaw/acp-core/meta";
+import { defaultAcpSessionStore, type AcpSessionStore } from "@sunclaw/acp-core/session";
+import { toAcpSessionLineageMeta } from "@sunclaw/acp-core/session-lineage-meta";
+import { timestampMsToIsoString } from "@sunclaw/normalization-core/number-coercion";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
 import type { EventFrame } from "../../packages/gateway-protocol/src/index.js";
 import type { GatewayClient } from "../gateway/client.js";
 import type { GatewaySessionRow, SessionsListResult } from "../gateway/session-utils.js";
@@ -192,7 +192,7 @@ function buildSystemInputProvenance(originSessionId: string) {
     kind: "external_user" as const,
     originSessionId,
     sourceChannel: "acp",
-    sourceTool: "openclaw_acp",
+    sourceTool: "sunclaw_acp",
   };
 }
 
@@ -203,7 +203,7 @@ function buildSystemProvenanceReceipt(params: {
 }) {
   return [
     "[Source Receipt]",
-    "bridge=openclaw-acp",
+    "bridge=sunclaw-acp",
     `originHost=${os.hostname()}`,
     `originCwd=${shortenHomePath(params.cwd)}`,
     `acpSessionId=${params.sessionId}`,
@@ -1671,7 +1671,7 @@ export class AcpGatewayAgent implements Agent {
       return;
     }
     throw new Error(
-      "ACP bridge mode does not support per-session MCP servers. Configure MCP on the OpenClaw gateway or agent instead.",
+      "ACP bridge mode does not support per-session MCP servers. Configure MCP on the SunClaw gateway or agent instead.",
     );
   }
 

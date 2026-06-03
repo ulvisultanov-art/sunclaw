@@ -52,12 +52,12 @@ export function readToolSearchGatewayFetchLimits(
 ): ToolSearchGatewayFetchLimits {
   return {
     bodyMaxBytes: readPositiveIntEnv(
-      "OPENCLAW_TOOL_SEARCH_GATEWAY_E2E_FETCH_BODY_MAX_BYTES",
+      "SUNCLAW_TOOL_SEARCH_GATEWAY_E2E_FETCH_BODY_MAX_BYTES",
       1024 * 1024,
       env,
     ),
     timeoutMs: readPositiveIntEnv(
-      "OPENCLAW_TOOL_SEARCH_GATEWAY_E2E_FETCH_TIMEOUT_MS",
+      "SUNCLAW_TOOL_SEARCH_GATEWAY_E2E_FETCH_TIMEOUT_MS",
       180_000,
       env,
     ),
@@ -391,10 +391,10 @@ async function writeFakePlugin(params: {
     path.join(pluginDir, "package.json"),
     `${JSON.stringify(
       {
-        name: "@openclaw/tool-search-e2e-fixture",
+        name: "@sunclaw/tool-search-e2e-fixture",
         version: "0.0.0",
         type: "module",
-        openclaw: {
+        sunclaw: {
           extensions: ["./index.js"],
         },
       },
@@ -404,7 +404,7 @@ async function writeFakePlugin(params: {
     "utf8",
   );
   await fs.writeFile(
-    path.join(pluginDir, "openclaw.plugin.json"),
+    path.join(pluginDir, "sunclaw.plugin.json"),
     `${JSON.stringify(
       {
         id: FAKE_PLUGIN_ID,
@@ -469,7 +469,7 @@ async function runLane(params: {
   fakePluginDir: string;
 }): Promise<LaneResult> {
   const stateDir = path.join(params.rootDir, params.lane, "state");
-  const configPath = path.join(stateDir, "openclaw.json");
+  const configPath = path.join(stateDir, "sunclaw.json");
   const workspaceDir = path.join(params.rootDir, params.lane, "workspace");
   const gatewayPort = await freePort();
   await fs.mkdir(workspaceDir, { recursive: true });
@@ -483,9 +483,9 @@ async function runLane(params: {
     fakePluginDir: params.fakePluginDir,
   });
 
-  process.env.OPENCLAW_STATE_DIR = stateDir;
-  process.env.OPENCLAW_CONFIG_PATH = configPath;
-  process.env.OPENCLAW_TEST_FAST = "1";
+  process.env.SUNCLAW_STATE_DIR = stateDir;
+  process.env.SUNCLAW_CONFIG_PATH = configPath;
+  process.env.SUNCLAW_TEST_FAST = "1";
   resetConfigRuntimeState();
 
   const server = await startGatewayServer(gatewayPort, {
@@ -502,11 +502,11 @@ async function runLane(params: {
       method: "POST",
       headers: {
         "content-type": "application/json",
-        "x-openclaw-scopes": "operator.write",
-        "x-openclaw-agent": "qa",
+        "x-sunclaw-scopes": "operator.write",
+        "x-sunclaw-agent": "qa",
       },
       body: JSON.stringify({
-        model: "openclaw/qa",
+        model: "sunclaw/qa",
         input: [
           {
             type: "message",
@@ -558,7 +558,7 @@ async function runLane(params: {
 }
 
 export async function main() {
-  const rootDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-tool-search-"));
+  const rootDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-tool-search-"));
   let provider: Awaited<ReturnType<typeof startQaMockOpenAiServer>> | undefined;
   try {
     provider = await startQaMockOpenAiServer();

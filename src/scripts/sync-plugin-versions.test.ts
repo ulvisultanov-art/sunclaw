@@ -16,23 +16,23 @@ describe("syncPluginVersions", () => {
     cleanupTempDirs(tempDirs);
   });
 
-  it("preserves workspace openclaw devDependencies and plugin host floors", () => {
-    const rootDir = makeTempDir(tempDirs, "openclaw-sync-plugin-versions-");
+  it("preserves workspace sunclaw devDependencies and plugin host floors", () => {
+    const rootDir = makeTempDir(tempDirs, "sunclaw-sync-plugin-versions-");
 
     writeJson(path.join(rootDir, "package.json"), {
-      name: "openclaw",
+      name: "sunclaw",
       version: "2026.4.1",
     });
     writeJson(path.join(rootDir, "extensions/imessage/package.json"), {
-      name: "@openclaw/imessage",
+      name: "@sunclaw/imessage",
       version: "2026.3.30",
       devDependencies: {
-        openclaw: "workspace:*",
+        sunclaw: "workspace:*",
       },
       peerDependencies: {
-        openclaw: ">=2026.3.30",
+        sunclaw: ">=2026.3.30",
       },
-      openclaw: {
+      sunclaw: {
         install: {
           minHostVersion: ">=2026.3.30",
         },
@@ -40,7 +40,7 @@ describe("syncPluginVersions", () => {
           pluginApi: ">=2026.3.30",
         },
         build: {
-          openclawVersion: "2026.3.30",
+          sunclawVersion: "2026.3.30",
         },
       },
     });
@@ -52,7 +52,7 @@ describe("syncPluginVersions", () => {
       version?: string;
       devDependencies?: Record<string, string>;
       peerDependencies?: Record<string, string>;
-      openclaw?: {
+      sunclaw?: {
         install?: {
           minHostVersion?: string;
         };
@@ -60,34 +60,34 @@ describe("syncPluginVersions", () => {
           pluginApi?: string;
         };
         build?: {
-          openclawVersion?: string;
+          sunclawVersion?: string;
         };
       };
     };
 
-    expect(summary.updated).toContain("@openclaw/imessage");
+    expect(summary.updated).toContain("@sunclaw/imessage");
     expect(updatedPackage.version).toBe("2026.4.1");
-    expect(updatedPackage.devDependencies?.openclaw).toBe("workspace:*");
-    expect(updatedPackage.peerDependencies?.openclaw).toBe(">=2026.4.1");
-    expect(updatedPackage.openclaw?.install?.minHostVersion).toBe(">=2026.3.30");
-    expect(updatedPackage.openclaw?.compat?.pluginApi).toBe(">=2026.4.1");
-    expect(updatedPackage.openclaw?.build?.openclawVersion).toBe("2026.4.1");
+    expect(updatedPackage.devDependencies?.sunclaw).toBe("workspace:*");
+    expect(updatedPackage.peerDependencies?.sunclaw).toBe(">=2026.4.1");
+    expect(updatedPackage.sunclaw?.install?.minHostVersion).toBe(">=2026.3.30");
+    expect(updatedPackage.sunclaw?.compat?.pluginApi).toBe(">=2026.4.1");
+    expect(updatedPackage.sunclaw?.build?.sunclawVersion).toBe("2026.4.1");
   });
 
   it("reports pending version sync without writing in check mode", () => {
-    const rootDir = makeTempDir(tempDirs, "openclaw-sync-plugin-versions-check-");
+    const rootDir = makeTempDir(tempDirs, "sunclaw-sync-plugin-versions-check-");
 
     writeJson(path.join(rootDir, "package.json"), {
-      name: "openclaw",
+      name: "sunclaw",
       version: "2026.4.2",
     });
     writeJson(path.join(rootDir, "extensions/discord/package.json"), {
-      name: "@openclaw/discord",
+      name: "@sunclaw/discord",
       version: "2026.4.1",
       peerDependencies: {
-        openclaw: ">=2026.4.1",
+        sunclaw: ">=2026.4.1",
       },
-      openclaw: {
+      sunclaw: {
         compat: {
           pluginApi: ">=2026.4.1",
         },
@@ -100,28 +100,28 @@ describe("syncPluginVersions", () => {
     ) as {
       version?: string;
       peerDependencies?: Record<string, string>;
-      openclaw?: {
+      sunclaw?: {
         compat?: {
           pluginApi?: string;
         };
       };
     };
 
-    expect(summary.updated).toEqual(["@openclaw/discord"]);
+    expect(summary.updated).toEqual(["@sunclaw/discord"]);
     expect(unchangedPackage.version).toBe("2026.4.1");
-    expect(unchangedPackage.peerDependencies?.openclaw).toBe(">=2026.4.1");
-    expect(unchangedPackage.openclaw?.compat?.pluginApi).toBe(">=2026.4.1");
+    expect(unchangedPackage.peerDependencies?.sunclaw).toBe(">=2026.4.1");
+    expect(unchangedPackage.sunclaw?.compat?.pluginApi).toBe(">=2026.4.1");
   });
 
   it("uses the base release version for beta changelog entries", () => {
-    const rootDir = makeTempDir(tempDirs, "openclaw-sync-plugin-versions-beta-changelog-");
+    const rootDir = makeTempDir(tempDirs, "sunclaw-sync-plugin-versions-beta-changelog-");
 
     writeJson(path.join(rootDir, "package.json"), {
-      name: "openclaw",
+      name: "sunclaw",
       version: "2026.5.3-beta.1",
     });
     writeJson(path.join(rootDir, "extensions/matrix/package.json"), {
-      name: "@openclaw/matrix",
+      name: "@sunclaw/matrix",
       version: "2026.5.3-beta.1",
     });
     fs.mkdirSync(path.join(rootDir, "extensions/matrix"), { recursive: true });
@@ -134,7 +134,7 @@ describe("syncPluginVersions", () => {
     const summary = syncPluginVersions(rootDir);
     const changelog = fs.readFileSync(path.join(rootDir, "extensions/matrix/CHANGELOG.md"), "utf8");
 
-    expect(summary.changelogged).toEqual(["@openclaw/matrix"]);
+    expect(summary.changelogged).toEqual(["@sunclaw/matrix"]);
     expect(changelog).toContain("## 2026.5.3\n\n### Changes\n- Version alignment");
     expect(changelog).not.toContain("## 2026.5.3-beta.1");
 

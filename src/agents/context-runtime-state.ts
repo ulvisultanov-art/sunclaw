@@ -1,12 +1,12 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { createLazyImportLoader, type LazyPromiseLoader } from "../shared/lazy-promise.js";
 import { MODEL_CONTEXT_TOKEN_CACHE } from "./context-cache.js";
 
-const CONTEXT_WINDOW_RUNTIME_STATE_KEY = Symbol.for("openclaw.contextWindowRuntimeState");
+const CONTEXT_WINDOW_RUNTIME_STATE_KEY = Symbol.for("sunclaw.contextWindowRuntimeState");
 
 type ContextWindowRuntimeState = {
   loadPromise: Promise<void> | null;
-  configuredConfig: OpenClawConfig | undefined;
+  configuredConfig: SunClawConfig | undefined;
   configLoadFailures: number;
   nextConfigLoadAttemptAtMs: number;
   modelsConfigRuntimeLoader: LazyPromiseLoader<typeof import("./models-config.runtime.js")>;

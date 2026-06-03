@@ -4,7 +4,7 @@ import {
   type IncomingMessage,
   type ServerResponse,
 } from "node:http";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord } from "@sunclaw/normalization-core/record-coerce";
 import { getRuntimeConfig } from "../config/io.js";
 import { isTruthyEnvValue } from "../infra/env.js";
 import { formatErrorMessage } from "../infra/errors.js";
@@ -39,8 +39,8 @@ let activeMcpLoopbackServerPromise: Promise<McpLoopbackServer> | null = null;
 
 function shouldLogMcpLoopbackTraffic(): boolean {
   return (
-    isTruthyEnvValue(process.env.OPENCLAW_CLI_BACKEND_LOG_OUTPUT) ||
-    isTruthyEnvValue(process.env.OPENCLAW_LIVE_CLI_BACKEND_DEBUG)
+    isTruthyEnvValue(process.env.SUNCLAW_CLI_BACKEND_LOG_OUTPUT) ||
+    isTruthyEnvValue(process.env.SUNCLAW_LIVE_CLI_BACKEND_DEBUG)
   );
 }
 

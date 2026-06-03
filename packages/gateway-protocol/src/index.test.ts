@@ -479,7 +479,7 @@ describe("validateTalkClientToolCallParams", () => {
         sessionKey: "agent:main:main",
         relaySessionId: "relay-1",
         callId: "call-1",
-        name: "openclaw_agent_consult",
+        name: "sunclaw_agent_consult",
         args: { question: "what now" },
       }),
     ).toBe(true);
@@ -511,13 +511,13 @@ describe("validateTalkAgentControlParams", () => {
         sessionId: "session-1",
         active: true,
         aborted: true,
-        message: "Cancelled the active OpenClaw run.",
+        message: "Cancelled the active SunClaw run.",
         speak: true,
         show: true,
         suppress: false,
         providerResult: {
           status: "cancelled",
-          message: "Cancelled the active OpenClaw run.",
+          message: "Cancelled the active SunClaw run.",
         },
       }),
     ).toBe(true);

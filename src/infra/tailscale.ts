@@ -2,12 +2,12 @@ import { existsSync } from "node:fs";
 import {
   asDateTimestampMs,
   resolveExpiresAtMsFromDurationMs,
-} from "@openclaw/normalization-core/number-coercion";
-import { asNullableObjectRecord as readRecord } from "@openclaw/normalization-core/record-coerce";
+} from "@sunclaw/normalization-core/number-coercion";
+import { asNullableObjectRecord as readRecord } from "@sunclaw/normalization-core/record-coerce";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@sunclaw/normalization-core/string-coerce";
 import { colorize, isRich, theme } from "../../packages/terminal-core/src/theme.js";
 import { formatCliCommand } from "../cli/command-format.js";
 import { promptYesNo } from "../cli/prompt.js";
@@ -166,7 +166,7 @@ let cachedTailscaleBinary: string | null = null;
 export function getTestTailscaleBinaryOverride(
   env: NodeJS.ProcessEnv = process.env,
 ): string | null {
-  const forcedBinary = env.OPENCLAW_TEST_TAILSCALE_BINARY?.trim();
+  const forcedBinary = env.SUNCLAW_TEST_TAILSCALE_BINARY?.trim();
   if (!forcedBinary) {
     return null;
   }
@@ -387,7 +387,7 @@ export async function ensureFunnel(
     runtime.error("Failed to enable Tailscale Funnel. Is it allowed on your tailnet?");
     runtime.error(
       info(
-        `Tip: Funnel is optional for OpenClaw. You can keep running the web gateway without it: \`${formatCliCommand("openclaw gateway")}\``,
+        `Tip: Funnel is optional for SunClaw. You can keep running the web gateway without it: \`${formatCliCommand("sunclaw gateway")}\``,
       ),
     );
     if (shouldLogVerbose()) {

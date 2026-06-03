@@ -24,17 +24,17 @@ const GATEWAY_E2E_TIMEOUT_MS = 90_000;
 let gatewayTestSeq = 0;
 const GATEWAY_TEST_ENV_KEYS = [
   "HOME",
-  "OPENCLAW_STATE_DIR",
-  "OPENCLAW_CONFIG_PATH",
-  "OPENCLAW_GATEWAY_TOKEN",
-  "OPENCLAW_SKIP_CHANNELS",
-  "OPENCLAW_SKIP_GMAIL_WATCHER",
-  "OPENCLAW_SKIP_CRON",
-  "OPENCLAW_SKIP_CANVAS_HOST",
-  "OPENCLAW_SKIP_BROWSER_CONTROL_SERVER",
-  "OPENCLAW_SKIP_PROVIDERS",
-  "OPENCLAW_BUNDLED_PLUGINS_DIR",
-  "OPENCLAW_DISABLE_BUNDLED_PLUGINS",
+  "SUNCLAW_STATE_DIR",
+  "SUNCLAW_CONFIG_PATH",
+  "SUNCLAW_GATEWAY_TOKEN",
+  "SUNCLAW_SKIP_CHANNELS",
+  "SUNCLAW_SKIP_GMAIL_WATCHER",
+  "SUNCLAW_SKIP_CRON",
+  "SUNCLAW_SKIP_CANVAS_HOST",
+  "SUNCLAW_SKIP_BROWSER_CONTROL_SERVER",
+  "SUNCLAW_SKIP_PROVIDERS",
+  "SUNCLAW_BUNDLED_PLUGINS_DIR",
+  "SUNCLAW_DISABLE_BUNDLED_PLUGINS",
 ] as const;
 
 function nextGatewayId(prefix: string): string {
@@ -42,13 +42,13 @@ function nextGatewayId(prefix: string): string {
 }
 
 async function createEmptyBundledPluginsDir(tempHome: string): Promise<string> {
-  const bundledPluginsDir = path.join(tempHome, "openclaw-test-empty-bundled-plugins");
+  const bundledPluginsDir = path.join(tempHome, "sunclaw-test-empty-bundled-plugins");
   await fs.mkdir(bundledPluginsDir, { recursive: true });
   return bundledPluginsDir;
 }
 
 async function createGatewayConfigPath(tempHome: string): Promise<string> {
-  const configPath = path.join(tempHome, ".openclaw", "openclaw.json");
+  const configPath = path.join(tempHome, ".sunclaw", "sunclaw.json");
   await fs.mkdir(path.dirname(configPath), { recursive: true });
   return configPath;
 }
@@ -79,10 +79,10 @@ async function writeWorkspacePlugin(params: {
   body: string;
   activation?: { onStartup?: boolean };
 }): Promise<void> {
-  const pluginDir = path.join(params.workspaceDir, ".openclaw", "extensions", params.id);
+  const pluginDir = path.join(params.workspaceDir, ".sunclaw", "extensions", params.id);
   await fs.mkdir(pluginDir, { recursive: true });
   await fs.writeFile(
-    path.join(pluginDir, "openclaw.plugin.json"),
+    path.join(pluginDir, "sunclaw.plugin.json"),
     `${JSON.stringify(
       {
         id: params.id,
@@ -130,29 +130,29 @@ async function readCounterWithRetry(filePath: string): Promise<number> {
 async function setupGatewayTempHome(params: { prefix: string; minimalGateway?: boolean }) {
   const envSnapshot = captureEnv([
     ...GATEWAY_TEST_ENV_KEYS,
-    ...(params.minimalGateway ? (["OPENCLAW_TEST_MINIMAL_GATEWAY"] as const) : []),
+    ...(params.minimalGateway ? (["SUNCLAW_TEST_MINIMAL_GATEWAY"] as const) : []),
   ]);
 
   const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), params.prefix));
   process.env.HOME = tempHome;
-  process.env.OPENCLAW_STATE_DIR = path.join(tempHome, ".openclaw");
-  delete process.env.OPENCLAW_CONFIG_PATH;
-  process.env.OPENCLAW_SKIP_CHANNELS = "1";
-  process.env.OPENCLAW_SKIP_GMAIL_WATCHER = "1";
-  process.env.OPENCLAW_SKIP_CRON = "1";
-  process.env.OPENCLAW_SKIP_CANVAS_HOST = "1";
-  process.env.OPENCLAW_SKIP_BROWSER_CONTROL_SERVER = "1";
-  process.env.OPENCLAW_SKIP_PROVIDERS = "1";
+  process.env.SUNCLAW_STATE_DIR = path.join(tempHome, ".sunclaw");
+  delete process.env.SUNCLAW_CONFIG_PATH;
+  process.env.SUNCLAW_SKIP_CHANNELS = "1";
+  process.env.SUNCLAW_SKIP_GMAIL_WATCHER = "1";
+  process.env.SUNCLAW_SKIP_CRON = "1";
+  process.env.SUNCLAW_SKIP_CANVAS_HOST = "1";
+  process.env.SUNCLAW_SKIP_BROWSER_CONTROL_SERVER = "1";
+  process.env.SUNCLAW_SKIP_PROVIDERS = "1";
   if (params.minimalGateway) {
-    process.env.OPENCLAW_TEST_MINIMAL_GATEWAY = "1";
+    process.env.SUNCLAW_TEST_MINIMAL_GATEWAY = "1";
   } else {
-    delete process.env.OPENCLAW_TEST_MINIMAL_GATEWAY;
+    delete process.env.SUNCLAW_TEST_MINIMAL_GATEWAY;
   }
 
-  const workspaceDir = path.join(tempHome, "openclaw");
+  const workspaceDir = path.join(tempHome, "sunclaw");
   await fs.mkdir(workspaceDir, { recursive: true });
-  process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = await createEmptyBundledPluginsDir(tempHome);
-  process.env.OPENCLAW_DISABLE_BUNDLED_PLUGINS = "1";
+  process.env.SUNCLAW_BUNDLED_PLUGINS_DIR = await createEmptyBundledPluginsDir(tempHome);
+  process.env.SUNCLAW_DISABLE_BUNDLED_PLUGINS = "1";
   return { envSnapshot, tempHome, workspaceDir };
 }
 
@@ -180,12 +180,12 @@ describe("gateway e2e", () => {
     async () => {
       const { baseUrl: openaiBaseUrl, restore } = installOpenAiResponsesMock();
       const { envSnapshot, tempHome, workspaceDir } = await setupGatewayTempHome({
-        prefix: "openclaw-gw-mock-home-",
+        prefix: "sunclaw-gw-mock-home-",
         minimalGateway: true,
       });
 
       const token = nextGatewayId("test-token");
-      process.env.OPENCLAW_GATEWAY_TOKEN = token;
+      process.env.SUNCLAW_GATEWAY_TOKEN = token;
 
       const configPath = await createGatewayConfigPath(tempHome);
       const mockProvider = buildMockOpenAiResponsesProvider(openaiBaseUrl);
@@ -260,11 +260,11 @@ describe("gateway e2e", () => {
     { timeout: GATEWAY_E2E_TIMEOUT_MS },
     async () => {
       const { envSnapshot, tempHome, workspaceDir } = await setupGatewayTempHome({
-        prefix: "openclaw-gw-http-tools-home-",
+        prefix: "sunclaw-gw-http-tools-home-",
       });
 
       const token = nextGatewayId("http-tools-token");
-      process.env.OPENCLAW_GATEWAY_TOKEN = token;
+      process.env.SUNCLAW_GATEWAY_TOKEN = token;
       const registerCountPath = path.join(tempHome, "workspace-plugin-register-count.txt");
       await writeWorkspacePlugin({
         workspaceDir,
@@ -297,7 +297,7 @@ module.exports = {
         gateway: { auth: { token } },
       };
       await fs.writeFile(configPath, `${JSON.stringify(cfg, null, 2)}\n`);
-      process.env.OPENCLAW_CONFIG_PATH = configPath;
+      process.env.SUNCLAW_CONFIG_PATH = configPath;
 
       const { port, server } = await startLoopbackTokenGateway(token);
 
@@ -339,13 +339,13 @@ module.exports = {
     { timeout: GATEWAY_E2E_TIMEOUT_MS },
     async () => {
       const { envSnapshot, tempHome } = await setupGatewayTempHome({
-        prefix: "openclaw-wizard-home-",
+        prefix: "sunclaw-wizard-home-",
         minimalGateway: true,
       });
-      delete process.env.OPENCLAW_GATEWAY_TOKEN;
+      delete process.env.SUNCLAW_GATEWAY_TOKEN;
 
       const configPath = await createGatewayConfigPath(tempHome);
-      process.env.OPENCLAW_CONFIG_PATH = configPath;
+      process.env.SUNCLAW_CONFIG_PATH = configPath;
       clearRuntimeConfigSnapshot();
       clearConfigCache();
 
@@ -462,38 +462,38 @@ module.exports = {
     async () => {
       const envSnapshot = captureEnv([
         "HOME",
-        "OPENCLAW_STATE_DIR",
-        "OPENCLAW_CONFIG_PATH",
-        "OPENCLAW_GATEWAY_TOKEN",
-        "OPENCLAW_SKIP_CHANNELS",
-        "OPENCLAW_SKIP_GMAIL_WATCHER",
-        "OPENCLAW_SKIP_CRON",
-        "OPENCLAW_SKIP_CANVAS_HOST",
-        "OPENCLAW_SKIP_BROWSER_CONTROL_SERVER",
-        "OPENCLAW_SKIP_PROVIDERS",
-        "OPENCLAW_BUNDLED_PLUGINS_DIR",
-        "OPENCLAW_TEST_MINIMAL_GATEWAY",
+        "SUNCLAW_STATE_DIR",
+        "SUNCLAW_CONFIG_PATH",
+        "SUNCLAW_GATEWAY_TOKEN",
+        "SUNCLAW_SKIP_CHANNELS",
+        "SUNCLAW_SKIP_GMAIL_WATCHER",
+        "SUNCLAW_SKIP_CRON",
+        "SUNCLAW_SKIP_CANVAS_HOST",
+        "SUNCLAW_SKIP_BROWSER_CONTROL_SERVER",
+        "SUNCLAW_SKIP_PROVIDERS",
+        "SUNCLAW_BUNDLED_PLUGINS_DIR",
+        "SUNCLAW_TEST_MINIMAL_GATEWAY",
         "DISCORD_BOT_TOKEN",
       ]);
 
-      const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-minimal-gateway-home-"));
+      const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-minimal-gateway-home-"));
       const configPath = await createGatewayConfigPath(tempHome);
-      const bundledPluginsDir = path.join(tempHome, "openclaw-test-no-bundled-extensions");
+      const bundledPluginsDir = path.join(tempHome, "sunclaw-test-no-bundled-extensions");
       process.env.HOME = tempHome;
-      process.env.OPENCLAW_STATE_DIR = path.join(tempHome, ".openclaw");
-      process.env.OPENCLAW_CONFIG_PATH = configPath;
-      process.env.OPENCLAW_SKIP_CHANNELS = "1";
-      process.env.OPENCLAW_SKIP_GMAIL_WATCHER = "1";
-      process.env.OPENCLAW_SKIP_CRON = "1";
-      process.env.OPENCLAW_SKIP_CANVAS_HOST = "1";
-      process.env.OPENCLAW_SKIP_BROWSER_CONTROL_SERVER = "1";
-      process.env.OPENCLAW_SKIP_PROVIDERS = "1";
-      process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = bundledPluginsDir;
-      process.env.OPENCLAW_TEST_MINIMAL_GATEWAY = "1";
+      process.env.SUNCLAW_STATE_DIR = path.join(tempHome, ".sunclaw");
+      process.env.SUNCLAW_CONFIG_PATH = configPath;
+      process.env.SUNCLAW_SKIP_CHANNELS = "1";
+      process.env.SUNCLAW_SKIP_GMAIL_WATCHER = "1";
+      process.env.SUNCLAW_SKIP_CRON = "1";
+      process.env.SUNCLAW_SKIP_CANVAS_HOST = "1";
+      process.env.SUNCLAW_SKIP_BROWSER_CONTROL_SERVER = "1";
+      process.env.SUNCLAW_SKIP_PROVIDERS = "1";
+      process.env.SUNCLAW_BUNDLED_PLUGINS_DIR = bundledPluginsDir;
+      process.env.SUNCLAW_TEST_MINIMAL_GATEWAY = "1";
       process.env.DISCORD_BOT_TOKEN = "discord-test-token";
 
       const token = nextGatewayId("minimal-token");
-      process.env.OPENCLAW_GATEWAY_TOKEN = token;
+      process.env.SUNCLAW_GATEWAY_TOKEN = token;
       await fs.mkdir(bundledPluginsDir, { recursive: true });
       await fs.writeFile(
         configPath,

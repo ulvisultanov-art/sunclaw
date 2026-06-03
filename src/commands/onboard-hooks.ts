@@ -1,22 +1,22 @@
 import { resolveAgentWorkspaceDir, resolveDefaultAgentId } from "../agents/agent-scope.js";
 import { formatCliCommand } from "../cli/command-format.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { buildWorkspaceHookStatus } from "../hooks/hooks-status.js";
 import type { RuntimeEnv } from "../runtime.js";
 import { t } from "../wizard/i18n/index.js";
 import type { WizardPrompter } from "../wizard/prompts.js";
 
 export async function setupInternalHooks(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   _runtime: RuntimeEnv,
   prompter: WizardPrompter,
-): Promise<OpenClawConfig> {
+): Promise<SunClawConfig> {
   await prompter.note(
     [
       "Hooks let you automate actions when agent commands are issued.",
       "Example: Save session context to memory when you issue /new or /reset.",
       "",
-      "Learn more: https://docs.openclaw.ai/automation/hooks",
+      "Learn more: https://docs.sunclaw.complex.az/automation/hooks",
     ].join("\n"),
     t("wizard.hooks.introTitle"),
   );
@@ -56,7 +56,7 @@ export async function setupInternalHooks(
     entries[name] = { enabled: true };
   }
 
-  const next: OpenClawConfig = {
+  const next: SunClawConfig = {
     ...cfg,
     hooks: {
       ...cfg.hooks,
@@ -72,9 +72,9 @@ export async function setupInternalHooks(
       `Enabled ${selected.length} hook${selected.length > 1 ? "s" : ""}: ${selected.join(", ")}`,
       "",
       "You can manage hooks later with:",
-      `  ${formatCliCommand("openclaw hooks list")}`,
-      `  ${formatCliCommand("openclaw hooks enable <name>")}`,
-      `  ${formatCliCommand("openclaw hooks disable <name>")}`,
+      `  ${formatCliCommand("sunclaw hooks list")}`,
+      `  ${formatCliCommand("sunclaw hooks enable <name>")}`,
+      `  ${formatCliCommand("sunclaw hooks disable <name>")}`,
     ].join("\n"),
     t("wizard.hooks.configuredTitle"),
   );

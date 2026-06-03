@@ -1,9 +1,9 @@
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
-import { hasOutboundReplyContent } from "openclaw/plugin-sdk/reply-payload";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+} from "@sunclaw/normalization-core/string-coerce";
+import { hasOutboundReplyContent } from "sunclaw/plugin-sdk/reply-payload";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import type { TtsAutoMode } from "../../config/types.tts.js";
 import { logVerbose } from "../../globals.js";
 import { formatErrorMessage } from "../../infra/errors.js";
@@ -91,7 +91,7 @@ async function shouldTreatDeliveredTextAsVisible(params: {
 
 async function maybeApplyAcpTts(params: {
   payload: ReplyPayload;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   agentId?: string;
   channel?: string;
   accountId?: string;
@@ -180,7 +180,7 @@ export type AcpDispatchDeliveryCoordinator = {
 };
 
 export function createAcpDispatchDeliveryCoordinator(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   agentId?: string;
   ctx: FinalizedMsgContext;
   dispatcher: ReplyDispatcher;

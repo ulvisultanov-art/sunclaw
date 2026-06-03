@@ -3,14 +3,14 @@ import {
   type EmbeddingProviderAdapter,
   type EmbeddingProvider as GenericEmbeddingProvider,
   type EmbeddingProviderRuntime as GenericEmbeddingProviderRuntime,
-} from "openclaw/plugin-sdk/embedding-providers";
+} from "sunclaw/plugin-sdk/embedding-providers";
 import {
   getMemoryEmbeddingProvider as getLegacyMemoryEmbeddingProvider,
   type MemoryEmbeddingProvider,
   type MemoryEmbeddingProviderAdapter,
   type MemoryEmbeddingProviderCreateOptions,
   type MemoryEmbeddingProviderRuntime,
-} from "openclaw/plugin-sdk/memory-core-host-engine-embeddings";
+} from "sunclaw/plugin-sdk/memory-core-host-engine-embeddings";
 import { formatErrorMessage } from "../dreaming-shared.js";
 
 export type EmbeddingProvider = MemoryEmbeddingProvider;

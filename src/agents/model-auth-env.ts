@@ -1,8 +1,8 @@
 import fs from "node:fs";
 import os from "node:os";
-import { normalizeProviderIdForAuth } from "@openclaw/model-catalog-core/provider-id";
-import { normalizeOptionalString as normalizeOptionalPathInput } from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { normalizeProviderIdForAuth } from "@sunclaw/model-catalog-core/provider-id";
+import { normalizeOptionalString as normalizeOptionalPathInput } from "@sunclaw/normalization-core/string-coerce";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { getShellEnvAppliedKeys } from "../infra/shell-env.js";
 import { resolvePluginSetupProvider } from "../plugins/setup-registry.js";
 import type { ProviderAuthEvidence } from "../secrets/provider-env-vars.js";
@@ -16,7 +16,7 @@ export type EnvApiKeyResult = {
 };
 
 export type EnvApiKeyLookupOptions = {
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   workspaceDir?: string;
   aliasMap?: Readonly<Record<string, string>>;
   candidateMap?: Readonly<Record<string, readonly string[]>>;

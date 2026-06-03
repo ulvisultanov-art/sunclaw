@@ -201,11 +201,11 @@ providerHttpMocks.pollProviderOperationJsonMock.mockImplementation(
   },
 );
 
-vi.mock("openclaw/plugin-sdk/provider-auth-runtime", () => ({
+vi.mock("sunclaw/plugin-sdk/provider-auth-runtime", () => ({
   resolveApiKeyForProvider: providerHttpMocks.resolveApiKeyForProviderMock,
 }));
 
-vi.mock("openclaw/plugin-sdk/provider-http", () => ({
+vi.mock("sunclaw/plugin-sdk/provider-http", () => ({
   assertOkOrThrowHttpError: providerHttpMocks.assertOkOrThrowHttpErrorMock,
   assertOkOrThrowProviderError: providerHttpMocks.assertOkOrThrowProviderErrorMock,
   createProviderOperationDeadline: ({

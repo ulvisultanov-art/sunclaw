@@ -1,9 +1,9 @@
 import { ApplicationCommandOptionType } from "discord-api-types/v10";
-import { resolveNativeCommandSessionTargets } from "openclaw/plugin-sdk/command-auth-native";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { buildPairingReply } from "openclaw/plugin-sdk/conversation-runtime";
-import { isDangerousNameMatchingEnabled } from "openclaw/plugin-sdk/dangerous-name-runtime";
-import { getAgentScopedMediaLocalRoots } from "openclaw/plugin-sdk/media-runtime";
+import { resolveNativeCommandSessionTargets } from "sunclaw/plugin-sdk/command-auth-native";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import { buildPairingReply } from "sunclaw/plugin-sdk/conversation-runtime";
+import { isDangerousNameMatchingEnabled } from "sunclaw/plugin-sdk/dangerous-name-runtime";
+import { getAgentScopedMediaLocalRoots } from "sunclaw/plugin-sdk/media-runtime";
 import {
   buildCommandTextFromArgs,
   findCommandByNativeName,
@@ -12,10 +12,10 @@ import {
   serializeCommandArgs,
   type ChatCommandDefinition,
   type NativeCommandSpec,
-} from "openclaw/plugin-sdk/native-command-registry";
-import { resolveChunkMode, resolveTextChunkLimit } from "openclaw/plugin-sdk/reply-chunking";
-import { createSubsystemLogger, logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { resolveOpenProviderRuntimeGroupPolicy } from "openclaw/plugin-sdk/runtime-group-policy";
+} from "sunclaw/plugin-sdk/native-command-registry";
+import { resolveChunkMode, resolveTextChunkLimit } from "sunclaw/plugin-sdk/reply-chunking";
+import { createSubsystemLogger, logVerbose } from "sunclaw/plugin-sdk/runtime-env";
+import { resolveOpenProviderRuntimeGroupPolicy } from "sunclaw/plugin-sdk/runtime-group-policy";
 import {
   resolveDiscordAccountAllowFrom,
   resolveDiscordAccountDmPolicy,
@@ -86,7 +86,7 @@ export { testing, testing as __testing } from "./native-command.runtime.js";
 
 export function createDiscordNativeCommand(params: {
   command: NativeCommandSpec;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   discordConfig: DiscordConfig;
   accountId: string;
   sessionPrefix: string;
@@ -200,7 +200,7 @@ async function dispatchDiscordCommandInteraction(params: {
   prompt: string;
   command: ChatCommandDefinition;
   commandArgs?: DiscordCommandArgs;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   discordConfig: DiscordConfig;
   accountId: string;
   sessionPrefix: string;

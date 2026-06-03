@@ -1,4 +1,4 @@
-import { sortUniqueStrings } from "@openclaw/normalization-core/string-normalization";
+import { sortUniqueStrings } from "@sunclaw/normalization-core/string-normalization";
 import { withActivatedPluginIds } from "./activation-context.js";
 import { resolveBundledPluginCompatibleActivationInputs } from "./activation-context.js";
 import { resolveManifestActivationPluginIds } from "./activation-planner.js";
@@ -7,7 +7,7 @@ import { extractPluginInstallRecordsFromInstalledPluginIndex } from "./installed
 import {
   getRuntimePluginRegistryForLoadOptions,
   isPluginRegistryLoadInFlight,
-  loadOpenClawPlugins,
+  loadSunClawPlugins,
   type PluginLoadOptions,
 } from "./loader.js";
 import { resolvePluginMetadataSnapshot } from "./plugin-metadata-snapshot.js";
@@ -348,7 +348,7 @@ export function resolvePluginProviders(params: {
     if (params.skipIfLoadInFlight && isPluginRegistryLoadInFlight(loadState.loadOptions)) {
       return [];
     }
-    const registry = loadOpenClawPlugins(loadState.loadOptions);
+    const registry = loadSunClawPlugins(loadState.loadOptions);
     return registry.providers.map((entry) =>
       Object.assign({}, entry.provider, { pluginId: entry.pluginId }),
     );

@@ -1,7 +1,7 @@
 import { promises as fs } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { clearConfigCache } from "openclaw/plugin-sdk/runtime-config-snapshot";
+import { clearConfigCache } from "sunclaw/plugin-sdk/runtime-config-snapshot";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { policyCheckCommand, policyCompareCommand, policyWatchCommand } from "./cli.js";
 import { resetPolicyDoctorChecksForTest } from "./doctor/register.js";
@@ -215,8 +215,8 @@ describe("policy commands", () => {
   });
 
   it("links policy findings to evidence and policy requirement refs", async () => {
-    const configPath = join(workspaceDir, "openclaw.jsonc");
-    vi.stubEnv("OPENCLAW_CONFIG_PATH", configPath);
+    const configPath = join(workspaceDir, "sunclaw.jsonc");
+    vi.stubEnv("SUNCLAW_CONFIG_PATH", configPath);
     await fs.writeFile(
       configPath,
       JSON.stringify({
@@ -246,15 +246,15 @@ describe("policy commands", () => {
         channels: [
           {
             id: "telegram",
-            source: "oc://openclaw.config/channels/telegram",
+            source: "oc://sunclaw.config/channels/telegram",
           },
         ],
       },
       findings: [
         {
           checkId: "policy/channels-denied-provider",
-          ocPath: "oc://openclaw.config/channels/telegram",
-          target: "oc://openclaw.config/channels/telegram",
+          ocPath: "oc://sunclaw.config/channels/telegram",
+          target: "oc://sunclaw.config/channels/telegram",
           requirement: "oc://policy.jsonc/channels/denyRules/#0",
         },
       ],
@@ -262,8 +262,8 @@ describe("policy commands", () => {
   });
 
   it("attests underlying policy findings when the accepted attestation is stale", async () => {
-    const configPath = join(workspaceDir, "openclaw.jsonc");
-    vi.stubEnv("OPENCLAW_CONFIG_PATH", configPath);
+    const configPath = join(workspaceDir, "sunclaw.jsonc");
+    vi.stubEnv("SUNCLAW_CONFIG_PATH", configPath);
     await fs.writeFile(
       configPath,
       JSON.stringify({
@@ -306,8 +306,8 @@ describe("policy commands", () => {
   });
 
   it("reports stale accepted attestations in policy watch", async () => {
-    const configPath = join(workspaceDir, "openclaw.jsonc");
-    vi.stubEnv("OPENCLAW_CONFIG_PATH", configPath);
+    const configPath = join(workspaceDir, "sunclaw.jsonc");
+    vi.stubEnv("SUNCLAW_CONFIG_PATH", configPath);
     await fs.writeFile(
       configPath,
       JSON.stringify({
@@ -395,8 +395,8 @@ describe("policy commands", () => {
   });
 
   it("reports findings before stale when accepted attestation exists", async () => {
-    const configPath = join(workspaceDir, "openclaw.jsonc");
-    vi.stubEnv("OPENCLAW_CONFIG_PATH", configPath);
+    const configPath = join(workspaceDir, "sunclaw.jsonc");
+    vi.stubEnv("SUNCLAW_CONFIG_PATH", configPath);
     await fs.writeFile(
       configPath,
       JSON.stringify({
@@ -446,9 +446,9 @@ describe("policy commands", () => {
     ]);
   });
 
-  it("fails closed when the OpenClaw config is invalid", async () => {
-    const configPath = join(workspaceDir, "openclaw.jsonc");
-    vi.stubEnv("OPENCLAW_CONFIG_PATH", configPath);
+  it("fails closed when the SunClaw config is invalid", async () => {
+    const configPath = join(workspaceDir, "sunclaw.jsonc");
+    vi.stubEnv("SUNCLAW_CONFIG_PATH", configPath);
     await fs.writeFile(configPath, "{", "utf-8");
     const { exitCode, parsed } = await runPolicyCheckJson();
 
@@ -813,8 +813,8 @@ describe("policy commands", () => {
   it("resolves the default compare policy path from the configured agent workspace", async () => {
     const agentWorkspace = join(workspaceDir, "agent-workspace");
     await fs.mkdir(agentWorkspace, { recursive: true });
-    const configPath = join(workspaceDir, "openclaw.jsonc");
-    vi.stubEnv("OPENCLAW_CONFIG_PATH", configPath);
+    const configPath = join(workspaceDir, "sunclaw.jsonc");
+    vi.stubEnv("SUNCLAW_CONFIG_PATH", configPath);
     await fs.writeFile(
       configPath,
       JSON.stringify({

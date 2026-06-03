@@ -8,7 +8,7 @@ type ConnectionRegistryState = {
   controllers: Map<string, WhatsAppConnectionControllerHandle>;
 };
 
-const CONNECTION_REGISTRY_KEY = Symbol.for("openclaw.whatsapp.connectionControllerRegistry");
+const CONNECTION_REGISTRY_KEY = Symbol.for("sunclaw.whatsapp.connectionControllerRegistry");
 
 function getConnectionRegistryState(): ConnectionRegistryState {
   const globalState = globalThis as typeof globalThis & {

@@ -1,6 +1,6 @@
-import type { AgentMessage } from "openclaw/plugin-sdk/agent-core";
-import type { ExtensionContext } from "openclaw/plugin-sdk/agent-sessions";
-import type { UserMessage } from "openclaw/plugin-sdk/llm";
+import type { AgentMessage } from "sunclaw/plugin-sdk/agent-core";
+import type { ExtensionContext } from "sunclaw/plugin-sdk/agent-sessions";
+import type { UserMessage } from "sunclaw/plugin-sdk/llm";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { summarizeWithFallback } from "./compaction.js";
 
@@ -9,9 +9,9 @@ const agentSessionMocks = vi.hoisted(() => ({
   estimateTokens: vi.fn((_message: unknown) => 100),
 }));
 
-vi.mock("openclaw/plugin-sdk/agent-sessions", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/agent-sessions")>(
-    "openclaw/plugin-sdk/agent-sessions",
+vi.mock("sunclaw/plugin-sdk/agent-sessions", async () => {
+  const actual = await vi.importActual<typeof import("sunclaw/plugin-sdk/agent-sessions")>(
+    "sunclaw/plugin-sdk/agent-sessions",
   );
   return {
     ...actual,

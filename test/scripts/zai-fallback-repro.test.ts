@@ -11,7 +11,7 @@ import {
 describe("zai fallback repro command resolution", () => {
   it("wraps Windows pnpm.cmd without Node shell argv", () => {
     expect(
-      resolveZaiFallbackPnpmCommand(["openclaw", "agent", "--message", "hello world"], {
+      resolveZaiFallbackPnpmCommand(["sunclaw", "agent", "--message", "hello world"], {
         comSpec: String.raw`C:\Windows\System32\cmd.exe`,
         npmExecPath: String.raw`C:\Program Files\nodejs\pnpm.cmd`,
         platform: "win32",
@@ -21,7 +21,7 @@ describe("zai fallback repro command resolution", () => {
         "/d",
         "/s",
         "/c",
-        String.raw`""C:\Program Files\nodejs\pnpm.cmd" openclaw agent --message "hello world""`,
+        String.raw`""C:\Program Files\nodejs\pnpm.cmd" sunclaw agent --message "hello world""`,
       ],
       command: String.raw`C:\Windows\System32\cmd.exe`,
       shell: false,
@@ -44,14 +44,14 @@ describe("zai fallback repro command resolution", () => {
     const exitCode = await runZaiFallbackRepro({
       env: {
         ANTHROPIC_API_KEY: "anthropic-test-key",
-        OPENCLAW_ZAI_FALLBACK_SESSION_ID: "session-test",
+        SUNCLAW_ZAI_FALLBACK_SESSION_ID: "session-test",
         PATH: process.env.PATH,
         ZAI_API_KEY: "zai-test-key",
       },
       error: () => {},
       log: () => {},
       mkdtemp: async () => {
-        const root = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-zai-fallback-test-"));
+        const root = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-zai-fallback-test-"));
         tempRoots.push(root);
         return root;
       },
@@ -60,7 +60,7 @@ describe("zai fallback repro command resolution", () => {
         calls.push(label);
         if (label === "run1") {
           const sessionFile = path.join(
-            String(env.OPENCLAW_STATE_DIR),
+            String(env.SUNCLAW_STATE_DIR),
             "agents",
             "main",
             "sessions",

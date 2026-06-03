@@ -13,7 +13,7 @@ function shellQuote(value: string): string {
 }
 
 function runGatewayPortCheck(fakeLsof: string) {
-  const root = mkdtempSync(join(tmpdir(), "openclaw-restart-mac-test-"));
+  const root = mkdtempSync(join(tmpdir(), "sunclaw-restart-mac-test-"));
   tempRoots.push(root);
 
   const binDir = join(root, "bin");
@@ -78,9 +78,9 @@ describe("scripts/restart-mac.sh", () => {
     const script = readFileSync(restartScriptPath, "utf8");
 
     expect(script).toContain(
-      'LOG_PATH="${OPENCLAW_RESTART_LOG:-${TMPDIR:-/tmp}/openclaw-restart-${LOCK_KEY}.log}"',
+      'LOG_PATH="${SUNCLAW_RESTART_LOG:-${TMPDIR:-/tmp}/sunclaw-restart-${LOCK_KEY}.log}"',
     );
-    expect(script).not.toContain('LOG_PATH="${OPENCLAW_RESTART_LOG:-/tmp/openclaw-restart.log}"');
+    expect(script).not.toContain('LOG_PATH="${SUNCLAW_RESTART_LOG:-/tmp/sunclaw-restart.log}"');
   });
 
   it("prefers the freshly packaged app unless an explicit app bundle is set", () => {
@@ -90,11 +90,11 @@ describe("scripts/restart-mac.sh", () => {
       script.indexOf("choose_app_bundle", script.indexOf("choose_app_bundle()") + 1),
     );
 
-    expect(chooseBlock).toContain('fail "OPENCLAW_APP_BUNDLE does not exist: ${APP_BUNDLE}"');
-    expect(chooseBlock.indexOf('${ROOT_DIR}/dist/OpenClaw.app')).toBeGreaterThan(-1);
-    expect(chooseBlock.indexOf('/Applications/OpenClaw.app')).toBeGreaterThan(-1);
-    expect(chooseBlock.indexOf('${ROOT_DIR}/dist/OpenClaw.app')).toBeLessThan(
-      chooseBlock.indexOf('/Applications/OpenClaw.app'),
+    expect(chooseBlock).toContain('fail "SUNCLAW_APP_BUNDLE does not exist: ${APP_BUNDLE}"');
+    expect(chooseBlock.indexOf('${ROOT_DIR}/dist/SunClaw.app')).toBeGreaterThan(-1);
+    expect(chooseBlock.indexOf('/Applications/SunClaw.app')).toBeGreaterThan(-1);
+    expect(chooseBlock.indexOf('${ROOT_DIR}/dist/SunClaw.app')).toBeLessThan(
+      chooseBlock.indexOf('/Applications/SunClaw.app'),
     );
   });
 });

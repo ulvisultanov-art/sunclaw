@@ -4,7 +4,7 @@ import path from "node:path";
 import type {
   AgentHarnessTaskRecord,
   AgentHarnessTaskRuntimeScope,
-} from "openclaw/plugin-sdk/agent-harness-task-runtime";
+} from "sunclaw/plugin-sdk/agent-harness-task-runtime";
 import { describe, expect, it, vi } from "vitest";
 import {
   CodexNativeSubagentMonitor,
@@ -601,7 +601,7 @@ describe("CodexNativeSubagentMonitor", () => {
   });
 
   it("reconciles completed native subagents from child rollout transcripts", async () => {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-codex-subagent-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-codex-subagent-"));
     const codexHome = path.join(tempDir, "codex-home");
     const transcriptDir = path.join(codexHome, "sessions", "2026", "05", "17");
     await fs.mkdir(transcriptDir, { recursive: true });
@@ -686,7 +686,7 @@ describe("CodexNativeSubagentMonitor", () => {
   });
 
   it("keeps polling after a transcript candidate belongs to a different parent", async () => {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-codex-subagent-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-codex-subagent-"));
     const codexHome = path.join(tempDir, "codex-home");
     const transcriptDir = path.join(codexHome, "sessions", "2026", "05", "17");
     await fs.mkdir(transcriptDir, { recursive: true });
@@ -755,7 +755,7 @@ describe("CodexNativeSubagentMonitor", () => {
   });
 
   it("reconciles existing running native subagent task rows when a parent registers", async () => {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-codex-subagent-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-codex-subagent-"));
     const codexHome = path.join(tempDir, "codex-home");
     const transcriptDir = path.join(codexHome, "sessions", "2026", "05", "17");
     await fs.mkdir(transcriptDir, { recursive: true });
@@ -824,7 +824,7 @@ describe("CodexNativeSubagentMonitor", () => {
   });
 
   it("does not rescan transcript directories while a child poll is already scheduled", async () => {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-codex-subagent-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-codex-subagent-"));
     const codexHome = path.join(tempDir, "codex-home");
     await fs.mkdir(path.join(codexHome, "sessions"), { recursive: true });
     const client = createClient();
@@ -867,7 +867,7 @@ describe("CodexNativeSubagentMonitor", () => {
   });
 
   it("uses one transcript tree scan for multiple pending task rows", async () => {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-codex-subagent-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-codex-subagent-"));
     const codexHome = path.join(tempDir, "codex-home");
     await fs.mkdir(path.join(codexHome, "sessions"), { recursive: true });
     const client = createClient();
@@ -910,7 +910,7 @@ describe("CodexNativeSubagentMonitor", () => {
   });
 
   it("reconciles completed native subagent transcripts from task rows without live child registration", async () => {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-codex-subagent-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-codex-subagent-"));
     const codexHome = path.join(tempDir, "codex-home");
     const transcriptDir = path.join(codexHome, "sessions", "2026", "05", "17");
     await fs.mkdir(transcriptDir, { recursive: true });
@@ -994,7 +994,7 @@ describe("CodexNativeSubagentMonitor", () => {
   });
 
   it("reconciles recent terminal native subagent rows that still need parent delivery", async () => {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-codex-subagent-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-codex-subagent-"));
     const codexHome = path.join(tempDir, "codex-home");
     const transcriptDir = path.join(codexHome, "sessions", "2026", "05", "17");
     await fs.mkdir(transcriptDir, { recursive: true });

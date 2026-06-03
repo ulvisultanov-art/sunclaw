@@ -1,10 +1,10 @@
 import fs from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { DELIVERY_NO_REPLY_RUNTIME_CONTRACT } from "openclaw/plugin-sdk/agent-runtime-test-contracts";
+import { DELIVERY_NO_REPLY_RUNTIME_CONTRACT } from "sunclaw/plugin-sdk/agent-runtime-test-contracts";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { setCliSessionBinding } from "../../agents/cli-session.js";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { SunClawConfig } from "../../config/config.js";
 import type { SessionEntry } from "../../config/sessions/types.js";
 import {
   createUserTurnTranscriptRecorder,
@@ -40,7 +40,7 @@ let createMockTypingController: typeof import("./test-helpers.js").createMockTyp
 let createReplyOperationForTest: typeof import("./reply-run-registry.js").createReplyOperation;
 let replyRunTestingForTest: typeof import("./reply-run-registry.js").testing;
 let cliBackendsTestingForTest: typeof import("../../agents/cli-backends.js").testing;
-const FOLLOWUP_DEBUG = process.env.OPENCLAW_DEBUG_FOLLOWUP_RUNNER_TEST === "1";
+const FOLLOWUP_DEBUG = process.env.SUNCLAW_DEBUG_FOLLOWUP_RUNNER_TEST === "1";
 const FOLLOWUP_TEST_QUEUES = new Map<
   string,
   {
@@ -975,7 +975,7 @@ describe("createFollowupRunner auto fallback primary probes", () => {
 
 describe("createFollowupRunner runtime config", () => {
   it("routes queued followups through CLI runtime dispatch when the model selects a CLI backend", async () => {
-    const runtimeConfig: OpenClawConfig = {
+    const runtimeConfig: SunClawConfig = {
       agents: {
         defaults: {
           cliBackends: {
@@ -1063,7 +1063,7 @@ describe("createFollowupRunner runtime config", () => {
   });
 
   it("reuses CLI session bindings for queued room-event followups", async () => {
-    const runtimeConfig: OpenClawConfig = {
+    const runtimeConfig: SunClawConfig = {
       agents: {
         defaults: {
           cliBackends: {
@@ -1110,7 +1110,7 @@ describe("createFollowupRunner runtime config", () => {
       createQueuedRun({
         currentInboundEventKind: "room_event",
         currentInboundAudio: true,
-        currentInboundContext: { text: "[OpenClaw room event]" },
+        currentInboundContext: { text: "[SunClaw room event]" },
         run: {
           config: runtimeConfig,
           sessionId: "session-cli-room-event",
@@ -1133,7 +1133,7 @@ describe("createFollowupRunner runtime config", () => {
   });
 
   it("stores queued room-event CLI sessions created from the first ambient run", async () => {
-    const runtimeConfig: OpenClawConfig = {
+    const runtimeConfig: SunClawConfig = {
       agents: {
         defaults: {
           cliBackends: {
@@ -1145,7 +1145,7 @@ describe("createFollowupRunner runtime config", () => {
         },
       },
     };
-    const storePath = "/tmp/openclaw-followup-room-event-cli.json";
+    const storePath = "/tmp/sunclaw-followup-room-event-cli.json";
     const sessionEntry: SessionEntry = {
       sessionId: "session-cli-room-event",
       updatedAt: Date.now(),
@@ -1180,7 +1180,7 @@ describe("createFollowupRunner runtime config", () => {
     await runner(
       createQueuedRun({
         currentInboundEventKind: "room_event",
-        currentInboundContext: { text: "[OpenClaw room event]" },
+        currentInboundContext: { text: "[SunClaw room event]" },
         run: {
           config: runtimeConfig,
           sessionId: "session-cli-room-event",
@@ -1204,7 +1204,7 @@ describe("createFollowupRunner runtime config", () => {
   });
 
   it("does not replace queued room-event CLI session bindings when reuse fails", async () => {
-    const runtimeConfig: OpenClawConfig = {
+    const runtimeConfig: SunClawConfig = {
       agents: {
         defaults: {
           cliBackends: {
@@ -1252,7 +1252,7 @@ describe("createFollowupRunner runtime config", () => {
     await runner(
       createQueuedRun({
         currentInboundEventKind: "room_event",
-        currentInboundContext: { text: "[OpenClaw room event]" },
+        currentInboundContext: { text: "[SunClaw room event]" },
         run: {
           config: runtimeConfig,
           sessionId: "session-cli-room-event",
@@ -1274,7 +1274,7 @@ describe("createFollowupRunner runtime config", () => {
   });
 
   it("passes prepared media user turns to CLI runtime dispatch", async () => {
-    const runtimeConfig: OpenClawConfig = {
+    const runtimeConfig: SunClawConfig = {
       agents: {
         defaults: {
           cliBackends: {
@@ -1325,7 +1325,7 @@ describe("createFollowupRunner runtime config", () => {
     const realAgentEvents = await vi.importActual<typeof import("../../infra/agent-events.js")>(
       "../../infra/agent-events.js",
     );
-    const runtimeConfig: OpenClawConfig = {
+    const runtimeConfig: SunClawConfig = {
       agents: {
         defaults: {
           cliBackends: {
@@ -1393,7 +1393,7 @@ describe("createFollowupRunner runtime config", () => {
         lifecyclePhases.push(phase);
       }
     });
-    const runtimeConfig: OpenClawConfig = {
+    const runtimeConfig: SunClawConfig = {
       agents: {
         defaults: {
           cliBackends: {
@@ -1465,7 +1465,7 @@ describe("createFollowupRunner runtime config", () => {
   });
 
   it("uses the active runtime snapshot for queued embedded followup runs", async () => {
-    const sourceConfig: OpenClawConfig = {
+    const sourceConfig: SunClawConfig = {
       models: {
         providers: {
           openai: {
@@ -1480,7 +1480,7 @@ describe("createFollowupRunner runtime config", () => {
         },
       },
     };
-    const runtimeConfig: OpenClawConfig = {
+    const runtimeConfig: SunClawConfig = {
       models: {
         providers: {
           openai: {
@@ -1659,7 +1659,7 @@ describe("createFollowupRunner runtime config", () => {
   });
 
   it("resolves queued embedded followups before preflight helpers read config", async () => {
-    const sourceConfig: OpenClawConfig = {
+    const sourceConfig: SunClawConfig = {
       skills: {
         entries: {
           whisper: {
@@ -1672,7 +1672,7 @@ describe("createFollowupRunner runtime config", () => {
         },
       },
     };
-    const runtimeConfig: OpenClawConfig = {
+    const runtimeConfig: SunClawConfig = {
       skills: {
         entries: {
           whisper: {
@@ -1718,7 +1718,7 @@ describe("createFollowupRunner runtime config", () => {
       payloads: [],
       meta: {},
     });
-    const sourceConfig: OpenClawConfig = {};
+    const sourceConfig: SunClawConfig = {};
     const runner = createFollowupRunner({
       typing: createMockTypingController(),
       typingMode: "instant",
@@ -2004,7 +2004,7 @@ describe("createFollowupRunner progress forwarding", () => {
 
   it("suppresses queued follow-up progress when verbose progress is disabled", async () => {
     const storePath = path.join(
-      await fs.mkdtemp(path.join(tmpdir(), "openclaw-followup-progress-off-")),
+      await fs.mkdtemp(path.join(tmpdir(), "sunclaw-followup-progress-off-")),
       "sessions.json",
     );
     const sessionEntry: SessionEntry = {
@@ -2319,7 +2319,7 @@ describe("createFollowupRunner progress forwarding", () => {
 describe("createFollowupRunner compaction", () => {
   it("adds verbose auto-compaction notice and tracks count", async () => {
     const storePath = path.join(
-      await fs.mkdtemp(path.join(tmpdir(), "openclaw-compaction-")),
+      await fs.mkdtemp(path.join(tmpdir(), "sunclaw-compaction-")),
       "sessions.json",
     );
     const sessionEntry: SessionEntry = {
@@ -2364,7 +2364,7 @@ describe("createFollowupRunner compaction", () => {
 
   it("suppresses queued auto-compaction notice when verbose is turned off", async () => {
     const storePath = path.join(
-      await fs.mkdtemp(path.join(tmpdir(), "openclaw-compaction-quiet-")),
+      await fs.mkdtemp(path.join(tmpdir(), "sunclaw-compaction-quiet-")),
       "sessions.json",
     );
     const sessionEntry: SessionEntry = {
@@ -2409,7 +2409,7 @@ describe("createFollowupRunner compaction", () => {
 
   it("tracks auto-compaction from embedded result metadata even when no compaction event is emitted", async () => {
     const storePath = path.join(
-      await fs.mkdtemp(path.join(tmpdir(), "openclaw-compaction-meta-")),
+      await fs.mkdtemp(path.join(tmpdir(), "sunclaw-compaction-meta-")),
       "sessions.json",
     );
     const sessionEntry: SessionEntry = {
@@ -2465,7 +2465,7 @@ describe("createFollowupRunner compaction", () => {
 
   it("refreshes queued followup runs to the rotated transcript", async () => {
     const storePath = path.join(
-      await fs.mkdtemp(path.join(tmpdir(), "openclaw-compaction-queue-")),
+      await fs.mkdtemp(path.join(tmpdir(), "sunclaw-compaction-queue-")),
       "sessions.json",
     );
     const sessionEntry: SessionEntry = {
@@ -2528,7 +2528,7 @@ describe("createFollowupRunner compaction", () => {
 
   it("does not count failed compaction end events in followup runs", async () => {
     const storePath = path.join(
-      await fs.mkdtemp(path.join(tmpdir(), "openclaw-compaction-failed-")),
+      await fs.mkdtemp(path.join(tmpdir(), "sunclaw-compaction-failed-")),
       "sessions.json",
     );
     const sessionEntry: SessionEntry = {
@@ -2583,7 +2583,7 @@ describe("createFollowupRunner compaction", () => {
   });
 
   it("injects the post-compaction refresh prompt before followup runs after preflight compaction", async () => {
-    const workspaceDir = await fs.mkdtemp(path.join(tmpdir(), "openclaw-preflight-followup-"));
+    const workspaceDir = await fs.mkdtemp(path.join(tmpdir(), "sunclaw-preflight-followup-"));
     const storePath = path.join(workspaceDir, "sessions.json");
     const transcriptPath = path.join(workspaceDir, "session.jsonl");
     await fs.writeFile(
@@ -2889,7 +2889,7 @@ describe("createFollowupRunner messaging delivery and dedupe", () => {
   }
 
   it("persists usage even when replies are suppressed", async () => {
-    const storePath = "/tmp/openclaw-followup-usage.json";
+    const storePath = "/tmp/sunclaw-followup-usage.json";
     const sessionKey = "main";
     const sessionEntry: SessionEntry = { sessionId: "session", updatedAt: Date.now() };
     const sessionStore: Record<string, SessionEntry> = { [sessionKey]: sessionEntry };
@@ -2946,7 +2946,7 @@ describe("createFollowupRunner messaging delivery and dedupe", () => {
   });
 
   it("passes queued config into usage persistence during drained followups", async () => {
-    const storePath = "/tmp/openclaw-followup-usage-cfg.json";
+    const storePath = "/tmp/sunclaw-followup-usage-cfg.json";
     const sessionKey = "main";
     const sessionEntry: SessionEntry = { sessionId: "session", updatedAt: Date.now() };
     const sessionStore: Record<string, SessionEntry> = { [sessionKey]: sessionEntry };
@@ -2997,7 +2997,7 @@ describe("createFollowupRunner messaging delivery and dedupe", () => {
   });
 
   it("uses providerUsed for snapshot freshness when agent metadata overrides the run provider", async () => {
-    const storePath = "/tmp/openclaw-followup-usage-provider.json";
+    const storePath = "/tmp/sunclaw-followup-usage-provider.json";
     const sessionKey = "main";
     const sessionEntry: SessionEntry = { sessionId: "session", updatedAt: Date.now() };
     const sessionStore: Record<string, SessionEntry> = { [sessionKey]: sessionEntry };
@@ -3038,7 +3038,7 @@ describe("createFollowupRunner messaging delivery and dedupe", () => {
                   },
                 },
               },
-            } as OpenClawConfig,
+            } as SunClawConfig,
           },
         }),
       ),
@@ -3050,7 +3050,7 @@ describe("createFollowupRunner messaging delivery and dedupe", () => {
   });
 
   it("preserves user-facing session model state for queued internal announce fallback", async () => {
-    const storePath = "/tmp/openclaw-followup-internal-announce-usage.json";
+    const storePath = "/tmp/sunclaw-followup-internal-announce-usage.json";
     const sessionKey = "main";
     const sessionEntry: SessionEntry = {
       sessionId: "session",

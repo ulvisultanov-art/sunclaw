@@ -2,17 +2,17 @@ import {
   assertOkOrThrowProviderError,
   assertProviderBinaryResponseContent,
   readProviderBinaryResponse,
-} from "openclaw/plugin-sdk/provider-http";
+} from "sunclaw/plugin-sdk/provider-http";
 import {
   normalizeApplyTextNormalization,
   normalizeLanguageCode,
   normalizeSeed,
   requireInRange,
-} from "openclaw/plugin-sdk/speech";
+} from "sunclaw/plugin-sdk/speech";
 import {
   fetchWithSsrFGuard,
   ssrfPolicyFromHttpBaseUrlAllowedHostname,
-} from "openclaw/plugin-sdk/ssrf-runtime";
+} from "sunclaw/plugin-sdk/ssrf-runtime";
 import { isValidElevenLabsVoiceId, normalizeElevenLabsBaseUrl } from "./shared.js";
 
 function assertElevenLabsVoiceSettings(settings: {

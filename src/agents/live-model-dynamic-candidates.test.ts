@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type { Model } from "../llm/types.js";
 
 const providerRuntimeMocks = vi.hoisted(() => ({
@@ -71,12 +71,12 @@ describe("appendPrioritizedDynamicLiveModels", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
 
     const result = await appendPrioritizedDynamicLiveModels({
       models: [model("anthropic", "claude-sonnet-4-6")],
       config,
-      agentDir: "/tmp/openclaw-agent",
+      agentDir: "/tmp/sunclaw-agent",
       modelRegistry: REGISTRY,
       resolveDynamicModel,
       prepareDynamicModel,
@@ -99,7 +99,7 @@ describe("appendPrioritizedDynamicLiveModels", () => {
       expect.objectContaining({
         provider: DYNAMIC_PROVIDER,
         context: expect.objectContaining({
-          agentDir: "/tmp/openclaw-agent",
+          agentDir: "/tmp/sunclaw-agent",
           modelId: "glm-5",
           modelRegistry: REGISTRY,
           provider: DYNAMIC_PROVIDER,
@@ -112,7 +112,7 @@ describe("appendPrioritizedDynamicLiveModels", () => {
       expect.objectContaining({
         provider: DYNAMIC_PROVIDER,
         context: expect.objectContaining({
-          agentDir: "/tmp/openclaw-agent",
+          agentDir: "/tmp/sunclaw-agent",
           modelId: "glm-5",
           modelRegistry: REGISTRY,
           provider: DYNAMIC_PROVIDER,
@@ -125,7 +125,7 @@ describe("appendPrioritizedDynamicLiveModels", () => {
         provider: DYNAMIC_PROVIDER,
         id: "glm-5",
       }),
-      "/tmp/openclaw-agent",
+      "/tmp/sunclaw-agent",
     );
   });
 
@@ -135,7 +135,7 @@ describe("appendPrioritizedDynamicLiveModels", () => {
 
     const result = await appendPrioritizedDynamicLiveModels({
       models: [model(DYNAMIC_PROVIDER, "glm-5")],
-      agentDir: "/tmp/openclaw-agent",
+      agentDir: "/tmp/sunclaw-agent",
       modelRegistry: REGISTRY,
       resolveDynamicModel,
       prepareDynamicModel,
@@ -157,7 +157,7 @@ describe("appendPrioritizedDynamicLiveModels", () => {
 
     const result = await appendPrioritizedDynamicLiveModels({
       models: [],
-      agentDir: "/tmp/openclaw-agent",
+      agentDir: "/tmp/sunclaw-agent",
       modelRegistry: REGISTRY,
       refs: [{ provider: DYNAMIC_PROVIDER, id: "glm-5" }],
     });

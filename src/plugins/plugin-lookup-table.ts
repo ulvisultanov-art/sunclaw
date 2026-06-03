@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import {
   createGatewayStartupMetadataPluginIdScope,
   isMetadataSnapshotScopedForGatewayStartup,
@@ -39,8 +39,8 @@ export type PluginLookUpTable = PluginMetadataSnapshot & {
 };
 
 export type LoadPluginLookUpTableParams = {
-  config: OpenClawConfig;
-  activationSourceConfig?: OpenClawConfig;
+  config: SunClawConfig;
+  activationSourceConfig?: SunClawConfig;
   workspaceDir?: string;
   env: NodeJS.ProcessEnv;
   index?: PluginRegistrySnapshot;

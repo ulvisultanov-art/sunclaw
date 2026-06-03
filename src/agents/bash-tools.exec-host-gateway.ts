@@ -1,5 +1,5 @@
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
-import { normalizeStringEntries } from "@openclaw/normalization-core/string-normalization";
+import { isRecord } from "@sunclaw/normalization-core/record-coerce";
+import { normalizeStringEntries } from "@sunclaw/normalization-core/string-normalization";
 import { describeInterpreterInlineEval } from "../infra/command-analysis/inline-eval.js";
 import { detectPolicyInlineEval } from "../infra/command-analysis/policy.js";
 import {
@@ -222,8 +222,8 @@ function formatDiagnosticsExportSuccess(aggregated: string): string {
     if (typeof manifest.generatedAt === "string") {
       lines.push(`Generated at: ${manifest.generatedAt}`);
     }
-    if (typeof manifest.openclawVersion === "string") {
-      lines.push(`OpenClaw version: ${manifest.openclawVersion}`);
+    if (typeof manifest.sunclawVersion === "string") {
+      lines.push(`SunClaw version: ${manifest.sunclawVersion}`);
     }
     const contents = formatDiagnosticsContents(manifest);
     if (contents.length > 0) {

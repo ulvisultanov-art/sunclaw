@@ -5,9 +5,9 @@ import {
   isActiveHarnessContextEngine,
   SKILL_WORKSHOP_TOOL_NAME,
   type EmbeddedRunAttemptParams,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
-import { buildCodexUserMcpServersThreadConfigPatch } from "openclaw/plugin-sdk/codex-mcp-projection";
-import { listRegisteredPluginAgentPromptGuidance } from "openclaw/plugin-sdk/plugin-runtime";
+} from "sunclaw/plugin-sdk/agent-harness-runtime";
+import { buildCodexUserMcpServersThreadConfigPatch } from "sunclaw/plugin-sdk/codex-mcp-projection";
+import { listRegisteredPluginAgentPromptGuidance } from "sunclaw/plugin-sdk/plugin-runtime";
 import { CODEX_GPT5_HEARTBEAT_PROMPT_OVERLAY } from "../../prompt-overlay.js";
 import { isModernCodexModel } from "../../provider.js";
 import {
@@ -916,7 +916,7 @@ export function buildThreadStartParams(
     sandbox: options.appServer.sandbox,
     ...(options.appServer.serviceTier ? { serviceTier: options.appServer.serviceTier } : {}),
     personality: CODEX_NATIVE_PERSONALITY_NONE,
-    serviceName: "OpenClaw",
+    serviceName: "SunClaw",
     config: buildCodexRuntimeThreadConfigForRun(params, options.config, {
       nativeCodeModeEnabled: options.nativeCodeModeEnabled,
       nativeCodeModeOnlyEnabled: options.nativeCodeModeOnlyEnabled,
@@ -1135,7 +1135,7 @@ function buildTurnScopedCollaborationInstructions(
 
 function buildDefaultCollaborationInstructions(): string {
   // Codex only applies the built-in Default-mode preset when `developer_instructions`
-  // is null. OpenClaw adds per-turn workspace instructions here, so preserve that
+  // is null. SunClaw adds per-turn workspace instructions here, so preserve that
   // pinned Codex default behavior before appending the workspace overlay.
   return [
     "# Collaboration Mode: Default",
@@ -1154,7 +1154,7 @@ function buildDefaultCollaborationInstructions(): string {
 
 function buildCronCollaborationInstructions(): string {
   return [
-    "This is an OpenClaw cron automation turn. Apply these instructions only to this scheduled job; ordinary chat turns should stay in Codex Default mode.",
+    "This is an SunClaw cron automation turn. Apply these instructions only to this scheduled job; ordinary chat turns should stay in Codex Default mode.",
     "Execute the cron payload directly. If it asks you to run an exact command, run that command before doing any investigation, planning, memory review, or workspace bootstrap.",
     "Use context already provided by the runtime, but do not spend time loading or re-reading workspace bootstrap, memory, or project-doc files before executing the cron payload. Inspect those files only if the payload asks for them or the command fails and they are needed to diagnose it.",
     "Keep output concise and automation-oriented. Prefer the final command result or a short failure summary over status narration.",
@@ -1163,8 +1163,8 @@ function buildCronCollaborationInstructions(): string {
 
 function buildHeartbeatCollaborationInstructions(): string {
   return [
-    "This is an OpenClaw heartbeat turn. Apply these instructions only to this heartbeat wake; ordinary chat turns should stay in Codex Default mode.",
-    "When you are ready to end the heartbeat, prefer the structured `heartbeat_respond` tool so OpenClaw can record the wake outcome and notification decision. If `heartbeat_respond` is not already available and `tool_search` is available, search for `heartbeat_respond`, load it, then call it. Use `notify=false` when nothing should visibly interrupt the user.",
+    "This is an SunClaw heartbeat turn. Apply these instructions only to this heartbeat wake; ordinary chat turns should stay in Codex Default mode.",
+    "When you are ready to end the heartbeat, prefer the structured `heartbeat_respond` tool so SunClaw can record the wake outcome and notification decision. If `heartbeat_respond` is not already available and `tool_search` is available, search for `heartbeat_respond`, load it, then call it. Use `notify=false` when nothing should visibly interrupt the user.",
     CODEX_GPT5_HEARTBEAT_PROMPT_OVERLAY,
   ].join("\n\n");
 }
@@ -1264,10 +1264,10 @@ export function buildDeveloperInstructions(
     includeLegacyGlobalGuidance: false,
   }).join("\n");
   const sections = [
-    "You are a personal agent running inside OpenClaw. OpenClaw has dynamic tools for OpenClaw-owned messaging, cron, sessions, media, gateway, and nodes.",
+    "You are a personal agent running inside SunClaw. SunClaw has dynamic tools for SunClaw-owned messaging, cron, sessions, media, gateway, and nodes.",
     buildDeferredDynamicToolManifest(options.dynamicTools),
     buildSkillWorkshopInstruction(options.dynamicTools),
-    "Use Codex native `spawn_agent` for Codex subagents. Use OpenClaw `sessions_spawn` only for OpenClaw or ACP delegation.",
+    "Use Codex native `spawn_agent` for Codex subagents. Use SunClaw `sessions_spawn` only for SunClaw or ACP delegation.",
     buildVisibleReplyInstruction(params, options.dynamicTools),
     nativeCommandGuidance,
     params.extraSystemPrompt,
@@ -1289,7 +1289,7 @@ function buildDeferredDynamicToolManifest(
   if (deferredToolNames.length === 0) {
     return undefined;
   }
-  return `Deferred searchable OpenClaw dynamic tools available: ${deferredToolNames.join(", ")}. Use \`tool_search\` to load exact callable specs before use.`;
+  return `Deferred searchable SunClaw dynamic tools available: ${deferredToolNames.join(", ")}. Use \`tool_search\` to load exact callable specs before use.`;
 }
 
 function buildSkillWorkshopInstruction(
@@ -1315,9 +1315,9 @@ function buildVisibleReplyInstruction(
     return "Visible source replies are not automatically delivered for this run. Use `message(action=send)` for user-visible source-channel output. Do not repeat that visible content in your final answer.";
   }
   if (messageToolAvailable) {
-    return "For the current source conversation, reply normally in your final assistant message; OpenClaw will deliver it through the active source conversation. Use `message` only for explicit out-of-band sends, media/file sends, or sends to a different target.";
+    return "For the current source conversation, reply normally in your final assistant message; SunClaw will deliver it through the active source conversation. Use `message` only for explicit out-of-band sends, media/file sends, or sends to a different target.";
   }
-  return "For the current source conversation, reply normally in your final assistant message; OpenClaw will deliver it through the active source conversation.";
+  return "For the current source conversation, reply normally in your final assistant message; SunClaw will deliver it through the active source conversation.";
 }
 
 function buildUserInput(
@@ -1347,12 +1347,12 @@ export function resolveCodexAppServerModelProvider(params: {
   const normalized = params.provider.trim();
   const normalizedLower = normalized.toLowerCase();
   if (!normalized || normalizedLower === "codex") {
-    // `codex` is OpenClaw's virtual provider; let Codex app-server keep its
+    // `codex` is SunClaw's virtual provider; let Codex app-server keep its
     // native provider/auth selection instead of forcing the legacy OpenAI path.
     return undefined;
   }
   if (isCodexAppServerNativeAuthProfile(params) && normalizedLower === "openai") {
-    // When OpenClaw is forwarding ChatGPT/Codex OAuth, `openai` is Codex's
+    // When SunClaw is forwarding ChatGPT/Codex OAuth, `openai` is Codex's
     // native provider id, not a public OpenAI API-key choice. Omit the override
     // so app-server keeps its configured provider/auth pair for this session.
     return undefined;

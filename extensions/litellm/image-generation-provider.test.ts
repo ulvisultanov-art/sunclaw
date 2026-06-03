@@ -28,11 +28,11 @@ const {
   sanitizeConfiguredModelProviderRequestMock: vi.fn((request) => request),
 }));
 
-vi.mock("openclaw/plugin-sdk/provider-auth-runtime", () => ({
+vi.mock("sunclaw/plugin-sdk/provider-auth-runtime", () => ({
   resolveApiKeyForProvider: resolveApiKeyForProviderMock,
 }));
 
-vi.mock("openclaw/plugin-sdk/provider-http", () => ({
+vi.mock("sunclaw/plugin-sdk/provider-http", () => ({
   assertOkOrThrowHttpError: assertOkOrThrowHttpErrorMock,
   createProviderOperationDeadline: createProviderOperationDeadlineMock,
   postJsonRequest: postJsonRequestMock,
@@ -43,8 +43,8 @@ vi.mock("openclaw/plugin-sdk/provider-http", () => ({
 }));
 
 afterAll(() => {
-  vi.doUnmock("openclaw/plugin-sdk/provider-auth-runtime");
-  vi.doUnmock("openclaw/plugin-sdk/provider-http");
+  vi.doUnmock("sunclaw/plugin-sdk/provider-auth-runtime");
+  vi.doUnmock("sunclaw/plugin-sdk/provider-http");
   vi.resetModules();
 });
 

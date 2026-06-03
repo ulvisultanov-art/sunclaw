@@ -1,20 +1,20 @@
-import type { AuthProfileStore, OpenClawConfig } from "openclaw/plugin-sdk/provider-auth";
-import { resolveApiKeyForProvider } from "openclaw/plugin-sdk/provider-auth-runtime";
+import type { AuthProfileStore, SunClawConfig } from "sunclaw/plugin-sdk/provider-auth";
+import { resolveApiKeyForProvider } from "sunclaw/plugin-sdk/provider-auth-runtime";
 import {
   resolveProviderHttpRequestConfig,
   type ProviderRequestCapability,
-} from "openclaw/plugin-sdk/provider-http";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/provider-http";
+import { normalizeOptionalString } from "sunclaw/plugin-sdk/string-coerce-runtime";
 
 const DEFAULT_FAL_BASE_URL = "https://fal.run";
 
 type FalAuthenticatedRequest = {
-  cfg?: OpenClawConfig;
+  cfg?: SunClawConfig;
   agentDir?: string;
   authStore?: AuthProfileStore;
 };
 
-function resolveFalConfiguredBaseUrl(cfg?: OpenClawConfig): string | undefined {
+function resolveFalConfiguredBaseUrl(cfg?: SunClawConfig): string | undefined {
   return normalizeOptionalString(cfg?.models?.providers?.fal?.baseUrl);
 }
 

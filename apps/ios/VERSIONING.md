@@ -1,6 +1,6 @@
-# OpenClaw iOS Versioning
+# SunClaw iOS Versioning
 
-OpenClaw iOS uses a **pinned CalVer release version** instead of reading the current gateway version automatically on every build.
+SunClaw iOS uses a **pinned CalVer release version** instead of reading the current gateway version automatically on every build.
 
 ## Goals
 

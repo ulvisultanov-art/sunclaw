@@ -10,19 +10,19 @@
  * Issue #69546.
  */
 
-import type { OpenClawConfig } from "openclaw/plugin-sdk/core";
-import { getRuntimeConfig } from "openclaw/plugin-sdk/runtime-config-snapshot";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/core";
+import { getRuntimeConfig } from "sunclaw/plugin-sdk/runtime-config-snapshot";
 
-export type GatewayCfg = OpenClawConfig;
+export type GatewayCfg = SunClawConfig;
 
-export type GatewayCfgLoader = () => OpenClawConfig;
+export type GatewayCfgLoader = () => SunClawConfig;
 
 export interface ActiveCfgProvider {
-  getActiveCfg(): OpenClawConfig;
+  getActiveCfg(): SunClawConfig;
 }
 
 export interface ActiveCfgProviderOptions {
-  fallback: OpenClawConfig;
+  fallback: SunClawConfig;
   load?: GatewayCfgLoader;
 }
 
@@ -30,7 +30,7 @@ export function createActiveCfgProvider(options: ActiveCfgProviderOptions): Acti
   const loader = options.load ?? defaultGatewayCfgLoader;
   const fallback = options.fallback;
   return {
-    getActiveCfg(): OpenClawConfig {
+    getActiveCfg(): SunClawConfig {
       return resolveActiveCfg(loader, fallback);
     },
   };
@@ -38,8 +38,8 @@ export function createActiveCfgProvider(options: ActiveCfgProviderOptions): Acti
 
 export function resolveActiveCfg(
   loader: GatewayCfgLoader,
-  fallback: OpenClawConfig,
-): OpenClawConfig {
+  fallback: SunClawConfig,
+): SunClawConfig {
   try {
     return loader();
   } catch {
@@ -47,6 +47,6 @@ export function resolveActiveCfg(
   }
 }
 
-function defaultGatewayCfgLoader(): OpenClawConfig {
+function defaultGatewayCfgLoader(): SunClawConfig {
   return getRuntimeConfig();
 }

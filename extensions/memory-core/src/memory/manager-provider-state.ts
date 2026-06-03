@@ -1,7 +1,7 @@
 import type {
-  OpenClawConfig,
+  SunClawConfig,
   ResolvedMemorySearchConfig,
-} from "openclaw/plugin-sdk/memory-core-host-engine-foundation";
+} from "sunclaw/plugin-sdk/memory-core-host-engine-foundation";
 import {
   resolveEmbeddingProviderFallbackModel,
   type EmbeddingProvider,
@@ -181,7 +181,7 @@ export function applyMemoryFallbackProviderState(params: {
 }
 
 export function resolveMemoryFallbackProviderRequest(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   settings: ResolvedMemorySearchConfig;
   currentProviderId: string | null;
 }): {

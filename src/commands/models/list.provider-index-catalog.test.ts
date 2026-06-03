@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { loadProviderIndexCatalogRowsForList } from "./list.provider-index-catalog.js";
 
-const baseConfig = {} satisfies OpenClawConfig;
+const baseConfig = {} satisfies SunClawConfig;
 
 describe("loadProviderIndexCatalogRowsForList", () => {
   it("returns provider-index preview rows when the provider plugin is enabled", () => {

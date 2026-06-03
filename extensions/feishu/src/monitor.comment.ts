@@ -1,5 +1,5 @@
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { asBoolean as readBoolean } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { formatErrorMessage } from "sunclaw/plugin-sdk/error-runtime";
+import { asBoolean as readBoolean } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import type { ClawdbotConfig } from "../runtime-api.js";
 import { raceWithTimeoutAndAbort } from "./async.js";
 import { createFeishuClient } from "./client.js";

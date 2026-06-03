@@ -2,8 +2,8 @@ import {
   createOpenAiCompatibleImageGenerationProvider,
   imageSourceUploadFileName,
   type ImageGenerationProvider,
-} from "openclaw/plugin-sdk/image-generation";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/image-generation";
+import { normalizeOptionalString } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import {
   DEEPINFRA_BASE_URL,
   DEEPINFRA_IMAGE_FALLBACK_MODELS,

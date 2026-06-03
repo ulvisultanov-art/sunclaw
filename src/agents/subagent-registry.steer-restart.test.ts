@@ -372,7 +372,7 @@ describe("subagent registry steer restarts", () => {
       previous.execution = {
         status: "interrupted",
         startedAt: previous.startedAt,
-        transcriptFile: "/tmp/openclaw-state/internal-agent-runs/run-old.jsonl",
+        transcriptFile: "/tmp/sunclaw-state/internal-agent-runs/run-old.jsonl",
       };
 
       replaceRunAfterSteer({
@@ -382,7 +382,7 @@ describe("subagent registry steer restarts", () => {
       });
 
       expect(removeInternalSessionEffectsTranscriptMock).toHaveBeenCalledWith(
-        "/tmp/openclaw-state/internal-agent-runs/run-old.jsonl",
+        "/tmp/sunclaw-state/internal-agent-runs/run-old.jsonl",
       );
     }
   });

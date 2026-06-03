@@ -1,4 +1,4 @@
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
+import { uniqueStrings } from "@sunclaw/normalization-core/string-normalization";
 import { getRuntimeConfig } from "../../config/config.js";
 import {
   assertContextEngineHostSupport,
@@ -86,9 +86,9 @@ const prepareDeps = {
   createMcpLoopbackServerConfig,
   resolveMcpLoopbackBearerToken,
   resolveMcpLoopbackScopedTools,
-  resolveOpenClawReferencePaths: async (
-    params: Parameters<typeof import("../docs-path.js").resolveOpenClawReferencePaths>[0],
-  ) => (await import("../docs-path.js")).resolveOpenClawReferencePaths(params),
+  resolveSunClawReferencePaths: async (
+    params: Parameters<typeof import("../docs-path.js").resolveSunClawReferencePaths>[0],
+  ) => (await import("../docs-path.js")).resolveSunClawReferencePaths(params),
   prepareClaudeCliSkillsPlugin,
   claudeCliSessionTranscriptHasContent,
   claudeCliSessionTranscriptHasOrphanedToolUse,
@@ -275,21 +275,21 @@ export async function prepareCliRunContext(
       : undefined,
     env: mcpLoopbackRuntime
       ? {
-          OPENCLAW_MCP_TOKEN: prepareDeps.resolveMcpLoopbackBearerToken(
+          SUNCLAW_MCP_TOKEN: prepareDeps.resolveMcpLoopbackBearerToken(
             mcpLoopbackRuntime,
             params.senderIsOwner === true,
           ),
-          OPENCLAW_MCP_AGENT_ID: sessionAgentId ?? "",
-          OPENCLAW_MCP_ACCOUNT_ID: params.agentAccountId ?? "",
-          OPENCLAW_MCP_SESSION_KEY: params.sessionKey ?? "",
-          OPENCLAW_MCP_MESSAGE_CHANNEL: params.messageChannel ?? params.messageProvider ?? "",
-          OPENCLAW_MCP_CURRENT_CHANNEL_ID: params.currentChannelId ?? "",
-          OPENCLAW_MCP_CURRENT_THREAD_TS: params.currentThreadTs ?? "",
-          OPENCLAW_MCP_CURRENT_MESSAGE_ID:
+          SUNCLAW_MCP_AGENT_ID: sessionAgentId ?? "",
+          SUNCLAW_MCP_ACCOUNT_ID: params.agentAccountId ?? "",
+          SUNCLAW_MCP_SESSION_KEY: params.sessionKey ?? "",
+          SUNCLAW_MCP_MESSAGE_CHANNEL: params.messageChannel ?? params.messageProvider ?? "",
+          SUNCLAW_MCP_CURRENT_CHANNEL_ID: params.currentChannelId ?? "",
+          SUNCLAW_MCP_CURRENT_THREAD_TS: params.currentThreadTs ?? "",
+          SUNCLAW_MCP_CURRENT_MESSAGE_ID:
             params.currentMessageId != null ? String(params.currentMessageId) : "",
-          OPENCLAW_MCP_CURRENT_INBOUND_AUDIO: params.currentInboundAudio === true ? "true" : "",
-          OPENCLAW_MCP_INBOUND_EVENT_KIND: params.currentInboundEventKind ?? "",
-          OPENCLAW_MCP_SOURCE_REPLY_DELIVERY_MODE: params.sourceReplyDeliveryMode ?? "",
+          SUNCLAW_MCP_CURRENT_INBOUND_AUDIO: params.currentInboundAudio === true ? "true" : "",
+          SUNCLAW_MCP_INBOUND_EVENT_KIND: params.currentInboundEventKind ?? "",
+          SUNCLAW_MCP_SOURCE_REPLY_DELIVERY_MODE: params.sourceReplyDeliveryMode ?? "",
         }
       : undefined,
     warn: (message) => cliBackendLog.warn(message),
@@ -421,23 +421,23 @@ export async function prepareCliRunContext(
       `cli session reset: provider=${params.provider} reason=${reusableCliSession.invalidatedReason}`,
     );
   }
-  let openClawHistoryMessages: unknown[] | undefined;
-  const loadOpenClawHistoryMessages = async () => {
-    openClawHistoryMessages ??= await loadCliSessionHistoryMessages({
+  let sunClawHistoryMessages: unknown[] | undefined;
+  const loadSunClawHistoryMessages = async () => {
+    sunClawHistoryMessages ??= await loadCliSessionHistoryMessages({
       sessionId: params.sessionId,
       sessionFile: params.sessionFile,
       sessionKey: params.sessionKey,
       agentId: params.agentId,
       config: params.config,
     });
-    return openClawHistoryMessages;
+    return sunClawHistoryMessages;
   };
   const heartbeatPrompt = resolveHeartbeatPromptForSystemPrompt({
     config: params.config,
     agentId: sessionAgentId,
     defaultAgentId,
   });
-  const openClawReferences = await prepareDeps.resolveOpenClawReferencePaths({
+  const sunClawReferences = await prepareDeps.resolveSunClawReferencePaths({
     workspaceDir,
     argv1: process.argv[1],
     cwd,
@@ -460,8 +460,8 @@ export async function prepareCliRunContext(
     silentReplyPromptMode: params.silentReplyPromptMode,
     ownerNumbers: params.ownerNumbers,
     heartbeatPrompt,
-    docsPath: openClawReferences.docsPath ?? undefined,
-    sourcePath: openClawReferences.sourcePath ?? undefined,
+    docsPath: sunClawReferences.docsPath ?? undefined,
+    sourcePath: sunClawReferences.sourcePath ?? undefined,
     skillsPrompt: systemPromptSkillsPrompt,
     tools: promptTools,
     contextFiles,
@@ -485,7 +485,7 @@ export async function prepareCliRunContext(
     const hookResult = await resolvePromptBuildHookResult({
       config: params.config ?? getRuntimeConfig(),
       prompt: params.prompt,
-      messages: await loadOpenClawHistoryMessages(),
+      messages: await loadSunClawHistoryMessages(),
       hookCtx: {
         runId: params.runId,
         agentId: sessionAgentId,
@@ -548,9 +548,9 @@ export async function prepareCliRunContext(
   const rawTranscriptReseedReason = reusableCliSession.sessionId
     ? "session-expired"
     : reusableCliSession.invalidatedReason;
-  const shouldPrepareOpenClawHistoryPrompt =
+  const shouldPrepareSunClawHistoryPrompt =
     !reusableCliSession.sessionId || allowRawTranscriptReseed;
-  const openClawHistoryPrompt = shouldPrepareOpenClawHistoryPrompt
+  const sunClawHistoryPrompt = shouldPrepareSunClawHistoryPrompt
     ? buildCliSessionHistoryPrompt({
         messages: await loadCliSessionReseedMessages({
           sessionId: params.sessionId,
@@ -666,7 +666,7 @@ export async function prepareCliRunContext(
       systemPromptReport,
       claudeSkillsPluginArgs: claudeSkillsPlugin.args,
       bootstrapPromptWarningLines: bootstrapPromptWarning.lines,
-      ...(openClawHistoryPrompt ? { openClawHistoryPrompt } : {}),
+      ...(sunClawHistoryPrompt ? { sunClawHistoryPrompt } : {}),
       heartbeatPrompt,
       authEpoch,
       authEpochVersion: CLI_AUTH_EPOCH_VERSION,

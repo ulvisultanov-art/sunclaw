@@ -1,13 +1,13 @@
 import {
   createResolvedApproverActionAuthAdapter,
   resolveApprovalApprovers,
-} from "openclaw/plugin-sdk/approval-auth-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+} from "sunclaw/plugin-sdk/approval-auth-runtime";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
 import { resolveSlackAccount, resolveSlackAccountAllowFrom } from "./accounts.js";
 import { normalizeSlackApproverId } from "./exec-approvals.js";
 
 export function getSlackApprovalApprovers(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   accountId?: string | null;
 }): string[] {
   const account = resolveSlackAccount(params).config;
@@ -20,7 +20,7 @@ export function getSlackApprovalApprovers(params: {
 }
 
 export function isSlackApprovalAuthorizedSender(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   accountId?: string | null;
   senderId?: string | null;
 }): boolean {

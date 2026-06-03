@@ -1,6 +1,6 @@
 export {
   definePluginEntry,
-  type OpenClawPluginApi,
-  type OpenClawPluginHttpRouteHandler,
+  type SunClawPluginApi,
+  type SunClawPluginHttpRouteHandler,
   type PluginLogger,
-} from "openclaw/plugin-sdk/plugin-entry";
+} from "sunclaw/plugin-sdk/plugin-entry";

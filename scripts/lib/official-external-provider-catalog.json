@@ -1,11 +1,11 @@
 {
   "entries": [
     {
-      "name": "@openclaw/amazon-bedrock-provider",
-      "description": "OpenClaw Amazon Bedrock provider plugin",
+      "name": "@sunclaw/amazon-bedrock-provider",
+      "description": "SunClaw Amazon Bedrock provider plugin",
       "source": "official",
       "kind": "provider",
-      "openclaw": {
+      "sunclaw": {
         "plugin": {
           "id": "amazon-bedrock",
           "label": "Amazon Bedrock"
@@ -19,18 +19,18 @@
           }
         ],
         "install": {
-          "npmSpec": "@openclaw/amazon-bedrock-provider",
+          "npmSpec": "@sunclaw/amazon-bedrock-provider",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.5.12-beta.1"
         }
       }
     },
     {
-      "name": "@openclaw/amazon-bedrock-mantle-provider",
-      "description": "OpenClaw Amazon Bedrock Mantle provider plugin",
+      "name": "@sunclaw/amazon-bedrock-mantle-provider",
+      "description": "SunClaw Amazon Bedrock Mantle provider plugin",
       "source": "official",
       "kind": "provider",
-      "openclaw": {
+      "sunclaw": {
         "plugin": {
           "id": "amazon-bedrock-mantle",
           "label": "Amazon Bedrock Mantle"
@@ -44,18 +44,18 @@
           }
         ],
         "install": {
-          "npmSpec": "@openclaw/amazon-bedrock-mantle-provider",
+          "npmSpec": "@sunclaw/amazon-bedrock-mantle-provider",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.5.12-beta.1"
         }
       }
     },
     {
-      "name": "@openclaw/anthropic-vertex-provider",
-      "description": "OpenClaw Anthropic Vertex provider plugin",
+      "name": "@sunclaw/anthropic-vertex-provider",
+      "description": "SunClaw Anthropic Vertex provider plugin",
       "source": "official",
       "kind": "provider",
-      "openclaw": {
+      "sunclaw": {
         "plugin": {
           "id": "anthropic-vertex",
           "label": "Anthropic Vertex"
@@ -69,18 +69,18 @@
           }
         ],
         "install": {
-          "npmSpec": "@openclaw/anthropic-vertex-provider",
+          "npmSpec": "@sunclaw/anthropic-vertex-provider",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.5.12-beta.1"
         }
       }
     },
     {
-      "name": "@openclaw/codex",
-      "description": "OpenClaw Codex harness and model provider plugin",
+      "name": "@sunclaw/codex",
+      "description": "SunClaw Codex harness and model provider plugin",
       "source": "official",
       "kind": "provider",
-      "openclaw": {
+      "sunclaw": {
         "plugin": {
           "id": "codex",
           "label": "Codex"
@@ -107,18 +107,18 @@
           }
         ],
         "install": {
-          "npmSpec": "@openclaw/codex",
+          "npmSpec": "@sunclaw/codex",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.5.1-beta.1"
         }
       }
     },
     {
-      "name": "@openclaw/pixverse-provider",
-      "description": "OpenClaw PixVerse video provider plugin",
+      "name": "@sunclaw/pixverse-provider",
+      "description": "SunClaw PixVerse video provider plugin",
       "source": "official",
       "kind": "provider",
-      "openclaw": {
+      "sunclaw": {
         "plugin": {
           "id": "pixverse",
           "label": "PixVerse"
@@ -148,7 +148,7 @@
           }
         ],
         "install": {
-          "npmSpec": "@openclaw/pixverse-provider",
+          "npmSpec": "@sunclaw/pixverse-provider",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.5.26"
         }

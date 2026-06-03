@@ -1,4 +1,4 @@
-const PLUGIN_REGISTRY_STATE = Symbol.for("openclaw.pluginRegistryState");
+const PLUGIN_REGISTRY_STATE = Symbol.for("sunclaw.pluginRegistryState");
 
 type GlobalRegistryWorkspaceState = typeof globalThis & {
   [PLUGIN_REGISTRY_STATE]?: {

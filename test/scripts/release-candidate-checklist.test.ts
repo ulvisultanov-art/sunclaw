@@ -104,15 +104,15 @@ describe("release candidate checklist", () => {
         "--plugin-publish-scope",
         "selected",
         "--plugins",
-        "@openclaw/diffs",
+        "@sunclaw/diffs",
       ]),
-    ).toThrow("release candidates publish OpenClaw with --plugin-publish-scope all-publishable");
+    ).toThrow("release candidates publish SunClaw with --plugin-publish-scope all-publishable");
   });
 
   it("extracts a workflow run id from gh dispatch output", () => {
     expect(
       parseRunIdFromDispatchOutput(
-        "https://github.com/openclaw/openclaw/actions/runs/25922042055\n",
+        "https://github.com/ulvisultanov-art/sunclaw/actions/runs/25922042055\n",
       ),
     ).toBe("25922042055");
   });
@@ -120,11 +120,11 @@ describe("release candidate checklist", () => {
   it("falls back to a single compatible artifact from the same run", () => {
     expect(
       resolveArtifactName(
-        [{ name: "openclaw-npm-preflight-dba00", expired: false }],
-        "openclaw-npm-preflight-v2026.5.16-beta.2",
-        "openclaw-npm-preflight-",
+        [{ name: "sunclaw-npm-preflight-dba00", expired: false }],
+        "sunclaw-npm-preflight-v2026.5.16-beta.2",
+        "sunclaw-npm-preflight-",
       ),
-    ).toBe("openclaw-npm-preflight-dba00");
+    ).toBe("sunclaw-npm-preflight-dba00");
   });
 
   it("bounds GitHub API requests with a timeout signal", async () => {
@@ -142,14 +142,14 @@ describe("release candidate checklist", () => {
     });
 
     await expect(
-      githubApi("repos/openclaw/openclaw/actions/runs", {
+      githubApi("repos/sunclaw/sunclaw/actions/runs", {
         fetchImpl,
         timeoutMs: 1234,
         token: "test-token",
       }),
     ).resolves.toEqual({ workflow_runs: [] });
     expect(fetchImpl).toHaveBeenCalledWith(
-      "https://api.github.com/repos/openclaw/openclaw/actions/runs",
+      "https://api.github.com/repos/sunclaw/sunclaw/actions/runs",
       expect.objectContaining({
         signal: expect.any(AbortSignal),
       }),
@@ -162,13 +162,13 @@ describe("release candidate checklist", () => {
     });
 
     await expect(
-      githubApi("repos/openclaw/openclaw/actions/runs/123/jobs", {
+      githubApi("repos/sunclaw/sunclaw/actions/runs/123/jobs", {
         fetchImpl,
         timeoutMs: 5,
         token: "test-token",
       }),
     ).rejects.toThrow(
-      "GitHub API repos/openclaw/openclaw/actions/runs/123/jobs timed out after 5ms",
+      "GitHub API repos/sunclaw/sunclaw/actions/runs/123/jobs timed out after 5ms",
     );
   });
 });

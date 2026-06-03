@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import type { DiagnosticTraceContext } from "../../infra/diagnostic-trace-context.js";
 import type {
   PluginHookAgentContext,
@@ -21,7 +21,7 @@ export type AgentHarnessHookContext = {
   contextTokenBudget?: number;
   contextWindowSource?: PluginHookContextWindowSource;
   contextWindowReferenceTokens?: number;
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
 };
 
 export function buildAgentHookContext(params: AgentHarnessHookContext): PluginHookAgentContext {

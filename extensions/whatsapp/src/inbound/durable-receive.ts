@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import type { WAMessage } from "baileys";
-import { createDurableInboundReceiveJournalFromQueue } from "openclaw/plugin-sdk/channel-outbound";
-import type { PluginJsonValue } from "openclaw/plugin-sdk/plugin-entry";
+import { createDurableInboundReceiveJournalFromQueue } from "sunclaw/plugin-sdk/channel-outbound";
+import type { PluginJsonValue } from "sunclaw/plugin-sdk/plugin-entry";
 import { getWhatsAppRuntime } from "../runtime.js";
 import { BufferJSON } from "../session.runtime.js";
 

@@ -18,7 +18,7 @@ import { createMemoryWikiTestHarness } from "./test-helpers.js";
 
 const callGatewayFromCliMock = vi.hoisted(() => vi.fn());
 
-vi.mock("openclaw/plugin-sdk/gateway-runtime", () => ({
+vi.mock("sunclaw/plugin-sdk/gateway-runtime", () => ({
   callGatewayFromCli: callGatewayFromCliMock,
 }));
 
@@ -272,9 +272,9 @@ describe("memory-wiki cli", () => {
         body: `# Alpha
 
 ## Notes
-<!-- openclaw:human:start -->
+<!-- sunclaw:human:start -->
 cli note
-<!-- openclaw:human:end -->
+<!-- sunclaw:human:end -->
 `,
       }),
       "utf8",

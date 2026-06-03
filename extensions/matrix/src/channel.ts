@@ -1,37 +1,37 @@
-import { describeAccountSnapshot } from "openclaw/plugin-sdk/account-helpers";
+import { describeAccountSnapshot } from "sunclaw/plugin-sdk/account-helpers";
 import {
   adaptScopedAccountAccessor,
   createScopedDmSecurityResolver,
-} from "openclaw/plugin-sdk/channel-config-helpers";
-import type { ChannelDoctorAdapter } from "openclaw/plugin-sdk/channel-contract";
-import { createChatChannelPlugin, type ChannelPlugin } from "openclaw/plugin-sdk/channel-core";
+} from "sunclaw/plugin-sdk/channel-config-helpers";
+import type { ChannelDoctorAdapter } from "sunclaw/plugin-sdk/channel-contract";
+import { createChatChannelPlugin, type ChannelPlugin } from "sunclaw/plugin-sdk/channel-core";
 import {
   createChannelMessageAdapterFromOutbound,
   createRuntimeOutboundDelegates,
-} from "openclaw/plugin-sdk/channel-outbound";
+} from "sunclaw/plugin-sdk/channel-outbound";
 import {
   createAllowlistProviderOpenWarningCollector,
   projectAccountConfigWarningCollector,
-} from "openclaw/plugin-sdk/channel-policy";
-import type { ChannelOutboundAdapter } from "openclaw/plugin-sdk/channel-send-result";
-import { createScopedAccountReplyToModeResolver } from "openclaw/plugin-sdk/conversation-runtime";
+} from "sunclaw/plugin-sdk/channel-policy";
+import type { ChannelOutboundAdapter } from "sunclaw/plugin-sdk/channel-send-result";
+import { createScopedAccountReplyToModeResolver } from "sunclaw/plugin-sdk/conversation-runtime";
 import {
   createChannelDirectoryAdapter,
   createResolvedDirectoryEntriesLister,
   createRuntimeDirectoryLiveAdapter,
-} from "openclaw/plugin-sdk/directory-runtime";
-import { createLazyRuntimeNamedExport } from "openclaw/plugin-sdk/lazy-runtime";
+} from "sunclaw/plugin-sdk/directory-runtime";
+import { createLazyRuntimeNamedExport } from "sunclaw/plugin-sdk/lazy-runtime";
 import {
   buildProbeChannelStatusSummary,
   collectStatusIssuesFromLastError,
   createComputedAccountStatusAdapter,
   createDefaultChannelRuntimeState,
-} from "openclaw/plugin-sdk/status-helpers";
+} from "sunclaw/plugin-sdk/status-helpers";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
-import { chunkTextForOutbound } from "openclaw/plugin-sdk/text-chunking";
+} from "sunclaw/plugin-sdk/string-coerce-runtime";
+import { chunkTextForOutbound } from "sunclaw/plugin-sdk/text-chunking";
 import { matrixMessageActions } from "./actions.js";
 import { matrixApprovalCapability } from "./approval-native.js";
 import { createMatrixPairingText, createMatrixProbeAccount } from "./channel-account-paths.js";

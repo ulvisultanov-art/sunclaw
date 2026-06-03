@@ -1,4 +1,4 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
 import {
   abortActiveReplyRuns,
   abortReplyRunBySessionId,
@@ -428,7 +428,7 @@ function prepareEmbeddedAgentQueueMessage(
 }
 
 /**
- * Abort embedded OpenClaw runs.
+ * Abort embedded SunClaw runs.
  *
  * - With a sessionId, aborts that single run.
  * - With no sessionId, supports targeted abort modes (for example, compacting runs only).

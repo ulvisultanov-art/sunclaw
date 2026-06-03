@@ -1,10 +1,10 @@
 {
-  "name": "@openclaw/google-meet",
+  "name": "@sunclaw/google-meet",
   "version": "2026.6.2",
-  "description": "OpenClaw Google Meet participant plugin for joining calls through Chrome or Twilio transports.",
+  "description": "SunClaw Google Meet participant plugin for joining calls through Chrome or Twilio transports.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/ulvisultanov-art/sunclaw"
   },
   "type": "module",
   "dependencies": {
@@ -12,23 +12,23 @@
     "typebox": "1.1.39"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "2026.5.28"
+    "@sunclaw/plugin-sdk": "workspace:*",
+    "sunclaw": "2026.5.28"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.6.2"
+    "sunclaw": ">=2026.6.2"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "sunclaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "npmSpec": "@openclaw/google-meet",
+      "npmSpec": "@sunclaw/google-meet",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.4.20"
     },
@@ -36,7 +36,7 @@
       "pluginApi": ">=2026.6.2"
     },
     "build": {
-      "openclawVersion": "2026.6.2"
+      "sunclawVersion": "2026.6.2"
     },
     "release": {
       "publishToClawHub": true,

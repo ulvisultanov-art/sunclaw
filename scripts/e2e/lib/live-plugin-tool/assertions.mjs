@@ -19,7 +19,7 @@ function readPositiveIntEnv(name, fallback) {
 }
 
 const agentTurnTimeoutSeconds = readPositiveIntEnv(
-  "OPENCLAW_LIVE_PLUGIN_TOOL_TIMEOUT_SECONDS",
+  "SUNCLAW_LIVE_PLUGIN_TOOL_TIMEOUT_SECONDS",
   300,
 );
 const SCAN_CHUNK_BYTES = 64 * 1024;
@@ -36,19 +36,19 @@ function requireEnv(name) {
 }
 
 function stateDir() {
-  return process.env.OPENCLAW_STATE_DIR || path.join(process.env.HOME, ".openclaw");
+  return process.env.SUNCLAW_STATE_DIR || path.join(process.env.HOME, ".sunclaw");
 }
 
 function configPath() {
-  return process.env.OPENCLAW_CONFIG_PATH || path.join(stateDir(), "openclaw.json");
+  return process.env.SUNCLAW_CONFIG_PATH || path.join(stateDir(), "sunclaw.json");
 }
 
 function agentOutputPath() {
-  return process.env.OPENCLAW_LIVE_PLUGIN_TOOL_AGENT_OUTPUT_PATH || "/tmp/openclaw-agent.json";
+  return process.env.SUNCLAW_LIVE_PLUGIN_TOOL_AGENT_OUTPUT_PATH || "/tmp/sunclaw-agent.json";
 }
 
 function agentErrorPath() {
-  return process.env.OPENCLAW_LIVE_PLUGIN_TOOL_AGENT_ERROR_PATH || "/tmp/openclaw-agent.err";
+  return process.env.SUNCLAW_LIVE_PLUGIN_TOOL_AGENT_ERROR_PATH || "/tmp/sunclaw-agent.err";
 }
 
 function scanFileForNeedles(file, pendingNeedles) {
@@ -164,8 +164,8 @@ function installRecords() {
 
 function pluginInstallPath() {
   const pluginId = requireEnv("PLUGIN_ID");
-  const inspect = fs.existsSync("/tmp/openclaw-plugin-inspect.json")
-    ? readJson("/tmp/openclaw-plugin-inspect.json")
+  const inspect = fs.existsSync("/tmp/sunclaw-plugin-inspect.json")
+    ? readJson("/tmp/sunclaw-plugin-inspect.json")
     : {};
   const record = installRecords()[pluginId] || inspect.install;
   if (!record) {
@@ -191,9 +191,9 @@ function writeFixture() {
     name: pluginName,
     version,
     dependencies: { slugify: "^1.6.6" },
-    openclaw: { extensions: ["./index.js"] },
+    sunclaw: { extensions: ["./index.js"] },
   });
-  writeJson(path.join(dir, "openclaw.plugin.json"), {
+  writeJson(path.join(dir, "sunclaw.plugin.json"), {
     id: pluginId,
     name: "E2E Slug Tool",
     description: "Docker E2E plugin tool fixture",
@@ -258,7 +258,7 @@ function configure() {
         api: "openai-responses",
         baseUrl: (process.env.OPENAI_BASE_URL || "https://api.openai.com/v1").trim(),
         apiKey: { source: "env", provider: "default", id: "OPENAI_API_KEY" },
-        agentRuntime: { id: "openclaw" },
+        agentRuntime: { id: "sunclaw" },
         timeoutSeconds: agentTurnTimeoutSeconds,
         models: [
           {
@@ -285,7 +285,7 @@ function configure() {
         ...cfg.agents?.defaults?.models,
         [modelRef]: {
           ...cfg.agents?.defaults?.models?.[modelRef],
-          agentRuntime: { id: "openclaw" },
+          agentRuntime: { id: "sunclaw" },
           params: { transport: "sse", openaiWsWarmup: false },
         },
       },
@@ -332,12 +332,12 @@ function assertInstalled() {
   }
   assertPathInside(npmRoot, slugifyPackageJson, "slugify dependency");
 
-  const list = readJson("/tmp/openclaw-plugins-list.json");
+  const list = readJson("/tmp/sunclaw-plugins-list.json");
   const plugin = (list.plugins || []).find((entry) => entry.id === pluginId);
   if (!plugin || plugin.enabled !== true || plugin.status !== "loaded") {
     throw new Error(`fixture plugin was not enabled+loaded: ${JSON.stringify(plugin)}`);
   }
-  const inspect = readJson("/tmp/openclaw-plugin-inspect.json");
+  const inspect = readJson("/tmp/sunclaw-plugin-inspect.json");
   const toolNames = Array.isArray(inspect.tools)
     ? inspect.tools.flatMap((entry) => (Array.isArray(entry?.names) ? entry.names : []))
     : [];

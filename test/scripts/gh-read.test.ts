@@ -16,16 +16,16 @@ describe("gh-read helpers", () => {
   });
 
   it("finds repo from gh args", () => {
-    expect(parseRepoArg(["pr", "view", "42", "-R", "openclaw/openclaw"])).toBe("openclaw/openclaw");
-    expect(parseRepoArg(["run", "list", "--repo=openclaw/docs"])).toBe("openclaw/docs");
+    expect(parseRepoArg(["pr", "view", "42", "-R", "sunclaw/sunclaw"])).toBe("sunclaw/sunclaw");
+    expect(parseRepoArg(["run", "list", "--repo=sunclaw/docs"])).toBe("sunclaw/docs");
     expect(parseRepoArg(["pr", "view", "42"])).toBeNull();
   });
 
   it("normalizes repo strings from common git formats", () => {
-    expect(normalizeRepo("openclaw/openclaw")).toBe("openclaw/openclaw");
-    expect(normalizeRepo("github.com/openclaw/openclaw")).toBe("openclaw/openclaw");
-    expect(normalizeRepo("https://github.com/openclaw/openclaw.git")).toBe("openclaw/openclaw");
-    expect(normalizeRepo("git@github.com:openclaw/openclaw.git")).toBe("openclaw/openclaw");
+    expect(normalizeRepo("sunclaw/sunclaw")).toBe("sunclaw/sunclaw");
+    expect(normalizeRepo("github.com/ulvisultanov-art/sunclaw")).toBe("sunclaw/sunclaw");
+    expect(normalizeRepo("https://github.com/ulvisultanov-art/sunclaw.git")).toBe("sunclaw/sunclaw");
+    expect(normalizeRepo("git@github.com:sunclaw/sunclaw.git")).toBe("sunclaw/sunclaw");
     expect(normalizeRepo("invalid")).toBeNull();
   });
 
@@ -162,7 +162,7 @@ describe("gh-read helpers", () => {
   it("rejects invalid GitHub API timeout values", () => {
     expect(resolveGitHubFetchTimeoutMs("1000")).toBe(1000);
     expect(() => resolveGitHubFetchTimeoutMs("1s")).toThrow(
-      /OPENCLAW_GH_READ_FETCH_TIMEOUT_MS must be an integer/u,
+      /SUNCLAW_GH_READ_FETCH_TIMEOUT_MS must be an integer/u,
     );
   });
 });

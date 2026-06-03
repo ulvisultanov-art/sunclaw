@@ -1,11 +1,11 @@
 {
-  "name": "@openclaw/msteams",
+  "name": "@sunclaw/msteams",
   "version": "2026.6.2",
   "lockfileVersion": 3,
   "requires": true,
   "packages": {
     "": {
-      "name": "@openclaw/msteams",
+      "name": "@sunclaw/msteams",
       "version": "2026.6.2",
       "dependencies": {
         "@azure/identity": "4.13.1",
@@ -15,10 +15,10 @@
         "typebox": "1.1.39"
       },
       "peerDependencies": {
-        "openclaw": ">=2026.6.2"
+        "sunclaw": ">=2026.6.2"
       },
       "peerDependenciesMeta": {
-        "openclaw": {
+        "sunclaw": {
           "optional": true
         }
       }

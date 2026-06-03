@@ -3,8 +3,8 @@ import {
   registerAcpRuntimeBackend,
   unregisterAcpRuntimeBackend,
   type AcpRuntime,
-} from "openclaw/plugin-sdk/acp-runtime-backend";
-import type { OpenClawPluginService, OpenClawPluginServiceContext } from "openclaw/plugin-sdk/core";
+} from "sunclaw/plugin-sdk/acp-runtime-backend";
+import type { SunClawPluginService, SunClawPluginServiceContext } from "sunclaw/plugin-sdk/core";
 import { createLazyAcpRuntimeProxy } from "./src/runtime-proxy.js";
 
 const ACPX_BACKEND_ID = "acpx";
@@ -15,10 +15,10 @@ type CreateAcpxRuntimeServiceParams = NonNullable<
 >;
 
 type DeferredServiceState = {
-  ctx: OpenClawPluginServiceContext | null;
+  ctx: SunClawPluginServiceContext | null;
   params: CreateAcpxRuntimeServiceParams;
   realRuntime: AcpRuntime | null;
-  realService: OpenClawPluginService | null;
+  realService: SunClawPluginService | null;
   startPromise: Promise<AcpRuntime> | null;
 };
 
@@ -40,7 +40,7 @@ async function startRealService(state: DeferredServiceState): Promise<AcpRuntime
     const { createAcpxRuntimeService: createAcpxRuntimeServiceLocal } = await loadServiceModule();
     const service = createAcpxRuntimeServiceLocal(state.params);
     state.realService = service;
-    await service.start(state.ctx as OpenClawPluginServiceContext);
+    await service.start(state.ctx as SunClawPluginServiceContext);
     const backend = getAcpRuntimeBackend(ACPX_BACKEND_ID);
     if (!backend?.runtime) {
       throw new Error("ACPX runtime service did not register an ACP backend");
@@ -64,7 +64,7 @@ function createDeferredRuntime(state: DeferredServiceState): AcpRuntime {
 
 export function createAcpxRuntimeService(
   params: CreateAcpxRuntimeServiceParams = {},
-): OpenClawPluginService {
+): SunClawPluginService {
   const state: DeferredServiceState = {
     ctx: null,
     params,
@@ -76,8 +76,8 @@ export function createAcpxRuntimeService(
   return {
     id: "acpx-runtime",
     async start(ctx) {
-      if (process.env.OPENCLAW_SKIP_ACPX_RUNTIME === "1") {
-        ctx.logger.info("skipping embedded acpx runtime backend (OPENCLAW_SKIP_ACPX_RUNTIME=1)");
+      if (process.env.SUNCLAW_SKIP_ACPX_RUNTIME === "1") {
+        ctx.logger.info("skipping embedded acpx runtime backend (SUNCLAW_SKIP_ACPX_RUNTIME=1)");
         return;
       }
 

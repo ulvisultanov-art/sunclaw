@@ -16,7 +16,7 @@ import {
   setRuntimeConfigSnapshotRefreshHandler,
   writeConfigFile,
 } from "./io.js";
-import type { ConfigFileSnapshot, OpenClawConfig } from "./types.openclaw.js";
+import type { ConfigFileSnapshot, SunClawConfig } from "./types.sunclaw.js";
 
 // Mock the plugin manifest registry so we can register a fake channel whose
 // AJV JSON Schema carries a `default` value.  This lets the #56772 regression
@@ -64,7 +64,7 @@ vi.mock("./backup-rotation.js", async (importOriginal) => {
 });
 
 describe("config io write", () => {
-  const suiteRootTracker = createSuiteTempRootTracker({ prefix: "openclaw-config-io-" });
+  const suiteRootTracker = createSuiteTempRootTracker({ prefix: "sunclaw-config-io-" });
   const silentLogger = {
     warn: () => {},
     error: () => {},
@@ -151,7 +151,7 @@ describe("config io write", () => {
 
   const createFastConfigIO = (home: string) =>
     createConfigIO({
-      env: { OPENCLAW_TEST_FAST: "1" } as NodeJS.ProcessEnv,
+      env: { SUNCLAW_TEST_FAST: "1" } as NodeJS.ProcessEnv,
       homedir: () => home,
       logger: silentLogger,
     });
@@ -181,8 +181,8 @@ describe("config io write", () => {
 
   it("logs health-state write failures through public config reads", async () => {
     await withSuiteHome(async (home) => {
-      const configPath = path.join(home, ".openclaw", "openclaw.json");
-      const healthPath = path.join(home, ".openclaw", "logs", "config-health.json");
+      const configPath = path.join(home, ".sunclaw", "sunclaw.json");
+      const healthPath = path.join(home, ".sunclaw", "logs", "config-health.json");
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       await fs.writeFile(
         configPath,
@@ -192,7 +192,7 @@ describe("config io write", () => {
       const warn = vi.fn();
       const io = createConfigIO({
         configPath,
-        env: { OPENCLAW_TEST_FAST: "1" } as NodeJS.ProcessEnv,
+        env: { SUNCLAW_TEST_FAST: "1" } as NodeJS.ProcessEnv,
         fs: withHealthStateWriteFailure(healthPath),
         homedir: () => home,
         logger: { warn, error: vi.fn() },
@@ -209,22 +209,22 @@ describe("config io write", () => {
 
   it("refuses direct config writes in Nix mode without changing the file", async () => {
     await withSuiteHome(async (home) => {
-      const configPath = path.join(home, ".openclaw", "openclaw.json");
+      const configPath = path.join(home, ".sunclaw", "sunclaw.json");
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       const initialRaw = `${JSON.stringify({ gateway: { mode: "local" } }, null, 2)}\n`;
       await fs.writeFile(configPath, initialRaw, "utf-8");
       const io = createConfigIO({
         configPath,
         env: {
-          OPENCLAW_NIX_MODE: "1",
-          OPENCLAW_TEST_FAST: "1",
+          SUNCLAW_NIX_MODE: "1",
+          SUNCLAW_TEST_FAST: "1",
         } as NodeJS.ProcessEnv,
         homedir: () => home,
         logger: silentLogger,
       });
 
       await expect(io.writeConfigFile({ gateway: { mode: "local", port: 19001 } })).rejects.toThrow(
-        "Agent-first Nix setup: https://github.com/openclaw/nix-openclaw#quick-start",
+        "Agent-first Nix setup: https://github.com/sunclaw/nix-sunclaw#quick-start",
       );
 
       await expect(fs.readFile(configPath, "utf-8")).resolves.toBe(initialRaw);
@@ -233,9 +233,9 @@ describe("config io write", () => {
 
   it("loads shipped plugin install config records without mutating config or plugin index", async () => {
     await withSuiteHome(async (home) => {
-      const configPath = path.join(home, ".openclaw", "openclaw.json");
-      const pluginDir = path.join(home, ".openclaw", "plugins", "demo");
-      const manifestPath = path.join(pluginDir, "openclaw.plugin.json");
+      const configPath = path.join(home, ".sunclaw", "sunclaw.json");
+      const pluginDir = path.join(home, ".sunclaw", "plugins", "demo");
+      const manifestPath = path.join(pluginDir, "sunclaw.plugin.json");
       const source = path.join(pluginDir, "index.ts");
       await fs.mkdir(pluginDir, { recursive: true });
       await fs.writeFile(source, "export function register() {}\n", "utf-8");
@@ -309,7 +309,7 @@ describe("config io write", () => {
         });
         await expect(
           readPersistedInstalledPluginIndex({
-            stateDir: path.join(home, ".openclaw"),
+            stateDir: path.join(home, ".sunclaw"),
           }),
         ).resolves.toBeNull();
         await expect(fs.readFile(configPath, "utf-8")).resolves.toBe(initialRaw);
@@ -324,9 +324,9 @@ describe("config io write", () => {
 
   it("migrates shipped plugin install config records into the plugin index during explicit writes", async () => {
     await withSuiteHome(async (home) => {
-      const configPath = path.join(home, ".openclaw", "openclaw.json");
-      const pluginDir = path.join(home, ".openclaw", "plugins", "demo");
-      const manifestPath = path.join(pluginDir, "openclaw.plugin.json");
+      const configPath = path.join(home, ".sunclaw", "sunclaw.json");
+      const pluginDir = path.join(home, ".sunclaw", "plugins", "demo");
+      const manifestPath = path.join(pluginDir, "sunclaw.plugin.json");
       const source = path.join(pluginDir, "index.ts");
       await fs.mkdir(pluginDir, { recursive: true });
       await fs.writeFile(source, "export function register() {}\n", "utf-8");
@@ -387,7 +387,7 @@ describe("config io write", () => {
 
         const index = requireRecord(
           await readPersistedInstalledPluginIndex({
-            stateDir: path.join(home, ".openclaw"),
+            stateDir: path.join(home, ".sunclaw"),
           }),
           "persisted plugin index",
         );
@@ -416,8 +416,8 @@ describe("config io write", () => {
 
   it("migrates shipped plugin install config records during explicit writes even when the manifest is missing", async () => {
     await withSuiteHome(async (home) => {
-      const configPath = path.join(home, ".openclaw", "openclaw.json");
-      const pluginDir = path.join(home, ".openclaw", "plugins", "missing");
+      const configPath = path.join(home, ".sunclaw", "sunclaw.json");
+      const pluginDir = path.join(home, ".sunclaw", "plugins", "missing");
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       await fs.writeFile(
         configPath,
@@ -449,7 +449,7 @@ describe("config io write", () => {
 
       const index = requireRecord(
         await readPersistedInstalledPluginIndex({
-          stateDir: path.join(home, ".openclaw"),
+          stateDir: path.join(home, ".sunclaw"),
         }),
         "persisted plugin index",
       );
@@ -472,8 +472,8 @@ describe("config io write", () => {
       plugins: [],
     } satisfies PluginManifestRegistry);
     await withSuiteHome(async (home) => {
-      const configPath = path.join(home, ".openclaw", "openclaw.json");
-      const unwritableStatePath = path.join(home, ".openclaw");
+      const configPath = path.join(home, ".sunclaw", "sunclaw.json");
+      const unwritableStatePath = path.join(home, ".sunclaw");
       const pluginDir = path.join(unwritableStatePath, "plugins", "demo");
       const original = {
         plugins: {
@@ -491,7 +491,7 @@ describe("config io write", () => {
       await fs.writeFile(configPath, `${JSON.stringify(original, null, 2)}\n`, "utf-8");
       const warn = vi.fn();
       const io = createConfigIO({
-        env: { OPENCLAW_TEST_FAST: "1" } as NodeJS.ProcessEnv,
+        env: { SUNCLAW_TEST_FAST: "1" } as NodeJS.ProcessEnv,
         homedir: () => home,
         logger: { warn, error: vi.fn() },
       });
@@ -524,8 +524,8 @@ describe("config io write", () => {
 
   it("keeps shipped plugin install index migration when config write fails", async () => {
     await withSuiteHome(async (home) => {
-      const configPath = path.join(home, ".openclaw", "openclaw.json");
-      const pluginDir = path.join(home, ".openclaw", "plugins", "demo");
+      const configPath = path.join(home, ".sunclaw", "sunclaw.json");
+      const pluginDir = path.join(home, ".sunclaw", "plugins", "demo");
       const original = {
         plugins: {
           entries: { demo: { enabled: true } },
@@ -554,7 +554,7 @@ describe("config io write", () => {
         installPath: pluginDir,
       });
       const persistedIndex = await readPersistedInstalledPluginIndex({
-        stateDir: path.join(home, ".openclaw"),
+        stateDir: path.join(home, ".sunclaw"),
       });
       expectInstallRecord(persistedIndex?.installRecords.demo, {
         source: "npm",
@@ -581,7 +581,7 @@ describe("config io write", () => {
     "tightens world-writable state dir when writing the default config",
     async () => {
       await withSuiteHome(async (home) => {
-        const stateDir = path.join(home, ".openclaw");
+        const stateDir = path.join(home, ".sunclaw");
         await fs.mkdir(stateDir, { recursive: true, mode: 0o777 });
         await fs.chmod(stateDir, 0o777);
 
@@ -599,9 +599,9 @@ describe("config io write", () => {
     },
   );
 
-  it("keeps writes inside an OPENCLAW_STATE_DIR override even when the real home config exists", async () => {
+  it("keeps writes inside an SUNCLAW_STATE_DIR override even when the real home config exists", async () => {
     await withSuiteHome(async (home) => {
-      const liveConfigPath = path.join(home, ".openclaw", "openclaw.json");
+      const liveConfigPath = path.join(home, ".sunclaw", "sunclaw.json");
       await fs.mkdir(path.dirname(liveConfigPath), { recursive: true });
       await fs.writeFile(
         liveConfigPath,
@@ -610,14 +610,14 @@ describe("config io write", () => {
       );
 
       const overrideDir = path.join(home, "isolated-state");
-      const env = { OPENCLAW_STATE_DIR: overrideDir } as NodeJS.ProcessEnv;
+      const env = { SUNCLAW_STATE_DIR: overrideDir } as NodeJS.ProcessEnv;
       const io = createConfigIO({
         env,
         homedir: () => home,
         logger: silentLogger,
       });
 
-      expect(io.configPath).toBe(path.join(overrideDir, "openclaw.json"));
+      expect(io.configPath).toBe(path.join(overrideDir, "sunclaw.json"));
 
       await io.writeConfigFile({
         agents: { list: [{ id: "main", default: true }] },
@@ -631,7 +631,7 @@ describe("config io write", () => {
       expect(livePersisted.gateway).toEqual({ mode: "local", port: 18789 });
 
       const overridePersisted = JSON.parse(
-        await fs.readFile(path.join(overrideDir, "openclaw.json"), "utf-8"),
+        await fs.readFile(path.join(overrideDir, "sunclaw.json"), "utf-8"),
       ) as {
         session?: { store?: unknown };
       };
@@ -641,7 +641,7 @@ describe("config io write", () => {
 
   it("does not mutate caller config when unsetPaths is applied on first write", async () => {
     await withSuiteHome(async (home) => {
-      const configPath = path.join(home, ".openclaw", "openclaw.json");
+      const configPath = path.join(home, ".sunclaw", "sunclaw.json");
       const io = createConfigIO({
         env: {} as NodeJS.ProcessEnv,
         homedir: () => home,
@@ -689,7 +689,7 @@ describe("config io write", () => {
 
   it("does not print overwrite audit output by default when updating config", async () => {
     await withSuiteHome(async (home) => {
-      const configPath = path.join(home, ".openclaw", "openclaw.json");
+      const configPath = path.join(home, ".sunclaw", "sunclaw.json");
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       await fs.writeFile(
         configPath,
@@ -719,7 +719,7 @@ describe("config io write", () => {
 
   it("does not print benign missing-meta write anomalies by default", async () => {
     await withSuiteHome(async (home) => {
-      const configPath = path.join(home, ".openclaw", "openclaw.json");
+      const configPath = path.join(home, ".sunclaw", "sunclaw.json");
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       await fs.writeFile(
         configPath,
@@ -749,7 +749,7 @@ describe("config io write", () => {
 
   it("prints missing-meta write anomalies when anomaly logging is requested", async () => {
     await withSuiteHome(async (home) => {
-      const configPath = path.join(home, ".openclaw", "openclaw.json");
+      const configPath = path.join(home, ".sunclaw", "sunclaw.json");
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       await fs.writeFile(
         configPath,
@@ -759,7 +759,7 @@ describe("config io write", () => {
       const warn = vi.fn();
       const io = createConfigIO({
         env: {
-          OPENCLAW_CONFIG_WRITE_ANOMALY_LOG: "1",
+          SUNCLAW_CONFIG_WRITE_ANOMALY_LOG: "1",
         } as NodeJS.ProcessEnv,
         homedir: () => home,
         logger: {
@@ -781,7 +781,7 @@ describe("config io write", () => {
 
   it("suppresses overwrite audit output when skipOutputLogs is set", async () => {
     await withSuiteHome(async (home) => {
-      const configPath = path.join(home, ".openclaw", "openclaw.json");
+      const configPath = path.join(home, ".sunclaw", "sunclaw.json");
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       await fs.writeFile(
         configPath,
@@ -792,7 +792,7 @@ describe("config io write", () => {
       const io = createConfigIO({
         env: {
           VITEST: "true",
-          OPENCLAW_TEST_CONFIG_OVERWRITE_LOG: "1",
+          SUNCLAW_TEST_CONFIG_OVERWRITE_LOG: "1",
         } as NodeJS.ProcessEnv,
         homedir: () => home,
         logger: {
@@ -817,13 +817,13 @@ describe("config io write", () => {
 
   it("preserves root $schema during partial writes", async () => {
     await withSuiteHome(async (home) => {
-      const configPath = path.join(home, ".openclaw", "openclaw.json");
+      const configPath = path.join(home, ".sunclaw", "sunclaw.json");
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       await fs.writeFile(
         configPath,
         `${JSON.stringify(
           {
-            $schema: "https://openclaw.ai/config.json",
+            $schema: "https://docs.sunclaw.complex.az/config.json",
             gateway: { mode: "local" },
           },
           null,
@@ -833,14 +833,14 @@ describe("config io write", () => {
       );
 
       const persisted = await writeGatewayPortAndReadConfig(home, configPath);
-      expect(persisted.$schema).toBe("https://openclaw.ai/config.json");
+      expect(persisted.$schema).toBe("https://docs.sunclaw.complex.az/config.json");
       expect(persisted.gateway).toEqual({ mode: "local", port: 18789 });
     });
   });
 
   it("recovers configs polluted by a leading status line", async () => {
     await withSuiteHome(async (home) => {
-      const configPath = path.join(home, ".openclaw", "openclaw.json");
+      const configPath = path.join(home, ".sunclaw", "sunclaw.json");
       const cleanConfig = {
         gateway: { mode: "local" },
         agents: { list: [{ id: "main", default: true }, { id: "discord-dm" }] },
@@ -884,7 +884,7 @@ describe("config io write", () => {
 
   it("rotates repeated prefix-recovery clobber snapshots for doctor-style repair loops", async () => {
     await withSuiteHome(async (home) => {
-      const configPath = path.join(home, ".openclaw", "openclaw.json");
+      const configPath = path.join(home, ".sunclaw", "sunclaw.json");
       const cleanConfig = {
         gateway: { mode: "local" },
         agents: { list: [{ id: "main", default: true }] },
@@ -926,12 +926,12 @@ describe("config io write", () => {
 
   it("rejects destructive internal writes before replacing the config", async () => {
     await withSuiteHome(async (home) => {
-      const configPath = path.join(home, ".openclaw", "openclaw.json");
+      const configPath = path.join(home, ".sunclaw", "sunclaw.json");
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       const original = {
         gateway: { mode: "local" },
         channels: { telegram: { enabled: true, dmPolicy: "pairing" } },
-        agents: { list: [{ id: "main", default: true, workspace: "/tmp/openclaw-main" }] },
+        agents: { list: [{ id: "main", default: true, workspace: "/tmp/sunclaw-main" }] },
         tools: { profile: "messaging" },
         commands: { ownerDisplay: "hash" },
       } satisfies ConfigFileSnapshot["config"];
@@ -984,7 +984,7 @@ describe("config io write", () => {
 
   it("does not preflight runtime secrets before rejecting blocked root writes", async () => {
     await withSuiteHome(async (home) => {
-      const configPath = path.join(home, ".openclaw", "openclaw.json");
+      const configPath = path.join(home, ".sunclaw", "sunclaw.json");
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       const original = {
         meta: { lastTouchedVersion: "2026.4.30" },
@@ -1034,7 +1034,7 @@ describe("config io write", () => {
 
   it("allows intentional size-drop writes without disabling gateway-mode protection", async () => {
     await withSuiteHome(async (home) => {
-      const configPath = path.join(home, ".openclaw", "openclaw.json");
+      const configPath = path.join(home, ".sunclaw", "sunclaw.json");
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       const original = {
         meta: { lastTouchedVersion: "2026.4.30" },
@@ -1091,7 +1091,7 @@ describe("config io write", () => {
 
   it("keeps authored agent provider params during narrowed internal agent writes", async () => {
     await withSuiteHome(async (home) => {
-      const configPath = path.join(home, ".openclaw", "openclaw.json");
+      const configPath = path.join(home, ".sunclaw", "sunclaw.json");
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       const original = {
         gateway: { mode: "local" },
@@ -1156,7 +1156,7 @@ describe("config io write", () => {
         { baseSnapshot },
       );
 
-      const persisted = JSON.parse(await fs.readFile(configPath, "utf-8")) as OpenClawConfig;
+      const persisted = JSON.parse(await fs.readFile(configPath, "utf-8")) as SunClawConfig;
       expect(persisted.agents?.defaults?.params).toEqual({
         transport: "sse",
         openaiWsWarmup: false,
@@ -1171,7 +1171,7 @@ describe("config io write", () => {
 
   it("preserves parsed source config when snapshot validation fails", async () => {
     await withSuiteHome(async (home) => {
-      const configPath = path.join(home, ".openclaw", "openclaw.json");
+      const configPath = path.join(home, ".sunclaw", "sunclaw.json");
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       const original = {
         gateway: { mode: "local" },
@@ -1194,12 +1194,12 @@ describe("config io write", () => {
 
   it("rejects root-include partial writes instead of flattening the root config", async () => {
     await withSuiteHome(async (home) => {
-      const configPath = path.join(home, ".openclaw", "openclaw.json");
-      const includePath = path.join(home, ".openclaw", "extra.json5");
+      const configPath = path.join(home, ".sunclaw", "sunclaw.json");
+      const includePath = path.join(home, ".sunclaw", "extra.json5");
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       await fs.writeFile(
         includePath,
-        `${JSON.stringify({ $schema: "https://openclaw.ai/config-from-include.json" }, null, 2)}\n`,
+        `${JSON.stringify({ $schema: "https://docs.sunclaw.complex.az/config-from-include.json" }, null, 2)}\n`,
         "utf-8",
       );
       await fs.writeFile(
@@ -1228,9 +1228,9 @@ describe("config io write", () => {
           cliBackends: [],
           skills: [],
           hooks: [],
-          rootDir: "/tmp/openclaw-test-required-plugin",
-          source: "/tmp/openclaw-test-required-plugin/index.ts",
-          manifestPath: "/tmp/openclaw-test-required-plugin/openclaw.plugin.json",
+          rootDir: "/tmp/sunclaw-test-required-plugin",
+          source: "/tmp/sunclaw-test-required-plugin/index.ts",
+          manifestPath: "/tmp/sunclaw-test-required-plugin/sunclaw.plugin.json",
           configSchema: {
             type: "object",
             properties: {
@@ -1272,9 +1272,9 @@ describe("config io write", () => {
 
   it("writes runtime-derived edits back to source SecretRef markers", async () => {
     await withSuiteHome(async (home) => {
-      const configPath = path.join(home, ".openclaw", "openclaw.json");
-      const previousConfigPath = process.env.OPENCLAW_CONFIG_PATH;
-      process.env.OPENCLAW_CONFIG_PATH = configPath;
+      const configPath = path.join(home, ".sunclaw", "sunclaw.json");
+      const previousConfigPath = process.env.SUNCLAW_CONFIG_PATH;
+      process.env.SUNCLAW_CONFIG_PATH = configPath;
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       await fs.writeFile(
         configPath,
@@ -1361,9 +1361,9 @@ describe("config io write", () => {
         expect(typeof persisted.meta?.lastTouchedVersion).toBe("string");
       } finally {
         if (previousConfigPath === undefined) {
-          delete process.env.OPENCLAW_CONFIG_PATH;
+          delete process.env.SUNCLAW_CONFIG_PATH;
         } else {
-          process.env.OPENCLAW_CONFIG_PATH = previousConfigPath;
+          process.env.SUNCLAW_CONFIG_PATH = previousConfigPath;
         }
       }
     });
@@ -1371,11 +1371,11 @@ describe("config io write", () => {
 
   it("notifies in-process reloaders with resolved source config when persisted env refs are restored", async () => {
     await withSuiteHome(async (home) => {
-      const configPath = path.join(home, ".openclaw", "openclaw.json");
-      const previousConfigPath = process.env.OPENCLAW_CONFIG_PATH;
-      const previousGatewayToken = process.env.OPENCLAW_GATEWAY_TOKEN;
-      process.env.OPENCLAW_CONFIG_PATH = configPath;
-      process.env.OPENCLAW_GATEWAY_TOKEN = "gateway-token-runtime";
+      const configPath = path.join(home, ".sunclaw", "sunclaw.json");
+      const previousConfigPath = process.env.SUNCLAW_CONFIG_PATH;
+      const previousGatewayToken = process.env.SUNCLAW_GATEWAY_TOKEN;
+      process.env.SUNCLAW_CONFIG_PATH = configPath;
+      process.env.SUNCLAW_GATEWAY_TOKEN = "gateway-token-runtime";
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       await fs.writeFile(
         configPath,
@@ -1383,7 +1383,7 @@ describe("config io write", () => {
           {
             gateway: {
               mode: "local",
-              auth: { mode: "token", token: "${OPENCLAW_GATEWAY_TOKEN}" },
+              auth: { mode: "token", token: "${SUNCLAW_GATEWAY_TOKEN}" },
             },
             agents: { defaults: { model: { primary: "openai/gpt-5.4" } } },
           },
@@ -1426,7 +1426,7 @@ describe("config io write", () => {
         const persisted = JSON.parse(await fs.readFile(configPath, "utf-8")) as {
           gateway?: { auth?: { token?: string } };
         };
-        expect(persisted.gateway?.auth?.token).toBe("${OPENCLAW_GATEWAY_TOKEN}");
+        expect(persisted.gateway?.auth?.token).toBe("${SUNCLAW_GATEWAY_TOKEN}");
         expect(observedSources).toHaveLength(1);
         const observedSource = requireRecord(observedSources[0], "observed source config");
         expect(observedSource.gateway).toEqual({
@@ -1441,14 +1441,14 @@ describe("config io write", () => {
       } finally {
         unsubscribe();
         if (previousConfigPath === undefined) {
-          delete process.env.OPENCLAW_CONFIG_PATH;
+          delete process.env.SUNCLAW_CONFIG_PATH;
         } else {
-          process.env.OPENCLAW_CONFIG_PATH = previousConfigPath;
+          process.env.SUNCLAW_CONFIG_PATH = previousConfigPath;
         }
         if (previousGatewayToken === undefined) {
-          delete process.env.OPENCLAW_GATEWAY_TOKEN;
+          delete process.env.SUNCLAW_GATEWAY_TOKEN;
         } else {
-          process.env.OPENCLAW_GATEWAY_TOKEN = previousGatewayToken;
+          process.env.SUNCLAW_GATEWAY_TOKEN = previousGatewayToken;
         }
       }
     });
@@ -1466,9 +1466,9 @@ describe("config io write", () => {
           cliBackends: [],
           skills: [],
           hooks: [],
-          rootDir: "/tmp/openclaw-test-demo",
-          source: "/tmp/openclaw-test-demo/index.ts",
-          manifestPath: "/tmp/openclaw-test-demo/openclaw.plugin.json",
+          rootDir: "/tmp/sunclaw-test-demo",
+          source: "/tmp/sunclaw-test-demo/index.ts",
+          manifestPath: "/tmp/sunclaw-test-demo/sunclaw.plugin.json",
           configSchema: {
             type: "object",
             properties: {
@@ -1481,9 +1481,9 @@ describe("config io write", () => {
     } satisfies PluginManifestRegistry);
 
     await withSuiteHome(async (home) => {
-      const configPath = path.join(home, ".openclaw", "openclaw.json");
-      const previousConfigPath = process.env.OPENCLAW_CONFIG_PATH;
-      process.env.OPENCLAW_CONFIG_PATH = configPath;
+      const configPath = path.join(home, ".sunclaw", "sunclaw.json");
+      const previousConfigPath = process.env.SUNCLAW_CONFIG_PATH;
+      process.env.SUNCLAW_CONFIG_PATH = configPath;
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       const sourceConfig = {
         gateway: { mode: "local" },
@@ -1517,7 +1517,7 @@ describe("config io write", () => {
         });
 
         const postWriteSnapshot = await createConfigIO({
-          env: { OPENCLAW_CONFIG_PATH: configPath, VITEST: "true" } as NodeJS.ProcessEnv,
+          env: { SUNCLAW_CONFIG_PATH: configPath, VITEST: "true" } as NodeJS.ProcessEnv,
           homedir: () => home,
           logger: silentLogger,
         }).readConfigFileSnapshot();
@@ -1536,9 +1536,9 @@ describe("config io write", () => {
           plugins: [],
         } satisfies PluginManifestRegistry);
         if (previousConfigPath === undefined) {
-          delete process.env.OPENCLAW_CONFIG_PATH;
+          delete process.env.SUNCLAW_CONFIG_PATH;
         } else {
-          process.env.OPENCLAW_CONFIG_PATH = previousConfigPath;
+          process.env.SUNCLAW_CONFIG_PATH = previousConfigPath;
         }
       }
     });
@@ -1546,11 +1546,11 @@ describe("config io write", () => {
 
   it("rolls back the root config when post-write runtime refresh fails", async () => {
     await withSuiteHome(async (home) => {
-      const configPath = path.join(home, ".openclaw", "openclaw.json");
-      const previousConfigPath = process.env.OPENCLAW_CONFIG_PATH;
-      process.env.OPENCLAW_CONFIG_PATH = configPath;
+      const configPath = path.join(home, ".sunclaw", "sunclaw.json");
+      const previousConfigPath = process.env.SUNCLAW_CONFIG_PATH;
+      process.env.SUNCLAW_CONFIG_PATH = configPath;
       await fs.mkdir(path.dirname(configPath), { recursive: true });
-      const initialConfig = { gateway: { mode: "local", port: 18789 } } satisfies OpenClawConfig;
+      const initialConfig = { gateway: { mode: "local", port: 18789 } } satisfies SunClawConfig;
       const initialRaw = `${JSON.stringify(initialConfig, null, 2)}\n`;
       await fs.writeFile(configPath, initialRaw, "utf-8");
 
@@ -1569,9 +1569,9 @@ describe("config io write", () => {
       } finally {
         setRuntimeConfigSnapshotRefreshHandler(null);
         if (previousConfigPath === undefined) {
-          delete process.env.OPENCLAW_CONFIG_PATH;
+          delete process.env.SUNCLAW_CONFIG_PATH;
         } else {
-          process.env.OPENCLAW_CONFIG_PATH = previousConfigPath;
+          process.env.SUNCLAW_CONFIG_PATH = previousConfigPath;
         }
       }
     });
@@ -1579,11 +1579,11 @@ describe("config io write", () => {
 
   it("does not delete an existing root config when rollback has no previous raw payload", async () => {
     await withSuiteHome(async (home) => {
-      const configPath = path.join(home, ".openclaw", "openclaw.json");
-      const previousConfigPath = process.env.OPENCLAW_CONFIG_PATH;
-      process.env.OPENCLAW_CONFIG_PATH = configPath;
+      const configPath = path.join(home, ".sunclaw", "sunclaw.json");
+      const previousConfigPath = process.env.SUNCLAW_CONFIG_PATH;
+      process.env.SUNCLAW_CONFIG_PATH = configPath;
       await fs.mkdir(path.dirname(configPath), { recursive: true });
-      const initialConfig = { gateway: { mode: "local", port: 18789 } } satisfies OpenClawConfig;
+      const initialConfig = { gateway: { mode: "local", port: 18789 } } satisfies SunClawConfig;
       await fs.writeFile(configPath, `${JSON.stringify(initialConfig, null, 2)}\n`, "utf-8");
       const baseSnapshot = {
         path: configPath,
@@ -1616,14 +1616,14 @@ describe("config io write", () => {
           ),
         ).rejects.toThrow(/runtime snapshot refresh failed: synthetic refresh failure/);
 
-        const persisted = JSON.parse(await fs.readFile(configPath, "utf-8")) as OpenClawConfig;
+        const persisted = JSON.parse(await fs.readFile(configPath, "utf-8")) as SunClawConfig;
         expect(persisted.gateway).toEqual({ mode: "local", port: 19001 });
       } finally {
         setRuntimeConfigSnapshotRefreshHandler(null);
         if (previousConfigPath === undefined) {
-          delete process.env.OPENCLAW_CONFIG_PATH;
+          delete process.env.SUNCLAW_CONFIG_PATH;
         } else {
-          process.env.OPENCLAW_CONFIG_PATH = previousConfigPath;
+          process.env.SUNCLAW_CONFIG_PATH = previousConfigPath;
         }
       }
     });
@@ -1631,9 +1631,9 @@ describe("config io write", () => {
 
   it("does not overwrite concurrent root config edits during failed refresh rollback", async () => {
     await withSuiteHome(async (home) => {
-      const configPath = path.join(home, ".openclaw", "openclaw.json");
-      const previousConfigPath = process.env.OPENCLAW_CONFIG_PATH;
-      process.env.OPENCLAW_CONFIG_PATH = configPath;
+      const configPath = path.join(home, ".sunclaw", "sunclaw.json");
+      const previousConfigPath = process.env.SUNCLAW_CONFIG_PATH;
+      process.env.SUNCLAW_CONFIG_PATH = configPath;
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       await fs.writeFile(
         configPath,
@@ -1662,9 +1662,9 @@ describe("config io write", () => {
       } finally {
         setRuntimeConfigSnapshotRefreshHandler(null);
         if (previousConfigPath === undefined) {
-          delete process.env.OPENCLAW_CONFIG_PATH;
+          delete process.env.SUNCLAW_CONFIG_PATH;
         } else {
-          process.env.OPENCLAW_CONFIG_PATH = previousConfigPath;
+          process.env.SUNCLAW_CONFIG_PATH = previousConfigPath;
         }
       }
     });
@@ -1672,11 +1672,11 @@ describe("config io write", () => {
 
   it("keeps plugin install index migration when runtime refresh fails", async () => {
     await withSuiteHome(async (home) => {
-      const stateDir = path.join(home, ".openclaw");
-      const configPath = path.join(stateDir, "openclaw.json");
+      const stateDir = path.join(home, ".sunclaw");
+      const configPath = path.join(stateDir, "sunclaw.json");
       const pluginDir = path.join(stateDir, "plugins", "demo");
-      const previousConfigPath = process.env.OPENCLAW_CONFIG_PATH;
-      const previousStateDir = process.env.OPENCLAW_STATE_DIR;
+      const previousConfigPath = process.env.SUNCLAW_CONFIG_PATH;
+      const previousStateDir = process.env.SUNCLAW_STATE_DIR;
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       const initialConfig = {
         plugins: {
@@ -1689,11 +1689,11 @@ describe("config io write", () => {
             },
           },
         },
-      } satisfies OpenClawConfig;
+      } satisfies SunClawConfig;
       const initialRaw = `${JSON.stringify(initialConfig, null, 2)}\n`;
       await fs.writeFile(configPath, initialRaw, "utf-8");
-      process.env.OPENCLAW_CONFIG_PATH = configPath;
-      process.env.OPENCLAW_STATE_DIR = stateDir;
+      process.env.SUNCLAW_CONFIG_PATH = configPath;
+      process.env.SUNCLAW_STATE_DIR = stateDir;
 
       try {
         setRuntimeConfigSnapshotRefreshHandler({
@@ -1716,14 +1716,14 @@ describe("config io write", () => {
       } finally {
         setRuntimeConfigSnapshotRefreshHandler(null);
         if (previousConfigPath === undefined) {
-          delete process.env.OPENCLAW_CONFIG_PATH;
+          delete process.env.SUNCLAW_CONFIG_PATH;
         } else {
-          process.env.OPENCLAW_CONFIG_PATH = previousConfigPath;
+          process.env.SUNCLAW_CONFIG_PATH = previousConfigPath;
         }
         if (previousStateDir === undefined) {
-          delete process.env.OPENCLAW_STATE_DIR;
+          delete process.env.SUNCLAW_STATE_DIR;
         } else {
-          process.env.OPENCLAW_STATE_DIR = previousStateDir;
+          process.env.SUNCLAW_STATE_DIR = previousStateDir;
         }
       }
     });
@@ -1731,14 +1731,14 @@ describe("config io write", () => {
 
   it("blocks runtime preflight failures before committing root writes", async () => {
     await withSuiteHome(async (home) => {
-      const configPath = path.join(home, ".openclaw", "openclaw.json");
-      const previousConfigPath = process.env.OPENCLAW_CONFIG_PATH;
+      const configPath = path.join(home, ".sunclaw", "sunclaw.json");
+      const previousConfigPath = process.env.SUNCLAW_CONFIG_PATH;
       const initialRaw = `${JSON.stringify({ gateway: { mode: "local" } }, null, 2)}\n`;
-      let observedSource: OpenClawConfig | undefined;
+      let observedSource: SunClawConfig | undefined;
 
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       await fs.writeFile(configPath, initialRaw, "utf-8");
-      process.env.OPENCLAW_CONFIG_PATH = configPath;
+      process.env.SUNCLAW_CONFIG_PATH = configPath;
 
       try {
         setRuntimeConfigSnapshotRefreshHandler({
@@ -1761,9 +1761,9 @@ describe("config io write", () => {
       } finally {
         setRuntimeConfigSnapshotRefreshHandler(null);
         if (previousConfigPath === undefined) {
-          delete process.env.OPENCLAW_CONFIG_PATH;
+          delete process.env.SUNCLAW_CONFIG_PATH;
         } else {
-          process.env.OPENCLAW_CONFIG_PATH = previousConfigPath;
+          process.env.SUNCLAW_CONFIG_PATH = previousConfigPath;
         }
       }
     });
@@ -1771,13 +1771,13 @@ describe("config io write", () => {
 
   it("blocks runtime preflight failures before direct config IO commits root writes", async () => {
     await withSuiteHome(async (home) => {
-      const configPath = path.join(home, ".openclaw", "openclaw.json");
+      const configPath = path.join(home, ".sunclaw", "sunclaw.json");
       const initialRaw = `${JSON.stringify({ gateway: { mode: "local" } }, null, 2)}\n`;
       const env = {
         ...process.env,
-        OPENCLAW_CONFIG_PATH: configPath,
+        SUNCLAW_CONFIG_PATH: configPath,
       } as NodeJS.ProcessEnv;
-      let observedSource: OpenClawConfig | undefined;
+      let observedSource: SunClawConfig | undefined;
 
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       await fs.writeFile(configPath, initialRaw, "utf-8");
@@ -1807,16 +1807,16 @@ describe("config io write", () => {
 
   it("restores config env vars when post-write runtime refresh rollback succeeds", async () => {
     await withSuiteHome(async (home) => {
-      const configPath = path.join(home, ".openclaw", "openclaw.json");
-      const previousConfigPath = process.env.OPENCLAW_CONFIG_PATH;
-      const envKey = "OPENCLAW_TEST_RUNTIME_ROLLBACK_ENV";
+      const configPath = path.join(home, ".sunclaw", "sunclaw.json");
+      const previousConfigPath = process.env.SUNCLAW_CONFIG_PATH;
+      const envKey = "SUNCLAW_TEST_RUNTIME_ROLLBACK_ENV";
       const previousEnvValue = process.env[envKey];
-      const initialConfig = { gateway: { mode: "local", port: 18789 } } satisfies OpenClawConfig;
+      const initialConfig = { gateway: { mode: "local", port: 18789 } } satisfies SunClawConfig;
       const initialRaw = `${JSON.stringify(initialConfig, null, 2)}\n`;
 
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       await fs.writeFile(configPath, initialRaw, "utf-8");
-      process.env.OPENCLAW_CONFIG_PATH = configPath;
+      process.env.SUNCLAW_CONFIG_PATH = configPath;
       delete process.env[envKey];
 
       try {
@@ -1839,9 +1839,9 @@ describe("config io write", () => {
       } finally {
         setRuntimeConfigSnapshotRefreshHandler(null);
         if (previousConfigPath === undefined) {
-          delete process.env.OPENCLAW_CONFIG_PATH;
+          delete process.env.SUNCLAW_CONFIG_PATH;
         } else {
-          process.env.OPENCLAW_CONFIG_PATH = previousConfigPath;
+          process.env.SUNCLAW_CONFIG_PATH = previousConfigPath;
         }
         if (previousEnvValue === undefined) {
           delete process.env[envKey];
@@ -1864,9 +1864,9 @@ describe("config io write", () => {
           cliBackends: [],
           skills: [],
           hooks: [],
-          rootDir: "/tmp/openclaw-test-demo",
-          source: "/tmp/openclaw-test-demo/index.ts",
-          manifestPath: "/tmp/openclaw-test-demo/openclaw.plugin.json",
+          rootDir: "/tmp/sunclaw-test-demo",
+          source: "/tmp/sunclaw-test-demo/index.ts",
+          manifestPath: "/tmp/sunclaw-test-demo/sunclaw.plugin.json",
           configSchema: {
             type: "object",
             properties: {
@@ -1879,9 +1879,9 @@ describe("config io write", () => {
     } satisfies PluginManifestRegistry);
 
     await withSuiteHome(async (home) => {
-      const configPath = path.join(home, ".openclaw", "openclaw.json");
-      const previousConfigPath = process.env.OPENCLAW_CONFIG_PATH;
-      process.env.OPENCLAW_CONFIG_PATH = configPath;
+      const configPath = path.join(home, ".sunclaw", "sunclaw.json");
+      const previousConfigPath = process.env.SUNCLAW_CONFIG_PATH;
+      process.env.SUNCLAW_CONFIG_PATH = configPath;
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       const sourceConfig = {
         gateway: { mode: "local" },
@@ -1904,7 +1904,7 @@ describe("config io write", () => {
           explicitSetPaths: [["plugins", "entries", "demo", "config"]],
         });
 
-        const persisted = JSON.parse(await fs.readFile(configPath, "utf-8")) as OpenClawConfig;
+        const persisted = JSON.parse(await fs.readFile(configPath, "utf-8")) as SunClawConfig;
         expect(persisted.plugins?.entries?.demo?.config).toStrictEqual({ mode: "auto" });
       } finally {
         mockLoadPluginManifestRegistry.mockReturnValue({
@@ -1912,9 +1912,9 @@ describe("config io write", () => {
           plugins: [],
         } satisfies PluginManifestRegistry);
         if (previousConfigPath === undefined) {
-          delete process.env.OPENCLAW_CONFIG_PATH;
+          delete process.env.SUNCLAW_CONFIG_PATH;
         } else {
-          process.env.OPENCLAW_CONFIG_PATH = previousConfigPath;
+          process.env.SUNCLAW_CONFIG_PATH = previousConfigPath;
         }
       }
     });
@@ -1922,9 +1922,9 @@ describe("config io write", () => {
 
   it("skipPluginValidation bypasses plugin schema rejection on writeConfigFile (#76800)", async () => {
     await withSuiteHome(async (home) => {
-      const configPath = path.join(home, ".openclaw", "openclaw.json");
-      const previousConfigPath = process.env.OPENCLAW_CONFIG_PATH;
-      process.env.OPENCLAW_CONFIG_PATH = configPath;
+      const configPath = path.join(home, ".sunclaw", "sunclaw.json");
+      const previousConfigPath = process.env.SUNCLAW_CONFIG_PATH;
+      process.env.SUNCLAW_CONFIG_PATH = configPath;
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       await fs.writeFile(configPath, "{}\n", "utf-8");
       mockLoadPluginManifestRegistry.mockReturnValue({
@@ -1938,9 +1938,9 @@ describe("config io write", () => {
             cliBackends: [],
             skills: [],
             hooks: [],
-            rootDir: "/tmp/openclaw-test-strict-plugin",
-            source: "/tmp/openclaw-test-strict-plugin/index.ts",
-            manifestPath: "/tmp/openclaw-test-strict-plugin/openclaw.plugin.json",
+            rootDir: "/tmp/sunclaw-test-strict-plugin",
+            source: "/tmp/sunclaw-test-strict-plugin/index.ts",
+            manifestPath: "/tmp/sunclaw-test-strict-plugin/sunclaw.plugin.json",
             configSchema: {
               type: "object",
               properties: { token: { type: "string" } },
@@ -1953,7 +1953,7 @@ describe("config io write", () => {
 
       try {
         // Plugin is enabled but missing required "token" — validation fails without skip.
-        const cfg: OpenClawConfig = {
+        const cfg: SunClawConfig = {
           agents: { list: [{ id: "main", default: true }] },
           plugins: { entries: { "strict-plugin": { enabled: true } } },
         };
@@ -1965,7 +1965,7 @@ describe("config io write", () => {
           /Config validation failed/,
         );
         await expect(
-          writeConfigFile({ agents: { list: "not-array" } } as unknown as OpenClawConfig, {
+          writeConfigFile({ agents: { list: "not-array" } } as unknown as SunClawConfig, {
             skipPluginValidation: true,
           }),
         ).rejects.toThrow(/Config validation failed/);
@@ -1975,9 +1975,9 @@ describe("config io write", () => {
           plugins: [],
         } satisfies PluginManifestRegistry);
         if (previousConfigPath === undefined) {
-          delete process.env.OPENCLAW_CONFIG_PATH;
+          delete process.env.SUNCLAW_CONFIG_PATH;
         } else {
-          process.env.OPENCLAW_CONFIG_PATH = previousConfigPath;
+          process.env.SUNCLAW_CONFIG_PATH = previousConfigPath;
         }
       }
     });
@@ -1985,13 +1985,13 @@ describe("config io write", () => {
 
   it("preserves authored tilde paths when runtime-shaped writes hand back absolute paths", async () => {
     await withSuiteHome(async (home) => {
-      const configPath = path.join(home, ".openclaw", "openclaw.json");
+      const configPath = path.join(home, ".sunclaw", "sunclaw.json");
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       await fs.writeFile(
         configPath,
         `${JSON.stringify(
           {
-            logging: { file: "~/openclaw-upgrade-survivor/gateway.jsonl" },
+            logging: { file: "~/sunclaw-upgrade-survivor/gateway.jsonl" },
           },
           null,
           2,
@@ -2004,15 +2004,15 @@ describe("config io write", () => {
       await io.writeConfigFile(
         {
           logging: {
-            file: path.join(home, "openclaw-upgrade-survivor", "gateway.jsonl"),
+            file: path.join(home, "sunclaw-upgrade-survivor", "gateway.jsonl"),
             level: "debug",
           },
         },
         { baseSnapshot: snapshot },
       );
 
-      const persisted = JSON.parse(await fs.readFile(configPath, "utf-8")) as OpenClawConfig;
-      expect(persisted.logging?.file).toBe("~/openclaw-upgrade-survivor/gateway.jsonl");
+      const persisted = JSON.parse(await fs.readFile(configPath, "utf-8")) as SunClawConfig;
+      expect(persisted.logging?.file).toBe("~/sunclaw-upgrade-survivor/gateway.jsonl");
       expect(persisted.logging?.level).toBe("debug");
     });
   });

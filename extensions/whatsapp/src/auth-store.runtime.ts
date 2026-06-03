@@ -1,1 +1,1 @@
-export { resolveOAuthDir } from "openclaw/plugin-sdk/state-paths";
+export { resolveOAuthDir } from "sunclaw/plugin-sdk/state-paths";

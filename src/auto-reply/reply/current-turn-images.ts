@@ -1,6 +1,6 @@
-import { mimeTypeFromFilePath } from "@openclaw/media-core/mime";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import { mimeTypeFromFilePath } from "@sunclaw/media-core/mime";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { logVerbose } from "../../globals.js";
 import { formatErrorMessage } from "../../infra/errors.js";
 import type { ImageContent } from "../../llm/types.js";
@@ -88,7 +88,7 @@ function createUndescribedImageContext(
 
 export async function resolveCurrentTurnImages(params: {
   ctx: MsgContext;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   images?: ImageContent[];
   imageOrder?: PromptImageOrderEntry[];
 }): Promise<{
@@ -126,7 +126,7 @@ export async function resolveCurrentTurnImages(params: {
     );
     if (images.length < undescribedImageAttachments.length) {
       logVerbose(
-        `agent-runner: native OpenClaw media resolution produced ${images.length}/${undescribedImageAttachments.length} current image attachment(s); falling back to prompt image refs`,
+        `agent-runner: native SunClaw media resolution produced ${images.length}/${undescribedImageAttachments.length} current image attachment(s); falling back to prompt image refs`,
       );
       return { images: params.images, imageOrder: params.imageOrder };
     }

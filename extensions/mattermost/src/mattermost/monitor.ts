@@ -1,27 +1,27 @@
 import {
   defineFinalizableLivePreviewAdapter,
   deliverWithFinalizableLivePreviewAdapter,
-} from "openclaw/plugin-sdk/channel-outbound";
+} from "sunclaw/plugin-sdk/channel-outbound";
 import {
   formatChannelProgressDraftLineForEntry,
   resolveChannelStreamingPreviewToolProgress,
-} from "openclaw/plugin-sdk/channel-outbound";
-import { isLoopbackHost } from "openclaw/plugin-sdk/gateway-runtime";
-import { createClaimableDedupe, type ClaimableDedupe } from "openclaw/plugin-sdk/persistent-dedupe";
+} from "sunclaw/plugin-sdk/channel-outbound";
+import { isLoopbackHost } from "sunclaw/plugin-sdk/gateway-runtime";
+import { createClaimableDedupe, type ClaimableDedupe } from "sunclaw/plugin-sdk/persistent-dedupe";
 import {
   buildTtsSupplementMediaPayload,
   getReplyPayloadTtsSupplement,
   isReasoningReplyPayload,
-} from "openclaw/plugin-sdk/reply-payload";
-import { resolveInboundLastRouteSessionKey } from "openclaw/plugin-sdk/routing";
-import { resolvePinnedMainDmOwnerFromAllowlist } from "openclaw/plugin-sdk/security-runtime";
-import { isPrivateNetworkOptInEnabled } from "openclaw/plugin-sdk/ssrf-runtime";
+} from "sunclaw/plugin-sdk/reply-payload";
+import { resolveInboundLastRouteSessionKey } from "sunclaw/plugin-sdk/routing";
+import { resolvePinnedMainDmOwnerFromAllowlist } from "sunclaw/plugin-sdk/security-runtime";
+import { isPrivateNetworkOptInEnabled } from "sunclaw/plugin-sdk/ssrf-runtime";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
   normalizeTrimmedStringList,
   uniqueStrings,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { getMattermostRuntime } from "../runtime.js";
 import {
   resolveMattermostAccount,
@@ -88,7 +88,7 @@ import {
 import type {
   ChannelAccountSnapshot,
   ChatType,
-  OpenClawConfig,
+  SunClawConfig,
   ReplyPayload,
   RuntimeEnv,
 } from "./runtime-api.js";
@@ -126,7 +126,7 @@ export type MonitorMattermostOpts = {
   botToken?: string;
   baseUrl?: string;
   accountId?: string;
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   runtime?: RuntimeEnv;
   abortSignal?: AbortSignal;
   statusSink?: (patch: Partial<ChannelAccountSnapshot>) => void;
@@ -516,7 +516,7 @@ function buildMattermostWsUrl(baseUrl: string): string {
 export async function monitorMattermostProvider(opts: MonitorMattermostOpts = {}): Promise<void> {
   const core = getMattermostRuntime();
   const runtime = resolveRuntime(opts);
-  const cfg = (opts.config ?? core.config.current()) as OpenClawConfig;
+  const cfg = (opts.config ?? core.config.current()) as SunClawConfig;
   const account = resolveMattermostAccount({
     cfg,
     accountId: opts.accountId,
@@ -662,7 +662,7 @@ export async function monitorMattermostProvider(opts: MonitorMattermostOpts = {}
               message: post.message ?? "",
               props: post.props ?? undefined,
             },
-            ephemeral_text: `OpenClaw ignored this action for ${decision.roomLabel}.`,
+            ephemeral_text: `SunClaw ignored this action for ${decision.roomLabel}.`,
           },
         };
       },

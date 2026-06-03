@@ -6,8 +6,8 @@ import {
   replaceRuntimeAuthProfileStoreSnapshots,
   resolveDefaultAgentDir,
   type AuthProfileStore,
-} from "openclaw/plugin-sdk/agent-runtime";
-import type { PluginCommandContext, PluginCommandResult } from "openclaw/plugin-sdk/plugin-entry";
+} from "sunclaw/plugin-sdk/agent-runtime";
+import type { PluginCommandContext, PluginCommandResult } from "sunclaw/plugin-sdk/plugin-entry";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CODEX_CONTROL_METHODS } from "./app-server/capabilities.js";
 import type { CodexComputerUseStatus } from "./app-server/computer-use.js";
@@ -232,8 +232,8 @@ function expectedDiagnosticsTargetBlock(params: {
   return [
     `Session ${params.index ?? 1}`,
     ...(params.channel ? [`Channel: ${params.channel}`] : []),
-    ...(params.sessionKey ? [`OpenClaw session key: \`${params.sessionKey}\``] : []),
-    ...(params.sessionId ? [`OpenClaw session id: \`${params.sessionId}\``] : []),
+    ...(params.sessionKey ? [`SunClaw session key: \`${params.sessionKey}\``] : []),
+    ...(params.sessionId ? [`SunClaw session id: \`${params.sessionId}\``] : []),
     `Codex thread id: \`${params.threadId}\``,
     `Inspect locally: \`codex resume ${params.threadId}\``,
   ];
@@ -241,8 +241,8 @@ function expectedDiagnosticsTargetBlock(params: {
 
 describe("codex command", () => {
   beforeEach(async () => {
-    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-codex-command-"));
-    vi.stubEnv("OPENCLAW_STATE_DIR", tempDir);
+    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-codex-command-"));
+    vi.stubEnv("SUNCLAW_STATE_DIR", tempDir);
   });
 
   afterEach(async () => {
@@ -311,7 +311,7 @@ describe("codex command", () => {
     });
 
     expectResultTextContains(result, "ON   google-calendar");
-    expectResultTextContains(result, "openclaw.json");
+    expectResultTextContains(result, "sunclaw.json");
   });
 
   it("enables and disables Codex sub-plugins through the /codex plugins command surface", async () => {
@@ -326,13 +326,13 @@ describe("codex command", () => {
     const disabled = await handleCodexCommand(createContext("plugins disable google-calendar"), {
       deps: createDeps({ codexPluginsManagementIo }),
     });
-    expectResultTextContains(disabled, "google-calendar: disabled in openclaw.json");
+    expectResultTextContains(disabled, "google-calendar: disabled in sunclaw.json");
     expect(codexPluginsManagementIo.current()["google-calendar"]?.enabled).toBe(false);
 
     const enabled = await handleCodexCommand(createContext("plugins enable google-calendar"), {
       deps: createDeps({ codexPluginsManagementIo }),
     });
-    expectResultTextContains(enabled, "google-calendar: enabled in openclaw.json");
+    expectResultTextContains(enabled, "google-calendar: enabled in sunclaw.json");
     expect(codexPluginsManagementIo.currentConfig().enabled).toBe(true);
     expect(codexPluginsManagementIo.current()["google-calendar"]?.enabled).toBe(true);
   });
@@ -356,7 +356,7 @@ describe("codex command", () => {
     await expect(
       handleCodexCommand(createContext("resume thread-123", sessionFile), { deps }),
     ).resolves.toEqual({
-      text: "Attached this OpenClaw session to Codex thread thread-123.",
+      text: "Attached this SunClaw session to Codex thread thread-123.",
     });
 
     expect(requests).toEqual([
@@ -422,7 +422,7 @@ describe("codex command", () => {
     expect(result.text).toContain(
       "Codex-native /codex " +
         args.split(/\s+/u)[0] +
-        " is unavailable because OpenClaw sandboxing is active for this session.",
+        " is unavailable because SunClaw sandboxing is active for this session.",
     );
     expect(codexControlRequest).not.toHaveBeenCalled();
     expect(startCodexConversationThread).not.toHaveBeenCalled();
@@ -467,7 +467,7 @@ describe("codex command", () => {
     expect(result.text).toContain(
       "Codex-native /codex " +
         args.split(/\s+/u)[0] +
-        " is unavailable because OpenClaw exec host=node is active for this session.",
+        " is unavailable because SunClaw exec host=node is active for this session.",
     );
     expect(codexControlRequest).not.toHaveBeenCalled();
     expect(startCodexConversationThread).not.toHaveBeenCalled();
@@ -493,7 +493,7 @@ describe("codex command", () => {
     );
 
     expect(result.text).toContain(
-      "Codex-native /codex bind is unavailable because OpenClaw exec host=node is active for this session.",
+      "Codex-native /codex bind is unavailable because SunClaw exec host=node is active for this session.",
     );
     expect(startCodexConversationThread).not.toHaveBeenCalled();
   });
@@ -2129,7 +2129,7 @@ describe("codex command", () => {
     await expect(
       handleCodexCommand(createContext("compact", sessionFile), { deps: createDeps() }),
     ).resolves.toEqual({
-      text: "No Codex thread is attached to this OpenClaw session yet.",
+      text: "No Codex thread is attached to this SunClaw session yet.",
     });
   });
 
@@ -2226,7 +2226,7 @@ describe("codex command", () => {
         threadId: "thread-123",
         includeLogs: true,
         tags: {
-          source: "openclaw-diagnostics",
+          source: "sunclaw-diagnostics",
           channel: "test",
         },
       },
@@ -2305,7 +2305,7 @@ describe("codex command", () => {
       [
         "Codex runtime thread detected.",
         "Approving diagnostics will also send this thread's feedback bundle to OpenAI servers.",
-        "The completed diagnostics reply will list the OpenClaw session ids and Codex thread ids that were sent.",
+        "The completed diagnostics reply will list the SunClaw session ids and Codex thread ids that were sent.",
         "Note: flaky tool call",
         "Included: Codex logs and spawned Codex subthreads when available.",
       ].join("\n"),
@@ -2362,7 +2362,7 @@ describe("codex command", () => {
         threadId: "thread-approved",
         includeLogs: true,
         tags: {
-          source: "openclaw-diagnostics",
+          source: "sunclaw-diagnostics",
           channel: "test",
         },
       },
@@ -2419,11 +2419,11 @@ describe("codex command", () => {
     );
     const token = readDiagnosticsConfirmationToken(request);
     expect(request.text).toContain("Codex runtime threads detected.");
-    expect(request.text).toContain("OpenClaw session key: `agent:main:whatsapp:one`");
-    expect(request.text).toContain("OpenClaw session id: `session-one`");
+    expect(request.text).toContain("SunClaw session key: `agent:main:whatsapp:one`");
+    expect(request.text).toContain("SunClaw session id: `session-one`");
     expect(request.text).toContain("Codex thread id: `thread-111`");
-    expect(request.text).toContain("OpenClaw session key: `agent:main:discord:two`");
-    expect(request.text).toContain("OpenClaw session id: `session-two`");
+    expect(request.text).toContain("SunClaw session key: `agent:main:discord:two`");
+    expect(request.text).toContain("SunClaw session id: `session-two`");
     expect(request.text).toContain("Codex thread id: `thread-222`");
     expect(safeCodexControlRequest).not.toHaveBeenCalled();
 
@@ -3137,7 +3137,7 @@ describe("codex command", () => {
       handleCodexCommand(createContext("diagnostics", sessionFile), { deps: createDeps() }),
     ).resolves.toEqual({
       text: [
-        "No Codex thread is attached to this OpenClaw session yet.",
+        "No Codex thread is attached to this SunClaw session yet.",
         "Use /codex threads to find a thread, then /codex resume <thread-id> before sending diagnostics.",
       ].join("\n"),
     });

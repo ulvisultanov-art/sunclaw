@@ -1,9 +1,9 @@
 import type * as Lark from "@larksuiteoapi/node-sdk";
-import { optionalPositiveIntegerSchema } from "openclaw/plugin-sdk/channel-actions";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { readPositiveIntegerParam } from "openclaw/plugin-sdk/param-readers";
+import { optionalPositiveIntegerSchema } from "sunclaw/plugin-sdk/channel-actions";
+import { formatErrorMessage } from "sunclaw/plugin-sdk/error-runtime";
+import { readPositiveIntegerParam } from "sunclaw/plugin-sdk/param-readers";
 import { Type, type TSchema } from "typebox";
-import type { OpenClawPluginApi } from "../runtime-api.js";
+import type { SunClawPluginApi } from "../runtime-api.js";
 import { listEnabledFeishuAccounts } from "./accounts.js";
 import { createFeishuClient } from "./client.js";
 import { resolveAnyEnabledFeishuToolsConfig, resolveFeishuToolAccount } from "./tool-account.js";
@@ -578,7 +578,7 @@ const UpdateRecordSchema = Type.Object({
 
 // ============ Tool Registration ============
 
-export function registerFeishuBitableTools(api: OpenClawPluginApi) {
+export function registerFeishuBitableTools(api: SunClawPluginApi) {
   if (!api.config) {
     return;
   }

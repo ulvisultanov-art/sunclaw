@@ -1,5 +1,5 @@
-import { clampTimerTimeoutMs } from "@openclaw/normalization-core/number-coercion";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { clampTimerTimeoutMs } from "@sunclaw/normalization-core/number-coercion";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
 import { resolveCapabilityModelRefForProviders } from "../../packages/media-generation-core/src/capability-model-ref.js";
 import type { MediaGenerationNormalizationMetadataInput } from "../../packages/media-generation-core/src/normalization.js";
 import { listProfilesForProvider } from "../agents/auth-profiles.js";
@@ -13,7 +13,7 @@ import {
   resolveAgentModelPrimaryValue,
 } from "../config/model-input.js";
 import type { AgentModelConfig } from "../config/types.agents-shared.js";
-import type { OpenClawConfig } from "../config/types.js";
+import type { SunClawConfig } from "../config/types.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import { getProviderEnvVars as getDefaultProviderEnvVars } from "../secrets/provider-env-vars.js";
 export type {
@@ -69,7 +69,7 @@ type CapabilityProviderCandidate = {
   aliases?: readonly string[];
   defaultModel?: string | null;
   models?: readonly string[];
-  isConfigured?: (ctx: { cfg?: OpenClawConfig; agentDir?: string }) => boolean;
+  isConfigured?: (ctx: { cfg?: SunClawConfig; agentDir?: string }) => boolean;
 };
 
 type ParsedAspectRatio = {
@@ -85,7 +85,7 @@ type ParsedSize = {
   area: number;
 };
 
-function resolveCurrentDefaultProviderId(cfg?: OpenClawConfig): string {
+function resolveCurrentDefaultProviderId(cfg?: SunClawConfig): string {
   const configured = resolveAgentModelPrimaryValue(cfg?.agents?.defaults?.model);
   const trimmed = normalizeOptionalString(configured);
   if (!trimmed) {
@@ -101,7 +101,7 @@ function resolveCurrentDefaultProviderId(cfg?: OpenClawConfig): string {
 
 function isCapabilityProviderConfigured(params: {
   provider: CapabilityProviderCandidate;
-  cfg?: OpenClawConfig;
+  cfg?: SunClawConfig;
   agentDir?: string;
 }): boolean {
   if (params.provider.isConfigured) {
@@ -124,9 +124,9 @@ function isCapabilityProviderConfigured(params: {
 }
 
 function resolveAutoCapabilityFallbackRefs(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   agentDir?: string;
-  listProviders: (cfg?: OpenClawConfig) => CapabilityProviderCandidate[];
+  listProviders: (cfg?: SunClawConfig) => CapabilityProviderCandidate[];
 }): string[] {
   const providerDefaults = new Map<string, { ref: string; aliases: string[] }>();
   for (const provider of params.listProviders(params.cfg)) {
@@ -168,12 +168,12 @@ function resolveAutoCapabilityFallbackRefs(params: {
 }
 
 export function resolveCapabilityModelCandidates(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   modelConfig: AgentModelConfig | undefined;
   modelOverride?: string;
   parseModelRef: (raw: string | undefined) => ParsedProviderModelRef | null;
   agentDir?: string;
-  listProviders?: (cfg?: OpenClawConfig) => CapabilityProviderCandidate[];
+  listProviders?: (cfg?: SunClawConfig) => CapabilityProviderCandidate[];
   autoProviderFallback?: boolean;
 }): ParsedProviderModelRef[] {
   const candidates: ParsedProviderModelRef[] = [];

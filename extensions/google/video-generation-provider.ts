@@ -1,18 +1,18 @@
-import { resolveApiKeyForProvider } from "openclaw/plugin-sdk/provider-auth-runtime";
+import { resolveApiKeyForProvider } from "sunclaw/plugin-sdk/provider-auth-runtime";
 import {
   createProviderOperationDeadline,
   executeProviderOperationWithRetry,
   resolveProviderOperationTimeoutMs,
   waitProviderOperationPollInterval,
-} from "openclaw/plugin-sdk/provider-http";
-import { readResponseWithLimit } from "openclaw/plugin-sdk/response-limit-runtime";
-import { fetchWithSsrFGuard } from "openclaw/plugin-sdk/ssrf-runtime";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/provider-http";
+import { readResponseWithLimit } from "sunclaw/plugin-sdk/response-limit-runtime";
+import { fetchWithSsrFGuard } from "sunclaw/plugin-sdk/ssrf-runtime";
+import { normalizeOptionalString } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import type {
   GeneratedVideoAsset,
   VideoGenerationProvider,
   VideoGenerationRequest,
-} from "openclaw/plugin-sdk/video-generation";
+} from "sunclaw/plugin-sdk/video-generation";
 import { parseGeminiAuth, resolveGoogleGenerativeAiApiOrigin } from "./api.js";
 import {
   createGoogleVideoGenerationProviderMetadata,

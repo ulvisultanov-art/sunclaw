@@ -1,6 +1,6 @@
 import { randomBytes } from "node:crypto";
 import fs from "node:fs/promises";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
 import { sanitizeForLog } from "../../../packages/terminal-core/src/ansi.js";
 import type { ReplyPayload } from "../../auto-reply/reply-payload.js";
 import type { ThinkLevel } from "../../auto-reply/thinking.js";
@@ -85,7 +85,7 @@ import {
   resolveAuthProfileOrder,
   shouldPreferExplicitConfigApiKeyAuth,
 } from "../model-auth.js";
-import { ensureOpenClawModelsJson } from "../models-config.js";
+import { ensureSunClawModelsJson } from "../models-config.js";
 import {
   OPENAI_PROVIDER_ID,
   listOpenAIAuthProfileProvidersForAgentRuntime,
@@ -411,7 +411,7 @@ function buildTraceToolSummary(params: {
  * The return value is normalized: whitespace-only inputs collapse to undefined, and
  * successful resolution returns a trimmed session key. This is a read-only lookup
  * with no side effects.
- * See: https://github.com/openclaw/openclaw/issues/60552
+ * See: https://github.com/ulvisultanov-art/sunclaw/issues/60552
  */
 function backfillSessionKey(params: {
   config: RunEmbeddedAgentParams["config"];
@@ -685,7 +685,7 @@ export async function runEmbeddedAgent(
         agentHarnessId: params.agentHarnessId,
         agentHarnessRuntimeOverride: params.agentHarnessRuntimeOverride,
       });
-      const pluginHarnessOwnsTransport = agentHarness.id !== "openclaw";
+      const pluginHarnessOwnsTransport = agentHarness.id !== "sunclaw";
       const modelConfigProvider = provider;
       const selectedRuntimeProvider = resolveSelectedOpenAIRuntimeProvider({
         provider,
@@ -709,7 +709,7 @@ export async function runEmbeddedAgent(
           params.config,
           {
             // Plugin dynamic model hooks can resolve explicit model refs without
-            // first generating OpenClaw models.json. This keeps one-shot model runs from
+            // first generating SunClaw models.json. This keeps one-shot model runs from
             // blocking on unrelated provider discovery.
             skipAgentDiscovery: true,
             allowBundledStaticCatalogFallback: pluginHarnessOwnsTransport,
@@ -729,7 +729,7 @@ export async function runEmbeddedAgent(
         modelResolution ??= firstModelResolution;
       }
       if (!modelResolution) {
-        await ensureOpenClawModelsJson(params.config, agentDir, {
+        await ensureSunClawModelsJson(params.config, agentDir, {
           workspaceDir: resolvedWorkspace,
         });
         for (const candidateProvider of modelResolutionProviders) {
@@ -790,17 +790,17 @@ export async function runEmbeddedAgent(
       startupStages.mark("model-resolution");
       notifyExecutionPhase("model_resolution", { provider, model: modelId });
 
-      const pluginHarnessNeedsOpenClawAuthBootstrap =
+      const pluginHarnessNeedsSunClawAuthBootstrap =
         pluginHarnessOwnsTransport &&
         provider === OPENAI_PROVIDER_ID &&
         effectiveModel.api === "openai-chatgpt-responses";
-      const openClawNativeCodexResponsesNeedsAuthBootstrap =
+      const sunClawNativeCodexResponsesNeedsAuthBootstrap =
         !pluginHarnessOwnsTransport &&
         provider === OPENAI_PROVIDER_ID &&
         effectiveModel.api === "openai-chatgpt-responses";
       let piExternalCliAuthScope = pluginHarnessOwnsTransport
         ? { ignoreAutoPreferredProfile: false }
-        : openClawNativeCodexResponsesNeedsAuthBootstrap
+        : sunClawNativeCodexResponsesNeedsAuthBootstrap
           ? {
               providerIds: [OPENAI_PROVIDER_ID],
               ignoreAutoPreferredProfile: false,
@@ -817,7 +817,7 @@ export async function runEmbeddedAgent(
       let noExternalAuthStore: AuthProfileStore | undefined;
       if (
         !pluginHarnessOwnsTransport &&
-        !pluginHarnessNeedsOpenClawAuthBootstrap &&
+        !pluginHarnessNeedsSunClawAuthBootstrap &&
         !piExternalCliAuthScope.providerIds
       ) {
         noExternalAuthStore = ensureAuthProfileStoreWithoutExternalProfiles(agentDir, {
@@ -835,9 +835,9 @@ export async function runEmbeddedAgent(
         });
       }
       const authStore =
-        pluginHarnessOwnsTransport && !pluginHarnessNeedsOpenClawAuthBootstrap
+        pluginHarnessOwnsTransport && !pluginHarnessNeedsSunClawAuthBootstrap
           ? createEmptyAuthProfileStore()
-          : pluginHarnessNeedsOpenClawAuthBootstrap
+          : pluginHarnessNeedsSunClawAuthBootstrap
             ? ensureAuthProfileStore(agentDir, {
                 externalCliProviderIds: [OPENAI_PROVIDER_ID],
                 allowKeychainPrompt: false,
@@ -852,7 +852,7 @@ export async function runEmbeddedAgent(
                   allowKeychainPrompt: false,
                 }));
       const attemptAuthProfileStore =
-        pluginHarnessOwnsTransport && !pluginHarnessNeedsOpenClawAuthBootstrap
+        pluginHarnessOwnsTransport && !pluginHarnessNeedsSunClawAuthBootstrap
           ? ensureAuthProfileStoreWithoutExternalProfiles(agentDir, {
               allowKeychainPrompt: false,
             })
@@ -1108,14 +1108,14 @@ export async function runEmbeddedAgent(
         return false;
       };
       const advanceAttemptAuthProfile =
-        pluginHarnessOwnsTransport && !pluginHarnessNeedsOpenClawAuthBootstrap
+        pluginHarnessOwnsTransport && !pluginHarnessNeedsSunClawAuthBootstrap
           ? advancePluginHarnessAuthProfile
           : advanceAuthProfile;
 
-      // Plugin harnesses own their model transport/auth. Running OpenClaw's generic
+      // Plugin harnesses own their model transport/auth. Running SunClaw's generic
       // auth bootstrap here can turn synthetic provider markers into real
       // vendor-token refresh attempts before the plugin gets control.
-      if (!pluginHarnessOwnsTransport || pluginHarnessNeedsOpenClawAuthBootstrap) {
+      if (!pluginHarnessOwnsTransport || pluginHarnessNeedsSunClawAuthBootstrap) {
         await initializeAuthProfile();
       } else if (lockedProfileId) {
         lastProfileId = lockedProfileId;
@@ -1132,7 +1132,7 @@ export async function runEmbeddedAgent(
               : lastProfileId,
           )
         : attemptAuthProfileStore;
-      const harnessBuildsOpenClawTools =
+      const harnessBuildsSunClawTools =
         agentHarness.id === "codex" || agentHarness.id === "copilot";
       const { sessionAgentId } = resolveSessionAgentIds({
         sessionKey: params.sessionKey,
@@ -1295,7 +1295,7 @@ export async function runEmbeddedAgent(
         }
         if (pluginHarnessOwnsTransport && reason === "timeout") {
           // Harness-owned transport timeouts are lifecycle failures, not
-          // credential evidence. Do not poison OpenClaw auth cooldowns.
+          // credential evidence. Do not poison SunClaw auth cooldowns.
           return;
         }
         await markAuthProfileFailure({
@@ -1600,8 +1600,8 @@ export async function runEmbeddedAgent(
             provider,
             modelId,
             // Use the harness selected before model/auth setup for the actual
-            // attempt too. Otherwise plugin-owned transports can skip OpenClaw auth
-            // bootstrap but drift back to OpenClaw when the attempt is created.
+            // attempt too. Otherwise plugin-owned transports can skip SunClaw auth
+            // bootstrap but drift back to SunClaw when the attempt is created.
             agentHarnessId: agentHarness.id,
             ...(params.sessionKey
               ? {
@@ -1626,9 +1626,9 @@ export async function runEmbeddedAgent(
             initialReplayState: accumulatedReplayState,
             authStorage,
             authProfileStore: runAttemptAuthProfileStore,
-            // These harnesses build OpenClaw tools internally. Keep transport auth
+            // These harnesses build SunClaw tools internally. Keep transport auth
             // scoped while letting tool construction see plugin/provider creds.
-            toolAuthProfileStore: harnessBuildsOpenClawTools ? attemptAuthProfileStore : undefined,
+            toolAuthProfileStore: harnessBuildsSunClawTools ? attemptAuthProfileStore : undefined,
             modelRegistry,
             agentId: workspaceResolution.agentId,
             beforeAgentStartResult,

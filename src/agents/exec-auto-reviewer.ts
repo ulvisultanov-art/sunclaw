@@ -1,8 +1,8 @@
-import { resolveTimerTimeoutMs } from "@openclaw/normalization-core/number-coercion";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { resolveTimerTimeoutMs } from "@sunclaw/normalization-core/number-coercion";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
 import { z } from "zod";
 import type { AgentModelConfig } from "../config/types.agents-shared.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import {
   defaultExecAutoReviewer,
@@ -223,7 +223,7 @@ async function raceWithReviewerTimeout<T>(
 }
 
 export function createModelExecAutoReviewer(params: {
-  cfg?: OpenClawConfig;
+  cfg?: SunClawConfig;
   agentId?: string;
   reviewer?: ExecReviewerConfig;
   deps?: ExecReviewerDeps;

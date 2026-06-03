@@ -4,7 +4,7 @@ import {
   normalizeInteractiveReply,
   renderMessagePresentationFallbackText,
   resolveInteractiveTextFallback,
-} from "openclaw/plugin-sdk/interactive-runtime";
+} from "sunclaw/plugin-sdk/interactive-runtime";
 
 export function resolveTelegramInteractiveTextFallback(params: {
   text?: string | null;

@@ -1,12 +1,12 @@
 import crypto from "node:crypto";
-import { isRequesterParentOfBackgroundAcpSession } from "@openclaw/acp-core/session-interaction-mode";
-import { finiteSecondsToTimerSafeMilliseconds } from "@openclaw/normalization-core/number-coercion";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { isRequesterParentOfBackgroundAcpSession } from "@sunclaw/acp-core/session-interaction-mode";
+import { finiteSecondsToTimerSafeMilliseconds } from "@sunclaw/normalization-core/number-coercion";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
 import { Type } from "typebox";
 import { readAcpSessionMeta } from "../../acp/runtime/session-meta.js";
 import { parseSessionThreadInfoFast } from "../../config/sessions/thread-info.js";
 import type { SessionEntry } from "../../config/sessions/types.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { callGateway } from "../../gateway/call.js";
 import { formatErrorMessage } from "../../infra/errors.js";
 import {
@@ -93,7 +93,7 @@ function resolveRunScopedFallbackSessionKey(sessionKey: string): string | undefi
 }
 
 function resolveConfiguredAgentMainSessionKey(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   agentId: string;
   mainKey: string;
 }): string | undefined {
@@ -109,7 +109,7 @@ function resolveConfiguredAgentMainSessionKey(params: {
 }
 
 function isConfiguredAgentMainSessionKey(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   sessionKey: string;
   mainKey: string;
 }): boolean {
@@ -125,7 +125,7 @@ function isConfiguredAgentMainSessionKey(params: {
 }
 
 async function ensureConfiguredAgentMainSession(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   callGateway: GatewayCaller;
   sessionKey: string;
   mainKey: string;
@@ -308,7 +308,7 @@ export function createSessionsSendTool(opts?: {
   agentSessionKey?: string;
   agentChannel?: GatewayMessageChannel;
   sandboxed?: boolean;
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   callGateway?: GatewayCaller;
 }): AnyAgentTool {
   return {

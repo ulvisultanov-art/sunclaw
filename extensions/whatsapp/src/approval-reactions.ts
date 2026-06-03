@@ -6,9 +6,9 @@ import {
   resolveApprovalReactionTarget,
   type ApprovalReactionDecisionBinding,
   type ApprovalReactionTargetRecord,
-} from "openclaw/plugin-sdk/approval-reaction-runtime";
-import type { ExecApprovalReplyDecision } from "openclaw/plugin-sdk/approval-reply-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+} from "sunclaw/plugin-sdk/approval-reaction-runtime";
+import type { ExecApprovalReplyDecision } from "sunclaw/plugin-sdk/approval-reply-runtime";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
 import { getWhatsAppApprovalApprovers, whatsappApprovalAuth } from "./approval-auth.js";
 import { getOptionalWhatsAppRuntime } from "./runtime.js";
 
@@ -261,7 +261,7 @@ function readWhatsAppApprovalReactionEvent(params: {
 }
 
 export async function maybeResolveWhatsAppApprovalReaction(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   accountId: string;
   msg: WAMessage;
   gatewayUrl?: string;

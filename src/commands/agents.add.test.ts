@@ -45,7 +45,7 @@ const transformConfigWithPendingPluginInstallsMock = vi.hoisted(() =>
       });
       await writeConfigFileMock(transformed.nextConfig);
       return {
-        path: snapshot.path ?? "/tmp/openclaw.json",
+        path: snapshot.path ?? "/tmp/sunclaw.json",
         previousHash: snapshot.hash ?? null,
         persistedHash: "persisted-hash",
         snapshot,
@@ -134,7 +134,7 @@ describe("agents add command", () => {
 
     expect(runtime.error).toHaveBeenCalledOnce();
     expect(runtime.error).toHaveBeenCalledWith(
-      `Non-interactive agent creation requires --workspace. Re-run ${formatCliCommand("openclaw agents add <id> --workspace <path>")} or omit flags to use the wizard.`,
+      `Non-interactive agent creation requires --workspace. Re-run ${formatCliCommand("sunclaw agents add <id> --workspace <path>")} or omit flags to use the wizard.`,
     );
     expect(runtime.exit).toHaveBeenCalledWith(1);
     expect(writeConfigFileMock).not.toHaveBeenCalled();
@@ -149,7 +149,7 @@ describe("agents add command", () => {
 
     expect(runtime.error).toHaveBeenCalledOnce();
     expect(runtime.error).toHaveBeenCalledWith(
-      `Non-interactive agent creation requires --workspace. Re-run ${formatCliCommand("openclaw agents add <id> --workspace <path>")} or omit flags to use the wizard.`,
+      `Non-interactive agent creation requires --workspace. Re-run ${formatCliCommand("sunclaw agents add <id> --workspace <path>")} or omit flags to use the wizard.`,
     );
     expect(runtime.exit).toHaveBeenCalledWith(1);
     expect(writeConfigFileMock).not.toHaveBeenCalled();
@@ -179,7 +179,7 @@ describe("agents add command", () => {
     });
     wizardMocks.createClackPrompter.mockReturnValue({
       intro: vi.fn(),
-      text: vi.fn().mockResolvedValueOnce("Jon").mockResolvedValueOnce("/tmp/openclaw-jon"),
+      text: vi.fn().mockResolvedValueOnce("Jon").mockResolvedValueOnce("/tmp/sunclaw-jon"),
       confirm: vi.fn().mockResolvedValue(false),
       note: vi.fn(),
       outro: vi.fn(),
@@ -199,7 +199,7 @@ describe("agents add command", () => {
   });
 
   it("copies only portable auth profiles when seeding a new agent store", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-agents-add-auth-copy-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-agents-add-auth-copy-"));
     try {
       const sourceAgentDir = path.join(root, "main", "agent");
       const destAgentDir = path.join(root, "work", "agent");
@@ -255,9 +255,9 @@ describe("agents add command", () => {
   });
 
   it("copies portable Codex OAuth profiles inline", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-agents-add-oauth-copy-"));
-    const previousStateDir = process.env.OPENCLAW_STATE_DIR;
-    process.env.OPENCLAW_STATE_DIR = root;
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-agents-add-oauth-copy-"));
+    const previousStateDir = process.env.SUNCLAW_STATE_DIR;
+    process.env.SUNCLAW_STATE_DIR = root;
     try {
       const sourceAgentDir = path.join(root, "main", "agent");
       const destAgentDir = path.join(root, "work", "agent");
@@ -304,23 +304,23 @@ describe("agents add command", () => {
       });
     } finally {
       if (previousStateDir === undefined) {
-        delete process.env.OPENCLAW_STATE_DIR;
+        delete process.env.SUNCLAW_STATE_DIR;
       } else {
-        process.env.OPENCLAW_STATE_DIR = previousStateDir;
+        process.env.SUNCLAW_STATE_DIR = previousStateDir;
       }
       await fs.rm(root, { recursive: true, force: true });
     }
   });
 
   it("skips unresolved OAuth profiles when seeding a new agent store", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-agents-add-oauth-ref-skip-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-agents-add-oauth-ref-skip-"));
     try {
       const sourceAgentDir = path.join(root, "main", "agent");
       const destAgentDir = path.join(root, "work", "agent");
       const destAuthPath = path.join(destAgentDir, "auth-profiles.json");
       const profileId = "openai:oauth";
       const ref = {
-        source: "openclaw-credentials" as const,
+        source: "sunclaw-credentials" as const,
         provider: "openai" as const,
         id: "0123456789abcdef0123456789abcdef",
       };

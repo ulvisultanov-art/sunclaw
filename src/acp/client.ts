@@ -11,8 +11,8 @@ import {
   type RequestPermissionRequest,
   type SessionNotification,
 } from "@agentclientprotocol/sdk";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import { ensureOpenClawCliOnPath } from "../infra/path-env.js";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
+import { ensureSunClawCliOnPath } from "../infra/path-env.js";
 import {
   buildAcpClientStripKeys,
   resolveAcpClientSpawnEnv,
@@ -107,11 +107,11 @@ async function createAcpClient(opts: AcpClientOptions = {}): Promise<AcpClientHa
   const verbose = Boolean(opts.verbose);
   const log = verbose ? (msg: string) => console.error(`[acp-client] ${msg}`) : () => {};
 
-  ensureOpenClawCliOnPath();
+  ensureSunClawCliOnPath();
   const serverArgs = buildServerArgs(opts);
 
   const entryPath = resolveSelfEntryPath();
-  const defaultServerCommand = entryPath ? process.execPath : "openclaw";
+  const defaultServerCommand = entryPath ? process.execPath : "sunclaw";
   const defaultServerArgs = entryPath ? [entryPath, ...serverArgs] : serverArgs;
   const serverCommand = opts.serverCommand ?? defaultServerCommand;
   const effectiveArgs = opts.serverCommand || !entryPath ? serverArgs : defaultServerArgs;
@@ -173,7 +173,7 @@ async function createAcpClient(opts: AcpClientOptions = {}): Promise<AcpClientHa
       fs: { readTextFile: true, writeTextFile: true },
       terminal: true,
     },
-    clientInfo: { name: "openclaw-acp-client", version: "1.0.0" },
+    clientInfo: { name: "sunclaw-acp-client", version: "1.0.0" },
   });
 
   log("creating session");
@@ -197,7 +197,7 @@ export async function runAcpClientInteractive(opts: AcpClientOptions = {}): Prom
     output: process.stdout,
   });
 
-  console.log("OpenClaw ACP client");
+  console.log("SunClaw ACP client");
   console.log(`Session: ${sessionId}`);
   console.log('Type a prompt, or "exit" to quit.\n');
 

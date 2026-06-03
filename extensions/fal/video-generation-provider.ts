@@ -1,27 +1,27 @@
-import { extensionForMime } from "openclaw/plugin-sdk/media-mime";
-import { resolvePositiveTimerTimeoutMs } from "openclaw/plugin-sdk/number-runtime";
-import { isProviderApiKeyConfigured } from "openclaw/plugin-sdk/provider-auth";
+import { extensionForMime } from "sunclaw/plugin-sdk/media-mime";
+import { resolvePositiveTimerTimeoutMs } from "sunclaw/plugin-sdk/number-runtime";
+import { isProviderApiKeyConfigured } from "sunclaw/plugin-sdk/provider-auth";
 import {
   assertOkOrThrowHttpError,
   createProviderOperationDeadline,
   type ProviderOperationDeadline,
-} from "openclaw/plugin-sdk/provider-http";
-import { readResponseWithLimit } from "openclaw/plugin-sdk/response-limit-runtime";
+} from "sunclaw/plugin-sdk/provider-http";
+import { readResponseWithLimit } from "sunclaw/plugin-sdk/response-limit-runtime";
 import {
   fetchWithSsrFGuard,
   type SsrFPolicy,
   ssrfPolicyFromDangerouslyAllowPrivateNetwork,
-} from "openclaw/plugin-sdk/ssrf-runtime";
+} from "sunclaw/plugin-sdk/ssrf-runtime";
 import {
   isRecord,
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/string-coerce-runtime";
 import type {
   GeneratedVideoAsset,
   VideoGenerationProvider,
   VideoGenerationRequest,
-} from "openclaw/plugin-sdk/video-generation";
+} from "sunclaw/plugin-sdk/video-generation";
 import { resolveFalHttpRequestConfig } from "./http-config.js";
 
 const DEFAULT_FAL_QUEUE_BASE_URL = "https://queue.fal.run";

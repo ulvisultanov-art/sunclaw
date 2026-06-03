@@ -35,7 +35,7 @@ import {
   summarizeProcessSamples,
   tailFile,
   unwrapRpcPayload,
-  usesBuiltOpenClawEntry,
+  usesBuiltSunClawEntry,
   waitForGatewayReady,
 } from "../../scripts/e2e/kitchen-sink-rpc-walk.mjs";
 
@@ -55,7 +55,7 @@ describe("kitchen-sink RPC isolated state", () => {
 
     expect(result.stderr).toBe("");
     expect(result.stdout).toContain("Usage: node scripts/e2e/kitchen-sink-rpc-walk.mjs");
-    expect(result.stdout).toContain("OPENCLAW_KITCHEN_SINK_NPM_SPEC");
+    expect(result.stdout).toContain("SUNCLAW_KITCHEN_SINK_NPM_SPEC");
     expect(result.stdout).not.toContain("Kitchen Sink RPC walk using");
     expect(result.stdout).not.toContain("temp root preserved");
   });
@@ -78,13 +78,13 @@ describe("kitchen-sink RPC isolated state", () => {
   it("cleans up the generated temporary home tree", async () => {
     const { root, env } = makeEnv();
 
-    expect(root).toContain("openclaw-kitchen-sink-rpc-");
+    expect(root).toContain("sunclaw-kitchen-sink-rpc-");
     expect(env.HOME).toBe(path.join(root, "home"));
     expect(env.USERPROFILE).toBe(env.HOME);
-    expect(env.OPENCLAW_HOME).toBe(env.HOME);
-    expect(env.OPENCLAW_STATE_DIR).toBe(path.join(env.HOME, ".openclaw"));
-    expect(env.OPENCLAW_CONFIG_PATH).toBe(path.join(env.OPENCLAW_STATE_DIR, "openclaw.json"));
-    expect(existsSync(env.OPENCLAW_STATE_DIR)).toBe(true);
+    expect(env.SUNCLAW_HOME).toBe(env.HOME);
+    expect(env.SUNCLAW_STATE_DIR).toBe(path.join(env.HOME, ".sunclaw"));
+    expect(env.SUNCLAW_CONFIG_PATH).toBe(path.join(env.SUNCLAW_STATE_DIR, "sunclaw.json"));
+    expect(existsSync(env.SUNCLAW_STATE_DIR)).toBe(true);
 
     await expect(cleanupKitchenSinkEnv(root)).resolves.toBe(true);
 
@@ -98,14 +98,14 @@ describe("kitchen-sink RPC isolated state", () => {
 
     try {
       await expect(
-        cleanupKitchenSinkEnv("/tmp/openclaw-kitchen-sink-rpc-stuck", {
+        cleanupKitchenSinkEnv("/tmp/sunclaw-kitchen-sink-rpc-stuck", {
           attempts: 3,
           delayMs: 1,
           throwOnFailure: true,
           warn: false,
         }),
       ).rejects.toThrow(
-        "failed to remove Kitchen Sink RPC temp root: /tmp/openclaw-kitchen-sink-rpc-stuck",
+        "failed to remove Kitchen Sink RPC temp root: /tmp/sunclaw-kitchen-sink-rpc-stuck",
       );
       expect(rmSync).toHaveBeenCalledTimes(3);
     } finally {
@@ -187,7 +187,7 @@ describe("kitchen-sink RPC gateway teardown", () => {
   });
 
   it("fails readiness waits before polling after signaled gateway exits", async () => {
-    const root = mkdtempSync(path.join(tmpdir(), "openclaw-kitchen-rpc-signal-ready-"));
+    const root = mkdtempSync(path.join(tmpdir(), "sunclaw-kitchen-rpc-signal-ready-"));
     try {
       const logPath = path.join(root, "gateway.log");
       writeFileSync(logPath, "gateway died\n");
@@ -209,7 +209,7 @@ describe("kitchen-sink RPC gateway teardown", () => {
   });
 
   it("keeps stalled readiness probes inside the caller deadline", async () => {
-    const root = mkdtempSync(path.join(tmpdir(), "openclaw-kitchen-rpc-stalled-ready-"));
+    const root = mkdtempSync(path.join(tmpdir(), "sunclaw-kitchen-rpc-stalled-ready-"));
     try {
       const logPath = path.join(root, "gateway.log");
       writeFileSync(logPath, "booting\n");
@@ -237,7 +237,7 @@ describe("kitchen-sink RPC gateway teardown", () => {
 
 describe("kitchen-sink RPC gateway readiness logs", () => {
   it("scans gateway readiness logs incrementally across appended chunks", () => {
-    const root = mkdtempSync(path.join(tmpdir(), "openclaw-kitchen-rpc-log-scan-"));
+    const root = mkdtempSync(path.join(tmpdir(), "sunclaw-kitchen-rpc-log-scan-"));
     try {
       const logPath = path.join(root, "gateway.log");
       writeFileSync(logPath, "booting\n".repeat(1000));
@@ -257,7 +257,7 @@ describe("kitchen-sink RPC gateway readiness logs", () => {
   });
 
   it("resets the readiness scanner after log rotation", () => {
-    const root = mkdtempSync(path.join(tmpdir(), "openclaw-kitchen-rpc-log-rotate-"));
+    const root = mkdtempSync(path.join(tmpdir(), "sunclaw-kitchen-rpc-log-rotate-"));
     try {
       const logPath = path.join(root, "gateway.log");
       writeFileSync(logPath, "older log contents without readiness\n");
@@ -273,7 +273,7 @@ describe("kitchen-sink RPC gateway readiness logs", () => {
   });
 
   it("tails large gateway logs without returning older content", () => {
-    const root = mkdtempSync(path.join(tmpdir(), "openclaw-kitchen-rpc-log-tail-"));
+    const root = mkdtempSync(path.join(tmpdir(), "sunclaw-kitchen-rpc-log-tail-"));
     try {
       const logPath = path.join(root, "gateway.log");
       writeFileSync(logPath, `old fatal marker\n${"noise\n".repeat(2000)}recent ready\n`);
@@ -307,7 +307,7 @@ describe("kitchen-sink RPC gateway readiness logs", () => {
   });
 
   it("scans gateway error logs incrementally and keeps the latest findings", () => {
-    const root = mkdtempSync(path.join(tmpdir(), "openclaw-kitchen-rpc-log-errors-"));
+    const root = mkdtempSync(path.join(tmpdir(), "sunclaw-kitchen-rpc-log-errors-"));
     try {
       const logPath = path.join(root, "gateway.log");
       writeFileSync(logPath, `${"ordinary line\n".repeat(2000)}0 errors\n[ERROR] late failure\n`);
@@ -324,7 +324,7 @@ describe("kitchen-sink RPC gateway readiness logs", () => {
   });
 
   it("bounds scanner memory for very long log lines", () => {
-    const root = mkdtempSync(path.join(tmpdir(), "openclaw-kitchen-rpc-log-long-line-"));
+    const root = mkdtempSync(path.join(tmpdir(), "sunclaw-kitchen-rpc-log-long-line-"));
     try {
       const logPath = path.join(root, "gateway.log");
       writeFileSync(logPath, `${"x".repeat(200_000)}[ERROR] giant line\n`);
@@ -351,7 +351,7 @@ describe("kitchen-sink RPC command output capture", () => {
   });
 
   posixIt("kills timed command process groups", async () => {
-    const root = mkdtempSync(path.join(tmpdir(), "openclaw-kitchen-rpc-timeout-"));
+    const root = mkdtempSync(path.join(tmpdir(), "sunclaw-kitchen-rpc-timeout-"));
     const scriptPath = path.join(root, "trap-term.mjs");
     const grandchildPidPath = path.join(root, "grandchild.pid");
     let grandchildPid = 0;
@@ -433,7 +433,7 @@ setInterval(() => {}, 1000);
   });
 
   it("rejects command spawn failures as Error objects", async () => {
-    await expect(runCommand("openclaw-definitely-missing-command", [])).rejects.toMatchObject({
+    await expect(runCommand("sunclaw-definitely-missing-command", [])).rejects.toMatchObject({
       code: "ENOENT",
     });
   });
@@ -459,21 +459,21 @@ describe("kitchen-sink RPC caller loading", () => {
   });
 
   it("uses built callGateway chunks for dist and packaged entries", () => {
-    expect(usesBuiltOpenClawEntry({ command: "node", baseArgs: ["dist/index.js"] })).toBe(true);
+    expect(usesBuiltSunClawEntry({ command: "node", baseArgs: ["dist/index.js"] })).toBe(true);
     expect(
-      usesBuiltOpenClawEntry({ command: "node", baseArgs: ["/app/openclaw.mjs"] }, "/repo", {
-        OPENCLAW_ENTRY: "/app/openclaw.mjs",
+      usesBuiltSunClawEntry({ command: "node", baseArgs: ["/app/sunclaw.mjs"] }, "/repo", {
+        SUNCLAW_ENTRY: "/app/sunclaw.mjs",
       }),
     ).toBe(true);
   });
 
   it("does not deep-import gateway TypeScript for source pnpm runners", () => {
-    expect(usesBuiltOpenClawEntry({ pnpm: true, baseArgs: ["openclaw"] })).toBe(false);
-    expect(usesBuiltOpenClawEntry({ command: "node", baseArgs: ["scripts/dev.mjs"] })).toBe(false);
+    expect(usesBuiltSunClawEntry({ pnpm: true, baseArgs: ["sunclaw"] })).toBe(false);
+    expect(usesBuiltSunClawEntry({ command: "node", baseArgs: ["scripts/dev.mjs"] })).toBe(false);
   });
 
   it("finds only built callGateway chunks", () => {
-    const root = mkdtempSync(path.join(tmpdir(), "openclaw-rpc-call-chunks-"));
+    const root = mkdtempSync(path.join(tmpdir(), "sunclaw-rpc-call-chunks-"));
     try {
       mkdirSync(path.join(root, "dist"));
       writeFileSync(path.join(root, "dist", "call-Abc123.js"), "");
@@ -709,7 +709,7 @@ describe("kitchen-sink RPC process sampling", () => {
         expect(args).toEqual(["-ww", "-axo", "pid=,ppid=,rss=,pcpu=,command="]);
         return {
           stdout: [
-            " 4321     1   16384   0.0 node /usr/local/bin/corepack pnpm openclaw gateway --port 19080",
+            " 4321     1   16384   0.0 node /usr/local/bin/corepack pnpm sunclaw gateway --port 19080",
             " 4322  4321  262144  12.5 node dist/index.js gateway --port 19080 --bind loopback",
             " 4323  4322   32768   1.5 node helper.js",
           ].join("\n"),
@@ -732,8 +732,8 @@ describe("kitchen-sink RPC process sampling", () => {
       posixCommandLineNeedles: ["gateway", "--port", "19080"],
       runCommand: async () => ({
         stdout: [
-          " 4321     1 1048576   0.0 node /usr/local/bin/corepack pnpm openclaw gateway --port 19080",
-          " 4322  4321  262144  12.5 openclaw-gateway",
+          " 4321     1 1048576   0.0 node /usr/local/bin/corepack pnpm sunclaw gateway --port 19080",
+          " 4322  4321  262144  12.5 sunclaw-gateway",
           " 4323  4322   32768   1.5 node helper.js",
         ].join("\n"),
         stderr: "",
@@ -754,7 +754,7 @@ describe("kitchen-sink RPC process sampling", () => {
       posixCommandLineNeedles: ["gateway", "--port", "19080"],
       runCommand: async () => ({
         stdout: [
-          " 4321     1 1048576   0.0 node /usr/local/bin/corepack pnpm openclaw gateway --port 19080",
+          " 4321     1 1048576   0.0 node /usr/local/bin/corepack pnpm sunclaw gateway --port 19080",
           " 4322  4321  262144  12.5 node",
           " 4323  4322   32768   1.5 node helper.js",
         ].join("\n"),
@@ -775,7 +775,7 @@ describe("kitchen-sink RPC process sampling", () => {
       platform: "darwin",
       posixCommandLineNeedles: ["gateway", "--port", "19080"],
       runCommand: async () => ({
-        stdout: " 4321     1   16384   0.0 node /usr/local/bin/corepack pnpm openclaw status\n",
+        stdout: " 4321     1   16384   0.0 node /usr/local/bin/corepack pnpm sunclaw status\n",
         stderr: "",
       }),
     });

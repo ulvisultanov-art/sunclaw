@@ -5,11 +5,11 @@ import {
   createPluginStateKeyedStoreForTests,
   createPluginStateSyncKeyedStoreForTests,
   resetPluginStateStoreForTests,
-} from "openclaw/plugin-sdk/plugin-state-test-runtime";
+} from "sunclaw/plugin-sdk/plugin-state-test-runtime";
 import type {
   OpenKeyedStoreOptions,
   PluginDoctorStateMigrationContext,
-} from "openclaw/plugin-sdk/runtime-doctor";
+} from "sunclaw/plugin-sdk/runtime-doctor";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { stateMigrations } from "./doctor-contract-api.js";
 import {
@@ -54,9 +54,9 @@ describe("voice-call doctor state migration", () => {
 
   beforeEach(async () => {
     resetPluginStateStoreForTests();
-    stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-voice-call-doctor-"));
+    stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-voice-call-doctor-"));
     storePath = createTestStorePath();
-    env = { ...process.env, HOME: stateDir, OPENCLAW_STATE_DIR: stateDir };
+    env = { ...process.env, HOME: stateDir, SUNCLAW_STATE_DIR: stateDir };
     installStateRuntime();
   });
 
@@ -87,7 +87,7 @@ describe("voice-call doctor state migration", () => {
     const config = {
       plugins: {
         entries: {
-          "@openclaw/voice-call": {
+          "@sunclaw/voice-call": {
             config: { store: storePath },
           },
         },
@@ -142,7 +142,7 @@ describe("voice-call doctor state migration", () => {
     const config = {
       plugins: {
         entries: {
-          "@openclaw/voice-call": {
+          "@sunclaw/voice-call": {
             config: { store: storePath },
           },
         },
@@ -187,7 +187,7 @@ describe("voice-call doctor state migration", () => {
     const config = {
       plugins: {
         entries: {
-          "@openclaw/voice-call": {
+          "@sunclaw/voice-call": {
             config: { store: storePath },
           },
         },

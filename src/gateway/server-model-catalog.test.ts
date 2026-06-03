@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type { GatewayModelChoice } from "./server-model-catalog.js";
 import {
   resetModelCatalogCacheForTest,
@@ -16,7 +16,7 @@ function model(id: string): GatewayModelChoice {
   return { id, name: id, provider: "openai" } as GatewayModelChoice;
 }
 
-const getConfig = () => ({}) as OpenClawConfig;
+const getConfig = () => ({}) as SunClawConfig;
 
 function createRefreshingCatalogLoader(
   firstCatalog: GatewayModelChoice[],

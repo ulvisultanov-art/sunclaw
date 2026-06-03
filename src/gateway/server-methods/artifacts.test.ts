@@ -118,7 +118,7 @@ function assistantImageMessage(params: {
   return {
     role: "assistant",
     content: [{ type: "image", data: params.data ?? "aGVsbG8=", alt: params.alt }],
-    __openclaw: {
+    __sunclaw: {
       seq: params.seq ?? 2,
       ...(params.runId ? { runId: params.runId } : {}),
       ...(params.taskId ? { messageTaskId: params.taskId } : {}),
@@ -143,7 +143,7 @@ function assistantFileMessage(params: {
         title: params.title,
       },
     ],
-    __openclaw: {
+    __sunclaw: {
       seq: params.seq ?? 2,
       ...(params.runId ? { runId: params.runId } : {}),
       ...(params.taskId ? { taskId: params.taskId } : {}),
@@ -163,7 +163,7 @@ function resultImageMessage() {
         alt: "result.png",
       },
     ],
-    __openclaw: { seq: 2 },
+    __sunclaw: { seq: 2 },
   };
 }
 
@@ -356,7 +356,7 @@ describe("artifacts RPC handlers", () => {
               alt: "result.png",
             },
           ],
-          __openclaw: { seq: 2 },
+          __sunclaw: { seq: 2 },
         },
       ],
     });
@@ -389,7 +389,7 @@ describe("artifacts RPC handlers", () => {
             alt: "second.png",
           },
         ],
-        __openclaw: { seq: 2 },
+        __sunclaw: { seq: 2 },
       },
     ];
     const summaries = collectArtifactsFromMessages({
@@ -462,17 +462,17 @@ describe("artifacts RPC handlers", () => {
       {
         role: "assistant",
         content: [{ type: "image", data: "dGFyZ2V0", alt: "task-result.png" }],
-        __openclaw: { seq: 2, messageTaskId: "task-1" },
+        __sunclaw: { seq: 2, messageTaskId: "task-1" },
       },
       {
         role: "assistant",
         content: [{ type: "image", data: "b3RoZXI=", alt: "other-task.png" }],
-        __openclaw: { seq: 3, messageTaskId: "task-2" },
+        __sunclaw: { seq: 3, messageTaskId: "task-2" },
       },
       {
         role: "assistant",
         content: [{ type: "image", data: "dW50YWdnZWQ=", alt: "untagged.png" }],
-        __openclaw: { seq: 4 },
+        __sunclaw: { seq: 4 },
       },
     ]);
 
@@ -615,7 +615,7 @@ describe("artifacts RPC handlers", () => {
             alt: "uploaded.png",
           },
         ],
-        __openclaw: { seq: 3 },
+        __sunclaw: { seq: 3 },
       },
     ]);
     const { calls } = await listArtifacts({ sessionKey: "agent:main:main" }, { id: "image-url" });
@@ -645,7 +645,7 @@ describe("artifacts RPC handlers", () => {
               alt: "uploaded.txt",
             },
           ],
-          __openclaw: { seq: 4 },
+          __sunclaw: { seq: 4 },
         },
       ],
     });
@@ -672,7 +672,7 @@ describe("artifacts RPC handlers", () => {
               title: "plain.txt",
             },
           ],
-          __openclaw: { seq: 5 },
+          __sunclaw: { seq: 5 },
         },
       ],
     });
@@ -692,7 +692,7 @@ describe("artifacts RPC handlers", () => {
         {
           role: "assistant",
           content: [{ type: "file", title: "secret.txt", url: "file:///etc/passwd" }],
-          __openclaw: { seq: 4 },
+          __sunclaw: { seq: 4 },
         },
       ],
     });

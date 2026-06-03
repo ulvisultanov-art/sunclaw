@@ -5,8 +5,8 @@ import os from "node:os";
 import path from "node:path";
 import readline from "node:readline";
 import chokidar, { type FSWatcher } from "chokidar";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { withFileLock } from "openclaw/plugin-sdk/file-lock";
+import { formatErrorMessage } from "sunclaw/plugin-sdk/error-runtime";
+import { withFileLock } from "sunclaw/plugin-sdk/file-lock";
 import {
   createSubsystemLogger,
   isPathInside,
@@ -16,8 +16,8 @@ import {
   resolveAgentWorkspaceDir,
   resolveGlobalSingleton,
   resolveStateDir,
-  type OpenClawConfig,
-} from "openclaw/plugin-sdk/memory-core-host-engine-foundation";
+  type SunClawConfig,
+} from "sunclaw/plugin-sdk/memory-core-host-engine-foundation";
 import {
   buildSessionEntry,
   deriveQmdScopeChannel,
@@ -29,7 +29,7 @@ import {
   runCliCommand,
   type QmdQueryResult,
   type SessionFileEntry,
-} from "openclaw/plugin-sdk/memory-core-host-engine-qmd";
+} from "sunclaw/plugin-sdk/memory-core-host-engine-qmd";
 import {
   buildMemoryReadResult,
   buildMemoryReadResultFromSlice,
@@ -48,17 +48,17 @@ import {
   type ResolvedMemoryBackendConfig,
   type ResolvedQmdConfig,
   type ResolvedQmdMcporterConfig,
-} from "openclaw/plugin-sdk/memory-core-host-engine-storage";
+} from "sunclaw/plugin-sdk/memory-core-host-engine-storage";
 import {
   addTimerTimeoutGraceMs,
   isFutureDateTimestampMs,
   resolveExpiresAtMsFromDurationMs,
-} from "openclaw/plugin-sdk/number-runtime";
+} from "sunclaw/plugin-sdk/number-runtime";
 import {
   localeLowercasePreservingWhitespace,
   normalizeLowercaseStringOrEmpty,
   uniqueValues,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { asRecord } from "../dreaming-shared.js";
 import { resolveQmdCollectionPatternFlags, type QmdCollectionPatternFlag } from "./qmd-compat.js";
 import {
@@ -86,9 +86,9 @@ const QMD_EMBED_LOCK_RETRY_TEMPLATE = {
   maxTimeout: 10_000,
   randomize: true,
 } as const;
-const MCPORTER_STATE_KEY = Symbol.for("openclaw.mcporterState");
-const QMD_EMBED_QUEUE_KEY = Symbol.for("openclaw.qmdEmbedQueueTail");
-const QMD_UPDATE_QUEUE_KEY = Symbol.for("openclaw.qmdUpdateQueueState");
+const MCPORTER_STATE_KEY = Symbol.for("sunclaw.mcporterState");
+const QMD_EMBED_QUEUE_KEY = Symbol.for("sunclaw.qmdEmbedQueueTail");
+const QMD_UPDATE_QUEUE_KEY = Symbol.for("sunclaw.qmdUpdateQueueState");
 const IGNORED_MEMORY_WATCH_DIR_NAMES = new Set([
   ".git",
   ".cache",
@@ -167,7 +167,7 @@ function getQmdUpdateQueueState(): QmdUpdateQueueState {
 
 function normalizeHanBm25Query(query: string): string {
   const trimmed = query.trim();
-  // Keep Han/CJK BM25 queries intact so OpenClaw search semantics match direct qmd search.
+  // Keep Han/CJK BM25 queries intact so SunClaw search semantics match direct qmd search.
   return trimmed;
 }
 
@@ -309,7 +309,7 @@ type QmdMcporterAcrossCollectionsParams =
 
 export class QmdMemoryManager implements MemorySearchManager {
   static async create(params: {
-    cfg: OpenClawConfig;
+    cfg: SunClawConfig;
     agentId: string;
     resolved: ResolvedMemoryBackendConfig;
     mode?: QmdManagerMode;
@@ -3253,7 +3253,7 @@ export class QmdMemoryManager implements MemorySearchManager {
 }
 
 function resolveQmdManagerRuntimeConfig(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   agentId: string,
 ): QmdManagerRuntimeConfig {
   return {

@@ -1,11 +1,11 @@
-import type { OpenClawPluginCommandDefinition } from "openclaw/plugin-sdk/core";
+import type { SunClawPluginCommandDefinition } from "sunclaw/plugin-sdk/core";
 import { describe, expect, it, vi } from "vitest";
 import type { PluginRuntime } from "./api.js";
 import register from "./index.js";
 
 function createHarness(initialConfig: Record<string, unknown>) {
   let config = initialConfig;
-  let command: OpenClawPluginCommandDefinition | undefined;
+  let command: SunClawPluginCommandDefinition | undefined;
   const runtime = {
     config: {
       current: vi.fn(() => config),
@@ -16,7 +16,7 @@ function createHarness(initialConfig: Record<string, unknown>) {
           mutate(draft);
           config = draft;
           return {
-            path: "/tmp/openclaw.json",
+            path: "/tmp/sunclaw.json",
             previousHash: null,
             persistedHash: null,
             snapshot: {},
@@ -38,7 +38,7 @@ function createHarness(initialConfig: Record<string, unknown>) {
   } as unknown as PluginRuntime;
   const api = {
     runtime,
-    registerCommand: vi.fn((definition: OpenClawPluginCommandDefinition) => {
+    registerCommand: vi.fn((definition: SunClawPluginCommandDefinition) => {
       command = definition;
     }),
   };

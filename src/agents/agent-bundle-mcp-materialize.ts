@@ -1,7 +1,7 @@
 import crypto from "node:crypto";
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { normalizeLowercaseStringOrEmpty } from "@sunclaw/normalization-core/string-coerce";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { logWarn } from "../logger.js";
 import { setPluginToolMeta, type PluginToolMcpMeta } from "../plugins/tools.js";
 import {
@@ -437,12 +437,12 @@ export async function materializeBundleMcpToolsForRun(params: {
 
 export async function createBundleMcpToolRuntime(params: {
   workspaceDir: string;
-  cfg?: OpenClawConfig;
+  cfg?: SunClawConfig;
   reservedToolNames?: Iterable<string>;
   createRuntime?: (params: {
     sessionId: string;
     workspaceDir: string;
-    cfg?: OpenClawConfig;
+    cfg?: SunClawConfig;
   }) => SessionMcpRuntime;
 }): Promise<BundleMcpToolRuntime> {
   const createRuntime =

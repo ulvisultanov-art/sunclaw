@@ -173,7 +173,7 @@ describe("renderSkills", () => {
               score: 0.95,
               slug: "github",
               displayName: "GitHub",
-              summary: "GitHub integration for OpenClaw",
+              summary: "GitHub integration for SunClaw",
               version: "1.2.3",
             },
           ],
@@ -191,7 +191,7 @@ describe("renderSkills", () => {
     expect(installButton).toBeInstanceOf(HTMLButtonElement);
     expect(resultItem?.querySelector(".list-title")?.textContent?.trim()).toBe("GitHub");
     expect(resultItem?.querySelector(".list-sub")?.textContent?.trim()).toBe(
-      "GitHub integration for OpenClaw",
+      "GitHub integration for SunClaw",
     );
     expect(resultItem?.querySelector(".list-meta .muted")?.textContent?.trim()).toBe("v1.2.3");
     expect(installButton?.textContent?.trim()).toBe("Install");
@@ -216,7 +216,7 @@ describe("renderSkills", () => {
             skill: {
               slug: "github",
               displayName: "GitHub",
-              summary: "GitHub integration for OpenClaw",
+              summary: "GitHub integration for SunClaw",
               createdAt: 1_700_000_000,
               updatedAt: 1_700_000_100,
             },
@@ -229,8 +229,8 @@ describe("renderSkills", () => {
               os: ["macos", "linux"],
             },
             owner: {
-              displayName: "OpenClaw",
-              handle: "openclaw",
+              displayName: "SunClaw",
+              handle: "sunclaw",
             },
           },
           onClawHubInstall,
@@ -245,7 +245,7 @@ describe("renderSkills", () => {
       Array.from(container.querySelectorAll(".callout")).map((node) => normalizeText(node)),
     ).toEqual(["rate limited", "Installed github"]);
     expect(normalizeText(container.querySelector(".md-preview-dialog__body")!)).toBe(
-      "GitHub integration for OpenClaw By OpenClaw (@openclaw) Latest: v1.2.3 Added search support Platforms: macos, linux Install GitHub",
+      "GitHub integration for SunClaw By SunClaw (@sunclaw) Latest: v1.2.3 Added search support Platforms: macos, linux Install GitHub",
     );
 
     const detailInstallButton = container.querySelector<HTMLButtonElement>(
@@ -272,7 +272,7 @@ describe("renderSkills", () => {
       clawhub: {
         status: "linked",
         valid: true,
-        registry: "https://clawhub.ai",
+        registry: "https://clawhub.complex.az",
         slug: "agentreceipt",
         installedVersion: "1.2.3",
         installedAt: 123,
@@ -288,7 +288,7 @@ describe("renderSkills", () => {
       managedSkillsDir: "/tmp/skills",
       skills: [linkedSkill],
     };
-    const verdictKey = "https://clawhub.ai\u0000agentreceipt\u00001.2.3";
+    const verdictKey = "https://clawhub.complex.az\u0000agentreceipt\u00001.2.3";
 
     render(
       renderSkills(
@@ -297,7 +297,7 @@ describe("renderSkills", () => {
           detailKey: "agentreceipt",
           clawhubVerdicts: {
             [verdictKey]: {
-              registry: "https://clawhub.ai",
+              registry: "https://clawhub.complex.az",
               ok: false,
               decision: "fail",
               reasons: ["security.suspicious"],
@@ -306,7 +306,7 @@ describe("renderSkills", () => {
               slug: "agentreceipt",
               version: "1.2.3",
               securityAuditUrl:
-                "https://clawhub.ai/openclaw/agentreceipt/security-audit?version=1.2.3",
+                "https://clawhub.complex.az/sunclaw/agentreceipt/security-audit?version=1.2.3",
               securityStatus: "suspicious",
               securityPassed: false,
             },
@@ -334,14 +334,14 @@ describe("renderSkills", () => {
           },
           clawhubVerdicts: {
             [verdictKey]: {
-              registry: "https://clawhub.ai",
+              registry: "https://clawhub.complex.az",
               ok: false,
               decision: "fail",
               reasons: ["security.suspicious"],
               requestedSlug: "agentreceipt",
               requestedVersion: "1.2.3",
               securityAuditUrl:
-                "https://clawhub.ai/openclaw/agentreceipt/security-audit?version=1.2.3",
+                "https://clawhub.complex.az/sunclaw/agentreceipt/security-audit?version=1.2.3",
               securityStatus: "suspicious",
               securityPassed: false,
             },
@@ -370,7 +370,7 @@ describe("renderSkills", () => {
       clawhub: {
         status: "linked",
         valid: true,
-        registry: "https://clawhub.ai",
+        registry: "https://clawhub.complex.az",
         slug: "agentreceipt",
         installedVersion: "1.2.3",
         installedAt: 123,
@@ -381,7 +381,7 @@ describe("renderSkills", () => {
       managedSkillsDir: "/tmp/skills",
       skills: [linkedSkill],
     };
-    const verdictKey = "https://clawhub.ai\u0000agentreceipt\u00001.2.3";
+    const verdictKey = "https://clawhub.complex.az\u0000agentreceipt\u00001.2.3";
 
     render(
       renderSkills(
@@ -390,7 +390,7 @@ describe("renderSkills", () => {
           detailKey: "agentreceipt",
           clawhubVerdicts: {
             [verdictKey]: {
-              registry: "https://clawhub.ai",
+              registry: "https://clawhub.complex.az",
               ok: false,
               decision: "pass",
               reasons: [],

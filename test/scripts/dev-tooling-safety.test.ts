@@ -58,8 +58,8 @@ describe("dev tooling safety helpers", () => {
   });
 
   it("redacts home paths and masks opaque ids", () => {
-    expect(redactHomePath("/home/alice/.openclaw/state.json", "/home/alice")).toBe(
-      "~/.openclaw/state.json",
+    expect(redactHomePath("/home/alice/.sunclaw/state.json", "/home/alice")).toBe(
+      "~/.sunclaw/state.json",
     );
     expect(maskIdentifier("session-key-abcdef123456")).toBe("sessio...3456");
   });
@@ -293,7 +293,7 @@ describe("script-specific dev tooling hardening", () => {
   it("rejects invalid OpenAI realtime smoke timeout values", () => {
     expect(realtimeSmokeTesting.resolveOpenAIHttpTimeoutMs("42")).toBe(42);
     expect(() => realtimeSmokeTesting.resolveOpenAIHttpTimeoutMs("2s")).toThrow(
-      /OPENCLAW_REALTIME_OPENAI_HTTP_TIMEOUT_MS must be an integer/u,
+      /SUNCLAW_REALTIME_OPENAI_HTTP_TIMEOUT_MS must be an integer/u,
     );
   });
 
@@ -340,8 +340,8 @@ describe("script-specific dev tooling hardening", () => {
   });
 
   it("cleans Anthropic prompt probe temp dirs unless explicitly kept", async () => {
-    const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-prompt-probe-test-"));
-    const keepRoot = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-prompt-probe-test-"));
+    const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-prompt-probe-test-"));
+    const keepRoot = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-prompt-probe-test-"));
 
     expect(promptProbeTesting.promptProbeTmpResult(tempRoot, false)).toEqual({});
     expect(promptProbeTesting.promptProbeTmpResult(keepRoot, true)).toEqual({ tmpDir: keepRoot });
@@ -459,7 +459,7 @@ describe("script-specific dev tooling hardening", () => {
   it("rejects invalid Claude usage timeout values", () => {
     expect(claudeUsageTesting.resolveFetchTimeoutMs("123")).toBe(123);
     expect(() => claudeUsageTesting.resolveFetchTimeoutMs("1.5")).toThrow(
-      /OPENCLAW_DEBUG_CLAUDE_USAGE_FETCH_TIMEOUT_MS must be an integer/u,
+      /SUNCLAW_DEBUG_CLAUDE_USAGE_FETCH_TIMEOUT_MS must be an integer/u,
     );
   });
 

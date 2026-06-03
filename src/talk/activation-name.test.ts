@@ -9,7 +9,7 @@ import {
 
 describe("realtime voice activation names", () => {
   it("normalizes and validates one- or two-word activation names", () => {
-    expect(normalizeSupportedRealtimeVoiceActivationName("  OpenClaw  ")).toBe("openclaw");
+    expect(normalizeSupportedRealtimeVoiceActivationName("  SunClaw  ")).toBe("sunclaw");
     expect(normalizeSupportedRealtimeVoiceActivationName("Open Claw")).toBe("open claw");
     expect(normalizeSupportedRealtimeVoiceActivationName("Claw Bot Helper")).toBeUndefined();
     expect(isSupportedRealtimeVoiceActivationName("Claw Bot")).toBe(true);
@@ -85,9 +85,9 @@ describe("realtime voice activation names", () => {
   });
 
   it("prefers longer activation names first", () => {
-    expect(sortRealtimeVoiceActivationNames(["claw", "claw bot", "openclaw"])).toEqual([
+    expect(sortRealtimeVoiceActivationNames(["claw", "claw bot", "sunclaw"])).toEqual([
       "claw bot",
-      "openclaw",
+      "sunclaw",
       "claw",
     ]);
     expect(matchRealtimeVoiceActivationName("Claw Bot, status", ["claw", "claw bot"])).toEqual({

@@ -8,18 +8,18 @@ describe("tool search gateway e2e fetch helper", () => {
   it("rejects loose numeric env limits instead of parsing prefixes", () => {
     expect(() =>
       readToolSearchGatewayFetchLimits({
-        OPENCLAW_TOOL_SEARCH_GATEWAY_E2E_FETCH_TIMEOUT_MS: "1e3",
+        SUNCLAW_TOOL_SEARCH_GATEWAY_E2E_FETCH_TIMEOUT_MS: "1e3",
       }),
-    ).toThrow("invalid OPENCLAW_TOOL_SEARCH_GATEWAY_E2E_FETCH_TIMEOUT_MS: 1e3");
+    ).toThrow("invalid SUNCLAW_TOOL_SEARCH_GATEWAY_E2E_FETCH_TIMEOUT_MS: 1e3");
     expect(() =>
       readToolSearchGatewayFetchLimits({
-        OPENCLAW_TOOL_SEARCH_GATEWAY_E2E_FETCH_BODY_MAX_BYTES: "1000ms",
+        SUNCLAW_TOOL_SEARCH_GATEWAY_E2E_FETCH_BODY_MAX_BYTES: "1000ms",
       }),
-    ).toThrow("invalid OPENCLAW_TOOL_SEARCH_GATEWAY_E2E_FETCH_BODY_MAX_BYTES: 1000ms");
+    ).toThrow("invalid SUNCLAW_TOOL_SEARCH_GATEWAY_E2E_FETCH_BODY_MAX_BYTES: 1000ms");
     expect(
       readToolSearchGatewayFetchLimits({
-        OPENCLAW_TOOL_SEARCH_GATEWAY_E2E_FETCH_BODY_MAX_BYTES: "4096",
-        OPENCLAW_TOOL_SEARCH_GATEWAY_E2E_FETCH_TIMEOUT_MS: "120000",
+        SUNCLAW_TOOL_SEARCH_GATEWAY_E2E_FETCH_BODY_MAX_BYTES: "4096",
+        SUNCLAW_TOOL_SEARCH_GATEWAY_E2E_FETCH_TIMEOUT_MS: "120000",
       }),
     ).toEqual({
       bodyMaxBytes: 4096,

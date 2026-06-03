@@ -6,7 +6,7 @@ const snapshot = fs.readFileSync(snapshotPath, "utf8");
 for (const needle of [
   'button "Save"',
   'link "Docs"',
-  "https://docs.openclaw.ai/browser-cdp-live",
+  "https://docs.sunclaw.complex.az/browser-cdp-live",
   'generic "Clickable Card"',
   "cursor:pointer",
   'Iframe "Child"',

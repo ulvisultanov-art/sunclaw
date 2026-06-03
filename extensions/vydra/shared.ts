@@ -1,6 +1,6 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { extensionForMime } from "openclaw/plugin-sdk/media-mime";
-import { resolveApiKeyForProvider } from "openclaw/plugin-sdk/provider-auth-runtime";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import { extensionForMime } from "sunclaw/plugin-sdk/media-mime";
+import { resolveApiKeyForProvider } from "sunclaw/plugin-sdk/provider-auth-runtime";
 import {
   assertOkOrThrowHttpError,
   createProviderOperationDeadline,
@@ -10,12 +10,12 @@ import {
   waitProviderOperationPollInterval,
   type ProviderOperationDeadline,
   type ProviderOperationTimeoutMs,
-} from "openclaw/plugin-sdk/provider-http";
-import { readResponseWithLimit } from "openclaw/plugin-sdk/response-limit-runtime";
+} from "sunclaw/plugin-sdk/provider-http";
+import { readResponseWithLimit } from "sunclaw/plugin-sdk/response-limit-runtime";
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/string-coerce-runtime";
 
 export const DEFAULT_VYDRA_BASE_URL = "https://www.vydra.ai/api/v1";
 export const DEFAULT_VYDRA_IMAGE_MODEL = "grok-imagine";
@@ -94,7 +94,7 @@ function resolveVydraBaseUrlFromConfig(cfg: unknown): string {
 }
 
 export async function resolveVydraRequestContext(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   agentDir?: string;
   authStore?: VydraAuthStore;
   capability: "image" | "video";

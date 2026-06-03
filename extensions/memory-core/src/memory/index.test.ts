@@ -6,8 +6,8 @@ import {
   clearMemoryEmbeddingProviders as clearRegistry,
   listRegisteredMemoryEmbeddingProviderAdapters as listRegisteredAdapters,
   registerMemoryEmbeddingProvider as registerAdapter,
-} from "openclaw/plugin-sdk/memory-core-host-engine-embeddings";
-import { resolveSessionTranscriptsDirForAgent } from "openclaw/plugin-sdk/memory-core-host-runtime-core";
+} from "sunclaw/plugin-sdk/memory-core-host-engine-embeddings";
+import { resolveSessionTranscriptsDirForAgent } from "sunclaw/plugin-sdk/memory-core-host-runtime-core";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import "./test-runtime-mocks.js";
 import type { MemoryIndexManager } from "./index.js";
@@ -198,7 +198,7 @@ describe("memory index", () => {
   const managersForCleanup = new Set<MemoryIndexManager>();
 
   beforeAll(async () => {
-    fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-mem-fixtures-"));
+    fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-mem-fixtures-"));
     workspaceDir = path.join(fixtureRoot, "workspace");
     memoryDir = path.join(workspaceDir, "memory");
     indexMainPath = path.join(workspaceDir, "index-main.sqlite");
@@ -223,7 +223,7 @@ describe("memory index", () => {
     vi.useRealTimers();
     // Perf: most suites don't need atomic swap behavior for full reindexes.
     // Keep atomic reindex tests on the safe path.
-    vi.stubEnv("OPENCLAW_TEST_MEMORY_UNSAFE_REINDEX", "1");
+    vi.stubEnv("SUNCLAW_TEST_MEMORY_UNSAFE_REINDEX", "1");
     clearRegistry();
     registerBuiltInMemoryEmbeddingProviders({ registerMemoryEmbeddingProvider: registerAdapter });
     embedBatchCalls = 0;
@@ -366,7 +366,7 @@ describe("memory index", () => {
     storeFileName: string;
   }): Promise<MemoryIndexManager | null> {
     forceNoProvider = true;
-    vi.stubEnv("OPENCLAW_STATE_DIR", path.join(workspaceDir, params.stateDirName));
+    vi.stubEnv("SUNCLAW_STATE_DIR", path.join(workspaceDir, params.stateDirName));
     const cfg = createCfg({
       storePath: path.join(workspaceDir, params.storeFileName),
       sources: ["memory", "sessions"],
@@ -556,7 +556,7 @@ describe("memory index", () => {
 
   it("clears dirty after sessions-only identity reindex", async () => {
     try {
-      vi.stubEnv("OPENCLAW_STATE_DIR", path.join(workspaceDir, ".state-sessions-only-reindex"));
+      vi.stubEnv("SUNCLAW_STATE_DIR", path.join(workspaceDir, ".state-sessions-only-reindex"));
       const sessionsDir = resolveSessionTranscriptsDirForAgent("main");
       await fs.mkdir(sessionsDir, { recursive: true });
       await fs.writeFile(
@@ -615,7 +615,7 @@ describe("memory index", () => {
 
   it("marks sessions-only indexes dirty when metadata is missing but chunks exist", async () => {
     try {
-      vi.stubEnv("OPENCLAW_STATE_DIR", path.join(workspaceDir, ".state-sessions-missing-meta"));
+      vi.stubEnv("SUNCLAW_STATE_DIR", path.join(workspaceDir, ".state-sessions-missing-meta"));
       const sessionsDir = resolveSessionTranscriptsDirForAgent("main");
       await fs.mkdir(sessionsDir, { recursive: true });
       await fs.writeFile(
@@ -673,7 +673,7 @@ describe("memory index", () => {
 
   it("keeps provider cutover vector search paused during targeted session sync", async () => {
     try {
-      vi.stubEnv("OPENCLAW_STATE_DIR", path.join(workspaceDir, ".state-targeted-cutover"));
+      vi.stubEnv("SUNCLAW_STATE_DIR", path.join(workspaceDir, ".state-targeted-cutover"));
       const sessionsDir = resolveSessionTranscriptsDirForAgent("main");
       await fs.mkdir(sessionsDir, { recursive: true });
       const sessionFile = path.join(sessionsDir, "session-targeted-cutover.jsonl");
@@ -740,7 +740,7 @@ describe("memory index", () => {
 
   it("preserves memory dirty events raised during session identity reindex", async () => {
     try {
-      vi.stubEnv("OPENCLAW_STATE_DIR", path.join(workspaceDir, ".state-dirty-during-session"));
+      vi.stubEnv("SUNCLAW_STATE_DIR", path.join(workspaceDir, ".state-dirty-during-session"));
       const sessionsDir = resolveSessionTranscriptsDirForAgent("main");
       await fs.mkdir(sessionsDir, { recursive: true });
       await fs.writeFile(
@@ -1480,7 +1480,7 @@ describe("memory index", () => {
   });
 
   it("streams embedding cache rows during safe reindex", async () => {
-    vi.stubEnv("OPENCLAW_TEST_MEMORY_UNSAFE_REINDEX", "0");
+    vi.stubEnv("SUNCLAW_TEST_MEMORY_UNSAFE_REINDEX", "0");
     type EmbeddingCacheRow = {
       provider: string;
       model: string;

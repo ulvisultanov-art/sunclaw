@@ -1,14 +1,14 @@
 ---
-summary: "OpenClaw browser control API, CLI reference, and scripting actions"
+summary: "SunClaw browser control API, CLI reference, and scripting actions"
 read_when:
   - Scripting or debugging the agent browser via the local control API
-  - Looking for the `openclaw browser` CLI reference
+  - Looking for the `sunclaw browser` CLI reference
   - Adding custom browser automation with snapshots and refs
 title: "Browser control API"
 ---
 
 For setup, configuration, and troubleshooting, see [Browser](/tools/browser).
-This page is the reference for the local control HTTP API, the `openclaw browser`
+This page is the reference for the local control HTTP API, the `sunclaw browser`
 CLI, and scripting patterns (snapshots, refs, waits, debug flows).
 
 ## Control API (optional)
@@ -32,7 +32,7 @@ For local integrations only, the Gateway exposes a small loopback HTTP API:
 All endpoints accept `?profile=<name>`. `POST /start?headless=true` requests a
 one-shot headless launch for local managed profiles without changing persisted
 browser config; attach-only, remote CDP, and existing-session profiles reject
-that override because OpenClaw does not launch those browser processes.
+that override because SunClaw does not launch those browser processes.
 
 For tab endpoints, `targetId` is the compatibility field name. Prefer passing
 `suggestedTargetId` from `GET /tabs` or `POST /tabs/open`; labels and `tabId`
@@ -42,7 +42,7 @@ target-id prefixes still work, but they are volatile diagnostic handles.
 If shared-secret gateway auth is configured, browser HTTP routes require auth too:
 
 - `Authorization: Bearer <gateway token>`
-- `x-openclaw-password: <gateway password>` or HTTP Basic auth with that password
+- `x-sunclaw-password: <gateway password>` or HTTP Basic auth with that password
 
 Notes:
 
@@ -85,7 +85,7 @@ What still works without Playwright:
   `--depth`, `--efficient`) when a per-tab CDP WebSocket is available. This is
   a fallback for inspection and ref discovery; Playwright remains the primary
   action engine.
-- Page screenshots for the managed `openclaw` browser when a per-tab CDP
+- Page screenshots for the managed `sunclaw` browser when a per-tab CDP
   WebSocket is available
 - Page screenshots for `existing-session` / Chrome MCP profiles
 - `existing-session` ref-based screenshots (`--ref`) from snapshot output
@@ -103,7 +103,7 @@ not supported for element screenshots`.
 
 If you see `Playwright is not available in this gateway build`, the packaged
 Gateway is missing the core browser runtime dependency. Reinstall or update
-OpenClaw, then restart the gateway. For Docker, also install the Chromium
+SunClaw, then restart the gateway. For Docker, also install the Chromium
 browser binaries as shown below.
 
 #### Docker Playwright install
@@ -112,19 +112,19 @@ If your Gateway runs in Docker, avoid `npx playwright` (npm override conflicts).
 For custom images, bake Chromium into the image:
 
 ```bash
-OPENCLAW_INSTALL_BROWSER=1 ./scripts/docker/setup.sh
+SUNCLAW_INSTALL_BROWSER=1 ./scripts/docker/setup.sh
 ```
 
 For an existing image, install through the bundled CLI instead:
 
 ```bash
-docker compose run --rm openclaw-cli \
+docker compose run --rm sunclaw-cli \
   node /app/node_modules/playwright-core/cli.js install chromium
 ```
 
 To persist browser downloads, set `PLAYWRIGHT_BROWSERS_PATH` (for example,
 `/home/node/.cache/ms-playwright`) and make sure `/home/node` is persisted via
-`OPENCLAW_HOME_VOLUME` or a bind mount. OpenClaw auto-detects the persisted
+`SUNCLAW_HOME_VOLUME` or a bind mount. SunClaw auto-detects the persisted
 Chromium on Linux. See [Docker](/install/docker).
 
 ## How it works (internal)
@@ -140,18 +140,18 @@ All commands accept `--browser-profile <name>` to target a specific profile, and
 <Accordion title="Basics: status, tabs, open/focus/close">
 
 ```bash
-openclaw browser status
-openclaw browser start
-openclaw browser start --headless # one-shot local managed headless launch
-openclaw browser stop            # also clears emulation on attach-only/remote CDP
-openclaw browser tabs
-openclaw browser tab             # shortcut for current tab
-openclaw browser tab new
-openclaw browser tab select 2
-openclaw browser tab close 2
-openclaw browser open https://example.com
-openclaw browser focus abcd1234
-openclaw browser close abcd1234
+sunclaw browser status
+sunclaw browser start
+sunclaw browser start --headless # one-shot local managed headless launch
+sunclaw browser stop            # also clears emulation on attach-only/remote CDP
+sunclaw browser tabs
+sunclaw browser tab             # shortcut for current tab
+sunclaw browser tab new
+sunclaw browser tab select 2
+sunclaw browser tab close 2
+sunclaw browser open https://example.com
+sunclaw browser focus abcd1234
+sunclaw browser close abcd1234
 ```
 
 </Accordion>
@@ -159,23 +159,23 @@ openclaw browser close abcd1234
 <Accordion title="Inspection: screenshot, snapshot, console, errors, requests">
 
 ```bash
-openclaw browser screenshot
-openclaw browser screenshot --full-page
-openclaw browser screenshot --ref 12        # or --ref e12
-openclaw browser screenshot --labels
-openclaw browser snapshot
-openclaw browser snapshot --format aria --limit 200
-openclaw browser snapshot --interactive --compact --depth 6
-openclaw browser snapshot --efficient
-openclaw browser snapshot --labels
-openclaw browser snapshot --urls
-openclaw browser snapshot --selector "#main" --interactive
-openclaw browser snapshot --frame "iframe#main" --interactive
-openclaw browser console --level error
-openclaw browser errors --clear
-openclaw browser requests --filter api --clear
-openclaw browser pdf
-openclaw browser responsebody "**/api" --max-chars 5000
+sunclaw browser screenshot
+sunclaw browser screenshot --full-page
+sunclaw browser screenshot --ref 12        # or --ref e12
+sunclaw browser screenshot --labels
+sunclaw browser snapshot
+sunclaw browser snapshot --format aria --limit 200
+sunclaw browser snapshot --interactive --compact --depth 6
+sunclaw browser snapshot --efficient
+sunclaw browser snapshot --labels
+sunclaw browser snapshot --urls
+sunclaw browser snapshot --selector "#main" --interactive
+sunclaw browser snapshot --frame "iframe#main" --interactive
+sunclaw browser console --level error
+sunclaw browser errors --clear
+sunclaw browser requests --filter api --clear
+sunclaw browser pdf
+sunclaw browser responsebody "**/api" --max-chars 5000
 ```
 
 </Accordion>
@@ -183,30 +183,30 @@ openclaw browser responsebody "**/api" --max-chars 5000
 <Accordion title="Actions: navigate, click, type, drag, wait, evaluate">
 
 ```bash
-openclaw browser navigate https://example.com
-openclaw browser resize 1280 720
-openclaw browser click 12 --double           # or e12 for role refs
-openclaw browser click-coords 120 340        # viewport coordinates
-openclaw browser type 23 "hello" --submit
-openclaw browser press Enter
-openclaw browser hover 44
-openclaw browser scrollintoview e12
-openclaw browser drag 10 11
-openclaw browser select 9 OptionA OptionB
-openclaw browser download e12 report.pdf
-openclaw browser waitfordownload report.pdf
-openclaw browser upload /tmp/openclaw/uploads/file.pdf
-openclaw browser upload media://inbound/file.pdf
-openclaw browser fill --fields '[{"ref":"1","type":"text","value":"Ada"}]'
-openclaw browser dialog --accept
-openclaw browser dialog --dismiss --dialog-id d1
-openclaw browser wait --text "Done"
-openclaw browser wait "#main" --url "**/dash" --load networkidle --fn "window.ready===true"
-openclaw browser evaluate --fn '(el) => el.textContent' --ref 7
-openclaw browser evaluate --timeout-ms 30000 --fn 'async () => { await window.ready; return true; }'
-openclaw browser highlight e12
-openclaw browser trace start
-openclaw browser trace stop
+sunclaw browser navigate https://example.com
+sunclaw browser resize 1280 720
+sunclaw browser click 12 --double           # or e12 for role refs
+sunclaw browser click-coords 120 340        # viewport coordinates
+sunclaw browser type 23 "hello" --submit
+sunclaw browser press Enter
+sunclaw browser hover 44
+sunclaw browser scrollintoview e12
+sunclaw browser drag 10 11
+sunclaw browser select 9 OptionA OptionB
+sunclaw browser download e12 report.pdf
+sunclaw browser waitfordownload report.pdf
+sunclaw browser upload /tmp/sunclaw/uploads/file.pdf
+sunclaw browser upload media://inbound/file.pdf
+sunclaw browser fill --fields '[{"ref":"1","type":"text","value":"Ada"}]'
+sunclaw browser dialog --accept
+sunclaw browser dialog --dismiss --dialog-id d1
+sunclaw browser wait --text "Done"
+sunclaw browser wait "#main" --url "**/dash" --load networkidle --fn "window.ready===true"
+sunclaw browser evaluate --fn '(el) => el.textContent' --ref 7
+sunclaw browser evaluate --timeout-ms 30000 --fn 'async () => { await window.ready; return true; }'
+sunclaw browser highlight e12
+sunclaw browser trace start
+sunclaw browser trace stop
 ```
 
 </Accordion>
@@ -214,20 +214,20 @@ openclaw browser trace stop
 <Accordion title="State: cookies, storage, offline, headers, geo, device">
 
 ```bash
-openclaw browser cookies
-openclaw browser cookies set session abc123 --url "https://example.com"
-openclaw browser cookies clear
-openclaw browser storage local get
-openclaw browser storage local set theme dark
-openclaw browser storage session clear
-openclaw browser set offline on
-openclaw browser set headers --headers-json '{"X-Debug":"1"}'
-openclaw browser set credentials user pass            # --clear to remove
-openclaw browser set geo 37.7749 -122.4194 --origin "https://example.com"
-openclaw browser set media dark
-openclaw browser set timezone America/New_York
-openclaw browser set locale en-US
-openclaw browser set device "iPhone 14"
+sunclaw browser cookies
+sunclaw browser cookies set session abc123 --url "https://example.com"
+sunclaw browser cookies clear
+sunclaw browser storage local get
+sunclaw browser storage local set theme dark
+sunclaw browser storage session clear
+sunclaw browser set offline on
+sunclaw browser set headers --headers-json '{"X-Debug":"1"}'
+sunclaw browser set credentials user pass            # --clear to remove
+sunclaw browser set geo 37.7749 -122.4194 --origin "https://example.com"
+sunclaw browser set media dark
+sunclaw browser set timezone America/New_York
+sunclaw browser set locale en-US
+sunclaw browser set device "iPhone 14"
 ```
 
 </Accordion>
@@ -236,17 +236,17 @@ openclaw browser set device "iPhone 14"
 
 Notes:
 
-- `upload` and `dialog` are **arming** calls; run them before the click/press that triggers the chooser/dialog. If an action opens a modal, the action response includes `blockedByDialog` and `browserState.dialogs.pending`; pass that `dialogId` to respond directly. Dialogs handled outside OpenClaw appear under `browserState.dialogs.recent`.
+- `upload` and `dialog` are **arming** calls; run them before the click/press that triggers the chooser/dialog. If an action opens a modal, the action response includes `blockedByDialog` and `browserState.dialogs.pending`; pass that `dialogId` to respond directly. Dialogs handled outside SunClaw appear under `browserState.dialogs.recent`.
 - `click`/`type`/etc require a `ref` from `snapshot` (numeric `12`, role ref `e12`, or actionable ARIA ref `ax12`). CSS selectors are intentionally not supported for actions. Use `click-coords` when the visible viewport position is the only reliable target.
-- Download and trace paths are constrained to OpenClaw temp roots: `/tmp/openclaw{,/downloads}` (fallback: `${os.tmpdir()}/openclaw/...`).
-- `upload` accepts files from the OpenClaw temp uploads root and
-  OpenClaw-managed inbound media. Managed inbound media can be referenced as
+- Download and trace paths are constrained to SunClaw temp roots: `/tmp/sunclaw{,/downloads}` (fallback: `${os.tmpdir()}/sunclaw/...`).
+- `upload` accepts files from the SunClaw temp uploads root and
+  SunClaw-managed inbound media. Managed inbound media can be referenced as
   `media://inbound/<id>`, sandbox-relative `media/inbound/<id>`, or a resolved
   path inside the managed inbound media directory. Nested media refs,
   traversal, symlinks, hardlinks, and arbitrary local paths are still rejected.
 - `upload` can also set file inputs directly via `--input-ref` or `--element`.
 
-Stable tab ids and labels survive Chromium raw-target replacement when OpenClaw
+Stable tab ids and labels survive Chromium raw-target replacement when SunClaw
 can prove the replacement tab, such as same URL or a single old tab becoming a
 single new tab after form submission. Raw target ids are still volatile; prefer
 `suggestedTargetId` from `tabs` in scripts.
@@ -254,7 +254,7 @@ single new tab after form submission. Raw target ids are still volatile; prefer
 Snapshot flags at a glance:
 
 - `--format ai` (default with Playwright): AI snapshot with numeric refs (`aria-ref="<n>"`).
-- `--format aria`: accessibility tree with `axN` refs. When Playwright is available, OpenClaw binds refs with backend DOM ids to the live page so follow-up actions can use them; otherwise treat the output as inspection-only.
+- `--format aria`: accessibility tree with `axN` refs. When Playwright is available, SunClaw binds refs with backend DOM ids to the live page so follow-up actions can use them; otherwise treat the output as inspection-only.
 - `--efficient` (or `--mode efficient`): compact role snapshot preset. Set `browser.snapshotDefaults.mode: "efficient"` to make this the default (see [Gateway configuration](/gateway/configuration-reference#browser)).
 - `--interactive`, `--compact`, `--depth`, `--selector` force a role snapshot with `ref=e12` refs. `--frame "<iframe>"` scopes role snapshots to an iframe.
 - `--labels` adds a viewport-only screenshot with overlayed ref labels and prints the saved path.
@@ -262,24 +262,24 @@ Snapshot flags at a glance:
 
 ## Snapshots and refs
 
-OpenClaw supports two "snapshot" styles:
+SunClaw supports two "snapshot" styles:
 
-- **AI snapshot (numeric refs)**: `openclaw browser snapshot` (default; `--format ai`)
+- **AI snapshot (numeric refs)**: `sunclaw browser snapshot` (default; `--format ai`)
   - Output: a text snapshot that includes numeric refs.
-  - Actions: `openclaw browser click 12`, `openclaw browser type 23 "hello"`.
+  - Actions: `sunclaw browser click 12`, `sunclaw browser type 23 "hello"`.
   - Internally, the ref is resolved via Playwright's `aria-ref`.
 
-- **Role snapshot (role refs like `e12`)**: `openclaw browser snapshot --interactive` (or `--compact`, `--depth`, `--selector`, `--frame`)
+- **Role snapshot (role refs like `e12`)**: `sunclaw browser snapshot --interactive` (or `--compact`, `--depth`, `--selector`, `--frame`)
   - Output: a role-based list/tree with `[ref=e12]` (and optional `[nth=1]`).
-  - Actions: `openclaw browser click e12`, `openclaw browser highlight e12`.
+  - Actions: `sunclaw browser click e12`, `sunclaw browser highlight e12`.
   - Internally, the ref is resolved via `getByRole(...)` (plus `nth()` for duplicates).
   - Add `--labels` to include a viewport screenshot with overlayed `e12` labels.
   - Add `--urls` when link text is ambiguous and the agent needs concrete
     navigation targets.
 
-- **ARIA snapshot (ARIA refs like `ax12`)**: `openclaw browser snapshot --format aria`
+- **ARIA snapshot (ARIA refs like `ax12`)**: `sunclaw browser snapshot --format aria`
   - Output: the accessibility tree as structured nodes.
-  - Actions: `openclaw browser click ax12` works when the snapshot path can bind
+  - Actions: `sunclaw browser click ax12` works when the snapshot path can bind
     the ref through Playwright and Chrome backend DOM ids.
 - If Playwright is unavailable, ARIA snapshots can still be useful for
   inspection, but refs may not be actionable. Re-snapshot with `--format ai`
@@ -304,18 +304,18 @@ Ref behavior:
 You can wait on more than just time/text:
 
 - Wait for URL (globs supported by Playwright):
-  - `openclaw browser wait --url "**/dash"`
+  - `sunclaw browser wait --url "**/dash"`
 - Wait for load state:
-  - `openclaw browser wait --load networkidle`
+  - `sunclaw browser wait --load networkidle`
 - Wait for a JS predicate:
-  - `openclaw browser wait --fn "window.ready===true"`
+  - `sunclaw browser wait --fn "window.ready===true"`
 - Wait for a selector to become visible:
-  - `openclaw browser wait "#main"`
+  - `sunclaw browser wait "#main"`
 
 These can be combined:
 
 ```bash
-openclaw browser wait "#main" \
+sunclaw browser wait "#main" \
   --url "**/dash" \
   --load networkidle \
   --fn "window.ready===true" \
@@ -326,16 +326,16 @@ openclaw browser wait "#main" \
 
 When an action fails (e.g. "not visible", "strict mode violation", "covered"):
 
-1. `openclaw browser snapshot --interactive`
+1. `sunclaw browser snapshot --interactive`
 2. Use `click <ref>` / `type <ref>` (prefer role refs in interactive mode)
-3. If it still fails: `openclaw browser highlight <ref>` to see what Playwright is targeting
+3. If it still fails: `sunclaw browser highlight <ref>` to see what Playwright is targeting
 4. If the page behaves oddly:
-   - `openclaw browser errors --clear`
-   - `openclaw browser requests --filter api --clear`
+   - `sunclaw browser errors --clear`
+   - `sunclaw browser requests --filter api --clear`
 5. For deep debugging: record a trace:
-   - `openclaw browser trace start`
+   - `sunclaw browser trace start`
    - reproduce the issue
-   - `openclaw browser trace stop` (prints `TRACE:<path>`)
+   - `sunclaw browser trace stop` (prints `TRACE:<path>`)
 
 ## JSON output
 
@@ -344,10 +344,10 @@ When an action fails (e.g. "not visible", "strict mode violation", "covered"):
 Examples:
 
 ```bash
-openclaw browser status --json
-openclaw browser snapshot --interactive --json
-openclaw browser requests --filter api --json
-openclaw browser cookies --json
+sunclaw browser status --json
+sunclaw browser snapshot --interactive --json
+sunclaw browser requests --filter api --json
+sunclaw browser cookies --json
 ```
 
 Role snapshots in JSON include `refs` plus a small `stats` block (lines/chars/refs/interactive) so tools can reason about payload size and density.
@@ -370,11 +370,11 @@ These are useful for "make the site behave like X" workflows:
 
 ## Security and privacy
 
-- The openclaw browser profile may contain logged-in sessions; treat it as sensitive.
-- `browser act kind=evaluate` / `openclaw browser evaluate` and `wait --fn`
+- The sunclaw browser profile may contain logged-in sessions; treat it as sensitive.
+- `browser act kind=evaluate` / `sunclaw browser evaluate` and `wait --fn`
   execute arbitrary JavaScript in the page context. Prompt injection can steer
   this. Disable it with `browser.evaluateEnabled=false` if you do not need it.
-- Use `openclaw browser evaluate --timeout-ms <ms>` when the page-side function
+- Use `sunclaw browser evaluate --timeout-ms <ms>` when the page-side function
   may need longer than the default evaluate timeout.
 - For logins and anti-bot notes (X/Twitter, etc.), see [Browser login + X/Twitter posting](/tools/browser-login).
 - Keep the Gateway/node host private (loopback or tailnet-only).

@@ -1,20 +1,20 @@
-export { formatAllowFromLowercase } from "openclaw/plugin-sdk/allow-from";
+export { formatAllowFromLowercase } from "sunclaw/plugin-sdk/allow-from";
 export type {
   ChannelDirectoryEntry,
   ChannelGroupContext,
   ChannelMessageActionAdapter,
-} from "openclaw/plugin-sdk/channel-contract";
-export { buildChannelConfigSchema } from "openclaw/plugin-sdk/channel-config-schema";
-export type { ChannelPlugin } from "openclaw/plugin-sdk/core";
+} from "sunclaw/plugin-sdk/channel-contract";
+export { buildChannelConfigSchema } from "sunclaw/plugin-sdk/channel-config-schema";
+export type { ChannelPlugin } from "sunclaw/plugin-sdk/core";
 export {
   DEFAULT_ACCOUNT_ID,
   normalizeAccountId,
-  type OpenClawConfig,
-} from "openclaw/plugin-sdk/core";
-export { isDangerousNameMatchingEnabled } from "openclaw/plugin-sdk/dangerous-name-runtime";
-export type { GroupToolPolicyConfig } from "openclaw/plugin-sdk/config-contracts";
-export { chunkTextForOutbound } from "openclaw/plugin-sdk/text-chunking";
+  type SunClawConfig,
+} from "sunclaw/plugin-sdk/core";
+export { isDangerousNameMatchingEnabled } from "sunclaw/plugin-sdk/dangerous-name-runtime";
+export type { GroupToolPolicyConfig } from "sunclaw/plugin-sdk/config-contracts";
+export { chunkTextForOutbound } from "sunclaw/plugin-sdk/text-chunking";
 export {
   isNumericTargetId,
   sendPayloadWithChunkedTextAndMedia,
-} from "openclaw/plugin-sdk/reply-payload";
+} from "sunclaw/plugin-sdk/reply-payload";

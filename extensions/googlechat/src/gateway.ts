@@ -1,10 +1,10 @@
 import {
   createAccountStatusSink,
   runPassiveAccountLifecycle,
-} from "openclaw/plugin-sdk/channel-outbound";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { createLazyRuntimeNamedExport } from "openclaw/plugin-sdk/lazy-runtime";
-import type { ChannelAccountSnapshot } from "openclaw/plugin-sdk/status-helpers";
+} from "sunclaw/plugin-sdk/channel-outbound";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import { createLazyRuntimeNamedExport } from "sunclaw/plugin-sdk/lazy-runtime";
+import type { ChannelAccountSnapshot } from "sunclaw/plugin-sdk/status-helpers";
 import type { ResolvedGoogleChatAccount } from "./accounts.js";
 import type { GoogleChatRuntimeEnv } from "./monitor-types.js";
 
@@ -15,7 +15,7 @@ const loadGoogleChatChannelRuntime = createLazyRuntimeNamedExport(
 
 export async function startGoogleChatGatewayAccount(ctx: {
   account: ResolvedGoogleChatAccount;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   runtime: GoogleChatRuntimeEnv;
   abortSignal: AbortSignal;
   setStatus: (next: ChannelAccountSnapshot) => void;

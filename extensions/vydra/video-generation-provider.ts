@@ -1,12 +1,12 @@
-import { isProviderApiKeyConfigured } from "openclaw/plugin-sdk/provider-auth";
+import { isProviderApiKeyConfigured } from "sunclaw/plugin-sdk/provider-auth";
 import {
   assertOkOrThrowHttpError,
   createProviderOperationDeadline,
   createProviderOperationTimeoutResolver,
   postJsonRequest,
   resolveProviderOperationTimeoutMs,
-} from "openclaw/plugin-sdk/provider-http";
-import type { VideoGenerationProvider } from "openclaw/plugin-sdk/video-generation";
+} from "sunclaw/plugin-sdk/provider-http";
+import type { VideoGenerationProvider } from "sunclaw/plugin-sdk/video-generation";
 import {
   DEFAULT_VYDRA_VIDEO_MODEL,
   downloadVydraAsset,

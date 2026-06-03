@@ -1,12 +1,12 @@
 import type { DatabaseSync } from "node:sqlite";
 import type { Insertable, Selectable } from "kysely";
 import { executeSqliteQuerySync, getNodeSqliteKysely } from "../infra/kysely-sync.js";
-import type { DB as OpenClawStateKyselyDatabase } from "../state/openclaw-state-db.generated.js";
+import type { DB as SunClawStateKyselyDatabase } from "../state/sunclaw-state-db.generated.js";
 import {
-  closeOpenClawStateDatabase,
-  openOpenClawStateDatabase,
-  runOpenClawStateWriteTransaction,
-} from "../state/openclaw-state-db.js";
+  closeSunClawStateDatabase,
+  openSunClawStateDatabase,
+  runSunClawStateWriteTransaction,
+} from "../state/sunclaw-state-db.js";
 import { parseDeliveryContextJson } from "./task-registry.sqlite.shared.js";
 import type { TaskRegistryStoreSnapshot } from "./task-registry.store.types.js";
 import {
@@ -20,10 +20,10 @@ import {
   type TaskRecord,
 } from "./task-registry.types.js";
 
-type TaskRunsTable = OpenClawStateKyselyDatabase["task_runs"];
-type TaskDeliveryStateTable = OpenClawStateKyselyDatabase["task_delivery_state"];
+type TaskRunsTable = SunClawStateKyselyDatabase["task_runs"];
+type TaskDeliveryStateTable = SunClawStateKyselyDatabase["task_delivery_state"];
 type TaskRegistryStoreDatabase = Pick<
-  OpenClawStateKyselyDatabase,
+  SunClawStateKyselyDatabase,
   "task_delivery_state" | "task_runs"
 >;
 
@@ -283,7 +283,7 @@ function deleteTaskRowsWithDeliveryState(db: DatabaseSync, taskId: string): void
 }
 
 function openTaskRegistryDatabase(): TaskRegistryDatabase {
-  const database = openOpenClawStateDatabase();
+  const database = openSunClawStateDatabase();
   const pathname = database.path;
   if (cachedDatabase && cachedDatabase.path === pathname && cachedDatabase.db.isOpen) {
     return cachedDatabase;
@@ -300,7 +300,7 @@ function openTaskRegistryDatabase(): TaskRegistryDatabase {
 
 function withWriteTransaction(write: (database: TaskRegistryDatabase) => void) {
   const database = openTaskRegistryDatabase();
-  runOpenClawStateWriteTransaction(() => {
+  runSunClawStateWriteTransaction(() => {
     write(database);
   });
 }
@@ -344,7 +344,7 @@ export function saveTaskRegistryStateToSqlite(snapshot: TaskRegistryStoreSnapsho
       db,
       tableName: "task_runs",
       columnName: "task_id",
-      tempTableName: "openclaw_live_task_run_ids",
+      tempTableName: "sunclaw_live_task_run_ids",
       ids: taskIds,
     });
     const deliveryTaskIds = [...snapshot.deliveryStates.keys()];
@@ -355,7 +355,7 @@ export function saveTaskRegistryStateToSqlite(snapshot: TaskRegistryStoreSnapsho
         db,
         tableName: "task_delivery_state",
         columnName: "task_id",
-        tempTableName: "openclaw_live_task_delivery_ids",
+        tempTableName: "sunclaw_live_task_delivery_ids",
         ids: deliveryTaskIds,
       });
     }
@@ -422,5 +422,5 @@ export function deleteTaskDeliveryStateFromSqlite(taskId: string) {
 
 export function closeTaskRegistryDatabase() {
   cachedDatabase = null;
-  closeOpenClawStateDatabase();
+  closeSunClawStateDatabase();
 }

@@ -6,7 +6,7 @@ import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
   readStringValue,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@sunclaw/normalization-core/string-coerce";
 import { DEFAULT_AGENT_ID } from "../routing/session-key.js";
 import type { CommandExplanationSummary } from "./command-analysis/explain.js";
 import { resolveAllowAlwaysPatternEntries } from "./exec-approvals-allowlist.js";
@@ -283,8 +283,8 @@ const DEFAULT_SECURITY: ExecSecurity = "full";
 const DEFAULT_ASK: ExecAsk = "off";
 export const DEFAULT_EXEC_APPROVAL_ASK_FALLBACK: ExecSecurity = "full";
 const DEFAULT_AUTO_ALLOW_SKILLS = false;
-const DEFAULT_SOCKET = "~/.openclaw/exec-approvals.sock";
-const DEFAULT_FILE = "~/.openclaw/exec-approvals.json";
+const DEFAULT_SOCKET = "~/.sunclaw/exec-approvals.sock";
+const DEFAULT_FILE = "~/.sunclaw/exec-approvals.json";
 
 function hashExecApprovalsRaw(raw: string | null): string {
   return crypto
@@ -1151,8 +1151,8 @@ function textMentionsSecurityAuditSuppressions(value: string): boolean {
 
 function isReadOnlySecurityAuditSuppressionInspection(argv: string[]): boolean {
   const command = normalizeCommandName(argv[0]);
-  let offset = command === "pnpm" && argv[1] === "openclaw" ? 1 : 0;
-  if (normalizeCommandName(argv[offset]) !== "openclaw") {
+  let offset = command === "pnpm" && argv[1] === "sunclaw" ? 1 : 0;
+  if (normalizeCommandName(argv[offset]) !== "sunclaw") {
     return false;
   }
   offset += 1;

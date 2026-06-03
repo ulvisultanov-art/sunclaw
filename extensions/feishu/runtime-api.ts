@@ -11,48 +11,48 @@ export type {
   ChannelOutboundAdapter,
   ChannelPlugin,
   HistoryEntry,
-  OpenClawConfig,
-  OpenClawPluginApi,
+  SunClawConfig,
+  SunClawPluginApi,
   OutboundIdentity,
   PluginRuntime,
   ReplyPayload,
-} from "openclaw/plugin-sdk/core";
-export type { OpenClawConfig as ClawdbotConfig } from "openclaw/plugin-sdk/core";
+} from "sunclaw/plugin-sdk/core";
+export type { SunClawConfig as ClawdbotConfig } from "sunclaw/plugin-sdk/core";
 export type RuntimeEnv = {
   log: (...args: unknown[]) => void;
   error: (...args: unknown[]) => void;
   exit: (code: number) => void;
 };
-export type { GroupToolPolicyConfig } from "openclaw/plugin-sdk/config-contracts";
+export type { GroupToolPolicyConfig } from "sunclaw/plugin-sdk/config-contracts";
 export {
   DEFAULT_ACCOUNT_ID,
   buildChannelConfigSchema,
   createActionGate,
   createDedupeCache,
-} from "openclaw/plugin-sdk/core";
+} from "sunclaw/plugin-sdk/core";
 export {
   PAIRING_APPROVED_MESSAGE,
   buildProbeChannelStatusSummary,
   createDefaultChannelRuntimeState,
-} from "openclaw/plugin-sdk/channel-status";
-export { buildAgentMediaPayload } from "openclaw/plugin-sdk/agent-media-payload";
-export { createChannelPairingController } from "openclaw/plugin-sdk/channel-pairing";
-export { createReplyPrefixContext } from "openclaw/plugin-sdk/channel-outbound";
+} from "sunclaw/plugin-sdk/channel-status";
+export { buildAgentMediaPayload } from "sunclaw/plugin-sdk/agent-media-payload";
+export { createChannelPairingController } from "sunclaw/plugin-sdk/channel-pairing";
+export { createReplyPrefixContext } from "sunclaw/plugin-sdk/channel-outbound";
 export {
   evaluateSupplementalContextVisibility,
   filterSupplementalContextItems,
   resolveChannelContextVisibilityMode,
-} from "openclaw/plugin-sdk/context-visibility-runtime";
+} from "sunclaw/plugin-sdk/context-visibility-runtime";
 export {
   loadSessionStore,
   resolveSessionStoreEntry,
-} from "openclaw/plugin-sdk/session-store-runtime";
-export { readJsonFileWithFallback } from "openclaw/plugin-sdk/json-store";
-export { normalizeAgentId } from "openclaw/plugin-sdk/routing";
-export { chunkTextForOutbound } from "openclaw/plugin-sdk/text-chunking";
+} from "sunclaw/plugin-sdk/session-store-runtime";
+export { readJsonFileWithFallback } from "sunclaw/plugin-sdk/json-store";
+export { normalizeAgentId } from "sunclaw/plugin-sdk/routing";
+export { chunkTextForOutbound } from "sunclaw/plugin-sdk/text-chunking";
 export {
   isRequestBodyLimitError,
   readRequestBodyWithLimit,
   requestBodyErrorToText,
-} from "openclaw/plugin-sdk/webhook-ingress";
+} from "sunclaw/plugin-sdk/webhook-ingress";
 export { setFeishuRuntime } from "./src/runtime.js";

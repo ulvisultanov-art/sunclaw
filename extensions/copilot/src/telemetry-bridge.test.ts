@@ -24,24 +24,24 @@ describe("createTelemetryConfig", () => {
     expect(createTelemetryConfig({ otlpEndpoint: "https://otel.example/v1/traces" })).toEqual({
       otlpEndpoint: "https://otel.example/v1/traces",
     });
-    expect(createTelemetryConfig({ sourceName: "openclaw" })).toEqual({
-      sourceName: "openclaw",
+    expect(createTelemetryConfig({ sourceName: "sunclaw" })).toEqual({
+      sourceName: "sunclaw",
     });
   });
 
   it("round-trips a fully populated config", () => {
     const result = createTelemetryConfig({
       otlpEndpoint: "https://otel.example/v1/traces",
-      filePath: "/tmp/openclaw-traces.jsonl",
+      filePath: "/tmp/sunclaw-traces.jsonl",
       exporterType: "otlp-http",
-      sourceName: "openclaw",
+      sourceName: "sunclaw",
       captureContent: true,
     });
     expect(result).toEqual({
       otlpEndpoint: "https://otel.example/v1/traces",
-      filePath: "/tmp/openclaw-traces.jsonl",
+      filePath: "/tmp/sunclaw-traces.jsonl",
       exporterType: "otlp-http",
-      sourceName: "openclaw",
+      sourceName: "sunclaw",
       captureContent: true,
     });
   });

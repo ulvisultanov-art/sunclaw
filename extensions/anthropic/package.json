@@ -1,13 +1,13 @@
 {
-  "name": "@openclaw/anthropic-provider",
+  "name": "@sunclaw/anthropic-provider",
   "version": "2026.6.2",
   "private": true,
-  "description": "OpenClaw Anthropic provider plugin",
+  "description": "SunClaw Anthropic provider plugin",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@sunclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ]

@@ -1,8 +1,8 @@
-import { isAudioFileName } from "@openclaw/media-core/mime";
+import { isAudioFileName } from "@sunclaw/media-core/mime";
 import {
   hasOutboundReplyContent,
   resolveSendableOutboundReplyParts,
-} from "openclaw/plugin-sdk/reply-payload";
+} from "sunclaw/plugin-sdk/reply-payload";
 import { loadSessionStore } from "../../config/sessions.js";
 import { normalizeVerboseLevel, type VerboseLevel } from "../thinking.js";
 import type { ReplyPayload } from "../types.js";

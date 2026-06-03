@@ -6,11 +6,11 @@ import { readPluginInstallRecords } from "./plugin-index-sqlite.mjs";
 export { readJson };
 
 export function stateDir() {
-  return process.env.OPENCLAW_STATE_DIR || path.join(process.env.HOME, ".openclaw");
+  return process.env.SUNCLAW_STATE_DIR || path.join(process.env.HOME, ".sunclaw");
 }
 
 export function configPath() {
-  return process.env.OPENCLAW_CONFIG_PATH || path.join(stateDir(), "openclaw.json");
+  return process.env.SUNCLAW_CONFIG_PATH || path.join(stateDir(), "sunclaw.json");
 }
 
 export function managedNpmRoot() {

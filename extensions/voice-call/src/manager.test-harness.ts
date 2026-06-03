@@ -1,8 +1,8 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { OpenKeyedStoreOptions } from "openclaw/plugin-sdk/plugin-state-runtime";
-import { createPluginStateSyncKeyedStoreForTests } from "openclaw/plugin-sdk/plugin-state-test-runtime";
+import type { OpenKeyedStoreOptions } from "sunclaw/plugin-sdk/plugin-state-runtime";
+import { createPluginStateSyncKeyedStoreForTests } from "sunclaw/plugin-sdk/plugin-state-test-runtime";
 import { VoiceCallConfigSchema } from "./config.js";
 import { CallManager } from "./manager.js";
 import { persistCallRecord } from "./manager/store.js";
@@ -74,7 +74,7 @@ export class FakeProvider implements VoiceCallProvider {
 }
 
 export function createTestStorePath(): string {
-  return fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-voice-call-test-"));
+  return fs.mkdtempSync(path.join(os.tmpdir(), "sunclaw-voice-call-test-"));
 }
 
 export function installVoiceCallStateRuntimeForTests(): void {

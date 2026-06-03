@@ -1,4 +1,4 @@
-import { validateIPv4AddressInput } from "@openclaw/net-policy/ipv4";
+import { validateIPv4AddressInput } from "@sunclaw/net-policy/ipv4";
 import { formatPortRangeHint } from "../cli/error-format.js";
 import {
   normalizeGatewayTokenInput,
@@ -6,7 +6,7 @@ import {
   validateGatewayPasswordInput,
 } from "../commands/onboard-helpers.js";
 import type { GatewayAuthChoice, SecretInputMode } from "../commands/onboard-types.js";
-import type { GatewayBindMode, GatewayTailscaleMode, OpenClawConfig } from "../config/config.js";
+import type { GatewayBindMode, GatewayTailscaleMode, SunClawConfig } from "../config/config.js";
 import { ensureControlUiAllowedOriginsForNonLoopbackBind } from "../config/gateway-control-ui-origins.js";
 import {
   normalizeSecretInputString,
@@ -34,8 +34,8 @@ import type {
 
 type ConfigureGatewayOptions = {
   flow: WizardFlow;
-  baseConfig: OpenClawConfig;
-  nextConfig: OpenClawConfig;
+  baseConfig: SunClawConfig;
+  nextConfig: SunClawConfig;
   localPort: number;
   quickstartGateway: QuickstartGatewayDefaults;
   secretInputMode?: SecretInputMode;
@@ -44,7 +44,7 @@ type ConfigureGatewayOptions = {
 };
 
 type ConfigureGatewayResult = {
-  nextConfig: OpenClawConfig;
+  nextConfig: SunClawConfig;
   settings: GatewayWizardSettings;
 };
 
@@ -237,10 +237,10 @@ export async function configureGatewayForSetup(
           provider: "gateway-auth-token",
           config: nextConfig,
           prompter,
-          preferredEnvVar: "OPENCLAW_GATEWAY_TOKEN",
+          preferredEnvVar: "SUNCLAW_GATEWAY_TOKEN",
           copy: {
             sourceMessage: t("wizard.gateway.authTokenStoredMessage"),
-            envVarPlaceholder: "OPENCLAW_GATEWAY_TOKEN",
+            envVarPlaceholder: "SUNCLAW_GATEWAY_TOKEN",
           },
         });
         gatewayTokenInput = resolved.ref;
@@ -248,12 +248,12 @@ export async function configureGatewayForSetup(
       }
     } else if (flow === "quickstart") {
       gatewayToken =
-        (quickstartTokenString ?? normalizeGatewayTokenInput(process.env.OPENCLAW_GATEWAY_TOKEN)) ||
+        (quickstartTokenString ?? normalizeGatewayTokenInput(process.env.SUNCLAW_GATEWAY_TOKEN)) ||
         randomToken();
       gatewayTokenInput = gatewayToken;
     } else {
       const existingToken =
-        quickstartTokenString ?? normalizeGatewayTokenInput(process.env.OPENCLAW_GATEWAY_TOKEN);
+        quickstartTokenString ?? normalizeGatewayTokenInput(process.env.SUNCLAW_GATEWAY_TOKEN);
       let tokenInput: string | undefined;
       if (existingToken) {
         const keep = await prompter.confirm({
@@ -297,10 +297,10 @@ export async function configureGatewayForSetup(
           provider: "gateway-auth-password",
           config: nextConfig,
           prompter,
-          preferredEnvVar: "OPENCLAW_GATEWAY_PASSWORD",
+          preferredEnvVar: "SUNCLAW_GATEWAY_PASSWORD",
           copy: {
             sourceMessage: t("wizard.gateway.authPasswordStoredMessage"),
-            envVarPlaceholder: "OPENCLAW_GATEWAY_PASSWORD",
+            envVarPlaceholder: "SUNCLAW_GATEWAY_PASSWORD",
           },
         });
         password = resolved.ref;

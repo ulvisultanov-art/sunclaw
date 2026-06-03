@@ -1,6 +1,6 @@
 import crypto from "node:crypto";
-import { estimateBase64DecodedBytes } from "@openclaw/media-core/base64";
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { estimateBase64DecodedBytes } from "@sunclaw/media-core/base64";
+import { normalizeLowercaseStringOrEmpty } from "@sunclaw/normalization-core/string-coerce";
 
 const REDACTED_IMAGE_DATA = "<redacted>";
 

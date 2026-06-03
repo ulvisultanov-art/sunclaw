@@ -1,41 +1,41 @@
-import { CHANNEL_APPROVAL_NATIVE_RUNTIME_CONTEXT_CAPABILITY } from "openclaw/plugin-sdk/approval-handler-adapter-runtime";
-import type { ChannelRuntimeSurface } from "openclaw/plugin-sdk/channel-contract";
-import { registerChannelRuntimeContext } from "openclaw/plugin-sdk/channel-runtime-context";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { SignalReactionNotificationMode } from "openclaw/plugin-sdk/config-contracts";
+import { CHANNEL_APPROVAL_NATIVE_RUNTIME_CONTEXT_CAPABILITY } from "sunclaw/plugin-sdk/approval-handler-adapter-runtime";
+import type { ChannelRuntimeSurface } from "sunclaw/plugin-sdk/channel-contract";
+import { registerChannelRuntimeContext } from "sunclaw/plugin-sdk/channel-runtime-context";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import type { SignalReactionNotificationMode } from "sunclaw/plugin-sdk/config-contracts";
 import {
   detectMime,
   estimateBase64DecodedBytes,
   saveMediaBuffer,
-} from "openclaw/plugin-sdk/media-runtime";
-import { DEFAULT_GROUP_HISTORY_LIMIT, type HistoryEntry } from "openclaw/plugin-sdk/reply-history";
+} from "sunclaw/plugin-sdk/media-runtime";
+import { DEFAULT_GROUP_HISTORY_LIMIT, type HistoryEntry } from "sunclaw/plugin-sdk/reply-history";
 import {
   deliverTextOrMediaReply,
   resolveSendableOutboundReplyParts,
-} from "openclaw/plugin-sdk/reply-payload";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
+} from "sunclaw/plugin-sdk/reply-payload";
+import type { ReplyPayload } from "sunclaw/plugin-sdk/reply-runtime";
 import {
   chunkTextWithMode,
   resolveChunkMode,
   resolveTextChunkLimit,
-} from "openclaw/plugin-sdk/reply-runtime";
-import { getRuntimeConfig } from "openclaw/plugin-sdk/runtime-config-snapshot";
+} from "sunclaw/plugin-sdk/reply-runtime";
+import { getRuntimeConfig } from "sunclaw/plugin-sdk/runtime-config-snapshot";
 import {
   createNonExitingRuntime,
   type BackoffPolicy,
   type RuntimeEnv,
-} from "openclaw/plugin-sdk/runtime-env";
+} from "sunclaw/plugin-sdk/runtime-env";
 import {
   resolveAllowlistProviderRuntimeGroupPolicy,
   resolveDefaultGroupPolicy,
   warnMissingProviderGroupPolicyFallbackOnce,
-} from "openclaw/plugin-sdk/runtime-group-policy";
+} from "sunclaw/plugin-sdk/runtime-group-policy";
 import {
   normalizeOptionalString,
   normalizeStringEntries,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
-import { normalizeE164 } from "openclaw/plugin-sdk/text-utility-runtime";
-import { waitForTransportReady } from "openclaw/plugin-sdk/transport-ready-runtime";
+} from "sunclaw/plugin-sdk/string-coerce-runtime";
+import { normalizeE164 } from "sunclaw/plugin-sdk/text-utility-runtime";
+import { waitForTransportReady } from "sunclaw/plugin-sdk/transport-ready-runtime";
 import { resolveSignalAccount } from "./accounts.js";
 import { isSignalNativeApprovalHandlerConfigured } from "./approval-native.js";
 import { signalRpcRequest, signalCheck } from "./client-adapter.js";
@@ -55,7 +55,7 @@ export type MonitorSignalOpts = {
   abortSignal?: AbortSignal;
   account?: string;
   accountId?: string;
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   baseUrl?: string;
   channelRuntime?: ChannelRuntimeSurface;
   autoStart?: boolean;
@@ -354,7 +354,7 @@ async function fetchAttachment(params: {
 }
 
 async function deliverReplies(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   replies: ReplyPayload[];
   target: string;
   baseUrl: string;

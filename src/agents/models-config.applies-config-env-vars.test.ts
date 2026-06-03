@@ -2,18 +2,18 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { beforeAll, describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { SunClawConfig } from "../config/config.js";
 import { createConfigRuntimeEnv } from "../config/env-vars.js";
 import type { PluginMetadataSnapshot } from "../plugins/plugin-metadata-snapshot.js";
 import { unsetEnv, withTempEnv } from "./models-config.e2e-harness.js";
 import {
-  planOpenClawModelsJsonWithDeps,
+  planSunClawModelsJsonWithDeps,
   resolveProvidersForModelsJsonWithDeps,
 } from "./models-config.plan.js";
 import type { ProviderConfig } from "./models-config.providers.secrets.js";
 import { encodePluginModelCatalogRelativePath } from "./plugin-model-catalog.js";
 
-const TEST_ENV_VAR = "OPENCLAW_MODELS_CONFIG_TEST_ENV";
+const TEST_ENV_VAR = "SUNCLAW_MODELS_CONFIG_TEST_ENV";
 
 function createImplicitOpenRouterProvider(): ProviderConfig {
   return {
@@ -72,14 +72,14 @@ function createImplicitGoogleVertexProvider(): ProviderConfig {
 }
 
 async function resolveProvidersForConfigEnvTest(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   onResolveImplicitProviders: (env: NodeJS.ProcessEnv) => void;
 }) {
   const env = createConfigRuntimeEnv(params.cfg);
   return await resolveProvidersForModelsJsonWithDeps(
     {
       cfg: params.cfg,
-      agentDir: "/tmp/openclaw-models-config-env-vars-test",
+      agentDir: "/tmp/sunclaw-models-config-env-vars-test",
       env,
     },
     {
@@ -93,7 +93,7 @@ async function resolveProvidersForConfigEnvTest(params: {
   );
 }
 
-function createConfigEnvVarsConfig(): OpenClawConfig {
+function createConfigEnvVarsConfig(): SunClawConfig {
   return {
     models: { providers: {} },
     env: {
@@ -105,7 +105,7 @@ function createConfigEnvVarsConfig(): OpenClawConfig {
   };
 }
 
-async function resolveProvidersAndCaptureDiscoveryEnv(cfg: OpenClawConfig) {
+async function resolveProvidersAndCaptureDiscoveryEnv(cfg: SunClawConfig) {
   let discoveryEnv: NodeJS.ProcessEnv | undefined;
   const providers = await resolveProvidersForConfigEnvTest({
     cfg,
@@ -116,14 +116,14 @@ async function resolveProvidersAndCaptureDiscoveryEnv(cfg: OpenClawConfig) {
   return { discoveryEnv, providers };
 }
 
-let unauthenticatedProviderWritePlan: Awaited<ReturnType<typeof planOpenClawModelsJsonWithDeps>>;
+let unauthenticatedProviderWritePlan: Awaited<ReturnType<typeof planSunClawModelsJsonWithDeps>>;
 let unauthenticatedProviderParsed: { providers?: Record<string, unknown> };
 
 beforeAll(async () => {
-  unauthenticatedProviderWritePlan = await planOpenClawModelsJsonWithDeps(
+  unauthenticatedProviderWritePlan = await planSunClawModelsJsonWithDeps(
     {
       cfg: { models: { providers: {} } },
-      agentDir: "/tmp/openclaw-models-config-env-vars-test",
+      agentDir: "/tmp/sunclaw-models-config-env-vars-test",
       env: {},
       existingRaw: "",
       existingParsed: null,
@@ -162,7 +162,7 @@ describe("models-config", () => {
     await resolveProvidersForModelsJsonWithDeps(
       {
         cfg: { models: { providers: {} } },
-        agentDir: "/tmp/openclaw-models-config-env-vars-test",
+        agentDir: "/tmp/sunclaw-models-config-env-vars-test",
         env: {},
         pluginMetadataSnapshot,
       },
@@ -183,9 +183,9 @@ describe("models-config", () => {
     await resolveProvidersForModelsJsonWithDeps(
       {
         cfg: { models: { providers: {} } },
-        agentDir: "/tmp/openclaw-models-config-env-vars-test",
+        agentDir: "/tmp/sunclaw-models-config-env-vars-test",
         env: {},
-        workspaceDir: "/tmp/openclaw-workspace",
+        workspaceDir: "/tmp/sunclaw-workspace",
       },
       {
         resolveImplicitProviders: async ({ workspaceDir }) => {
@@ -195,7 +195,7 @@ describe("models-config", () => {
       },
     );
 
-    expect(observedWorkspaceDir).toBe("/tmp/openclaw-workspace");
+    expect(observedWorkspaceDir).toBe("/tmp/sunclaw-workspace");
   });
 
   it("threads startup provider discovery scope into implicit provider discovery", async () => {
@@ -206,7 +206,7 @@ describe("models-config", () => {
     await resolveProvidersForModelsJsonWithDeps(
       {
         cfg: { models: { providers: {} } },
-        agentDir: "/tmp/openclaw-models-config-env-vars-test",
+        agentDir: "/tmp/sunclaw-models-config-env-vars-test",
         env: {},
         providerDiscoveryProviderIds: ["openai"],
         providerDiscoveryEntriesOnly: true,
@@ -242,10 +242,10 @@ describe("models-config", () => {
       | Pick<PluginMetadataSnapshot, "index" | "manifestRegistry" | "owners">
       | undefined;
 
-    await planOpenClawModelsJsonWithDeps(
+    await planSunClawModelsJsonWithDeps(
       {
         cfg: { models: { providers: {} } },
-        agentDir: "/tmp/openclaw-models-config-env-vars-test",
+        agentDir: "/tmp/sunclaw-models-config-env-vars-test",
         env: {},
         existingRaw: "",
         existingParsed: null,
@@ -269,10 +269,10 @@ describe("models-config", () => {
   });
 
   it("treats empty replace-mode provider sets as authoritative", async () => {
-    const plan = await planOpenClawModelsJsonWithDeps(
+    const plan = await planSunClawModelsJsonWithDeps(
       {
         cfg: { models: { mode: "replace", providers: {} } },
-        agentDir: "/tmp/openclaw-models-config-env-vars-test",
+        agentDir: "/tmp/sunclaw-models-config-env-vars-test",
         env: {},
         existingRaw: `${JSON.stringify({ providers: { stale: {} } }, null, 2)}\n`,
         existingParsed: { providers: { stale: {} } },
@@ -301,10 +301,10 @@ describe("models-config", () => {
         setupProviders: new Map(),
       },
     } as unknown as Pick<PluginMetadataSnapshot, "index" | "manifestRegistry" | "owners">;
-    const plan = await planOpenClawModelsJsonWithDeps(
+    const plan = await planSunClawModelsJsonWithDeps(
       {
         cfg: { models: { providers: {} } },
-        agentDir: "/tmp/openclaw-models-config-env-vars-test",
+        agentDir: "/tmp/sunclaw-models-config-env-vars-test",
         env: { ZAI_API_KEY: "sk-test" } as NodeJS.ProcessEnv,
         existingRaw: "",
         existingParsed: null,
@@ -341,10 +341,10 @@ describe("models-config", () => {
   });
 
   it("falls back to canonical env markers when provider runtime has no api-key policy", async () => {
-    const plan = await planOpenClawModelsJsonWithDeps(
+    const plan = await planSunClawModelsJsonWithDeps(
       {
         cfg: { models: { providers: {} } },
-        agentDir: "/tmp/openclaw-models-config-env-vars-test",
+        agentDir: "/tmp/sunclaw-models-config-env-vars-test",
         env: { OPENAI_API_KEY: "sk-test" } as NodeJS.ProcessEnv,
         existingRaw: "",
         existingParsed: null,
@@ -367,10 +367,10 @@ describe("models-config", () => {
   });
 
   it("normalizes retired Gemini ids preserved from existing models.json rows", async () => {
-    const plan = await planOpenClawModelsJsonWithDeps(
+    const plan = await planSunClawModelsJsonWithDeps(
       {
         cfg: { models: { mode: "merge", providers: {} } },
-        agentDir: "/tmp/openclaw-models-config-env-vars-test",
+        agentDir: "/tmp/sunclaw-models-config-env-vars-test",
         env: {},
         existingRaw: "",
         existingParsed: {
@@ -425,7 +425,7 @@ describe("models-config", () => {
   });
 
   it("keeps google-vertex static catalog rows when an auth profile supplies the API key", async () => {
-    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-google-vertex-models-"));
+    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-google-vertex-models-"));
     try {
       await fs.writeFile(
         path.join(agentDir, "auth-profiles.json"),
@@ -445,7 +445,7 @@ describe("models-config", () => {
         )}\n`,
       );
 
-      const plan = await planOpenClawModelsJsonWithDeps(
+      const plan = await planSunClawModelsJsonWithDeps(
         {
           cfg: {
             agents: {

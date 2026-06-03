@@ -1,4 +1,4 @@
-import type { AssistantMessage } from "openclaw/plugin-sdk/llm";
+import type { AssistantMessage } from "sunclaw/plugin-sdk/llm";
 import { describe, expect, it } from "vitest";
 import { MALFORMED_STREAMING_FRAGMENT_ERROR_MESSAGE } from "../shared/assistant-error-format.js";
 import {
@@ -339,7 +339,7 @@ describe("formatAssistantErrorText", () => {
     (errorMessage) => {
       const msg = makeAssistantError(errorMessage);
       expect(formatAssistantErrorText(msg)).toBe(
-        "OpenClaw could not write local session data because the disk is full. Free some disk space and try again.",
+        "SunClaw could not write local session data because the disk is full. Free some disk space and try again.",
       );
     },
   );
@@ -377,7 +377,7 @@ describe("formatAssistantErrorText", () => {
   });
 
   it("returns a contention-specific message for OAuth refresh lock timeouts", () => {
-    const msg = makeAssistantError("file lock timeout for /tmp/openclaw-oauth-refresh.lock");
+    const msg = makeAssistantError("file lock timeout for /tmp/sunclaw-oauth-refresh.lock");
     expect(formatAssistantErrorText(msg)).toBe(
       "Authentication refresh is already in progress elsewhere and this attempt timed out waiting for it. Retry in a moment.",
     );

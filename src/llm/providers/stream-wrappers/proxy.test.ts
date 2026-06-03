@@ -1,6 +1,6 @@
-import type { StreamFn } from "openclaw/plugin-sdk/agent-core";
-import type { Context, Model } from "openclaw/plugin-sdk/llm";
-import { createAssistantMessageEventStream } from "openclaw/plugin-sdk/llm";
+import type { StreamFn } from "sunclaw/plugin-sdk/agent-core";
+import type { Context, Model } from "sunclaw/plugin-sdk/llm";
+import { createAssistantMessageEventStream } from "sunclaw/plugin-sdk/llm";
 import { describe, expect, it } from "vitest";
 import { createOpenRouterSystemCacheWrapper, createOpenRouterWrapper } from "./proxy.js";
 
@@ -51,8 +51,8 @@ describe("proxy stream wrappers", () => {
     expect(calls).toEqual([
       {
         headers: {
-          "HTTP-Referer": "https://openclaw.ai",
-          "X-OpenRouter-Title": "OpenClaw",
+          "HTTP-Referer": "https://docs.sunclaw.complex.az",
+          "X-OpenRouter-Title": "SunClaw",
           "X-OpenRouter-Categories":
             "cli-agent,cloud-agent,programming-app,creative-writing,writing-assistant,general-chat,personal-agent",
           "X-Custom": "1",
@@ -84,7 +84,7 @@ describe("proxy stream wrappers", () => {
       {},
     );
 
-    expect(calls[0]?.headers?.["HTTP-Referer"]).toBe("https://openclaw.ai");
+    expect(calls[0]?.headers?.["HTTP-Referer"]).toBe("https://docs.sunclaw.complex.az");
     expect(calls[0]?.headers?.["X-OpenRouter-Cache"]).toBe("true");
     expect(calls[0]?.headers?.["X-OpenRouter-Cache-TTL"]).toBe("900");
   });

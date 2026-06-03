@@ -9,7 +9,7 @@ describe("controlUiPublicAssetPath", () => {
 
   it("resolves base-mounted public assets under the configured base path", () => {
     expect(controlUiPublicAssetPath("favicon.svg", "/ui")).toBe("/ui/favicon.svg");
-    expect(controlUiPublicAssetPath("sw.js", "/apps/openclaw/")).toBe("/apps/openclaw/sw.js");
+    expect(controlUiPublicAssetPath("sw.js", "/apps/sunclaw/")).toBe("/apps/sunclaw/sw.js");
   });
 });
 
@@ -21,8 +21,8 @@ describe("inferControlUiPublicAssetPath", () => {
   });
 
   it("infers base-mounted assets from nested routes", () => {
-    expect(inferControlUiPublicAssetPath("sw.js", { pathname: "/openclaw/skills/workshop" })).toBe(
-      "/openclaw/sw.js",
+    expect(inferControlUiPublicAssetPath("sw.js", { pathname: "/sunclaw/skills/workshop" })).toBe(
+      "/sunclaw/sw.js",
     );
   });
 

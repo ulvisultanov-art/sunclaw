@@ -1,16 +1,16 @@
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { buildCodexUserMcpServersThreadConfigPatch } from "./bundle-mcp-codex.js";
 
 describe("buildCodexUserMcpServersThreadConfigPatch", () => {
   it("returns undefined when cfg has no mcp.servers (regression: #80814)", () => {
     expect(buildCodexUserMcpServersThreadConfigPatch(undefined)).toBeUndefined();
-    expect(buildCodexUserMcpServersThreadConfigPatch({} as OpenClawConfig)).toBeUndefined();
+    expect(buildCodexUserMcpServersThreadConfigPatch({} as SunClawConfig)).toBeUndefined();
     expect(
-      buildCodexUserMcpServersThreadConfigPatch({ mcp: {} } as OpenClawConfig),
+      buildCodexUserMcpServersThreadConfigPatch({ mcp: {} } as SunClawConfig),
     ).toBeUndefined();
     expect(
-      buildCodexUserMcpServersThreadConfigPatch({ mcp: { servers: {} } } as OpenClawConfig),
+      buildCodexUserMcpServersThreadConfigPatch({ mcp: { servers: {} } } as SunClawConfig),
     ).toBeUndefined();
   });
 
@@ -26,7 +26,7 @@ describe("buildCodexUserMcpServersThreadConfigPatch", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig);
+    } as unknown as SunClawConfig);
     expect(patch).toStrictEqual({
       mcp_servers: {
         outlook: {
@@ -52,7 +52,7 @@ describe("buildCodexUserMcpServersThreadConfigPatch", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig);
+    } as unknown as SunClawConfig);
     expect(patch).toStrictEqual({
       mcp_servers: {
         notes: {
@@ -77,7 +77,7 @@ describe("buildCodexUserMcpServersThreadConfigPatch", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig);
+    } as unknown as SunClawConfig);
     expect(patch).toStrictEqual({
       mcp_servers: {
         search: {
@@ -101,14 +101,14 @@ describe("buildCodexUserMcpServersThreadConfigPatch", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig);
+    } as unknown as SunClawConfig);
     expect(patch?.mcp_servers.search).toMatchObject({
       url: "https://mcp.example.com/mcp",
       default_tools_approval_mode: "prompt",
     });
   });
 
-  it("filters Codex-scoped user MCP servers by OpenClaw agent id", () => {
+  it("filters Codex-scoped user MCP servers by SunClaw agent id", () => {
     const cfg = {
       mcp: {
         servers: {
@@ -129,7 +129,7 @@ describe("buildCodexUserMcpServersThreadConfigPatch", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as SunClawConfig;
 
     const atlasPatch = buildCodexUserMcpServersThreadConfigPatch(cfg, { agentId: "atlas" });
     expect(Object.keys(atlasPatch!.mcp_servers).toSorted()).toEqual(["atlas", "global"]);
@@ -156,7 +156,7 @@ describe("buildCodexUserMcpServersThreadConfigPatch", () => {
             },
           },
         },
-      } as unknown as OpenClawConfig,
+      } as unknown as SunClawConfig,
       { agentId: "apolo" },
     );
     expect(patch).toBeUndefined();
@@ -178,7 +178,7 @@ describe("buildCodexUserMcpServersThreadConfigPatch", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig);
+    } as unknown as SunClawConfig);
 
     expect(patch).toStrictEqual({
       mcp_servers: {
@@ -202,7 +202,7 @@ describe("buildCodexUserMcpServersThreadConfigPatch", () => {
             },
           },
         },
-      } as unknown as OpenClawConfig,
+      } as unknown as SunClawConfig,
       { agentId: "ATLAS" },
     );
     expect(patch?.mcp_servers.atlas).toMatchObject({
@@ -236,7 +236,7 @@ describe("buildCodexUserMcpServersThreadConfigPatch", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as SunClawConfig;
 
     const patch = buildCodexUserMcpServersThreadConfigPatch(cfg, { agentId: "atlas" });
     expect(patch).toStrictEqual({
@@ -249,7 +249,7 @@ describe("buildCodexUserMcpServersThreadConfigPatch", () => {
     });
   });
 
-  it("omits scoped Codex MCP servers when no OpenClaw agent id is available", () => {
+  it("omits scoped Codex MCP servers when no SunClaw agent id is available", () => {
     const patch = buildCodexUserMcpServersThreadConfigPatch({
       mcp: {
         servers: {
@@ -260,7 +260,7 @@ describe("buildCodexUserMcpServersThreadConfigPatch", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig);
+    } as unknown as SunClawConfig);
     expect(patch).toBeUndefined();
   });
 
@@ -272,7 +272,7 @@ describe("buildCodexUserMcpServersThreadConfigPatch", () => {
           two: { transport: "stdio", command: "two" },
         },
       },
-    } as unknown as OpenClawConfig);
+    } as unknown as SunClawConfig);
     expect(patch?.mcp_servers).toBeDefined();
     expect(Object.keys(patch!.mcp_servers).toSorted()).toEqual(["one", "two"]);
     expect(patch!.mcp_servers.one).toMatchObject({ command: "one" });

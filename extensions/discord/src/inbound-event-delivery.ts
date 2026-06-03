@@ -1,8 +1,8 @@
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-payload";
+import type { ReplyPayload } from "sunclaw/plugin-sdk/reply-payload";
 import {
   asOptionalRecord as readRecord,
   normalizeOptionalString as readString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/string-coerce-runtime";
 
 export type DiscordInboundEventDeliveryEnd = () => void;
 
@@ -12,7 +12,7 @@ type ActiveEvent = {
   markInboundEventDelivered: () => void;
 };
 
-const DISCORD_INBOUND_EVENT_DELIVERY_KEY = "__openclawInboundEventDelivery";
+const DISCORD_INBOUND_EVENT_DELIVERY_KEY = "__sunclawInboundEventDelivery";
 const registry = new Map<string, ActiveEvent>();
 
 function normalizeDiscordDeliveryTarget(value: string): string {

@@ -1,4 +1,4 @@
-import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalLowercaseString } from "@sunclaw/normalization-core/string-coerce";
 
 export function normalizeCapabilityProviderId(providerId: string | undefined): string | undefined {
   return normalizeOptionalLowercaseString(providerId);

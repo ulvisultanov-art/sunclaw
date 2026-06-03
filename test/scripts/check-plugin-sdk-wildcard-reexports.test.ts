@@ -6,14 +6,14 @@ describe("check-plugin-sdk-wildcard-reexports", () => {
     expect(
       findPluginSdkWildcardReexports(
         [
-          'export * from "openclaw/plugin-sdk/foo";',
-          'export type * from "openclaw/plugin-sdk/bar";',
-          'export { named } from "openclaw/plugin-sdk/foo";',
+          'export * from "sunclaw/plugin-sdk/foo";',
+          'export type * from "sunclaw/plugin-sdk/bar";',
+          'export { named } from "sunclaw/plugin-sdk/foo";',
         ].join("\n"),
       ),
     ).toEqual([
-      { line: 1, text: 'export * from "openclaw/plugin-sdk/foo";' },
-      { line: 2, text: 'export type * from "openclaw/plugin-sdk/bar";' },
+      { line: 1, text: 'export * from "sunclaw/plugin-sdk/foo";' },
+      { line: 2, text: 'export type * from "sunclaw/plugin-sdk/bar";' },
     ]);
   });
 
@@ -21,8 +21,8 @@ describe("check-plugin-sdk-wildcard-reexports", () => {
     expect(
       findPluginSdkWildcardReexports(
         [
-          'export { named } from "openclaw/plugin-sdk/foo";',
-          'export type { Named } from "openclaw/plugin-sdk/foo";',
+          'export { named } from "sunclaw/plugin-sdk/foo";',
+          'export type { Named } from "sunclaw/plugin-sdk/foo";',
           'export * from "./src/runtime-api.js";',
         ].join("\n"),
       ),

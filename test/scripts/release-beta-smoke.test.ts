@@ -34,13 +34,13 @@ describe("release-beta-smoke", () => {
   });
 
   it("rejects malformed positive integer environment limits", () => {
-    expect(readPositiveInt(undefined, 60, "OPENCLAW_RELEASE_BETA_SMOKE_COMMAND_MS")).toBe(60);
-    expect(readPositiveInt("", 60, "OPENCLAW_RELEASE_BETA_SMOKE_COMMAND_MS")).toBe(60);
-    expect(readPositiveInt("25", 60, "OPENCLAW_RELEASE_BETA_SMOKE_COMMAND_MS")).toBe(25);
+    expect(readPositiveInt(undefined, 60, "SUNCLAW_RELEASE_BETA_SMOKE_COMMAND_MS")).toBe(60);
+    expect(readPositiveInt("", 60, "SUNCLAW_RELEASE_BETA_SMOKE_COMMAND_MS")).toBe(60);
+    expect(readPositiveInt("25", 60, "SUNCLAW_RELEASE_BETA_SMOKE_COMMAND_MS")).toBe(25);
 
     for (const raw of ["1e3", "25ms", "1.5", "0", "-1", String(Number.MAX_SAFE_INTEGER + 1)]) {
-      expect(() => readPositiveInt(raw, 60, "OPENCLAW_RELEASE_BETA_SMOKE_COMMAND_MS")).toThrow(
-        "OPENCLAW_RELEASE_BETA_SMOKE_COMMAND_MS must be a positive integer",
+      expect(() => readPositiveInt(raw, 60, "SUNCLAW_RELEASE_BETA_SMOKE_COMMAND_MS")).toThrow(
+        "SUNCLAW_RELEASE_BETA_SMOKE_COMMAND_MS must be a positive integer",
       );
     }
   });
@@ -48,7 +48,7 @@ describe("release-beta-smoke", () => {
   it("parses workflow run urls when gh includes them in dispatch output", () => {
     expect(
       parseWorkflowRunIdFromOutput(
-        "Dispatched: https://github.com/openclaw/openclaw/actions/runs/1234567890",
+        "Dispatched: https://github.com/ulvisultanov-art/sunclaw/actions/runs/1234567890",
       ),
     ).toBe("1234567890");
   });
@@ -89,7 +89,7 @@ describe("release-beta-smoke", () => {
       "",
       "### Release verification",
       "",
-      "- npm package: https://www.npmjs.com/package/openclaw/v/2026.5.20-beta.1",
+      "- npm package: https://www.npmjs.com/package/sunclaw/v/2026.5.20-beta.1",
       "- npm Telegram beta E2E: not supplied",
       "",
       "### Assets",
@@ -100,7 +100,7 @@ describe("release-beta-smoke", () => {
 
     const merged = mergeTelegramProofIntoReleaseBody(
       body,
-      "- npm Telegram beta E2E: https://github.com/openclaw/openclaw/actions/runs/123",
+      "- npm Telegram beta E2E: https://github.com/ulvisultanov-art/sunclaw/actions/runs/123",
     );
 
     expect(merged).toContain("actions/runs/123");
@@ -114,7 +114,7 @@ describe("release-beta-smoke", () => {
       "",
       "### Release verification",
       "",
-      "- npm package: https://www.npmjs.com/package/openclaw/v/2026.5.20-beta.1",
+      "- npm package: https://www.npmjs.com/package/sunclaw/v/2026.5.20-beta.1",
       "",
       "### Assets",
       "",
@@ -124,7 +124,7 @@ describe("release-beta-smoke", () => {
 
     const merged = mergeTelegramProofIntoReleaseBody(
       body,
-      "- npm Telegram beta E2E: https://github.com/openclaw/openclaw/actions/runs/123",
+      "- npm Telegram beta E2E: https://github.com/ulvisultanov-art/sunclaw/actions/runs/123",
     );
 
     expect(merged.indexOf("actions/runs/123")).toBeLessThan(merged.indexOf("### Assets"));
@@ -157,12 +157,12 @@ describe("release-beta-smoke", () => {
     const sleeps: number[] = [];
 
     await expect(
-      pollRun("openclaw/openclaw", "123", {
+      pollRun("sunclaw/sunclaw", "123", {
         now: () => now,
         pollIntervalMs: 400,
         readRun: () => ({
           conclusion: null,
-          html_url: "https://github.com/openclaw/openclaw/actions/runs/123",
+          html_url: "https://github.com/ulvisultanov-art/sunclaw/actions/runs/123",
           status: "queued",
           updated_at: "2026-05-28T12:00:00Z",
         }),
@@ -178,10 +178,10 @@ describe("release-beta-smoke", () => {
 
   it("returns when the Telegram workflow succeeds", async () => {
     await expect(
-      pollRun("openclaw/openclaw", "123", {
+      pollRun("sunclaw/sunclaw", "123", {
         readRun: () => ({
           conclusion: "success",
-          html_url: "https://github.com/openclaw/openclaw/actions/runs/123",
+          html_url: "https://github.com/ulvisultanov-art/sunclaw/actions/runs/123",
           status: "completed",
           updated_at: "2026-05-28T12:00:00Z",
         }),

@@ -1,8 +1,8 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
 import {
   asDateTimestampMs,
   resolveExpiresAtMsFromDurationMs,
-} from "openclaw/plugin-sdk/number-runtime";
+} from "sunclaw/plugin-sdk/number-runtime";
 import {
   extractIMessageApprovalPromptBinding,
   handleIMessageApprovalReaction,
@@ -219,7 +219,7 @@ function bindObservedApprovalPrompt(params: {
 
 export async function pollPendingIMessageApprovalReactions(params: {
   client: IMessageRpcClient;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   accountId: string;
   allowRecentChatDiscovery?: boolean;
   logVerboseMessage?: (message: string) => void;

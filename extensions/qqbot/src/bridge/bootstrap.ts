@@ -27,8 +27,8 @@ import {
   hasConfiguredSecretInput,
   normalizeResolvedSecretInputString,
   normalizeSecretInputString,
-} from "openclaw/plugin-sdk/secret-input";
-import { resolvePreferredOpenClawTmpDir } from "openclaw/plugin-sdk/temp-path";
+} from "sunclaw/plugin-sdk/secret-input";
+import { resolvePreferredSunClawTmpDir } from "sunclaw/plugin-sdk/temp-path";
 import {
   registerPlatformAdapter,
   registerPlatformAdapterFactory,
@@ -38,11 +38,11 @@ import {
 import type { FetchMediaOptions, FetchMediaResult } from "../engine/adapter/types.js";
 import { getBridgeLogger } from "./logger.js";
 
-let mediaRuntimeModulePromise: Promise<typeof import("openclaw/plugin-sdk/media-runtime")> | null =
+let mediaRuntimeModulePromise: Promise<typeof import("sunclaw/plugin-sdk/media-runtime")> | null =
   null;
 
 const loadMediaRuntimeModule = async () => {
-  mediaRuntimeModulePromise ??= import("openclaw/plugin-sdk/media-runtime");
+  mediaRuntimeModulePromise ??= import("sunclaw/plugin-sdk/media-runtime");
   return await mediaRuntimeModulePromise;
 };
 
@@ -86,7 +86,7 @@ function createBuiltinAdapter(): PlatformAdapter {
     },
 
     getTempDir(): string {
-      return resolvePreferredOpenClawTmpDir();
+      return resolvePreferredSunClawTmpDir();
     },
 
     hasConfiguredSecret(value: unknown): boolean {
@@ -103,9 +103,9 @@ function createBuiltinAdapter(): PlatformAdapter {
 
     async resolveApproval(approvalId: string, decision: string): Promise<boolean> {
       try {
-        const { getRuntimeConfig } = await import("openclaw/plugin-sdk/runtime-config-snapshot");
+        const { getRuntimeConfig } = await import("sunclaw/plugin-sdk/runtime-config-snapshot");
         const { resolveApprovalOverGateway } =
-          await import("openclaw/plugin-sdk/approval-gateway-runtime");
+          await import("sunclaw/plugin-sdk/approval-gateway-runtime");
         const cfg = getRuntimeConfig();
         await resolveApprovalOverGateway({
           cfg,

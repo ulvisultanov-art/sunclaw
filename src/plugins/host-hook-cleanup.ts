@@ -1,10 +1,10 @@
 import fs from "node:fs";
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@sunclaw/normalization-core/string-coerce";
 import { getRuntimeConfig } from "../config/config.js";
 import { updateSessionStore } from "../config/sessions/store.js";
 import { resolveAllAgentSessionStoreTargetsSync } from "../config/sessions/targets.js";
 import type { SessionEntry } from "../config/sessions/types.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { withPluginHostCleanupTimeout } from "./host-hook-cleanup-timeout.js";
 import {
   cleanupPluginSessionSchedulerJobs,
@@ -201,7 +201,7 @@ function matchesCleanupSession(
   );
 }
 
-function resolveExistingSessionStorePaths(cfg: OpenClawConfig): string[] {
+function resolveExistingSessionStorePaths(cfg: SunClawConfig): string[] {
   return [
     ...new Set(
       resolveAllAgentSessionStoreTargetsSync(cfg)
@@ -212,7 +212,7 @@ function resolveExistingSessionStorePaths(cfg: OpenClawConfig): string[] {
 }
 
 function createMemoizedCleanupSessionStorePathResolver(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
 ): ResolveCleanupSessionStorePaths {
   let paths: readonly string[] | undefined;
   return () => {
@@ -222,7 +222,7 @@ function createMemoizedCleanupSessionStorePathResolver(
 }
 
 function resolveCleanupSessionStorePaths(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   storePaths?: readonly string[];
   resolveStorePaths?: ResolveCleanupSessionStorePaths;
 }): readonly string[] {
@@ -234,7 +234,7 @@ function resolveCleanupSessionStorePaths(params: {
 }
 
 async function clearPluginOwnedSessionStores(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   pluginId?: string;
   sessionKey?: string;
   sessionEntrySlotKeys?: ReadonlySet<string>;
@@ -275,7 +275,7 @@ async function clearPluginOwnedSessionStores(params: {
 }
 
 async function clearPromotedSessionEntrySlotStores(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   pluginId?: string;
   sessionKey?: string;
   sessionEntrySlotKeys: ReadonlySet<string>;
@@ -340,7 +340,7 @@ function collectSessionEntrySlotKeys(
 }
 
 export async function runPluginHostCleanup(params: {
-  cfg?: OpenClawConfig;
+  cfg?: SunClawConfig;
   registry?: PluginRegistry | null;
   pluginId?: string;
   reason: PluginHostCleanupReason;
@@ -550,7 +550,7 @@ function collectRestartPromotedSessionEntrySlotKeys(
 }
 
 export async function cleanupReplacedPluginHostRegistry(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   previousRegistry?: PluginRegistry | null;
   nextRegistry?: PluginRegistry | null;
   shouldCleanup?: () => boolean;

@@ -1,14 +1,14 @@
-import { validateIPv4AddressInput } from "@openclaw/net-policy/ipv4";
+import { validateIPv4AddressInput } from "@sunclaw/net-policy/ipv4";
 import {
   normalizeOptionalString,
   readStringValue,
-} from "@openclaw/normalization-core/string-coerce";
-import { normalizeStringEntries } from "@openclaw/normalization-core/string-normalization";
+} from "@sunclaw/normalization-core/string-coerce";
+import { normalizeStringEntries } from "@sunclaw/normalization-core/string-normalization";
 import { note } from "../../packages/terminal-core/src/note.js";
 import { formatPortRangeHint } from "../cli/error-format.js";
 import { parsePort } from "../cli/shared/parse-port.js";
 import { resolveGatewayPort } from "../config/config.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { isValidEnvSecretRefId, type SecretInput } from "../config/types.secrets.js";
 import {
   maybeAddTailnetOriginToControlUiAllowedOrigins,
@@ -39,10 +39,10 @@ function validateGatewayPortInput(value: unknown): string | undefined {
 }
 
 export async function promptGatewayConfig(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   runtime: RuntimeEnv,
 ): Promise<{
-  config: OpenClawConfig;
+  config: SunClawConfig;
   port: number;
   token?: string;
 }> {
@@ -204,12 +204,12 @@ export async function promptGatewayConfig(
       const envVar = guardCancel(
         await text({
           message: "Gateway token env var",
-          initialValue: "OPENCLAW_GATEWAY_TOKEN",
-          placeholder: "OPENCLAW_GATEWAY_TOKEN",
+          initialValue: "SUNCLAW_GATEWAY_TOKEN",
+          placeholder: "SUNCLAW_GATEWAY_TOKEN",
           validate: (value) => {
             const candidate = normalizeOptionalString(value) ?? "";
             if (!isValidEnvSecretRefId(candidate)) {
-              return "Use an env var name like OPENCLAW_GATEWAY_TOKEN.";
+              return "Use an env var name like SUNCLAW_GATEWAY_TOKEN.";
             }
             const resolved = process.env[candidate]?.trim();
             if (!resolved) {
@@ -228,7 +228,7 @@ export async function promptGatewayConfig(
         }),
         id: envVarName,
       };
-      note(`Validated ${envVarName}. OpenClaw will store a token SecretRef.`, "Gateway token");
+      note(`Validated ${envVarName}. SunClaw will store a token SecretRef.`, "Gateway token");
     } else {
       const tokenInput = guardCancel(
         await text({
@@ -256,12 +256,12 @@ export async function promptGatewayConfig(
   if (authMode === "trusted-proxy") {
     note(
       [
-        "Trusted proxy mode: OpenClaw trusts user identity from a reverse proxy.",
+        "Trusted proxy mode: SunClaw trusts user identity from a reverse proxy.",
         "The proxy must authenticate users and pass identity via headers.",
         "Only requests from specified proxy IPs will be trusted.",
         "",
         "Common use cases: Pomerium, Caddy + OAuth, Traefik + forward auth",
-        "Docs: https://docs.openclaw.ai/gateway/trusted-proxy-auth",
+        "Docs: https://docs.sunclaw.complex.az/gateway/trusted-proxy-auth",
       ].join("\n"),
       "Trusted Proxy Auth",
     );

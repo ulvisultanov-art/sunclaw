@@ -3,31 +3,31 @@ export {
   listNodes,
   resolveNodeIdFromList,
   selectDefaultNodeFromList,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
-export type { AnyAgentTool, NodeListNode } from "openclaw/plugin-sdk/agent-harness-runtime";
+} from "sunclaw/plugin-sdk/agent-harness-runtime";
+export type { AnyAgentTool, NodeListNode } from "sunclaw/plugin-sdk/agent-harness-runtime";
 export {
   imageResultFromFile,
   jsonResult,
   readPositiveIntegerParam,
   readStringParam,
-} from "openclaw/plugin-sdk/channel-actions";
-export { optionalStringEnum, stringEnum } from "openclaw/plugin-sdk/channel-actions";
+} from "sunclaw/plugin-sdk/channel-actions";
+export { optionalStringEnum, stringEnum } from "sunclaw/plugin-sdk/channel-actions";
 export {
   formatCliCommand,
   formatHelpExamples,
   inheritOptionFromParent,
   note,
   theme,
-} from "openclaw/plugin-sdk/cli-runtime";
-export { danger, info } from "openclaw/plugin-sdk/runtime-env";
+} from "sunclaw/plugin-sdk/cli-runtime";
+export { danger, info } from "sunclaw/plugin-sdk/runtime-env";
 export {
   IMAGE_REDUCE_QUALITY_STEPS,
   buildImageResizeSideGrid,
   getImageMetadata,
   isImageProcessorUnavailableError,
   resizeToJpeg,
-} from "openclaw/plugin-sdk/media-runtime";
-export { detectMime } from "openclaw/plugin-sdk/media-mime";
-export { ensureMediaDir, saveMediaBuffer } from "openclaw/plugin-sdk/media-runtime";
-export { describeImageFile } from "openclaw/plugin-sdk/media-understanding-runtime";
-export { formatDocsLink } from "openclaw/plugin-sdk/setup-tools";
+} from "sunclaw/plugin-sdk/media-runtime";
+export { detectMime } from "sunclaw/plugin-sdk/media-mime";
+export { ensureMediaDir, saveMediaBuffer } from "sunclaw/plugin-sdk/media-runtime";
+export { describeImageFile } from "sunclaw/plugin-sdk/media-understanding-runtime";
+export { formatDocsLink } from "sunclaw/plugin-sdk/setup-tools";

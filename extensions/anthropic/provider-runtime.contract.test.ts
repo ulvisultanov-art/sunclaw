@@ -1,3 +1,3 @@
-import { describeAnthropicProviderRuntimeContract } from "openclaw/plugin-sdk/provider-test-contracts";
+import { describeAnthropicProviderRuntimeContract } from "sunclaw/plugin-sdk/provider-test-contracts";
 
 describeAnthropicProviderRuntimeContract(() => import("./index.js"));

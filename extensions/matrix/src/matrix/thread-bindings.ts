@@ -1,16 +1,16 @@
 import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { readJsonFileWithFallback } from "openclaw/plugin-sdk/json-store";
-import { resolveAgentIdFromSessionKey } from "openclaw/plugin-sdk/session-key-runtime";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import { readJsonFileWithFallback } from "sunclaw/plugin-sdk/json-store";
+import { resolveAgentIdFromSessionKey } from "sunclaw/plugin-sdk/session-key-runtime";
+import { normalizeOptionalString } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import {
   registerSessionBindingAdapter,
   resolveThreadBindingFarewellText,
   type SessionBindingAdapter,
   unregisterSessionBindingAdapter,
-} from "openclaw/plugin-sdk/thread-bindings-session-runtime";
+} from "sunclaw/plugin-sdk/thread-bindings-session-runtime";
 import { getMatrixRuntime } from "../runtime.js";
 import { claimCurrentTokenStorageState, resolveMatrixStateFilePath } from "./client/storage.js";
 import type { MatrixAuth } from "./client/types.js";
@@ -232,7 +232,7 @@ function buildMatrixBindingIntroText(params: {
 }
 
 async function sendBindingMessage(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   client: MatrixClient;
   accountId: string;
   roomId: string;
@@ -253,7 +253,7 @@ async function sendBindingMessage(params: {
 }
 
 async function sendFarewellMessage(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   client: MatrixClient;
   accountId: string;
   record: MatrixThreadBindingRecord;
@@ -288,7 +288,7 @@ async function sendFarewellMessage(params: {
 }
 
 export async function createMatrixThreadBindingManager(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   accountId: string;
   auth: MatrixAuth;
   client: MatrixClient;

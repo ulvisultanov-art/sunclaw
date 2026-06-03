@@ -1,7 +1,7 @@
-import type { SessionManager } from "openclaw/plugin-sdk/agent-sessions";
-import type { Model } from "openclaw/plugin-sdk/llm";
+import type { SessionManager } from "sunclaw/plugin-sdk/agent-sessions";
+import type { Model } from "sunclaw/plugin-sdk/llm";
 import { describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { SunClawConfig } from "../../config/config.js";
 import { getCompactionSafeguardRuntime } from "../agent-hooks/compaction-safeguard-runtime.js";
 import compactionSafeguardExtension from "../agent-hooks/compaction-safeguard.js";
 import contextPruningExtension from "../agent-hooks/context-pruning.js";
@@ -16,7 +16,7 @@ vi.mock("../../plugins/provider-hook-runtime.js", () => ({
   resolveProviderRuntimePlugin: () => undefined,
 }));
 
-function buildSafeguardFactories(cfg: OpenClawConfig, workspaceDir?: string) {
+function buildSafeguardFactories(cfg: SunClawConfig, workspaceDir?: string) {
   const sessionManager = {} as SessionManager;
   const model = {
     id: "claude-sonnet-4-20250514",
@@ -36,7 +36,7 @@ function buildSafeguardFactories(cfg: OpenClawConfig, workspaceDir?: string) {
 }
 
 function expectSafeguardRuntime(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   expectedRuntime: { qualityGuardEnabled: boolean; qualityGuardMaxRetries?: number },
 ) {
   const { factories, sessionManager } = buildSafeguardFactories(cfg);
@@ -58,7 +58,7 @@ describe("buildEmbeddedExtensionFactories", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
     expectSafeguardRuntime(cfg, {
       qualityGuardEnabled: true,
     });
@@ -76,7 +76,7 @@ describe("buildEmbeddedExtensionFactories", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
     expectSafeguardRuntime(cfg, {
       qualityGuardEnabled: false,
     });
@@ -95,7 +95,7 @@ describe("buildEmbeddedExtensionFactories", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
     expectSafeguardRuntime(cfg, {
       qualityGuardEnabled: true,
       qualityGuardMaxRetries: 2,
@@ -112,12 +112,12 @@ describe("buildEmbeddedExtensionFactories", () => {
             },
           },
         },
-      } as OpenClawConfig,
-      "/tmp/openclaw-workspace",
+      } as SunClawConfig,
+      "/tmp/sunclaw-workspace",
     );
 
     expect(getCompactionSafeguardRuntime(sessionManager)?.workspaceDir).toBe(
-      "/tmp/openclaw-workspace",
+      "/tmp/sunclaw-workspace",
     );
   });
 
@@ -131,7 +131,7 @@ describe("buildEmbeddedExtensionFactories", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as SunClawConfig,
       sessionManager: {} as SessionManager,
       provider: "litellm",
       modelId: "claude-sonnet-4-6",

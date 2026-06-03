@@ -75,7 +75,7 @@ describe("buildCompactAnnounceStatsLine", () => {
         totalTokens: 999_999,
       })) as ReadSessionEntry,
       resolveAgentIdFromSessionKey: (() => "main") as ResolveAgentIdFromSessionKey,
-      resolveStorePath: (() => "/tmp/openclaw-session-store") as ResolveStorePath,
+      resolveStorePath: (() => "/tmp/sunclaw-session-store") as ResolveStorePath,
     });
 
     await expect(
@@ -107,7 +107,7 @@ describe("readSubagentOutput", () => {
         {
           role: "system",
           content: [{ type: "text", text: "Compaction" }],
-          __openclaw: { kind: "compaction" },
+          __sunclaw: { kind: "compaction" },
         },
         {
           role: "assistant",
@@ -206,13 +206,13 @@ describe("readSubagentOutput", () => {
 
     await expect(
       readSubagentOutput("agent:main:subagent:child", undefined, {
-        sessionFile: "/tmp/openclaw-internal-run.jsonl",
+        sessionFile: "/tmp/sunclaw-internal-run.jsonl",
       }),
     ).resolves.toBe("fresh recovered output");
     expect(deps.readSessionMessagesAsync).toHaveBeenCalledWith(
       "agent:main:subagent:child",
       undefined,
-      "/tmp/openclaw-internal-run.jsonl",
+      "/tmp/sunclaw-internal-run.jsonl",
       { mode: "recent", maxMessages: 100, maxBytes: 1024 * 1024 },
     );
     expect(deps.callGateway).not.toHaveBeenCalled();
@@ -231,7 +231,7 @@ describe("readSubagentOutput", () => {
 
     await expect(
       readSubagentOutput("agent:main:subagent:child", undefined, {
-        sessionFile: "/tmp/openclaw-empty-internal-run.jsonl",
+        sessionFile: "/tmp/sunclaw-empty-internal-run.jsonl",
       }),
     ).resolves.toBeUndefined();
     expect(deps.callGateway).not.toHaveBeenCalled();

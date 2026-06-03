@@ -1,14 +1,14 @@
 import {
   resolveRuntimeHandleIdentifiersFromIdentity,
   resolveSessionIdentityFromMeta,
-} from "@openclaw/acp-core/runtime/session-identity";
+} from "@sunclaw/acp-core/runtime/session-identity";
 import type {
   AcpRuntime,
   AcpRuntimeHandle,
   AcpRuntimeStatus,
-} from "@openclaw/acp-core/runtime/types";
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+} from "@sunclaw/acp-core/runtime/types";
+import { normalizeLowercaseStringOrEmpty } from "@sunclaw/normalization-core/string-coerce";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { logVerbose } from "../../globals.js";
 import type { ActiveTurnState, SessionAcpMeta } from "./manager.types.js";
 import { normalizeActorKey, resolveRuntimeIdleTtlMs } from "./manager.utils.js";
@@ -41,7 +41,7 @@ export class ManagerRuntimeHandleCache {
     this.runtimeCache.clear(normalizeActorKey(sessionKey));
   }
 
-  getObservabilitySnapshot(cfg: OpenClawConfig) {
+  getObservabilitySnapshot(cfg: SunClawConfig) {
     return {
       activeSessions: this.runtimeCache.size(),
       idleTtlMs: resolveRuntimeIdleTtlMs(cfg),
@@ -78,7 +78,7 @@ export class ManagerRuntimeHandleCache {
   }
 
   async evictIdle(params: {
-    cfg: OpenClawConfig;
+    cfg: SunClawConfig;
     actorQueue: SessionActorQueue;
     activeTurnBySession: Map<string, ActiveTurnState>;
   }): Promise<void> {

@@ -1,13 +1,13 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 
-type CreateOpenClawToolsArg = {
+type CreateSunClawToolsArg = {
   inheritedToolDenylist?: string[];
   pluginToolDenylist?: string[];
 };
 
 const hoisted = vi.hoisted(() => ({
-  createOpenClawToolsMock: vi.fn((_args: CreateOpenClawToolsArg) => [
+  createSunClawToolsMock: vi.fn((_args: CreateSunClawToolsArg) => [
     {
       name: "read",
       description: "Read files",
@@ -23,24 +23,24 @@ const hoisted = vi.hoisted(() => ({
   ]),
 }));
 
-vi.mock("../agents/openclaw-tools.js", () => ({
-  createOpenClawTools: (args: CreateOpenClawToolsArg) => hoisted.createOpenClawToolsMock(args),
+vi.mock("../agents/sunclaw-tools.js", () => ({
+  createSunClawTools: (args: CreateSunClawToolsArg) => hoisted.createSunClawToolsMock(args),
 }));
 
 import { resolveGatewayScopedTools } from "./tool-resolution.js";
 
 describe("resolveGatewayScopedTools excludeToolNames", () => {
   beforeEach(() => {
-    hoisted.createOpenClawToolsMock.mockClear();
+    hoisted.createSunClawToolsMock.mockClear();
   });
 
   function readCreateToolsArgs(): {
     inheritedToolDenylist?: string[];
     pluginToolDenylist?: string[];
   } {
-    const args = hoisted.createOpenClawToolsMock.mock.calls[0]?.[0];
+    const args = hoisted.createSunClawToolsMock.mock.calls[0]?.[0];
     if (!args || typeof args !== "object") {
-      throw new Error("expected createOpenClawTools args");
+      throw new Error("expected createSunClawTools args");
     }
     return args as {
       inheritedToolDenylist?: string[];
@@ -50,7 +50,7 @@ describe("resolveGatewayScopedTools excludeToolNames", () => {
 
   it("filters loopback dedup exclusions without inheriting policy denies", () => {
     const result = resolveGatewayScopedTools({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as SunClawConfig,
       sessionKey: "agent:main:direct:test",
       surface: "loopback",
       excludeToolNames: ["read", "apply_patch"],
@@ -66,7 +66,7 @@ describe("resolveGatewayScopedTools excludeToolNames", () => {
     resolveGatewayScopedTools({
       cfg: {
         gateway: { tools: { deny: ["exec"] } },
-      } as OpenClawConfig,
+      } as SunClawConfig,
       sessionKey: "agent:main:direct:test",
       surface: "loopback",
       excludeToolNames: ["read", "apply_patch"],

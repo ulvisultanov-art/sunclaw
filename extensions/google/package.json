@@ -1,17 +1,17 @@
 {
-  "name": "@openclaw/google-plugin",
+  "name": "@sunclaw/google-plugin",
   "version": "2026.6.2",
   "private": true,
-  "description": "OpenClaw Google plugin",
+  "description": "SunClaw Google plugin",
   "type": "module",
   "dependencies": {
     "@google/genai": "2.7.0",
     "google-auth-library": "10.6.2"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@sunclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ]

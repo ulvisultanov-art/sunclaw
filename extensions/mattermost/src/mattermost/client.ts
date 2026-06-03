@@ -1,13 +1,13 @@
-import { resolveTimerTimeoutMs } from "openclaw/plugin-sdk/number-runtime";
-import { sleep } from "openclaw/plugin-sdk/runtime-env";
+import { resolveTimerTimeoutMs } from "sunclaw/plugin-sdk/number-runtime";
+import { sleep } from "sunclaw/plugin-sdk/runtime-env";
 import {
   fetchWithSsrFGuard,
   ssrfPolicyFromPrivateNetworkOptIn,
-} from "openclaw/plugin-sdk/ssrf-runtime";
+} from "sunclaw/plugin-sdk/ssrf-runtime";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { z } from "zod";
 
 export type MattermostFetch = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;

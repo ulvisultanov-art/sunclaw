@@ -3,21 +3,21 @@ import os from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { resolveStorePath } from "../config/sessions/paths.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { describeHeartbeatSessionTargetIssues } from "./doctor-heartbeat-session-target.js";
 
 describe("describeHeartbeatSessionTargetIssues", () => {
   let tmpDir: string;
 
   beforeEach(() => {
-    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-heartbeat-doctor-"));
+    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "sunclaw-heartbeat-doctor-"));
   });
 
   afterEach(() => {
     fs.rmSync(tmpDir, { recursive: true, force: true });
   });
 
-  function cfgWithSession(session: string, target: string | null = "slack"): OpenClawConfig {
+  function cfgWithSession(session: string, target: string | null = "slack"): SunClawConfig {
     const heartbeat = target === null ? { session } : { session, target };
     return {
       session: {
@@ -32,13 +32,13 @@ describe("describeHeartbeatSessionTargetIssues", () => {
           },
         ],
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
   }
 
   function cfgWithDefaultHeartbeat(
     session: string,
     target: string | null = "slack",
-  ): OpenClawConfig {
+  ): SunClawConfig {
     const heartbeat = target === null ? { session } : { session, target };
     return {
       session: {
@@ -55,10 +55,10 @@ describe("describeHeartbeatSessionTargetIssues", () => {
           },
         ],
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
   }
 
-  function writeStore(cfg: OpenClawConfig, entries: Record<string, unknown>) {
+  function writeStore(cfg: SunClawConfig, entries: Record<string, unknown>) {
     const storePath = resolveStorePath(cfg.session?.store, { agentId: "ops" });
     fs.mkdirSync(path.dirname(storePath), { recursive: true });
     fs.writeFileSync(storePath, JSON.stringify(entries, null, 2));

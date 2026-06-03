@@ -1,5 +1,5 @@
-import { asFiniteNumber } from "@openclaw/normalization-core/number-coercion";
-import { asOptionalRecord } from "@openclaw/normalization-core/record-coerce";
+import { asFiniteNumber } from "@sunclaw/normalization-core/number-coercion";
+import { asOptionalRecord } from "@sunclaw/normalization-core/record-coerce";
 import {
   buildAgentRunTerminalOutcome,
   isStickyAgentRunTerminalOutcome,

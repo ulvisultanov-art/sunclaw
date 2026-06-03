@@ -1,10 +1,10 @@
 import {
   createChannelIngressResolver,
   defineStableChannelIngressIdentity,
-} from "openclaw/plugin-sdk/channel-ingress-runtime";
-import { createChannelPairingChallengeIssuer } from "openclaw/plugin-sdk/channel-pairing";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { upsertChannelPairingRequest } from "openclaw/plugin-sdk/conversation-runtime";
+} from "sunclaw/plugin-sdk/channel-ingress-runtime";
+import { createChannelPairingChallengeIssuer } from "sunclaw/plugin-sdk/channel-pairing";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import { upsertChannelPairingRequest } from "sunclaw/plugin-sdk/conversation-runtime";
 import {
   formatSignalSenderId,
   looksLikeUuid,
@@ -115,7 +115,7 @@ export async function resolveSignalAccessState(params: {
   sender: SignalSender;
   groupId?: string;
   isGroup?: boolean;
-  cfg?: Pick<OpenClawConfig, "accessGroups" | "commands">;
+  cfg?: Pick<SunClawConfig, "accessGroups" | "commands">;
   hasControlCommand?: boolean;
   readStoreAllowFrom?: () => Promise<string[]>;
 }) {

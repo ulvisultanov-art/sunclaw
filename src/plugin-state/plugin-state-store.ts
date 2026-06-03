@@ -1,4 +1,4 @@
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import { closeSunClawStateDatabaseForTest } from "../state/sunclaw-state-db.js";
 import {
   clearPluginStateDatabaseForTests,
   closePluginStateDatabase,
@@ -477,7 +477,7 @@ export function clearPluginStateStoreForTests(): void {
 export function resetPluginStateStoreForTests(options: { closeDatabase?: boolean } = {}): void {
   if (options.closeDatabase !== false) {
     closePluginStateDatabase();
-    closeOpenClawStateDatabaseForTest();
+    closeSunClawStateDatabaseForTest();
   }
   namespaceOptionSignatures.clear();
 }

@@ -82,55 +82,55 @@ type CapturedLogRecord = {
 
 const DEFAULT_SCENARIO_ID = "otel-trace-smoke";
 const DEFAULT_DOCKER_COLLECTOR_IMAGE =
-  process.env.OPENCLAW_QA_OTEL_COLLECTOR_IMAGE || "otel/opentelemetry-collector:0.104.0";
+  process.env.SUNCLAW_QA_OTEL_COLLECTOR_IMAGE || "otel/opentelemetry-collector:0.104.0";
 const OTLP_SIGNAL_PATHS = new Map<string, OtlpSignal>([
   ["/v1/traces", "traces"],
   ["/v1/metrics", "metrics"],
   ["/v1/logs", "logs"],
 ]);
 const REQUIRED_SPAN_NAMES = [
-  "openclaw.run",
-  "openclaw.harness.run",
-  "openclaw.context.assembled",
-  "openclaw.message.delivery",
+  "sunclaw.run",
+  "sunclaw.harness.run",
+  "sunclaw.context.assembled",
+  "sunclaw.message.delivery",
 ] as const;
-const REQUIRED_METRIC_NAMES = ["openclaw.harness.duration_ms"] as const;
+const REQUIRED_METRIC_NAMES = ["sunclaw.harness.duration_ms"] as const;
 const DISALLOWED_ATTRIBUTE_KEYS = new Set([
-  "openclaw.runId",
-  "openclaw.chatId",
-  "openclaw.messageId",
-  "openclaw.sessionKey",
-  "openclaw.sessionId",
-  "openclaw.callId",
-  "openclaw.toolCallId",
-  "openclaw.run_id",
-  "openclaw.chat_id",
-  "openclaw.message_id",
-  "openclaw.session_key",
-  "openclaw.session_id",
-  "openclaw.call_id",
-  "openclaw.tool_call_id",
+  "sunclaw.runId",
+  "sunclaw.chatId",
+  "sunclaw.messageId",
+  "sunclaw.sessionKey",
+  "sunclaw.sessionId",
+  "sunclaw.callId",
+  "sunclaw.toolCallId",
+  "sunclaw.run_id",
+  "sunclaw.chat_id",
+  "sunclaw.message_id",
+  "sunclaw.session_key",
+  "sunclaw.session_id",
+  "sunclaw.call_id",
+  "sunclaw.tool_call_id",
 ]);
 const DISALLOWED_BODY_NEEDLES = ["OTEL-QA-SECRET", "OTEL-QA-OK"];
 const COLLECTOR_OUTPUT_TAIL_BYTES = 16_000;
 const POSITIVE_INTEGER_PATTERN = /^[1-9]\d*$/u;
 const MAX_OTLP_COMPRESSED_BODY_BYTES = readPositiveIntegerEnv(
-  "OPENCLAW_QA_OTEL_MAX_COMPRESSED_BODY_BYTES",
+  "SUNCLAW_QA_OTEL_MAX_COMPRESSED_BODY_BYTES",
   2 * 1024 * 1024,
 );
 const MAX_OTLP_DECODED_BODY_BYTES = readPositiveIntegerEnv(
-  "OPENCLAW_QA_OTEL_MAX_DECODED_BODY_BYTES",
+  "SUNCLAW_QA_OTEL_MAX_DECODED_BODY_BYTES",
   8 * 1024 * 1024,
 );
 const MAX_CAPTURED_BODY_TEXT_BYTES = readPositiveIntegerEnv(
-  "OPENCLAW_QA_OTEL_MAX_CAPTURED_BODY_TEXT_BYTES",
+  "SUNCLAW_QA_OTEL_MAX_CAPTURED_BODY_TEXT_BYTES",
   512 * 1024,
 );
 const QA_SUITE_TIMEOUT_MS = readPositiveIntegerEnv(
-  "OPENCLAW_QA_OTEL_SUITE_TIMEOUT_MS",
+  "SUNCLAW_QA_OTEL_SUITE_TIMEOUT_MS",
   10 * 60 * 1000,
 );
-const QA_SUITE_KILL_GRACE_MS = readPositiveIntegerEnv("OPENCLAW_QA_OTEL_SUITE_KILL_GRACE_MS", 5000);
+const QA_SUITE_KILL_GRACE_MS = readPositiveIntegerEnv("SUNCLAW_QA_OTEL_SUITE_KILL_GRACE_MS", 5000);
 
 function readPositiveIntegerEnv(
   name: string,
@@ -895,9 +895,9 @@ async function startDockerOtelCollector(
   const osTmpdir = deps.tmpdir ?? tmpdir;
 
   const collectorPort = await reservePort();
-  const tempDir = await makeTempDir(path.join(osTmpdir(), "openclaw-otel-collector-"));
+  const tempDir = await makeTempDir(path.join(osTmpdir(), "sunclaw-otel-collector-"));
   const configPath = path.join(tempDir, "collector.yaml");
-  const containerName = `openclaw-otel-smoke-${makeUuid()}`;
+  const containerName = `sunclaw-otel-smoke-${makeUuid()}`;
   const useHostNetwork = (deps.platform ?? process.platform) === "linux";
   const collectorEndpoint = useHostNetwork ? `127.0.0.1:${collectorPort}` : "0.0.0.0:4318";
   const receiverEndpoint = useHostNetwork
@@ -909,19 +909,19 @@ async function startDockerOtelCollector(
       http:
         endpoint: ${collectorEndpoint}
 exporters:
-  otlphttp/openclaw:
+  otlphttp/sunclaw:
     endpoint: ${receiverEndpoint}
 service:
   pipelines:
     traces:
       receivers: [otlp]
-      exporters: [otlphttp/openclaw]
+      exporters: [otlphttp/sunclaw]
     metrics:
       receivers: [otlp]
-      exporters: [otlphttp/openclaw]
+      exporters: [otlphttp/sunclaw]
     logs:
       receivers: [otlp]
-      exporters: [otlphttp/openclaw]
+      exporters: [otlphttp/sunclaw]
 `;
   await writeConfigFile(configPath, config, "utf8");
 
@@ -984,15 +984,15 @@ service:
   };
 }
 
-function openClawEntryArgs(): string[] {
+function sunClawEntryArgs(): string[] {
   if (existsSync(path.join(process.cwd(), "scripts", "run-node.mjs"))) {
     return ["scripts/run-node.mjs"];
   }
-  return ["openclaw.mjs"];
+  return ["sunclaw.mjs"];
 }
 
-function spawnOpenClaw(args: string[], env: NodeJS.ProcessEnv): ChildProcess {
-  return spawn(process.execPath, [...openClawEntryArgs(), ...args], {
+function spawnSunClaw(args: string[], env: NodeJS.ProcessEnv): ChildProcess {
+  return spawn(process.execPath, [...sunClawEntryArgs(), ...args], {
     detached: process.platform !== "win32",
     env,
     stdio: ["ignore", "pipe", "pipe"],
@@ -1027,7 +1027,7 @@ async function waitForChild(
     terminateChildTree(child, "SIGKILL", cleanupPids);
     await waitForProcessTreeExit(child, 1000, cleanupPids);
   }
-  throw new Error(`openclaw qa suite timed out after ${timeoutMs}ms`);
+  throw new Error(`sunclaw qa suite timed out after ${timeoutMs}ms`);
 }
 
 function collectChildProcessTreePids(child: ChildProcess): number[] {
@@ -1181,9 +1181,9 @@ function buildQaEnv(port: number): NodeJS.ProcessEnv {
   env.OTEL_EXPORTER_OTLP_TRACES_ENDPOINT = `http://127.0.0.1:${port}/v1/traces`;
   env.OTEL_EXPORTER_OTLP_METRICS_ENDPOINT = `http://127.0.0.1:${port}/v1/metrics`;
   env.OTEL_EXPORTER_OTLP_LOGS_ENDPOINT = `http://127.0.0.1:${port}/v1/logs`;
-  env.OTEL_SERVICE_NAME = "openclaw-qa-lab-otel-smoke";
+  env.OTEL_SERVICE_NAME = "sunclaw-qa-lab-otel-smoke";
   env.OTEL_SEMCONV_STABILITY_OPT_IN = "gen_ai_latest_experimental";
-  env.OPENCLAW_QA_SUITE_PROGRESS = env.OPENCLAW_QA_SUITE_PROGRESS ?? "1";
+  env.SUNCLAW_QA_SUITE_PROGRESS = env.SUNCLAW_QA_SUITE_PROGRESS ?? "1";
   return env;
 }
 
@@ -1250,8 +1250,8 @@ function isLatestGenAiModelCallSpan(span: CapturedSpan): boolean {
   }
   return (
     span.name === `${operationName} ${modelName}` &&
-    typeof span.attributes["openclaw.provider"] === "string" &&
-    typeof span.attributes["openclaw.model"] === "string"
+    typeof span.attributes["sunclaw.provider"] === "string" &&
+    typeof span.attributes["sunclaw.model"] === "string"
   );
 }
 
@@ -1342,8 +1342,8 @@ function assertSmoke(params: {
   if (modelSpans.length === 0) {
     failures.push("missing required GenAI model-call span");
   }
-  if (spanNames.has("openclaw.model.call")) {
-    failures.push("legacy openclaw.model.call span exported with GenAI semconv opt-in");
+  if (spanNames.has("sunclaw.model.call")) {
+    failures.push("legacy sunclaw.model.call span exported with GenAI semconv opt-in");
   }
   const metricNames = new Set(params.metrics.map((metric) => metric.name));
   for (const name of REQUIRED_METRIC_NAMES) {
@@ -1360,7 +1360,7 @@ function assertSmoke(params: {
 
   const attributeKeys = collectAttributeKeys(params.spans);
   const disallowed = [...DISALLOWED_ATTRIBUTE_KEYS].filter((key) => attributeKeys.has(key));
-  const contentKeys = [...attributeKeys].filter((key) => key.startsWith("openclaw.content."));
+  const contentKeys = [...attributeKeys].filter((key) => key.startsWith("sunclaw.content."));
   if (disallowed.length > 0) {
     failures.push(`raw diagnostic id attributes exported: ${disallowed.join(", ")}`);
   }
@@ -1375,7 +1375,7 @@ function assertSmoke(params: {
     const serialized = JSON.stringify(span.attributes);
     return (
       Object.hasOwn(span.attributes, "error.type") ||
-      Object.hasOwn(span.attributes, "openclaw.errorCategory") ||
+      Object.hasOwn(span.attributes, "sunclaw.errorCategory") ||
       serialized.includes("StreamAbandoned")
     );
   });
@@ -1444,7 +1444,7 @@ async function main() {
       );
     }
 
-    const child = spawnOpenClaw(buildQaArgs(options), buildQaEnv(exportPort));
+    const child = spawnSunClaw(buildQaArgs(options), buildQaEnv(exportPort));
     const cleanupSignalRelay = relayParentSignalsToChild(child);
     child.stdout?.on("data", (chunk) => process.stdout.write(chunk));
     child.stderr?.on("data", (chunk) => process.stderr.write(chunk));

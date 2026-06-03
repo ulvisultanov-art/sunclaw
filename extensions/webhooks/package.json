@@ -1,13 +1,13 @@
 {
-  "name": "@openclaw/webhooks",
+  "name": "@sunclaw/webhooks",
   "version": "2026.6.2",
   "private": true,
-  "description": "OpenClaw webhook bridge plugin",
+  "description": "SunClaw webhook bridge plugin",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@sunclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ]

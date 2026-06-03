@@ -8,7 +8,7 @@ import { createTrackedTempDirs } from "../test-utils/tracked-temp-dirs.js";
 const tempDirs = createTrackedTempDirs();
 
 async function makeTempDir(label: string): Promise<string> {
-  return await tempDirs.make(`openclaw-${label}-`);
+  return await tempDirs.make(`sunclaw-${label}-`);
 }
 
 async function makeFakeGitRepo(
@@ -50,9 +50,9 @@ async function makeFakeGitRepo(
   }
 }
 
-async function makeFakeOpenClawPackage(root: string) {
+async function makeFakeSunClawPackage(root: string) {
   await fs.mkdir(path.join(root, "src"), { recursive: true });
-  await fs.writeFile(path.join(root, "package.json"), JSON.stringify({ name: "openclaw" }));
+  await fs.writeFile(path.join(root, "package.json"), JSON.stringify({ name: "sunclaw" }));
 }
 
 describe("git commit resolution", () => {
@@ -82,10 +82,10 @@ describe("git commit resolution", () => {
 
   it("resolves commit metadata from the caller module root instead of the caller cwd", async () => {
     const temp = await makeTempDir("git-commit-cwd");
-    const repoRoot = path.join(temp, "openclaw");
+    const repoRoot = path.join(temp, "sunclaw");
     const repoCommit = "abcdef0123456789abcdef0123456789abcdef01";
     await makeFakeGitRepo(repoRoot, { head: `${repoCommit}\n` });
-    await makeFakeOpenClawPackage(repoRoot);
+    await makeFakeSunClawPackage(repoRoot);
 
     const otherRepo = path.join(temp, "other");
     const otherCommit = "1234567890abcdef1234567890abcdef12345678";
@@ -100,10 +100,10 @@ describe("git commit resolution", () => {
 
   it("prefers live git metadata over stale build info in a package checkout", async () => {
     const temp = await makeTempDir("git-commit-live-checkout");
-    const repoRoot = path.join(temp, "openclaw");
+    const repoRoot = path.join(temp, "sunclaw");
     const repoCommit = "abcdef0123456789abcdef0123456789abcdef01";
     await makeFakeGitRepo(repoRoot, { head: `${repoCommit}\n` });
-    await makeFakeOpenClawPackage(repoRoot);
+    await makeFakeSunClawPackage(repoRoot);
     const entryModuleUrl = pathToFileURL(path.join(repoRoot, "src", "entry.ts")).href;
 
     expect(
@@ -163,26 +163,26 @@ describe("git commit resolution", () => {
 
   it("treats invalid moduleUrl inputs as a fallback hint instead of throwing", async () => {
     const temp = await makeTempDir("git-commit-invalid-module-url");
-    const repoRoot = path.join(temp, "openclaw");
+    const repoRoot = path.join(temp, "sunclaw");
     const repoCommit = "abcdef0123456789abcdef0123456789abcdef01";
     await makeFakeGitRepo(repoRoot, { head: `${repoCommit}\n` });
-    await makeFakeOpenClawPackage(repoRoot);
+    await makeFakeSunClawPackage(repoRoot);
 
     expect(resolveCommitHash({ moduleUrl: "not-a-file-url", cwd: repoRoot, env: {} })).toBe(
       repoCommit.slice(0, 7),
     );
   });
 
-  it("does not walk out of the openclaw package into a host repo", async () => {
+  it("does not walk out of the sunclaw package into a host repo", async () => {
     const temp = await makeTempDir("git-commit-package-boundary");
     const hostRepo = path.join(temp, "host");
     await makeFakeGitRepo(hostRepo, { head: "abcdef1234567890abcdef1234567890abcdef12" });
 
-    const packageRoot = path.join(hostRepo, "node_modules", "openclaw");
+    const packageRoot = path.join(hostRepo, "node_modules", "sunclaw");
     await fs.mkdir(path.join(packageRoot, "dist"), { recursive: true });
     await fs.writeFile(
       path.join(packageRoot, "package.json"),
-      JSON.stringify({ name: "openclaw", version: "2026.3.10" }),
+      JSON.stringify({ name: "sunclaw", version: "2026.3.10" }),
       "utf-8",
     );
     const moduleUrl = pathToFileURL(path.join(packageRoot, "dist", "entry.js")).href;

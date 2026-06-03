@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type { PluginMetadataSnapshot } from "../plugins/plugin-metadata-snapshot.js";
 import { isRecord } from "../utils.js";
 import {
@@ -20,10 +20,10 @@ import {
   resolvePluginModelCatalogOwnerPluginId,
 } from "./plugin-model-catalog.js";
 
-type ModelsConfig = NonNullable<OpenClawConfig["models"]>;
+type ModelsConfig = NonNullable<SunClawConfig["models"]>;
 export type ResolveImplicitProvidersForModelsJson = (params: {
   agentDir: string;
-  config: OpenClawConfig;
+  config: SunClawConfig;
   env: NodeJS.ProcessEnv;
   workspaceDir?: string;
   explicitProviders: Record<string, ProviderConfig>;
@@ -85,7 +85,7 @@ function buildPluginCatalogWrites(
 
 export async function resolveProvidersForModelsJsonWithDeps(
   params: {
-    cfg: OpenClawConfig;
+    cfg: SunClawConfig;
     agentDir: string;
     env: NodeJS.ProcessEnv;
     workspaceDir?: string;
@@ -164,10 +164,10 @@ function filterWritableProviders(
   return Object.keys(next).length === Object.keys(providers).length ? providers : next;
 }
 
-export async function planOpenClawModelsJsonWithDeps(
+export async function planSunClawModelsJsonWithDeps(
   params: {
-    cfg: OpenClawConfig;
-    sourceConfigForSecrets?: OpenClawConfig;
+    cfg: SunClawConfig;
+    sourceConfigForSecrets?: SunClawConfig;
     agentDir: string;
     env: NodeJS.ProcessEnv;
     workspaceDir?: string;
@@ -274,8 +274,8 @@ export async function planOpenClawModelsJsonWithDeps(
   };
 }
 
-export async function planOpenClawModelsJson(
-  params: Parameters<typeof planOpenClawModelsJsonWithDeps>[0],
+export async function planSunClawModelsJson(
+  params: Parameters<typeof planSunClawModelsJsonWithDeps>[0],
 ): Promise<ModelsJsonPlan> {
-  return planOpenClawModelsJsonWithDeps(params);
+  return planSunClawModelsJsonWithDeps(params);
 }

@@ -1,15 +1,15 @@
-import { resolveStableChannelMessageIngress } from "openclaw/plugin-sdk/channel-ingress-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { resolveInboundRouteEnvelopeBuilderWithRuntime } from "openclaw/plugin-sdk/inbound-envelope";
+import { resolveStableChannelMessageIngress } from "sunclaw/plugin-sdk/channel-ingress-runtime";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import { resolveInboundRouteEnvelopeBuilderWithRuntime } from "sunclaw/plugin-sdk/inbound-envelope";
 import {
   buildAgentMediaPayload,
   saveMediaBuffer,
   saveMediaSource,
-} from "openclaw/plugin-sdk/media-runtime";
+} from "sunclaw/plugin-sdk/media-runtime";
 import {
   sanitizeQaBusToolCallArguments,
   type QaBusToolCall,
-} from "openclaw/plugin-sdk/qa-channel-protocol";
+} from "sunclaw/plugin-sdk/qa-channel-protocol";
 import { buildQaTarget, sendQaBusMessage, type QaBusMessage } from "./bus-client.js";
 import { getQaChannelRuntime } from "./runtime.js";
 import type { CoreConfig, ResolvedQaChannelAccount } from "./types.js";
@@ -105,7 +105,7 @@ export async function handleQaInbound(params: {
   });
   const toolCalls: QaBusToolCall[] = [];
   const { route, buildEnvelope } = resolveInboundRouteEnvelopeBuilderWithRuntime({
-    cfg: params.config as OpenClawConfig,
+    cfg: params.config as SunClawConfig,
     channel: params.channelId,
     accountId: params.account.accountId,
     peer: {
@@ -125,7 +125,7 @@ export async function handleQaInbound(params: {
     ? runtime.channel.mentions.matchesMentionPatterns(
         inbound.text,
         runtime.channel.mentions.buildMentionRegexes(
-          params.config as OpenClawConfig,
+          params.config as SunClawConfig,
           route.agentId,
         ),
       )
@@ -218,7 +218,7 @@ export async function handleQaInbound(params: {
   });
 
   await runtime.channel.inbound.dispatchReply({
-    cfg: params.config as OpenClawConfig,
+    cfg: params.config as SunClawConfig,
     channel: params.channelId,
     accountId: params.account.accountId,
     agentId: route.agentId,

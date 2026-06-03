@@ -1,21 +1,21 @@
 ---
-summary: "Redirect: flow commands live under `openclaw tasks flow`"
+summary: "Redirect: flow commands live under `sunclaw tasks flow`"
 read_when:
-  - You encounter `openclaw flows` in older docs or release notes
+  - You encounter `sunclaw flows` in older docs or release notes
   - You want a quick TaskFlow inspection reference
 title: "Flows (redirect)"
 ---
 
-# `openclaw tasks flow`
+# `sunclaw tasks flow`
 
-There is no top-level `openclaw flows` command. Durable TaskFlow inspection lives under `openclaw tasks flow`.
+There is no top-level `sunclaw flows` command. Durable TaskFlow inspection lives under `sunclaw tasks flow`.
 
 ## Subcommands
 
 ```bash
-openclaw tasks flow list   [--json] [--status <name>]
-openclaw tasks flow show   <lookup> [--json]
-openclaw tasks flow cancel <lookup>
+sunclaw tasks flow list   [--json] [--status <name>]
+sunclaw tasks flow show   <lookup> [--json]
+sunclaw tasks flow cancel <lookup>
 ```
 
 | Subcommand | Description                | Arguments / options                                                                   |
@@ -35,12 +35,12 @@ openclaw tasks flow cancel <lookup>
 ## Examples
 
 ```bash
-openclaw tasks flow list
-openclaw tasks flow list --status running
-openclaw tasks flow list --json
-openclaw tasks flow show flow_abc123
-openclaw tasks flow show flow_abc123 --json
-openclaw tasks flow cancel flow_abc123
+sunclaw tasks flow list
+sunclaw tasks flow list --status running
+sunclaw tasks flow list --json
+sunclaw tasks flow show flow_abc123
+sunclaw tasks flow show flow_abc123 --json
+sunclaw tasks flow cancel flow_abc123
 ```
 
 For full TaskFlow concepts and authoring see [TaskFlow](/automation/taskflow). For the parent `tasks` command see [tasks CLI reference](/cli/tasks).

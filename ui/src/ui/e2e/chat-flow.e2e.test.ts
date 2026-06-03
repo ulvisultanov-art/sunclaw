@@ -11,7 +11,7 @@ import {
 
 const chromiumExecutablePath = resolvePlaywrightChromiumExecutablePath(chromium.executablePath());
 const chromiumAvailable = canRunPlaywrightChromium(chromiumExecutablePath);
-const allowMissingChromium = process.env.OPENCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM === "1";
+const allowMissingChromium = process.env.SUNCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM === "1";
 const describeControlUiE2e = chromiumAvailable || !allowMissingChromium ? describe : describe.skip;
 
 let browser: Browser;
@@ -61,7 +61,7 @@ async function waitForChatScrollIdle(page: Page): Promise<void> {
     .poll(
       () =>
         page.evaluate(() => {
-          const app = document.querySelector("openclaw-app") as
+          const app = document.querySelector("sunclaw-app") as
             | (Element & {
                 chatIsProgrammaticScroll?: boolean;
                 chatScrollFrame?: number | null;
@@ -93,7 +93,7 @@ async function controlUiEventPayloads(
   event: string,
 ): Promise<Array<Record<string, unknown>>> {
   return page.evaluate((eventName) => {
-    const app = document.querySelector("openclaw-app") as
+    const app = document.querySelector("sunclaw-app") as
       | (Element & { eventLogBuffer?: unknown[] })
       | null;
     return (app?.eventLogBuffer ?? [])
@@ -139,7 +139,7 @@ describeControlUiE2e("Control UI mocked Gateway E2E", () => {
   beforeAll(async () => {
     if (!chromiumAvailable) {
       throw new Error(
-        `Playwright Chromium is not installed at ${chromiumExecutablePath}. Run \`pnpm --dir ui exec playwright install chromium\`, set PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH to a compatible browser, or set OPENCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM=1 only when intentionally skipping this lane.`,
+        `Playwright Chromium is not installed at ${chromiumExecutablePath}. Run \`pnpm --dir ui exec playwright install chromium\`, set PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH to a compatible browser, or set SUNCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM=1 only when intentionally skipping this lane.`,
       );
     }
     server = await startControlUiE2eServer();
@@ -234,7 +234,7 @@ describeControlUiE2e("Control UI mocked Gateway E2E", () => {
 
       await gateway.resolveDeferred("chat.send", { runId, status: "started" });
       await page.waitForFunction(() => {
-        const app = document.querySelector("openclaw-app") as
+        const app = document.querySelector("sunclaw-app") as
           | (Element & { chatSending?: unknown })
           | null;
         return app?.chatSending === false;
@@ -358,7 +358,7 @@ describeControlUiE2e("Control UI mocked Gateway E2E", () => {
       });
       await page.getByText("First token visible.").waitFor({ timeout: 10_000 });
       await page.waitForFunction((expectedRunId) => {
-        const app = document.querySelector("openclaw-app") as
+        const app = document.querySelector("sunclaw-app") as
           | (Element & { eventLogBuffer?: unknown[] })
           | null;
         return (app?.eventLogBuffer ?? []).some((entry) => {
@@ -381,7 +381,7 @@ describeControlUiE2e("Control UI mocked Gateway E2E", () => {
       ).toBe(true);
       await gateway.resolveDeferred("chat.startup", {
         agentsList: {
-          agents: [{ id: "ops", name: "OpenClaw" }],
+          agents: [{ id: "ops", name: "SunClaw" }],
           defaultId: "ops",
           mainKey: "main",
           scope: "agent",

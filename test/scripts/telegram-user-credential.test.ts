@@ -88,7 +88,7 @@ describe("telegram user credential path handling", () => {
   });
 
   it("writes private JSON files", async () => {
-    const dir = makeTempDir("openclaw-telegram-credential-");
+    const dir = makeTempDir("sunclaw-telegram-credential-");
     await writePrivateJson(path.join(dir, "payload.json"), { status: "ok" });
     await expect(readFile(path.join(dir, "payload.json"), "utf8")).resolves.toBe(
       '{\n  "status": "ok"\n}\n',
@@ -111,7 +111,7 @@ describe("telegram user credential IO", () => {
   it.runIf(process.platform !== "win32")(
     "waits for timed-out child processes to exit before rejecting",
     async () => {
-      const dir = makeTempDir("openclaw-telegram-credential-timeout-");
+      const dir = makeTempDir("sunclaw-telegram-credential-timeout-");
       const terminatedPath = path.join(dir, "terminated.txt");
       const scriptPath = path.join(dir, "ignore-term.cjs");
       writeFileSync(
@@ -150,7 +150,7 @@ setInterval(() => {}, 1000);
   it.runIf(process.platform !== "win32")(
     "kills timed-out child process groups",
     async () => {
-      const dir = makeTempDir("openclaw-telegram-credential-tree-timeout-");
+      const dir = makeTempDir("sunclaw-telegram-credential-tree-timeout-");
       const childPidPath = path.join(dir, "child.pid");
       let childPid: number | undefined;
 

@@ -1,13 +1,13 @@
 {
-  "name": "@openclaw/kilocode-provider",
+  "name": "@sunclaw/kilocode-provider",
   "version": "2026.6.2",
   "private": true,
-  "description": "OpenClaw Kilo Gateway provider plugin",
+  "description": "SunClaw Kilo Gateway provider plugin",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@sunclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ]

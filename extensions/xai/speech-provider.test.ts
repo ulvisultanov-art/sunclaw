@@ -21,11 +21,11 @@ vi.mock("./tts.js", () => ({
   xaiTTS: xaiTTSMock,
 }));
 
-vi.mock("openclaw/plugin-sdk/provider-auth", () => ({
+vi.mock("sunclaw/plugin-sdk/provider-auth", () => ({
   isProviderAuthProfileConfigured: isProviderAuthProfileConfiguredMock,
 }));
 
-vi.mock("openclaw/plugin-sdk/provider-auth-runtime", () => ({
+vi.mock("sunclaw/plugin-sdk/provider-auth-runtime", () => ({
   resolveApiKeyForProvider: resolveApiKeyForProviderMock,
 }));
 

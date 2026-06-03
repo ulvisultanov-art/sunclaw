@@ -1,7 +1,7 @@
-import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "openclaw/plugin-sdk/account-id";
-import { resolveOptionalIntegerOption } from "openclaw/plugin-sdk/number-runtime";
-import { coerceSecretRef } from "openclaw/plugin-sdk/secret-ref-runtime";
-import { normalizeSecretInputString } from "openclaw/plugin-sdk/setup";
+import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "sunclaw/plugin-sdk/account-id";
+import { resolveOptionalIntegerOption } from "sunclaw/plugin-sdk/number-runtime";
+import { coerceSecretRef } from "sunclaw/plugin-sdk/secret-ref-runtime";
+import { normalizeSecretInputString } from "sunclaw/plugin-sdk/setup";
 import type { CoreConfig, MatrixConfig } from "../types.js";
 import { findMatrixAccountConfig } from "./account-config.js";
 import {

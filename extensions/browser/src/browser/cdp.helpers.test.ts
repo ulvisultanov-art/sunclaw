@@ -1,4 +1,4 @@
-import { MAX_TIMER_TIMEOUT_MS } from "openclaw/plugin-sdk/number-runtime";
+import { MAX_TIMER_TIMEOUT_MS } from "sunclaw/plugin-sdk/number-runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { resolveCdpReachabilityPolicy } from "./cdp-reachability-policy.js";
 import {
@@ -12,8 +12,8 @@ import { assertBrowserNavigationAllowed } from "./navigation-guard.js";
 
 const fetchWithSsrFGuardMock = vi.hoisted(() => vi.fn());
 
-vi.mock("openclaw/plugin-sdk/ssrf-runtime", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/ssrf-runtime")>();
+vi.mock("sunclaw/plugin-sdk/ssrf-runtime", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("sunclaw/plugin-sdk/ssrf-runtime")>();
   return {
     ...actual,
     fetchWithSsrFGuard: (...args: unknown[]) => fetchWithSsrFGuardMock(...args),
@@ -135,7 +135,7 @@ describe("cdp helpers", () => {
     });
 
     await expect(
-      fetchOk("http://openclaw:relay-token@127.0.0.1:9222/json/version", 250),
+      fetchOk("http://sunclaw:relay-token@127.0.0.1:9222/json/version", 250),
     ).resolves.toBeUndefined();
 
     const request = requireGuardedFetchRequest();
@@ -182,7 +182,7 @@ function createProfile(overrides: Partial<ResolvedBrowserProfile>): ResolvedBrow
     cdpHost: "172.29.128.1",
     cdpIsLoopback: false,
     color: "#123456",
-    driver: "openclaw",
+    driver: "sunclaw",
     attachOnly: false,
     ...overrides,
     headless: overrides.headless ?? false,

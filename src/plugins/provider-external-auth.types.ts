@@ -1,9 +1,9 @@
 import type { AuthProfileStore, OAuthCredential } from "../agents/auth-profiles/types.js";
 import type { ModelProviderAuthMode, ModelProviderConfig } from "../config/types.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 
 export type ProviderResolveSyntheticAuthContext = {
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   provider: string;
   providerConfig?: ModelProviderConfig;
 };
@@ -16,7 +16,7 @@ export type ProviderSyntheticAuthResult = {
 };
 
 export type ProviderResolveExternalAuthProfilesContext = {
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   agentDir?: string;
   workspaceDir?: string;
   env: NodeJS.ProcessEnv;

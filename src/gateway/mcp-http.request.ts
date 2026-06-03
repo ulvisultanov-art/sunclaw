@@ -1,9 +1,9 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
 import type { SourceReplyDeliveryMode } from "../auto-reply/get-reply-options.types.js";
 import type { InboundEventKind } from "../channels/inbound-event/kind.js";
 import { resolveMainSessionKey } from "../config/sessions.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { isTruthyEnvValue } from "../infra/env.js";
 import { safeEqualSecret } from "../security/secret-equal.js";
 import { normalizeMessageChannel } from "../utils/message-channel.js";
@@ -16,8 +16,8 @@ const MCP_HTTP_BODY_TOO_LARGE_CODE = "ETOOBIG";
 
 function shouldLogMcpLoopbackHttp(): boolean {
   return (
-    isTruthyEnvValue(process.env.OPENCLAW_CLI_BACKEND_LOG_OUTPUT) ||
-    isTruthyEnvValue(process.env.OPENCLAW_LIVE_CLI_BACKEND_DEBUG)
+    isTruthyEnvValue(process.env.SUNCLAW_CLI_BACKEND_LOG_OUTPUT) ||
+    isTruthyEnvValue(process.env.SUNCLAW_LIVE_CLI_BACKEND_DEBUG)
   );
 }
 
@@ -41,7 +41,7 @@ type McpRequestContext = {
   senderIsOwner: boolean | undefined;
 };
 
-function resolveScopedSessionKey(cfg: OpenClawConfig, rawSessionKey: string | undefined): string {
+function resolveScopedSessionKey(cfg: SunClawConfig, rawSessionKey: string | undefined): string {
   const trimmed = normalizeOptionalString(rawSessionKey);
   return !trimmed || trimmed === "main" ? resolveMainSessionKey(cfg) : trimmed;
 }
@@ -233,23 +233,23 @@ export function isMcpHttpBodyTooLargeError(error: unknown): error is Error & { c
 
 export function resolveMcpRequestContext(
   req: IncomingMessage,
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   auth: { senderIsOwner: boolean },
 ): McpRequestContext {
   return {
     sessionKey: resolveScopedSessionKey(cfg, getHeader(req, "x-session-key")),
     messageProvider:
-      normalizeMessageChannel(getHeader(req, "x-openclaw-message-channel")) ?? undefined,
-    currentChannelId: normalizeOptionalString(getHeader(req, "x-openclaw-current-channel-id")),
-    currentThreadTs: normalizeOptionalString(getHeader(req, "x-openclaw-current-thread-ts")),
-    currentMessageId: normalizeOptionalString(getHeader(req, "x-openclaw-current-message-id")),
+      normalizeMessageChannel(getHeader(req, "x-sunclaw-message-channel")) ?? undefined,
+    currentChannelId: normalizeOptionalString(getHeader(req, "x-sunclaw-current-channel-id")),
+    currentThreadTs: normalizeOptionalString(getHeader(req, "x-sunclaw-current-thread-ts")),
+    currentMessageId: normalizeOptionalString(getHeader(req, "x-sunclaw-current-message-id")),
     currentInboundAudio: normalizeMcpCurrentInboundAudio(
-      getHeader(req, "x-openclaw-current-inbound-audio"),
+      getHeader(req, "x-sunclaw-current-inbound-audio"),
     ),
-    accountId: normalizeOptionalString(getHeader(req, "x-openclaw-account-id")),
-    inboundEventKind: normalizeMcpInboundEventKind(getHeader(req, "x-openclaw-inbound-event-kind")),
+    accountId: normalizeOptionalString(getHeader(req, "x-sunclaw-account-id")),
+    inboundEventKind: normalizeMcpInboundEventKind(getHeader(req, "x-sunclaw-inbound-event-kind")),
     sourceReplyDeliveryMode: normalizeMcpSourceReplyDeliveryMode(
-      getHeader(req, "x-openclaw-source-reply-delivery-mode"),
+      getHeader(req, "x-sunclaw-source-reply-delivery-mode"),
     ),
     senderIsOwner: auth.senderIsOwner,
   };

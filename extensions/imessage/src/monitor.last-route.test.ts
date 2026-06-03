@@ -1,8 +1,8 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { MsgContext } from "openclaw/plugin-sdk/reply-runtime";
-import type { waitForTransportReady } from "openclaw/plugin-sdk/transport-ready-runtime";
+import type { MsgContext } from "sunclaw/plugin-sdk/reply-runtime";
+import type { waitForTransportReady } from "sunclaw/plugin-sdk/transport-ready-runtime";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { createIMessageRpcClient } from "./client.js";
 import { monitorIMessageProvider } from "./monitor.js";
@@ -55,12 +55,12 @@ const debouncerControl = vi.hoisted(() => ({
   },
 }));
 
-vi.mock("openclaw/plugin-sdk/transport-ready-runtime", () => ({
+vi.mock("sunclaw/plugin-sdk/transport-ready-runtime", () => ({
   waitForTransportReady: waitForTransportReadyMock,
 }));
 
-vi.mock("openclaw/plugin-sdk/conversation-runtime", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/conversation-runtime")>();
+vi.mock("sunclaw/plugin-sdk/conversation-runtime", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("sunclaw/plugin-sdk/conversation-runtime")>();
   return {
     ...actual,
     readChannelAllowFromStore: readChannelAllowFromStoreMock,
@@ -69,8 +69,8 @@ vi.mock("openclaw/plugin-sdk/conversation-runtime", async (importOriginal) => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/channel-inbound", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/channel-inbound")>();
+vi.mock("sunclaw/plugin-sdk/channel-inbound", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("sunclaw/plugin-sdk/channel-inbound")>();
   return {
     ...actual,
     createChannelInboundDebouncer: vi.fn((opts) => ({
@@ -92,8 +92,8 @@ vi.mock("openclaw/plugin-sdk/channel-inbound", async (importOriginal) => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/reply-runtime", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/reply-runtime")>();
+vi.mock("sunclaw/plugin-sdk/reply-runtime", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("sunclaw/plugin-sdk/reply-runtime")>();
   return {
     ...actual,
     dispatchInboundMessage: dispatchInboundMessageMock,
@@ -114,7 +114,7 @@ describe("iMessage monitor last-route updates", () => {
   async function createMessagesDbWithMaxRowid(maxRowid: number, dbPath?: string): Promise<string> {
     let resolvedDbPath = dbPath;
     if (!resolvedDbPath) {
-      const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-imsg-watch-watermark-"));
+      const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sunclaw-imsg-watch-watermark-"));
       tempDirs.push(stateDir);
       resolvedDbPath = path.join(stateDir, "chat.db");
     }
@@ -551,7 +551,7 @@ describe("iMessage monitor last-route updates", () => {
   });
 
   it("uses the default local chat.db path for the startup watermark", async () => {
-    const homeDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-imsg-default-home-"));
+    const homeDir = fs.mkdtempSync(path.join(os.tmpdir(), "sunclaw-imsg-default-home-"));
     tempDirs.push(homeDir);
     vi.stubEnv("HOME", homeDir);
     await createMessagesDbWithMaxRowid(4000, path.join(homeDir, "Library", "Messages", "chat.db"));
@@ -631,7 +631,7 @@ describe("iMessage monitor last-route updates", () => {
   });
 
   it("subscribes without a startup watermark when the configured dbPath is not readable", async () => {
-    const dbPath = path.join(os.tmpdir(), `openclaw-missing-chat-${Date.now()}.db`);
+    const dbPath = path.join(os.tmpdir(), `sunclaw-missing-chat-${Date.now()}.db`);
     const client = {
       request: vi.fn(async () => ({ subscription: 1 })),
       waitForClose: vi.fn(async () => {}),
@@ -690,9 +690,9 @@ describe("iMessage monitor last-route updates", () => {
   });
 
   it("advances the catchup cursor after startup catchup succeeds and a live row is handled", async () => {
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-imsg-live-cursor-"));
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sunclaw-imsg-live-cursor-"));
     tempDirs.push(stateDir);
-    vi.stubEnv("OPENCLAW_STATE_DIR", stateDir);
+    vi.stubEnv("SUNCLAW_STATE_DIR", stateDir);
 
     let onNotification: ((message: { method: string; params: unknown }) => void) | undefined;
     const client = {
@@ -757,9 +757,9 @@ describe("iMessage monitor last-route updates", () => {
   it("flushes live cursor advancement for rows handled while startup catchup is running", async () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2026-05-22T15:31:00.000Z"));
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-imsg-live-during-catchup-"));
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sunclaw-imsg-live-during-catchup-"));
     tempDirs.push(stateDir);
-    vi.stubEnv("OPENCLAW_STATE_DIR", stateDir);
+    vi.stubEnv("SUNCLAW_STATE_DIR", stateDir);
 
     let onNotification: ((message: { method: string; params: unknown }) => void) | undefined;
     const client = {
@@ -842,9 +842,9 @@ describe("iMessage monitor last-route updates", () => {
   });
 
   it("repairs anchorless group watch payloads before routing or cursor updates", async () => {
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-imsg-anchor-repair-"));
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sunclaw-imsg-anchor-repair-"));
     tempDirs.push(stateDir);
-    vi.stubEnv("OPENCLAW_STATE_DIR", stateDir);
+    vi.stubEnv("SUNCLAW_STATE_DIR", stateDir);
 
     let onNotification: ((message: { method: string; params: unknown }) => void) | undefined;
     const client = {
@@ -884,7 +884,7 @@ describe("iMessage monitor last-route updates", () => {
               chat_id: 0,
               sender: "+15550001111",
               is_from_me: false,
-              text: "@openclaw check this https://example.com",
+              text: "@sunclaw check this https://example.com",
               is_group: false,
               chat_guid: "",
               chat_identifier: "",
@@ -917,7 +917,7 @@ describe("iMessage monitor last-route updates", () => {
           },
         },
         messages: {
-          groupChat: { mentionPatterns: ["@openclaw"] },
+          groupChat: { mentionPatterns: ["@sunclaw"] },
           inbound: { debounceMs: 0 },
         },
         session: { mainKey: "main" },
@@ -939,9 +939,9 @@ describe("iMessage monitor last-route updates", () => {
   it("does not advance the live cursor after partial startup catchup", async () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2026-05-22T15:31:00.000Z"));
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-imsg-partial-cursor-"));
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sunclaw-imsg-partial-cursor-"));
     tempDirs.push(stateDir);
-    vi.stubEnv("OPENCLAW_STATE_DIR", stateDir);
+    vi.stubEnv("SUNCLAW_STATE_DIR", stateDir);
 
     let onNotification: ((message: { method: string; params: unknown }) => void) | undefined;
     const client = {
@@ -1029,9 +1029,9 @@ describe("iMessage monitor last-route updates", () => {
   });
 
   it("advances a coalesced live bucket to the highest source row", async () => {
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-imsg-coalesced-cursor-"));
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sunclaw-imsg-coalesced-cursor-"));
     tempDirs.push(stateDir);
-    vi.stubEnv("OPENCLAW_STATE_DIR", stateDir);
+    vi.stubEnv("SUNCLAW_STATE_DIR", stateDir);
     debouncerControl.holdEntries = true;
 
     let onNotification: ((message: { method: string; params: unknown }) => void) | undefined;

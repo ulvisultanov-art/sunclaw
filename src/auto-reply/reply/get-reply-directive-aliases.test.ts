@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { SunClawConfig } from "../../config/config.js";
 import { parseInlineDirectives } from "./directive-handling.parse.js";
 import {
   reserveSkillCommandNames,
   resolveConfiguredDirectiveAliases,
 } from "./get-reply-directive-aliases.js";
 
-function configWithModelAlias(alias: string): OpenClawConfig {
+function configWithModelAlias(alias: string): SunClawConfig {
   return {
     agents: {
       defaults: {
@@ -15,7 +15,7 @@ function configWithModelAlias(alias: string): OpenClawConfig {
         },
       },
     },
-  } as unknown as OpenClawConfig;
+  } as unknown as SunClawConfig;
 }
 
 describe("reply directive aliases", () => {

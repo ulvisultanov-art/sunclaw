@@ -24,9 +24,9 @@ describe("qa-otel-smoke receiver bounds", () => {
         encoding: "utf8",
         env: {
           ...process.env,
-          OPENCLAW_QA_OTEL_MAX_CAPTURED_BODY_TEXT_BYTES: "1024",
-          OPENCLAW_QA_OTEL_MAX_COMPRESSED_BODY_BYTES: "2048",
-          OPENCLAW_QA_OTEL_MAX_DECODED_BODY_BYTES: "4096",
+          SUNCLAW_QA_OTEL_MAX_CAPTURED_BODY_TEXT_BYTES: "1024",
+          SUNCLAW_QA_OTEL_MAX_COMPRESSED_BODY_BYTES: "2048",
+          SUNCLAW_QA_OTEL_MAX_DECODED_BODY_BYTES: "4096",
         },
       },
     );
@@ -123,7 +123,7 @@ describe("qa-otel-smoke receiver bounds", () => {
       return;
     }
 
-    const tempDir = mkdtempSync(path.join(os.tmpdir(), "openclaw-qa-otel-child-"));
+    const tempDir = mkdtempSync(path.join(os.tmpdir(), "sunclaw-qa-otel-child-"));
     const markerPath = path.join(tempDir, "marker.txt");
     try {
       const gatewayScript = [
@@ -151,7 +151,7 @@ describe("qa-otel-smoke receiver bounds", () => {
       );
 
       await expect(testing.waitForChild(child, 100, 100)).rejects.toThrow(
-        "openclaw qa suite timed out after 100ms",
+        "sunclaw qa suite timed out after 100ms",
       );
       const sizeAfterReturn = existsSync(markerPath) ? statSync(markerPath).size : 0;
       await new Promise((resolve) => {
@@ -183,7 +183,7 @@ describe("qa-otel-smoke receiver bounds", () => {
   });
 
   it("cleans Docker collector containers and temp config after readiness failures", async () => {
-    const tempRoot = mkdtempSync(path.join(os.tmpdir(), "openclaw-qa-otel-collector-"));
+    const tempRoot = mkdtempSync(path.join(os.tmpdir(), "sunclaw-qa-otel-collector-"));
     const collectorDir = path.join(tempRoot, "collector");
     const child = new EventEmitter() as EventEmitter & {
       stderr: EventEmitter;
@@ -211,7 +211,7 @@ describe("qa-otel-smoke receiver bounds", () => {
       ).rejects.toThrow("collector never became ready");
 
       expect(stopDockerContainer).toHaveBeenCalledWith(
-        "openclaw-otel-smoke-00000000-0000-4000-8000-000000000000",
+        "sunclaw-otel-smoke-00000000-0000-4000-8000-000000000000",
       );
       expect(existsSync(collectorDir)).toBe(false);
     } finally {

@@ -1,11 +1,11 @@
 {
-  "name": "@openclaw/discord",
+  "name": "@sunclaw/discord",
   "version": "2026.6.2",
   "lockfileVersion": 3,
   "requires": true,
   "packages": {
     "": {
-      "name": "@openclaw/discord",
+      "name": "@sunclaw/discord",
       "version": "2026.6.2",
       "dependencies": {
         "@discordjs/voice": "0.19.2",
@@ -16,10 +16,10 @@
         "ws": "8.21.0"
       },
       "peerDependencies": {
-        "openclaw": ">=2026.6.2"
+        "sunclaw": ">=2026.6.2"
       },
       "peerDependenciesMeta": {
-        "openclaw": {
+        "sunclaw": {
           "optional": true
         }
       }

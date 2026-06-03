@@ -18,7 +18,7 @@ function assistantTextMessage(text: string, seq: number) {
   return {
     role: "assistant" as const,
     content: textContent(text),
-    __openclaw: { seq },
+    __sunclaw: { seq },
   };
 }
 
@@ -26,7 +26,7 @@ function userTextMessage(text: string, seq: number) {
   return {
     role: "user" as const,
     content: textContent(text),
-    __openclaw: { seq },
+    __sunclaw: { seq },
   };
 }
 
@@ -70,7 +70,7 @@ function messageToolResult(
     toolName: "message",
     toolCallId,
     content: { ok: true, messageId, ...content },
-    ...(seq === undefined ? {} : { __openclaw: { seq } }),
+    ...(seq === undefined ? {} : { __sunclaw: { seq } }),
   };
 }
 
@@ -97,16 +97,16 @@ describe("SessionHistorySseState", () => {
         (
           state.snapshot().messages[0] as {
             content?: Array<{ text?: string }>;
-            __openclaw?: { seq?: number };
+            __sunclaw?: { seq?: number };
           }
         ).content?.[0]?.text,
       ).toBe("fresh snapshot message");
       expect(
         (
           state.snapshot().messages[0] as {
-            __openclaw?: { seq?: number };
+            __sunclaw?: { seq?: number };
           }
-        )["__openclaw"]?.seq,
+        )["__sunclaw"]?.seq,
       ).toBe(2);
 
       const appended = state.appendInlineMessage({
@@ -130,7 +130,7 @@ describe("SessionHistorySseState", () => {
     });
 
     expect(snapshot.history.items).toBe(snapshot.history.messages);
-    expect(snapshot.history.messages[0]?.["__openclaw"]?.seq).toBe(2);
+    expect(snapshot.history.messages[0]?.["__sunclaw"]?.seq).toBe(2);
     expect(snapshot.rawTranscriptSeq).toBe(2);
   });
 
@@ -140,7 +140,7 @@ describe("SessionHistorySseState", () => {
     const appended = appendAssistantText(state, "carried", 9);
 
     expect(appended?.messageSeq).toBe(9);
-    expect(state.snapshot().messages.at(-1)?.["__openclaw"]?.seq).toBe(9);
+    expect(state.snapshot().messages.at(-1)?.["__sunclaw"]?.seq).toBe(9);
   });
 
   test("emits message-tool mirror when silent control reply completes inline append", () => {
@@ -175,14 +175,14 @@ describe("SessionHistorySseState", () => {
       (
         appended?.message as {
           content?: Array<{ text?: string }>;
-          openclawMessageToolMirror?: unknown;
+          sunclawMessageToolMirror?: unknown;
         }
       )?.content?.[0]?.text,
     ).toBe("Still the current chat.");
     expect(
       Boolean(
-        (appended?.message as { openclawMessageToolMirror?: unknown } | undefined)
-          ?.openclawMessageToolMirror,
+        (appended?.message as { sunclawMessageToolMirror?: unknown } | undefined)
+          ?.sunclawMessageToolMirror,
       ),
     ).toBe(true);
   });
@@ -204,7 +204,7 @@ describe("SessionHistorySseState", () => {
               },
             },
           ],
-          __openclaw: { seq: 1 },
+          __sunclaw: { seq: 1 },
         },
         {
           role: "user",
@@ -214,7 +214,7 @@ describe("SessionHistorySseState", () => {
             sourceSessionKey: "agent:main:webchat:source",
             sourceTool: "sessions_send",
           },
-          __openclaw: { seq: 2 },
+          __sunclaw: { seq: 2 },
         },
       ],
     });
@@ -247,14 +247,14 @@ describe("SessionHistorySseState", () => {
       (
         appended?.message as {
           content?: Array<{ text?: string }>;
-          openclawMessageToolMirror?: unknown;
+          sunclawMessageToolMirror?: unknown;
         }
       )?.content?.[0]?.text,
     ).toBe("Still visible after forwarded handoff.");
     expect(
       Boolean(
-        (appended?.message as { openclawMessageToolMirror?: unknown } | undefined)
-          ?.openclawMessageToolMirror,
+        (appended?.message as { sunclawMessageToolMirror?: unknown } | undefined)
+          ?.sunclawMessageToolMirror,
       ),
     ).toBe(true);
   });
@@ -266,7 +266,7 @@ describe("SessionHistorySseState", () => {
         {
           role: "assistant",
           content: [messageToolCall("call-message-cursor", "Cursor-visible reply.")],
-          __openclaw: { seq: 2 },
+          __sunclaw: { seq: 2 },
         },
         messageToolResult("call-message-cursor", "cursor", 3),
         assistantTextMessage("NO_REPLY", 4),
@@ -275,7 +275,7 @@ describe("SessionHistorySseState", () => {
     });
 
     expect(snapshot.history.nextCursor).toBe("3");
-    expect(snapshot.history.messages[0]?.["__openclaw"]?.seq).toBe(3);
+    expect(snapshot.history.messages[0]?.["__sunclaw"]?.seq).toBe(3);
     expect(
       (snapshot.history.messages[0] as { content?: Array<{ text?: string }> }).content?.[0]?.text,
     ).toBe("Cursor-visible reply.");
@@ -287,7 +287,7 @@ describe("SessionHistorySseState", () => {
       cursor: "seq:2next",
     });
 
-    expect(snapshot.history.messages.map((message) => message["__openclaw"]?.seq)).toEqual([1, 2]);
+    expect(snapshot.history.messages.map((message) => message["__sunclaw"]?.seq)).toEqual([1, 2]);
   });
 
   test("requests refresh when silent control reply completes multiple message-tool mirrors", () => {
@@ -354,7 +354,7 @@ describe("SessionHistorySseState", () => {
             },
           },
         ],
-        openclawTtsSupplement: { textSha256, spokenText: visibleText },
+        sunclawTtsSupplement: { textSha256, spokenText: visibleText },
       },
       messageSeq: 3,
     });
@@ -375,7 +375,7 @@ describe("SessionHistorySseState", () => {
             },
           },
         ],
-        __openclaw: { seq: 2 },
+        __sunclaw: { seq: 2 },
       },
     ]);
   });
@@ -387,7 +387,7 @@ describe("SessionHistorySseState", () => {
 
     expect(appended).toEqual({ shouldRefresh: true });
     expect(state.snapshot().messages).toHaveLength(1);
-    expect(state.snapshot().messages.at(-1)?.["__openclaw"]?.seq).toBe(5);
+    expect(state.snapshot().messages.at(-1)?.["__sunclaw"]?.seq).toBe(5);
   });
 
   test("marks bounded tail snapshots as having older history", () => {
@@ -418,12 +418,12 @@ describe("SessionHistorySseState", () => {
         limit: 1,
       });
 
-      expect(state.snapshot().messages[0]?.["__openclaw"]?.seq).toBe(7);
+      expect(state.snapshot().messages[0]?.["__sunclaw"]?.seq).toBe(7);
       const refreshed = await state.refreshAsync();
 
       expect(refreshed.hasMore).toBe(true);
       expect(refreshed.nextCursor).toBe("8");
-      expect(refreshed.messages[0]?.["__openclaw"]?.seq).toBe(8);
+      expect(refreshed.messages[0]?.["__sunclaw"]?.seq).toBe(8);
       expect(tailReadSpy).toHaveBeenCalledTimes(1);
       expect(fullReadSpy).not.toHaveBeenCalled();
     } finally {
@@ -441,15 +441,15 @@ describe("SessionHistorySseState", () => {
             {
               type: "text",
               text: [
-                "<<<BEGIN_OPENCLAW_INTERNAL_CONTEXT>>>",
+                "<<<BEGIN_SUNCLAW_INTERNAL_CONTEXT>>>",
                 "secret runtime context",
-                "<<<END_OPENCLAW_INTERNAL_CONTEXT>>>",
+                "<<<END_SUNCLAW_INTERNAL_CONTEXT>>>",
                 "",
                 "visible ask",
               ].join("\n"),
             },
           ],
-          __openclaw: { seq: 1 },
+          __sunclaw: { seq: 1 },
         },
       ],
     });
@@ -473,13 +473,13 @@ describe("SessionHistorySseState", () => {
             {
               type: "text",
               text: [
-                "<<<BEGIN_OPENCLAW_INTERNAL_CONTEXT>>>",
+                "<<<BEGIN_SUNCLAW_INTERNAL_CONTEXT>>>",
                 "subagent completion payload",
-                "<<<END_OPENCLAW_INTERNAL_CONTEXT>>>",
+                "<<<END_SUNCLAW_INTERNAL_CONTEXT>>>",
               ].join("\n"),
             },
           ],
-          __openclaw: { seq: 1 },
+          __sunclaw: { seq: 1 },
         },
         assistantTextMessage("visible answer", 2),
       ],
@@ -493,10 +493,10 @@ describe("SessionHistorySseState", () => {
       rawMessages: [
         {
           role: "custom",
-          customType: "openclaw.runtime-context",
+          customType: "sunclaw.runtime-context",
           content: "secret runtime context",
           display: false,
-          __openclaw: { seq: 1 },
+          __sunclaw: { seq: 1 },
         },
         assistantTextMessage("visible answer", 2),
       ],
@@ -516,10 +516,10 @@ describe("SessionHistorySseState", () => {
               type: "text",
               text: [
                 "[Inter-session message] sourceSession=agent:main:subagent:child sourceChannel=webchat sourceTool=subagent_announce isUser=false",
-                "This content was routed by OpenClaw from another session or internal tool.",
-                "<<<BEGIN_OPENCLAW_INTERNAL_CONTEXT>>>",
+                "This content was routed by SunClaw from another session or internal tool.",
+                "<<<BEGIN_SUNCLAW_INTERNAL_CONTEXT>>>",
                 "subagent completion payload",
-                "<<<END_OPENCLAW_INTERNAL_CONTEXT>>>",
+                "<<<END_SUNCLAW_INTERNAL_CONTEXT>>>",
               ].join("\n"),
             },
           ],
@@ -528,7 +528,7 @@ describe("SessionHistorySseState", () => {
             sourceSessionKey: "agent:main:subagent:child",
             sourceTool: "subagent_announce",
           },
-          __openclaw: { seq: 1 },
+          __sunclaw: { seq: 1 },
         },
         assistantTextMessage("clean child result", 2),
       ],
@@ -543,13 +543,13 @@ describe("SessionHistorySseState", () => {
         {
           role: "user",
           content: `${HEARTBEAT_PROMPT}\nWhen reading HEARTBEAT.md, use workspace file /tmp/HEARTBEAT.md (exact case). Do not read docs/heartbeat.md.`,
-          __openclaw: { seq: 1 },
+          __sunclaw: { seq: 1 },
         },
         assistantTextMessage("HEARTBEAT_OK", 2),
         {
           role: "user",
           content: HEARTBEAT_PROMPT,
-          __openclaw: { seq: 3 },
+          __sunclaw: { seq: 3 },
         },
         assistantTextMessage("Disk usage crossed 95 percent.", 4),
       ],
@@ -575,7 +575,7 @@ describe("SessionHistorySseState", () => {
       state.appendInlineMessage({
         message: {
           role: "custom",
-          customType: "openclaw.runtime-context",
+          customType: "sunclaw.runtime-context",
           content: "secret runtime context",
           display: false,
         },
@@ -589,9 +589,9 @@ describe("SessionHistorySseState", () => {
             {
               type: "text",
               text: [
-                "<<<BEGIN_OPENCLAW_INTERNAL_CONTEXT>>>",
+                "<<<BEGIN_SUNCLAW_INTERNAL_CONTEXT>>>",
                 "runtime details",
-                "<<<END_OPENCLAW_INTERNAL_CONTEXT>>>",
+                "<<<END_SUNCLAW_INTERNAL_CONTEXT>>>",
               ].join("\n"),
             },
           ],

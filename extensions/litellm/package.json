@@ -1,13 +1,13 @@
 {
-  "name": "@openclaw/litellm-provider",
+  "name": "@sunclaw/litellm-provider",
   "version": "2026.6.2",
   "private": true,
-  "description": "OpenClaw LiteLLM provider plugin",
+  "description": "SunClaw LiteLLM provider plugin",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@sunclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ]

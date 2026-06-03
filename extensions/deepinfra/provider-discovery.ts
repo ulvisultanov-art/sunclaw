@@ -1,5 +1,5 @@
-import type { ProviderCatalogContext } from "openclaw/plugin-sdk/provider-catalog-shared";
-import type { ProviderPlugin } from "openclaw/plugin-sdk/provider-model-shared";
+import type { ProviderCatalogContext } from "sunclaw/plugin-sdk/provider-catalog-shared";
+import type { ProviderPlugin } from "sunclaw/plugin-sdk/provider-model-shared";
 import { buildDeepInfraApiKeyCatalog, buildStaticDeepInfraProvider } from "./provider-catalog.js";
 
 const PROVIDER_ID = "deepinfra";

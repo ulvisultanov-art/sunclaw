@@ -1,5 +1,5 @@
-import { embeddedAgentLog } from "openclaw/plugin-sdk/agent-harness-runtime";
-import { resolveTimerTimeoutMs } from "openclaw/plugin-sdk/number-runtime";
+import { embeddedAgentLog } from "sunclaw/plugin-sdk/agent-harness-runtime";
+import { resolveTimerTimeoutMs } from "sunclaw/plugin-sdk/number-runtime";
 
 type Timer = ReturnType<typeof setTimeout>;
 

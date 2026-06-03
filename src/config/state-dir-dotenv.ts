@@ -8,7 +8,7 @@ import {
 } from "../infra/host-env-security.js";
 import { collectConfigServiceEnvVars } from "./config-env-vars.js";
 import { resolveStateDir } from "./paths.js";
-import type { OpenClawConfig } from "./types.js";
+import type { SunClawConfig } from "./types.js";
 
 function isBlockedServiceEnvVar(key: string): boolean {
   return isDangerousHostEnvVarName(key) || isDangerousHostEnvOverrideVarName(key);
@@ -29,7 +29,7 @@ function unwrapMatchingLiteralQuotes(value: string): string {
 export function isUnresolvedShellReference(value: string): boolean {
   const candidate = unwrapMatchingLiteralQuotes(value.trim());
   // Match only values whose entire content is a shell variable reference:
-  //   $VAR_NAME          (simple reference, OpenClaw env-var style)
+  //   $VAR_NAME          (simple reference, SunClaw env-var style)
   //   ${VAR_NAME}        (brace-form reference)
   //   $(command)         (command substitution)
   // A real credential that merely contains a $ (e.g. "abc$2!", "$100") is NOT matched.
@@ -45,7 +45,7 @@ type ParsedStateDirDotEnv = {
   entries: Record<string, string>;
   /**
    * Keys that were dropped because their entire value was an unresolved shell
-   * reference ($VAR, ${VAR}, or $(cmd)). These are still OpenClaw-managed keys:
+   * reference ($VAR, ${VAR}, or $(cmd)). These are still SunClaw-managed keys:
    * a previously generated env file may carry a stale literal reference for them
    * that must be removed on re-stage rather than preserved as an operator secret.
    */
@@ -89,7 +89,7 @@ export function readStateDirDotEnvVarsFromStateDir(stateDir: string): Record<str
  * Read and parse the state-dir `.env`, returning both the persisted entries and
  * the keys that were skipped because they held unresolved shell references. The
  * skipped keys are surfaced so generated service env files can remove stale
- * literal references for keys OpenClaw previously managed.
+ * literal references for keys SunClaw previously managed.
  */
 export function readStateDirDotEnvFromStateDir(stateDir: string): ParsedStateDirDotEnv {
   const dotEnvPath = path.join(stateDir, ".env");
@@ -101,7 +101,7 @@ export function readStateDirDotEnvFromStateDir(stateDir: string): ParsedStateDir
 }
 
 /**
- * Read and parse `~/.openclaw/.env` (or `$OPENCLAW_STATE_DIR/.env`), returning
+ * Read and parse `~/.sunclaw/.env` (or `$SUNCLAW_STATE_DIR/.env`), returning
  * a filtered record of key-value pairs suitable for a managed service
  * environment source.
  */
@@ -120,7 +120,7 @@ export type DurableServiceEnvVarSources = {
 
 export function collectDurableServiceEnvVarSources(params: {
   env: Record<string, string | undefined>;
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
 }): DurableServiceEnvVarSources {
   const stateDirDotEnvEnvironment = readStateDirDotEnvVars(params.env);
   const configEnvironment = collectConfigServiceEnvVars(params.config);
@@ -144,7 +144,7 @@ export function collectDurableServiceEnvVarSources(params: {
  */
 export function collectDurableServiceEnvVars(params: {
   env: Record<string, string | undefined>;
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
 }): Record<string, string> {
   return collectDurableServiceEnvVarSources(params).durableEnvironment;
 }

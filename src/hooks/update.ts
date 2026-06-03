@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { buildNpmResolutionFields } from "../infra/install-source-utils.js";
 import {
   expectedIntegrityForUpdate,
@@ -27,7 +27,7 @@ export type HookPackUpdateOutcome = {
 };
 
 export type HookPackUpdateSummary = {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   changed: boolean;
   outcomes: HookPackUpdateOutcome[];
 };
@@ -67,7 +67,7 @@ function createHookPackUpdateIntegrityDriftHandler(params: {
 }
 
 export async function updateNpmInstalledHookPacks(params: {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   logger?: HookPackUpdateLogger;
   hookIds?: string[];
   dryRun?: boolean;

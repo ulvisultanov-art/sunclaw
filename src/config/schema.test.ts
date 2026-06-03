@@ -1,9 +1,9 @@
-import { SENSITIVE_URL_HINT_TAG } from "@openclaw/net-policy/redact-sensitive-url";
+import { SENSITIVE_URL_HINT_TAG } from "@sunclaw/net-policy/redact-sensitive-url";
 import { beforeAll, describe, expect, it } from "vitest";
 import { buildConfigSchema, lookupConfigSchema } from "./schema.js";
 import { applyDerivedTags, CONFIG_TAGS, deriveTagsForPath } from "./schema.tags.js";
 import { ToolsSchema } from "./zod-schema.agent-runtime.js";
-import { OpenClawSchema } from "./zod-schema.js";
+import { SunClawSchema } from "./zod-schema.js";
 import { DiscordConfigSchema, TelegramConfigSchema } from "./zod-schema.providers-core.js";
 
 describe("config schema", () => {
@@ -156,7 +156,7 @@ describe("config schema", () => {
 
   it("rejects empty Codex MCP agent scopes", () => {
     expect(() =>
-      OpenClawSchema.parse({
+      SunClawSchema.parse({
         mcp: {
           servers: {
             scoped: {
@@ -169,7 +169,7 @@ describe("config schema", () => {
       }),
     ).toThrow();
     expect(() =>
-      OpenClawSchema.parse({
+      SunClawSchema.parse({
         mcp: {
           servers: {
             scoped: {
@@ -182,7 +182,7 @@ describe("config schema", () => {
       }),
     ).toThrow();
     expect(() =>
-      OpenClawSchema.parse({
+      SunClawSchema.parse({
         mcp: {
           servers: {
             scoped: {
@@ -198,7 +198,7 @@ describe("config schema", () => {
 
   it("validates MCP OAuth client metadata URLs against the SDK contract", () => {
     expect(() =>
-      OpenClawSchema.parse({
+      SunClawSchema.parse({
         mcp: {
           servers: {
             docs: {
@@ -206,7 +206,7 @@ describe("config schema", () => {
               transport: "streamable-http",
               auth: "oauth",
               oauth: {
-                clientMetadataUrl: "https://client.example.com/openclaw-mcp.json",
+                clientMetadataUrl: "https://client.example.com/sunclaw-mcp.json",
               },
             },
           },
@@ -214,11 +214,11 @@ describe("config schema", () => {
       }),
     ).not.toThrow();
     for (const clientMetadataUrl of [
-      "http://client.example.com/openclaw-mcp.json",
+      "http://client.example.com/sunclaw-mcp.json",
       "https://client.example.com/",
     ]) {
       expect(() =>
-        OpenClawSchema.parse({
+        SunClawSchema.parse({
           mcp: {
             servers: {
               docs: {
@@ -479,7 +479,7 @@ describe("config schema", () => {
   });
 
   it("keeps per-agent model overrides limited to model selection", () => {
-    const result = OpenClawSchema.safeParse({
+    const result = SunClawSchema.safeParse({
       agents: {
         list: [
           {
@@ -497,7 +497,7 @@ describe("config schema", () => {
   });
 
   it("rejects per-agent subagent model timeout config", () => {
-    const result = OpenClawSchema.safeParse({
+    const result = SunClawSchema.safeParse({
       agents: {
         list: [
           {
@@ -524,7 +524,7 @@ describe("config schema", () => {
     });
     expect(tools?.exec?.commandHighlighting).toBe(false);
 
-    const config = OpenClawSchema.parse({
+    const config = SunClawSchema.parse({
       agents: {
         list: [
           {
@@ -556,7 +556,7 @@ describe("config schema", () => {
       primary: "openrouter/anthropic/claude-sonnet-4-6",
     });
 
-    const config = OpenClawSchema.parse({
+    const config = SunClawSchema.parse({
       agents: {
         list: [
           {
@@ -586,7 +586,7 @@ describe("config schema", () => {
     ).toBe(false);
 
     expect(
-      OpenClawSchema.safeParse({
+      SunClawSchema.safeParse({
         agents: {
           list: [
             {
@@ -702,7 +702,7 @@ describe("config schema", () => {
   });
 
   it("accepts WhatsApp Web Baileys socket timing in the runtime zod schema", () => {
-    const parsed = OpenClawSchema.parse({
+    const parsed = SunClawSchema.parse({
       web: {
         whatsapp: {
           keepAliveIntervalMs: 15_000,

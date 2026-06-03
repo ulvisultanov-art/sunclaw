@@ -1,11 +1,11 @@
-# OpenClaw Matrix
+# SunClaw Matrix
 
-Official OpenClaw channel plugin for Matrix rooms and direct messages.
+Official SunClaw channel plugin for Matrix rooms and direct messages.
 
-Install from OpenClaw:
+Install from SunClaw:
 
 ```bash
-openclaw plugin add @openclaw/matrix
+sunclaw plugin add @sunclaw/matrix
 ```
 
-Configure the Matrix homeserver and bot credentials in OpenClaw. The plugin lets agents join configured rooms, receive messages, and reply through Matrix.
+Configure the Matrix homeserver and bot credentials in SunClaw. The plugin lets agents join configured rooms, receive messages, and reply through Matrix.

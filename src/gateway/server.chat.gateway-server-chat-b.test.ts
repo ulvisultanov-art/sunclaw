@@ -70,7 +70,7 @@ async function withGatewayChatHarness(
   const tempDirs: string[] = [];
   const ws = await harness.openWs();
   const createSessionDir = async () => {
-    const sessionDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-gw-"));
+    const sessionDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-gw-"));
     tempDirs.push(sessionDir);
     testState.sessionStorePath = path.join(sessionDir, "sessions.json");
     return sessionDir;
@@ -80,8 +80,8 @@ async function withGatewayChatHarness(
     await run({ ws, createSessionDir });
   } finally {
     setMaxChatHistoryMessagesBytesForTest();
-    if (process.env.OPENCLAW_CONFIG_PATH) {
-      await fs.rm(process.env.OPENCLAW_CONFIG_PATH, { force: true });
+    if (process.env.SUNCLAW_CONFIG_PATH) {
+      await fs.rm(process.env.SUNCLAW_CONFIG_PATH, { force: true });
     }
     clearConfigCache();
     testState.sessionStorePath = undefined;
@@ -103,9 +103,9 @@ async function writeMainSessionStore() {
 }
 
 async function writeGatewayConfig(config: Record<string, unknown>) {
-  const configPath = process.env.OPENCLAW_CONFIG_PATH;
+  const configPath = process.env.SUNCLAW_CONFIG_PATH;
   if (!configPath) {
-    throw new Error("OPENCLAW_CONFIG_PATH missing in gateway test environment");
+    throw new Error("SUNCLAW_CONFIG_PATH missing in gateway test environment");
   }
   await fs.mkdir(path.dirname(configPath), { recursive: true });
   await fs.writeFile(configPath, JSON.stringify(config, null, 2), "utf-8");
@@ -202,7 +202,7 @@ async function prepareMainHistoryHarness(params: {
 
 describe("gateway server chat", () => {
   test("chat.history returns catalog-backed session metadata with history", async () => {
-    const sessionDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-gw-"));
+    const sessionDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-gw-"));
     try {
       testState.sessionStorePath = path.join(sessionDir, "sessions.json");
       testState.agentConfig = {
@@ -493,7 +493,7 @@ describe("gateway server chat", () => {
   });
 
   test("chat.send returns in_flight when duplicate attachment send wins parsing race", async () => {
-    const sessionDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-gw-"));
+    const sessionDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-gw-"));
     const dispatchRelease = createDeferred<void>();
     try {
       testState.sessionStorePath = path.join(sessionDir, "sessions.json");
@@ -633,7 +633,7 @@ describe("gateway server chat", () => {
   test.each(configuredImageModelCases)(
     "chat.send preserves text-only image uploads as MediaPaths even with configured imageModel: $id",
     async ({ id, imageModel }) => {
-      const sessionDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-gw-"));
+      const sessionDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-gw-"));
       try {
         testState.sessionStorePath = path.join(sessionDir, "sessions.json");
         testState.agentConfig = {
@@ -784,7 +784,7 @@ describe("gateway server chat", () => {
   );
 
   test("chat.send reuses an active internal run for duplicate WebChat text sends", async () => {
-    const sessionDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-gw-"));
+    const sessionDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-gw-"));
     const dispatchRelease = createDeferred<void>();
     try {
       testState.sessionStorePath = path.join(sessionDir, "sessions.json");
@@ -905,7 +905,7 @@ describe("gateway server chat", () => {
   });
 
   test("chat.send starts the next WebChat turn after the prior internal run finishes", async () => {
-    const sessionDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-gw-"));
+    const sessionDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-gw-"));
     try {
       testState.sessionStorePath = path.join(sessionDir, "sessions.json");
       await writeSessionStore({
@@ -1010,7 +1010,7 @@ describe("gateway server chat", () => {
       expect(dispatchOptions[0]?.runId).toBe("idem-sequential-a");
       expect(dispatchOptions[1]?.runId).toBe("idem-sequential-b");
       expect(dispatchOptions[0]?.promptCacheKey).toEqual(
-        expect.stringMatching(/^openclaw-webchat-[a-f0-9]{32}$/u),
+        expect.stringMatching(/^sunclaw-webchat-[a-f0-9]{32}$/u),
       );
       expect(dispatchOptions[1]?.promptCacheKey).toBe(dispatchOptions[0]?.promptCacheKey);
       expect(dispatchOptions[0]?.promptCacheKey).not.toContain("main");
@@ -1050,7 +1050,7 @@ describe("gateway server chat", () => {
             message: {
               role: "user",
               content:
-                'Sender (untrusted metadata):\n```json\n{"label":"openclaw-control-ui"}\n```\n\n[Thu 2026-03-26 16:29 GMT] hi',
+                'Sender (untrusted metadata):\n```json\n{"label":"sunclaw-control-ui"}\n```\n\n[Thu 2026-03-26 16:29 GMT] hi',
             },
           }),
           JSON.stringify({
@@ -1319,12 +1319,12 @@ describe("gateway server chat", () => {
   });
 
   test("chat.send diagnostics timeline carries run correlation attributes", async () => {
-    const timelineDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-chat-timeline-"));
+    const timelineDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-chat-timeline-"));
     const timelinePath = path.join(timelineDir, "timeline.jsonl");
-    const previousDiagnostics = process.env.OPENCLAW_DIAGNOSTICS;
-    const previousTimelinePath = process.env.OPENCLAW_DIAGNOSTICS_TIMELINE_PATH;
-    process.env.OPENCLAW_DIAGNOSTICS = "timeline";
-    process.env.OPENCLAW_DIAGNOSTICS_TIMELINE_PATH = timelinePath;
+    const previousDiagnostics = process.env.SUNCLAW_DIAGNOSTICS;
+    const previousTimelinePath = process.env.SUNCLAW_DIAGNOSTICS_TIMELINE_PATH;
+    process.env.SUNCLAW_DIAGNOSTICS = "timeline";
+    process.env.SUNCLAW_DIAGNOSTICS_TIMELINE_PATH = timelinePath;
     try {
       await withGatewayChatHarness(async ({ ws, createSessionDir }) => {
         const spy = getReplyFromConfig;
@@ -1369,14 +1369,14 @@ describe("gateway server chat", () => {
       });
     } finally {
       if (previousDiagnostics === undefined) {
-        delete process.env.OPENCLAW_DIAGNOSTICS;
+        delete process.env.SUNCLAW_DIAGNOSTICS;
       } else {
-        process.env.OPENCLAW_DIAGNOSTICS = previousDiagnostics;
+        process.env.SUNCLAW_DIAGNOSTICS = previousDiagnostics;
       }
       if (previousTimelinePath === undefined) {
-        delete process.env.OPENCLAW_DIAGNOSTICS_TIMELINE_PATH;
+        delete process.env.SUNCLAW_DIAGNOSTICS_TIMELINE_PATH;
       } else {
-        process.env.OPENCLAW_DIAGNOSTICS_TIMELINE_PATH = previousTimelinePath;
+        process.env.SUNCLAW_DIAGNOSTICS_TIMELINE_PATH = previousTimelinePath;
       }
       await fs.rm(timelineDir, { recursive: true, force: true, maxRetries: 5, retryDelay: 50 });
     }
@@ -1419,7 +1419,7 @@ describe("gateway server chat", () => {
       expect(bytes).toBeLessThanOrEqual(historyMaxBytes);
       expect(serialized).toContain("[chat.history omitted: message too large]");
       expect(messages[0]).toMatchObject({
-        __openclaw: { id: "msg-huge", truncated: true, reason: "oversized" },
+        __sunclaw: { id: "msg-huge", truncated: true, reason: "oversized" },
       });
       expect(serialized.includes(hugeNestedText.slice(0, 256))).toBe(false);
     });

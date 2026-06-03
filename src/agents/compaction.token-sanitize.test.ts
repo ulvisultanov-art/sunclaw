@@ -1,4 +1,4 @@
-import type { AgentMessage } from "openclaw/plugin-sdk/agent-core";
+import type { AgentMessage } from "sunclaw/plugin-sdk/agent-core";
 import { describe, expect, it, vi } from "vitest";
 
 const agentSessionMocks = vi.hoisted(() => ({
@@ -6,9 +6,9 @@ const agentSessionMocks = vi.hoisted(() => ({
   generateSummary: vi.fn(async () => "summary"),
 }));
 
-vi.mock("openclaw/plugin-sdk/agent-sessions", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/agent-sessions")>(
-    "openclaw/plugin-sdk/agent-sessions",
+vi.mock("sunclaw/plugin-sdk/agent-sessions", async () => {
+  const actual = await vi.importActual<typeof import("sunclaw/plugin-sdk/agent-sessions")>(
+    "sunclaw/plugin-sdk/agent-sessions",
   );
   return {
     ...actual,
@@ -63,7 +63,7 @@ describe("compaction token accounting sanitization", () => {
       } as any,
       {
         role: "custom",
-        customType: "openclaw.runtime-context",
+        customType: "sunclaw.runtime-context",
         content: "internal",
         timestamp: 2,
       } as any,

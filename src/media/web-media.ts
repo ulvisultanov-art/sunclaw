@@ -1,7 +1,7 @@
 import { lstat, realpath } from "node:fs/promises";
 import path from "node:path";
-import { maxBytesForKind, type MediaKind } from "@openclaw/media-core/constants";
-import { basenameFromAnyPath, extnameFromAnyPath } from "@openclaw/media-core/file-name";
+import { maxBytesForKind, type MediaKind } from "@sunclaw/media-core/constants";
+import { basenameFromAnyPath, extnameFromAnyPath } from "@sunclaw/media-core/file-name";
 import {
   detectMime,
   extensionForMime,
@@ -9,14 +9,14 @@ import {
   kindFromMime,
   mimeTypeFromFilePath,
   normalizeMimeType,
-} from "@openclaw/media-core/mime";
-import { uniqueValues } from "@openclaw/normalization-core/string-normalization";
+} from "@sunclaw/media-core/mime";
+import { uniqueValues } from "@sunclaw/normalization-core/string-normalization";
 import { logVerbose, shouldLogVerbose } from "../globals.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import { FsSafeError, readLocalFileSafely } from "../infra/fs-safe.js";
 import { assertNoWindowsNetworkPath, safeFileURLToPath } from "../infra/local-file-access.js";
 import type { PinnedDispatcherPolicy, SsrFPolicy } from "../infra/net/ssrf.js";
-import { resolvePreferredOpenClawTmpDir } from "../infra/tmp-openclaw-dir.js";
+import { resolvePreferredSunClawTmpDir } from "../infra/tmp-sunclaw-dir.js";
 import { getActivePluginRegistry } from "../plugins/runtime.js";
 import { resolveUserPath } from "../utils.js";
 import { readRemoteMediaBuffer } from "./fetch.js";
@@ -294,7 +294,7 @@ async function isTrustedGeneratedHostReadHtmlPath(filePath: string | undefined):
   }
   const [resolvedFilePath, resolvedTmpRoot] = await Promise.all([
     realpath(filePath).catch(() => undefined),
-    realpath(resolvePreferredOpenClawTmpDir()).catch(() => undefined),
+    realpath(resolvePreferredSunClawTmpDir()).catch(() => undefined),
   ]);
   return Boolean(
     resolvedFilePath && resolvedTmpRoot && isPathInsideRoot(resolvedFilePath, resolvedTmpRoot),

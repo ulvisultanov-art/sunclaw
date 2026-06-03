@@ -1,5 +1,5 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { isBlockedObjectKey } from "../../infra/prototype-keys.js";
 import { isInstalledPluginEnabled } from "../../plugins/installed-plugin-index.js";
 import type { PluginManifestRecord } from "../../plugins/manifest-registry.js";
@@ -57,7 +57,7 @@ export function resolveReadOnlyChannelCommandDefaults(
     env?: NodeJS.ProcessEnv;
     stateDir?: string;
     workspaceDir?: string;
-    config: OpenClawConfig;
+    config: SunClawConfig;
   },
 ): ChannelCommandDefaults | undefined {
   const normalizedChannelId = normalizeOptionalString(channelId) ?? "";

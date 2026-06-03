@@ -1,9 +1,9 @@
-import { resolveTimerTimeoutMs } from "openclaw/plugin-sdk/number-runtime";
-import { assertOkOrThrowProviderError } from "openclaw/plugin-sdk/provider-http";
+import { resolveTimerTimeoutMs } from "sunclaw/plugin-sdk/number-runtime";
+import { assertOkOrThrowProviderError } from "sunclaw/plugin-sdk/provider-http";
 import {
   fetchWithSsrFGuard,
   ssrfPolicyFromHttpBaseUrlAllowedHostname,
-} from "openclaw/plugin-sdk/ssrf-runtime";
+} from "sunclaw/plugin-sdk/ssrf-runtime";
 
 export const DEFAULT_MINIMAX_TTS_BASE_URL = "https://api.minimax.io";
 

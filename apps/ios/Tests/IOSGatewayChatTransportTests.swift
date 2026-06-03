@@ -1,8 +1,8 @@
 import Foundation
-import OpenClawKit
-import OpenClawProtocol
+import SunClawKit
+import SunClawProtocol
 import Testing
-@testable import OpenClaw
+@testable import SunClaw
 
 @Suite struct IOSGatewayChatTransportTests {
     private func object(from json: String) throws -> [String: Any] {

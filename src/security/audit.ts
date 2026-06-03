@@ -1,20 +1,20 @@
 import path from "node:path";
-import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
-import { asNullableRecord } from "@openclaw/normalization-core/record-coerce";
+import { normalizeProviderId } from "@sunclaw/model-catalog-core/provider-id";
+import { asNullableRecord } from "@sunclaw/normalization-core/record-coerce";
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
-import { normalizeStringEntries } from "@openclaw/normalization-core/string-normalization";
+} from "@sunclaw/normalization-core/string-coerce";
+import { normalizeStringEntries } from "@sunclaw/normalization-core/string-normalization";
 import { resolveAgentWorkspaceDir, resolveDefaultAgentId } from "../agents/agent-scope.js";
 import { resolveExecDefaults } from "../agents/exec-defaults.js";
 import { resolveSandboxConfigForAgent } from "../agents/sandbox/config.js";
 import type { ChannelPlugin } from "../channels/plugins/types.plugin.js";
-import type { ConfigFileSnapshot, OpenClawConfig } from "../config/config.js";
+import type { ConfigFileSnapshot, SunClawConfig } from "../config/config.js";
 import { resolveConfigPath, resolveStateDir } from "../config/paths.js";
 import type { CliBackendConfig } from "../config/types.agent-defaults.js";
 import type { GatewayAuthConfig } from "../config/types.gateway.js";
-import type { SecurityAuditSuppression } from "../config/types.openclaw.js";
+import type { SecurityAuditSuppression } from "../config/types.sunclaw.js";
 import {
   canMaterializeGatewayAuthSecretRefsWithoutExec,
   materializeGatewayAuthSecretRefs,
@@ -72,8 +72,8 @@ export type {
 } from "./audit.types.js";
 
 export type SecurityAuditOptions = {
-  config: OpenClawConfig;
-  sourceConfig?: OpenClawConfig;
+  config: SunClawConfig;
+  sourceConfig?: SunClawConfig;
   env?: NodeJS.ProcessEnv;
   platform?: NodeJS.Platform;
   deep?: boolean;
@@ -108,8 +108,8 @@ export type SecurityAuditOptions = {
 };
 
 export type AuditExecutionContext = {
-  cfg: OpenClawConfig;
-  sourceConfig: OpenClawConfig;
+  cfg: SunClawConfig;
+  sourceConfig: SunClawConfig;
   env: NodeJS.ProcessEnv;
   platform: NodeJS.Platform;
   includeFilesystem: boolean;
@@ -227,15 +227,15 @@ function normalizeSuppressionText(value: string | undefined): string {
 }
 
 async function materializeAuditGatewayAuthRefs(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   env: NodeJS.ProcessEnv;
-}): Promise<OpenClawConfig> {
+}): Promise<SunClawConfig> {
   const materializeParams = {
     cfg: params.cfg,
     env: params.env,
     mode: params.cfg.gateway?.auth?.mode,
-    hasTokenCandidate: Boolean(normalizeOptionalString(params.env.OPENCLAW_GATEWAY_TOKEN)),
-    hasPasswordCandidate: Boolean(normalizeOptionalString(params.env.OPENCLAW_GATEWAY_PASSWORD)),
+    hasTokenCandidate: Boolean(normalizeOptionalString(params.env.SUNCLAW_GATEWAY_TOKEN)),
+    hasPasswordCandidate: Boolean(normalizeOptionalString(params.env.SUNCLAW_GATEWAY_PASSWORD)),
   };
   if (!canMaterializeGatewayAuthSecretRefsWithoutExec(materializeParams)) {
     return params.cfg;
@@ -247,7 +247,7 @@ async function materializeAuditGatewayAuthRefs(params: {
   }
 }
 
-function shouldMaterializeHooksGatewayAuthRefs(cfg: OpenClawConfig): boolean {
+function shouldMaterializeHooksGatewayAuthRefs(cfg: SunClawConfig): boolean {
   return cfg.hooks?.enabled === true && Boolean(normalizeOptionalString(cfg.hooks.token));
 }
 
@@ -347,7 +347,7 @@ export async function collectFilesystemFindings(params: {
         checkId: "fs.state_dir.perms_world_writable",
         severity: "critical",
         title: "State dir is world-writable",
-        detail: `${formatPermissionDetail(params.stateDir, stateDirPerms)}; other users can write into your OpenClaw state.`,
+        detail: `${formatPermissionDetail(params.stateDir, stateDirPerms)}; other users can write into your SunClaw state.`,
         remediation: formatPermissionRemediation({
           targetPath: params.stateDir,
           perms: stateDirPerms,
@@ -361,7 +361,7 @@ export async function collectFilesystemFindings(params: {
         checkId: "fs.state_dir.perms_group_writable",
         severity: "warn",
         title: "State dir is group-writable",
-        detail: `${formatPermissionDetail(params.stateDir, stateDirPerms)}; group users can write into your OpenClaw state.`,
+        detail: `${formatPermissionDetail(params.stateDir, stateDirPerms)}; group users can write into your SunClaw state.`,
         remediation: formatPermissionRemediation({
           targetPath: params.stateDir,
           perms: stateDirPerms,
@@ -451,8 +451,8 @@ export async function collectFilesystemFindings(params: {
 }
 
 export function collectGatewayConfigFindings(
-  cfg: OpenClawConfig,
-  sourceConfig: OpenClawConfig,
+  cfg: SunClawConfig,
+  sourceConfig: SunClawConfig,
   env: NodeJS.ProcessEnv,
   options: { gatewayAuthOverride?: SecurityAuditGatewayAuthOverride } = {},
 ): SecurityAuditFinding[] {
@@ -554,7 +554,7 @@ export async function collectPluginSecurityAuditFindings(
   return collectorResults.flat();
 }
 
-export function collectLoggingFindings(cfg: OpenClawConfig): SecurityAuditFinding[] {
+export function collectLoggingFindings(cfg: SunClawConfig): SecurityAuditFinding[] {
   const redact = cfg.logging?.redactSensitive;
   if (redact !== "off") {
     return [];
@@ -570,7 +570,7 @@ export function collectLoggingFindings(cfg: OpenClawConfig): SecurityAuditFindin
   ];
 }
 
-export function collectElevatedFindings(cfg: OpenClawConfig): SecurityAuditFinding[] {
+export function collectElevatedFindings(cfg: SunClawConfig): SecurityAuditFinding[] {
   const findings: SecurityAuditFinding[] = [];
   const enabled = cfg.tools?.elevated?.enabled;
   const allowFrom = cfg.tools?.elevated?.allowFrom ?? {};
@@ -688,7 +688,7 @@ function findClaudeCliBackendConfig(
   return undefined;
 }
 
-function collectYoloExecScopeIds(cfg: OpenClawConfig, approvals: ExecApprovalsFile): string[] {
+function collectYoloExecScopeIds(cfg: SunClawConfig, approvals: ExecApprovalsFile): string[] {
   const agents = Array.isArray(cfg.agents?.list) ? cfg.agents.list : [];
   return [
     { id: DEFAULT_AGENT_ID },
@@ -720,7 +720,7 @@ function collectYoloExecScopeIds(cfg: OpenClawConfig, approvals: ExecApprovalsFi
     .map((entry) => entry.id);
 }
 
-export function collectExecRuntimeFindings(cfg: OpenClawConfig): SecurityAuditFinding[] {
+export function collectExecRuntimeFindings(cfg: SunClawConfig): SecurityAuditFinding[] {
   const findings: SecurityAuditFinding[] = [];
   const globalExecHost = cfg.tools?.exec?.host;
   const globalStrictInlineEval = cfg.tools?.exec?.strictInlineEval === true;
@@ -817,9 +817,9 @@ export function collectExecRuntimeFindings(cfg: OpenClawConfig): SecurityAuditFi
       checkId: "agents.claude_cli.permission_mode_overridden_by_yolo",
       severity: "warn",
       title: "Claude permission mode is ignored under YOLO exec",
-      detail: `claude-cli sets ${claudePermissionModeHits.map((hit) => `${hit.argSet}=${hit.mode}`).join(", ")}, but OpenClaw exec is YOLO for: ${yoloExecScopeIds.join(", ")}. Managed Claude live sessions use --permission-mode bypassPermissions.`,
+      detail: `claude-cli sets ${claudePermissionModeHits.map((hit) => `${hit.argSet}=${hit.mode}`).join(", ")}, but SunClaw exec is YOLO for: ${yoloExecScopeIds.join(", ")}. Managed Claude live sessions use --permission-mode bypassPermissions.`,
       remediation:
-        "Restrict OpenClaw tools.exec.security/tools.exec.ask, or remove the Claude --permission-mode override.",
+        "Restrict SunClaw tools.exec.security/tools.exec.ask, or remove the Claude --permission-mode override.",
     });
   }
 
@@ -1058,7 +1058,7 @@ export function collectExecRuntimeFindings(cfg: OpenClawConfig): SecurityAuditFi
   return findings;
 }
 
-function collectOpenExecSurfacePaths(cfg: OpenClawConfig): string[] {
+function collectOpenExecSurfacePaths(cfg: SunClawConfig): string[] {
   const channels = asNullableRecord(cfg.channels);
   if (!channels) {
     return [];
@@ -1126,7 +1126,7 @@ function collectInterpreterAllowlistHits(params: {
 }
 
 async function maybeProbeGateway(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   env: NodeJS.ProcessEnv;
   timeoutMs: number;
   probe: ProbeGatewayFn;

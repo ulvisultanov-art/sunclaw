@@ -1,5 +1,5 @@
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { normalizeLowercaseStringOrEmpty } from "@sunclaw/normalization-core/string-coerce";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { resolvePluginControlPlaneFingerprint } from "../plugins/plugin-control-plane-context.js";
 import type { ProviderRuntimePluginHandle } from "../plugins/provider-hook-runtime.js";
 import { resolveProviderRuntimePlugin } from "../plugins/provider-hook-runtime.js";
@@ -249,12 +249,12 @@ function mergeTranscriptPolicy(
   };
 }
 
-const transcriptPolicyCache = new WeakMap<OpenClawConfig, Map<string, TranscriptPolicy>>();
+const transcriptPolicyCache = new WeakMap<SunClawConfig, Map<string, TranscriptPolicy>>();
 
 function canCacheTranscriptPolicy(params: {
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   env?: NodeJS.ProcessEnv;
-}): params is { config: OpenClawConfig; env?: NodeJS.ProcessEnv } {
+}): params is { config: SunClawConfig; env?: NodeJS.ProcessEnv } {
   if (!params.config) {
     return false;
   }
@@ -266,7 +266,7 @@ function resolveTranscriptPolicyCacheKey(params: {
   provider: string;
   modelId?: string | null;
   model?: ProviderRuntimeModel;
-  config: OpenClawConfig;
+  config: SunClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
 }): string {
@@ -289,7 +289,7 @@ export function resolveTranscriptPolicy(params: {
   modelApi?: string | null;
   provider?: string | null;
   modelId?: string | null;
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   model?: ProviderRuntimeModel;

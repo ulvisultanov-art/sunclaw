@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
 import JSZip from "jszip";
 import {
   ARCHIVE_LIMIT_ERROR_CODE,
@@ -173,9 +173,9 @@ function isTrustedSourceLinkedOfficialPackage(pkg: NonNullable<ClawHubPackageDet
     pkg.channel === "official" &&
     pkg.isOfficial &&
     pkg.verification?.tier === "source-linked" &&
-    (sourceRepo === "openclaw/openclaw" ||
-      sourceRepo === "github.com/openclaw/openclaw" ||
-      sourceRepo === "https://github.com/openclaw/openclaw")
+    (sourceRepo === "sunclaw/sunclaw" ||
+      sourceRepo === "github.com/ulvisultanov-art/sunclaw" ||
+      sourceRepo === "https://github.com/ulvisultanov-art/sunclaw")
   );
 }
 
@@ -959,7 +959,7 @@ function validateClawHubPluginPackage(params: {
   }
   if (pkg.family === "skill") {
     return buildClawHubInstallFailure(
-      `"${pkg.name}" is a skill. Use "openclaw skills install ${pkg.name}" instead.`,
+      `"${pkg.name}" is a skill. Use "sunclaw skills install ${pkg.name}" instead.`,
       CLAWHUB_INSTALL_ERROR_CODE.SKILL_PACKAGE,
     );
   }
@@ -983,7 +983,7 @@ function validateClawHubPluginPackage(params: {
     !satisfiesPluginApiRange(runtimeVersion, compatibility.pluginApiRange)
   ) {
     return buildClawHubInstallFailure(
-      `Plugin "${pkg.name}" requires plugin API ${compatibility.pluginApiRange}, but this OpenClaw runtime exposes ${runtimeVersion}.`,
+      `Plugin "${pkg.name}" requires plugin API ${compatibility.pluginApiRange}, but this SunClaw runtime exposes ${runtimeVersion}.`,
       CLAWHUB_INSTALL_ERROR_CODE.INCOMPATIBLE_PLUGIN_API,
     );
   }
@@ -993,7 +993,7 @@ function validateClawHubPluginPackage(params: {
     !satisfiesGatewayMinimum(runtimeVersion, compatibility.minGatewayVersion)
   ) {
     return buildClawHubInstallFailure(
-      `Plugin "${pkg.name}" requires OpenClaw >=${compatibility.minGatewayVersion}, but this host is ${runtimeVersion}.`,
+      `Plugin "${pkg.name}" requires SunClaw >=${compatibility.minGatewayVersion}, but this host is ${runtimeVersion}.`,
       CLAWHUB_INSTALL_ERROR_CODE.INCOMPATIBLE_GATEWAY,
     );
   }
@@ -1252,8 +1252,8 @@ export async function installPluginFromClawHub(
         source: "clawhub",
         clawhubUrl:
           normalizeOptionalString(params.baseUrl) ||
-          normalizeOptionalString(process.env.OPENCLAW_CLAWHUB_URL) ||
-          "https://clawhub.ai",
+          normalizeOptionalString(process.env.SUNCLAW_CLAWHUB_URL) ||
+          "https://clawhub.complex.az",
         clawhubPackage: parsed.name,
         clawhubFamily,
         clawhubChannel: pkg.channel,

@@ -1,5 +1,5 @@
 /**
- * OpenClaw Memory (LanceDB) Plugin
+ * SunClaw Memory (LanceDB) Plugin
  *
  * Long-term memory with vector search for AI conversations.
  * Uses LanceDB for storage and OpenAI for embeddings.
@@ -9,28 +9,28 @@
 import { Buffer } from "node:buffer";
 import { randomUUID } from "node:crypto";
 import type * as LanceDB from "@lancedb/lancedb";
-import type { AgentToolResult } from "openclaw/plugin-sdk/agent-core";
+import type { AgentToolResult } from "sunclaw/plugin-sdk/agent-core";
 import {
   optionalFiniteNumberSchema,
   optionalPositiveIntegerSchema,
-} from "openclaw/plugin-sdk/channel-actions";
-import { BUNDLED_CHAT_CHANNEL_ENVELOPE_PREFIXES } from "openclaw/plugin-sdk/chat-channel-ids";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { MemoryEmbeddingProvider } from "openclaw/plugin-sdk/memory-core-host-engine-embeddings";
+} from "sunclaw/plugin-sdk/channel-actions";
+import { BUNDLED_CHAT_CHANNEL_ENVELOPE_PREFIXES } from "sunclaw/plugin-sdk/chat-channel-ids";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import type { MemoryEmbeddingProvider } from "sunclaw/plugin-sdk/memory-core-host-engine-embeddings";
 import {
   parseStrictPositiveInteger,
   resolveTimerTimeoutMs,
-} from "openclaw/plugin-sdk/number-runtime";
-import { readFiniteNumberParam, readPositiveIntegerParam } from "openclaw/plugin-sdk/param-readers";
-import { resolveLivePluginConfigObject } from "openclaw/plugin-sdk/plugin-config-runtime";
-import { ensureGlobalUndiciEnvProxyDispatcher } from "openclaw/plugin-sdk/runtime-env";
+} from "sunclaw/plugin-sdk/number-runtime";
+import { readFiniteNumberParam, readPositiveIntegerParam } from "sunclaw/plugin-sdk/param-readers";
+import { resolveLivePluginConfigObject } from "sunclaw/plugin-sdk/plugin-config-runtime";
+import { ensureGlobalUndiciEnvProxyDispatcher } from "sunclaw/plugin-sdk/runtime-env";
 import {
   asOptionalRecord as asRecord,
   normalizeLowercaseStringOrEmpty,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "sunclaw/plugin-sdk/string-coerce-runtime";
+import { truncateUtf16Safe } from "sunclaw/plugin-sdk/text-utility-runtime";
 import { Type } from "typebox";
-import { definePluginEntry, type OpenClawPluginApi } from "./api.js";
+import { definePluginEntry, type SunClawPluginApi } from "./api.js";
 import {
   DEFAULT_CAPTURE_MAX_CHARS,
   DEFAULT_RECALL_MAX_CHARS,
@@ -85,23 +85,23 @@ function loadOpenAiModule(): Promise<typeof import("openai")> {
 }
 
 let memoryEmbeddingProviderModulePromise:
-  | Promise<typeof import("openclaw/plugin-sdk/memory-core-host-engine-embeddings")>
+  | Promise<typeof import("sunclaw/plugin-sdk/memory-core-host-engine-embeddings")>
   | undefined;
 function loadMemoryEmbeddingProviderModule(): Promise<
-  typeof import("openclaw/plugin-sdk/memory-core-host-engine-embeddings")
+  typeof import("sunclaw/plugin-sdk/memory-core-host-engine-embeddings")
 > {
   memoryEmbeddingProviderModulePromise ??=
-    import("openclaw/plugin-sdk/memory-core-host-engine-embeddings");
+    import("sunclaw/plugin-sdk/memory-core-host-engine-embeddings");
   return memoryEmbeddingProviderModulePromise;
 }
 
 let memoryHostCoreModulePromise:
-  | Promise<typeof import("openclaw/plugin-sdk/memory-host-core")>
+  | Promise<typeof import("sunclaw/plugin-sdk/memory-host-core")>
   | undefined;
 function loadMemoryHostCoreModule(): Promise<
-  typeof import("openclaw/plugin-sdk/memory-host-core")
+  typeof import("sunclaw/plugin-sdk/memory-host-core")
 > {
-  memoryHostCoreModulePromise ??= import("openclaw/plugin-sdk/memory-host-core");
+  memoryHostCoreModulePromise ??= import("sunclaw/plugin-sdk/memory-host-core");
   return memoryHostCoreModulePromise;
 }
 
@@ -408,7 +408,7 @@ class ProviderAdapterEmbeddings implements Embeddings {
   private providerPromise: Promise<MemoryEmbeddingProvider> | undefined;
 
   constructor(
-    private api: OpenClawPluginApi,
+    private api: SunClawPluginApi,
     private embedding: MemoryConfig["embedding"],
   ) {}
 
@@ -423,7 +423,7 @@ class ProviderAdapterEmbeddings implements Embeddings {
   }
 
   private async createProvider(): Promise<MemoryEmbeddingProvider> {
-    const cfg = (this.api.runtime.config?.current?.() ?? this.api.config) as OpenClawConfig;
+    const cfg = (this.api.runtime.config?.current?.() ?? this.api.config) as SunClawConfig;
     const providerId = this.embedding.provider;
     const { getMemoryEmbeddingProvider } = await loadMemoryEmbeddingProviderModule();
     const adapter = getMemoryEmbeddingProvider(providerId, cfg);
@@ -537,7 +537,7 @@ export const testing = {
   runWithTimeout,
 } as const;
 
-function createEmbeddings(api: OpenClawPluginApi, cfg: MemoryConfig): Embeddings {
+function createEmbeddings(api: SunClawPluginApi, cfg: MemoryConfig): Embeddings {
   const { provider, model, dimensions, apiKey, baseUrl } = cfg.embedding;
   if (provider === "openai" && apiKey) {
     return new OpenAiCompatibleEmbeddings(apiKey, model, baseUrl, dimensions);
@@ -765,7 +765,7 @@ const LEADING_CURRENT_MESSAGE_ID_SENDER_RE = /^#\d+\s+[^\n:]{1,100}:\s*/;
 const UNTRUSTED_CONTEXT_HEADER_RE = /^Untrusted context \(metadata/m;
 
 /**
- * Matches JSON blobs that look like OpenClaw transport envelope metadata.
+ * Matches JSON blobs that look like SunClaw transport envelope metadata.
  * Allows `{` on its own line so pretty-printed JSON (the `JSON.stringify(..., null, 2)`
  * output produced by `formatUntrustedJsonBlock` in core) is also caught when it
  * leaks outside its ```json fence. Key list mirrors envelope identifiers used
@@ -880,7 +880,7 @@ function matchKnownChannelMarkerFreeEnvelopePrefix(
 }
 
 /**
- * Returns true if `text` looks like it contains OpenClaw-injected envelope or
+ * Returns true if `text` looks like it contains SunClaw-injected envelope or
  * transport metadata that should never be persisted as a long-term memory.
  */
 export function looksLikeEnvelopeSludge(text: string): boolean {
@@ -1168,7 +1168,7 @@ function stripLeadingChronologicalContextBlocks(text: string): string {
 }
 
 /**
- * Strips OpenClaw-injected envelope metadata from a user message so that only
+ * Strips SunClaw-injected envelope metadata from a user message so that only
  * the user's actual intent text remains. Returns empty string if nothing
  * meaningful survives.
  */
@@ -1414,7 +1414,7 @@ export default definePluginEntry({
   kind: "memory" as const,
   configSchema: memoryConfigSchema,
 
-  register(api: OpenClawPluginApi) {
+  register(api: SunClawPluginApi) {
     let cfg: MemoryConfig;
     try {
       cfg = memoryConfigSchema.parse(api.pluginConfig);
@@ -1441,7 +1441,7 @@ export default definePluginEntry({
     const resolveCurrentHookConfig = () => {
       const runtimePluginConfig = resolveLivePluginConfigObject(
         api.runtime.config?.current
-          ? () => api.runtime.config.current() as OpenClawConfig
+          ? () => api.runtime.config.current() as SunClawConfig
           : undefined,
         "memory-lancedb",
         api.pluginConfig as Record<string, unknown>,

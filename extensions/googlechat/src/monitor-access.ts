@@ -2,13 +2,13 @@ import {
   channelIngressRoutes,
   createChannelIngressResolver,
   defineStableChannelIngressIdentity,
-} from "openclaw/plugin-sdk/channel-ingress-runtime";
-import type { ChannelBotLoopProtectionConfig } from "openclaw/plugin-sdk/config-contracts";
+} from "sunclaw/plugin-sdk/channel-ingress-runtime";
+import type { ChannelBotLoopProtectionConfig } from "sunclaw/plugin-sdk/config-contracts";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
   normalizeStringEntries,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/string-coerce-runtime";
 import {
   GROUP_POLICY_BLOCKED_LABEL,
   createChannelPairingController,
@@ -16,7 +16,7 @@ import {
   resolveAllowlistProviderRuntimeGroupPolicy,
   resolveDefaultGroupPolicy,
   warnMissingProviderGroupPolicyFallbackOnce,
-  type OpenClawConfig,
+  type SunClawConfig,
 } from "../runtime-api.js";
 import type { ResolvedGoogleChatAccount } from "./accounts.js";
 import { sendGoogleChatMessage } from "./api.js";
@@ -190,7 +190,7 @@ function warnMutableGroupKeysConfigured(
 
 export async function applyGoogleChatInboundAccessPolicy(params: {
   account: ResolvedGoogleChatAccount;
-  config: OpenClawConfig;
+  config: SunClawConfig;
   core: GoogleChatCoreRuntime;
   space: GoogleChatSpace;
   message: GoogleChatMessage;

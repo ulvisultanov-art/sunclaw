@@ -1,4 +1,4 @@
-import { normalizeUniqueStringEntries } from "@openclaw/normalization-core/string-normalization";
+import { normalizeUniqueStringEntries } from "@sunclaw/normalization-core/string-normalization";
 import { DEFAULT_SUBAGENT_MAX_SPAWN_DEPTH } from "../config/agent-limits.js";
 import type { DeliveryContext } from "../utils/delivery-context.types.js";
 
@@ -87,10 +87,10 @@ export function buildSubagentSystemPrompt(params: {
       ...(acpEnabled
         ? [
             'For ACP harness sessions (claudecode/gemini/opencode, or Codex only when explicit ACP/acpx), use `sessions_spawn` with `runtime: "acp"` (set `agentId` unless `acp.defaultAgent` is configured).',
-            '`agents_list` and `subagents` apply to OpenClaw sub-agents (`runtime: "subagent"`); ACP harness ids are controlled by `acp.allowedAgents`.',
+            '`agents_list` and `subagents` apply to SunClaw sub-agents (`runtime: "subagent"`); ACP harness ids are controlled by `acp.allowedAgents`.',
             "Do not ask users to run slash commands or CLI when `sessions_spawn` can do it directly.",
-            "Do not use `exec` (`openclaw ...`, `acpx ...`) to spawn ACP sessions.",
-            'Use `subagents` only for OpenClaw subagents (`runtime: "subagent"`).',
+            "Do not use `exec` (`sunclaw ...`, `acpx ...`) to spawn ACP sessions.",
+            'Use `subagents` only for SunClaw subagents (`runtime: "subagent"`).',
             "Subagent results auto-announce back to you; ACP sessions continue in their bound thread.",
             "Avoid polling loops; spawn, orchestrate, and synthesize results.",
           ]

@@ -1,6 +1,6 @@
 import path from "node:path";
-import { readNumber } from "@openclaw/acp-core/meta";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { readNumber } from "@sunclaw/acp-core/meta";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
 
 const ACP_LIST_SESSIONS_DEFAULT_PAGE_SIZE = 100;
 const ACP_LIST_SESSIONS_MAX_PAGE_SIZE = 100;

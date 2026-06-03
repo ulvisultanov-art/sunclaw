@@ -1,6 +1,6 @@
-import type { ReplyToMode } from "openclaw/plugin-sdk/config-contracts";
-import type { ReplyThreadingPolicy } from "openclaw/plugin-sdk/reply-reference";
-import { resolveBatchedReplyThreadingPolicy } from "openclaw/plugin-sdk/reply-reference";
+import type { ReplyToMode } from "sunclaw/plugin-sdk/config-contracts";
+import type { ReplyThreadingPolicy } from "sunclaw/plugin-sdk/reply-reference";
+import { resolveBatchedReplyThreadingPolicy } from "sunclaw/plugin-sdk/reply-reference";
 
 type ReplyThreadingContext = {
   ReplyThreading?: ReplyThreadingPolicy;

@@ -1,27 +1,27 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/memory-core-host-runtime-core";
-import type { MemorySearchResult } from "openclaw/plugin-sdk/memory-core-host-runtime-files";
-import { resolveSessionAgentId } from "openclaw/plugin-sdk/memory-host-core";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/memory-core-host-runtime-core";
+import type { MemorySearchResult } from "sunclaw/plugin-sdk/memory-core-host-runtime-files";
+import { resolveSessionAgentId } from "sunclaw/plugin-sdk/memory-host-core";
 import {
   extractTranscriptIdentityFromSessionsMemoryHit,
   loadCombinedSessionStoreForGateway,
   resolveTranscriptStemToSessionKeys,
-} from "openclaw/plugin-sdk/session-transcript-hit";
+} from "sunclaw/plugin-sdk/session-transcript-hit";
 import {
   createAgentToAgentPolicy,
   createSessionVisibilityGuard,
   resolveEffectiveSessionToolsVisibility,
-} from "openclaw/plugin-sdk/session-visibility";
+} from "sunclaw/plugin-sdk/session-visibility";
 
 function normalizeAgentIdForCompare(value: string | undefined): string | undefined {
   return value?.trim().toLowerCase() || undefined;
 }
 
-function isGlobalSessionKeyForSharedScope(cfg: OpenClawConfig, key: string): boolean {
+function isGlobalSessionKeyForSharedScope(cfg: SunClawConfig, key: string): boolean {
   return cfg.session?.scope === "global" && key.trim().toLowerCase() === "global";
 }
 
 function filterSessionKeysByScopedAgent(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   keys: string[];
   scopedAgentId: string | undefined;
 }): string[] {
@@ -42,7 +42,7 @@ function filterSessionKeysByScopedAgent(params: {
 }
 
 export async function filterMemorySearchHitsBySessionVisibility(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   agentId?: string;
   requesterSessionKey: string | undefined;
   sandboxed: boolean;

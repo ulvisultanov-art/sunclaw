@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { resolveCrestodianRescuePolicy } from "./rescue-policy.js";
 
-function decide(cfg: OpenClawConfig, overrides = {}) {
+function decide(cfg: SunClawConfig, overrides = {}) {
   return resolveCrestodianRescuePolicy({
     cfg,
     senderIsOwner: true,

@@ -1,6 +1,6 @@
-import type { ModelCatalogProvider } from "@openclaw/model-catalog-core/model-catalog-types";
+import type { ModelCatalogProvider } from "@sunclaw/model-catalog-core/model-catalog-types";
 
-export type OpenClawProviderIndexPluginInstall = {
+export type SunClawProviderIndexPluginInstall = {
   clawhubSpec?: string;
   npmSpec?: string;
   defaultChoice?: "clawhub" | "npm";
@@ -8,14 +8,14 @@ export type OpenClawProviderIndexPluginInstall = {
   expectedIntegrity?: string;
 };
 
-export type OpenClawProviderIndexPlugin = {
+export type SunClawProviderIndexPlugin = {
   id: string;
   package?: string;
   source?: string;
-  install?: OpenClawProviderIndexPluginInstall;
+  install?: SunClawProviderIndexPluginInstall;
 };
 
-export type OpenClawProviderIndexProviderAuthChoice = {
+export type SunClawProviderIndexProviderAuthChoice = {
   method: string;
   choiceId: string;
   choiceLabel: string;
@@ -32,17 +32,17 @@ export type OpenClawProviderIndexProviderAuthChoice = {
   onboardingScopes?: readonly ("text-inference" | "image-generation" | "music-generation")[];
 };
 
-export type OpenClawProviderIndexProvider = {
+export type SunClawProviderIndexProvider = {
   id: string;
   name: string;
-  plugin: OpenClawProviderIndexPlugin;
+  plugin: SunClawProviderIndexPlugin;
   docs?: string;
   categories?: readonly string[];
-  authChoices?: readonly OpenClawProviderIndexProviderAuthChoice[];
+  authChoices?: readonly SunClawProviderIndexProviderAuthChoice[];
   previewCatalog?: ModelCatalogProvider;
 };
 
-export type OpenClawProviderIndex = {
+export type SunClawProviderIndex = {
   version: number;
-  providers: Readonly<Record<string, OpenClawProviderIndexProvider>>;
+  providers: Readonly<Record<string, SunClawProviderIndexProvider>>;
 };

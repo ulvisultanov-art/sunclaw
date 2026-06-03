@@ -1,16 +1,16 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 
 export type RealtimeTranscriptionProviderId = string;
 
 export type RealtimeTranscriptionProviderConfig = Record<string, unknown>;
 
 export type RealtimeTranscriptionProviderResolveConfigContext = {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   rawConfig: RealtimeTranscriptionProviderConfig;
 };
 
 export type RealtimeTranscriptionProviderConfiguredContext = {
-  cfg?: OpenClawConfig;
+  cfg?: SunClawConfig;
   providerConfig: RealtimeTranscriptionProviderConfig;
 };
 
@@ -22,7 +22,7 @@ export type RealtimeTranscriptionSessionCallbacks = {
 };
 
 export type RealtimeTranscriptionSessionCreateRequest = RealtimeTranscriptionSessionCallbacks & {
-  cfg?: OpenClawConfig;
+  cfg?: SunClawConfig;
   providerConfig: RealtimeTranscriptionProviderConfig;
 };
 

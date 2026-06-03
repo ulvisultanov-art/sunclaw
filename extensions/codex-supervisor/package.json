@@ -1,8 +1,8 @@
 {
-  "name": "@openclaw/codex-supervisor",
+  "name": "@sunclaw/codex-supervisor",
   "version": "2026.6.2",
   "private": true,
-  "description": "OpenClaw Codex app-server fleet supervision plugin.",
+  "description": "SunClaw Codex app-server fleet supervision plugin.",
   "type": "module",
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.29.0",
@@ -11,9 +11,9 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@sunclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ]

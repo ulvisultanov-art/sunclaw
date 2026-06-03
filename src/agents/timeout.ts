@@ -1,22 +1,22 @@
 import {
   clampTimerTimeoutMs,
   MAX_TIMER_TIMEOUT_MS,
-} from "@openclaw/normalization-core/number-coercion";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+} from "@sunclaw/normalization-core/number-coercion";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 
 const DEFAULT_AGENT_TIMEOUT_SECONDS = 48 * 60 * 60;
 
 const normalizeNumber = (value: unknown): number | undefined =>
   typeof value === "number" && Number.isFinite(value) ? Math.floor(value) : undefined;
 
-export function resolveAgentTimeoutSeconds(cfg?: OpenClawConfig): number {
+export function resolveAgentTimeoutSeconds(cfg?: SunClawConfig): number {
   const raw = normalizeNumber(cfg?.agents?.defaults?.timeoutSeconds);
   const seconds = raw ?? DEFAULT_AGENT_TIMEOUT_SECONDS;
   return Math.max(seconds, 1);
 }
 
 export function resolveAgentTimeoutMs(opts: {
-  cfg?: OpenClawConfig;
+  cfg?: SunClawConfig;
   overrideMs?: number | null;
   overrideSeconds?: number | null;
   minMs?: number;

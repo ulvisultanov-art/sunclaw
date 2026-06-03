@@ -7,8 +7,8 @@ packages:
 minimumReleaseAge: 2880
 
 minimumReleaseAgeExclude:
-  - "@openclaw/fs-safe@0.3.0"
-  - "@openclaw/proxyline@0.3.3"
+  - "@sunclaw/fs-safe@0.3.0"
+  - "@sunclaw/proxyline@0.3.3"
   - "acpx"
   - "tokenjuice"
   - "@agentclientprotocol/claude-agent-acp@0.39.0"
@@ -19,7 +19,7 @@ minimumReleaseAgeExclude:
   - "hono"
   - "libopus-wasm@0.2.0"
   - "libsignal@6.0.0"
-  - "openclaw"
+  - "sunclaw"
   - "protobufjs"
   - "vite"
   - "@cloudflare/workers-types"
@@ -94,7 +94,7 @@ overrides:
   uuid: 14.0.0
 
 allowBuilds:
-  "@openclaw/fs-safe": true
+  "@sunclaw/fs-safe": true
   "@google/genai": true
   "@lydell/node-pty": true
   "@matrix-org/matrix-sdk-crypto-nodejs": true
@@ -108,8 +108,8 @@ allowBuilds:
   node-llama-cpp: true
   protobufjs: true
   tree-sitter-bash: false
-  openclaw: true
-  "@openclaw/proxyline": true
+  sunclaw: true
+  "@sunclaw/proxyline": true
   clawpdf: true
   rastermill: true
 

@@ -1,8 +1,8 @@
 import {
   clampTimerTimeoutMs,
   resolveTimerTimeoutMs,
-} from "@openclaw/normalization-core/number-coercion";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+} from "@sunclaw/normalization-core/number-coercion";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type { ModelCatalogEntry } from "./model-catalog.types.js";
 import { parseConfiguredModelVisibilityEntries } from "./model-selection-shared.js";
 
@@ -34,7 +34,7 @@ function resolveModelCatalogBrowseTimeoutMs(value: number | undefined): number {
 }
 
 export async function loadModelCatalogForBrowse(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   view?: ModelCatalogBrowseView;
   loadCatalog: (params: { readOnly: boolean }) => Promise<ModelCatalogEntry[]>;
   timeoutMs?: number;

@@ -6,7 +6,7 @@ const mocks = vi.hoisted(() => ({
   shouldAutoControlRealtimeVoiceAgentText: vi.fn(),
 }));
 
-vi.mock("openclaw/plugin-sdk/realtime-voice", () => ({
+vi.mock("sunclaw/plugin-sdk/realtime-voice", () => ({
   controlRealtimeVoiceAgentRun: mocks.controlRealtimeVoiceAgentRun,
   shouldAutoControlRealtimeVoiceAgentText: mocks.shouldAutoControlRealtimeVoiceAgentText,
 }));
@@ -29,7 +29,7 @@ describe("maybeControlDiscordVoiceAgentRun", () => {
       active: false,
       mode: "cancel",
       sessionKey: "discord:g1:c1",
-      message: "There is no active OpenClaw run to cancel.",
+      message: "There is no active SunClaw run to cancel.",
       speak: true,
       suppress: false,
     };
@@ -49,7 +49,7 @@ describe("maybeControlDiscordVoiceAgentRun", () => {
       active: true,
       mode: "cancel",
       sessionKey: "discord:g1:c1",
-      message: "Cancelled the active OpenClaw run.",
+      message: "Cancelled the active SunClaw run.",
       speak: true,
       suppress: false,
     };
@@ -63,7 +63,7 @@ describe("maybeControlDiscordVoiceAgentRun", () => {
     ).resolves.toEqual({
       handled: true,
       result,
-      speakText: "Cancelled the active OpenClaw run.",
+      speakText: "Cancelled the active SunClaw run.",
     });
   });
 

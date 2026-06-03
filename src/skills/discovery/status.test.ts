@@ -11,7 +11,7 @@ type SkillStatus = ReturnType<typeof buildWorkspaceSkillStatus>["skills"][number
 
 describe("buildWorkspaceSkillStatus", () => {
   it("surfaces valid ClawHub linkage and local Skill Card metadata", async () => {
-    const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-skill-status-"));
+    const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-skill-status-"));
     try {
       const skillDir = path.join(workspaceDir, "skills", "agentreceipt");
       const originPath = path.join(skillDir, ".clawhub", "origin.json");
@@ -24,7 +24,7 @@ describe("buildWorkspaceSkillStatus", () => {
         `${JSON.stringify(
           {
             version: 1,
-            registry: "https://clawhub.ai/",
+            registry: "https://clawhub.complex.az/",
             slug: "agentreceipt",
             installedVersion: "1.2.3",
             installedAt: 123,
@@ -43,7 +43,7 @@ describe("buildWorkspaceSkillStatus", () => {
               agentreceipt: {
                 version: "1.2.3",
                 installedAt: 123,
-                registry: "https://clawhub.ai/",
+                registry: "https://clawhub.complex.az/",
               },
             },
           },
@@ -61,7 +61,7 @@ describe("buildWorkspaceSkillStatus", () => {
       expect(report.skills[0]?.clawhub).toEqual({
         status: "linked",
         valid: true,
-        registry: "https://clawhub.ai",
+        registry: "https://clawhub.complex.az",
         slug: "agentreceipt",
         installedVersion: "1.2.3",
         installedAt: 123,
@@ -79,7 +79,7 @@ describe("buildWorkspaceSkillStatus", () => {
   });
 
   it("uses ClawHub origin metadata for linkage when the skill name is a display name", async () => {
-    const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-skill-status-"));
+    const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-skill-status-"));
     try {
       const skillDir = path.join(workspaceDir, "skills", "agentreceipt");
       await writeClawHubStatusFixture({
@@ -96,7 +96,7 @@ describe("buildWorkspaceSkillStatus", () => {
       expect(report.skills[0]?.clawhub).toMatchObject({
         status: "linked",
         valid: true,
-        registry: "https://clawhub.ai",
+        registry: "https://clawhub.complex.az",
         slug: "agentreceipt",
         installedVersion: "1.2.3",
         installedAt: 123,
@@ -107,7 +107,7 @@ describe("buildWorkspaceSkillStatus", () => {
   });
 
   it("does not link ClawHub origin metadata from the wrong install directory", async () => {
-    const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-skill-status-"));
+    const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-skill-status-"));
     try {
       const copiedSkillDir = path.join(workspaceDir, "skills", "copied-agentreceipt");
       await writeClawHubStatusFixture({
@@ -132,14 +132,14 @@ describe("buildWorkspaceSkillStatus", () => {
   });
 
   it("does not link ClawHub origin metadata when the lockfile registry disagrees", async () => {
-    const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-skill-status-"));
+    const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-skill-status-"));
     try {
       const skillDir = path.join(workspaceDir, "skills", "agentreceipt");
       await writeClawHubStatusFixture({
         workspaceDir,
         skillDir,
         slug: "agentreceipt",
-        originRegistry: "https://clawhub.ai",
+        originRegistry: "https://clawhub.complex.az",
         lockRegistry: "https://example.invalid",
       });
 
@@ -161,7 +161,7 @@ describe("buildWorkspaceSkillStatus", () => {
   it.runIf(process.platform !== "win32")(
     "does not surface or read Skill Card symlinks outside the skill directory",
     async () => {
-      const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-skill-status-"));
+      const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-skill-status-"));
       try {
         const skillDir = path.join(workspaceDir, "skills", "agentreceipt");
         const secretPath = path.join(workspaceDir, "secret.txt");
@@ -182,7 +182,7 @@ describe("buildWorkspaceSkillStatus", () => {
   );
 
   it("surfaces malformed or mismatched ClawHub linkage without trusting it", async () => {
-    const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-skill-status-"));
+    const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-skill-status-"));
     try {
       const malformedDir = path.join(workspaceDir, "skills", "malformed");
       const missingLockDir = path.join(workspaceDir, "skills", "missing-lock");
@@ -435,7 +435,7 @@ describe("buildWorkspaceSkillStatus", () => {
   });
 
   it("classifies a mixed broken skill pack without flattening visibility reasons", () => {
-    const missingBin = "openclaw-test-definitely-missing-skill-bin";
+    const missingBin = "sunclaw-test-definitely-missing-skill-bin";
     const report = buildWorkspaceSkillStatus("/tmp/ws", {
       agentId: "specialist",
       config: {
@@ -473,7 +473,7 @@ describe("buildWorkspaceSkillStatus", () => {
             install: [
               {
                 kind: "node",
-                package: "@openclaw/missing-skill-bin",
+                package: "@sunclaw/missing-skill-bin",
                 bins: [missingBin],
               },
             ],
@@ -481,8 +481,8 @@ describe("buildWorkspaceSkillStatus", () => {
         }),
         createEntry("needs-env", {
           metadata: {
-            primaryEnv: "OPENCLAW_TEST_MISSING_SKILL_KEY",
-            requires: { env: ["OPENCLAW_TEST_MISSING_SKILL_KEY"] },
+            primaryEnv: "SUNCLAW_TEST_MISSING_SKILL_KEY",
+            requires: { env: ["SUNCLAW_TEST_MISSING_SKILL_KEY"] },
           },
         }),
         createEntry("prompt-hidden", {
@@ -499,7 +499,7 @@ describe("buildWorkspaceSkillStatus", () => {
         }),
         createEntry("agent-filtered"),
         createEntry("disabled"),
-        createEntry("bundled-blocked", { source: "openclaw-bundled" }),
+        createEntry("bundled-blocked", { source: "sunclaw-bundled" }),
       ],
     });
 
@@ -535,18 +535,18 @@ describe("buildWorkspaceSkillStatus", () => {
       {
         kind: "node",
         id: "node-0",
-        label: "Install @openclaw/missing-skill-bin (pnpm)",
+        label: "Install @sunclaw/missing-skill-bin (pnpm)",
         bins: [missingBin],
       },
     ]);
     const needsEnv = requireSkillStatus(byName, "needs-env");
     expect(needsEnv.eligible).toBe(false);
-    expect(needsEnv.primaryEnv).toBe("OPENCLAW_TEST_MISSING_SKILL_KEY");
+    expect(needsEnv.primaryEnv).toBe("SUNCLAW_TEST_MISSING_SKILL_KEY");
     expect(needsEnv.missing).toStrictEqual({
       anyBins: [],
       bins: [],
       config: [],
-      env: ["OPENCLAW_TEST_MISSING_SKILL_KEY"],
+      env: ["SUNCLAW_TEST_MISSING_SKILL_KEY"],
       os: [],
     });
     expectStatusFlags(requireSkillStatus(byName, "prompt-hidden"), {
@@ -655,7 +655,7 @@ async function writeClawHubStatusFixture(params: {
     `${JSON.stringify(
       {
         version: 1,
-        registry: params.originRegistry ?? "https://clawhub.ai",
+        registry: params.originRegistry ?? "https://clawhub.complex.az",
         slug: params.slug,
         installedVersion,
         installedAt,
@@ -679,7 +679,7 @@ async function writeClawHubStatusFixture(params: {
           [params.slug]: {
             version: params.lockVersion ?? installedVersion,
             installedAt,
-            registry: params.lockRegistry ?? "https://clawhub.ai",
+            registry: params.lockRegistry ?? "https://clawhub.complex.az",
           },
         },
       },

@@ -1,9 +1,9 @@
 import {
   getRuntimeConfig,
   getRuntimeConfigSourceSnapshot,
-  type OpenClawConfig,
+  type SunClawConfig,
 } from "../config/config.js";
 
-export function loadBrowserConfigForRuntimeRefresh(): OpenClawConfig {
+export function loadBrowserConfigForRuntimeRefresh(): SunClawConfig {
   return getRuntimeConfigSourceSnapshot() ?? getRuntimeConfig();
 }

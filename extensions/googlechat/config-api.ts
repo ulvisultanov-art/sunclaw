@@ -1,2 +1,2 @@
-export { GoogleChatConfigSchema } from "openclaw/plugin-sdk/bundled-channel-config-schema";
-export { buildChannelConfigSchema } from "openclaw/plugin-sdk/channel-config-primitives";
+export { GoogleChatConfigSchema } from "sunclaw/plugin-sdk/bundled-channel-config-schema";
+export { buildChannelConfigSchema } from "sunclaw/plugin-sdk/channel-config-primitives";

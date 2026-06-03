@@ -1,5 +1,5 @@
-import type { AgentMessage } from "openclaw/plugin-sdk/agent-core";
-import { SessionManager } from "openclaw/plugin-sdk/agent-sessions";
+import type { AgentMessage } from "sunclaw/plugin-sdk/agent-core";
+import { SessionManager } from "sunclaw/plugin-sdk/agent-sessions";
 import { describe, expect, it } from "vitest";
 import { installSessionToolResultGuard } from "./session-tool-result-guard.js";
 import { castAgentMessage } from "./test-helpers/agent-message-fixtures.js";

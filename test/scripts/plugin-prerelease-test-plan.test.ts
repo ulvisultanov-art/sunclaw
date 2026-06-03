@@ -101,7 +101,7 @@ describe("scripts/lib/plugin-prerelease-test-plan.mjs", () => {
     );
 
     expect(lane).toEqual({
-      command: "OPENCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:kitchen-sink-plugin",
+      command: "SUNCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:kitchen-sink-plugin",
       e2eImageKind: "functional",
       live: false,
       name: "kitchen-sink-plugin",
@@ -111,15 +111,15 @@ describe("scripts/lib/plugin-prerelease-test-plan.mjs", () => {
       stateScenario: "empty",
       weight: 3,
     });
-    expect(script).toContain("npm:@openclaw/kitchen-sink@latest");
+    expect(script).toContain("npm:@sunclaw/kitchen-sink@latest");
     expect(script).toContain("npm-latest-conformance");
     expect(script).toContain("npm-latest-adversarial");
-    expect(script).toContain("npm:@openclaw/kitchen-sink@beta");
-    expect(script).toContain("clawhub:@openclaw/kitchen-sink@latest");
-    expect(script).toContain("clawhub:@openclaw/kitchen-sink@beta");
-    expect(script).toContain("OPENCLAW_KITCHEN_SINK_PLUGIN_MAX_MEMORY_MIB");
+    expect(script).toContain("npm:@sunclaw/kitchen-sink@beta");
+    expect(script).toContain("clawhub:@sunclaw/kitchen-sink@latest");
+    expect(script).toContain("clawhub:@sunclaw/kitchen-sink@beta");
+    expect(script).toContain("SUNCLAW_KITCHEN_SINK_PLUGIN_MAX_MEMORY_MIB");
     expect(script).toContain(
-      "npm-to-clawhub|clawhub:@openclaw/kitchen-sink@latest|openclaw-kitchen-sink-fixture|clawhub|success|basic||${KITCHEN_SINK_NPM_SPEC}",
+      "npm-to-clawhub|clawhub:@sunclaw/kitchen-sink@latest|sunclaw-kitchen-sink-fixture|clawhub|success|basic||${KITCHEN_SINK_NPM_SPEC}",
     );
     expect(script).toContain("scripts/e2e/lib/kitchen-sink-plugin/sweep.sh");
     expect(sweepScript).toContain('plugins install "$KITCHEN_SINK_SPEC"');
@@ -127,7 +127,7 @@ describe("scripts/lib/plugin-prerelease-test-plan.mjs", () => {
     expect(sweepScript).toContain("assert-cutover-preinstalled");
     expect(sweepScript).toContain('install_args+=("--force")');
     expect(sweepScript).toContain("KITCHEN_SINK_PERSONALITY");
-    expect(sweepScript).toContain("OPENCLAW_KITCHEN_SINK_PERSONALITY");
+    expect(sweepScript).toContain("SUNCLAW_KITCHEN_SINK_PERSONALITY");
     expect(sweepScript).toContain('plugins uninstall "$KITCHEN_SINK_SPEC" --force');
     const successScenario = sweepScript.slice(
       sweepScript.indexOf("run_success_scenario()"),
@@ -155,7 +155,7 @@ describe("scripts/lib/plugin-prerelease-test-plan.mjs", () => {
     );
     expect(assertionsScript).toContain("!INVALID_PROBE_DIAGNOSTIC_SURFACE_MODES.has(surfaceMode)");
     expect(readFileSync("scripts/e2e/lib/clawhub-fixture-server.cjs", "utf8")).toContain(
-      'from "openclaw/plugin-sdk/plugin-entry"',
+      'from "sunclaw/plugin-sdk/plugin-entry"',
     );
     expect(readFileSync("scripts/e2e/lib/clawhub-fixture-server.cjs", "utf8")).toContain(
       "X-ClawHub-Artifact-Sha256",
@@ -171,7 +171,7 @@ describe("scripts/lib/plugin-prerelease-test-plan.mjs", () => {
     const walkScript = readFileSync("scripts/e2e/kitchen-sink-rpc-walk.mjs", "utf8");
 
     expect(lane).toEqual({
-      command: "OPENCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:kitchen-sink-rpc",
+      command: "SUNCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:kitchen-sink-rpc",
       e2eImageKind: "functional",
       live: false,
       name: "kitchen-sink-rpc",
@@ -182,8 +182,8 @@ describe("scripts/lib/plugin-prerelease-test-plan.mjs", () => {
       timeoutMs: 900000,
       weight: 3,
     });
-    expect(script).toContain("OPENCLAW_ENTRY=/app/openclaw.mjs");
-    expect(script).toContain("OPENCLAW_KITCHEN_SINK_COMMAND_MAX_RSS_MIB");
+    expect(script).toContain("SUNCLAW_ENTRY=/app/sunclaw.mjs");
+    expect(script).toContain("SUNCLAW_KITCHEN_SINK_COMMAND_MAX_RSS_MIB");
     expect(script).toContain("docker_e2e_sample_stats_until_exit");
     expect(script).toContain("scripts/e2e/lib/docker-stats/assert-resource-ceiling.mjs");
     expect(script).toContain("node scripts/e2e/kitchen-sink-rpc-walk.mjs");
@@ -193,7 +193,7 @@ describe("scripts/lib/plugin-prerelease-test-plan.mjs", () => {
     expect(walkScript).toContain("tts.providers");
     expect(walkScript).toContain("plugins.uiDescriptors");
     expect(walkScript).toContain("loadCallGatewayModule(options.runner)");
-    expect(walkScript).toContain("usesBuiltOpenClawEntry(runner)");
+    expect(walkScript).toContain("usesBuiltSunClawEntry(runner)");
     expect(walkScript).toContain('"gateway"');
     expect(walkScript).toContain('"call"');
     expect(walkScript).not.toContain("src/gateway/call.ts");
@@ -209,7 +209,7 @@ describe("scripts/lib/plugin-prerelease-test-plan.mjs", () => {
     const prereleasePlan = createPluginPrereleaseTestPlan();
 
     expect(lane).toEqual({
-      command: "OPENCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:plugins",
+      command: "SUNCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:plugins",
       e2eImageKind: "functional",
       live: false,
       name: "plugins",
@@ -223,9 +223,9 @@ describe("scripts/lib/plugin-prerelease-test-plan.mjs", () => {
     expect(sweepScript).toContain("run_plugins_clawhub_scenario");
     expect(clawhubScript).toContain('plugins install "$CLAWHUB_PLUGIN_SPEC"');
     expect(assertionsScript).toContain("assertClawHubExternalInstallContract");
-    expect(assertionsScript).toContain('node_modules", "openclaw');
+    expect(assertionsScript).toContain('node_modules", "sunclaw');
     expect(fixtureServer).toContain('"is-number": "7.0.0"');
-    expect(fixtureServer).toContain('openclaw: ">=2026.4.11"');
+    expect(fixtureServer).toContain('sunclaw: ">=2026.4.11"');
     expect(fixtureServer).toContain("/versions/${fixture.version}/artifact");
   });
 
@@ -324,33 +324,33 @@ describe("scripts/lib/plugin-prerelease-test-plan.mjs", () => {
       type: "boolean",
     });
     expect(manifestEnv).toEqual({
-      OPENCLAW_CI_CHECKOUT_REVISION: "${{ steps.checkout_ref.outputs.sha }}",
-      OPENCLAW_CI_DOCS_CHANGED:
+      SUNCLAW_CI_CHECKOUT_REVISION: "${{ steps.checkout_ref.outputs.sha }}",
+      SUNCLAW_CI_DOCS_CHANGED:
         "${{ github.event_name == 'workflow_dispatch' && 'true' || steps.docs_scope.outputs.docs_changed }}",
-      OPENCLAW_CI_DOCS_ONLY:
+      SUNCLAW_CI_DOCS_ONLY:
         "${{ github.event_name == 'workflow_dispatch' && 'false' || steps.docs_scope.outputs.docs_only }}",
-      OPENCLAW_CI_EVENT_NAME: "${{ github.event_name }}",
-      OPENCLAW_CI_REPOSITORY: "${{ github.repository }}",
-      OPENCLAW_CI_RUN_ANDROID:
+      SUNCLAW_CI_EVENT_NAME: "${{ github.event_name }}",
+      SUNCLAW_CI_REPOSITORY: "${{ github.repository }}",
+      SUNCLAW_CI_RUN_ANDROID:
         "${{ github.event_name == 'workflow_dispatch' && inputs.include_android && 'true' || steps.changed_scope.outputs.run_android || 'false' }}",
-      OPENCLAW_CI_RUN_CONTROL_UI_I18N:
+      SUNCLAW_CI_RUN_CONTROL_UI_I18N:
         "${{ github.event_name == 'workflow_dispatch' && 'true' || steps.changed_scope.outputs.run_control_ui_i18n || 'false' }}",
-      OPENCLAW_CI_RUN_MACOS:
+      SUNCLAW_CI_RUN_MACOS:
         "${{ github.event_name == 'workflow_dispatch' && 'true' || steps.changed_scope.outputs.run_macos || 'false' }}",
-      OPENCLAW_CI_RUN_NODE:
+      SUNCLAW_CI_RUN_NODE:
         "${{ github.event_name == 'workflow_dispatch' && 'true' || steps.changed_scope.outputs.run_node || 'false' }}",
-      OPENCLAW_CI_RUN_NODE_FAST_CI_ROUTING:
+      SUNCLAW_CI_RUN_NODE_FAST_CI_ROUTING:
         "${{ github.event_name == 'workflow_dispatch' && 'false' || steps.changed_scope.outputs.run_node_fast_ci_routing || 'false' }}",
-      OPENCLAW_CI_RUN_NODE_FAST_ONLY:
+      SUNCLAW_CI_RUN_NODE_FAST_ONLY:
         "${{ github.event_name == 'workflow_dispatch' && 'false' || steps.changed_scope.outputs.run_node_fast_only || 'false' }}",
-      OPENCLAW_CI_RUN_NODE_FAST_PLUGIN_CONTRACTS:
+      SUNCLAW_CI_RUN_NODE_FAST_PLUGIN_CONTRACTS:
         "${{ github.event_name == 'workflow_dispatch' && 'false' || steps.changed_scope.outputs.run_node_fast_plugin_contracts || 'false' }}",
-      OPENCLAW_CI_RUN_SKILLS_PYTHON:
+      SUNCLAW_CI_RUN_SKILLS_PYTHON:
         "${{ github.event_name == 'workflow_dispatch' && 'true' || steps.changed_scope.outputs.run_skills_python || 'false' }}",
-      OPENCLAW_CI_RUN_WINDOWS:
+      SUNCLAW_CI_RUN_WINDOWS:
         "${{ github.event_name == 'workflow_dispatch' && 'true' || steps.changed_scope.outputs.run_windows || 'false' }}",
     });
-    expect(manifestEnv).not.toHaveProperty("OPENCLAW_CI_FULL_RELEASE_VALIDATION");
+    expect(manifestEnv).not.toHaveProperty("SUNCLAW_CI_FULL_RELEASE_VALIDATION");
     expect(manifestScript).toContain("includeReleaseOnlyPluginShards: false");
     expect(manifestScript).not.toContain("plugin-prerelease-test-plan.mjs");
     expect(
@@ -443,12 +443,12 @@ describe("scripts/lib/plugin-prerelease-test-plan.mjs", () => {
       (step) => step.name === "Run plugin inspector advisory sweep",
     );
     expect(inspectorRun.env).toEqual({
-      OPENCLAW_PLUGIN_INSPECTOR_ROOT: ".artifacts/plugin-inspector",
-      OPENCLAW_PLUGIN_INSPECTOR_VERSION: "0.3.10",
+      SUNCLAW_PLUGIN_INSPECTOR_ROOT: ".artifacts/plugin-inspector",
+      SUNCLAW_PLUGIN_INSPECTOR_VERSION: "0.3.10",
     });
     expect(inspectorRun.run).toContain("extensions/");
     expect(inspectorRun.run).toContain(
-      'npm exec --yes "@openclaw/plugin-inspector@${OPENCLAW_PLUGIN_INSPECTOR_VERSION}" -- ci',
+      'npm exec --yes "@sunclaw/plugin-inspector@${SUNCLAW_PLUGIN_INSPECTOR_VERSION}" -- ci',
     );
     expect(inspectorRun.run).toContain("This job is informational");
     expect(
@@ -476,7 +476,7 @@ describe("scripts/lib/plugin-prerelease-test-plan.mjs", () => {
         packages: "write",
         "pull-requests": "read",
       },
-      uses: "./.github/workflows/openclaw-live-and-e2e-checks-reusable.yml",
+      uses: "./.github/workflows/sunclaw-live-and-e2e-checks-reusable.yml",
       with: {
         docker_lanes: "${{ needs.preflight.outputs.plugin_prerelease_docker_lanes }}",
         include_live_suites: false,
@@ -504,13 +504,13 @@ describe("scripts/lib/plugin-prerelease-test-plan.mjs", () => {
 
   it("keeps release-check reruns independent while cancelling superseded umbrella runs", () => {
     const releaseChecksWorkflow = parse(
-      readFileSync(".github/workflows/openclaw-release-checks.yml", "utf8"),
+      readFileSync(".github/workflows/sunclaw-release-checks.yml", "utf8"),
     );
     const fullReleaseWorkflow = readFullReleaseValidationWorkflow();
 
     expect(releaseChecksWorkflow.concurrency).toEqual({
       group:
-        "openclaw-release-checks-${{ inputs.expected_sha || inputs.ref }}-${{ inputs.rerun_group }}",
+        "sunclaw-release-checks-${{ inputs.expected_sha || inputs.ref }}-${{ inputs.rerun_group }}",
       "cancel-in-progress": "${{ startsWith(github.ref, 'refs/heads/tideclaw/alpha/') }}",
     });
     expect(fullReleaseWorkflow.concurrency).toEqual({
@@ -555,7 +555,7 @@ describe("scripts/lib/plugin-prerelease-test-plan.mjs", () => {
     expect(dockerPreflightStep?.run).toContain("--target runtime-assets");
     expect(dockerPreflightStep?.run).toContain("timeout --kill-after=30s 15m docker build");
     expect(dockerPreflightStep?.run).toContain(
-      '--build-arg OPENCLAW_EXTENSIONS="diagnostics-otel,codex"',
+      '--build-arg SUNCLAW_EXTENSIONS="diagnostics-otel,codex"',
     );
     expect(
       fullReleaseWorkflow.jobs.docker_runtime_assets_preflight.steps.some(
@@ -579,7 +579,7 @@ describe("scripts/lib/plugin-prerelease-test-plan.mjs", () => {
 
   it("keeps runtime tool coverage blocking in release checks", () => {
     const releaseChecksSource = readFileSync(
-      ".github/workflows/openclaw-release-checks.yml",
+      ".github/workflows/sunclaw-release-checks.yml",
       "utf8",
     );
     const releaseChecksWorkflow = parse(releaseChecksSource);
@@ -594,7 +594,7 @@ describe("scripts/lib/plugin-prerelease-test-plan.mjs", () => {
       expect.arrayContaining([
         expect.objectContaining({
           name: "Enforce standard runtime tool coverage",
-          run: expect.stringContaining("pnpm openclaw qa coverage"),
+          run: expect.stringContaining("pnpm sunclaw qa coverage"),
         }),
       ]),
     );
@@ -630,7 +630,7 @@ describe("scripts/lib/plugin-prerelease-test-plan.mjs", () => {
     );
 
     expect(output).toContain("provider-openai: present (OPENAI_API_KEY, OPENAI_BASE_URL)");
-    expect(output).toContain("channel-discord: present (DISCORD_TOKEN, OPENCLAW_DISCORD_TOKEN)");
+    expect(output).toContain("channel-discord: present (DISCORD_TOKEN, SUNCLAW_DISCORD_TOKEN)");
     expect(output).not.toContain("openai-token-should-not-print");
     expect(output).not.toContain("discord-token-should-not-print");
   });

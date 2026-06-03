@@ -1,9 +1,9 @@
 import {
   findNormalizedProviderValue,
   normalizeProviderId,
-} from "@openclaw/model-catalog-core/provider-id";
-import { normalizeUniqueSingleOrTrimmedStringList } from "@openclaw/normalization-core/string-normalization";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+} from "@sunclaw/model-catalog-core/provider-id";
+import { normalizeUniqueSingleOrTrimmedStringList } from "@sunclaw/normalization-core/string-normalization";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 
 function dedupeCatalogScopeRefs(values: Array<string | undefined>): string[] {
   return normalizeUniqueSingleOrTrimmedStringList(values);
@@ -34,7 +34,7 @@ function providerConfigDeclaresModel(
 }
 
 export function resolveModelCatalogScope(params: {
-  cfg?: OpenClawConfig;
+  cfg?: SunClawConfig;
   provider: string;
   model: string;
 }): { providerRefs: string[]; modelRefs: string[] } {

@@ -1,7 +1,7 @@
-import { resolveDirectStatusReplyForSession } from "openclaw/plugin-sdk/command-status-runtime";
-import * as pluginRuntime from "openclaw/plugin-sdk/plugin-runtime";
-import { dispatchReplyWithDispatcher } from "openclaw/plugin-sdk/reply-dispatch-runtime";
-import { getSessionEntry } from "openclaw/plugin-sdk/session-store-runtime";
+import { resolveDirectStatusReplyForSession } from "sunclaw/plugin-sdk/command-status-runtime";
+import * as pluginRuntime from "sunclaw/plugin-sdk/plugin-runtime";
+import { dispatchReplyWithDispatcher } from "sunclaw/plugin-sdk/reply-dispatch-runtime";
+import { getSessionEntry } from "sunclaw/plugin-sdk/session-store-runtime";
 import { resolveDiscordNativeInteractionRouteState } from "./native-command-route.js";
 
 export const nativeCommandRuntime = {

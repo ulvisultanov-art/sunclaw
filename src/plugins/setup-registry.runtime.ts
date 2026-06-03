@@ -1,6 +1,6 @@
 import { createRequire } from "node:module";
-import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { normalizeProviderId } from "@sunclaw/model-catalog-core/provider-id";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { isInstalledPluginEnabled } from "./installed-plugin-index.js";
 import {
   resolvePluginMetadataSnapshot,
@@ -22,7 +22,7 @@ type SetupCliBackendRuntimeEntry = {
 
 type SetupCliBackendRuntimeLookupParams = {
   backend: string;
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
 };

@@ -1,15 +1,15 @@
 import type { DatabaseSync } from "node:sqlite";
 import type { FSWatcher } from "chokidar";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
+import { formatErrorMessage } from "sunclaw/plugin-sdk/error-runtime";
 import {
   createSubsystemLogger,
   resolveAgentDir,
   resolveAgentWorkspaceDir,
   resolveMemorySearchConfig,
-  type OpenClawConfig,
+  type SunClawConfig,
   type ResolvedMemorySearchConfig,
-} from "openclaw/plugin-sdk/memory-core-host-engine-foundation";
-import { extractKeywords } from "openclaw/plugin-sdk/memory-core-host-engine-qmd";
+} from "sunclaw/plugin-sdk/memory-core-host-engine-foundation";
+import { extractKeywords } from "sunclaw/plugin-sdk/memory-core-host-engine-qmd";
 import {
   readMemoryFile,
   type MemoryEmbeddingProbeResult,
@@ -19,8 +19,8 @@ import {
   type MemorySearchResult,
   type MemorySource,
   type MemorySyncProgressUpdate,
-} from "openclaw/plugin-sdk/memory-core-host-engine-storage";
-import { uniqueValues } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/memory-core-host-engine-storage";
+import { uniqueValues } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import {
   createEmbeddingProvider,
   type EmbeddingProvider,
@@ -65,7 +65,7 @@ const SNIPPET_MAX_CHARS = 700;
 const VECTOR_TABLE = "chunks_vec";
 const FTS_TABLE = "chunks_fts";
 const EMBEDDING_CACHE_TABLE = "embedding_cache";
-const MEMORY_INDEX_MANAGER_CACHE_KEY = Symbol.for("openclaw.memoryIndexManagerCache");
+const MEMORY_INDEX_MANAGER_CACHE_KEY = Symbol.for("sunclaw.memoryIndexManagerCache");
 export const EMBEDDING_PROBE_CACHE_TTL_MS = 30_000;
 const log = createSubsystemLogger("memory");
 type MemoryIndexManagerPurpose = "default" | "status" | "cli";
@@ -93,7 +93,7 @@ export async function closeAllMemoryIndexManagers(): Promise<void> {
 }
 
 export async function closeMemoryIndexManagersForAgent(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   agentId: string;
 }): Promise<void> {
   const settings = resolveMemorySearchConfig(params.cfg, params.agentId);
@@ -138,7 +138,7 @@ function resolveEffectiveMemorySearchSettings(
 
 export class MemoryIndexManager extends MemoryManagerEmbeddingOps implements MemorySearchManager {
   private readonly cacheKey: string;
-  protected readonly cfg: OpenClawConfig;
+  protected readonly cfg: SunClawConfig;
   protected readonly agentId: string;
   protected readonly workspaceDir: string;
   protected readonly settings: ResolvedMemorySearchConfig;
@@ -209,7 +209,7 @@ export class MemoryIndexManager extends MemoryManagerEmbeddingOps implements Mem
   };
 
   private static async loadProviderResult(params: {
-    cfg: OpenClawConfig;
+    cfg: SunClawConfig;
     agentId: string;
     settings: ResolvedMemorySearchConfig;
   }): Promise<EmbeddingProviderResult> {
@@ -221,7 +221,7 @@ export class MemoryIndexManager extends MemoryManagerEmbeddingOps implements Mem
   }
 
   static async get(params: {
-    cfg: OpenClawConfig;
+    cfg: SunClawConfig;
     agentId: string;
     purpose?: MemoryIndexManagerPurpose;
   }): Promise<MemoryIndexManager | null> {
@@ -254,7 +254,7 @@ export class MemoryIndexManager extends MemoryManagerEmbeddingOps implements Mem
 
   private constructor(params: {
     cacheKey: string;
-    cfg: OpenClawConfig;
+    cfg: SunClawConfig;
     agentId: string;
     workspaceDir: string;
     settings: ResolvedMemorySearchConfig;

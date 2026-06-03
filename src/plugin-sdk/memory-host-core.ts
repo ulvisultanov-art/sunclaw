@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import type { OpenClawConfig } from "../config/config.js";
+import type { SunClawConfig } from "../config/config.js";
 import type { MemoryPluginPublicArtifact } from "../plugins/memory-state.js";
 import { resolveMemoryDreamingWorkspaces } from "./memory-core-host-status.js";
 import { resolveMemoryHostEventLogPath } from "./memory-host-events.js";
@@ -88,7 +88,7 @@ export async function listMemoryWorkspacePublicArtifacts(params: {
 }
 
 export async function listMemoryHostPublicArtifacts(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
 }): Promise<MemoryPluginPublicArtifact[]> {
   const workspaces = resolveMemoryDreamingWorkspaces(params.cfg);
   const artifacts: MemoryPluginPublicArtifact[] = [];

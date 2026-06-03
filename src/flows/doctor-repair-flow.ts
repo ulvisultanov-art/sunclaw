@@ -1,5 +1,5 @@
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { uniqueStrings } from "@sunclaw/normalization-core/string-normalization";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { scrubDoctorErrorMessage } from "./doctor-error-message.js";
 import { normalizeHealthCheck } from "./health-check-adapter.js";
 import { listHealthChecks } from "./health-check-registry.js";
@@ -20,7 +20,7 @@ export interface DoctorRepairRunOptions {
 }
 
 export interface DoctorRepairRunResult {
-  readonly config: OpenClawConfig;
+  readonly config: SunClawConfig;
   readonly findings: readonly HealthFinding[];
   readonly remainingFindings: readonly HealthFinding[];
   readonly changes: readonly string[];
@@ -258,7 +258,7 @@ function hasHealthRepairOutput(result: HealthRepairResult | HealthCheckRunResult
 }
 
 function repairRunResult(
-  config: OpenClawConfig,
+  config: SunClawConfig,
   findings: readonly HealthFinding[],
   remainingFindings: readonly HealthFinding[],
   changes: readonly string[],

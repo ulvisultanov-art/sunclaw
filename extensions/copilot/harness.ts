@@ -8,8 +8,8 @@ import {
   type AgentHarnessCompactParams,
   type AgentHarnessCompactResult,
   type AgentHarnessResetParams,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
-import type { PluginStateSyncKeyedStore } from "openclaw/plugin-sdk/plugin-state-runtime";
+} from "sunclaw/plugin-sdk/agent-harness-runtime";
+import type { PluginStateSyncKeyedStore } from "sunclaw/plugin-sdk/plugin-state-runtime";
 import type { CopilotSessionConfig } from "./src/attempt.js";
 import { resolveCopilotAuth } from "./src/auth-bridge.js";
 import type {
@@ -406,7 +406,7 @@ export function createCopilotAgentHarness(
   let disposed = false;
   let disposePromise: Promise<void> | undefined;
   const inFlight = new Set<Promise<unknown>>();
-  // Maps OpenClaw session id (from AgentHarnessAttemptParams.sessionId) to
+  // Maps SunClaw session id (from AgentHarnessAttemptParams.sessionId) to
   // the SDK session id + client that owns it. Populated by
   // runCopilotAttempt via the onSessionEstablished callback so that
   // reset(params) can call client.deleteSession on the right client.
@@ -462,11 +462,11 @@ export function createCopilotAgentHarness(
         if (disposed) {
           throw new Error("[copilot] harness was disposed while starting an attempt");
         }
-        const openclawSessionId =
+        const sunclawSessionId =
           typeof params.sessionId === "string" ? params.sessionId : undefined;
 
         // Dogfood finding #4: reuse the SDK session across turns within
-        // the same OpenClaw session so that the GitHub Copilot agent runtime's prompt
+        // the same SunClaw session so that the GitHub Copilot agent runtime's prompt
         // cache, tool-call history, and any server-side compaction state
         // survive turn boundaries. Without this, every turn called
         // `createSession()` and lost cache + thread continuity — the
@@ -487,11 +487,11 @@ export function createCopilotAgentHarness(
         //     surfaces as a prompt error.
         const currentCompatKey = computeSessionCompatKey(params);
         const currentCompactKey = computeSessionCompactKey(params);
-        const tracked = openclawSessionId ? trackedSessions.get(openclawSessionId) : undefined;
-        const stored = openclawSessionId
-          ? resetBlockedStoredSessions.has(openclawSessionId)
+        const tracked = sunclawSessionId ? trackedSessions.get(sunclawSessionId) : undefined;
+        const stored = sunclawSessionId
+          ? resetBlockedStoredSessions.has(sunclawSessionId)
             ? undefined
-            : lookupStoredBinding(options?.sessionStore, openclawSessionId)
+            : lookupStoredBinding(options?.sessionStore, sunclawSessionId)
           : undefined;
         const resumableSessionId =
           tracked && tracked.compatKey === currentCompatKey
@@ -511,7 +511,7 @@ export function createCopilotAgentHarness(
 
         return runCopilotAttempt(effectiveParams, {
           pool,
-          onSessionEstablished: openclawSessionId
+          onSessionEstablished: sunclawSessionId
             ? ({
                 sdkSessionId,
                 pooledClient,
@@ -521,7 +521,7 @@ export function createCopilotAgentHarness(
                 pooledClient: PooledClient;
                 sessionConfig: CopilotSessionConfig;
               }) => {
-                trackedSessions.set(openclawSessionId, {
+                trackedSessions.set(sunclawSessionId, {
                   sdkSessionId,
                   client: pooledClient.client,
                   clientOptions: poolAcquire.options,
@@ -531,7 +531,7 @@ export function createCopilotAgentHarness(
                   sessionConfig,
                   ...sessionAuthFields(poolAcquire.auth),
                 });
-                const persisted = registerStoredBinding(options?.sessionStore, openclawSessionId, {
+                const persisted = registerStoredBinding(options?.sessionStore, sunclawSessionId, {
                   schemaVersion: 2,
                   sdkSessionId,
                   compatKey: currentCompatKey,
@@ -540,7 +540,7 @@ export function createCopilotAgentHarness(
                   updatedAt: Date.now(),
                 });
                 if (persisted) {
-                  resetBlockedStoredSessions.delete(openclawSessionId);
+                  resetBlockedStoredSessions.delete(sunclawSessionId);
                 }
               }
             : undefined,
@@ -555,21 +555,21 @@ export function createCopilotAgentHarness(
     },
 
     async reset(params: AgentHarnessResetParams): Promise<void> {
-      const openclawSessionId = typeof params.sessionId === "string" ? params.sessionId : undefined;
-      if (!openclawSessionId) {
+      const sunclawSessionId = typeof params.sessionId === "string" ? params.sessionId : undefined;
+      if (!sunclawSessionId) {
         return;
       }
-      const tracked = trackedSessions.get(openclawSessionId);
-      if (deleteStoredBinding(options?.sessionStore, openclawSessionId)) {
-        resetBlockedStoredSessions.delete(openclawSessionId);
+      const tracked = trackedSessions.get(sunclawSessionId);
+      if (deleteStoredBinding(options?.sessionStore, sunclawSessionId)) {
+        resetBlockedStoredSessions.delete(sunclawSessionId);
       } else {
-        resetBlockedStoredSessions.add(openclawSessionId);
+        resetBlockedStoredSessions.add(sunclawSessionId);
       }
       if (!tracked) {
         // Session was created by a different harness, or already reset.
         return;
       }
-      trackedSessions.delete(openclawSessionId);
+      trackedSessions.delete(sunclawSessionId);
       try {
         await tracked.client.deleteSession(tracked.sdkSessionId);
       } catch {
@@ -583,19 +583,19 @@ export function createCopilotAgentHarness(
     async compact(
       params: AgentHarnessCompactParams,
     ): Promise<AgentHarnessCompactResult | undefined> {
-      // The SDK owns Copilot history compaction. OpenClaw only resumes
+      // The SDK owns Copilot history compaction. SunClaw only resumes
       // the tracked SDK session and calls the session-scoped RPC; durable
-      // OpenClaw session/transcript state stays in SQLite, with no marker
+      // SunClaw session/transcript state stays in SQLite, with no marker
       // sidecars under the workspace.
-      const openclawSessionId = typeof params.sessionId === "string" ? params.sessionId : undefined;
-      if (!openclawSessionId) {
+      const sunclawSessionId = typeof params.sessionId === "string" ? params.sessionId : undefined;
+      if (!sunclawSessionId) {
         return {
           ok: false,
           compacted: false,
           reason: "missing-required-params",
         };
       }
-      const tracked = trackedSessions.get(openclawSessionId);
+      const tracked = trackedSessions.get(sunclawSessionId);
       const currentCompactKey = computeSessionCompactKey(params);
       const { resolvePoolAcquire } = await import("./src/attempt.js");
       const resolvedPoolAcquire = resolvePoolAcquire(params as never);
@@ -606,7 +606,7 @@ export function createCopilotAgentHarness(
           : undefined;
       if (!compatibleTracked) {
         // Durable bindings only carry SDK session ids. Manual SDK compaction also
-        // needs the live SessionConfig with OpenClaw hooks/tools, so preserve the
+        // needs the live SessionConfig with SunClaw hooks/tools, so preserve the
         // binding for the next attempt and let the host compact transcript state.
         return {
           ok: false,
@@ -656,8 +656,8 @@ export function createCopilotAgentHarness(
       } catch (err) {
         const rawError = err instanceof Error ? err.message : String(err);
         if (isStaleSdkSessionError(err)) {
-          trackedSessions.delete(openclawSessionId);
-          deleteStoredBinding(options?.sessionStore, openclawSessionId);
+          trackedSessions.delete(sunclawSessionId);
+          deleteStoredBinding(options?.sessionStore, sunclawSessionId);
           return {
             ok: false,
             compacted: false,

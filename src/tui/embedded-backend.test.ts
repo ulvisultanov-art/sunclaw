@@ -27,7 +27,7 @@ const getSessionDefaultsMock = vi.fn(() => ({
   contextTokens: null,
 }));
 const loadCombinedSessionStoreForGatewayMock = vi.fn((_options?: unknown) => ({
-  storePath: "/tmp/openclaw-sessions.json",
+  storePath: "/tmp/sunclaw-sessions.json",
   store: {},
 }));
 const getRuntimeConfigMock = vi.fn(() => ({}));
@@ -45,7 +45,7 @@ const loadSessionEntryMock = vi.fn(
   (sessionKey: string, _opts?: { agentId?: string }): LoadSessionEntryMockResult => ({
     cfg: {},
     canonicalKey: sessionKey,
-    storePath: "/tmp/openclaw-sessions.json",
+    storePath: "/tmp/sunclaw-sessions.json",
     store: {},
     entry: {},
   }),
@@ -79,7 +79,7 @@ vi.mock("../config/sessions.js", () => ({
     goal ? `Goal: ${goal.objective ?? ""}` : "No goal for this session.",
   getSessionGoal: (...args: unknown[]) => getSessionGoalMock(...args),
   resolveAgentMainSessionKey: () => "agent:main:main",
-  resolveStorePath: () => "/tmp/openclaw-sessions.json",
+  resolveStorePath: () => "/tmp/sunclaw-sessions.json",
   updateSessionGoalStatus: (...args: unknown[]) => updateSessionGoalStatusMock(...args),
   updateSessionStore: (...args: unknown[]) => updateSessionStoreMock(...args),
 }));
@@ -152,7 +152,7 @@ vi.mock("../gateway/session-utils.js", () => ({
   readSessionMessagesAsync: async () => [],
   resolveGatewaySessionStoreTarget: ({ key }: { key: string }) => ({
     canonicalKey: key,
-    storePath: "/tmp/openclaw-sessions.json",
+    storePath: "/tmp/sunclaw-sessions.json",
   }),
   resolveSessionModelRef: () => ({ provider: "openai", model: "gpt-5.4" }),
 }));
@@ -232,7 +232,7 @@ describe("EmbeddedTuiBackend", () => {
     listSessionsFromStoreAsyncMock.mockResolvedValue({ sessions: [] });
     loadCombinedSessionStoreForGatewayMock.mockReset();
     loadCombinedSessionStoreForGatewayMock.mockReturnValue({
-      storePath: "/tmp/openclaw-sessions.json",
+      storePath: "/tmp/sunclaw-sessions.json",
       store: {},
     });
     applySessionsPatchToStoreMock.mockReset();
@@ -245,7 +245,7 @@ describe("EmbeddedTuiBackend", () => {
     loadSessionEntryMock.mockImplementation((sessionKey: string) => ({
       cfg: {},
       canonicalKey: sessionKey,
-      storePath: "/tmp/openclaw-sessions.json",
+      storePath: "/tmp/sunclaw-sessions.json",
       store: {},
       entry: {},
     }));
@@ -495,7 +495,7 @@ describe("EmbeddedTuiBackend", () => {
     expect(loadCombinedSessionStoreForGatewayMock).toHaveBeenCalledWith({}, { agentId: "work" });
     expect(listSessionsFromStoreAsyncMock).toHaveBeenCalledWith({
       cfg: {},
-      storePath: "/tmp/openclaw-sessions.json",
+      storePath: "/tmp/sunclaw-sessions.json",
       store: {},
       opts: { agentId: "work", includeGlobal: true, search: "global" },
     });
@@ -505,7 +505,7 @@ describe("EmbeddedTuiBackend", () => {
     loadSessionEntryMock.mockReturnValueOnce({
       cfg: {},
       canonicalKey: "agent:main:main",
-      storePath: "/tmp/openclaw-sessions.json",
+      storePath: "/tmp/sunclaw-sessions.json",
     });
 
     const { EmbeddedTuiBackend } = await import("./embedded-backend.js");
@@ -519,7 +519,7 @@ describe("EmbeddedTuiBackend", () => {
     ).resolves.toEqual({ text: "Goal started: Ship Goal" });
     expect(createSessionGoalMock).toHaveBeenCalledWith({
       sessionKey: "agent:main:main",
-      storePath: "/tmp/openclaw-sessions.json",
+      storePath: "/tmp/sunclaw-sessions.json",
       objective: "Ship Goal",
       fallbackEntry: {
         sessionId: expect.any(String),
@@ -532,7 +532,7 @@ describe("EmbeddedTuiBackend", () => {
     loadSessionEntryMock.mockReturnValueOnce({
       cfg: {},
       canonicalKey: "global",
-      storePath: "/tmp/openclaw-work-sessions.json",
+      storePath: "/tmp/sunclaw-work-sessions.json",
       entry: { sessionId: "session-work", updatedAt: embeddedEventTimestamp },
     });
 
@@ -550,7 +550,7 @@ describe("EmbeddedTuiBackend", () => {
     expect(loadSessionEntryMock).toHaveBeenCalledWith("global", { agentId: "work" });
     expect(getSessionGoalMock).toHaveBeenCalledWith({
       sessionKey: "global",
-      storePath: "/tmp/openclaw-work-sessions.json",
+      storePath: "/tmp/sunclaw-work-sessions.json",
     });
   });
 
@@ -585,7 +585,7 @@ describe("EmbeddedTuiBackend", () => {
     loadSessionEntryMock.mockReturnValue({
       cfg: {},
       canonicalKey: "global",
-      storePath: "/tmp/openclaw-work-sessions.json",
+      storePath: "/tmp/sunclaw-work-sessions.json",
       entry: { sessionId: "session-work-global" },
     });
 
@@ -739,8 +739,8 @@ describe("EmbeddedTuiBackend", () => {
   });
 
   it("aborts local post-turn maintenance when stop grace elapses", async () => {
-    const previous = process.env.OPENCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS;
-    process.env.OPENCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS = "5";
+    const previous = process.env.SUNCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS;
+    process.env.SUNCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS = "5";
     try {
       const { EmbeddedTuiBackend } = await import("./embedded-backend.js");
       const pending = deferred<{
@@ -782,9 +782,9 @@ describe("EmbeddedTuiBackend", () => {
       expect(isEmbeddedMode()).toBe(false);
     } finally {
       if (previous === undefined) {
-        delete process.env.OPENCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS;
+        delete process.env.SUNCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS;
       } else {
-        process.env.OPENCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS = previous;
+        process.env.SUNCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS = previous;
       }
     }
   });
@@ -845,8 +845,8 @@ describe("EmbeddedTuiBackend", () => {
   });
 
   it("queues same-session sends behind active local runs", async () => {
-    const previous = process.env.OPENCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS;
-    process.env.OPENCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS = "5";
+    const previous = process.env.SUNCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS;
+    process.env.SUNCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS = "5";
     try {
       const { EmbeddedTuiBackend } = await import("./embedded-backend.js");
       const first = deferred<{
@@ -899,9 +899,9 @@ describe("EmbeddedTuiBackend", () => {
       await flushMicrotasks();
     } finally {
       if (previous === undefined) {
-        delete process.env.OPENCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS;
+        delete process.env.SUNCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS;
       } else {
-        process.env.OPENCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS = previous;
+        process.env.SUNCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS = previous;
       }
     }
   });
@@ -1270,8 +1270,8 @@ describe("EmbeddedTuiBackend", () => {
   });
 
   it("fails a queued local send when the previous finishing run does not settle", async () => {
-    const previous = process.env.OPENCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS;
-    process.env.OPENCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS = "5";
+    const previous = process.env.SUNCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS;
+    process.env.SUNCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS = "5";
     try {
       const { EmbeddedTuiBackend } = await import("./embedded-backend.js");
       const first = deferred<{
@@ -1327,16 +1327,16 @@ describe("EmbeddedTuiBackend", () => {
       ).toBe(true);
     } finally {
       if (previous === undefined) {
-        delete process.env.OPENCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS;
+        delete process.env.SUNCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS;
       } else {
-        process.env.OPENCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS = previous;
+        process.env.SUNCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS = previous;
       }
     }
   });
 
   it("fails a queued local send immediately when shutdown grace is zero", async () => {
-    const previous = process.env.OPENCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS;
-    process.env.OPENCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS = "0";
+    const previous = process.env.SUNCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS;
+    process.env.SUNCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS = "0";
     try {
       const { EmbeddedTuiBackend } = await import("./embedded-backend.js");
       const first = deferred<{
@@ -1385,9 +1385,9 @@ describe("EmbeddedTuiBackend", () => {
       ).toBe(true);
     } finally {
       if (previous === undefined) {
-        delete process.env.OPENCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS;
+        delete process.env.SUNCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS;
       } else {
-        process.env.OPENCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS = previous;
+        process.env.SUNCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS = previous;
       }
     }
   });

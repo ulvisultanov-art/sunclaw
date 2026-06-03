@@ -12,7 +12,7 @@ import {
 } from "../codex-install-utils.mjs";
 
 const cfg = readJson(configPath());
-const inspect = readJson("/tmp/openclaw-codex-inspect.json");
+const inspect = readJson("/tmp/sunclaw-codex-inspect.json");
 const records = readInstallRecords(cfg.plugins?.installs);
 const codexRecord = records.codex || inspect.install;
 if (!codexRecord) {
@@ -21,8 +21,8 @@ if (!codexRecord) {
 if (codexRecord.source !== "npm") {
   throw new Error(`expected npm codex install record, got ${codexRecord.source}`);
 }
-if (!String(codexRecord.spec || "").includes("@openclaw/codex")) {
-  throw new Error(`expected @openclaw/codex install spec, got ${codexRecord.spec}`);
+if (!String(codexRecord.spec || "").includes("@sunclaw/codex")) {
+  throw new Error(`expected @sunclaw/codex install spec, got ${codexRecord.spec}`);
 }
 
 const npmRoot = managedNpmRoot();
@@ -34,14 +34,14 @@ assertPathInside(npmRoot, installPath, "codex install path");
 
 const codexPackageJson = path.join(installPath, "package.json");
 if (!fs.existsSync(codexPackageJson)) {
-  throw new Error(`missing npm-installed @openclaw/codex package: ${codexPackageJson}`);
+  throw new Error(`missing npm-installed @sunclaw/codex package: ${codexPackageJson}`);
 }
 const codexPackage = readJson(codexPackageJson);
-if (codexPackage.name !== "@openclaw/codex") {
+if (codexPackage.name !== "@sunclaw/codex") {
   throw new Error(`unexpected codex package name: ${codexPackage.name}`);
 }
 
-const npmProjectRoot = npmProjectRootForInstalledPackage(installPath, "@openclaw/codex");
+const npmProjectRoot = npmProjectRootForInstalledPackage(installPath, "@sunclaw/codex");
 const openAiCodexPackageJson = findPackageJson("@openai/codex", [
   installPath,
   npmProjectRoot,
@@ -52,7 +52,7 @@ if (!openAiCodexPackageJson) {
 }
 assertPathInside(npmRoot, openAiCodexPackageJson, "@openai/codex dependency");
 
-const list = readJson("/tmp/openclaw-plugins-list.json");
+const list = readJson("/tmp/sunclaw-plugins-list.json");
 const plugin = (list.plugins || []).find((entry) => entry.id === "codex");
 if (!plugin || plugin.enabled !== true || plugin.status !== "loaded") {
   throw new Error(`codex plugin was not enabled+loaded: ${JSON.stringify(plugin)}`);
@@ -86,6 +86,6 @@ const authRaw = fs.readFileSync(authPath, "utf8");
 if (!authRaw.includes("OPENAI_API_KEY")) {
   throw new Error("auth profile did not persist OPENAI_API_KEY env ref");
 }
-if (authRaw.includes("sk-openclaw-codex-on-demand-e2e")) {
+if (authRaw.includes("sk-sunclaw-codex-on-demand-e2e")) {
   throw new Error("auth profile persisted the raw OpenAI test key");
 }

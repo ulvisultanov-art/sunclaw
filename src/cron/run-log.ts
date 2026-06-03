@@ -2,14 +2,14 @@ import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
   normalizeStringifiedOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
-import { uniqueValues } from "@openclaw/normalization-core/string-normalization";
+} from "@sunclaw/normalization-core/string-coerce";
+import { uniqueValues } from "@sunclaw/normalization-core/string-normalization";
 import { parseByteSize } from "../cli/parse-bytes.js";
 import type { CronConfig } from "../config/types.cron.js";
 import {
-  openOpenClawStateDatabase,
-  runOpenClawStateWriteTransaction,
-} from "../state/openclaw-state-db.js";
+  openSunClawStateDatabase,
+  runSunClawStateWriteTransaction,
+} from "../state/sunclaw-state-db.js";
 import type { CronRunLogEntry } from "./run-log-types.js";
 import {
   countCronRunLogRows,
@@ -144,7 +144,7 @@ export async function appendCronRunLog(params: {
   const next = prev
     .catch(() => undefined)
     .then(async () => {
-      runOpenClawStateWriteTransaction(({ db }) => {
+      runSunClawStateWriteTransaction(({ db }) => {
         insertCronRunLogEntry(db, storeKey, params.entry);
         if (params.opts?.keepLines !== false) {
           pruneCronRunLogRows(
@@ -194,7 +194,7 @@ export function readCronRunLogEntriesSync(params: {
   const limit = Math.max(1, Math.min(5000, Math.floor(params.limit ?? 200)));
   const storeKey = cronStoreKey(params.storePath);
   const jobId = params.jobId ? assertSafeCronRunLogJobId(params.jobId) : undefined;
-  const rows = readCronRunLogRows(openOpenClawStateDatabase().db, storeKey, jobId);
+  const rows = readCronRunLogRows(openSunClawStateDatabase().db, storeKey, jobId);
   return rows
     .map(parseStoredRunLogEntry)
     .filter((entry): entry is CronRunLogEntry => entry !== null)
@@ -301,7 +301,7 @@ export async function readCronRunLogEntriesPage(
   const deliveryStatuses = normalizeDeliveryStatuses(opts);
   const query = normalizeLowercaseStringOrEmpty(opts.query);
   const sortDir: CronRunLogSortDir = opts.sortDir === "asc" ? "asc" : "desc";
-  const db = openOpenClawStateDatabase().db;
+  const db = openSunClawStateDatabase().db;
   const storeKey = cronStoreKey(opts.storePath);
   const offset = Math.max(0, Math.floor(opts.offset ?? 0));
 

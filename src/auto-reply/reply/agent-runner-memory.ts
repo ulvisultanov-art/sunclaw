@@ -4,7 +4,7 @@ import path from "node:path";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@sunclaw/normalization-core/string-coerce";
 import { resolveBootstrapWarningSignaturesSeen } from "../../agents/bootstrap-budget.js";
 import { estimateMessagesTokens } from "../../agents/compaction.js";
 import { classifyCompactionReason } from "../../agents/embedded-agent-runner/compact-reasons.js";
@@ -30,7 +30,7 @@ import {
   applySessionStoreEntryPatch,
   updateSessionStoreEntry,
 } from "../../config/sessions.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { readSessionMessagesAsync } from "../../gateway/session-utils.fs.js";
 import { logVerbose } from "../../globals.js";
 import { emitAgentEvent, registerAgentRunContext } from "../../infra/agent-events.js";
@@ -233,7 +233,7 @@ function resolveMemoryFlushRuntimeOverrideForProvider(params: {
 }
 
 function resolveFollowupContextConfigProvider(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   followupRun: FollowupRun;
   sessionEntry?: SessionEntry;
   sessionKey?: string;
@@ -248,7 +248,7 @@ function resolveFollowupContextConfigProvider(params: {
 }
 
 function resolveFollowupAgentRuntimeId(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   followupRun: FollowupRun;
   sessionEntry?: SessionEntry;
   sessionKey?: string;
@@ -285,7 +285,7 @@ function resolveFollowupAgentRuntimeId(params: {
 }
 
 function followupUsesCodexRuntime(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   followupRun: FollowupRun;
   sessionEntry?: SessionEntry;
   sessionKey?: string;
@@ -429,7 +429,7 @@ type SessionLogSnapshot = {
 };
 
 async function appendPostCompactionRefreshPrompt(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   followupRun: FollowupRun;
 }): Promise<void> {
   const refreshPrompt = await readPostCompactionContext(params.followupRun.run.workspaceDir, {
@@ -674,7 +674,7 @@ async function estimatePromptTokensFromSessionTranscript(params: {
 }
 
 export async function runPreflightCompactionIfNeeded(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   followupRun: FollowupRun;
   promptForEstimate?: string;
   defaultModel: string;
@@ -717,7 +717,7 @@ export async function runPreflightCompactionIfNeeded(params: {
     })
   ) {
     // Codex runtime sessions should reach Codex with their real thread state.
-    // Its harness owns automatic compaction; OpenClaw preflight compaction is
+    // Its harness owns automatic compaction; SunClaw preflight compaction is
     // only for non-Codex embedded runtimes.
     logVerbose(
       `preflightCompaction skipped: sessionKey=${params.sessionKey} runtime=codex reason=codex_native_auto_compaction`,
@@ -952,7 +952,7 @@ export async function runPreflightCompactionIfNeeded(params: {
 }
 
 export async function runMemoryFlushIfNeeded(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   followupRun: FollowupRun;
   promptForEstimate?: string;
   sessionCtx: TemplateContext;

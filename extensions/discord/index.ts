@@ -1,4 +1,4 @@
-import { defineBundledChannelEntry } from "openclaw/plugin-sdk/channel-entry-contract";
+import { defineBundledChannelEntry } from "sunclaw/plugin-sdk/channel-entry-contract";
 import { registerDiscordSubagentHooks } from "./subagent-hooks-api.js";
 import { discordVoiceTranscriptsSourceProvider } from "./transcripts-source-api.js";
 

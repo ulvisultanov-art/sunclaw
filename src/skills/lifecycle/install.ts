@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { resolveBrewExecutable as defaultResolveBrewExecutable } from "../../infra/brew.js";
 import { isContainerEnvironment as defaultIsContainerEnvironment } from "../../infra/container-environment.js";
 import { formatErrorMessage } from "../../infra/errors.js";
@@ -28,7 +28,7 @@ export type SkillInstallRequest = InstallSafetyOverrides & {
   skillName: string;
   installId: string;
   timeoutMs?: number;
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
 };
 export type { SkillInstallResult } from "./install-types.js";
 
@@ -123,9 +123,9 @@ function resolveDefaultNodeInstallStateDir({
   platform?: NodeJS.Platform;
 } = {}): string {
   if (platform !== "win32" && getuid?.() === 0) {
-    return path.join(path.parse(cwd).root, "var", "lib", "openclaw");
+    return path.join(path.parse(cwd).root, "var", "lib", "sunclaw");
   }
-  return path.join(homedir(), ".openclaw");
+  return path.join(homedir(), ".sunclaw");
 }
 
 async function buildNodeInstallEnv(prefs: SkillsInstallPreferences): Promise<NodeJS.ProcessEnv> {
@@ -500,7 +500,7 @@ export async function installSkill(params: SkillInstallRequest): Promise<SkillIn
   }
   // Warn when install is triggered from a non-bundled source.
   // Workspace/project/personal agent skills can contain attacker-controlled metadata.
-  const trustedInstallSources = new Set(["openclaw-bundled", "openclaw-managed", "openclaw-extra"]);
+  const trustedInstallSources = new Set(["sunclaw-bundled", "sunclaw-managed", "sunclaw-extra"]);
   if (!trustedInstallSources.has(skillSource)) {
     warnings.push(
       `WARNING: Skill "${params.skillName}" install triggered from non-bundled source "${skillSource}". Verify the install recipe is trusted.`,

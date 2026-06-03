@@ -1,4 +1,4 @@
-import { isLoopbackHost } from "openclaw/plugin-sdk/gateway-runtime";
+import { isLoopbackHost } from "sunclaw/plugin-sdk/gateway-runtime";
 import type { ResolvedMattermostAccount } from "./accounts.js";
 import {
   fetchMattermostUserTeams,
@@ -8,7 +8,7 @@ import {
 import {
   listSkillCommandsForAgents,
   parseTcpPort,
-  type OpenClawConfig,
+  type SunClawConfig,
   type RuntimeEnv,
 } from "./runtime-api.js";
 import {
@@ -24,7 +24,7 @@ import {
 import { activateSlashCommands } from "./slash-state.js";
 
 function buildSlashCommands(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   runtime: RuntimeEnv;
   nativeSkills: boolean;
 }): MattermostCommandSpec[] {
@@ -133,7 +133,7 @@ async function registerSlashCommandsAcrossTeams(params: {
 
 export async function registerMattermostMonitorSlashCommands(params: {
   client: MattermostClient;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   runtime: RuntimeEnv;
   account: ResolvedMattermostAccount;
   baseUrl: string;
@@ -149,7 +149,7 @@ export async function registerMattermostMonitorSlashCommands(params: {
 
   try {
     const teams = await fetchMattermostUserTeams(params.client, params.botUserId);
-    const envPort = parseTcpPort(process.env.OPENCLAW_GATEWAY_PORT);
+    const envPort = parseTcpPort(process.env.SUNCLAW_GATEWAY_PORT);
     const slashGatewayPort = envPort ?? params.cfg.gateway?.port ?? 18789;
     const slashCallbackUrl = resolveCallbackUrl({
       config: slashConfig,

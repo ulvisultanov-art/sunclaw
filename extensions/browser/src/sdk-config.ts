@@ -1,27 +1,27 @@
-import { normalizeOptionalLowercaseString } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { normalizeOptionalLowercaseString } from "sunclaw/plugin-sdk/string-coerce-runtime";
 
 export {
   getRuntimeConfig,
   getRuntimeConfigSnapshot,
   getRuntimeConfigSourceSnapshot,
-} from "openclaw/plugin-sdk/runtime-config-snapshot";
-export { mutateConfigFile, replaceConfigFile } from "openclaw/plugin-sdk/config-mutation";
+} from "sunclaw/plugin-sdk/runtime-config-snapshot";
+export { mutateConfigFile, replaceConfigFile } from "sunclaw/plugin-sdk/config-mutation";
 export {
   type BrowserConfig,
   type BrowserProfileConfig,
-  type OpenClawConfig,
-} from "openclaw/plugin-sdk/config-contracts";
+  type SunClawConfig,
+} from "sunclaw/plugin-sdk/config-contracts";
 export {
   normalizePluginsConfig,
   resolveEffectiveEnableState,
-} from "openclaw/plugin-sdk/plugin-config-runtime";
-export { resolveGatewayPort } from "openclaw/plugin-sdk/core";
+} from "sunclaw/plugin-sdk/plugin-config-runtime";
+export { resolveGatewayPort } from "sunclaw/plugin-sdk/core";
 export {
   CONFIG_DIR,
   escapeRegExp,
   resolveUserPath,
   shortenHomePath,
-} from "openclaw/plugin-sdk/text-utility-runtime";
+} from "sunclaw/plugin-sdk/text-utility-runtime";
 type PortRange = { start: number; end: number };
 
 const DEFAULT_BROWSER_CDP_PORT_RANGE_START = 18800;

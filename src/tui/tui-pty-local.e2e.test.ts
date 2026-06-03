@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { afterEach, describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { startPty, waitFor, type PtyRun } from "./tui-pty-test-support.js";
 
 type MockModelServer = {
@@ -166,7 +166,7 @@ function buildLocalModeConfig(params: { workspaceDir: string; providerBaseUrl: s
         workspace: params.workspaceDir,
         model: { primary: "tui-pty-mock/gpt-5.5" },
         models: {
-          "tui-pty-mock/gpt-5.5": { agentRuntime: { id: "openclaw" } },
+          "tui-pty-mock/gpt-5.5": { agentRuntime: { id: "sunclaw" } },
         },
         skills: [],
         skipBootstrap: true,
@@ -211,19 +211,19 @@ function buildLocalModeConfig(params: { workspaceDir: string; providerBaseUrl: s
       auth: { mode: "token", token: "tui-pty-local" },
     },
     discovery: { mdns: { mode: "off" } },
-  } satisfies OpenClawConfig;
+  } satisfies SunClawConfig;
 }
 
 async function startLocalModeTui() {
   const replyText = "LOCAL_PTY_RESPONSE";
-  const tempDir = await mkdtemp(path.join(tmpdir(), "openclaw-tui-pty-local-"));
+  const tempDir = await mkdtemp(path.join(tmpdir(), "sunclaw-tui-pty-local-"));
   const workspaceDir = path.join(tempDir, "workspace");
   const homeDir = path.join(tempDir, "home");
   const stateDir = path.join(tempDir, "state");
   const xdgConfigHome = path.join(tempDir, "xdg-config");
   const xdgDataHome = path.join(tempDir, "xdg-data");
   const xdgCacheHome = path.join(tempDir, "xdg-cache");
-  const configPath = path.join(tempDir, "openclaw.json");
+  const configPath = path.join(tempDir, "sunclaw.json");
   const mockModel = await startMockModelServer(replyText);
   const config = buildLocalModeConfig({ workspaceDir, providerBaseUrl: mockModel.baseUrl });
   const tuiCliModuleUrl = pathToFileURL(path.join(process.cwd(), "src/cli/tui-cli.ts")).href;
@@ -233,7 +233,7 @@ async function startLocalModeTui() {
     `const program = new Command();`,
     `program.exitOverride();`,
     `registerTuiCli(program);`,
-    `program.parseAsync([process.execPath, "openclaw", "tui", "--local"], { from: "node" }).catch((error) => {`,
+    `program.parseAsync([process.execPath, "sunclaw", "tui", "--local"], { from: "node" }).catch((error) => {`,
     `  console.error(error);`,
     `  process.exit(1);`,
     `});`,
@@ -253,14 +253,14 @@ async function startLocalModeTui() {
     cwd: process.cwd(),
     env: {
       HOME: homeDir,
-      OPENCLAW_HOME: homeDir,
-      OPENCLAW_CONFIG_PATH: configPath,
-      OPENCLAW_STATE_DIR: stateDir,
+      SUNCLAW_HOME: homeDir,
+      SUNCLAW_CONFIG_PATH: configPath,
+      SUNCLAW_STATE_DIR: stateDir,
       XDG_CONFIG_HOME: xdgConfigHome,
       XDG_DATA_HOME: xdgDataHome,
       XDG_CACHE_HOME: xdgCacheHome,
-      OPENCLAW_THEME: "dark",
-      OPENCLAW_CODEX_DISCOVERY_LIVE: "0",
+      SUNCLAW_THEME: "dark",
+      SUNCLAW_CODEX_DISCOVERY_LIVE: "0",
       NO_COLOR: undefined,
     },
     exitTimeoutMs: LOCAL_EXIT_TIMEOUT_MS,

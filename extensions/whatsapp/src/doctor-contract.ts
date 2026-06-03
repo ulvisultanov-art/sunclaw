@@ -1,11 +1,11 @@
-import type { ChannelDoctorConfigMutation } from "openclaw/plugin-sdk/channel-contract";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { ChannelDoctorConfigMutation } from "sunclaw/plugin-sdk/channel-contract";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
 import { normalizeCompatibilityConfig as normalizeCompatibilityConfigImpl } from "./doctor.js";
 
 export function normalizeCompatibilityConfig({
   cfg,
 }: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
 }): ChannelDoctorConfigMutation {
   return normalizeCompatibilityConfigImpl({ cfg });
 }

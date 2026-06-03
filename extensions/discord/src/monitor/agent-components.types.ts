@@ -1,4 +1,4 @@
-import type { DiscordAccountConfig, OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { DiscordAccountConfig, SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
 import type {
   ButtonInteraction,
   ChannelSelectMenuInteraction,
@@ -35,10 +35,10 @@ export type DiscordChannelContext = {
 };
 
 export type AgentComponentContext = {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   accountId: string;
   discordConfig?: DiscordAccountConfig;
-  runtime?: import("openclaw/plugin-sdk/runtime-env").RuntimeEnv;
+  runtime?: import("sunclaw/plugin-sdk/runtime-env").RuntimeEnv;
   token?: string;
   guildEntries?: Record<string, DiscordGuildEntryResolved>;
   allowFrom?: string[];

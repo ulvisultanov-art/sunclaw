@@ -6,16 +6,16 @@ import { join } from "node:path";
 import {
   asDateTimestampMs,
   resolveExpiresAtMsFromDurationMs,
-} from "openclaw/plugin-sdk/number-runtime";
-import { loadOutboundMediaFromUrl } from "openclaw/plugin-sdk/outbound-media";
-import { privateFileStore } from "openclaw/plugin-sdk/security-runtime";
-import { resolvePreferredOpenClawTmpDir } from "openclaw/plugin-sdk/temp-path";
-import { resolveWebhookPath } from "openclaw/plugin-sdk/webhook-ingress";
+} from "sunclaw/plugin-sdk/number-runtime";
+import { loadOutboundMediaFromUrl } from "sunclaw/plugin-sdk/outbound-media";
+import { privateFileStore } from "sunclaw/plugin-sdk/security-runtime";
+import { resolvePreferredSunClawTmpDir } from "sunclaw/plugin-sdk/temp-path";
+import { resolveWebhookPath } from "sunclaw/plugin-sdk/webhook-ingress";
 
 const ZALO_OUTBOUND_MEDIA_TTL_MS = 2 * 60_000;
 const ZALO_OUTBOUND_MEDIA_SEGMENT = "media";
 const ZALO_OUTBOUND_MEDIA_PREFIX = `/${ZALO_OUTBOUND_MEDIA_SEGMENT}/`;
-const ZALO_OUTBOUND_MEDIA_DIR_NAME = "openclaw-zalo-outbound-media";
+const ZALO_OUTBOUND_MEDIA_DIR_NAME = "sunclaw-zalo-outbound-media";
 
 function resolveHostedZaloMediaDirName(): string {
   const workerId = process.env.VITEST_WORKER_ID ?? process.env.VITEST_POOL_ID;
@@ -27,7 +27,7 @@ function resolveHostedZaloMediaDirName(): string {
 }
 
 const ZALO_OUTBOUND_MEDIA_DIR = join(
-  resolvePreferredOpenClawTmpDir(),
+  resolvePreferredSunClawTmpDir(),
   resolveHostedZaloMediaDirName(),
 );
 const ZALO_OUTBOUND_MEDIA_ID_RE = /^[a-f0-9]{24}$/;

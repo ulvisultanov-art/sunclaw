@@ -1,4 +1,4 @@
-import type { SecretInput } from "openclaw/plugin-sdk/secret-input";
+import type { SecretInput } from "sunclaw/plugin-sdk/secret-input";
 
 export type SmsChannelConfigFields = {
   enabled?: boolean;

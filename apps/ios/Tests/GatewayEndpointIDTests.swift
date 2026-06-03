@@ -1,17 +1,17 @@
-import OpenClawKit
+import SunClawKit
 import Network
 import Testing
-@testable import OpenClaw
+@testable import SunClaw
 
 @Suite struct GatewayEndpointIDTests {
     @Test func stableIDForServiceDecodesAndNormalizesName() {
         let endpoint = NWEndpoint.service(
-            name: "OpenClaw\\032Gateway   \\032  Node\n",
-            type: "_openclaw-gw._tcp",
+            name: "SunClaw\\032Gateway   \\032  Node\n",
+            type: "_sunclaw-gw._tcp",
             domain: "local.",
             interface: nil)
 
-        #expect(GatewayEndpointID.stableID(endpoint) == "_openclaw-gw._tcp|local.|OpenClaw Gateway Node")
+        #expect(GatewayEndpointID.stableID(endpoint) == "_sunclaw-gw._tcp|local.|SunClaw Gateway Node")
     }
 
     @Test func stableIDForNonServiceUsesEndpointDescription() {
@@ -21,8 +21,8 @@ import Testing
 
     @Test func prettyDescriptionDecodesBonjourEscapes() {
         let endpoint = NWEndpoint.service(
-            name: "OpenClaw\\032Gateway",
-            type: "_openclaw-gw._tcp",
+            name: "SunClaw\\032Gateway",
+            type: "_sunclaw-gw._tcp",
             domain: "local.",
             interface: nil)
 

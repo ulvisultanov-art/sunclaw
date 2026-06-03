@@ -1,15 +1,15 @@
-import type { OpenClawConfig } from "./types.openclaw.js";
+import type { SunClawConfig } from "./types.sunclaw.js";
 
 export type OwnerDisplaySecretRuntimeState = {
   pendingByPath: Map<string, string>;
 };
 
 export function retainGeneratedOwnerDisplaySecret(params: {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   configPath: string;
   generatedSecret?: string;
   state: OwnerDisplaySecretRuntimeState;
-}): OpenClawConfig {
+}): SunClawConfig {
   const { config, configPath, generatedSecret, state } = params;
   if (!generatedSecret) {
     state.pendingByPath.delete(configPath);

@@ -1,5 +1,5 @@
 import { Type } from "typebox";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import {
   applySkillProposal,
   inspectSkillProposal,
@@ -121,7 +121,7 @@ const SkillWorkshopToolSchema = Type.Object(
 
 export type SkillWorkshopToolOptions = {
   workspaceDir: string;
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   agentId?: string;
   origin?: SkillProposalOrigin;
 };

@@ -46,7 +46,7 @@ const hoisted = vi.hoisted(() => {
     allowed: true,
     inCatalog: true,
   }));
-  const ensureOpenClawModelsJson = vi.fn(async () => {});
+  const ensureSunClawModelsJson = vi.fn(async () => {});
   const ensureRuntimePluginsLoaded = vi.fn();
   const clearCurrentProviderAuthState = vi.fn();
   const warmCurrentProviderAuthStateOffMainThread = vi.fn(
@@ -82,7 +82,7 @@ const hoisted = vi.hoisted(() => {
     resolveHooksGmailModel,
     loadModelCatalog,
     getModelRefStatus,
-    ensureOpenClawModelsJson,
+    ensureSunClawModelsJson,
     ensureRuntimePluginsLoaded,
     clearCurrentProviderAuthState,
     warmCurrentProviderAuthStateOffMainThread,
@@ -108,10 +108,10 @@ vi.mock("../config/paths.js", async () => {
   const actual = await vi.importActual<typeof import("../config/paths.js")>("../config/paths.js");
   return {
     ...actual,
-    STATE_DIR: "/tmp/openclaw-state",
-    resolveConfigPath: vi.fn(() => "/tmp/openclaw-state/openclaw.json"),
+    STATE_DIR: "/tmp/sunclaw-state",
+    resolveConfigPath: vi.fn(() => "/tmp/sunclaw-state/sunclaw.json"),
     resolveGatewayPort: vi.fn(() => 18789),
-    resolveStateDir: vi.fn(() => "/tmp/openclaw-state"),
+    resolveStateDir: vi.fn(() => "/tmp/sunclaw-state"),
   };
 });
 
@@ -178,7 +178,7 @@ vi.mock("../agents/model-selection.js", () => ({
 }));
 
 vi.mock("../agents/models-config.js", () => ({
-  ensureOpenClawModelsJson: hoisted.ensureOpenClawModelsJson,
+  ensureSunClawModelsJson: hoisted.ensureSunClawModelsJson,
 }));
 
 vi.mock("../agents/runtime-plugins.js", () => ({
@@ -265,8 +265,8 @@ function firstGatewayStartCall(
 
 describe("startGatewayPostAttachRuntime", () => {
   beforeEach(() => {
-    vi.stubEnv("OPENCLAW_SKIP_CHANNELS", "0");
-    vi.stubEnv("OPENCLAW_SKIP_PROVIDERS", "0");
+    vi.stubEnv("SUNCLAW_SKIP_CHANNELS", "0");
+    vi.stubEnv("SUNCLAW_SKIP_PROVIDERS", "0");
     hoisted.startPluginServices.mockClear();
     hoisted.startGmailWatcherWithLogs.mockClear();
     hoisted.loadInternalHooks.mockClear();
@@ -298,8 +298,8 @@ describe("startGatewayPostAttachRuntime", () => {
       allowed: true,
       inCatalog: true,
     });
-    hoisted.ensureOpenClawModelsJson.mockReset();
-    hoisted.ensureOpenClawModelsJson.mockResolvedValue(undefined);
+    hoisted.ensureSunClawModelsJson.mockReset();
+    hoisted.ensureSunClawModelsJson.mockResolvedValue(undefined);
     hoisted.ensureRuntimePluginsLoaded.mockReset();
     hoisted.clearCurrentProviderAuthState.mockClear();
     hoisted.warmCurrentProviderAuthStateOffMainThread.mockReset();
@@ -508,8 +508,8 @@ describe("startGatewayPostAttachRuntime", () => {
   });
 
   it("skips heavy restart sentinel refresh when no sentinel file exists", async () => {
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-no-sentinel-"));
-    vi.stubEnv("OPENCLAW_STATE_DIR", stateDir);
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sunclaw-no-sentinel-"));
+    vi.stubEnv("SUNCLAW_STATE_DIR", stateDir);
 
     const result = await testing.refreshLatestUpdateRestartSentinelIfPresent();
 
@@ -519,9 +519,9 @@ describe("startGatewayPostAttachRuntime", () => {
   });
 
   it("refreshes the restart sentinel when the sentinel file exists", async () => {
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-sentinel-"));
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sunclaw-sentinel-"));
     fs.writeFileSync(path.join(stateDir, "restart-sentinel.json"), "{}\n");
-    vi.stubEnv("OPENCLAW_STATE_DIR", stateDir);
+    vi.stubEnv("SUNCLAW_STATE_DIR", stateDir);
     const sentinel = { kind: "update", status: "ok", ts: 1 } as const;
     hoisted.refreshLatestUpdateRestartSentinel.mockResolvedValue(sentinel);
 
@@ -533,28 +533,28 @@ describe("startGatewayPostAttachRuntime", () => {
   });
 
   it("expands tilde-based restart sentinel state paths", async () => {
-    const osHome = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-home-"));
+    const osHome = fs.mkdtempSync(path.join(os.tmpdir(), "sunclaw-home-"));
     try {
-      const openclawHome = path.join(osHome, "openclaw-home");
-      const stateDirFromHome = path.join(openclawHome, ".openclaw");
+      const sunclawHome = path.join(osHome, "sunclaw-home");
+      const stateDirFromHome = path.join(sunclawHome, ".sunclaw");
       fs.mkdirSync(stateDirFromHome, { recursive: true });
       fs.writeFileSync(path.join(stateDirFromHome, "restart-sentinel.json"), "{}\n");
 
       expect(
         await testing.hasRestartSentinelFileFast({
           HOME: osHome,
-          OPENCLAW_HOME: "~/openclaw-home",
+          SUNCLAW_HOME: "~/sunclaw-home",
         } as NodeJS.ProcessEnv),
       ).toBe(true);
 
-      const backslashStateDir = path.resolve(`${osHome}\\openclaw-state`);
+      const backslashStateDir = path.resolve(`${osHome}\\sunclaw-state`);
       fs.mkdirSync(backslashStateDir, { recursive: true });
       fs.writeFileSync(path.join(backslashStateDir, "restart-sentinel.json"), "{}\n");
 
       expect(
         await testing.hasRestartSentinelFileFast({
           HOME: osHome,
-          OPENCLAW_STATE_DIR: "~\\openclaw-state",
+          SUNCLAW_STATE_DIR: "~\\sunclaw-state",
         } as NodeJS.ProcessEnv),
       ).toBe(true);
     } finally {
@@ -563,7 +563,7 @@ describe("startGatewayPostAttachRuntime", () => {
   });
 
   it("avoids sync filesystem probes while checking restart sentinel presence", async () => {
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-async-sentinel-"));
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sunclaw-async-sentinel-"));
     try {
       fs.writeFileSync(path.join(stateDir, "restart-sentinel.json"), "{}\n");
       const actualExistsSync = fs.existsSync;
@@ -576,7 +576,7 @@ describe("startGatewayPostAttachRuntime", () => {
       try {
         await expect(
           testing.hasRestartSentinelFileFast({
-            OPENCLAW_STATE_DIR: stateDir,
+            SUNCLAW_STATE_DIR: stateDir,
           } as NodeJS.ProcessEnv),
         ).resolves.toBe(true);
         expect(
@@ -752,7 +752,7 @@ describe("startGatewayPostAttachRuntime", () => {
           memory: { backend: "qmd", qmd: { update: { startup: "idle", startupDelayMs: 25 } } },
         } as never,
         pluginRegistry: createPostAttachParams().pluginRegistry,
-        defaultWorkspaceDir: "/tmp/openclaw-workspace",
+        defaultWorkspaceDir: "/tmp/sunclaw-workspace",
         deps: {} as never,
         startChannels: vi.fn(async () => {}),
         log: { warn: vi.fn() },
@@ -784,7 +784,7 @@ describe("startGatewayPostAttachRuntime", () => {
     let active = 0;
     let maxActive = 0;
     const cleanedLock = {
-      lockPath: "/tmp/openclaw-state/agents/main/sessions/a.jsonl.lock",
+      lockPath: "/tmp/sunclaw-state/agents/main/sessions/a.jsonl.lock",
       pid: null,
       pidAlive: false,
       createdAt: null,
@@ -844,7 +844,7 @@ describe("startGatewayPostAttachRuntime", () => {
   it("marks cleaned startup session locks even when cleanup is stopped after removal", async () => {
     let stopped = false;
     const cleanedLock = {
-      lockPath: "/tmp/openclaw-state/agents/main/sessions/a.jsonl.lock",
+      lockPath: "/tmp/sunclaw-state/agents/main/sessions/a.jsonl.lock",
       pid: null,
       pidAlive: false,
       createdAt: null,
@@ -971,7 +971,7 @@ describe("startGatewayPostAttachRuntime", () => {
     await vi.waitFor(() => {
       expect(hoisted.ensureRuntimePluginsLoaded).toHaveBeenCalledWith({
         config: currentConfig,
-        workspaceDir: "/tmp/openclaw-workspace",
+        workspaceDir: "/tmp/sunclaw-workspace",
         allowGatewaySubagentBinding: true,
       });
     });
@@ -1181,8 +1181,8 @@ describe("startGatewayPostAttachRuntime", () => {
   it("starts channels when channel startup is enabled", async () => {
     await withEnvAsync(
       {
-        OPENCLAW_SKIP_CHANNELS: undefined,
-        OPENCLAW_SKIP_PROVIDERS: undefined,
+        SUNCLAW_SKIP_CHANNELS: undefined,
+        SUNCLAW_SKIP_PROVIDERS: undefined,
       },
       async () => {
         const startChannels = vi.fn(async () => {});
@@ -1193,7 +1193,7 @@ describe("startGatewayPostAttachRuntime", () => {
             agents: { defaults: { model: "openai/gpt-5.4" } },
           } as never,
           pluginRegistry: createPostAttachParams().pluginRegistry,
-          defaultWorkspaceDir: "/tmp/openclaw-workspace",
+          defaultWorkspaceDir: "/tmp/sunclaw-workspace",
           deps: {} as never,
           startChannels,
           log: { warn: vi.fn() },
@@ -1215,7 +1215,7 @@ describe("startGatewayPostAttachRuntime", () => {
 
   it("starts and reports plugin services after channel startup completes", async () => {
     await withEnvAsync(
-      { OPENCLAW_SKIP_CHANNELS: undefined, OPENCLAW_SKIP_PROVIDERS: undefined },
+      { SUNCLAW_SKIP_CHANNELS: undefined, SUNCLAW_SKIP_PROVIDERS: undefined },
       async () => {
         let releaseChannels: (() => void) | undefined;
         const events: string[] = [];
@@ -1278,7 +1278,7 @@ describe("startGatewayPostAttachRuntime", () => {
 
   it("does not start plugin services after deferred close starts during channel startup", async () => {
     await withEnvAsync(
-      { OPENCLAW_SKIP_CHANNELS: undefined, OPENCLAW_SKIP_PROVIDERS: undefined },
+      { SUNCLAW_SKIP_CHANNELS: undefined, SUNCLAW_SKIP_PROVIDERS: undefined },
       async () => {
         let closing = false;
         let releaseChannels: (() => void) | undefined;
@@ -1322,7 +1322,7 @@ describe("startGatewayPostAttachRuntime", () => {
 
   it("stops plugin services that finish starting after deferred close begins", async () => {
     await withEnvAsync(
-      { OPENCLAW_SKIP_CHANNELS: undefined, OPENCLAW_SKIP_PROVIDERS: undefined },
+      { SUNCLAW_SKIP_CHANNELS: undefined, SUNCLAW_SKIP_PROVIDERS: undefined },
       async () => {
         let shouldStartPluginServices = true;
         let releasePluginServices: (() => void) | undefined;
@@ -1338,7 +1338,7 @@ describe("startGatewayPostAttachRuntime", () => {
         const sidecarsPromise = startGatewaySidecars({
           cfg: { hooks: { internal: { enabled: false } } } as never,
           pluginRegistry: createPostAttachParams().pluginRegistry,
-          defaultWorkspaceDir: "/tmp/openclaw-workspace",
+          defaultWorkspaceDir: "/tmp/sunclaw-workspace",
           deps: {} as never,
           startChannels: vi.fn(async () => {}),
           shouldStartPluginServices: () => shouldStartPluginServices,
@@ -1374,7 +1374,7 @@ describe("startGatewayPostAttachRuntime", () => {
 
   it("returns plugin services already reported by deferred sidecars", async () => {
     await withEnvAsync(
-      { OPENCLAW_SKIP_CHANNELS: undefined, OPENCLAW_SKIP_PROVIDERS: undefined },
+      { SUNCLAW_SKIP_CHANNELS: undefined, SUNCLAW_SKIP_PROVIDERS: undefined },
       async () => {
         let releaseStartupLog: (() => void) | undefined;
         let releaseChannels: (() => void) | undefined;
@@ -1439,12 +1439,12 @@ describe("startGatewayPostAttachRuntime", () => {
     const logChannels = { info: vi.fn(), error: vi.fn() };
 
     await withEnvAsync(
-      { OPENCLAW_SKIP_CHANNELS: "1", OPENCLAW_SKIP_PROVIDERS: undefined },
+      { SUNCLAW_SKIP_CHANNELS: "1", SUNCLAW_SKIP_PROVIDERS: undefined },
       async () => {
         await startGatewaySidecars({
           cfg: { hooks: { internal: { enabled: false } } } as never,
           pluginRegistry: createPostAttachParams().pluginRegistry,
-          defaultWorkspaceDir: "/tmp/openclaw-workspace",
+          defaultWorkspaceDir: "/tmp/sunclaw-workspace",
           deps: {} as never,
           startChannels: vi.fn(async () => {}),
           log: { warn: vi.fn() },
@@ -1462,7 +1462,7 @@ describe("startGatewayPostAttachRuntime", () => {
     expect(trace.measures).toContain("sidecars.channels");
     expect(trace.measures).toContain("sidecars.channel-skip");
     expect(logChannels.info).toHaveBeenCalledWith(
-      "skipping channel start (OPENCLAW_SKIP_CHANNELS=1 or OPENCLAW_SKIP_PROVIDERS=1)",
+      "skipping channel start (SUNCLAW_SKIP_CHANNELS=1 or SUNCLAW_SKIP_PROVIDERS=1)",
     );
   });
 
@@ -1526,7 +1526,7 @@ describe("startGatewayPostAttachRuntime", () => {
         hooks: { enabled: true, internal: { enabled: false }, gmail: { account: "me" } },
       } as never,
       pluginRegistry: createPostAttachParams().pluginRegistry,
-      defaultWorkspaceDir: "/tmp/openclaw-workspace",
+      defaultWorkspaceDir: "/tmp/sunclaw-workspace",
       deps: {} as never,
       startChannels: vi.fn(async () => {}),
       log,
@@ -1569,7 +1569,7 @@ describe("startGatewayPostAttachRuntime", () => {
         hooks: { enabled: true, internal: { enabled: false }, gmail: { account: "me" } },
       } as never,
       pluginRegistry: createPostAttachParams().pluginRegistry,
-      defaultWorkspaceDir: "/tmp/openclaw-workspace",
+      defaultWorkspaceDir: "/tmp/sunclaw-workspace",
       deps: {} as never,
       startChannels: vi.fn(async () => {}),
       log,
@@ -1598,7 +1598,7 @@ describe("startGatewayPostAttachRuntime", () => {
         hooks: { enabled: true, internal: { enabled: false }, gmail: { account: "me" } },
       } as never,
       pluginRegistry: createPostAttachParams().pluginRegistry,
-      defaultWorkspaceDir: "/tmp/openclaw-workspace",
+      defaultWorkspaceDir: "/tmp/sunclaw-workspace",
       deps: {} as never,
       startChannels: vi.fn(async () => {}),
       log: { warn: vi.fn() },
@@ -1642,7 +1642,7 @@ describe("startGatewayPostAttachRuntime", () => {
           hooks: { enabled: true, internal: { enabled: false }, gmail: { account: "me" } },
         } as never,
         pluginRegistry: createPostAttachParams().pluginRegistry,
-        defaultWorkspaceDir: "/tmp/openclaw-workspace",
+        defaultWorkspaceDir: "/tmp/sunclaw-workspace",
         deps: {} as never,
         startChannels: vi.fn(async () => {}),
         log: { warn: vi.fn() },
@@ -1724,7 +1724,7 @@ describe("startGatewayPostAttachRuntime", () => {
         hooks: { internal: { enabled: false }, gmail: { model: "openai/gpt-5.4" } },
       } as never,
       pluginRegistry: createPostAttachParams().pluginRegistry,
-      defaultWorkspaceDir: "/tmp/openclaw-workspace",
+      defaultWorkspaceDir: "/tmp/sunclaw-workspace",
       deps: {} as never,
       startChannels: vi.fn(async () => {}),
       log: { warn: vi.fn() },
@@ -1835,7 +1835,7 @@ describe("startGatewayPostAttachRuntime", () => {
       await startGatewaySidecars({
         cfg,
         pluginRegistry: createPostAttachParams().pluginRegistry,
-        defaultWorkspaceDir: "/tmp/openclaw-workspace",
+        defaultWorkspaceDir: "/tmp/sunclaw-workspace",
         deps,
         startChannels: vi.fn(async () => {}),
         log: { warn: vi.fn() },
@@ -1862,7 +1862,7 @@ describe("startGatewayPostAttachRuntime", () => {
         {
           cfg,
           deps,
-          workspaceDir: "/tmp/openclaw-workspace",
+          workspaceDir: "/tmp/sunclaw-workspace",
         },
       );
       expect(hoisted.triggerInternalHook).toHaveBeenCalledWith(hoisted.startupHookEvent);
@@ -1886,7 +1886,7 @@ describe("startGatewayPostAttachRuntime", () => {
         acp: { enabled: true, backend: "acpx" },
       } as never,
       pluginRegistry: createPostAttachParams().pluginRegistry,
-      defaultWorkspaceDir: "/tmp/openclaw-workspace",
+      defaultWorkspaceDir: "/tmp/sunclaw-workspace",
       deps: {} as never,
       startChannels: vi.fn(async () => {}),
       log: { warn: vi.fn() },
@@ -1958,7 +1958,7 @@ describe("startGatewayPostAttachRuntime", () => {
     expect(event).toEqual({ port: 18789 });
     expect(ctx.port).toBe(18789);
     expect(ctx.config).toBe(params.gatewayPluginConfigAtStart);
-    expect(ctx.workspaceDir).toBe("/tmp/openclaw-workspace");
+    expect(ctx.workspaceDir).toBe("/tmp/sunclaw-workspace");
     const getCron = ctx.getCron;
     if (!getCron) {
       throw new Error("gateway_start context did not expose getCron");
@@ -2071,7 +2071,7 @@ function createPostAttachParams(overrides: Partial<PostAttachParams> = {}): Post
       ],
       typedHooks: [],
     } as never,
-    defaultWorkspaceDir: "/tmp/openclaw-workspace",
+    defaultWorkspaceDir: "/tmp/sunclaw-workspace",
     deps: {} as never,
     startChannels: vi.fn(async () => {}),
     logHooks: {

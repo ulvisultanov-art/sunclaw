@@ -1,7 +1,7 @@
-import { stripUrlUserInfo } from "@openclaw/net-policy/url-userinfo";
-import { asFiniteNumber } from "@openclaw/normalization-core/number-coercion";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import { normalizeStringEntries } from "@openclaw/normalization-core/string-normalization";
+import { stripUrlUserInfo } from "@sunclaw/net-policy/url-userinfo";
+import { asFiniteNumber } from "@sunclaw/normalization-core/number-coercion";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
+import { normalizeStringEntries } from "@sunclaw/normalization-core/string-normalization";
 import { isRecord } from "../utils.js";
 import { asBoolean } from "../utils/boolean.js";
 import type { ChannelAccountSnapshot } from "./plugins/types.core.js";

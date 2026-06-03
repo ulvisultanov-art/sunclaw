@@ -5,8 +5,8 @@ import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
-import { normalizeStringEntries } from "@openclaw/normalization-core/string-normalization";
+} from "@sunclaw/normalization-core/string-coerce";
+import { normalizeStringEntries } from "@sunclaw/normalization-core/string-normalization";
 import { buildCommandPayloadCandidates } from "../infra/command-analysis/risks.js";
 import { analyzeShellCommand } from "../infra/exec-approvals-analysis.js";
 import {
@@ -27,7 +27,7 @@ import {
   normalizeHostOverrideEnvVarKey,
   sanitizeHostExecEnvWithDiagnostics,
 } from "../infra/host-env-security.js";
-import { OPENCLAW_CLI_ENV_VAR } from "../infra/openclaw-exec-env.js";
+import { SUNCLAW_CLI_ENV_VAR } from "../infra/sunclaw-exec-env.js";
 import {
   getShellPathFromLoginShell,
   resolveShellEnvFallbackTimeoutMs,
@@ -124,7 +124,7 @@ function filterPluginExecEnv(rawEnv: Record<string, string>): Record<string, str
     const upperKey = key.toUpperCase();
     if (
       upperKey === "PATH" ||
-      upperKey === OPENCLAW_CLI_ENV_VAR ||
+      upperKey === SUNCLAW_CLI_ENV_VAR ||
       isDangerousHostEnvVarName(upperKey) ||
       isDangerousHostEnvOverrideVarName(upperKey)
     ) {
@@ -1217,21 +1217,21 @@ function normalizeCommandBaseName(token: string | undefined): string {
   return base.replace(/\.(?:cmd|exe)$/u, "");
 }
 
-function stripOpenClawPackageRunner(argv: string[]): string[] {
+function stripSunClawPackageRunner(argv: string[]): string[] {
   const commandName = normalizeCommandBaseName(argv[0]);
-  if (commandName === "openclaw") {
+  if (commandName === "sunclaw") {
     return argv;
   }
   if (
     (commandName === "pnpm" || commandName === "npm" || commandName === "yarn") &&
-    normalizeCommandBaseName(argv[1]) === "openclaw"
+    normalizeCommandBaseName(argv[1]) === "sunclaw"
   ) {
     return argv.slice(1);
   }
   if (
     (commandName === "pnpm" || commandName === "npm" || commandName === "yarn") &&
     (argv[1] === "exec" || argv[1] === "dlx" || argv[1] === "run") &&
-    normalizeCommandBaseName(argv[2]) === "openclaw"
+    normalizeCommandBaseName(argv[2]) === "sunclaw"
   ) {
     return argv.slice(2);
   }
@@ -1251,23 +1251,23 @@ function stripOpenClawPackageRunner(argv: string[]): string[] {
         idx += 1;
       }
     }
-    if (normalizeCommandBaseName(argv[idx]) === "openclaw") {
+    if (normalizeCommandBaseName(argv[idx]) === "sunclaw") {
       return argv.slice(idx);
     }
   }
   return argv;
 }
 
-function parseOpenClawChannelsLoginShellCommand(raw: string): boolean {
+function parseSunClawChannelsLoginShellCommand(raw: string): boolean {
   const argv = splitShellArgs(raw);
   if (!argv) {
     return false;
   }
-  const openclawArgv = stripOpenClawPackageRunner(argv);
+  const sunclawArgv = stripSunClawPackageRunner(argv);
   return (
-    normalizeCommandBaseName(openclawArgv[0]) === "openclaw" &&
-    (openclawArgv[1] === "channels" || openclawArgv[1] === "channel") &&
-    openclawArgv[2] === "login"
+    normalizeCommandBaseName(sunclawArgv[0]) === "sunclaw" &&
+    (sunclawArgv[1] === "channels" || sunclawArgv[1] === "channel") &&
+    sunclawArgv[2] === "login"
   );
 }
 
@@ -1289,11 +1289,11 @@ function rejectUnsafeControlShellCommand(command: string): void {
         ].join(" "),
       );
     }
-    if (parseOpenClawChannelsLoginShellCommand(candidate)) {
+    if (parseSunClawChannelsLoginShellCommand(candidate)) {
       throw new Error(
         [
-          "exec cannot run interactive OpenClaw channel login commands.",
-          "Run `openclaw channels login` in a terminal on the gateway host, or use the channel-specific login agent tool when available (for WhatsApp: `whatsapp_login`).",
+          "exec cannot run interactive SunClaw channel login commands.",
+          "Run `sunclaw channels login` in a terminal on the gateway host, or use the channel-specific login agent tool when available (for WhatsApp: `whatsapp_login`).",
         ].join(" "),
       );
     }
@@ -1316,7 +1316,7 @@ export function createExecTool(
   defaults?: ExecToolDefaults,
 ): AgentToolWithMeta<typeof execSchema, ExecToolDetails> {
   const defaultBackgroundMs = clampWithDefault(
-    defaults?.backgroundMs ?? readEnvInt("OPENCLAW_BASH_YIELD_MS", "PI_BASH_YIELD_MS"),
+    defaults?.backgroundMs ?? readEnvInt("SUNCLAW_BASH_YIELD_MS", "PI_BASH_YIELD_MS"),
     10_000,
     10,
     120_000,
@@ -1973,7 +1973,7 @@ export function createExecTool(
 export const execTool = createExecTool();
 
 export const testing = {
-  parseOpenClawChannelsLoginShellCommand,
+  parseSunClawChannelsLoginShellCommand,
   validateScriptFileForShellBleed,
 };
 export { testing as __testing };

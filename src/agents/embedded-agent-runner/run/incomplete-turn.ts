@@ -1,6 +1,6 @@
-import { asFiniteNumber } from "@openclaw/normalization-core/number-coercion";
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
-import { normalizeStringEntries } from "@openclaw/normalization-core/string-normalization";
+import { asFiniteNumber } from "@sunclaw/normalization-core/number-coercion";
+import { normalizeLowercaseStringOrEmpty } from "@sunclaw/normalization-core/string-coerce";
+import { normalizeStringEntries } from "@sunclaw/normalization-core/string-normalization";
 import {
   isSilentReplyPayloadText,
   isSilentReplyText,
@@ -159,8 +159,8 @@ const RETRY_GUARD_MODEL_APIS = new Set([
   "openai-responses",
   "openai-chatgpt-responses",
   "azure-openai-responses",
-  "openclaw-openai-responses-transport",
-  "openclaw-azure-openai-responses-transport",
+  "sunclaw-openai-responses-transport",
+  "sunclaw-azure-openai-responses-transport",
 ]);
 const DEFAULT_PLANNING_ONLY_RETRY_LIMIT = 1;
 const STRICT_AGENTIC_PLANNING_ONLY_RETRY_LIMIT = 2;

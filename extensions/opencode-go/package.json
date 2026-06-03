@@ -1,13 +1,13 @@
 {
-  "name": "@openclaw/opencode-go-provider",
+  "name": "@sunclaw/opencode-go-provider",
   "version": "2026.6.2",
   "private": true,
-  "description": "OpenClaw OpenCode Go provider plugin",
+  "description": "SunClaw OpenCode Go provider plugin",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@sunclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ]

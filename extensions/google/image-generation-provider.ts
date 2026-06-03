@@ -2,20 +2,20 @@ import {
   generatedImageAssetFromBase64,
   type GeneratedImageAsset,
   type ImageGenerationProvider,
-} from "openclaw/plugin-sdk/image-generation";
-import { parseStrictPositiveInteger } from "openclaw/plugin-sdk/number-runtime";
-import { isProviderApiKeyConfigured } from "openclaw/plugin-sdk/provider-auth";
-import { resolveApiKeyForProvider } from "openclaw/plugin-sdk/provider-auth-runtime";
+} from "sunclaw/plugin-sdk/image-generation";
+import { parseStrictPositiveInteger } from "sunclaw/plugin-sdk/number-runtime";
+import { isProviderApiKeyConfigured } from "sunclaw/plugin-sdk/provider-auth";
+import { resolveApiKeyForProvider } from "sunclaw/plugin-sdk/provider-auth-runtime";
 import {
   assertOkOrThrowHttpError,
   postJsonRequest,
   sanitizeConfiguredModelProviderRequest,
-} from "openclaw/plugin-sdk/provider-http";
+} from "sunclaw/plugin-sdk/provider-http";
 import {
   isRecord,
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { normalizeGoogleModelId, resolveGoogleGenerativeAiHttpRequestConfig } from "./api.js";
 
 const DEFAULT_GOOGLE_IMAGE_MODEL = "gemini-3.1-flash-image-preview";

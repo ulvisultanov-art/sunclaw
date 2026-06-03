@@ -1,26 +1,26 @@
-import { adaptScopedAccountAccessor } from "openclaw/plugin-sdk/channel-config-helpers";
+import { adaptScopedAccountAccessor } from "sunclaw/plugin-sdk/channel-config-helpers";
 import type {
   ChannelThreadingContext,
   ChannelThreadingToolContext,
-} from "openclaw/plugin-sdk/channel-contract";
+} from "sunclaw/plugin-sdk/channel-contract";
 import {
   createMessageReceiptFromOutboundResults,
   defineChannelMessageAdapter,
   type MessageReceiptPartKind,
-} from "openclaw/plugin-sdk/channel-outbound";
-import { sanitizeForPlainText } from "openclaw/plugin-sdk/channel-outbound";
+} from "sunclaw/plugin-sdk/channel-outbound";
+import { sanitizeForPlainText } from "sunclaw/plugin-sdk/channel-outbound";
 import {
   composeAccountWarningCollectors,
   createAllowlistProviderOpenWarningCollector,
-} from "openclaw/plugin-sdk/channel-policy";
+} from "sunclaw/plugin-sdk/channel-policy";
 import {
   createChannelDirectoryAdapter,
   listResolvedDirectoryGroupEntriesFromMapKeys,
   listResolvedDirectoryUserEntriesFromAllowFrom,
-} from "openclaw/plugin-sdk/directory-runtime";
-import { createLazyRuntimeNamedExport } from "openclaw/plugin-sdk/lazy-runtime";
-import type { OutboundMediaLoadOptions } from "openclaw/plugin-sdk/outbound-media";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/directory-runtime";
+import { createLazyRuntimeNamedExport } from "sunclaw/plugin-sdk/lazy-runtime";
+import type { OutboundMediaLoadOptions } from "sunclaw/plugin-sdk/outbound-media";
+import { normalizeOptionalString } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { formatGoogleChatAllowFromEntry } from "./channel-base.js";
 import {
   type ResolvedGoogleChatAccount,
@@ -34,7 +34,7 @@ import {
   resolveChannelMediaMaxBytes,
   resolveGoogleChatAccount,
   resolveGoogleChatOutboundSpace,
-  type OpenClawConfig,
+  type SunClawConfig,
 } from "./channel.deps.runtime.js";
 import { resolveGoogleChatGroupRequireMention } from "./group-policy.js";
 
@@ -82,7 +82,7 @@ const collectGoogleChatGroupPolicyWarnings =
 const collectGoogleChatSecurityWarnings = composeAccountWarningCollectors<
   ResolvedGoogleChatAccount,
   {
-    cfg: OpenClawConfig;
+    cfg: SunClawConfig;
     account: ResolvedGoogleChatAccount;
   }
 >(
@@ -125,7 +125,7 @@ export const googlechatSecurityAdapter = {
 
 export const googlechatThreadingAdapter = {
   scopedAccountReplyToMode: {
-    resolveAccount: (cfg: OpenClawConfig, accountId?: string | null) =>
+    resolveAccount: (cfg: SunClawConfig, accountId?: string | null) =>
       resolveGoogleChatAccount({ cfg, accountId }),
     resolveReplyToMode: (account: ResolvedGoogleChatAccount, _chatType?: string | null) =>
       account.config.replyToMode,
@@ -137,7 +137,7 @@ export const googlechatThreadingAdapter = {
     context,
     hasRepliedRef,
   }: {
-    cfg: OpenClawConfig;
+    cfg: SunClawConfig;
     accountId?: string | null;
     context: ChannelThreadingContext;
     hasRepliedRef?: { value: boolean };
@@ -166,7 +166,7 @@ export const googlechatPairingTextAdapter = {
     message,
     accountId,
   }: {
-    cfg: OpenClawConfig;
+    cfg: SunClawConfig;
     id: string;
     message: string;
     accountId?: string | null;
@@ -224,7 +224,7 @@ export const googlechatOutboundAdapter = {
       replyToId,
       threadId,
     }: {
-      cfg: OpenClawConfig;
+      cfg: SunClawConfig;
       to: string;
       text: string;
       accountId?: string | null;
@@ -264,7 +264,7 @@ export const googlechatOutboundAdapter = {
       replyToId,
       threadId,
     }: {
-      cfg: OpenClawConfig;
+      cfg: SunClawConfig;
       to: string;
       text?: string;
       mediaUrl?: string;

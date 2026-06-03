@@ -2,7 +2,7 @@ import { spawnSync } from "node:child_process";
 import path from "node:path";
 import { note } from "../../packages/terminal-core/src/note.js";
 import { formatCliCommand } from "../cli/command-format.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type { StatusSummary } from "./status.types.js";
 
 export type LocalTuiProcess = {
@@ -29,10 +29,10 @@ function normalizeExecutableName(value: string | undefined): string {
 function isLocalTuiCommand(command: string): boolean {
   const argv = tokenizeCommandLine(command);
   const executable = normalizeExecutableName(argv[0]);
-  if (executable === "openclaw-tui") {
+  if (executable === "sunclaw-tui") {
     return true;
   }
-  return executable === "openclaw" && LOCAL_TUI_SUBCOMMANDS.has(argv[1] ?? "");
+  return executable === "sunclaw" && LOCAL_TUI_SUBCOMMANDS.has(argv[1] ?? "");
 }
 
 function parsePsPidLine(line: string): LocalTuiProcess | null {
@@ -75,7 +75,7 @@ export function listLocalTuiProcesses(): LocalTuiProcess[] {
   return processes;
 }
 
-function hasWhatsappEnabled(cfg: OpenClawConfig): boolean {
+function hasWhatsappEnabled(cfg: SunClawConfig): boolean {
   const whatsapp = cfg.channels?.whatsapp;
   if (!whatsapp || whatsapp.enabled === false) {
     return false;
@@ -146,7 +146,7 @@ export async function terminateLocalTuiProcesses(params: {
 }
 
 export async function noteWhatsappResponsivenessHealth(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   status?: Pick<StatusSummary, "eventLoop"> | null;
   shouldRepair: boolean;
   listLocalTuiProcesses?: () => LocalTuiProcess[];
@@ -185,7 +185,7 @@ export async function noteWhatsappResponsivenessHealth(params: {
       }
     } else {
       warnings.push(
-        `Fix: close those TUI sessions, or run ${formatCliCommand("openclaw doctor --fix")}.`,
+        `Fix: close those TUI sessions, or run ${formatCliCommand("sunclaw doctor --fix")}.`,
       );
     }
   }

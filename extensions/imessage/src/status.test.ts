@@ -1,6 +1,6 @@
-import { createPluginSetupWizardStatus } from "openclaw/plugin-sdk/plugin-test-runtime";
-import * as processRuntime from "openclaw/plugin-sdk/process-runtime";
-import * as setupRuntime from "openclaw/plugin-sdk/setup";
+import { createPluginSetupWizardStatus } from "sunclaw/plugin-sdk/plugin-test-runtime";
+import * as processRuntime from "sunclaw/plugin-sdk/process-runtime";
+import * as setupRuntime from "sunclaw/plugin-sdk/setup";
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { resolveIMessageAccount } from "./accounts.js";
 import * as channelRuntimeModule from "./channel.runtime.js";

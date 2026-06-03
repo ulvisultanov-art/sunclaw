@@ -1,12 +1,12 @@
-import type { OpenClawPluginApi } from "./types.js";
+import type { SunClawPluginApi } from "./types.js";
 
 type PluginApiFacadeFields = Pick<
-  OpenClawPluginApi,
+  SunClawPluginApi,
   "agent" | "lifecycle" | "runContext" | "session"
 >;
-export type OpenClawPluginApiWithoutFacades = Omit<OpenClawPluginApi, keyof PluginApiFacadeFields>;
+export type SunClawPluginApiWithoutFacades = Omit<SunClawPluginApi, keyof PluginApiFacadeFields>;
 type PluginApiFacadeSource = Pick<
-  OpenClawPluginApi,
+  SunClawPluginApi,
   | "clearRunContext"
   | "emitAgentEvent"
   | "enqueueNextTurnInjection"

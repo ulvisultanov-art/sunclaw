@@ -44,7 +44,14 @@ mapfile -t FILES < <(
       -name "*.swift" -o -name "*.kt" -o -name "*.kts" -o -name "*.gradle" -o \
       -name "*.xml" -o -name "*.plist" -o -name "*.xcconfig" -o -name "*.pbxproj" -o \
       -name "*.go" -o -name "*.py" -o -name "*.rs" -o -name "*.ql" -o -name "*.lobster" -o \
-      -name "Dockerfile*" -o -name "Makefile*" -o -name ".gitignore" -o -name ".dockerignore" \
+      -name "*.jsonl" -o -name "*.ps1" -o -name "*.mts" -o -name "*.cts" -o \
+      -name "*.webmanifest" -o -name "*.service" -o -name "*.timer" -o \
+      -name "*.in" -o -name "*.example" -o -name "*.xcfilelist" -o \
+      -name "Dockerfile*" -o -name "*.Dockerfile" -o -name "Makefile*" -o \
+      -name ".gitignore" -o -name ".dockerignore" -o \
+      -name "CODEOWNERS" -o -name "Appfile" -o -name "Fastfile" -o \
+      -name "agent-transcript" -o \
+      -name "go.mod" -o -name "go.sum" -o -name "go.work" \
     \) -print
 )
 

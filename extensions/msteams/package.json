@@ -1,10 +1,10 @@
 {
-  "name": "@openclaw/msteams",
+  "name": "@sunclaw/msteams",
   "version": "2026.6.2",
-  "description": "OpenClaw Microsoft Teams channel plugin for bot conversations.",
+  "description": "SunClaw Microsoft Teams channel plugin for bot conversations.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/ulvisultanov-art/sunclaw"
   },
   "type": "module",
   "dependencies": {
@@ -15,19 +15,19 @@
     "typebox": "1.1.39"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
+    "@sunclaw/plugin-sdk": "workspace:*",
     "jose": "6.2.3",
-    "openclaw": "2026.5.28"
+    "sunclaw": "2026.5.28"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.6.2"
+    "sunclaw": ">=2026.6.2"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "sunclaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ],
@@ -51,7 +51,7 @@
       }
     },
     "install": {
-      "npmSpec": "@openclaw/msteams",
+      "npmSpec": "@sunclaw/msteams",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.4.10"
     },
@@ -59,7 +59,7 @@
       "pluginApi": ">=2026.6.2"
     },
     "build": {
-      "openclawVersion": "2026.6.2"
+      "sunclawVersion": "2026.6.2"
     },
     "release": {
       "publishToClawHub": true,

@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { setTimeout as sleep } from "node:timers/promises";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { uniqueStrings, uniqueValues } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { formatErrorMessage } from "sunclaw/plugin-sdk/error-runtime";
+import { uniqueStrings, uniqueValues } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import type { MatrixQaObservedEvent } from "./events.js";
 import { requestMatrixJson, type MatrixQaFetchLike } from "./request.js";
 import {
@@ -852,19 +852,19 @@ export async function provisionMatrixQaRoom(params: {
   });
   const [driver, sut, observer] = await Promise.all([
     anonClient.registerWithToken({
-      deviceName: "OpenClaw Matrix QA Driver",
+      deviceName: "SunClaw Matrix QA Driver",
       localpart: params.driverLocalpart,
       password: `driver-${randomUUID()}`,
       registrationToken: params.registrationToken,
     }),
     anonClient.registerWithToken({
-      deviceName: "OpenClaw Matrix QA SUT",
+      deviceName: "SunClaw Matrix QA SUT",
       localpart: params.sutLocalpart,
       password: `sut-${randomUUID()}`,
       registrationToken: params.registrationToken,
     }),
     anonClient.registerWithToken({
-      deviceName: "OpenClaw Matrix QA Observer",
+      deviceName: "SunClaw Matrix QA Observer",
       localpart: params.observerLocalpart,
       password: `observer-${randomUUID()}`,
       registrationToken: params.registrationToken,

@@ -8,7 +8,7 @@ import {
 import { ensureCustomApiRegistered } from "./custom-api-registry.js";
 import type { StreamFn } from "./runtime/index.js";
 
-export const GOOGLE_SIMPLE_COMPLETION_API: Api = "openclaw-google-generative-ai-simple";
+export const GOOGLE_SIMPLE_COMPLETION_API: Api = "sunclaw-google-generative-ai-simple";
 
 const SOURCE_API: Api = "google-generative-ai";
 

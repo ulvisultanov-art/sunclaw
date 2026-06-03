@@ -113,7 +113,7 @@ const scenarioConfigSteps = new Map([
       {
         id: "logging-file",
         intent: "logging",
-        argv: ["config", "set", "logging.file", "~/openclaw-upgrade-survivor/gateway.jsonl"],
+        argv: ["config", "set", "logging.file", "~/sunclaw-upgrade-survivor/gateway.jsonl"],
       },
     ],
   ],
@@ -157,7 +157,7 @@ const recipe = [
 ];
 
 function selectedScenario() {
-  return process.env.OPENCLAW_UPGRADE_SURVIVOR_SCENARIO || "base";
+  return process.env.SUNCLAW_UPGRADE_SURVIVOR_SCENARIO || "base";
 }
 
 function adaptStepForBaseline(step, baselineVersion, summary) {
@@ -199,22 +199,22 @@ function adaptStepForBaseline(step, baselineVersion, summary) {
   return step;
 }
 
-export function resolveUpgradeSurvivorOpenClawCommand(argv, params = {}) {
+export function resolveUpgradeSurvivorSunClawCommand(argv, params = {}) {
   const platform = params.platform ?? process.platform;
   if (platform === "win32") {
     const comSpec = params.comSpec ?? process.env.ComSpec ?? "cmd.exe";
     return {
       command: comSpec,
-      args: ["/d", "/s", "/c", buildCmdExeCommandLine("openclaw.cmd", argv)],
-      commandLabel: ["openclaw", ...argv].join(" "),
+      args: ["/d", "/s", "/c", buildCmdExeCommandLine("sunclaw.cmd", argv)],
+      commandLabel: ["sunclaw", ...argv].join(" "),
       shell: false,
       windowsVerbatimArguments: true,
     };
   }
   return {
-    command: "openclaw",
+    command: "sunclaw",
     args: argv,
-    commandLabel: ["openclaw", ...argv].join(" "),
+    commandLabel: ["sunclaw", ...argv].join(" "),
     shell: false,
   };
 }
@@ -223,8 +223,8 @@ function errorCode(error) {
   return error && typeof error === "object" && "code" in error ? String(error.code) : undefined;
 }
 
-export function runUpgradeSurvivorOpenClawStep(step, params = {}) {
-  const invocation = resolveUpgradeSurvivorOpenClawCommand(step.argv);
+export function runUpgradeSurvivorSunClawStep(step, params = {}) {
+  const invocation = resolveUpgradeSurvivorSunClawCommand(step.argv);
   const run = params.spawnSyncCommand ?? spawnSync;
   const timeoutMs = params.timeoutMs ?? CONFIG_COMMAND_TIMEOUT_MS;
   const maxBuffer = params.maxBufferBytes ?? CONFIG_COMMAND_MAX_BUFFER_BYTES;
@@ -283,7 +283,7 @@ function applyRecipe() {
     if (!adaptedStep) {
       continue;
     }
-    const outcome = runUpgradeSurvivorOpenClawStep(adaptedStep);
+    const outcome = runUpgradeSurvivorSunClawStep(adaptedStep);
     summary.steps.push(outcome);
     writeJson(summaryPath, summary);
     if (!outcome.ok) {

@@ -2,7 +2,7 @@ import { promises as fs } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type { SkillStatusEntry } from "../skills/discovery/status.js";
 import {
   CORE_HEALTH_CHECKS,
@@ -35,8 +35,8 @@ function createSkill(overrides: Partial<SkillStatusEntry> = {}): SkillStatusEntr
     description: "Missing tool",
     source: "workspace",
     bundled: false,
-    filePath: "/tmp/openclaw-test-workspace/skills/missing-tool/SKILL.md",
-    baseDir: "/tmp/openclaw-test-workspace/skills/missing-tool",
+    filePath: "/tmp/sunclaw-test-workspace/skills/missing-tool/SKILL.md",
+    baseDir: "/tmp/sunclaw-test-workspace/skills/missing-tool",
     skillKey: "missing-tool",
     always: false,
     disabled: false,
@@ -47,14 +47,14 @@ function createSkill(overrides: Partial<SkillStatusEntry> = {}): SkillStatusEntr
     userInvocable: true,
     commandVisible: false,
     requirements: {
-      bins: ["openclaw-test-missing-skill-bin"],
+      bins: ["sunclaw-test-missing-skill-bin"],
       anyBins: [],
       env: [],
       config: [],
       os: [],
     },
     missing: {
-      bins: ["openclaw-test-missing-skill-bin"],
+      bins: ["sunclaw-test-missing-skill-bin"],
       anyBins: [],
       env: [],
       config: [],
@@ -106,7 +106,7 @@ describe("registerCoreHealthChecks", () => {
     resetCoreHealthChecksForTest();
     mocks.loadModelCatalog.mockClear();
     mocks.loadModelCatalog.mockResolvedValue([]);
-    const cfg: OpenClawConfig = {
+    const cfg: SunClawConfig = {
       hooks: {
         gmail: {
           model: "openai/gpt-5.5",
@@ -202,10 +202,10 @@ describe("registerCoreHealthChecks", () => {
 
   it("converts unavailable skills into repair-capable health findings", async () => {
     const unavailableSkill = createSkill();
-    const cfg: OpenClawConfig = {
+    const cfg: SunClawConfig = {
       agents: {
         defaults: {
-          workspace: "/tmp/openclaw-test-workspace",
+          workspace: "/tmp/sunclaw-test-workspace",
           skills: ["missing-tool"],
         },
       },
@@ -227,7 +227,7 @@ describe("registerCoreHealthChecks", () => {
       mode: "lint",
       runtime,
       cfg,
-      cwd: "/tmp/openclaw-test-workspace",
+      cwd: "/tmp/sunclaw-test-workspace",
     });
     expect(findings).toContainEqual(
       expect.objectContaining({
@@ -242,7 +242,7 @@ describe("registerCoreHealthChecks", () => {
           mode: "fix",
           runtime,
           cfg,
-          cwd: "/tmp/openclaw-test-workspace",
+          cwd: "/tmp/sunclaw-test-workspace",
         },
         { paths: ["skills.entries.other-tool.enabled"] },
       ),
@@ -253,7 +253,7 @@ describe("registerCoreHealthChecks", () => {
           mode: "fix",
           runtime,
           cfg,
-          cwd: "/tmp/openclaw-test-workspace",
+          cwd: "/tmp/sunclaw-test-workspace",
         },
         { paths: ["skills.entries.missing-tool.enabled"] },
       ),
@@ -268,7 +268,7 @@ describe("registerCoreHealthChecks", () => {
         mode: "fix",
         runtime,
         cfg,
-        cwd: "/tmp/openclaw-test-workspace",
+        cwd: "/tmp/sunclaw-test-workspace",
       },
       findings,
     );
@@ -349,7 +349,7 @@ describe("registerCoreHealthChecks", () => {
             },
           },
         },
-      } as unknown as OpenClawConfig,
+      } as unknown as SunClawConfig,
     });
 
     expect(findings).toStrictEqual([
@@ -360,14 +360,14 @@ describe("registerCoreHealthChecks", () => {
         target: "openai/gpt-5.5",
         requirement: "Codex plugin enabled for routes that use the Codex runtime.",
         fixHint:
-          "Run `openclaw doctor --fix`: it enables plugins.entries.codex, or set the affected OpenAI models to an OpenClaw runtime policy.",
+          "Run `sunclaw doctor --fix`: it enables plugins.entries.codex, or set the affected OpenAI models to an SunClaw runtime policy.",
       }),
     ]);
     expect(findings[0]?.message).toContain("Codex plugin is disabled by config");
   });
 
   it("uses the read-only model catalog for hooks.gmail.model checks", async () => {
-    const cfg: OpenClawConfig = {
+    const cfg: SunClawConfig = {
       hooks: {
         gmail: {
           model: "openai/gpt-5.5",
@@ -379,8 +379,8 @@ describe("registerCoreHealthChecks", () => {
 
   it("skips gateway auth warning when SecretRef-managed token resolves in lint checks", async () => {
     const check = CORE_HEALTH_CHECKS.find((entry) => entry.id === "core/doctor/gateway-auth");
-    const previousToken = process.env.OPENCLAW_TEST_GATEWAY_TOKEN;
-    process.env.OPENCLAW_TEST_GATEWAY_TOKEN = "resolved-test-token";
+    const previousToken = process.env.SUNCLAW_TEST_GATEWAY_TOKEN;
+    process.env.SUNCLAW_TEST_GATEWAY_TOKEN = "resolved-test-token";
     try {
       const findings = await check?.detect({
         mode: "lint",
@@ -393,7 +393,7 @@ describe("registerCoreHealthChecks", () => {
               token: {
                 source: "env",
                 provider: "default",
-                id: "OPENCLAW_TEST_GATEWAY_TOKEN",
+                id: "SUNCLAW_TEST_GATEWAY_TOKEN",
               },
             },
           },
@@ -409,19 +409,19 @@ describe("registerCoreHealthChecks", () => {
       expect(findings).toEqual([]);
     } finally {
       if (previousToken === undefined) {
-        delete process.env.OPENCLAW_TEST_GATEWAY_TOKEN;
+        delete process.env.SUNCLAW_TEST_GATEWAY_TOKEN;
       } else {
-        process.env.OPENCLAW_TEST_GATEWAY_TOKEN = previousToken;
+        process.env.SUNCLAW_TEST_GATEWAY_TOKEN = previousToken;
       }
     }
   });
 
-  it("reports unresolved SecretRefs even when OPENCLAW_GATEWAY_TOKEN is set", async () => {
+  it("reports unresolved SecretRefs even when SUNCLAW_GATEWAY_TOKEN is set", async () => {
     const check = CORE_HEALTH_CHECKS.find((entry) => entry.id === "core/doctor/gateway-auth");
-    const previousFallbackToken = process.env.OPENCLAW_GATEWAY_TOKEN;
-    const previousRefToken = process.env.OPENCLAW_MISSING_GATEWAY_REF_TOKEN;
-    process.env.OPENCLAW_GATEWAY_TOKEN = "fallback-token";
-    delete process.env.OPENCLAW_MISSING_GATEWAY_REF_TOKEN;
+    const previousFallbackToken = process.env.SUNCLAW_GATEWAY_TOKEN;
+    const previousRefToken = process.env.SUNCLAW_MISSING_GATEWAY_REF_TOKEN;
+    process.env.SUNCLAW_GATEWAY_TOKEN = "fallback-token";
+    delete process.env.SUNCLAW_MISSING_GATEWAY_REF_TOKEN;
     try {
       const findings = await check?.detect({
         mode: "lint",
@@ -434,7 +434,7 @@ describe("registerCoreHealthChecks", () => {
               token: {
                 source: "env",
                 provider: "default",
-                id: "OPENCLAW_MISSING_GATEWAY_REF_TOKEN",
+                id: "SUNCLAW_MISSING_GATEWAY_REF_TOKEN",
               },
             },
           },
@@ -455,20 +455,20 @@ describe("registerCoreHealthChecks", () => {
       );
     } finally {
       if (previousFallbackToken === undefined) {
-        delete process.env.OPENCLAW_GATEWAY_TOKEN;
+        delete process.env.SUNCLAW_GATEWAY_TOKEN;
       } else {
-        process.env.OPENCLAW_GATEWAY_TOKEN = previousFallbackToken;
+        process.env.SUNCLAW_GATEWAY_TOKEN = previousFallbackToken;
       }
       if (previousRefToken === undefined) {
-        delete process.env.OPENCLAW_MISSING_GATEWAY_REF_TOKEN;
+        delete process.env.SUNCLAW_MISSING_GATEWAY_REF_TOKEN;
       } else {
-        process.env.OPENCLAW_MISSING_GATEWAY_REF_TOKEN = previousRefToken;
+        process.env.SUNCLAW_MISSING_GATEWAY_REF_TOKEN = previousRefToken;
       }
     }
   });
 
   it("does not execute or warn for valid exec SecretRefs during default gateway auth lint checks", async () => {
-    tmp = await fs.mkdtemp(join(tmpdir(), "openclaw-health-exec-ref-"));
+    tmp = await fs.mkdtemp(join(tmpdir(), "sunclaw-health-exec-ref-"));
     const markerPath = join(tmp, "exec-ran");
     const check = CORE_HEALTH_CHECKS.find((entry) => entry.id === "core/doctor/gateway-auth");
 
@@ -507,7 +507,7 @@ describe("registerCoreHealthChecks", () => {
   });
 
   it("executes exec SecretRefs when gateway auth lint explicitly allows exec checks", async () => {
-    tmp = await fs.mkdtemp(join(tmpdir(), "openclaw-health-exec-ref-"));
+    tmp = await fs.mkdtemp(join(tmpdir(), "sunclaw-health-exec-ref-"));
     const markerPath = join(tmp, "exec-ran");
     const resolverPath = join(tmp, "resolve-token.cjs");
     await fs.writeFile(
@@ -561,7 +561,7 @@ describe("registerCoreHealthChecks", () => {
   });
 
   it("reports exec SecretRef failures when gateway auth lint explicitly allows exec checks", async () => {
-    tmp = await fs.mkdtemp(join(tmpdir(), "openclaw-health-exec-ref-"));
+    tmp = await fs.mkdtemp(join(tmpdir(), "sunclaw-health-exec-ref-"));
     const resolverPath = join(tmp, "fail-token.cjs");
     await fs.writeFile(
       resolverPath,
@@ -569,8 +569,8 @@ describe("registerCoreHealthChecks", () => {
       "utf8",
     );
     const check = CORE_HEALTH_CHECKS.find((entry) => entry.id === "core/doctor/gateway-auth");
-    const previousFallbackToken = process.env.OPENCLAW_GATEWAY_TOKEN;
-    process.env.OPENCLAW_GATEWAY_TOKEN = "fallback-token";
+    const previousFallbackToken = process.env.SUNCLAW_GATEWAY_TOKEN;
+    process.env.SUNCLAW_GATEWAY_TOKEN = "fallback-token";
 
     let findings: readonly HealthFinding[] | undefined;
     try {
@@ -606,9 +606,9 @@ describe("registerCoreHealthChecks", () => {
       });
     } finally {
       if (previousFallbackToken === undefined) {
-        delete process.env.OPENCLAW_GATEWAY_TOKEN;
+        delete process.env.SUNCLAW_GATEWAY_TOKEN;
       } else {
-        process.env.OPENCLAW_GATEWAY_TOKEN = previousFallbackToken;
+        process.env.SUNCLAW_GATEWAY_TOKEN = previousFallbackToken;
       }
     }
 
@@ -618,7 +618,7 @@ describe("registerCoreHealthChecks", () => {
         severity: "warning",
         message: expect.stringContaining("Gateway token SecretRef could not be resolved:"),
         fixHint:
-          "Run `openclaw doctor --allow-exec` to verify exec SecretRefs during doctor, or `openclaw secrets audit --allow-exec` to audit all exec SecretRefs.",
+          "Run `sunclaw doctor --allow-exec` to verify exec SecretRefs during doctor, or `sunclaw secrets audit --allow-exec` to audit all exec SecretRefs.",
       }),
     );
   });
@@ -631,7 +631,7 @@ describe("registerCoreHealthChecks", () => {
             return [
               [
                 "- Tip: back up the workspace in a private git repo (GitHub or GitLab).",
-                "- Keep ~/.openclaw out of git; it contains credentials and session history.",
+                "- Keep ~/.sunclaw out of git; it contains credentials and session history.",
               ].join("\n"),
               "Memory system not found in workspace.",
             ];
@@ -647,11 +647,11 @@ describe("registerCoreHealthChecks", () => {
       cfg: {
         agents: {
           defaults: {
-            workspace: "/tmp/openclaw-test-workspace",
+            workspace: "/tmp/sunclaw-test-workspace",
           },
         },
       },
-      cwd: "/tmp/openclaw-test-workspace",
+      cwd: "/tmp/sunclaw-test-workspace",
     });
 
     expect(findings).toContainEqual(

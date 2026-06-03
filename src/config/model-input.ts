@@ -1,14 +1,14 @@
-import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
+import { normalizeProviderId } from "@sunclaw/model-catalog-core/provider-id";
 import {
   normalizeGooglePreviewModelId,
   normalizeTogetherModelId,
-} from "@openclaw/model-catalog-core/provider-model-id-normalize";
-import { isRecord as isPlainRecord } from "@openclaw/normalization-core/record-coerce";
+} from "@sunclaw/model-catalog-core/provider-model-id-normalize";
+import { isRecord as isPlainRecord } from "@sunclaw/normalization-core/record-coerce";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
   resolvePrimaryStringValue,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@sunclaw/normalization-core/string-coerce";
 import type { AgentModelConfig, AgentToolModelConfig } from "./types.agents-shared.js";
 
 type AgentModelListLike = {

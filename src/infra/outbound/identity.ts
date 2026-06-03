@@ -1,7 +1,7 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
 import { resolveAgentAvatar } from "../../agents/identity-avatar.js";
 import { resolveAgentIdentity } from "../../agents/identity.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import type { OutboundIdentity } from "./identity-types.js";
 
 export type { OutboundIdentity } from "./identity-types.js";
@@ -25,7 +25,7 @@ export function normalizeOutboundIdentity(
 
 /** Resolves an agent's configured identity into channel-safe outbound metadata. */
 export function resolveAgentOutboundIdentity(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   agentId: string,
 ): OutboundIdentity | undefined {
   const agentIdentity = resolveAgentIdentity(cfg, agentId);

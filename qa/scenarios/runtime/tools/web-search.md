@@ -8,7 +8,7 @@ runtimeParityTier: standard
 coverage:
   primary:
     - tools.web-search
-objective: Verify web_search preserves arguments and result shape across OpenClaw and Codex.
+objective: Verify web_search preserves arguments and result shape across SunClaw and Codex.
 successCriteria:
   - Effective tools expose web_search.
   - The mock provider plans exactly one happy-path web_search call.
@@ -27,14 +27,14 @@ execution:
     toolCoverage:
       family: web_search
       actualTool: web_search
-      bucket: openclaw-dynamic-integration
-      expectedLayer: openclaw-dynamic
-      capabilityLayer: openclaw-dynamic-direct
+      bucket: sunclaw-dynamic-integration
+      expectedLayer: sunclaw-dynamic
+      capabilityLayer: sunclaw-dynamic-direct
       required: true
       codexDefaultImpact: P4
       qaImpact: P1
       action: hard gate in the standard direct-loading tier
-      reason: web_search is an OpenClaw integration tool and must stay visible and callable under OpenClaw and Codex direct runtime parity.
+      reason: web_search is an SunClaw integration tool and must stay visible and callable under SunClaw and Codex direct runtime parity.
     promptSnippet: "target=web_search"
     failurePromptSnippet: "failure target=web_search"
 ```

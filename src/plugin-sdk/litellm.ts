@@ -1,10 +1,10 @@
 // Manual facade. Keep loader boundary explicit.
-import type { ModelDefinitionConfig, OpenClawConfig } from "../config/types.js";
+import type { ModelDefinitionConfig, SunClawConfig } from "../config/types.js";
 import { loadBundledPluginPublicSurfaceModuleSync } from "./facade-loader.js";
 
 type FacadeModule = {
-  applyLitellmConfig: (cfg: OpenClawConfig) => OpenClawConfig;
-  applyLitellmProviderConfig: (cfg: OpenClawConfig) => OpenClawConfig;
+  applyLitellmConfig: (cfg: SunClawConfig) => SunClawConfig;
+  applyLitellmProviderConfig: (cfg: SunClawConfig) => SunClawConfig;
   buildLitellmModelDefinition: () => ModelDefinitionConfig;
   LITELLM_BASE_URL: string;
   LITELLM_DEFAULT_MODEL_ID: string;

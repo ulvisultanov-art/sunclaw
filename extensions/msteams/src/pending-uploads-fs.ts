@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
-import type { PluginStateKeyedStore } from "openclaw/plugin-sdk/plugin-state-runtime";
+import type { PluginStateKeyedStore } from "sunclaw/plugin-sdk/plugin-state-runtime";
 import { getMSTeamsRuntime } from "./runtime.js";
 import {
   resolveMSTeamsSqliteStateEnv,

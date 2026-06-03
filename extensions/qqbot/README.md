@@ -1,11 +1,11 @@
-# OpenClaw QQ Bot
+# SunClaw QQ Bot
 
-Official OpenClaw channel plugin for QQ Bot group and direct-message workflows.
+Official SunClaw channel plugin for QQ Bot group and direct-message workflows.
 
-Install from OpenClaw:
+Install from SunClaw:
 
 ```bash
-openclaw plugin add @openclaw/qqbot
+sunclaw plugin add @sunclaw/qqbot
 ```
 
-Configure QQ Bot credentials in OpenClaw, then connect the bot to the groups or direct-message contexts where agents should operate.
+Configure QQ Bot credentials in SunClaw, then connect the bot to the groups or direct-message contexts where agents should operate.

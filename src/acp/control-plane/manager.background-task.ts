@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { logVerbose } from "../../globals.js";
 import {
   createRunningTaskRun,
@@ -89,7 +89,7 @@ export function resolveBackgroundTaskTerminalResult(progressSummary: string): {
 
 export function resolveBackgroundTaskContext(params: {
   deps: AcpSessionManagerDeps;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   sessionKey: string;
   requestId: string;
   text: string;

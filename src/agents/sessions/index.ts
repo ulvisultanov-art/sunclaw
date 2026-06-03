@@ -1,5 +1,5 @@
 /**
- * OpenClaw-owned agent session runtime.
+ * SunClaw-owned agent session runtime.
  */
 
 export { getAgentDir, VERSION } from "../config.js";

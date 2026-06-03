@@ -1,5 +1,5 @@
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { summarizeStringEntries } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { logVerbose } from "sunclaw/plugin-sdk/runtime-env";
+import { summarizeStringEntries } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { formatThreadBindingDurationLabel } from "./thread-bindings.messages.js";
 
 function formatThreadBindingDurationForConfigLabel(durationMs: number): string {

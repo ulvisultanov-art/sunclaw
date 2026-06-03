@@ -1,6 +1,6 @@
 import path from "node:path";
 import { resolveStateDir } from "../config/paths.js";
-import { resolveOpenClawStateSqlitePath } from "../state/openclaw-state-db.paths.js";
+import { resolveSunClawStateSqlitePath } from "../state/sunclaw-state-db.paths.js";
 
 const LEGACY_INSTALLED_PLUGIN_INDEX_STORE_PATH = path.join("plugins", "installs.json");
 
@@ -12,7 +12,7 @@ export type InstalledPluginIndexStoreOptions = {
 
 function resolveStoreEnv(options: InstalledPluginIndexStoreOptions): NodeJS.ProcessEnv {
   return options.stateDir
-    ? { ...(options.env ?? process.env), OPENCLAW_STATE_DIR: options.stateDir }
+    ? { ...(options.env ?? process.env), SUNCLAW_STATE_DIR: options.stateDir }
     : (options.env ?? process.env);
 }
 
@@ -22,7 +22,7 @@ export function resolveInstalledPluginIndexStorePath(
   if (options.filePath) {
     return options.filePath;
   }
-  return resolveOpenClawStateSqlitePath(resolveStoreEnv(options));
+  return resolveSunClawStateSqlitePath(resolveStoreEnv(options));
 }
 
 export function resolveLegacyInstalledPluginIndexStorePath(

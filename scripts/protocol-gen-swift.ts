@@ -28,9 +28,9 @@ const outPaths = [
     repoRoot,
     "apps",
     "shared",
-    "OpenClawKit",
+    "SunClawKit",
     "Sources",
-    "OpenClawProtocol",
+    "SunClawProtocol",
     "GatewayModels.swift",
   ),
 ];

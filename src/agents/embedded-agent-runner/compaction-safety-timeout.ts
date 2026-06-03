@@ -1,5 +1,5 @@
-import { finiteSecondsToTimerSafeMilliseconds } from "@openclaw/normalization-core/number-coercion";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import { finiteSecondsToTimerSafeMilliseconds } from "@sunclaw/normalization-core/number-coercion";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import type { CompactResult, ContextEngine } from "../../context-engine/types.js";
 import { withTimeout } from "../../node-host/with-timeout.js";
 
@@ -53,7 +53,7 @@ function composeAbortSignals(...signals: Array<AbortSignal | undefined>): {
   };
 }
 
-export function resolveCompactionTimeoutMs(cfg?: OpenClawConfig): number {
+export function resolveCompactionTimeoutMs(cfg?: SunClawConfig): number {
   return (
     finiteSecondsToTimerSafeMilliseconds(cfg?.agents?.defaults?.compaction?.timeoutSeconds, {
       floorSeconds: true,

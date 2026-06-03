@@ -1,11 +1,11 @@
-import { assertOkOrThrowProviderError } from "openclaw/plugin-sdk/provider-http";
-import { readResponseWithLimit } from "openclaw/plugin-sdk/response-limit-runtime";
-import type { SpeechVoiceOption } from "openclaw/plugin-sdk/speech-core";
-import { trimToUndefined } from "openclaw/plugin-sdk/speech-core";
+import { assertOkOrThrowProviderError } from "sunclaw/plugin-sdk/provider-http";
+import { readResponseWithLimit } from "sunclaw/plugin-sdk/response-limit-runtime";
+import type { SpeechVoiceOption } from "sunclaw/plugin-sdk/speech-core";
+import { trimToUndefined } from "sunclaw/plugin-sdk/speech-core";
 import {
   fetchWithSsrFGuard,
   ssrfPolicyFromHttpBaseUrlAllowedHostname,
-} from "openclaw/plugin-sdk/ssrf-runtime";
+} from "sunclaw/plugin-sdk/ssrf-runtime";
 
 export const DEFAULT_AZURE_SPEECH_VOICE = "en-US-JennyNeural";
 export const DEFAULT_AZURE_SPEECH_LANG = "en-US";
@@ -190,7 +190,7 @@ export async function azureSpeechTTS(params: {
         "Content-Type": "application/ssml+xml",
         "Ocp-Apim-Subscription-Key": params.apiKey,
         "X-Microsoft-OutputFormat": outputFormat,
-        "User-Agent": "OpenClaw",
+        "User-Agent": "SunClaw",
       },
       body: buildAzureSpeechSsml({
         text: params.text,

@@ -1,5 +1,5 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
+import type { SunClawConfig } from "../../../config/types.sunclaw.js";
 import {
   canMaterializeGatewayAuthSecretRefsWithoutExec,
   materializeGatewayAuthSecretRefs,
@@ -19,7 +19,7 @@ function activeGatewaySharedSecret(auth: ResolvedGatewayAuth): string {
 }
 
 export function repairHooksTokenReuseGatewayAuth(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   env: NodeJS.ProcessEnv = process.env,
   createToken: () => string = randomToken,
 ): Promise<DoctorConfigMutationResult> {
@@ -27,15 +27,15 @@ export function repairHooksTokenReuseGatewayAuth(
 }
 
 async function materializeDoctorGatewayAuthRefs(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   env: NodeJS.ProcessEnv,
-): Promise<OpenClawConfig> {
+): Promise<SunClawConfig> {
   const materializeParams = {
     cfg,
     env,
     mode: cfg.gateway?.auth?.mode,
-    hasTokenCandidate: Boolean(normalizeOptionalString(env.OPENCLAW_GATEWAY_TOKEN)),
-    hasPasswordCandidate: Boolean(normalizeOptionalString(env.OPENCLAW_GATEWAY_PASSWORD)),
+    hasTokenCandidate: Boolean(normalizeOptionalString(env.SUNCLAW_GATEWAY_TOKEN)),
+    hasPasswordCandidate: Boolean(normalizeOptionalString(env.SUNCLAW_GATEWAY_PASSWORD)),
   };
   if (!canMaterializeGatewayAuthSecretRefsWithoutExec(materializeParams)) {
     return cfg;
@@ -48,7 +48,7 @@ async function materializeDoctorGatewayAuthRefs(
 }
 
 async function repairHooksTokenReuseGatewayAuthAfterMaterializingRefs(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   env: NodeJS.ProcessEnv,
   createToken: () => string,
 ): Promise<DoctorConfigMutationResult> {

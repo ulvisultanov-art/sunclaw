@@ -333,7 +333,7 @@ describe("local embedding provider", () => {
   });
 
   it("uses a worker process for the public local provider", async () => {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-local-embedding-worker-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-local-embedding-worker-"));
     const workerScript = path.join(tempDir, "worker.cjs");
     await fs.writeFile(
       workerScript,
@@ -375,7 +375,7 @@ process.on("message", (message) => {
   });
 
   it("terminates the worker when close runs behind a pending request", async () => {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-local-embedding-worker-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-local-embedding-worker-"));
     const workerScript = path.join(tempDir, "worker.cjs");
     const embedStartedPath = path.join(tempDir, "embed-started");
     await fs.writeFile(
@@ -442,7 +442,7 @@ process.on("message", (message) => {
   });
 
   it("does not pass inline-source or inspector exec args to the file-backed worker", async () => {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-local-embedding-worker-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-local-embedding-worker-"));
     const workerScript = path.join(tempDir, "worker.cjs");
     await fs.writeFile(
       workerScript,
@@ -489,7 +489,7 @@ process.on("message", (message) => {
   });
 
   it("reports worker initialization failures during provider creation", async () => {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-local-embedding-worker-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-local-embedding-worker-"));
     const workerScript = path.join(tempDir, "worker.cjs");
     await fs.writeFile(
       workerScript,
@@ -524,7 +524,7 @@ process.on("message", (message) => {
   });
 
   it("reports worker exits with structured failure codes", async () => {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-local-embedding-worker-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-local-embedding-worker-"));
     const workerScript = path.join(tempDir, "worker.cjs");
     await fs.writeFile(
       workerScript,

@@ -1,6 +1,6 @@
-import type { MessageReceipt } from "openclaw/plugin-sdk/channel-outbound";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { RetryConfig } from "openclaw/plugin-sdk/retry-runtime";
+import type { MessageReceipt } from "sunclaw/plugin-sdk/channel-outbound";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import type { RetryConfig } from "sunclaw/plugin-sdk/retry-runtime";
 import type { RequestClient } from "./internal/discord.js";
 
 export class DiscordSendError extends Error {
@@ -34,12 +34,12 @@ export type DiscordSendResult = {
 };
 
 export type DiscordRuntimeAccountContext = {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   accountId: string;
 };
 
 export type DiscordReactOpts = {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   accountId?: string;
   token?: string;
   rest?: RequestClient;

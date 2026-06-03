@@ -12,8 +12,8 @@ import {
   type EmbeddedRunAttemptParams,
   type EmbeddedRunAttemptResult,
   type SessionWriteLockAcquireTimeoutConfig,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/agent-harness-runtime";
+import { normalizeOptionalString } from "sunclaw/plugin-sdk/string-coerce-runtime";
 
 type MirroredAgentMessage = Extract<AgentMessage, { role: "user" | "assistant" | "toolResult" }>;
 type MirroredUserMessage = Extract<AgentMessage, { role: "user" }>;
@@ -230,20 +230,20 @@ export async function mirrorPromptAtTurnStartBestEffort(params: {
  */
 export function attachCodexMirrorIdentity<T extends AgentMessage>(message: T, identity: string): T {
   const record = message as unknown as Record<string, unknown>;
-  const existing = record["__openclaw"];
+  const existing = record["__sunclaw"];
   const baseMeta =
     existing && typeof existing === "object" && !Array.isArray(existing)
       ? (existing as Record<string, unknown>)
       : {};
   return {
     ...record,
-    __openclaw: { ...baseMeta, [MIRROR_IDENTITY_META_KEY]: identity },
+    __sunclaw: { ...baseMeta, [MIRROR_IDENTITY_META_KEY]: identity },
   } as unknown as T;
 }
 
 function readMirrorIdentity(message: MirroredAgentMessage): string | undefined {
-  const record = message as unknown as { __openclaw?: unknown };
-  const meta = record["__openclaw"];
+  const record = message as unknown as { __sunclaw?: unknown };
+  const meta = record["__sunclaw"];
   if (!meta || typeof meta !== "object" || Array.isArray(meta)) {
     return undefined;
   }

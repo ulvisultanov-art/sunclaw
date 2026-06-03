@@ -1,6 +1,6 @@
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { parseStrictNonNegativeInteger } from "openclaw/plugin-sdk/number-runtime";
-import { readProviderJsonResponse } from "openclaw/plugin-sdk/provider-http";
+import { formatErrorMessage } from "sunclaw/plugin-sdk/error-runtime";
+import { parseStrictNonNegativeInteger } from "sunclaw/plugin-sdk/number-runtime";
+import { readProviderJsonResponse } from "sunclaw/plugin-sdk/provider-http";
 import { fetchWithSsrFGuard } from "../runtime-api.js";
 import type { ResolvedNextcloudTalkAccount } from "./accounts.js";
 import { resolveNextcloudTalkApiCredentials } from "./api-credentials.js";

@@ -1,11 +1,11 @@
-# OpenClaw WhatsApp
+# SunClaw WhatsApp
 
-Official OpenClaw channel plugin for WhatsApp Web chats.
+Official SunClaw channel plugin for WhatsApp Web chats.
 
-Install from OpenClaw:
+Install from SunClaw:
 
 ```bash
-openclaw plugin add @openclaw/whatsapp
+sunclaw plugin add @sunclaw/whatsapp
 ```
 
-Link a WhatsApp account through the plugin's setup flow, then configure which chats OpenClaw agents should monitor and reply to.
+Link a WhatsApp account through the plugin's setup flow, then configure which chats SunClaw agents should monitor and reply to.

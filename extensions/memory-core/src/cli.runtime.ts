@@ -2,13 +2,13 @@ import fsSync from "node:fs";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import type { MemoryEmbeddingProbeResult } from "openclaw/plugin-sdk/memory-core-host-engine-storage";
+import type { MemoryEmbeddingProbeResult } from "sunclaw/plugin-sdk/memory-core-host-engine-storage";
 import {
   resolveMemoryDreamingConfig,
   resolveMemoryRemDreamingConfig,
-} from "openclaw/plugin-sdk/memory-core-host-status";
-import { buildAgentSessionKey } from "openclaw/plugin-sdk/routing";
-import { resolvePreferredOpenClawTmpDir } from "openclaw/plugin-sdk/temp-path";
+} from "sunclaw/plugin-sdk/memory-core-host-status";
+import { buildAgentSessionKey } from "sunclaw/plugin-sdk/routing";
+import { resolvePreferredSunClawTmpDir } from "sunclaw/plugin-sdk/temp-path";
 import {
   colorize,
   defaultRuntime,
@@ -26,7 +26,7 @@ import {
   shortenHomeInString,
   shortenHomePath,
   theme,
-  type OpenClawConfig,
+  type SunClawConfig,
   withManager,
   withProgress,
   withProgressTotals,
@@ -89,7 +89,7 @@ function formatMemoryIndexIdentityWarning(
   }
   return {
     reason,
-    fix: `Run: openclaw memory status --index --agent ${agentId}`,
+    fix: `Run: sunclaw memory status --index --agent ${agentId}`,
   };
 }
 
@@ -106,7 +106,7 @@ type MemorySourceScan = {
 };
 
 type LoadedMemoryCommandConfig = {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   diagnostics: string[];
 };
 
@@ -147,7 +147,7 @@ function emitMemorySecretResolveDiagnostics(
   }
 }
 
-function resolveMemoryPluginConfig(cfg: OpenClawConfig): Record<string, unknown> {
+function resolveMemoryPluginConfig(cfg: SunClawConfig): Record<string, unknown> {
   const entry = asRecord(cfg.plugins?.entries?.["memory-core"]);
   return asRecord(entry?.config) ?? {};
 }
@@ -193,7 +193,7 @@ async function createHistoricalRemHarnessWorkspace(params: {
 }> {
   const sourceFiles = await listHistoricalDailyFiles(params.inputPath);
   const workspaceDir = await fs.mkdtemp(
-    path.join(resolvePreferredOpenClawTmpDir(), "openclaw-rem-harness-"),
+    path.join(resolvePreferredSunClawTmpDir(), "sunclaw-rem-harness-"),
   );
   const memoryDir = path.join(workspaceDir, "memory");
   await fs.mkdir(memoryDir, { recursive: true });
@@ -220,7 +220,7 @@ async function createHistoricalRemHarnessWorkspace(params: {
   };
 }
 
-function formatDreamingSummary(cfg: OpenClawConfig): string {
+function formatDreamingSummary(cfg: SunClawConfig): string {
   const pluginConfig = resolveMemoryPluginConfig(cfg);
   const dreaming = resolveShortTermPromotionDreamingConfig({ pluginConfig, cfg });
   if (!dreaming.enabled) {
@@ -315,7 +315,7 @@ function formatSourceLabel(source: string, workspaceDir: string, agentId: string
   return source;
 }
 
-function resolveAgent(cfg: OpenClawConfig, agent?: string) {
+function resolveAgent(cfg: SunClawConfig, agent?: string) {
   const trimmed = agent?.trim();
   if (trimmed) {
     return trimmed;
@@ -332,7 +332,7 @@ function buildCliMemorySearchSessionKey(agentId: string): string {
   });
 }
 
-function resolveAgentIds(cfg: OpenClawConfig, agent?: string): string[] {
+function resolveAgentIds(cfg: SunClawConfig, agent?: string): string[] {
   const trimmed = agent?.trim();
   if (trimmed) {
     return [trimmed];
@@ -479,7 +479,7 @@ function matchesPromotionSelector(
 }
 
 async function withMemoryManagerForAgent(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   agentId: string;
   purpose?: MemoryManagerPurpose;
   run: (manager: MemoryManager) => Promise<void>;
@@ -1046,7 +1046,7 @@ export async function runMemoryStatus(opts: MemoryCommandOptions) {
         lines.push(`  ${issue.severity === "error" ? warn(issue.message) : muted(issue.message)}`);
       }
       if (!opts.fix) {
-        lines.push(`  ${muted(`Fix: openclaw memory status --fix --agent ${agentId}`)}`);
+        lines.push(`  ${muted(`Fix: sunclaw memory status --fix --agent ${agentId}`)}`);
       }
     }
     if (dreamingAudit?.issues.length) {
@@ -1057,7 +1057,7 @@ export async function runMemoryStatus(opts: MemoryCommandOptions) {
         lines.push(`  ${issue.severity === "error" ? warn(issue.message) : muted(issue.message)}`);
       }
       if (!opts.fix) {
-        lines.push(`  ${muted(`Fix: openclaw memory status --fix --agent ${agentId}`)}`);
+        lines.push(`  ${muted(`Fix: sunclaw memory status --fix --agent ${agentId}`)}`);
       }
     }
     defaultRuntime.log(lines.join("\n"));
@@ -1879,7 +1879,7 @@ export async function runMemoryRemBackfill(opts: MemoryRemBackfillOptions) {
       }
 
       const scratchDir = await fs.mkdtemp(
-        path.join(resolvePreferredOpenClawTmpDir(), "openclaw-rem-backfill-"),
+        path.join(resolvePreferredSunClawTmpDir(), "sunclaw-rem-backfill-"),
       );
       try {
         const sourceFiles = await listHistoricalDailyFiles(opts.path);

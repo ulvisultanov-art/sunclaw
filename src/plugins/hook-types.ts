@@ -6,7 +6,7 @@ import type {
   ReplyDispatcher,
 } from "../auto-reply/reply/reply-dispatcher.types.js";
 import type { FinalizedMsgContext } from "../auto-reply/templating.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type { TtsAutoMode } from "../config/types.tts.js";
 import type { DiagnosticTraceContext } from "../infra/diagnostic-trace-context.js";
 import type {
@@ -457,7 +457,7 @@ export type PluginHookReplyDispatchEvent = {
 };
 
 export type PluginHookReplyDispatchContext = {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   dispatcher: ReplyDispatcher;
   abortSignal?: AbortSignal;
   onReplyStart?: () => Promise<void> | void;
@@ -677,7 +677,7 @@ export type PluginHookSubagentSpawningResult =
       /**
        * @deprecated Core now resolves thread-bound spawn routing from session
        * bindings and channel route projection. Keep returning this only for
-       * compatibility with older OpenClaw runtimes.
+       * compatibility with older SunClaw runtimes.
        */
       threadBindingReady?: boolean;
       /**
@@ -747,7 +747,7 @@ export type PluginHookSubagentEndedEvent = {
 
 export type PluginHookGatewayContext = {
   port?: number;
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   workspaceDir?: string;
   getCron?: () => PluginHookGatewayCronService | undefined;
 };

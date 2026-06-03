@@ -188,7 +188,7 @@ vi.mock("../acp/runtime/errors.js", () => ({
     error instanceof Error ? error : new Error(String(error)),
 }));
 
-vi.mock("@openclaw/acp-core/runtime/session-identifiers", () => ({
+vi.mock("@sunclaw/acp-core/runtime/session-identifiers", () => ({
   resolveAcpSessionCwd: () => "/tmp",
 }));
 
@@ -912,7 +912,7 @@ function setupSessionTouchStore(): void {
   };
   state.sessionEntryMock = sessionEntry;
   state.sessionStoreMock = { "agent:main:main": sessionEntry };
-  state.storePathMock = "/tmp/openclaw-sessions.json";
+  state.storePathMock = "/tmp/sunclaw-sessions.json";
 }
 
 function expectFallbackOverrideCalls(first: boolean, second: boolean) {
@@ -1067,7 +1067,7 @@ describe("agentCommand – LiveSessionModelSwitchError retry", () => {
     state.updateSessionStoreAfterAgentRunMock.mockResolvedValue(undefined);
     state.trajectoryFlushMock.mockResolvedValue(undefined);
     state.prepareInternalSessionEffectsTranscriptMock.mockResolvedValue(
-      "/tmp/openclaw-internal-run.jsonl",
+      "/tmp/sunclaw-internal-run.jsonl",
     );
     state.removeInternalSessionEffectsTranscriptMock.mockResolvedValue(undefined);
   });
@@ -1546,7 +1546,7 @@ describe("agentCommand – LiveSessionModelSwitchError retry", () => {
     });
   });
 
-  it("does not treat backend CLI session id as OpenClaw session identity", async () => {
+  it("does not treat backend CLI session id as SunClaw session identity", async () => {
     setupSingleAttemptFallback();
     setupSessionTouchStore();
     const result = makeSuccessResult("openai", "gpt-5.4") as ReturnType<
@@ -1618,7 +1618,7 @@ describe("agentCommand – LiveSessionModelSwitchError retry", () => {
     const sessionStore: Record<string, SessionEntry> = { "agent:main:main": sessionEntry };
     state.sessionEntryMock = sessionEntry;
     state.sessionStoreMock = sessionStore;
-    state.storePathMock = "/tmp/openclaw-sessions.json";
+    state.storePathMock = "/tmp/sunclaw-sessions.json";
     state.isThinkingLevelSupportedMock.mockReturnValue(false);
     state.resolveSupportedThinkingLevelMock.mockReturnValue("off");
     state.runAgentAttemptMock.mockResolvedValue(makeSuccessResult("openai", "gpt-5.4"));
@@ -1646,7 +1646,7 @@ describe("agentCommand – LiveSessionModelSwitchError retry", () => {
     };
     state.sessionEntryMock = sessionEntry;
     state.sessionStoreMock = { "agent:main:main": sessionEntry };
-    state.storePathMock = "/tmp/openclaw-sessions.json";
+    state.storePathMock = "/tmp/sunclaw-sessions.json";
     state.deliverAgentCommandResultMock.mockResolvedValue({ deliverySucceeded: true });
 
     await agentCommand({
@@ -1681,7 +1681,7 @@ describe("agentCommand – LiveSessionModelSwitchError retry", () => {
     };
     state.sessionEntryMock = sessionEntry;
     state.sessionStoreMock = { "agent:main:main": sessionEntry };
-    state.storePathMock = "/tmp/openclaw-sessions.json";
+    state.storePathMock = "/tmp/sunclaw-sessions.json";
     state.deliverAgentCommandResultMock.mockResolvedValue({ deliverySucceeded: true });
     state.resolveAgentDeliveryPlanMock.mockReturnValueOnce({
       baseDelivery: {
@@ -1726,7 +1726,7 @@ describe("agentCommand – LiveSessionModelSwitchError retry", () => {
     };
     state.sessionEntryMock = sessionEntry;
     state.sessionStoreMock = { "agent:main:main": sessionEntry };
-    state.storePathMock = "/tmp/openclaw-sessions.json";
+    state.storePathMock = "/tmp/sunclaw-sessions.json";
     state.deliverAgentCommandResultMock.mockResolvedValue({ deliverySucceeded: true });
 
     await agentCommand({
@@ -1763,7 +1763,7 @@ describe("agentCommand – LiveSessionModelSwitchError retry", () => {
     };
     state.sessionEntryMock = sessionEntry;
     state.sessionStoreMock = { "agent:main:main": sessionEntry };
-    state.storePathMock = "/tmp/openclaw-sessions.json";
+    state.storePathMock = "/tmp/sunclaw-sessions.json";
     state.deliverAgentCommandResultMock.mockResolvedValue({ deliverySucceeded: true });
 
     await agentCommand({
@@ -1803,7 +1803,7 @@ describe("agentCommand – LiveSessionModelSwitchError retry", () => {
     };
     state.sessionEntryMock = sessionEntry;
     state.sessionStoreMock = { "agent:main:main": sessionEntry };
-    state.storePathMock = "/tmp/openclaw-sessions.json";
+    state.storePathMock = "/tmp/sunclaw-sessions.json";
     state.deliverAgentCommandResultMock.mockResolvedValue({ deliverySucceeded: true });
     state.resolveMessageChannelSelectionMock.mockResolvedValue({
       channel: "discord",
@@ -1854,7 +1854,7 @@ describe("agentCommand – LiveSessionModelSwitchError retry", () => {
     };
     state.sessionEntryMock = staleEntry;
     state.sessionStoreMock = sessionStore;
-    state.storePathMock = "/tmp/openclaw-sessions.json";
+    state.storePathMock = "/tmp/sunclaw-sessions.json";
 
     await agentCommand({
       message: "hello",
@@ -1894,7 +1894,7 @@ describe("agentCommand – LiveSessionModelSwitchError retry", () => {
     };
     state.sessionEntryMock = staleEntry;
     state.sessionStoreMock = sessionStore;
-    state.storePathMock = "/tmp/openclaw-sessions.json";
+    state.storePathMock = "/tmp/sunclaw-sessions.json";
 
     await agentCommand({
       message: "hello",
@@ -1919,7 +1919,7 @@ describe("agentCommand – LiveSessionModelSwitchError retry", () => {
     const sessionStore: Record<string, SessionEntry> = { "agent:main:main": sessionEntry };
     state.sessionEntryMock = sessionEntry;
     state.sessionStoreMock = sessionStore;
-    state.storePathMock = "/tmp/openclaw-sessions.json";
+    state.storePathMock = "/tmp/sunclaw-sessions.json";
     state.deliverAgentCommandResultMock.mockImplementation(async () => {
       const current = sessionStore["agent:main:main"];
       if (current) {
@@ -1961,7 +1961,7 @@ describe("agentCommand – LiveSessionModelSwitchError retry", () => {
     const sessionStore: Record<string, SessionEntry> = { "agent:main:main": sessionEntry };
     state.sessionEntryMock = sessionEntry;
     state.sessionStoreMock = sessionStore;
-    state.storePathMock = "/tmp/openclaw-sessions.json";
+    state.storePathMock = "/tmp/sunclaw-sessions.json";
     state.deliverAgentCommandResultMock.mockImplementation(async () => {
       delete sessionStore["agent:main:main"];
       return { deliverySucceeded: true };
@@ -1997,7 +1997,7 @@ describe("agentCommand – LiveSessionModelSwitchError retry", () => {
     const sessionStore: Record<string, SessionEntry> = { "agent:main:main": sessionEntry };
     state.sessionEntryMock = sessionEntry;
     state.sessionStoreMock = sessionStore;
-    state.storePathMock = "/tmp/openclaw-sessions.json";
+    state.storePathMock = "/tmp/sunclaw-sessions.json";
     state.deliverAgentCommandResultMock.mockImplementation(async () => {
       sessionStore["agent:main:main"] = rotatedEntry;
       return { deliverySucceeded: true };
@@ -2034,7 +2034,7 @@ describe("agentCommand – LiveSessionModelSwitchError retry", () => {
     const sessionStore: Record<string, SessionEntry> = { "agent:main:main": sessionEntry };
     state.sessionEntryMock = sessionEntry;
     state.sessionStoreMock = sessionStore;
-    state.storePathMock = "/tmp/openclaw-sessions.json";
+    state.storePathMock = "/tmp/sunclaw-sessions.json";
     state.deliverAgentCommandResultMock.mockImplementation(async () => {
       sessionStore["agent:main:main"] = laterRunEntry;
       return { deliverySucceeded: false };
@@ -2060,7 +2060,7 @@ describe("agentCommand – LiveSessionModelSwitchError retry", () => {
     };
     state.sessionEntryMock = sessionEntry;
     state.sessionStoreMock = { "agent:main:main": sessionEntry };
-    state.storePathMock = "/tmp/openclaw-sessions.json";
+    state.storePathMock = "/tmp/sunclaw-sessions.json";
     state.deliverAgentCommandResultMock.mockResolvedValue({ deliverySucceeded: false });
 
     await agentCommand({
@@ -2103,7 +2103,7 @@ describe("agentCommand – LiveSessionModelSwitchError retry", () => {
     };
     state.sessionEntryMock = sessionEntry;
     state.sessionStoreMock = { "agent:main:main": sessionEntry };
-    state.storePathMock = "/tmp/openclaw-sessions.json";
+    state.storePathMock = "/tmp/sunclaw-sessions.json";
     state.deliverAgentCommandResultMock.mockResolvedValue(undefined);
 
     await agentCommand({
@@ -2142,7 +2142,7 @@ describe("agentCommand – LiveSessionModelSwitchError retry", () => {
     const sessionStore: Record<string, SessionEntry> = { "agent:main:main": visibleEntry };
     state.sessionEntryMock = visibleEntry;
     state.sessionStoreMock = sessionStore;
-    state.storePathMock = "/tmp/openclaw-session-store.json";
+    state.storePathMock = "/tmp/sunclaw-session-store.json";
     const attemptCalls: Array<{ sessionFile?: string; sessionEntry?: SessionEntry }> = [];
     state.runAgentAttemptMock.mockImplementation(async (params) => {
       attemptCalls.push(params as { sessionFile?: string; sessionEntry?: SessionEntry });
@@ -2161,7 +2161,7 @@ describe("agentCommand – LiveSessionModelSwitchError retry", () => {
       runId: expect.any(String),
     });
     expect(attemptCalls).toHaveLength(1);
-    expect(attemptCalls[0]?.sessionFile).toBe("/tmp/openclaw-internal-run.jsonl");
+    expect(attemptCalls[0]?.sessionFile).toBe("/tmp/sunclaw-internal-run.jsonl");
     expect(attemptCalls[0]?.sessionEntry).toStrictEqual(visibleEntry);
     expect(state.persistSessionEntryMock).not.toHaveBeenCalled();
     expect(state.updateSessionStoreAfterAgentRunMock).not.toHaveBeenCalled();
@@ -2527,7 +2527,7 @@ describe("agentCommand – LiveSessionModelSwitchError retry", () => {
     state.sessionEntryMock = sessionEntry;
     const sessionStore: Record<string, SessionEntry> = { "agent:main:main": sessionEntry };
     state.sessionStoreMock = sessionStore;
-    state.storePathMock = "/tmp/openclaw-session-store.json";
+    state.storePathMock = "/tmp/sunclaw-session-store.json";
     setupModelSwitchRetry({
       provider: "openai",
       model: "gpt-5.4",
@@ -2568,7 +2568,7 @@ describe("agentCommand – LiveSessionModelSwitchError retry", () => {
     state.sessionEntryMock = sessionEntry;
     const sessionStore: Record<string, SessionEntry> = { "agent:main:main": sessionEntry };
     state.sessionStoreMock = sessionStore;
-    state.storePathMock = "/tmp/openclaw-session-store.json";
+    state.storePathMock = "/tmp/sunclaw-session-store.json";
     state.runWithModelFallbackMock.mockImplementationOnce(async (params: FallbackRunnerParams) => {
       const result = await params.run(params.provider, params.model);
       sessionStore["agent:main:main"] = {
@@ -2801,7 +2801,7 @@ describe("agentCommand – LiveSessionModelSwitchError retry", () => {
     await agentCommand({
       message: [
         INTERNAL_RUNTIME_CONTEXT_BEGIN,
-        "OpenClaw runtime context (internal):",
+        "SunClaw runtime context (internal):",
         "hidden task completion event",
         INTERNAL_RUNTIME_CONTEXT_END,
       ].join("\n"),

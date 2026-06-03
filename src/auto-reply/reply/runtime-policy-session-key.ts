@@ -1,9 +1,9 @@
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@sunclaw/normalization-core/string-coerce";
 import { normalizeChatType } from "../../channels/chat-type.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import {
   buildAgentMainSessionKey,
   buildAgentPeerSessionKey,
@@ -54,7 +54,7 @@ function resolvePolicyDirectPeerId(ctx?: RuntimePolicyContext): string | undefin
 }
 
 function isMainSessionAlias(params: {
-  cfg?: OpenClawConfig;
+  cfg?: SunClawConfig;
   agentId: string;
   sessionKey: string;
 }): boolean {
@@ -84,7 +84,7 @@ function isMainSessionAlias(params: {
 }
 
 export function resolveRuntimePolicySessionKey(params: {
-  cfg?: OpenClawConfig;
+  cfg?: SunClawConfig;
   ctx?: RuntimePolicyContext;
   sessionKey?: string | null;
 }): string | undefined {

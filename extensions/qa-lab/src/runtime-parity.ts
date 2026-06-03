@@ -1,19 +1,19 @@
 import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { fetchWithSsrFGuard } from "openclaw/plugin-sdk/ssrf-runtime";
+import { fetchWithSsrFGuard } from "sunclaw/plugin-sdk/ssrf-runtime";
 import {
   asFiniteNumber as readFiniteNumber,
   isRecord as isMessageRecord,
   normalizeOptionalString as readNonEmptyString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/string-coerce-runtime";
 import {
   scanDirectReplyTranscriptSentinels,
   scanGatewayLogSentinels,
   type GatewayLogSentinelFinding,
 } from "./gateway-log-sentinel.js";
 
-export type RuntimeId = "openclaw" | "codex";
+export type RuntimeId = "sunclaw" | "codex";
 
 export type RuntimeParityToolCall = {
   tool: string;
@@ -54,7 +54,7 @@ export type RuntimeParityDrift =
 export type RuntimeParityResult = {
   scenarioId: string;
   cells: {
-    openclaw: RuntimeParityCell;
+    sunclaw: RuntimeParityCell;
     codex: RuntimeParityCell;
   };
   drift: RuntimeParityDrift;
@@ -79,7 +79,7 @@ export function runtimeParityCellStatus(
 export function isRuntimeParityResultPass(result: RuntimeParityResult) {
   return (
     result.drift !== "failure-mode" &&
-    runtimeParityCellStatus(result.cells.openclaw) === "pass" &&
+    runtimeParityCellStatus(result.cells.sunclaw) === "pass" &&
     runtimeParityCellStatus(result.cells.codex) === "pass"
   );
 }
@@ -130,7 +130,7 @@ type RuntimeParityPendingToolCall = RuntimeParityToolCall & {
 
 const DEFAULT_AGENT_ID = "qa";
 const HEARTBEAT_RESPONSE_TOOL_NAME = "heartbeat_respond";
-const HEARTBEAT_TRANSCRIPT_PROMPT = "[OpenClaw heartbeat poll]";
+const HEARTBEAT_TRANSCRIPT_PROMPT = "[SunClaw heartbeat poll]";
 const HEARTBEAT_TASK_PROMPT_PREFIX =
   "Run the following periodic tasks (only those due based on their intervals):";
 const BOOT_STATE_LINE_RE =
@@ -760,28 +760,28 @@ function summarizeSentinelErrorClass(findings: readonly GatewayLogSentinelFindin
 }
 
 function classifyRuntimeParityCells(params: {
-  openclaw: RuntimeParityCell;
+  sunclaw: RuntimeParityCell;
   codex: RuntimeParityCell;
-  openclawScenarioStatus: "pass" | "fail";
+  sunclawScenarioStatus: "pass" | "fail";
   codexScenarioStatus: "pass" | "fail";
 }): Pick<RuntimeParityResult, "drift" | "driftDetails"> {
   if (
-    isHardFailureRuntimeError(params.openclaw.runtimeErrorClass) ||
+    isHardFailureRuntimeError(params.sunclaw.runtimeErrorClass) ||
     isHardFailureRuntimeError(params.codex.runtimeErrorClass) ||
-    params.openclaw.transportErrorClass ||
+    params.sunclaw.transportErrorClass ||
     params.codex.transportErrorClass
   ) {
     return {
       drift: "failure-mode",
       driftDetails:
-        params.openclaw.transportErrorClass || params.codex.transportErrorClass
+        params.sunclaw.transportErrorClass || params.codex.transportErrorClass
           ? "at least one runtime hit a transport failure"
           : "at least one runtime hit a hard runtime failure",
     };
   }
 
   const toolCallShapeDetails = compareToolCallShape(
-    params.openclaw.toolCalls,
+    params.sunclaw.toolCalls,
     params.codex.toolCalls,
   );
   if (toolCallShapeDetails) {
@@ -789,47 +789,47 @@ function classifyRuntimeParityCells(params: {
   }
 
   const toolResultShapeDetails = compareToolResultShape(
-    params.openclaw.toolCalls,
+    params.sunclaw.toolCalls,
     params.codex.toolCalls,
   );
   if (toolResultShapeDetails) {
     return { drift: "tool-result-shape", driftDetails: toolResultShapeDetails };
   }
 
-  const openclawTranscriptLines = params.openclaw.transcriptBytes.trim().length
-    ? params.openclaw.transcriptBytes.trim().split(/\r?\n/u).length
+  const sunclawTranscriptLines = params.sunclaw.transcriptBytes.trim().length
+    ? params.sunclaw.transcriptBytes.trim().split(/\r?\n/u).length
     : 0;
   const codexTranscriptLines = params.codex.transcriptBytes.trim().length
     ? params.codex.transcriptBytes.trim().split(/\r?\n/u).length
     : 0;
   if (
-    openclawTranscriptLines !== codexTranscriptLines ||
-    (!params.openclaw.finalText && Boolean(params.codex.finalText)) ||
-    (Boolean(params.openclaw.finalText) && !params.codex.finalText)
+    sunclawTranscriptLines !== codexTranscriptLines ||
+    (!params.sunclaw.finalText && Boolean(params.codex.finalText)) ||
+    (Boolean(params.sunclaw.finalText) && !params.codex.finalText)
   ) {
     return {
       drift: "structural",
-      driftDetails: `transcript/final-text structure differs (${openclawTranscriptLines} lines vs ${codexTranscriptLines})`,
+      driftDetails: `transcript/final-text structure differs (${sunclawTranscriptLines} lines vs ${codexTranscriptLines})`,
     };
   }
 
   if (
-    params.openclawScenarioStatus === "fail" ||
+    params.sunclawScenarioStatus === "fail" ||
     params.codexScenarioStatus === "fail" ||
-    params.openclaw.runtimeErrorClass ||
+    params.sunclaw.runtimeErrorClass ||
     params.codex.runtimeErrorClass
   ) {
     return {
       drift: "failure-mode",
       driftDetails:
-        params.openclawScenarioStatus === params.codexScenarioStatus
+        params.sunclawScenarioStatus === params.codexScenarioStatus
           ? "at least one runtime failed"
-          : `scenario status differs (${params.openclawScenarioStatus} vs ${params.codexScenarioStatus})`,
+          : `scenario status differs (${params.sunclawScenarioStatus} vs ${params.codexScenarioStatus})`,
     };
   }
 
   if (
-    normalizeTextForParity(params.openclaw.finalText) ===
+    normalizeTextForParity(params.sunclaw.finalText) ===
     normalizeTextForParity(params.codex.finalText)
   ) {
     return { drift: "none" };
@@ -1006,18 +1006,18 @@ export async function runRuntimeParityScenario(params: {
   scenarioId: string;
   runCell: (runtime: RuntimeId) => Promise<RuntimeParityScenarioExecution>;
 }): Promise<RuntimeParityResult> {
-  const openclaw = await params.runCell("openclaw");
+  const sunclaw = await params.runCell("sunclaw");
   const codex = await params.runCell("codex");
   const drift = classifyRuntimeParityCells({
-    openclaw: openclaw.cell,
+    sunclaw: sunclaw.cell,
     codex: codex.cell,
-    openclawScenarioStatus: openclaw.scenarioStatus,
+    sunclawScenarioStatus: sunclaw.scenarioStatus,
     codexScenarioStatus: codex.scenarioStatus,
   });
   return {
     scenarioId: params.scenarioId,
     cells: {
-      openclaw: openclaw.cell,
+      sunclaw: sunclaw.cell,
       codex: codex.cell,
     },
     drift: drift.drift,

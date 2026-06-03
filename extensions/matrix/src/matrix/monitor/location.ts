@@ -1,8 +1,8 @@
-import { parseStrictFiniteNumber } from "openclaw/plugin-sdk/number-runtime";
+import { parseStrictFiniteNumber } from "sunclaw/plugin-sdk/number-runtime";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/string-coerce-runtime";
 import type { LocationMessageEventContent } from "../sdk.js";
 import { formatLocationText, toLocationContext, type NormalizedLocation } from "./runtime-api.js";
 import { EventType } from "./types.js";

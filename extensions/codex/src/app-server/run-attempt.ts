@@ -33,18 +33,18 @@ import {
   type EmbeddedRunAttemptResult,
   type NativeHookRelayEvent,
   type NativeHookRelayRegistrationHandle,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
-import { resolveAgentDir } from "openclaw/plugin-sdk/agent-runtime";
+} from "sunclaw/plugin-sdk/agent-harness-runtime";
+import { resolveAgentDir } from "sunclaw/plugin-sdk/agent-runtime";
 import {
   createDiagnosticTraceContextFromActiveScope,
   emitTrustedDiagnosticEvent,
   freezeDiagnosticTraceContext,
   onInternalDiagnosticEvent,
   resolveDiagnosticModelContentCapturePolicy,
-} from "openclaw/plugin-sdk/diagnostic-runtime";
-import { loadExecApprovals } from "openclaw/plugin-sdk/exec-approvals-runtime";
-import { pathExists } from "openclaw/plugin-sdk/security-runtime";
-import { resolveCodexAppServerForOpenClawToolPolicy } from "./app-server-policy.js";
+} from "sunclaw/plugin-sdk/diagnostic-runtime";
+import { loadExecApprovals } from "sunclaw/plugin-sdk/exec-approvals-runtime";
+import { pathExists } from "sunclaw/plugin-sdk/security-runtime";
+import { resolveCodexAppServerForSunClawToolPolicy } from "./app-server-policy.js";
 import { handleCodexAppServerApprovalRequest } from "./approval-bridge.js";
 import {
   CODEX_APP_SERVER_INTERRUPT_TIMEOUT_MS,
@@ -54,11 +54,11 @@ import {
   unsubscribeCodexThreadBestEffort,
 } from "./attempt-client-cleanup.js";
 import {
-  buildCodexOpenClawPromptContext,
+  buildCodexSunClawPromptContext,
   buildCodexSystemPromptReport,
   buildCodexWorkspaceBootstrapContext,
   getCodexWorkspaceMemoryToolNames,
-  prependCodexOpenClawPromptContext,
+  prependCodexSunClawPromptContext,
   readContextEngineThreadBootstrapProjection,
   readMirroredSessionHistoryMessages,
   renderCodexSkillsCollaborationInstructions,
@@ -122,7 +122,7 @@ import {
   readCodexPluginConfig,
   resolveCodexComputerUseConfig,
   resolveCodexAppServerRuntimeOptions,
-  resolveOpenClawExecPolicyForCodexAppServer,
+  resolveSunClawExecPolicyForCodexAppServer,
   shouldAutoApproveCodexAppServerApprovals,
   type CodexAppServerRuntimeOptions,
 } from "./config.js";
@@ -139,9 +139,9 @@ import {
   includeForcedCodexDynamicToolAllow,
   isCodexNativeExecutionBlockedByNodeExecHost,
   resolveCodexAppServerHookChannelId,
-  resolveOpenClawCodingToolsSessionKeys,
-  resetOpenClawCodingToolsFactoryForTests,
-  setOpenClawCodingToolsFactoryForTests,
+  resolveSunClawCodingToolsSessionKeys,
+  resetSunClawCodingToolsFactoryForTests,
+  setSunClawCodingToolsFactoryForTests,
   shouldEnableCodexAppServerNativeToolSurface,
   shouldForceMessageTool,
   shouldWarnCodexDynamicToolBuildStageSummary,
@@ -378,7 +378,7 @@ export async function runCodexAppServerAttempt(
     workspaceDir: resolvedWorkspace,
   });
   preDynamicStartupStages.mark("sandbox");
-  const execPolicy = resolveOpenClawExecPolicyForCodexAppServer({
+  const execPolicy = resolveSunClawExecPolicyForCodexAppServer({
     execOverrides: params.execOverrides,
     approvals: loadExecApprovals(),
     config: params.config,
@@ -387,7 +387,7 @@ export async function runCodexAppServerAttempt(
   const configuredAppServer = resolveCodexAppServerRuntimeOptions({
     pluginConfig,
     execPolicy,
-    openClawSandboxActive: sandbox?.enabled === true,
+    sunClawSandboxActive: sandbox?.enabled === true,
   });
   const effectiveWorkspace = sandbox?.enabled
     ? sandbox.workspaceAccess === "rw"
@@ -403,7 +403,7 @@ export async function runCodexAppServerAttempt(
   const effectiveCwd = sandbox?.enabled ? effectiveWorkspace : (requestedCwd ?? effectiveWorkspace);
   await ensureCodexWorkspaceDirOnce(effectiveWorkspace);
   preDynamicStartupStages.mark("effective-workspace");
-  const appServer = resolveCodexAppServerForOpenClawToolPolicy({
+  const appServer = resolveCodexAppServerForSunClawToolPolicy({
     appServer: configuredAppServer,
     pluginConfig,
     env: process.env,
@@ -416,7 +416,7 @@ export async function runCodexAppServerAttempt(
       isCodexAppServerApprovalPolicyAllowedByRequirements("untrusted"),
   });
   if (configuredAppServer.approvalPolicy === "never" && appServer.approvalPolicy === "untrusted") {
-    embeddedAgentLog.info("codex app-server approval policy promoted for OpenClaw tool policy", {
+    embeddedAgentLog.info("codex app-server approval policy promoted for SunClaw tool policy", {
       from: "never",
       to: "untrusted",
       beforeToolCallHook: beforeToolCallPolicy.hasBeforeToolCallHook,
@@ -676,7 +676,7 @@ export async function runCodexAppServerAttempt(
     }),
     workspaceBootstrapContext.developerInstructions,
   );
-  const openClawPromptContext = buildCodexOpenClawPromptContext({
+  const sunClawPromptContext = buildCodexSunClawPromptContext({
     params,
     workspacePromptContext: workspaceBootstrapContext.promptContext,
   });
@@ -786,7 +786,7 @@ export async function runCodexAppServerAttempt(
     }
   }
   // Codex app-server threads own conversation continuity. The mirrored
-  // OpenClaw transcript is persistence/search state. Context-engine output is
+  // SunClaw transcript is persistence/search state. Context-engine output is
   // rendered into the prompt/developer instructions, not parallel history.
   const codexModelInputHistoryMessages: typeof historyMessages = [];
   const buildPromptFromCurrentInputs = () =>
@@ -798,7 +798,7 @@ export async function runCodexAppServerAttempt(
     });
   let promptBuild = await buildPromptFromCurrentInputs();
   const decorateCodexTurnPromptText = (prompt: string) =>
-    prependCodexOpenClawPromptContext(prompt, openClawPromptContext, {
+    prependCodexSunClawPromptContext(prompt, sunClawPromptContext, {
       preservePromptWithoutContext:
         params.bootstrapContextMode === "lightweight" && params.bootstrapContextRunKind === "cron",
     });
@@ -844,7 +844,7 @@ export async function runCodexAppServerAttempt(
       if (typeof idempotencyKey === "string" && idempotencyKey.startsWith("codex-app-server:")) {
         return false;
       }
-      const meta = record["__openclaw"];
+      const meta = record["__sunclaw"];
       const mirrorIdentity =
         meta && typeof meta === "object" && !Array.isArray(meta)
           ? (meta as Record<string, unknown>).mirrorIdentity
@@ -1159,7 +1159,7 @@ export async function runCodexAppServerAttempt(
   const turnAttemptIdleTimeoutMs = Math.max(100, Math.floor(params.timeoutMs));
   let nativeHookRelayLastRenewedAt = 0;
   let activeAppServerTurnRequests = 0;
-  const pendingOpenClawDynamicToolCompletionIds = new Set<string>();
+  const pendingSunClawDynamicToolCompletionIds = new Set<string>();
   const activeTurnItemIds = new Set<string>();
   let turnCrossedToolHandoff = false;
   let pendingTerminalDynamicToolRelease:
@@ -1263,7 +1263,7 @@ export async function runCodexAppServerAttempt(
         currentTurnHadNonTerminalDynamicToolResult,
         activeAppServerTurnRequests,
         activeTurnItemIdsCount: activeTurnItemIds.size,
-        pendingOpenClawDynamicToolCompletionIdsCount: pendingOpenClawDynamicToolCompletionIds.size,
+        pendingSunClawDynamicToolCompletionIdsCount: pendingSunClawDynamicToolCompletionIds.size,
       })
     ) {
       return;
@@ -1309,7 +1309,7 @@ export async function runCodexAppServerAttempt(
       const action = resolveTerminalDynamicToolBatchAction({
         activeAppServerTurnRequests,
         activeTurnItemIdsCount: activeTurnItemIds.size,
-        pendingOpenClawDynamicToolCompletionIdsCount: pendingOpenClawDynamicToolCompletionIds.size,
+        pendingSunClawDynamicToolCompletionIdsCount: pendingSunClawDynamicToolCompletionIds.size,
         currentTurnHadNonTerminalDynamicToolResult,
         hasPendingTerminalDynamicToolRelease: pendingTerminalDynamicToolRelease !== undefined,
       });
@@ -1407,7 +1407,7 @@ export async function runCodexAppServerAttempt(
       turnWatches,
       activeTurnItemIds,
       activeAppServerTurnRequests,
-      pendingOpenClawDynamicToolCompletionIds,
+      pendingSunClawDynamicToolCompletionIds,
       turnCrossedToolHandoff,
       postToolRawAssistantCompletionIdleTimeoutMs,
       onScheduleTerminalDynamicToolReleaseCheck: scheduleTerminalDynamicToolReleaseCheck,
@@ -1416,7 +1416,7 @@ export async function runCodexAppServerAttempt(
     turnCrossedToolHandoff = notificationState.turnCrossedToolHandoff;
     // Determine terminal-turn status before invoking the projector so a throw
     // inside projector.handleNotification still releases the session lane.
-    // See openclaw/openclaw#67996.
+    // See sunclaw/sunclaw#67996.
     if (notificationState.isTurnTerminal) {
       terminalTurnNotificationQueued = true;
     }
@@ -1601,7 +1601,7 @@ export async function runCodexAppServerAttempt(
       armCompletionWatchOnResponse = true;
       markCurrentTurnRequestProgress();
       turnCrossedToolHandoff = true;
-      pendingOpenClawDynamicToolCompletionIds.add(call.callId);
+      pendingSunClawDynamicToolCompletionIds.add(call.callId);
       trajectoryRecorder?.recordEvent("tool.call", {
         threadId: call.threadId,
         turnId: call.turnId,
@@ -1730,7 +1730,7 @@ export async function runCodexAppServerAttempt(
             durationMs: toolDurationMs,
           });
         }
-        pendingOpenClawDynamicToolCompletionIds.delete(call.callId);
+        pendingSunClawDynamicToolCompletionIds.delete(call.callId);
         if (response.terminate === true) {
           scheduleTurnReleaseAfterTerminalDynamicTool({
             call,
@@ -1745,7 +1745,7 @@ export async function runCodexAppServerAttempt(
         }
         return protocolResponse as JsonValue;
       } catch (error) {
-        pendingOpenClawDynamicToolCompletionIds.delete(call.callId);
+        pendingSunClawDynamicToolCompletionIds.delete(call.callId);
         if (
           !terminalDiagnosticObserved &&
           !hasPendingDynamicToolTerminalDiagnostic({
@@ -1894,8 +1894,8 @@ export async function runCodexAppServerAttempt(
       }) &&
       restartContextEngineCodexThread
     ) {
-      // Do not try to pre-compact or summarize through OpenClaw here. Codex owns
-      // automatic compaction; OpenClaw may only discard a stale projection thread
+      // Do not try to pre-compact or summarize through SunClaw here. Codex owns
+      // automatic compaction; SunClaw may only discard a stale projection thread
       // and let Codex start cleanly.
       embeddedAgentLog.warn(
         "codex app-server context-engine turn overflowed on resume; retrying with fresh thread",
@@ -2675,13 +2675,13 @@ export const testing = {
   resolveCodexDynamicToolsLoadingForModel,
   resolveCodexAppServerHookChannelId,
   buildCodexAppServerPromptTimeoutOutcome,
-  resolveOpenClawCodingToolsSessionKeys,
+  resolveSunClawCodingToolsSessionKeys,
   shouldEnableCodexAppServerNativeToolSurface,
   shouldForceMessageTool,
   hasPendingDynamicToolTerminalDiagnostic,
   withCodexStartupTimeout,
-  setOpenClawCodingToolsFactoryForTests,
-  resetOpenClawCodingToolsFactoryForTests,
+  setSunClawCodingToolsFactoryForTests,
+  resetSunClawCodingToolsFactoryForTests,
   async ensureCodexWorkspaceDirOnceForTests(workspaceDir: string): Promise<void> {
     await ensureCodexWorkspaceDirOnce(workspaceDir);
   },

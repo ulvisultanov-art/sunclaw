@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
-import { isLoopbackIpAddress } from "@openclaw/net-policy/ip";
-import { redactSensitiveUrlLikeString } from "@openclaw/net-policy/redact-sensitive-url";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { isLoopbackIpAddress } from "@sunclaw/net-policy/ip";
+import { redactSensitiveUrlLikeString } from "@sunclaw/net-policy/redact-sensitive-url";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
 import {
   GATEWAY_CLIENT_MODES,
   GATEWAY_CLIENT_NAMES,
@@ -18,7 +18,7 @@ import {
   resolveGatewayPort as resolveGatewayPortFromPaths,
   resolveStateDir as resolveStateDirFromPaths,
 } from "../config/paths.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { loadDeviceAuthToken } from "../infra/device-auth-store.js";
 import { loadOrCreateDeviceIdentity, type DeviceIdentity } from "../infra/device-identity.js";
 import { loadGatewayTlsRuntime } from "../infra/tls/gateway.js";
@@ -66,7 +66,7 @@ type CallGatewayBaseOptions = {
   token?: string;
   password?: string;
   tlsFingerprint?: string;
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   method: string;
   params?: unknown;
   expectFinal?: boolean;
@@ -251,8 +251,8 @@ export function isGatewayExplicitAuthRequiredError(
 }
 
 const defaultCreateGatewayClient = (opts: GatewayClientOptions) => new GatewayClient(opts);
-type GatewayRuntimeConfigLoader = () => OpenClawConfig | Promise<OpenClawConfig>;
-const defaultGetRuntimeConfig = async (): Promise<OpenClawConfig> =>
+type GatewayRuntimeConfigLoader = () => SunClawConfig | Promise<SunClawConfig>;
+const defaultGetRuntimeConfig = async (): Promise<SunClawConfig> =>
   (await import("../config/io.js")).getRuntimeConfig();
 const defaultGatewayCallDeps: {
   createGatewayClient: typeof defaultCreateGatewayClient;
@@ -298,7 +298,7 @@ function resolveGatewayClientDisplayName(opts: CallGatewayBaseOptions): string |
   return method ? `gateway:${method}` : "gateway:request";
 }
 
-async function loadGatewayConfig(): Promise<OpenClawConfig> {
+async function loadGatewayConfig(): Promise<SunClawConfig> {
   const loadConfigFn =
     typeof gatewayCallDeps.getRuntimeConfig === "function"
       ? gatewayCallDeps.getRuntimeConfig
@@ -308,16 +308,16 @@ async function loadGatewayConfig(): Promise<OpenClawConfig> {
   return await loadConfigFn();
 }
 
-function loadGatewayConfigForConnectionDetails(): OpenClawConfig {
+function loadGatewayConfigForConnectionDetails(): SunClawConfig {
   if (
     gatewayCallDeps.getRuntimeConfig !== defaultGetRuntimeConfig &&
     typeof gatewayCallDeps.getRuntimeConfig === "function"
   ) {
     const config = gatewayCallDeps.getRuntimeConfig();
-    if (config && typeof (config as Promise<OpenClawConfig>).then === "function") {
+    if (config && typeof (config as Promise<SunClawConfig>).then === "function") {
       throw new Error("async gateway config loader is not supported for connection details");
     }
-    return config as OpenClawConfig;
+    return config as SunClawConfig;
   }
   return readGatewayDispatchConfig();
 }
@@ -338,7 +338,7 @@ function resolveGatewayConfigPath(env: NodeJS.ProcessEnv): string {
   return resolveConfigPathFn(env, resolveGatewayStateDir(env));
 }
 
-function resolveGatewayPortValue(config?: OpenClawConfig, env?: NodeJS.ProcessEnv): number {
+function resolveGatewayPortValue(config?: SunClawConfig, env?: NodeJS.ProcessEnv): number {
   const resolveGatewayPortFn =
     typeof gatewayCallDeps.resolveGatewayPort === "function"
       ? gatewayCallDeps.resolveGatewayPort
@@ -348,7 +348,7 @@ function resolveGatewayPortValue(config?: OpenClawConfig, env?: NodeJS.ProcessEn
 
 export function buildGatewayConnectionDetails(
   options: {
-    config?: OpenClawConfig;
+    config?: SunClawConfig;
     url?: string;
     configPath?: string;
     urlSource?: "cli" | "env";
@@ -459,7 +459,7 @@ function hasStoredOperatorDeviceAuthToken(deviceIdentity: DeviceIdentity | null)
   }
 }
 
-function resolveGatewayCallAuth(config: OpenClawConfig) {
+function resolveGatewayCallAuth(config: SunClawConfig) {
   return resolveGatewayAuth({
     authConfig: config.gateway?.auth,
     env: process.env,
@@ -552,7 +552,7 @@ type GatewayRemoteSettings = {
 };
 
 type ResolvedGatewayCallContext = {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   configPath: string;
   isRemoteMode: boolean;
   remote?: GatewayRemoteSettings;
@@ -581,8 +581,8 @@ function resolveGatewayCallTimeout(
     Number.isFinite(configuredHandshakeTimeoutMs) &&
     configuredHandshakeTimeoutMs > 0;
   const hasEnvHandshakeTimeout =
-    Boolean(process.env.OPENCLAW_HANDSHAKE_TIMEOUT_MS) ||
-    Boolean(process.env.VITEST && process.env.OPENCLAW_TEST_HANDSHAKE_TIMEOUT_MS);
+    Boolean(process.env.SUNCLAW_HANDSHAKE_TIMEOUT_MS) ||
+    Boolean(process.env.VITEST && process.env.SUNCLAW_TEST_HANDSHAKE_TIMEOUT_MS);
   const resolvedHandshakeTimeoutMs =
     hasConfiguredHandshakeTimeout || hasEnvHandshakeTimeout
       ? resolvePreauthHandshakeTimeoutMs({ configuredTimeoutMs: configuredHandshakeTimeoutMs })
@@ -604,7 +604,7 @@ async function resolveGatewayCallContext(
   const explicitAuth = resolveExplicitGatewayAuth({ token: opts.token, password: opts.password });
   const envUrlOverride = cliUrlOverride
     ? undefined
-    : trimToUndefined(process.env.OPENCLAW_GATEWAY_URL);
+    : trimToUndefined(process.env.SUNCLAW_GATEWAY_URL);
   const urlOverride = cliUrlOverride ?? envUrlOverride;
   const urlOverrideSource = cliUrlOverride ? "cli" : envUrlOverride ? "env" : undefined;
   const canSkipConfigLoad = canSkipGatewayConfigLoad({
@@ -613,7 +613,7 @@ async function resolveGatewayCallContext(
     explicitAuth,
   });
   const config =
-    opts.config ?? (canSkipConfigLoad ? ({} as OpenClawConfig) : await loadGatewayConfig());
+    opts.config ?? (canSkipConfigLoad ? ({} as SunClawConfig) : await loadGatewayConfig());
   const configPath = opts.configPath ?? resolveGatewayConfigPath(process.env);
   const isRemoteMode = config.gateway?.mode === "remote";
   const remote = isRemoteMode
@@ -729,7 +729,7 @@ function formatGatewayCloseError(
       "\n- Gateway not yet ready to accept connections (retry after a moment)" +
       "\n- TLS mismatch (connecting with ws:// to a wss:// gateway, or vice versa)" +
       "\n- Gateway crashed or was terminated unexpectedly" +
-      "\nRun `openclaw doctor` for diagnostics.";
+      "\nRun `sunclaw doctor` for diagnostics.";
   }
   return message;
 }

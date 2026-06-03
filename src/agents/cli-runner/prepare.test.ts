@@ -1,9 +1,9 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { CURRENT_SESSION_VERSION } from "openclaw/plugin-sdk/agent-sessions";
+import { CURRENT_SESSION_VERSION } from "sunclaw/plugin-sdk/agent-sessions";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { registerLegacyContextEngine } from "../../context-engine/legacy.registration.js";
 import {
   registerContextEngine,
@@ -84,27 +84,27 @@ const mockBuildActiveMusicGenerationTaskPromptContextForSession = vi.mocked(
 );
 
 function wrappedPluginSystemContext(text: string): string {
-  return `---\n\nOpenClaw plugin-injected system context. This block is not workspace file content.\n\n${text}\n\n---`;
+  return `---\n\nSunClaw plugin-injected system context. This block is not workspace file content.\n\n${text}\n\n---`;
 }
 
 function createTestMcpLoopbackServerConfig(port: number) {
   return {
     mcpServers: {
-      openclaw: {
+      sunclaw: {
         type: "http",
         url: `http://127.0.0.1:${port}/mcp`,
         headers: {
-          Authorization: "Bearer ${OPENCLAW_MCP_TOKEN}",
-          "x-session-key": "${OPENCLAW_MCP_SESSION_KEY}",
-          "x-openclaw-agent-id": "${OPENCLAW_MCP_AGENT_ID}",
-          "x-openclaw-account-id": "${OPENCLAW_MCP_ACCOUNT_ID}",
-          "x-openclaw-message-channel": "${OPENCLAW_MCP_MESSAGE_CHANNEL}",
-          "x-openclaw-current-channel-id": "${OPENCLAW_MCP_CURRENT_CHANNEL_ID}",
-          "x-openclaw-current-thread-ts": "${OPENCLAW_MCP_CURRENT_THREAD_TS}",
-          "x-openclaw-current-message-id": "${OPENCLAW_MCP_CURRENT_MESSAGE_ID}",
-          "x-openclaw-current-inbound-audio": "${OPENCLAW_MCP_CURRENT_INBOUND_AUDIO}",
-          "x-openclaw-inbound-event-kind": "${OPENCLAW_MCP_INBOUND_EVENT_KIND}",
-          "x-openclaw-source-reply-delivery-mode": "${OPENCLAW_MCP_SOURCE_REPLY_DELIVERY_MODE}",
+          Authorization: "Bearer ${SUNCLAW_MCP_TOKEN}",
+          "x-session-key": "${SUNCLAW_MCP_SESSION_KEY}",
+          "x-sunclaw-agent-id": "${SUNCLAW_MCP_AGENT_ID}",
+          "x-sunclaw-account-id": "${SUNCLAW_MCP_ACCOUNT_ID}",
+          "x-sunclaw-message-channel": "${SUNCLAW_MCP_MESSAGE_CHANNEL}",
+          "x-sunclaw-current-channel-id": "${SUNCLAW_MCP_CURRENT_CHANNEL_ID}",
+          "x-sunclaw-current-thread-ts": "${SUNCLAW_MCP_CURRENT_THREAD_TS}",
+          "x-sunclaw-current-message-id": "${SUNCLAW_MCP_CURRENT_MESSAGE_ID}",
+          "x-sunclaw-current-inbound-audio": "${SUNCLAW_MCP_CURRENT_INBOUND_AUDIO}",
+          "x-sunclaw-inbound-event-kind": "${SUNCLAW_MCP_INBOUND_EVENT_KIND}",
+          "x-sunclaw-source-reply-delivery-mode": "${SUNCLAW_MCP_SOURCE_REPLY_DELIVERY_MODE}",
         },
       },
     },
@@ -123,7 +123,7 @@ function createCliBackendConfig(
     bundleMcp?: boolean;
     reseedFromRawTranscriptWhenUncompacted?: boolean;
   } = {},
-): OpenClawConfig {
+): SunClawConfig {
   return {
     agents: {
       defaults: {
@@ -146,7 +146,7 @@ function createCliBackendConfig(
         },
       },
     },
-  } satisfies OpenClawConfig;
+  } satisfies SunClawConfig;
 }
 
 function setClaudeCliBackendForPrepareTest() {
@@ -171,8 +171,8 @@ function setClaudeCliBackendForPrepareTest() {
 }
 
 function createSessionFile() {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-cli-prepare-"));
-  vi.stubEnv("OPENCLAW_STATE_DIR", dir);
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "sunclaw-cli-prepare-"));
+  vi.stubEnv("SUNCLAW_STATE_DIR", dir);
   const sessionFile = path.join(dir, "agents", "main", "sessions", "session-test.jsonl");
   fs.mkdirSync(path.dirname(sessionFile), { recursive: true });
   fs.writeFileSync(
@@ -230,7 +230,7 @@ describe("shouldSkipLocalCliCredentialEpoch", () => {
         senderIsOwner ? runtime.ownerToken : runtime.nonOwnerToken,
       ),
       resolveMcpLoopbackScopedTools: vi.fn(() => ({ agentId: "main", tools: [] })),
-      resolveOpenClawReferencePaths: vi.fn(async () => ({ docsPath: null, sourcePath: null })),
+      resolveSunClawReferencePaths: vi.fn(async () => ({ docsPath: null, sourcePath: null })),
       prepareClaudeCliSkillsPlugin: vi.fn(async () => ({
         args: [],
         cleanup: vi.fn(async () => undefined),
@@ -479,7 +479,7 @@ describe("shouldSkipLocalCliCredentialEpoch", () => {
         trigger: "user",
         sessionFile,
         workspaceDir: dir,
-        prompt: "[OpenClaw room event]",
+        prompt: "[SunClaw room event]",
         currentInboundEventKind: "room_event",
         currentInboundContext: {
           text: "Room context:\nAlice: lunch?\n\nCurrent event:\nBob: yes",
@@ -498,9 +498,9 @@ describe("shouldSkipLocalCliCredentialEpoch", () => {
       });
 
       expect(context.reusableCliSession).toEqual({ sessionId: "cli-session" });
-      expect(context.params.prompt).toBe("Current event:\nBob: yes\n\n[OpenClaw room event]");
-      expect(context.openClawHistoryPrompt).toContain("Room context:\nAlice: lunch?");
-      expect(context.openClawHistoryPrompt).toContain("Current event:\nBob: yes");
+      expect(context.params.prompt).toBe("Current event:\nBob: yes\n\n[SunClaw room event]");
+      expect(context.sunClawHistoryPrompt).toContain("Room context:\nAlice: lunch?");
+      expect(context.sunClawHistoryPrompt).toContain("Current event:\nBob: yes");
     } finally {
       fs.rmSync(dir, { recursive: true, force: true });
     }
@@ -669,7 +669,7 @@ describe("shouldSkipLocalCliCredentialEpoch", () => {
 
       expect(context.params.prompt).toBe("latest ask");
       expect(context.systemPrompt).toContain(
-        "You are a personal assistant running inside OpenClaw.",
+        "You are a personal assistant running inside SunClaw.",
       );
       expect(context.systemPrompt).toContain("Current model identity: test-cli/test-model.");
       expect(context.systemPrompt).not.toContain("hook exploded");
@@ -694,7 +694,7 @@ describe("shouldSkipLocalCliCredentialEpoch", () => {
     });
     registerContextEngine(engineId, factory);
     setCliRunnerPrepareTestDeps({
-      resolveOpenClawReferencePaths: vi.fn(async () => {
+      resolveSunClawReferencePaths: vi.fn(async () => {
         throw new Error("reference path lookup failed");
       }),
     });
@@ -791,7 +791,7 @@ describe("shouldSkipLocalCliCredentialEpoch", () => {
           hostRequirements: {
             "agent-run": {
               requiredCapabilities: ["assemble-before-prompt"],
-              unsupportedMessage: "Use the native Codex or OpenClaw embedded runtime.",
+              unsupportedMessage: "Use the native Codex or SunClaw embedded runtime.",
             },
           },
         },
@@ -834,7 +834,7 @@ describe("shouldSkipLocalCliCredentialEpoch", () => {
         list: [{ id: "main", default: true, agentDir: runtimeAgentDir }],
       },
       plugins: { slots: { contextEngine: engineId } },
-    } satisfies OpenClawConfig;
+    } satisfies SunClawConfig;
     const factory = vi.fn((_ctx: unknown): ContextEngine => {
       return {
         info: { id: engineId, name: "CLI runtime config engine" },
@@ -923,7 +923,7 @@ describe("shouldSkipLocalCliCredentialEpoch", () => {
 
   it("uses cwd for CLI system prompt workspace guidance", async () => {
     const { dir, sessionFile } = createSessionFile();
-    const taskDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-cli-task-"));
+    const taskDir = fs.mkdtempSync(path.join(os.tmpdir(), "sunclaw-cli-task-"));
     try {
       const context = await prepareCliRunContext({
         sessionId: "session-test",
@@ -1012,8 +1012,8 @@ describe("shouldSkipLocalCliCredentialEpoch", () => {
       });
 
       expect(context.reusableCliSession).toEqual({ invalidatedReason: "system-prompt" });
-      expect(context.openClawHistoryPrompt).toContain("prior no-compaction ask");
-      expect(context.openClawHistoryPrompt).toContain("latest ask");
+      expect(context.sunClawHistoryPrompt).toContain("prior no-compaction ask");
+      expect(context.sunClawHistoryPrompt).toContain("latest ask");
     } finally {
       fs.rmSync(dir, { recursive: true, force: true });
     }
@@ -1052,8 +1052,8 @@ describe("shouldSkipLocalCliCredentialEpoch", () => {
       });
 
       expect(context.reusableCliSession).toEqual({ sessionId: "cli-session" });
-      expect(context.openClawHistoryPrompt).toContain("prior resumable ask");
-      expect(context.openClawHistoryPrompt).toContain("latest ask");
+      expect(context.sunClawHistoryPrompt).toContain("prior resumable ask");
+      expect(context.sunClawHistoryPrompt).toContain("latest ask");
     } finally {
       fs.rmSync(dir, { recursive: true, force: true });
     }
@@ -1374,13 +1374,13 @@ describe("shouldSkipLocalCliCredentialEpoch", () => {
       });
 
       expect(context.preparedBackend.env).toMatchObject({
-        OPENCLAW_MCP_MESSAGE_CHANNEL: "telegram",
-        OPENCLAW_MCP_CURRENT_CHANNEL_ID: "telegram:-100123:topic:42",
-        OPENCLAW_MCP_CURRENT_THREAD_TS: "42",
-        OPENCLAW_MCP_CURRENT_MESSAGE_ID: "reply-message-1",
-        OPENCLAW_MCP_CURRENT_INBOUND_AUDIO: "true",
-        OPENCLAW_MCP_INBOUND_EVENT_KIND: "room_event",
-        OPENCLAW_MCP_SOURCE_REPLY_DELIVERY_MODE: "message_tool_only",
+        SUNCLAW_MCP_MESSAGE_CHANNEL: "telegram",
+        SUNCLAW_MCP_CURRENT_CHANNEL_ID: "telegram:-100123:topic:42",
+        SUNCLAW_MCP_CURRENT_THREAD_TS: "42",
+        SUNCLAW_MCP_CURRENT_MESSAGE_ID: "reply-message-1",
+        SUNCLAW_MCP_CURRENT_INBOUND_AUDIO: "true",
+        SUNCLAW_MCP_INBOUND_EVENT_KIND: "room_event",
+        SUNCLAW_MCP_SOURCE_REPLY_DELIVERY_MODE: "message_tool_only",
       });
     } finally {
       fs.rmSync(dir, { recursive: true, force: true });
@@ -1729,9 +1729,9 @@ describe("shouldSkipLocalCliCredentialEpoch", () => {
       });
       setCliRunnerPrepareTestDeps({
         prepareClaudeCliSkillsPlugin: vi.fn(async () => ({
-          args: ["--plugin-dir", path.join(dir, "openclaw-skills")],
+          args: ["--plugin-dir", path.join(dir, "sunclaw-skills")],
           cleanup: vi.fn(async () => undefined),
-          pluginDir: path.join(dir, "openclaw-skills"),
+          pluginDir: path.join(dir, "sunclaw-skills"),
         })),
       });
 
@@ -1781,7 +1781,7 @@ describe("shouldSkipLocalCliCredentialEpoch", () => {
       expect(context.systemPromptReport.skills.promptChars).toBe(0);
       expect(context.claudeSkillsPluginArgs).toEqual([
         "--plugin-dir",
-        path.join(dir, "openclaw-skills"),
+        path.join(dir, "sunclaw-skills"),
       ]);
     } finally {
       fs.rmSync(dir, { recursive: true, force: true });
@@ -2027,9 +2027,9 @@ describe("shouldSkipLocalCliCredentialEpoch", () => {
         config: createCliBackendConfig(),
       });
 
-      expect(context.openClawHistoryPrompt).toBeDefined();
-      expect(context.openClawHistoryPrompt).toContain(summaryMarker);
-      expect(context.openClawHistoryPrompt).not.toContain("OpenClaw reseed history truncated");
+      expect(context.sunClawHistoryPrompt).toBeDefined();
+      expect(context.sunClawHistoryPrompt).toContain(summaryMarker);
+      expect(context.sunClawHistoryPrompt).not.toContain("SunClaw reseed history truncated");
     } finally {
       fs.rmSync(dir, { recursive: true, force: true });
     }
@@ -2082,9 +2082,9 @@ describe("shouldSkipLocalCliCredentialEpoch", () => {
         config: createCliBackendConfig(),
       });
 
-      expect(context.openClawHistoryPrompt).toBeDefined();
-      expect(context.openClawHistoryPrompt).toContain(summaryMarker);
-      expect(context.openClawHistoryPrompt).not.toContain("OpenClaw reseed history truncated");
+      expect(context.sunClawHistoryPrompt).toBeDefined();
+      expect(context.sunClawHistoryPrompt).toContain(summaryMarker);
+      expect(context.sunClawHistoryPrompt).not.toContain("SunClaw reseed history truncated");
     } finally {
       fs.rmSync(dir, { recursive: true, force: true });
     }
@@ -2116,8 +2116,8 @@ describe("shouldSkipLocalCliCredentialEpoch", () => {
         config: createCliBackendConfig(),
       });
 
-      expect(context.openClawHistoryPrompt).toBeDefined();
-      expect(context.openClawHistoryPrompt).toContain("OpenClaw reseed history truncated");
+      expect(context.sunClawHistoryPrompt).toBeDefined();
+      expect(context.sunClawHistoryPrompt).toContain("SunClaw reseed history truncated");
     } finally {
       fs.rmSync(dir, { recursive: true, force: true });
     }
@@ -2192,10 +2192,10 @@ describe("shouldSkipLocalCliCredentialEpoch", () => {
       });
 
       expect(context.reusableCliSession).toEqual({ sessionId: "cli-session" });
-      expect(context.openClawHistoryPrompt).toBeDefined();
-      expect(context.openClawHistoryPrompt).toContain(recentMarker);
-      expect(context.openClawHistoryPrompt).toContain("EARLIEST_USER");
-      expect(context.openClawHistoryPrompt).not.toContain("OpenClaw reseed history truncated");
+      expect(context.sunClawHistoryPrompt).toBeDefined();
+      expect(context.sunClawHistoryPrompt).toContain(recentMarker);
+      expect(context.sunClawHistoryPrompt).toContain("EARLIEST_USER");
+      expect(context.sunClawHistoryPrompt).not.toContain("SunClaw reseed history truncated");
     } finally {
       fs.rmSync(dir, { recursive: true, force: true });
     }

@@ -1,4 +1,4 @@
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/channel-entry-contract";
+import type { SunClawPluginApi } from "sunclaw/plugin-sdk/channel-entry-contract";
 
 type MatrixSubagentHooksModule = typeof import("./src/matrix/subagent-hooks.js");
 
@@ -9,7 +9,7 @@ function loadMatrixSubagentHooksModule() {
   return matrixSubagentHooksPromise;
 }
 
-export function registerMatrixSubagentHooks(api: OpenClawPluginApi): void {
+export function registerMatrixSubagentHooks(api: SunClawPluginApi): void {
   api.on("subagent_ended", async (event) => {
     const { handleMatrixSubagentEnded } = await loadMatrixSubagentHooksModule();
     await handleMatrixSubagentEnded(event);

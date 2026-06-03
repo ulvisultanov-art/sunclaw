@@ -24,7 +24,7 @@ beforeEach(() => {
 describe("schtasks runtime parsing", () => {
   it.each(["Ready", "Running"])("parses %s status", (status) => {
     const output = [
-      "TaskName: \\OpenClaw Gateway",
+      "TaskName: \\SunClaw Gateway",
       `Status: ${status}`,
       "Last Run Time: 1/8/2026 1:23:45 AM",
       "Last Run Result: 0x0",
@@ -38,7 +38,7 @@ describe("schtasks runtime parsing", () => {
 
   it("parses 'Last Result' key variant (without 'Run') (#47726)", () => {
     const output = [
-      "TaskName: \\OpenClaw Gateway",
+      "TaskName: \\SunClaw Gateway",
       "Status: Running",
       "Last Run Time: 2026/3/16 8:34:15",
       "Last Result: 267009",
@@ -59,13 +59,13 @@ describe("scheduled task runtime derivation", () => {
     );
     return await readScheduledTaskRuntime({
       USERPROFILE: "C:\\Users\\test",
-      OPENCLAW_PROFILE: "default",
+      SUNCLAW_PROFILE: "default",
     });
   }
 
   function taskQueryOutput(lines: string[]): string {
     return [
-      "TaskName: \\OpenClaw Gateway",
+      "TaskName: \\SunClaw Gateway",
       "Last Run Time: 1/8/2026 1:23:45 AM",
       ...lines,
       "",
@@ -140,36 +140,36 @@ describe("scheduled task runtime derivation", () => {
 describe("resolveTaskScriptPath", () => {
   it.each([
     {
-      name: "uses default path when OPENCLAW_PROFILE is unset",
+      name: "uses default path when SUNCLAW_PROFILE is unset",
       env: { USERPROFILE: "C:\\Users\\test" },
-      expected: path.join("C:\\Users\\test", ".openclaw", "gateway.cmd"),
+      expected: path.join("C:\\Users\\test", ".sunclaw", "gateway.cmd"),
     },
     {
-      name: "uses profile-specific path when OPENCLAW_PROFILE is set to a custom value",
-      env: { USERPROFILE: "C:\\Users\\test", OPENCLAW_PROFILE: "jbphoenix" },
-      expected: path.join("C:\\Users\\test", ".openclaw-jbphoenix", "gateway.cmd"),
+      name: "uses profile-specific path when SUNCLAW_PROFILE is set to a custom value",
+      env: { USERPROFILE: "C:\\Users\\test", SUNCLAW_PROFILE: "jbphoenix" },
+      expected: path.join("C:\\Users\\test", ".sunclaw-jbphoenix", "gateway.cmd"),
     },
     {
-      name: "prefers OPENCLAW_STATE_DIR over profile-derived defaults",
+      name: "prefers SUNCLAW_STATE_DIR over profile-derived defaults",
       env: {
         USERPROFILE: "C:\\Users\\test",
-        OPENCLAW_PROFILE: "rescue",
-        OPENCLAW_STATE_DIR: "C:\\State\\openclaw",
+        SUNCLAW_PROFILE: "rescue",
+        SUNCLAW_STATE_DIR: "C:\\State\\sunclaw",
       },
-      expected: path.join("C:\\State\\openclaw", "gateway.cmd"),
+      expected: path.join("C:\\State\\sunclaw", "gateway.cmd"),
     },
     {
       name: "falls back to HOME when USERPROFILE is not set",
-      env: { HOME: "/home/test", OPENCLAW_PROFILE: "default" },
-      expected: path.join("/home/test", ".openclaw", "gateway.cmd"),
+      env: { HOME: "/home/test", SUNCLAW_PROFILE: "default" },
+      expected: path.join("/home/test", ".sunclaw", "gateway.cmd"),
     },
     {
       name: "uses a custom task script file name inside the state directory",
       env: {
         USERPROFILE: "C:\\Users\\test",
-        OPENCLAW_TASK_SCRIPT_NAME: "gateway-node.cmd",
+        SUNCLAW_TASK_SCRIPT_NAME: "gateway-node.cmd",
       },
-      expected: path.join("C:\\Users\\test", ".openclaw", "gateway-node.cmd"),
+      expected: path.join("C:\\Users\\test", ".sunclaw", "gateway-node.cmd"),
     },
   ])("$name", ({ env, expected }) => {
     expect(resolveTaskScriptPath(env)).toBe(expected);
@@ -185,9 +185,9 @@ describe("resolveTaskScriptPath", () => {
     expect(() =>
       resolveTaskScriptPath({
         USERPROFILE: "C:\\Users\\test",
-        OPENCLAW_TASK_SCRIPT_NAME: scriptName,
+        SUNCLAW_TASK_SCRIPT_NAME: scriptName,
       }),
-    ).toThrow("OPENCLAW_TASK_SCRIPT_NAME must be a file name only");
+    ).toThrow("SUNCLAW_TASK_SCRIPT_NAME must be a file name only");
   });
 });
 
@@ -201,12 +201,12 @@ describe("readScheduledTaskCommand", () => {
     },
     run: (env: Record<string, string | undefined>) => Promise<void>,
   ) {
-    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-schtasks-test-"));
+    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-schtasks-test-"));
     try {
       const extraEnv = typeof options.env === "function" ? options.env(tmpDir) : options.env;
       const env = {
         USERPROFILE: tmpDir,
-        OPENCLAW_PROFILE: "default",
+        SUNCLAW_PROFILE: "default",
         ...extraEnv,
       };
       if (options.scriptLines) {
@@ -258,10 +258,10 @@ describe("readScheduledTaskCommand", () => {
       {
         scriptLines: [
           "@echo off",
-          "rem OpenClaw Gateway",
-          "cd /d C:\\Projects\\openclaw",
+          "rem SunClaw Gateway",
+          "cd /d C:\\Projects\\sunclaw",
           "set NODE_ENV=production",
-          "set OPENCLAW_PORT=18789",
+          "set SUNCLAW_PORT=18789",
           "node gateway.js --verbose",
         ],
       },
@@ -269,14 +269,14 @@ describe("readScheduledTaskCommand", () => {
         const result = await readScheduledTaskCommand(env);
         expect(result).toEqual({
           programArguments: ["node", "gateway.js", "--verbose"],
-          workingDirectory: "C:\\Projects\\openclaw",
+          workingDirectory: "C:\\Projects\\sunclaw",
           environment: {
             NODE_ENV: "production",
-            OPENCLAW_PORT: "18789",
+            SUNCLAW_PORT: "18789",
           },
           environmentValueSources: {
             NODE_ENV: "inline",
-            OPENCLAW_PORT: "inline",
+            SUNCLAW_PORT: "inline",
           },
           sourcePath: resolveTaskScriptPath(env),
         });
@@ -289,7 +289,7 @@ describe("readScheduledTaskCommand", () => {
       {
         scriptLines: [
           "@echo off",
-          '"C:\\Program Files\\nodejs\\node.exe" C:\\Users\\test\\AppData\\Roaming\\npm\\node_modules\\openclaw\\dist\\index.js gateway --port 18789',
+          '"C:\\Program Files\\nodejs\\node.exe" C:\\Users\\test\\AppData\\Roaming\\npm\\node_modules\\sunclaw\\dist\\index.js gateway --port 18789',
         ],
       },
       async (env) => {
@@ -297,7 +297,7 @@ describe("readScheduledTaskCommand", () => {
         expect(result).toEqual({
           programArguments: [
             "C:\\Program Files\\nodejs\\node.exe",
-            "C:\\Users\\test\\AppData\\Roaming\\npm\\node_modules\\openclaw\\dist\\index.js",
+            "C:\\Users\\test\\AppData\\Roaming\\npm\\node_modules\\sunclaw\\dist\\index.js",
             "gateway",
             "--port",
             "18789",
@@ -313,15 +313,15 @@ describe("readScheduledTaskCommand", () => {
       {
         scriptLines: [
           "@echo off",
-          '"\\\\fileserver\\OpenClaw Share\\node.exe" "\\\\fileserver\\OpenClaw Share\\dist\\index.js" gateway --port 18789',
+          '"\\\\fileserver\\SunClaw Share\\node.exe" "\\\\fileserver\\SunClaw Share\\dist\\index.js" gateway --port 18789',
         ],
       },
       async (env) => {
         const result = await readScheduledTaskCommand(env);
         expect(result).toEqual({
           programArguments: [
-            "\\\\fileserver\\OpenClaw Share\\node.exe",
-            "\\\\fileserver\\OpenClaw Share\\dist\\index.js",
+            "\\\\fileserver\\SunClaw Share\\node.exe",
+            "\\\\fileserver\\SunClaw Share\\dist\\index.js",
             "gateway",
             "--port",
             "18789",
@@ -332,10 +332,10 @@ describe("readScheduledTaskCommand", () => {
     );
   });
 
-  it("reads script from OPENCLAW_STATE_DIR override", async () => {
+  it("reads script from SUNCLAW_STATE_DIR override", async () => {
     await withScheduledTaskScript(
       {
-        env: (tmpDir) => ({ OPENCLAW_STATE_DIR: path.join(tmpDir, "custom-state") }),
+        env: (tmpDir) => ({ SUNCLAW_STATE_DIR: path.join(tmpDir, "custom-state") }),
         scriptLines: ["@echo off", "node gateway.js --from-state-dir"],
       },
       async (env) => {

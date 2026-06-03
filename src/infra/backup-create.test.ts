@@ -6,10 +6,10 @@ import { describe, expect, it, vi } from "vitest";
 import { backupVerifyCommand } from "../commands/backup-verify.js";
 import type { RuntimeEnv } from "../runtime.js";
 import {
-  closeOpenClawStateDatabase,
-  openOpenClawStateDatabase,
-} from "../state/openclaw-state-db.js";
-import { withOpenClawTestState } from "../test-utils/openclaw-test-state.js";
+  closeSunClawStateDatabase,
+  openSunClawStateDatabase,
+} from "../state/sunclaw-state-db.js";
+import { withSunClawTestState } from "../test-utils/sunclaw-test-state.js";
 import {
   testApi as backupCreateInternals,
   buildExtensionsNodeModulesFilter,
@@ -22,8 +22,8 @@ import { requireNodeSqlite } from "./node-sqlite.js";
 function makeResult(overrides: Partial<BackupCreateResult> = {}): BackupCreateResult {
   return {
     createdAt: "2026-01-01T00:00:00.000Z",
-    archiveRoot: "openclaw-backup-2026-01-01",
-    archivePath: "/tmp/openclaw-backup.tar.gz",
+    archiveRoot: "sunclaw-backup-2026-01-01",
+    archivePath: "/tmp/sunclaw-backup.tar.gz",
     dryRun: false,
     includeWorkspace: true,
     onlyConfig: false,
@@ -68,7 +68,7 @@ async function listArchiveEntryDetails(
 }
 
 describe("formatBackupCreateSummary", () => {
-  const backupArchiveLine = "Backup archive: /tmp/openclaw-backup.tar.gz";
+  const backupArchiveLine = "Backup archive: /tmp/sunclaw-backup.tar.gz";
 
   it.each([
     {
@@ -80,26 +80,26 @@ describe("formatBackupCreateSummary", () => {
             kind: "state",
             sourcePath: "/state",
             archivePath: "archive/state",
-            displayPath: "~/.openclaw",
+            displayPath: "~/.sunclaw",
           },
         ],
         skipped: [
           {
             kind: "workspace",
             sourcePath: "/workspace",
-            displayPath: "~/Projects/openclaw",
+            displayPath: "~/Projects/sunclaw",
             reason: "covered",
-            coveredBy: "~/.openclaw",
+            coveredBy: "~/.sunclaw",
           },
         ],
       }),
       expected: [
         backupArchiveLine,
         "Included 1 path:",
-        "- state: ~/.openclaw",
+        "- state: ~/.sunclaw",
         "Skipped 1 path:",
-        "- workspace: ~/Projects/openclaw (covered by ~/.openclaw)",
-        "Created /tmp/openclaw-backup.tar.gz",
+        "- workspace: ~/Projects/sunclaw (covered by ~/.sunclaw)",
+        "Created /tmp/sunclaw-backup.tar.gz",
         "Archive verification: passed",
       ],
     },
@@ -112,21 +112,21 @@ describe("formatBackupCreateSummary", () => {
             kind: "config",
             sourcePath: "/config",
             archivePath: "archive/config",
-            displayPath: "~/.openclaw/config.json",
+            displayPath: "~/.sunclaw/config.json",
           },
           {
             kind: "credentials",
             sourcePath: "/oauth",
             archivePath: "archive/oauth",
-            displayPath: "~/.openclaw/oauth",
+            displayPath: "~/.sunclaw/oauth",
           },
         ],
       }),
       expected: [
         backupArchiveLine,
         "Included 2 paths:",
-        "- config: ~/.openclaw/config.json",
-        "- credentials: ~/.openclaw/oauth",
+        "- config: ~/.sunclaw/config.json",
+        "- credentials: ~/.sunclaw/oauth",
         "Dry run only; archive was not written.",
       ],
     },
@@ -143,17 +143,17 @@ describe("formatBackupCreateSummary", () => {
               kind: "state",
               sourcePath: "/state",
               archivePath: "archive/state",
-              displayPath: "~/.openclaw",
+              displayPath: "~/.sunclaw",
             },
           ],
           skippedVolatileCount: 3,
         }),
       ),
     ).toEqual([
-      "Backup archive: /tmp/openclaw-backup.tar.gz",
+      "Backup archive: /tmp/sunclaw-backup.tar.gz",
       "Included 1 path:",
-      "- state: ~/.openclaw",
-      "Created /tmp/openclaw-backup.tar.gz",
+      "- state: ~/.sunclaw",
+      "Created /tmp/sunclaw-backup.tar.gz",
       "Skipped 3 volatile files (live sessions, cron logs, queues, sockets, pid/tmp).",
     ]);
   });
@@ -292,7 +292,7 @@ describe("buildExtensionsNodeModulesFilter", () => {
   it("excludes dependency trees only under state extensions", () => {
     const filter = buildExtensionsNodeModulesFilter("/state/");
 
-    expect(filter("/state/extensions/demo/openclaw.plugin.json")).toBe(true);
+    expect(filter("/state/extensions/demo/sunclaw.plugin.json")).toBe(true);
     expect(filter("/state/extensions/demo/src/index.js")).toBe(true);
     expect(filter("/state/extensions/demo/node_modules/dep/index.js")).toBe(false);
     expect(filter("/state/extensions/demo/vendor/node_modules/dep/index.js")).toBe(false);
@@ -301,21 +301,21 @@ describe("buildExtensionsNodeModulesFilter", () => {
   });
 
   it("normalizes Windows path separators", () => {
-    const filter = buildExtensionsNodeModulesFilter("C:\\Users\\me\\.openclaw\\");
+    const filter = buildExtensionsNodeModulesFilter("C:\\Users\\me\\.sunclaw\\");
 
-    expect(filter(String.raw`C:\Users\me\.openclaw\extensions\demo\index.js`)).toBe(true);
+    expect(filter(String.raw`C:\Users\me\.sunclaw\extensions\demo\index.js`)).toBe(true);
     expect(
-      filter(String.raw`C:\Users\me\.openclaw\extensions\demo\node_modules\dep\index.js`),
+      filter(String.raw`C:\Users\me\.sunclaw\extensions\demo\node_modules\dep\index.js`),
     ).toBe(false);
   });
 });
 
 describe("createBackupArchive", () => {
   it("falls back when injected nowMs is outside Date range", async () => {
-    await withOpenClawTestState(
+    await withSunClawTestState(
       {
         layout: "state-only",
-        prefix: "openclaw-backup-invalid-now-",
+        prefix: "sunclaw-backup-invalid-now-",
         scenario: "minimal",
       },
       async (state) => {
@@ -332,7 +332,7 @@ describe("createBackupArchive", () => {
           });
 
           expect(result.createdAt).toBe("2026-05-30T12:00:00.000Z");
-          expect(path.basename(result.archivePath)).toContain("openclaw-backup.tar.gz");
+          expect(path.basename(result.archivePath)).toContain("sunclaw-backup.tar.gz");
           expect(path.basename(result.archivePath)).not.toContain("NaN");
         } finally {
           dateNowSpy.mockRestore();
@@ -342,10 +342,10 @@ describe("createBackupArchive", () => {
   });
 
   it("falls back to epoch when injected nowMs and Date.now are outside Date range", async () => {
-    await withOpenClawTestState(
+    await withSunClawTestState(
       {
         layout: "state-only",
-        prefix: "openclaw-backup-invalid-fallback-now-",
+        prefix: "sunclaw-backup-invalid-fallback-now-",
         scenario: "minimal",
       },
       async (state) => {
@@ -362,7 +362,7 @@ describe("createBackupArchive", () => {
           });
 
           expect(result.createdAt).toBe("1970-01-01T00:00:00.000Z");
-          expect(path.basename(result.archivePath)).toContain("openclaw-backup.tar.gz");
+          expect(path.basename(result.archivePath)).toContain("sunclaw-backup.tar.gz");
           expect(path.basename(result.archivePath)).not.toContain("NaN");
         } finally {
           dateNowSpy.mockRestore();
@@ -372,10 +372,10 @@ describe("createBackupArchive", () => {
   });
 
   it("skips current live volatile state files while preserving workspace locks", async () => {
-    await withOpenClawTestState(
+    await withSunClawTestState(
       {
         layout: "split",
-        prefix: "openclaw-backup-volatile-",
+        prefix: "sunclaw-backup-volatile-",
         scenario: "minimal",
       },
       async (state) => {
@@ -438,10 +438,10 @@ describe("createBackupArchive", () => {
   });
 
   it("scrubs transient SQLite delivery queue rows from archive snapshots", async () => {
-    await withOpenClawTestState(
+    await withSunClawTestState(
       {
         layout: "state-only",
-        prefix: "openclaw-backup-sqlite-queue-",
+        prefix: "sunclaw-backup-sqlite-queue-",
         scenario: "minimal",
       },
       async (state) => {
@@ -449,7 +449,7 @@ describe("createBackupArchive", () => {
         const extractDir = state.path("extract");
         await fs.mkdir(outputDir, { recursive: true });
         await fs.mkdir(extractDir, { recursive: true });
-        const { db } = openOpenClawStateDatabase({ env: state.env });
+        const { db } = openSunClawStateDatabase({ env: state.env });
         db.prepare(
           `
             INSERT INTO delivery_queue_entries (
@@ -466,10 +466,10 @@ describe("createBackupArchive", () => {
           });
           const entries = await listArchiveEntries(result.archivePath);
           const archivedDbEntry = entries.find((entry) =>
-            entry.endsWith("/state/state/openclaw.sqlite"),
+            entry.endsWith("/state/state/sunclaw.sqlite"),
           );
           expect(archivedDbEntry).toBeDefined();
-          expect(entries.some((entry) => entry.endsWith("/state/state/openclaw.sqlite-wal"))).toBe(
+          expect(entries.some((entry) => entry.endsWith("/state/state/sunclaw.sqlite-wal"))).toBe(
             false,
           );
 
@@ -490,17 +490,17 @@ describe("createBackupArchive", () => {
             count: 1,
           });
         } finally {
-          closeOpenClawStateDatabase();
+          closeSunClawStateDatabase();
         }
       },
     );
   });
 
   it("omits installed plugin node_modules from the real archive while keeping plugin files", async () => {
-    await withOpenClawTestState(
+    await withSunClawTestState(
       {
         layout: "state-only",
-        prefix: "openclaw-backup-plugin-deps-",
+        prefix: "sunclaw-backup-plugin-deps-",
         scenario: "minimal",
       },
       async (state) => {
@@ -512,7 +512,7 @@ describe("createBackupArchive", () => {
         await fs.mkdir(path.join(stateDir, "extensions", "demo", "src"), { recursive: true });
         await fs.mkdir(path.join(stateDir, "node_modules", "root-dep"), { recursive: true });
         await fs.writeFile(
-          path.join(stateDir, "extensions", "demo", "openclaw.plugin.json"),
+          path.join(stateDir, "extensions", "demo", "sunclaw.plugin.json"),
           '{"id":"demo"}\n',
           "utf8",
         );
@@ -541,7 +541,7 @@ describe("createBackupArchive", () => {
         const entries = await listArchiveEntries(result.archivePath);
 
         const entrySuffixes = entries.map((entry) => entry.replace(/^.*\/state\//, "/state/"));
-        expect(entrySuffixes).toContain("/state/extensions/demo/openclaw.plugin.json");
+        expect(entrySuffixes).toContain("/state/extensions/demo/sunclaw.plugin.json");
         expect(entrySuffixes).toContain("/state/extensions/demo/src/index.js");
         expect(entrySuffixes).toContain("/state/node_modules/root-dep/index.js");
         const pluginNodeModuleEntries = entries.filter((entry) =>
@@ -557,16 +557,16 @@ describe("createBackupArchive", () => {
   });
 
   it("dereferences hardlinks instead of emitting restore-hostile Link entries", async () => {
-    await withOpenClawTestState(
+    await withSunClawTestState(
       {
         layout: "state-only",
-        prefix: "openclaw-backup-hardlink-",
+        prefix: "sunclaw-backup-hardlink-",
         scenario: "minimal",
       },
       async (state) => {
         const stateDir = state.stateDir;
         const outputDir = state.path("backups");
-        const sourcePath = path.join(stateDir, "workspace-adx", "openclaw-src", "node_modules");
+        const sourcePath = path.join(stateDir, "workspace-adx", "sunclaw-src", "node_modules");
         const targetPath = path.join(sourcePath, "esbuild", "bin", "esbuild");
         const hardlinkPath = path.join(sourcePath, "@esbuild", "darwin-arm64", "bin", "esbuild");
         await fs.mkdir(path.dirname(targetPath), { recursive: true });
@@ -596,10 +596,10 @@ describe("createBackupArchive", () => {
   });
 
   it("does not duplicate the root manifest when the system tempdir lives inside the state dir", async () => {
-    await withOpenClawTestState(
+    await withSunClawTestState(
       {
         layout: "state-only",
-        prefix: "openclaw-backup-tmp-overlap-",
+        prefix: "sunclaw-backup-tmp-overlap-",
         scenario: "minimal",
       },
       async (state) => {
@@ -633,10 +633,10 @@ describe("createBackupArchive", () => {
   });
 
   it("does not duplicate the root manifest when the system tempdir is the state dir itself", async () => {
-    await withOpenClawTestState(
+    await withSunClawTestState(
       {
         layout: "state-only",
-        prefix: "openclaw-backup-tmp-equals-state-",
+        prefix: "sunclaw-backup-tmp-equals-state-",
         scenario: "minimal",
       },
       async (state) => {

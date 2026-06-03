@@ -1,13 +1,13 @@
 {
-  "name": "@openclaw/admin-http-rpc",
+  "name": "@sunclaw/admin-http-rpc",
   "version": "2026.6.2",
   "private": true,
-  "description": "OpenClaw admin HTTP RPC endpoint",
+  "description": "SunClaw admin HTTP RPC endpoint",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@sunclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ]

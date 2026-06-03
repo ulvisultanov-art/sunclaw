@@ -1,6 +1,6 @@
 import { EventEmitter } from "node:events";
 import path from "node:path";
-import { MAX_TIMER_TIMEOUT_MS } from "openclaw/plugin-sdk/number-runtime";
+import { MAX_TIMER_TIMEOUT_MS } from "sunclaw/plugin-sdk/number-runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const spawnMock = vi.hoisted(() => vi.fn());
@@ -155,7 +155,7 @@ describe("qa suite runtime agent process helpers", () => {
         repoRoot: "/repo",
         gateway: {
           tempRoot: "/tmp/runtime",
-          runtimeEnv: { PATH: "/usr/bin", OPENCLAW_STATE_DIR: "/tmp/default-state" },
+          runtimeEnv: { PATH: "/usr/bin", SUNCLAW_STATE_DIR: "/tmp/default-state" },
         },
         primaryModel: "openai/gpt-5.5",
         alternateModel: "openai/gpt-5.5-mini",
@@ -164,8 +164,8 @@ describe("qa suite runtime agent process helpers", () => {
       ["crestodian", "-m", "overview"],
       {
         env: {
-          OPENCLAW_STATE_DIR: "/tmp/isolated-state",
-          OPENCLAW_CONFIG_PATH: "/tmp/isolated-state/openclaw.json",
+          SUNCLAW_STATE_DIR: "/tmp/isolated-state",
+          SUNCLAW_CONFIG_PATH: "/tmp/isolated-state/sunclaw.json",
         },
       },
     );
@@ -185,8 +185,8 @@ describe("qa suite runtime agent process helpers", () => {
     ]);
     const spawnEnv = (spawnCall?.[2] as { env?: Record<string, string> } | undefined)?.env;
     expect(spawnEnv?.PATH).toBe("/usr/bin");
-    expect(spawnEnv?.OPENCLAW_STATE_DIR).toBe("/tmp/isolated-state");
-    expect(spawnEnv?.OPENCLAW_CONFIG_PATH).toBe("/tmp/isolated-state/openclaw.json");
+    expect(spawnEnv?.SUNCLAW_STATE_DIR).toBe("/tmp/isolated-state");
+    expect(spawnEnv?.SUNCLAW_CONFIG_PATH).toBe("/tmp/isolated-state/sunclaw.json");
   });
 
   it("parses json qa cli output when requested", async () => {
@@ -384,7 +384,7 @@ describe("qa suite runtime agent process helpers", () => {
       name: "Memory Dreaming Promotion",
       payload: {
         kind: "systemEvent",
-        text: "__openclaw_memory_core_short_term_promotion_dream__",
+        text: "__sunclaw_memory_core_short_term_promotion_dream__",
       },
     };
     const current = {
@@ -392,7 +392,7 @@ describe("qa suite runtime agent process helpers", () => {
       name: "Memory Dreaming Promotion",
       payload: {
         kind: "agentTurn",
-        message: "__openclaw_memory_core_short_term_promotion_dream__",
+        message: "__sunclaw_memory_core_short_term_promotion_dream__",
         lightContext: true,
       },
       sessionTarget: "isolated",

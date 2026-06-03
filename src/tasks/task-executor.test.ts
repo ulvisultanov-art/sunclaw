@@ -42,7 +42,7 @@ import {
 } from "./task-registry.js";
 import type { TaskRecord } from "./task-registry.types.js";
 
-const ORIGINAL_STATE_DIR = process.env.OPENCLAW_STATE_DIR;
+const ORIGINAL_STATE_DIR = process.env.SUNCLAW_STATE_DIR;
 
 function createQueuedTaskRun(params: Parameters<typeof createQueuedTaskRunOrNull>[0]): TaskRecord {
   const task = createQueuedTaskRunOrNull(params);
@@ -97,7 +97,7 @@ vi.mock("../utils/message-channel.js", () => ({
 }));
 
 async function withTaskExecutorStateDir(run: (stateDir: string) => Promise<void>): Promise<void> {
-  await withStateDirEnv("openclaw-task-executor-", async ({ stateDir }) => {
+  await withStateDirEnv("sunclaw-task-executor-", async ({ stateDir }) => {
     resetDetachedTaskLifecycleRuntimeForTests();
     resetSystemEventsForTest();
     resetHeartbeatWakeStateForTests();
@@ -210,9 +210,9 @@ function expectCancelledAcpChildTask(
 describe("task-executor", () => {
   afterEach(() => {
     if (ORIGINAL_STATE_DIR === undefined) {
-      delete process.env.OPENCLAW_STATE_DIR;
+      delete process.env.SUNCLAW_STATE_DIR;
     } else {
-      process.env.OPENCLAW_STATE_DIR = ORIGINAL_STATE_DIR;
+      process.env.SUNCLAW_STATE_DIR = ORIGINAL_STATE_DIR;
     }
     resetSystemEventsForTest();
     resetHeartbeatWakeStateForTests();

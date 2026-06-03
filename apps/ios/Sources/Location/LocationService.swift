@@ -1,6 +1,6 @@
 import CoreLocation
 import Foundation
-import OpenClawKit
+import SunClawKit
 
 @MainActor
 final class LocationService: NSObject, CLLocationManagerDelegate, LocationServiceCommon {
@@ -31,7 +31,7 @@ final class LocationService: NSObject, CLLocationManagerDelegate, LocationServic
         self.configureLocationManager()
     }
 
-    func ensureAuthorization(mode: OpenClawLocationMode) async -> CLAuthorizationStatus {
+    func ensureAuthorization(mode: SunClawLocationMode) async -> CLAuthorizationStatus {
         guard CLLocationManager.locationServicesEnabled() else { return .denied }
 
         let status = self.manager.authorizationStatus
@@ -54,8 +54,8 @@ final class LocationService: NSObject, CLLocationManagerDelegate, LocationServic
     }
 
     func currentLocation(
-        params: OpenClawLocationGetParams,
-        desiredAccuracy: OpenClawLocationAccuracy,
+        params: SunClawLocationGetParams,
+        desiredAccuracy: SunClawLocationAccuracy,
         maxAgeMs: Int?,
         timeoutMs: Int?) async throws -> CLLocation
     {
@@ -85,7 +85,7 @@ final class LocationService: NSObject, CLLocationManagerDelegate, LocationServic
     }
 
     func startLocationUpdates(
-        desiredAccuracy: OpenClawLocationAccuracy,
+        desiredAccuracy: SunClawLocationAccuracy,
         significantChangesOnly: Bool) -> AsyncStream<CLLocation>
     {
         self.stopLocationUpdates()

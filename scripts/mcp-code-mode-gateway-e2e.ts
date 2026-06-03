@@ -227,8 +227,8 @@ async function writeConfig(params: {
 }
 
 export async function main() {
-  const rootDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-mcp-code-mode-"));
-  const keep = process.env.OPENCLAW_MCP_CODE_MODE_GATEWAY_E2E_KEEP === "1";
+  const rootDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-mcp-code-mode-"));
+  const keep = process.env.SUNCLAW_MCP_CODE_MODE_GATEWAY_E2E_KEEP === "1";
   let provider: Awaited<ReturnType<typeof startQaMockOpenAiServer>> | undefined;
   let server: Awaited<ReturnType<typeof startGatewayServer>> | undefined;
   try {
@@ -236,7 +236,7 @@ export async function main() {
     const stateDir = path.join(rootDir, "state");
     const workspaceDir = path.join(rootDir, "workspace");
     const serverPath = path.join(rootDir, "mcp", "fixture-server.mjs");
-    const configPath = path.join(stateDir, "openclaw.json");
+    const configPath = path.join(stateDir, "sunclaw.json");
     const gatewayPort = await freePort();
     await fs.mkdir(workspaceDir, { recursive: true });
     await writeProbeMcpServer(serverPath);
@@ -249,9 +249,9 @@ export async function main() {
       serverPath,
     });
 
-    process.env.OPENCLAW_STATE_DIR = stateDir;
-    process.env.OPENCLAW_CONFIG_PATH = configPath;
-    process.env.OPENCLAW_TEST_FAST = "1";
+    process.env.SUNCLAW_STATE_DIR = stateDir;
+    process.env.SUNCLAW_CONFIG_PATH = configPath;
+    process.env.SUNCLAW_TEST_FAST = "1";
     resetConfigRuntimeState();
 
     server = await startGatewayServer(gatewayPort, {
@@ -266,11 +266,11 @@ export async function main() {
       method: "POST",
       headers: {
         "content-type": "application/json",
-        "x-openclaw-scopes": "operator.write",
-        "x-openclaw-agent": "qa",
+        "x-sunclaw-scopes": "operator.write",
+        "x-sunclaw-agent": "qa",
       },
       body: JSON.stringify({
-        model: "openclaw/qa",
+        model: "sunclaw/qa",
         input: [
           {
             type: "message",
@@ -333,9 +333,9 @@ export async function main() {
     await server?.close({ reason: "mcp code-mode gateway e2e complete" });
     await provider?.stop();
     resetConfigRuntimeState();
-    delete process.env.OPENCLAW_STATE_DIR;
-    delete process.env.OPENCLAW_CONFIG_PATH;
-    delete process.env.OPENCLAW_TEST_FAST;
+    delete process.env.SUNCLAW_STATE_DIR;
+    delete process.env.SUNCLAW_CONFIG_PATH;
+    delete process.env.SUNCLAW_TEST_FAST;
     if (!keep) {
       await fs.rm(rootDir, { recursive: true, force: true });
     }

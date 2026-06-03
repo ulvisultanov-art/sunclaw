@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../../config/types.sunclaw.js";
 import type { ProviderRuntimeModel } from "../../../plugins/provider-runtime-model.types.js";
 import type {
   PluginHookBeforeAgentStartResult,
@@ -116,7 +116,7 @@ export function buildBeforeModelResolveAttachments(
 }
 
 export function resolveEffectiveRuntimeModel(params: {
-  cfg: OpenClawConfig | undefined;
+  cfg: SunClawConfig | undefined;
   provider: string;
   contextConfigProvider?: string;
   modelId: string;

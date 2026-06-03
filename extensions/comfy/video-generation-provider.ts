@@ -2,7 +2,7 @@ import type {
   GeneratedVideoAsset,
   VideoGenerationProvider,
   VideoGenerationSourceAsset,
-} from "openclaw/plugin-sdk/video-generation";
+} from "sunclaw/plugin-sdk/video-generation";
 import {
   DEFAULT_COMFY_MODEL,
   setComfyFetchGuardForTesting,

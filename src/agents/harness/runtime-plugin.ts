@@ -1,11 +1,11 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { withActivatedPluginIds } from "../../plugins/activation-context.js";
 import {
   resolveActivatableProviderOwnerPluginIds,
   resolveBundledProviderCompatPluginIds,
   resolveOwningPluginIdsForProviderRef,
 } from "../../plugins/providers.js";
-import { isDefaultAgentRuntimeId, OPENCLAW_AGENT_RUNTIME_ID } from "../agent-runtime-id.js";
+import { isDefaultAgentRuntimeId, SUNCLAW_AGENT_RUNTIME_ID } from "../agent-runtime-id.js";
 import { normalizeOptionalAgentRuntimeId } from "../agent-runtime-id.js";
 import { resolveAgentHarnessPolicy } from "./policy.js";
 
@@ -25,7 +25,7 @@ function dedupePluginIds(values: readonly string[]): string[] {
   return result;
 }
 
-function restrictiveAllowlistOmitsPlugin(config: OpenClawConfig | undefined, pluginId: string) {
+function restrictiveAllowlistOmitsPlugin(config: SunClawConfig | undefined, pluginId: string) {
   const allow = config?.plugins?.allow ?? [];
   return allow.length > 0 && !allow.includes(pluginId);
 }
@@ -33,7 +33,7 @@ function restrictiveAllowlistOmitsPlugin(config: OpenClawConfig | undefined, plu
 function resolveHarnessPluginIds(params: {
   runtime: string;
   provider: string;
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   workspaceDir: string;
 }): string[] {
   if (params.runtime !== "codex") {
@@ -73,10 +73,10 @@ function resolveHarnessPluginIds(params: {
 }
 
 function withRuntimePluginIdsAllowed(params: {
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   requiredPluginId: string;
   pluginIds: readonly string[];
-}): OpenClawConfig | undefined {
+}): SunClawConfig | undefined {
   if (params.pluginIds.length === 0) {
     return params.config;
   }
@@ -96,7 +96,7 @@ function withRuntimePluginIdsAllowed(params: {
 export async function ensureSelectedAgentHarnessPlugin(params: {
   provider: string;
   modelId: string;
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   agentId?: string;
   sessionKey?: string;
   agentHarnessRuntimeOverride?: string;
@@ -114,7 +114,7 @@ export async function ensureSelectedAgentHarnessPlugin(params: {
     runtimeOverride && !isDefaultAgentRuntimeId(runtimeOverride) ? runtimeOverride : policy.runtime;
   if (
     isDefaultAgentRuntimeId(runtime) ||
-    runtime === OPENCLAW_AGENT_RUNTIME_ID ||
+    runtime === SUNCLAW_AGENT_RUNTIME_ID ||
     !COLD_LOADABLE_HARNESS_PLUGIN_IDS.has(runtime)
   ) {
     return;

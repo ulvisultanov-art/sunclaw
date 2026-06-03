@@ -1,7 +1,7 @@
 import type { Message } from "grammy/types";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { resolveStorePath } from "openclaw/plugin-sdk/session-store-runtime";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import { logVerbose } from "sunclaw/plugin-sdk/runtime-env";
+import { resolveStorePath } from "sunclaw/plugin-sdk/session-store-runtime";
 import { createTelegramMessageCache, resolveTelegramMessageCacheScope } from "./message-cache.js";
 
 export type TelegramOutboundPromptContextMessage = {
@@ -49,7 +49,7 @@ function buildOutboundCacheMessage(params: {
     from: params.message.from ?? {
       id: 0,
       is_bot: true,
-      first_name: params.account.name ?? "OpenClaw",
+      first_name: params.account.name ?? "SunClaw",
     },
     ...(text ? { text } : {}),
     ...(params.messageThreadId !== undefined ? { message_thread_id: params.messageThreadId } : {}),
@@ -57,7 +57,7 @@ function buildOutboundCacheMessage(params: {
 }
 
 export async function recordOutboundMessageForPromptContext(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   account: TelegramOutboundPromptContextAccount;
   chatId: string | number;
   message: TelegramOutboundPromptContextMessage;

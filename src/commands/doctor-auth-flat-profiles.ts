@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord } from "@sunclaw/normalization-core/record-coerce";
 import { note } from "../../packages/terminal-core/src/note.js";
 import { resolveAgentDir, resolveDefaultAgentDir, listAgentIds } from "../agents/agent-scope.js";
 import { AUTH_STORE_VERSION } from "../agents/auth-profiles/constants.js";
@@ -13,7 +13,7 @@ import type { AuthProfileCredential, AuthProfileStore } from "../agents/auth-pro
 import { formatCliCommand } from "../cli/command-format.js";
 import { resolveStateDir } from "../config/paths.js";
 import type { AuthProfileConfig } from "../config/types.auth.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { coerceSecretRef } from "../config/types.secrets.js";
 import { loadJsonFile } from "../infra/json-file.js";
 import { shortenHomePath } from "../utils.js";
@@ -195,13 +195,13 @@ function listExistingAgentDirsFromState(env: NodeJS.ProcessEnv): string[] {
 }
 
 function listAuthProfileRepairCandidates(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   env: NodeJS.ProcessEnv,
 ): AuthProfileRepairCandidate[] {
   const candidates = new Map<string, AuthProfileRepairCandidate>();
   addCandidate(candidates, resolveDefaultAgentDir(cfg, env));
   const envAgentDir =
-    readNonEmptyString(env.OPENCLAW_AGENT_DIR) ?? readNonEmptyString(env.PI_CODING_AGENT_DIR);
+    readNonEmptyString(env.SUNCLAW_AGENT_DIR) ?? readNonEmptyString(env.PI_CODING_AGENT_DIR);
   if (envAgentDir) {
     addCandidate(candidates, envAgentDir);
   }
@@ -287,7 +287,7 @@ function resolveAwsSdkAuthProfileMarkerStore(
     : null;
 }
 
-function ensureConfigAuthProfiles(config: OpenClawConfig): Record<string, AuthProfileConfig> {
+function ensureConfigAuthProfiles(config: SunClawConfig): Record<string, AuthProfileConfig> {
   const root = config as Record<string, unknown>;
   const auth = isRecord(root.auth) ? root.auth : {};
   if (root.auth !== auth) {
@@ -309,7 +309,7 @@ function removeAwsSdkProfileMarkers(raw: Record<string, unknown>, profileIds: st
 }
 
 export async function maybeRepairLegacyFlatAuthProfileStores(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   prompter: DoctorPrompter;
   now?: () => number;
   env?: NodeJS.ProcessEnv;
@@ -341,17 +341,17 @@ export async function maybeRepairLegacyFlatAuthProfileStores(params: {
     ),
     ...awsSdkMarkerStores.map(
       (entry) =>
-        `- ${shortenHomePath(entry.authPath)} contains aws-sdk profile markers that belong in openclaw.json auth.profiles.`,
+        `- ${shortenHomePath(entry.authPath)} contains aws-sdk profile markers that belong in sunclaw.json auth.profiles.`,
     ),
   ];
   if (legacyStores.length > 0) {
     noteLines.push(
-      `- The gateway expects the canonical version/profiles store; ${formatCliCommand("openclaw doctor --fix")} rewrites this legacy shape with a backup.`,
+      `- The gateway expects the canonical version/profiles store; ${formatCliCommand("sunclaw doctor --fix")} rewrites this legacy shape with a backup.`,
     );
   }
   if (awsSdkMarkerStores.length > 0) {
     noteLines.push(
-      `- AWS SDK profile markers are routing metadata, not stored credentials; ${formatCliCommand("openclaw doctor --fix")} moves them to config with a backup.`,
+      `- AWS SDK profile markers are routing metadata, not stored credentials; ${formatCliCommand("sunclaw doctor --fix")} moves them to config with a backup.`,
     );
   }
   note(noteLines.join("\n"), "Auth profiles");
@@ -453,7 +453,7 @@ function backupCanonicalApiKeyAlias(authPath: string, now: () => number): string
 }
 
 export async function maybeRepairCanonicalApiKeyFieldAlias(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   prompter: DoctorPrompter;
   now?: () => number;
   env?: NodeJS.ProcessEnv;
@@ -478,7 +478,7 @@ export async function maybeRepairCanonicalApiKeyFieldAlias(params: {
       `- ${shortenHomePath(entry.authPath)} has ${entry.profileIds.length} profile(s) using the non-canonical "api_key" field; the canonical field is "key".`,
   );
   noteLines.push(
-    `- Runtime auth parsing only reads canonical "key" and "keyRef" fields, so these profiles are silently skipped; ${formatCliCommand("openclaw doctor --fix")} rewrites "api_key" to "key" with a backup.`,
+    `- Runtime auth parsing only reads canonical "key" and "keyRef" fields, so these profiles are silently skipped; ${formatCliCommand("sunclaw doctor --fix")} rewrites "api_key" to "key" with a backup.`,
   );
   note(noteLines.join("\n"), "Auth profiles");
 
@@ -761,10 +761,10 @@ function canonicalizeOpenAILastGood(
 }
 
 export function maybeRepairOpenAICodexAuthConfig(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   options?: { profileIdMap?: ReadonlyMap<string, string> },
 ): {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   changes: string[];
   warnings: string[];
 } {
@@ -838,7 +838,7 @@ function resolveOpenAICodexAuthStoreRepair(
 }
 
 export function collectOpenAICodexAuthProfileStoreIdMap(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   env?: NodeJS.ProcessEnv;
 }): Map<string, string> {
   const env = params.env ?? process.env;
@@ -874,7 +874,7 @@ function backupOpenAIProviderUnification(authPath: string, now: () => number): s
 }
 
 export async function maybeRepairOpenAICodexAuthProfileStores(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   now?: () => number;
   env?: NodeJS.ProcessEnv;
 }): Promise<LegacyFlatAuthProfileRepairResult> {

@@ -487,7 +487,7 @@ describe("telegram message cache", () => {
   });
 
   it("parses legacy sidecar records for doctor migration only", async () => {
-    const storePath = `/tmp/openclaw-telegram-message-cache-legacy-${process.pid}-${Date.now()}.json`;
+    const storePath = `/tmp/sunclaw-telegram-message-cache-legacy-${process.pid}-${Date.now()}.json`;
     const persistedPath = resolveTelegramMessageCachePath(storePath);
     await rm(persistedPath, { force: true });
     try {
@@ -674,7 +674,7 @@ describe("telegram message cache", () => {
     const beforeSession = Date.parse("2026-05-10T12:40:00.000Z");
     const sessionStartedAt = Date.parse("2026-05-10T17:30:43.980Z");
     const afterSession = Date.parse("2026-05-11T23:36:00.000Z");
-    const staleInstruction = "okay so we just flip in openclaw? if yes do it up";
+    const staleInstruction = "okay so we just flip in sunclaw? if yes do it up";
     const record = (params: {
       id: number;
       text: string;
@@ -804,7 +804,7 @@ describe("telegram message cache", () => {
     const beforeSession = Date.parse("2026-05-10T12:40:00.000Z");
     const sessionStartedAt = Date.parse("2026-05-10T17:30:43.127Z");
     const afterSession = Date.parse("2026-05-11T23:36:00.000Z");
-    const staleInstruction = "okay so we just flip in openclaw? if yes do it up";
+    const staleInstruction = "okay so we just flip in sunclaw? if yes do it up";
     const record = (params: {
       id: number;
       text: string;

@@ -3,12 +3,12 @@ import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { writePersistedInstalledPluginIndexSync } from "./installed-plugin-index-store.js";
-import { listOpenClawPluginManifestMetadata } from "./manifest-metadata-scan.js";
+import { listSunClawPluginManifestMetadata } from "./manifest-metadata-scan.js";
 
 const tempRoots: string[] = [];
 
 function createTempRoot(): string {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-manifest-metadata-"));
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "sunclaw-manifest-metadata-"));
   tempRoots.push(root);
   return root;
 }
@@ -18,7 +18,7 @@ function writeJson(filePath: string, value: unknown): void {
   fs.writeFileSync(filePath, JSON.stringify(value, null, 2), "utf8");
 }
 
-describe("listOpenClawPluginManifestMetadata", () => {
+describe("listSunClawPluginManifestMetadata", () => {
   afterEach(() => {
     for (const root of tempRoots.splice(0)) {
       fs.rmSync(root, { recursive: true, force: true });
@@ -31,11 +31,11 @@ describe("listOpenClawPluginManifestMetadata", () => {
     const bundledRoot = path.join(root, "extensions");
     const staleBundledRoot = path.join(root, "stale", "extensions");
 
-    writeJson(path.join(bundledRoot, "openai", "openclaw.plugin.json"), {
+    writeJson(path.join(bundledRoot, "openai", "sunclaw.plugin.json"), {
       id: "openai",
       providerEndpoints: [{ endpointClass: "openai-public", hosts: ["api.openai.com"] }],
     });
-    writeJson(path.join(staleBundledRoot, "openai", "openclaw.plugin.json"), {
+    writeJson(path.join(staleBundledRoot, "openai", "sunclaw.plugin.json"), {
       id: "openai",
       providers: ["openai"],
     });
@@ -51,7 +51,7 @@ describe("listOpenClawPluginManifestMetadata", () => {
         plugins: [
           {
             pluginId: "openai",
-            manifestPath: path.join(staleBundledRoot, "openai", "openclaw.plugin.json"),
+            manifestPath: path.join(staleBundledRoot, "openai", "sunclaw.plugin.json"),
             manifestHash: "stale-openai",
             rootDir: path.join(staleBundledRoot, "openai"),
             origin: "bundled",
@@ -67,12 +67,12 @@ describe("listOpenClawPluginManifestMetadata", () => {
         ],
         diagnostics: [],
       },
-      { stateDir: path.join(home, ".openclaw") },
+      { stateDir: path.join(home, ".sunclaw") },
     );
 
-    const records = listOpenClawPluginManifestMetadata({
-      OPENCLAW_HOME: home,
-      OPENCLAW_BUNDLED_PLUGINS_DIR: bundledRoot,
+    const records = listSunClawPluginManifestMetadata({
+      SUNCLAW_HOME: home,
+      SUNCLAW_BUNDLED_PLUGINS_DIR: bundledRoot,
     });
 
     const openai = records.find((record) => record.manifest.id === "openai");

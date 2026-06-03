@@ -1,22 +1,22 @@
-import { DEFAULT_ACCOUNT_ID } from "openclaw/plugin-sdk/account-id";
+import { DEFAULT_ACCOUNT_ID } from "sunclaw/plugin-sdk/account-id";
 import {
   buildChannelApprovalExpiredText,
   buildChannelApprovalResolvedText,
   createChannelApprovalNativeRuntimeAdapter,
   type PendingApprovalView,
   resolvePreparedApprovalAccountId,
-} from "openclaw/plugin-sdk/approval-handler-runtime";
-import { buildChannelApprovalNativeTargetKey } from "openclaw/plugin-sdk/approval-native-runtime";
+} from "sunclaw/plugin-sdk/approval-handler-runtime";
+import { buildChannelApprovalNativeTargetKey } from "sunclaw/plugin-sdk/approval-native-runtime";
 import {
   buildApprovalReactionPendingContent,
   type ApprovalReactionPendingContent,
-} from "openclaw/plugin-sdk/approval-reaction-runtime";
+} from "sunclaw/plugin-sdk/approval-reaction-runtime";
 import type {
   ExecApprovalRequest,
   PluginApprovalRequest,
-} from "openclaw/plugin-sdk/approval-runtime";
-import { createSubsystemLogger } from "openclaw/plugin-sdk/runtime-env";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/approval-runtime";
+import { createSubsystemLogger } from "sunclaw/plugin-sdk/runtime-env";
+import { normalizeOptionalString } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import {
   hasSignalApprovalReactionApprovers,
   registerSignalApprovalReactionTarget,

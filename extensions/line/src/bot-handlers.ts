@@ -1,29 +1,29 @@
 import type { webhook } from "@line/bot-sdk";
-import { buildMentionRegexes, matchesMentionPatterns } from "openclaw/plugin-sdk/channel-inbound";
-import { resolveStableChannelMessageIngress } from "openclaw/plugin-sdk/channel-ingress-runtime";
-import { createChannelPairingChallengeIssuer } from "openclaw/plugin-sdk/channel-pairing";
-import { shouldComputeCommandAuthorized } from "openclaw/plugin-sdk/command-auth-native";
-import type { GroupPolicy, OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import { buildMentionRegexes, matchesMentionPatterns } from "sunclaw/plugin-sdk/channel-inbound";
+import { resolveStableChannelMessageIngress } from "sunclaw/plugin-sdk/channel-ingress-runtime";
+import { createChannelPairingChallengeIssuer } from "sunclaw/plugin-sdk/channel-pairing";
+import { shouldComputeCommandAuthorized } from "sunclaw/plugin-sdk/command-auth-native";
+import type { GroupPolicy, SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
 import {
   readChannelAllowFromStore,
   resolvePairingIdLabel,
   upsertChannelPairingRequest,
-} from "openclaw/plugin-sdk/conversation-runtime";
-import { createClaimableDedupe, type ClaimableDedupe } from "openclaw/plugin-sdk/persistent-dedupe";
+} from "sunclaw/plugin-sdk/conversation-runtime";
+import { createClaimableDedupe, type ClaimableDedupe } from "sunclaw/plugin-sdk/persistent-dedupe";
 import {
   DEFAULT_GROUP_HISTORY_LIMIT,
   createChannelHistoryWindow,
   type HistoryEntry,
-} from "openclaw/plugin-sdk/reply-history";
-import { resolveAgentRoute } from "openclaw/plugin-sdk/routing";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime";
-import { danger, logVerbose } from "openclaw/plugin-sdk/runtime-env";
+} from "sunclaw/plugin-sdk/reply-history";
+import { resolveAgentRoute } from "sunclaw/plugin-sdk/routing";
+import type { RuntimeEnv } from "sunclaw/plugin-sdk/runtime";
+import { danger, logVerbose } from "sunclaw/plugin-sdk/runtime-env";
 import {
   resolveAllowlistProviderRuntimeGroupPolicy,
   resolveDefaultGroupPolicy,
   warnMissingProviderGroupPolicyFallbackOnce,
-} from "openclaw/plugin-sdk/runtime-group-policy";
-import { normalizeStringEntries } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/runtime-group-policy";
+import { normalizeStringEntries } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { firstDefined, normalizeLineAllowEntry } from "./bot-access.js";
 import {
   buildLineMessageContext,
@@ -63,7 +63,7 @@ function isDownloadableLineMessageType(
 }
 
 export interface LineHandlerContext {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   account: ResolvedLineAccount;
   runtime: RuntimeEnv;
   mediaMaxBytes: number;

@@ -1,10 +1,10 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import type { SkillScanFinding } from "../security/scanner.js";
 
-export const SKILL_WORKSHOP_SCHEMA = "openclaw.skill-workshop.proposal.v1" as const;
+export const SKILL_WORKSHOP_SCHEMA = "sunclaw.skill-workshop.proposal.v1" as const;
 export const SKILL_WORKSHOP_MANIFEST_SCHEMA =
-  "openclaw.skill-workshop.proposals-manifest.v1" as const;
-export const SKILL_WORKSHOP_ROLLBACK_SCHEMA = "openclaw.skill-workshop.rollback.v1" as const;
+  "sunclaw.skill-workshop.proposals-manifest.v1" as const;
+export const SKILL_WORKSHOP_ROLLBACK_SCHEMA = "sunclaw.skill-workshop.rollback.v1" as const;
 
 export type SkillProposalKind = "create" | "update";
 export type SkillProposalStatus = "pending" | "applied" | "rejected" | "quarantined" | "stale";
@@ -112,7 +112,7 @@ export type SkillProposalSupportFileInput = {
 
 export type SkillProposalCreateInput = {
   workspaceDir: string;
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   name: string;
   description: string;
   content: string;
@@ -125,7 +125,7 @@ export type SkillProposalCreateInput = {
 
 export type SkillProposalUpdateInput = {
   workspaceDir: string;
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   skillName: string;
   description?: string;
   content: string;
@@ -138,7 +138,7 @@ export type SkillProposalUpdateInput = {
 
 export type SkillProposalReviseInput = {
   workspaceDir: string;
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   proposalId: string;
   content: string;
   supportFiles?: SkillProposalSupportFileInput[];

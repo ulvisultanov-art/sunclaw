@@ -1,11 +1,11 @@
 import { randomBytes } from "node:crypto";
-import { resolveExpiresAtMsFromDurationSeconds } from "openclaw/plugin-sdk/number-runtime";
-import { generatePkceVerifierChallenge, toFormUrlEncoded } from "openclaw/plugin-sdk/provider-auth";
+import { resolveExpiresAtMsFromDurationSeconds } from "sunclaw/plugin-sdk/number-runtime";
+import { generatePkceVerifierChallenge, toFormUrlEncoded } from "sunclaw/plugin-sdk/provider-auth";
 import {
   parseOAuthCallbackInput,
   waitForLocalOAuthCallback,
-} from "openclaw/plugin-sdk/provider-auth-runtime";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/provider-auth-runtime";
+import { normalizeOptionalString } from "sunclaw/plugin-sdk/string-coerce-runtime";
 
 const CHUTES_AUTHORIZE_ENDPOINT = "https://api.chutes.ai/idp/authorize";
 const CHUTES_TOKEN_ENDPOINT = "https://api.chutes.ai/idp/token";

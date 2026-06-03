@@ -1,4 +1,4 @@
-import { MAX_DATE_TIMESTAMP_MS } from "@openclaw/normalization-core/number-coercion";
+import { MAX_DATE_TIMESTAMP_MS } from "@sunclaw/normalization-core/number-coercion";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { OAuthCredential } from "./auth-profiles/types.js";
 
@@ -133,7 +133,7 @@ describe("buildAuthHealthSummary", () => {
           provider: "openai-codex",
           expires: now + DEFAULT_OAUTH_WARN_MS + 60_000,
           oauthRef: {
-            source: "openclaw-credentials" as const,
+            source: "sunclaw-credentials" as const,
             provider: "openai-codex" as const,
             id: "0123456789abcdef0123456789abcdef",
           },

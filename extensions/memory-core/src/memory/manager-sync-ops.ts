@@ -4,24 +4,24 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import type { DatabaseSync } from "node:sqlite";
 import chokidar, { FSWatcher } from "chokidar";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { classifyMemoryMultimodalPath } from "openclaw/plugin-sdk/memory-core-host-engine-embeddings";
+import { formatErrorMessage } from "sunclaw/plugin-sdk/error-runtime";
+import { classifyMemoryMultimodalPath } from "sunclaw/plugin-sdk/memory-core-host-engine-embeddings";
 import {
   createSubsystemLogger,
   onSessionTranscriptUpdate,
   resolveAgentDir,
   resolveSessionTranscriptsDirForAgent,
   resolveUserPath,
-  type OpenClawConfig,
+  type SunClawConfig,
   type ResolvedMemorySearchConfig,
-} from "openclaw/plugin-sdk/memory-core-host-engine-foundation";
+} from "sunclaw/plugin-sdk/memory-core-host-engine-foundation";
 import {
   buildSessionEntry,
   isSessionArchiveArtifactName,
   isUsageCountedSessionTranscriptFileName,
   listSessionFilesForAgent,
   sessionPathForFile,
-} from "openclaw/plugin-sdk/memory-core-host-engine-qmd";
+} from "sunclaw/plugin-sdk/memory-core-host-engine-qmd";
 import {
   buildFileEntry,
   ensureMemoryIndexSchema,
@@ -33,9 +33,9 @@ import {
   runWithConcurrency,
   type MemorySource,
   type MemorySyncProgressUpdate,
-} from "openclaw/plugin-sdk/memory-core-host-engine-storage";
-import { resolveTimerTimeoutMs } from "openclaw/plugin-sdk/number-runtime";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/memory-core-host-engine-storage";
+import { resolveTimerTimeoutMs } from "sunclaw/plugin-sdk/number-runtime";
+import { normalizeLowercaseStringOrEmpty } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import {
   createEmbeddingProvider,
   resolveEmbeddingProviderAdapterId,
@@ -115,8 +115,8 @@ const IGNORED_MEMORY_WATCH_DIR_NAMES = new Set([
 ]);
 
 const log = createSubsystemLogger("memory");
-const TEST_MEMORY_WATCH_FACTORY_KEY = Symbol.for("openclaw.test.memoryWatchFactory");
-const TEST_MEMORY_NATIVE_WATCH_FACTORY_KEY = Symbol.for("openclaw.test.memoryNativeWatchFactory");
+const TEST_MEMORY_WATCH_FACTORY_KEY = Symbol.for("sunclaw.test.memoryWatchFactory");
+const TEST_MEMORY_NATIVE_WATCH_FACTORY_KEY = Symbol.for("sunclaw.test.memoryNativeWatchFactory");
 
 type NativeMemoryWatchPair = {
   dir: string;
@@ -199,7 +199,7 @@ function createSessionSyncYield(total: number): () => Promise<void> {
 }
 
 export abstract class MemoryManagerSyncOps {
-  protected abstract readonly cfg: OpenClawConfig;
+  protected abstract readonly cfg: SunClawConfig;
   protected abstract readonly agentId: string;
   protected abstract readonly workspaceDir: string;
   protected abstract readonly settings: ResolvedMemorySearchConfig;
@@ -1821,8 +1821,8 @@ export abstract class MemoryManagerSyncOps {
     try {
       if (needsFullReindex) {
         if (
-          process.env.OPENCLAW_TEST_FAST === "1" &&
-          process.env.OPENCLAW_TEST_MEMORY_UNSAFE_REINDEX === "1"
+          process.env.SUNCLAW_TEST_FAST === "1" &&
+          process.env.SUNCLAW_TEST_MEMORY_UNSAFE_REINDEX === "1"
         ) {
           await this.runUnsafeReindex({
             reason: params?.reason,

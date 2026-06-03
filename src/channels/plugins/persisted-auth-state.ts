@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import type { PluginDiscoveryResult } from "../../plugins/discovery.js";
 import {
   hasBundledChannelPackageState,
@@ -13,7 +13,7 @@ export function listBundledChannelIdsWithPersistedAuthState(
 
 export function hasBundledChannelPersistedAuthState(params: {
   channelId: string;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   env?: NodeJS.ProcessEnv;
   discovery?: PluginDiscoveryResult;
 }): boolean {

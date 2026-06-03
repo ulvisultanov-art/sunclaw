@@ -23,7 +23,7 @@ function buildNodeInstallEnvironmentValueSources(): Record<
   GatewayServiceEnvironmentValueSource | undefined
 > {
   return {
-    OPENCLAW_GATEWAY_TOKEN: "file",
+    SUNCLAW_GATEWAY_TOKEN: "file",
   };
 }
 
@@ -73,7 +73,7 @@ export async function buildNodeInstallPlan(params: {
     extraPathDirs: resolveDaemonNodeBinDir(nodePath),
   });
   const description = formatNodeServiceDescription({
-    version: environment.OPENCLAW_SERVICE_VERSION,
+    version: environment.SUNCLAW_SERVICE_VERSION,
   });
 
   return {

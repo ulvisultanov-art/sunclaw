@@ -1,6 +1,6 @@
-import { withFileLock as withPathLock } from "openclaw/plugin-sdk/file-lock";
-import { readJsonFileWithFallback, writeJsonFileAtomically } from "openclaw/plugin-sdk/json-store";
-import { pathExists } from "openclaw/plugin-sdk/security-runtime";
+import { withFileLock as withPathLock } from "sunclaw/plugin-sdk/file-lock";
+import { readJsonFileWithFallback, writeJsonFileAtomically } from "sunclaw/plugin-sdk/json-store";
+import { pathExists } from "sunclaw/plugin-sdk/security-runtime";
 
 const STORE_LOCK_OPTIONS = {
   retries: {

@@ -7,7 +7,7 @@ import { VerificationMethod } from "matrix-js-sdk/lib/types.js";
 import {
   resolveDateTimestampMs,
   resolveTimestampMsToIsoString,
-} from "openclaw/plugin-sdk/number-runtime";
+} from "sunclaw/plugin-sdk/number-runtime";
 import { formatMatrixErrorMessage } from "../errors.js";
 
 export type MatrixVerificationMethod = "sas" | "show-qr" | "scan-qr";

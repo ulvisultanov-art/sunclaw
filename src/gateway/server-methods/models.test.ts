@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { ErrorCodes } from "../../../packages/gateway-protocol/src/index.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { createDeferred } from "../test-helpers.deferred.js";
 import { expectGatewayErrorResponse } from "./gateway-response.test-helpers.js";
 import { modelsHandlers } from "./models.js";
@@ -9,7 +9,7 @@ import type { RespondFn } from "./types.js";
 function requestModelsList(params: {
   view: "configured" | "all";
   respond?: ReturnType<typeof vi.fn>;
-  runtimeConfig?: OpenClawConfig;
+  runtimeConfig?: SunClawConfig;
   loadGatewayModelCatalog: () => Promise<Array<Record<string, unknown>>>;
   reqId?: string;
 }) {
@@ -26,7 +26,7 @@ function requestModelsList(params: {
     client: null,
     isWebchatConnect: () => false,
     context: {
-      getRuntimeConfig: () => params.runtimeConfig ?? ({} as OpenClawConfig),
+      getRuntimeConfig: () => params.runtimeConfig ?? ({} as SunClawConfig),
       loadGatewayModelCatalog: params.loadGatewayModelCatalog,
       logGateway: {
         debug: vi.fn(),
@@ -49,7 +49,7 @@ describe("models.list", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as SunClawConfig;
 
     vi.useFakeTimers();
     try {
@@ -158,7 +158,7 @@ describe("models.list", () => {
           vllm: { apiKey: "test-key" },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as SunClawConfig;
 
     const loadConfiguredCatalog = vi.fn(() => Promise.resolve(catalog));
     const { request: configuredRequest, respond: configuredRespond } = requestModelsList({

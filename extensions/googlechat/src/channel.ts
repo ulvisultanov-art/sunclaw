@@ -1,12 +1,12 @@
-import type { ChannelMessageActionName } from "openclaw/plugin-sdk/channel-contract";
-import { createChatChannelPlugin } from "openclaw/plugin-sdk/channel-core";
-import { buildPassiveProbedChannelStatusSummary } from "openclaw/plugin-sdk/extension-shared";
-import { createLazyRuntimeNamedExport } from "openclaw/plugin-sdk/lazy-runtime";
+import type { ChannelMessageActionName } from "sunclaw/plugin-sdk/channel-contract";
+import { createChatChannelPlugin } from "sunclaw/plugin-sdk/channel-core";
+import { buildPassiveProbedChannelStatusSummary } from "sunclaw/plugin-sdk/extension-shared";
+import { createLazyRuntimeNamedExport } from "sunclaw/plugin-sdk/lazy-runtime";
 import {
   createComputedAccountStatusAdapter,
   createDefaultChannelRuntimeState,
-} from "openclaw/plugin-sdk/status-helpers";
-import { extractToolSend } from "openclaw/plugin-sdk/tool-send";
+} from "sunclaw/plugin-sdk/status-helpers";
+import { extractToolSend } from "sunclaw/plugin-sdk/tool-send";
 import { googleChatApprovalAuth } from "./approval-auth.js";
 import { createGoogleChatPluginBase, GOOGLECHAT_CHANNEL_ID } from "./channel-base.js";
 import {

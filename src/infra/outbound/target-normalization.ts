@@ -1,12 +1,12 @@
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@sunclaw/normalization-core/string-coerce";
 import { getChannelPlugin } from "../../channels/plugins/index.js";
 import { getLoadedChannelPluginForRead } from "../../channels/plugins/registry-loaded-read.js";
 import type { ChannelPlugin } from "../../channels/plugins/types.plugin.js";
 import type { ChannelDirectoryEntryKind, ChannelId } from "../../channels/plugins/types.public.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { getActivePluginChannelRegistryVersion } from "../../plugins/runtime.js";
 
 /**
@@ -135,7 +135,7 @@ export function looksLikeTargetId(params: {
  * Resolves a normalized target through the channel plugin when a resolver is available.
  */
 export async function maybeResolvePluginMessagingTarget(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   channel: ChannelId;
   input: string;
   accountId?: string | null;

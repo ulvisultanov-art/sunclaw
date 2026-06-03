@@ -1,36 +1,36 @@
-import { describeAccountSnapshot } from "openclaw/plugin-sdk/account-helpers";
-import { formatAllowFromLowercase } from "openclaw/plugin-sdk/allow-from";
+import { describeAccountSnapshot } from "sunclaw/plugin-sdk/account-helpers";
+import { formatAllowFromLowercase } from "sunclaw/plugin-sdk/allow-from";
 import {
   adaptScopedAccountAccessor,
   createHybridChannelConfigAdapter,
-} from "openclaw/plugin-sdk/channel-config-helpers";
+} from "sunclaw/plugin-sdk/channel-config-helpers";
 import type {
   ChannelMessageActionAdapter,
   ChannelMessageActionContext,
   ChannelMessageToolDiscovery,
-} from "openclaw/plugin-sdk/channel-contract";
-import { createChatChannelPlugin } from "openclaw/plugin-sdk/channel-core";
+} from "sunclaw/plugin-sdk/channel-contract";
+import { createChatChannelPlugin } from "sunclaw/plugin-sdk/channel-core";
 import {
   defineChannelMessageAdapter,
   createRuntimeOutboundDelegates,
   type ChannelMessageSendResult,
   type MessageReceiptPartKind,
-} from "openclaw/plugin-sdk/channel-outbound";
-import { createPairingPrefixStripper } from "openclaw/plugin-sdk/channel-pairing";
+} from "sunclaw/plugin-sdk/channel-outbound";
+import { createPairingPrefixStripper } from "sunclaw/plugin-sdk/channel-pairing";
 import {
   createAllowlistProviderGroupPolicyWarningCollector,
   projectConfigAccountIdWarningCollector,
-} from "openclaw/plugin-sdk/channel-policy";
-import { getSessionBindingService } from "openclaw/plugin-sdk/conversation-runtime";
+} from "sunclaw/plugin-sdk/channel-policy";
+import { getSessionBindingService } from "sunclaw/plugin-sdk/conversation-runtime";
 import {
   createChannelDirectoryAdapter,
   createRuntimeDirectoryLiveAdapter,
-} from "openclaw/plugin-sdk/directory-runtime";
-import { normalizeMessagePresentation } from "openclaw/plugin-sdk/interactive-runtime";
-import { createLazyRuntimeNamedExport } from "openclaw/plugin-sdk/lazy-runtime";
-import { parseStrictPositiveInteger } from "openclaw/plugin-sdk/number-runtime";
-import { createComputedAccountStatusAdapter } from "openclaw/plugin-sdk/status-helpers";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/directory-runtime";
+import { normalizeMessagePresentation } from "sunclaw/plugin-sdk/interactive-runtime";
+import { createLazyRuntimeNamedExport } from "sunclaw/plugin-sdk/lazy-runtime";
+import { parseStrictPositiveInteger } from "sunclaw/plugin-sdk/number-runtime";
+import { createComputedAccountStatusAdapter } from "sunclaw/plugin-sdk/status-helpers";
+import { normalizeLowercaseStringOrEmpty } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import type { PluginRuntime } from "../runtime-api.js";
 import {
   inspectFeishuCredentials,
@@ -1209,8 +1209,8 @@ export const feishuPlugin: ChannelPlugin<ResolvedFeishuAccount, FeishuProbeResul
       },
       auth: {
         login: async ({ cfg }) => {
-          const { createClackPrompter } = await import("openclaw/plugin-sdk/setup-runtime");
-          const { replaceConfigFile } = await import("openclaw/plugin-sdk/config-mutation");
+          const { createClackPrompter } = await import("sunclaw/plugin-sdk/setup-runtime");
+          const { replaceConfigFile } = await import("sunclaw/plugin-sdk/config-mutation");
           const prompter = createClackPrompter();
           const nextCfg = await runFeishuLogin({ cfg, prompter });
           if (nextCfg !== cfg) {

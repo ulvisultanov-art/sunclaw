@@ -1,4 +1,4 @@
-import { parseFiniteNumber } from "openclaw/plugin-sdk/number-runtime";
+import { parseFiniteNumber } from "sunclaw/plugin-sdk/number-runtime";
 
 const IDENTIFY_WINDOW_MS = 5_000;
 

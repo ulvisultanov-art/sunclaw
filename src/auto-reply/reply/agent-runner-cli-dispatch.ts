@@ -1,8 +1,8 @@
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord } from "@sunclaw/normalization-core/record-coerce";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@sunclaw/normalization-core/string-coerce";
 import { runCliAgent } from "../../agents/cli-runner.js";
 import type { RunCliAgentParams } from "../../agents/cli-runner/types.js";
 import { clearCliSession } from "../../agents/cli-session.js";

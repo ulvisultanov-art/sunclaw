@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import {
   createChildDiagnosticTraceContext,
   createDiagnosticTraceContext,
@@ -27,7 +27,7 @@ import {
   resolveSubagentCapabilityStore,
 } from "../subagent-capabilities.js";
 import { expandToolGroups, normalizeToolName } from "../tool-policy.js";
-import { createOpenClawAgentHarness } from "./builtin-openclaw.js";
+import { createSunClawAgentHarness } from "./builtin-sunclaw.js";
 import { MissingAgentHarnessError } from "./errors.js";
 import { runAgentHarnessLifecycleAttempt } from "./lifecycle.js";
 import {
@@ -62,16 +62,16 @@ type AgentHarnessSelectionDecision = {
   policy: AgentHarnessPolicy;
   selectedHarnessId: string;
   selectedReason:
-    | "forced_openclaw"
+    | "forced_sunclaw"
     | "forced_plugin"
-    // Implicit Codex preference found no registered Codex harness, so OpenClaw handled the run.
-    | "implicit_plugin_unavailable_openclaw"
+    // Implicit Codex preference found no registered Codex harness, so SunClaw handled the run.
+    | "implicit_plugin_unavailable_sunclaw"
     // Provider-owned CLI runtime aliases have no agent harness plugin counterpart.
-    | "cli_runtime_passthrough_openclaw"
+    | "cli_runtime_passthrough_sunclaw"
     // Auto mode chose a registered plugin harness that supports the provider/model.
     | "auto_plugin"
-    // Auto mode found no supporting plugin harness, so OpenClaw handled the run.
-    | "auto_openclaw";
+    // Auto mode found no supporting plugin harness, so SunClaw handled the run.
+    | "auto_sunclaw";
   candidates: AgentHarnessSelectionCandidate[];
 };
 
@@ -82,7 +82,7 @@ function listPluginAgentHarnesses(): AgentHarness[] {
 export function resolveAvailableAgentHarnessPolicy(params: {
   provider?: string;
   modelId?: string;
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   agentId?: string;
   sessionKey?: string;
   env?: NodeJS.ProcessEnv;
@@ -98,7 +98,7 @@ function applyAgentHarnessAvailabilityPolicy(policy: AgentHarnessPolicy): AgentH
   ) {
     return {
       ...policy,
-      runtime: "openclaw",
+      runtime: "sunclaw",
     };
   }
   return policy;
@@ -118,7 +118,7 @@ function compareHarnessSupport(
 export function selectAgentHarness(params: {
   provider: string;
   modelId?: string;
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   agentId?: string;
   sessionKey?: string;
   agentHarnessId?: string;
@@ -130,7 +130,7 @@ export function selectAgentHarness(params: {
 function selectAgentHarnessDecision(params: {
   provider: string;
   modelId?: string;
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   agentId?: string;
   sessionKey?: string;
   agentHarnessId?: string;
@@ -146,16 +146,16 @@ function selectAgentHarnessDecision(params: {
           runtimeSource: "model",
         } as AgentHarnessPolicy)
       : resolvedPolicy;
-  // OpenClaw's built-in harness is intentionally not part of the plugin candidate list. Explicit plugin
-  // runtimes fail closed; only `auto` may route an unmatched turn to OpenClaw.
+  // SunClaw's built-in harness is intentionally not part of the plugin candidate list. Explicit plugin
+  // runtimes fail closed; only `auto` may route an unmatched turn to SunClaw.
   const pluginHarnesses = listPluginAgentHarnesses();
-  const openClawHarness = createOpenClawAgentHarness();
+  const sunClawHarness = createSunClawAgentHarness();
   const runtime = policy.runtime;
-  if (runtime === "openclaw") {
+  if (runtime === "sunclaw") {
     return buildSelectionDecision({
-      harness: openClawHarness,
+      harness: sunClawHarness,
       policy,
-      selectedReason: "forced_openclaw",
+      selectedReason: "forced_sunclaw",
       candidates: listHarnessCandidates(pluginHarnesses),
     });
   }
@@ -177,12 +177,12 @@ function selectAgentHarnessDecision(params: {
       }
       if (isCliRuntimeAliasForProvider({ runtime, provider: params.provider })) {
         return buildSelectionDecision({
-          harness: openClawHarness,
+          harness: sunClawHarness,
           policy: {
             ...policy,
-            runtime: "openclaw",
+            runtime: "sunclaw",
           },
-          selectedReason: "cli_runtime_passthrough_openclaw",
+          selectedReason: "cli_runtime_passthrough_sunclaw",
           candidates: listHarnessCandidates(pluginHarnesses),
         });
       }
@@ -194,12 +194,12 @@ function selectAgentHarnessDecision(params: {
     }
     if (runtime === "codex" && policy.runtimeSource === "implicit") {
       return buildSelectionDecision({
-        harness: openClawHarness,
+        harness: sunClawHarness,
         policy: {
           ...policy,
-          runtime: "openclaw",
+          runtime: "sunclaw",
         },
-        selectedReason: "implicit_plugin_unavailable_openclaw",
+        selectedReason: "implicit_plugin_unavailable_sunclaw",
         candidates: listHarnessCandidates(pluginHarnesses),
       });
     }
@@ -211,12 +211,12 @@ function selectAgentHarnessDecision(params: {
       })
     ) {
       return buildSelectionDecision({
-        harness: openClawHarness,
+        harness: sunClawHarness,
         policy: {
           ...policy,
-          runtime: "openclaw",
+          runtime: "sunclaw",
         },
-        selectedReason: "cli_runtime_passthrough_openclaw",
+        selectedReason: "cli_runtime_passthrough_sunclaw",
         candidates: listHarnessCandidates(pluginHarnesses),
       });
     }
@@ -252,9 +252,9 @@ function selectAgentHarnessDecision(params: {
     });
   }
   return buildSelectionDecision({
-    harness: openClawHarness,
+    harness: sunClawHarness,
     policy,
-    selectedReason: "auto_openclaw",
+    selectedReason: "auto_sunclaw",
     candidates: candidates.map(toSelectionCandidate),
   });
 }
@@ -277,7 +277,7 @@ export async function runAgentHarnessAttempt(
   });
   const harness = selection.harness;
   const attemptParams =
-    harness.id === "openclaw" ? params : applyPluginHarnessDenyAllToolPolicy(params);
+    harness.id === "sunclaw" ? params : applyPluginHarnessDenyAllToolPolicy(params);
   logAgentHarnessSelection(selection, {
     provider: params.provider,
     modelId: params.modelId,
@@ -285,14 +285,14 @@ export async function runAgentHarnessAttempt(
     agentId: params.agentId,
   });
   const runAttempt = () => runAgentHarnessLifecycleAttempt(harness, attemptParams);
-  if (harness.id === "openclaw") {
+  if (harness.id === "sunclaw") {
     return await runWithDiagnosticTraceContext(harnessTrace, runAttempt);
   }
 
   try {
     return await runWithDiagnosticTraceContext(harnessTrace, runAttempt);
   } catch (error) {
-    log.warn(`${harness.label} failed; not falling back to embedded OpenClaw backend`, {
+    log.warn(`${harness.label} failed; not falling back to embedded SunClaw backend`, {
       harnessId: harness.id,
       provider: params.provider,
       modelId: params.modelId,

@@ -44,8 +44,8 @@ export type {
   AnyAgentTool,
   CliBackendPlugin,
   MediaUnderstandingProviderPlugin,
-  OpenClawPluginApi,
-  OpenClawPluginConfigSchema,
+  SunClawPluginApi,
+  SunClawPluginConfigSchema,
   PluginLogger,
   ProviderAuthContext,
   ProviderAuthResult,
@@ -59,7 +59,7 @@ export type {
   UnifiedModelCatalogEntry,
   UnifiedModelCatalogKind,
   UnifiedModelCatalogSource,
-} from "@openclaw/model-catalog-core/model-catalog-types";
+} from "@sunclaw/model-catalog-core/model-catalog-types";
 export type { ProviderRuntimeModel } from "../plugins/provider-runtime-model.types.js";
 export type { ResolvedProviderRuntimeAuth } from "../plugins/runtime/model-auth-types.js";
 export type {
@@ -91,11 +91,11 @@ export type {
   TaskRunDetail,
   TaskRunView,
 } from "../plugins/runtime/task-domain-types.js";
-export type { OpenClawConfig } from "../config/config.js";
-/** @deprecated Use OpenClawConfig instead */
-export type { OpenClawConfig as ClawdbotConfig } from "../config/config.js";
-/** @deprecated Use OpenClawConfig instead */
-export type { OpenClawConfig as OpenClawSchemaType } from "../config/config.js";
+export type { SunClawConfig } from "../config/config.js";
+/** @deprecated Use SunClawConfig instead */
+export type { SunClawConfig as ClawdbotConfig } from "../config/config.js";
+/** @deprecated Use SunClawConfig instead */
+export type { SunClawConfig as SunClawSchemaType } from "../config/config.js";
 export type {
   MemoryPluginCapability,
   MemoryPluginPublicArtifact,

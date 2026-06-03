@@ -1,5 +1,5 @@
-import * as fetchModule from "openclaw/plugin-sdk/fetch-runtime";
-import { MAX_TIMER_TIMEOUT_MS } from "openclaw/plugin-sdk/number-runtime";
+import * as fetchModule from "sunclaw/plugin-sdk/fetch-runtime";
+import { MAX_TIMER_TIMEOUT_MS } from "sunclaw/plugin-sdk/number-runtime";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import {
   containerCheck,

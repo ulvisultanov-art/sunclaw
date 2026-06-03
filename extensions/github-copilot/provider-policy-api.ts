@@ -1,5 +1,5 @@
-import type { ProviderDefaultThinkingPolicyContext } from "openclaw/plugin-sdk/core";
-import { normalizeOptionalLowercaseString } from "openclaw/plugin-sdk/string-coerce-runtime";
+import type { ProviderDefaultThinkingPolicyContext } from "sunclaw/plugin-sdk/core";
+import { normalizeOptionalLowercaseString } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { resolveStaticCopilotModelOverride } from "./model-metadata.js";
 
 const COPILOT_XHIGH_MODEL_IDS = ["gpt-5.4", "gpt-5.3-codex"] as const;

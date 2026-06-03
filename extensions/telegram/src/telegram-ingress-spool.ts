@@ -6,8 +6,8 @@ import type {
   ChannelIngressQueueClaim,
   ChannelIngressQueueClaimRef,
   ChannelIngressQueueRecord,
-} from "openclaw/plugin-sdk/channel-outbound";
-import { resolveStateDir } from "openclaw/plugin-sdk/state-paths";
+} from "sunclaw/plugin-sdk/channel-outbound";
+import { resolveStateDir } from "sunclaw/plugin-sdk/state-paths";
 import { getTelegramRuntime } from "./runtime.js";
 
 const SPOOL_VERSION = 1;

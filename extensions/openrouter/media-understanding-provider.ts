@@ -5,14 +5,14 @@ import {
   type AudioTranscriptionRequest,
   type AudioTranscriptionResult,
   type MediaUnderstandingProvider,
-} from "openclaw/plugin-sdk/media-understanding";
+} from "sunclaw/plugin-sdk/media-understanding";
 import {
   assertOkOrThrowHttpError,
   postJsonRequest,
   requireTranscriptionText,
   resolveProviderHttpRequestConfig,
-} from "openclaw/plugin-sdk/provider-http";
-import { asFiniteNumber } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/provider-http";
+import { asFiniteNumber } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { OPENROUTER_BASE_URL } from "./provider-catalog.js";
 
 const DEFAULT_OPENROUTER_AUDIO_TRANSCRIPTION_MODEL = "openai/whisper-large-v3-turbo";
@@ -116,8 +116,8 @@ export async function transcribeOpenRouterAudio(
       defaultHeaders: {
         Authorization: `Bearer ${params.apiKey}`,
         "Content-Type": "application/json",
-        "HTTP-Referer": "https://openclaw.ai",
-        "X-OpenRouter-Title": "OpenClaw",
+        "HTTP-Referer": "https://docs.sunclaw.complex.az",
+        "X-OpenRouter-Title": "SunClaw",
       },
       provider: "openrouter",
       api: "openrouter-stt",

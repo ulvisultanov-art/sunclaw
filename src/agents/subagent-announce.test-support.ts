@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type { callGateway } from "../gateway/call.js";
 import type { dispatchGatewayMethodInProcess } from "../gateway/server-plugins.js";
 import type { EmbeddedAgentQueueMessageOptions } from "./embedded-agent-runner/run-state.js";
@@ -6,7 +6,7 @@ import type { EmbeddedAgentQueueMessageOutcome } from "./embedded-agent-runner/r
 
 type DeliveryRuntimeMockOptions = {
   callGateway: (request: unknown) => Promise<unknown>;
-  getRuntimeConfig: () => OpenClawConfig;
+  getRuntimeConfig: () => SunClawConfig;
   loadSessionStore: (storePath: string) => unknown;
   resolveAgentIdFromSessionKey: (sessionKey: string) => string;
   resolveMainSessionKey: (cfg: unknown) => string;

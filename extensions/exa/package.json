@@ -1,13 +1,13 @@
 {
-  "name": "@openclaw/exa-plugin",
+  "name": "@sunclaw/exa-plugin",
   "version": "2026.6.2",
   "private": true,
-  "description": "OpenClaw Exa plugin",
+  "description": "SunClaw Exa plugin",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@sunclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ]

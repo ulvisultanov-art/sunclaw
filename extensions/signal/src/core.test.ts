@@ -1,9 +1,9 @@
 import {
   createMessageReceiptFromOutboundResults,
   verifyChannelMessageAdapterCapabilityProofs,
-} from "openclaw/plugin-sdk/channel-outbound";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { createPluginSetupWizardStatus } from "openclaw/plugin-sdk/plugin-test-runtime";
+} from "sunclaw/plugin-sdk/channel-outbound";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import { createPluginSetupWizardStatus } from "sunclaw/plugin-sdk/plugin-test-runtime";
 import { describe, expect, it, vi } from "vitest";
 import { signalPlugin } from "./channel.js";
 import * as clientModule from "./client-adapter.js";
@@ -202,7 +202,7 @@ describe("probeSignal", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as SunClawConfig,
       accountOverrides: {},
     });
 
@@ -241,7 +241,7 @@ describe("signal outbound", () => {
               enabled: true,
             },
           },
-        } as OpenClawConfig,
+        } as SunClawConfig,
         accountId: "default",
         payload: {
           text: "Approval required.",
@@ -282,7 +282,7 @@ describe("signal outbound", () => {
       proofs: {
         text: async () => {
           const result = await signalPlugin.message?.send?.text?.({
-            cfg: {} as OpenClawConfig,
+            cfg: {} as SunClawConfig,
             to: "signal:+15555550123",
             text: "hello",
             deps,
@@ -298,7 +298,7 @@ describe("signal outbound", () => {
         },
         media: async () => {
           const result = await signalPlugin.message?.send?.media?.({
-            cfg: {} as OpenClawConfig,
+            cfg: {} as SunClawConfig,
             to: "signal:+15555550123",
             text: "image",
             mediaUrl: "https://example.com/image.png",
@@ -440,7 +440,7 @@ describe("signal setup parsing", () => {
   });
 
   it("uses configured defaultAccount for omitted DM policy account context", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: SunClawConfig = {
       channels: {
         signal: {
           defaultAccount: "work",
@@ -470,7 +470,7 @@ describe("signal setup parsing", () => {
   });
 
   it('writes open policy state to the named account and stores inherited allowFrom with "*"', () => {
-    const cfg: OpenClawConfig = {
+    const cfg: SunClawConfig = {
       channels: {
         signal: {
           allowFrom: ["+15555550123"],

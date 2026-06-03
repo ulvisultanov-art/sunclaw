@@ -4,13 +4,13 @@ import {
   getRuntimeConfig,
   getRuntimeConfigSourceSnapshot,
   setRuntimeConfigSnapshot,
-  type OpenClawConfig,
+  type SunClawConfig,
   getModelsCommandSecretTargetIds,
 } from "./load-config.runtime.js";
 
 export type LoadedModelsConfig = {
-  sourceConfig: OpenClawConfig;
-  resolvedConfig: OpenClawConfig;
+  sourceConfig: SunClawConfig;
+  resolvedConfig: SunClawConfig;
   diagnostics: string[];
 };
 
@@ -38,6 +38,6 @@ export async function loadModelsConfigWithSource(params: {
 export async function loadModelsConfig(params: {
   commandName: string;
   runtime?: RuntimeEnv;
-}): Promise<OpenClawConfig> {
+}): Promise<SunClawConfig> {
   return (await loadModelsConfigWithSource(params)).resolvedConfig;
 }

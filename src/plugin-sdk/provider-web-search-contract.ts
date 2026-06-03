@@ -1,6 +1,6 @@
 // Public contract-safe web-search registration helpers for provider plugins.
 
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type {
   WebSearchCredentialResolutionSource,
   WebSearchProviderSetupContext,
@@ -59,7 +59,7 @@ export function createWebSearchProviderContractFields(
     ...createBaseWebSearchProviderContractFields(options),
     ...(selectionPluginId
       ? {
-          applySelectionConfig: (config: OpenClawConfig) =>
+          applySelectionConfig: (config: SunClawConfig) =>
             enablePluginInConfig(config, selectionPluginId).config,
         }
       : {}),

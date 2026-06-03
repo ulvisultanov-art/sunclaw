@@ -1,11 +1,11 @@
 import {
   resolveStableChannelMessageIngress,
   type StableChannelIngressIdentityParams,
-} from "openclaw/plugin-sdk/channel-ingress-runtime";
-import { createChannelPairingController } from "openclaw/plugin-sdk/channel-pairing";
-import { attachChannelToResult } from "openclaw/plugin-sdk/channel-send-result";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { runStoppablePassiveMonitor } from "openclaw/plugin-sdk/extension-shared";
+} from "sunclaw/plugin-sdk/channel-ingress-runtime";
+import { createChannelPairingController } from "sunclaw/plugin-sdk/channel-pairing";
+import { attachChannelToResult } from "sunclaw/plugin-sdk/channel-send-result";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import { runStoppablePassiveMonitor } from "sunclaw/plugin-sdk/extension-shared";
 import type { ChannelOutboundAdapter, ChannelPlugin } from "./channel-api.js";
 import type { MetricEvent, MetricsSnapshot } from "./metrics.js";
 import { startNostrBus, type NostrBusHandle } from "./nostr-bus.js";
@@ -289,7 +289,7 @@ export const nostrPairingTextAdapter = {
     message,
     accountId,
   }: {
-    cfg: OpenClawConfig;
+    cfg: SunClawConfig;
     id: string;
     message: string;
     accountId?: string;

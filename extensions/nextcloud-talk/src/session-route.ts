@@ -1,9 +1,9 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { buildOutboundBaseSessionKey } from "openclaw/plugin-sdk/routing";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import { buildOutboundBaseSessionKey } from "sunclaw/plugin-sdk/routing";
 import { stripNextcloudTalkTargetPrefix } from "./normalize.js";
 
 type NextcloudTalkOutboundSessionRouteParams = {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   agentId: string;
   accountId?: string | null;
   target: string;

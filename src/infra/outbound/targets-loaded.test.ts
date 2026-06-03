@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { SunClawConfig } from "../../config/config.js";
 import { tryResolveLoadedOutboundTarget } from "./targets-loaded.js";
 
 const mocks = vi.hoisted(() => ({
@@ -22,7 +22,7 @@ describe("tryResolveLoadedOutboundTarget", () => {
   });
 
   it("uses loaded plugin config defaultTo fallback", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: SunClawConfig = {
       channels: { alpha: { defaultTo: "room-one" } },
     };
     mocks.getLoadedChannelPlugin.mockReturnValue({
@@ -30,7 +30,7 @@ describe("tryResolveLoadedOutboundTarget", () => {
       meta: { label: "Alpha" },
       capabilities: {},
       config: {
-        resolveDefaultTo: ({ cfg: cfgLocal }: { cfg: OpenClawConfig }) =>
+        resolveDefaultTo: ({ cfg: cfgLocal }: { cfg: SunClawConfig }) =>
           (cfgLocal.channels?.alpha as { defaultTo?: string } | undefined)?.defaultTo,
       },
       outbound: {},

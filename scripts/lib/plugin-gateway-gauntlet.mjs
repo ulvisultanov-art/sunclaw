@@ -6,7 +6,7 @@ import {
   collectBundledPluginBuildEntries,
 } from "./bundled-plugin-build-entries.mjs";
 
-const MANIFEST_NAMES = ["openclaw.plugin.json", "openclaw.plugin.json5"];
+const MANIFEST_NAMES = ["sunclaw.plugin.json", "sunclaw.plugin.json5"];
 const ANSI_PATTERN = new RegExp(String.raw`\u001B\[[0-9;]*m`, "gu");
 
 function isPlainObject(value) {
@@ -357,7 +357,7 @@ function collectQaBaselineRegressionObservations(rows, thresholds = {}) {
 function buildGauntletPrebuildEnv(env, options = {}) {
   const buildIds = new Set(normalizeStringArray(options.buildIds));
   const runtimeOnlyPrebuildEnv = options.skipDeclarationBuild
-    ? { OPENCLAW_RUN_NODE_SKIP_DTS_BUILD: "1" }
+    ? { SUNCLAW_RUN_NODE_SKIP_DTS_BUILD: "1" }
     : {};
   const hasRuntimeOnlyPrebuildEnv = Object.keys(runtimeOnlyPrebuildEnv).length > 0;
   if (options.includePrivateQa) {
@@ -373,7 +373,7 @@ function buildGauntletPrebuildEnv(env, options = {}) {
           ...runtimeOnlyPrebuildEnv,
           ...(buildIds.size > 0
             ? {
-                OPENCLAW_BUNDLED_PLUGIN_BUILD_IDS: [...buildIds]
+                SUNCLAW_BUNDLED_PLUGIN_BUILD_IDS: [...buildIds]
                   .toSorted((left, right) => left.localeCompare(right))
                   .join(","),
               }
@@ -383,11 +383,11 @@ function buildGauntletPrebuildEnv(env, options = {}) {
   return {
     ...env,
     ...runtimeOnlyPrebuildEnv,
-    OPENCLAW_BUILD_PRIVATE_QA: "1",
-    OPENCLAW_ENABLE_PRIVATE_QA_CLI: "1",
+    SUNCLAW_BUILD_PRIVATE_QA: "1",
+    SUNCLAW_ENABLE_PRIVATE_QA_CLI: "1",
     ...(buildIds.size > 0
       ? {
-          OPENCLAW_BUNDLED_PLUGIN_BUILD_IDS: [...buildIds]
+          SUNCLAW_BUNDLED_PLUGIN_BUILD_IDS: [...buildIds]
             .toSorted((left, right) => left.localeCompare(right))
             .join(","),
         }

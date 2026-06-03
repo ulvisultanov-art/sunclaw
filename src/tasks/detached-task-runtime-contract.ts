@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type {
   TaskDeliveryState,
   TaskDeliveryStatus,
@@ -100,7 +100,7 @@ export type DetachedTaskDeliveryStatusParams = {
 };
 
 export type DetachedTaskCancelParams = {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   taskId: string;
   reason?: string;
 };

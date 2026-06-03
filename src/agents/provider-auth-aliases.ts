@@ -1,5 +1,5 @@
-import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { normalizeProviderId } from "@sunclaw/model-catalog-core/provider-id";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { normalizePluginsConfig } from "../plugins/config-state.js";
 import { getCurrentPluginMetadataSnapshot } from "../plugins/current-plugin-metadata-snapshot.js";
 import type { PluginManifestRecord } from "../plugins/manifest-registry.js";
@@ -13,7 +13,7 @@ import type { PluginMetadataSnapshot } from "../plugins/plugin-metadata-snapshot
 import type { PluginOrigin } from "../plugins/plugin-origin.types.js";
 
 export type ProviderAuthAliasLookupParams = {
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   includeUntrustedWorkspacePlugins?: boolean;
@@ -64,7 +64,7 @@ function resolveProviderAuthAliasOriginPriority(origin: PluginOrigin | undefined
 
 function isWorkspacePluginTrustedForAuthAliases(
   plugin: PluginManifestRecord,
-  config: OpenClawConfig | undefined,
+  config: SunClawConfig | undefined,
 ): boolean {
   return isWorkspacePluginAllowedByConfig({
     config,

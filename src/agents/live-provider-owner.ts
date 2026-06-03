@@ -1,9 +1,9 @@
-import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { normalizeProviderId } from "@sunclaw/model-catalog-core/provider-id";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { resolveOwningPluginIdsForProviderRef } from "../plugins/providers.js";
 
 type LiveProviderOwnerContext = {
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   ownerCache: Map<string, readonly string[]>;

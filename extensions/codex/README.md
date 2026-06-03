@@ -1,11 +1,11 @@
-# OpenClaw Codex
+# SunClaw Codex
 
-Official OpenClaw provider and harness plugin for OpenAI Codex app-server integration. It exposes the Codex-managed GPT model catalog and the Codex runtime surfaces used by OpenClaw agents.
+Official SunClaw provider and harness plugin for OpenAI Codex app-server integration. It exposes the Codex-managed GPT model catalog and the Codex runtime surfaces used by SunClaw agents.
 
-Install from OpenClaw:
+Install from SunClaw:
 
 ```bash
-openclaw plugin add @openclaw/codex
+sunclaw plugin add @sunclaw/codex
 ```
 
-Use this plugin when you want OpenClaw to run Codex-backed model turns, media understanding, and prompt overlays through the Codex app-server harness.
+Use this plugin when you want SunClaw to run Codex-backed model turns, media understanding, and prompt overlays through the Codex app-server harness.

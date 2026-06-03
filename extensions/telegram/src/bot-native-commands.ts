@@ -6,9 +6,9 @@ import {
   resolveAgentConfig,
   resolveDefaultModelForAgent,
   resolveThinkingDefaultWithRuntimeCatalog,
-} from "openclaw/plugin-sdk/agent-runtime";
-import { resolveChannelStreamingBlockEnabled } from "openclaw/plugin-sdk/channel-outbound";
-import { resolveNativeCommandSessionTargets } from "openclaw/plugin-sdk/command-auth-native";
+} from "sunclaw/plugin-sdk/agent-runtime";
+import { resolveChannelStreamingBlockEnabled } from "sunclaw/plugin-sdk/channel-outbound";
+import { resolveNativeCommandSessionTargets } from "sunclaw/plugin-sdk/command-auth-native";
 import {
   buildCommandTextFromArgs,
   findCommandByNativeName,
@@ -19,34 +19,34 @@ import {
   resolveCommandArgMenu,
   resolveStoredModelOverride,
   type CommandArgs,
-} from "openclaw/plugin-sdk/command-auth-native";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { ChannelGroupPolicy } from "openclaw/plugin-sdk/config-contracts";
+} from "sunclaw/plugin-sdk/command-auth-native";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import type { ChannelGroupPolicy } from "sunclaw/plugin-sdk/config-contracts";
 import type {
   ReplyToMode,
   TelegramAccountConfig,
   TelegramDirectConfig,
   TelegramGroupConfig,
   TelegramTopicConfig,
-} from "openclaw/plugin-sdk/config-contracts";
-import { resolveMarkdownTableMode } from "openclaw/plugin-sdk/markdown-table-runtime";
-import { resolveSendableOutboundReplyParts } from "openclaw/plugin-sdk/reply-payload";
-import { resolveAgentRoute } from "openclaw/plugin-sdk/routing";
-import { getRuntimeConfigSnapshot } from "openclaw/plugin-sdk/runtime-config-snapshot";
-import { danger, logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { getChildLogger } from "openclaw/plugin-sdk/runtime-env";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
+} from "sunclaw/plugin-sdk/config-contracts";
+import { resolveMarkdownTableMode } from "sunclaw/plugin-sdk/markdown-table-runtime";
+import { resolveSendableOutboundReplyParts } from "sunclaw/plugin-sdk/reply-payload";
+import { resolveAgentRoute } from "sunclaw/plugin-sdk/routing";
+import { getRuntimeConfigSnapshot } from "sunclaw/plugin-sdk/runtime-config-snapshot";
+import { danger, logVerbose } from "sunclaw/plugin-sdk/runtime-env";
+import { getChildLogger } from "sunclaw/plugin-sdk/runtime-env";
+import type { RuntimeEnv } from "sunclaw/plugin-sdk/runtime-env";
 import {
   loadSessionStore,
   resolveAndPersistSessionFile,
   resolveSessionStoreEntry,
   resolveSessionTranscriptPathInDir,
   resolveStorePath,
-} from "openclaw/plugin-sdk/session-store-runtime";
+} from "sunclaw/plugin-sdk/session-store-runtime";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { expandTelegramAllowFromWithAccessGroups } from "./access-groups.js";
 import { resolveTelegramAccount } from "./accounts.js";
 import { withTelegramApiErrorLogging } from "./api-logging.js";
@@ -112,9 +112,9 @@ const EMPTY_RESPONSE_FALLBACK = "No response generated. Please try again.";
 
 type TelegramNativeCommandContext = Context & { match?: string };
 type TelegramChunkMode = ReturnType<
-  typeof import("openclaw/plugin-sdk/reply-dispatch-runtime").resolveChunkMode
+  typeof import("sunclaw/plugin-sdk/reply-dispatch-runtime").resolveChunkMode
 >;
-type TelegramNativeReplyPayload = import("openclaw/plugin-sdk/reply-dispatch-runtime").ReplyPayload;
+type TelegramNativeReplyPayload = import("sunclaw/plugin-sdk/reply-dispatch-runtime").ReplyPayload;
 type TelegramNativeReplyChannelData = {
   buttons?: TelegramInlineButtons;
   pin?: boolean;
@@ -177,7 +177,7 @@ function resolveTelegramProgressPlaceholder(command: {
 }
 
 async function resolveTelegramCommandSessionFile(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   agentId: string;
   sessionKey: string;
   threadId?: string | number;
@@ -219,7 +219,7 @@ async function resolveTelegramCommandSessionFile(params: {
 }
 
 function resolveTelegramCommandMenuModelContext(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   agentId: string;
   sessionKey: string;
 }): { provider?: string; model?: string; thinkingLevel?: string } {
@@ -271,7 +271,7 @@ function resolveTelegramCommandMenuModelContext(params: {
 }
 
 async function resolveTelegramDefaultThinkingLevel(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   provider: string;
   model: string;
 }): Promise<string> {
@@ -284,7 +284,7 @@ async function resolveTelegramDefaultThinkingLevel(params: {
 }
 
 async function resolveTelegramThinkMenuCurrentLevel(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   agentId: string;
   provider?: string;
   model?: string;
@@ -410,7 +410,7 @@ async function resolveTelegramNativeCommandThreadContext(params: {
 }
 
 export type RegisterTelegramHandlerParams = {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   accountId: string;
   bot: Bot;
   mediaMaxBytes: number;
@@ -456,7 +456,7 @@ export function resolveTelegramNativeCommandDisableBlockStreaming(
 
 export type RegisterTelegramNativeCommandsParams = {
   bot: Bot;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   runtime: RuntimeEnv;
   accountId: string;
   telegramCfg: TelegramAccountConfig;
@@ -482,7 +482,7 @@ export type RegisterTelegramNativeCommandsParams = {
 async function resolveTelegramCommandAuth(params: {
   msg: NonNullable<TelegramNativeCommandContext["message"]>;
   bot: Bot;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   accountId: string;
   telegramCfg: TelegramAccountConfig;
   readChannelAllowFromStore: TelegramBotDeps["readChannelAllowFromStore"];
@@ -832,8 +832,8 @@ export const registerTelegramNativeCommands = ({
     );
   }
   const { nativeCommands, pluginCatalog } = fullCommandCatalog;
-  const loadFreshRuntimeConfig = (): OpenClawConfig => telegramDeps.getRuntimeConfig();
-  const resolveFreshTelegramConfig = (runtimeCfg: OpenClawConfig): TelegramAccountConfig => {
+  const loadFreshRuntimeConfig = (): SunClawConfig => telegramDeps.getRuntimeConfig();
+  const resolveFreshTelegramConfig = (runtimeCfg: SunClawConfig): TelegramAccountConfig => {
     try {
       return resolveTelegramAccount({
         cfg: runtimeCfg,
@@ -886,7 +886,7 @@ export const registerTelegramNativeCommands = ({
 
   const resolveCommandRuntimeContext = async (params: {
     msg: NonNullable<TelegramNativeCommandContext["message"]>;
-    runtimeCfg: OpenClawConfig;
+    runtimeCfg: SunClawConfig;
     isGroup: boolean;
     isForum: boolean;
     resolvedThreadId?: number;
@@ -958,7 +958,7 @@ export const registerTelegramNativeCommands = ({
     return { chatId, threadSpec, route, mediaLocalRoots, tableMode, chunkMode };
   };
   const buildCommandDeliveryBaseOptions = (params: {
-    cfg: OpenClawConfig;
+    cfg: SunClawConfig;
     chatId: string | number;
     accountId: string;
     sessionKeyForInternalHooks?: string;
@@ -991,7 +991,7 @@ export const registerTelegramNativeCommands = ({
     linkPreview: params.linkPreview,
   });
   const resolveCommandTargetSessionKey = (params: {
-    runtimeCfg: OpenClawConfig;
+    runtimeCfg: SunClawConfig;
     route: ReturnType<typeof resolveTelegramConversationRoute>["route"];
     chatId: number;
     isGroup: boolean;

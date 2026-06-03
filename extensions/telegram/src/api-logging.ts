@@ -1,6 +1,6 @@
-import { createSubsystemLogger } from "openclaw/plugin-sdk/runtime-env";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
-import { formatErrorMessage } from "openclaw/plugin-sdk/ssrf-runtime";
+import { createSubsystemLogger } from "sunclaw/plugin-sdk/runtime-env";
+import type { RuntimeEnv } from "sunclaw/plugin-sdk/runtime-env";
+import { formatErrorMessage } from "sunclaw/plugin-sdk/ssrf-runtime";
 
 type TelegramApiLogger = (message: string) => void;
 

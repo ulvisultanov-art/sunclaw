@@ -14,8 +14,8 @@ const tempDirs = createTrackedTempDirs();
 let envSnapshot: ReturnType<typeof captureEnv>;
 
 beforeEach(async () => {
-  envSnapshot = captureEnv(["OPENCLAW_STATE_DIR"]);
-  process.env.OPENCLAW_STATE_DIR = await tempDirs.make("openclaw-skill-workshop-state-");
+  envSnapshot = captureEnv(["SUNCLAW_STATE_DIR"]);
+  process.env.SUNCLAW_STATE_DIR = await tempDirs.make("sunclaw-skill-workshop-state-");
 });
 
 afterEach(async () => {
@@ -24,7 +24,7 @@ afterEach(async () => {
 });
 
 async function makeWorkspace(): Promise<string> {
-  return await tempDirs.make("openclaw-skill-workshop-");
+  return await tempDirs.make("sunclaw-skill-workshop-");
 }
 
 describe("skill research auto-capture", () => {

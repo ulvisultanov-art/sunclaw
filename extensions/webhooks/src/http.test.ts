@@ -1,9 +1,9 @@
 import { EventEmitter } from "node:events";
 import type { IncomingMessage } from "node:http";
-import { createRuntimeTaskFlow } from "openclaw/plugin-sdk/plugin-test-runtime";
-import { createMockServerResponse } from "openclaw/plugin-sdk/test-env";
+import { createRuntimeTaskFlow } from "sunclaw/plugin-sdk/plugin-test-runtime";
+import { createMockServerResponse } from "sunclaw/plugin-sdk/test-env";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../runtime-api.js";
+import type { SunClawConfig } from "../runtime-api.js";
 import { createTaskFlowWebhookRequestHandler, type TaskFlowWebhookTarget } from "./http.js";
 
 type BoundTaskFlow = TaskFlowWebhookTarget["taskFlow"];
@@ -56,7 +56,7 @@ function createJsonRequest(params: {
   req.url = params.path;
   req.headers = {
     "content-type": "application/json",
-    ...(params.secret ? { "x-openclaw-webhook-secret": params.secret } : {}),
+    ...(params.secret ? { "x-sunclaw-webhook-secret": params.secret } : {}),
   };
   req.socket = { remoteAddress: "127.0.0.1" } as MockIncomingMessage["socket"];
   req.destroyed = false;
@@ -94,7 +94,7 @@ function createHandler(): {
   const targetsByPath = new Map<string, TaskFlowWebhookTarget[]>([[target.path, [target]]]);
   return {
     handler: createTaskFlowWebhookRequestHandler({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as SunClawConfig,
       targetsByPath,
     }),
     target,
@@ -104,7 +104,7 @@ function createHandler(): {
 
 function createHandlerWithTarget(
   target: TaskFlowWebhookTarget,
-  cfg: OpenClawConfig = {} as OpenClawConfig,
+  cfg: SunClawConfig = {} as SunClawConfig,
 ): ReturnType<typeof createTaskFlowWebhookRequestHandler> {
   const targetsByPath = new Map<string, TaskFlowWebhookTarget[]>([[target.path, [target]]]);
   return createTaskFlowWebhookRequestHandler({
@@ -163,7 +163,7 @@ describe("createTaskFlowWebhookRequestHandler", () => {
       secretInput: {
         source: "env",
         provider: "default",
-        id: "OPENCLAW_WEBHOOK_SECRET",
+        id: "SUNCLAW_WEBHOOK_SECRET",
       },
       secretConfigPath: "plugins.entries.webhooks.routes.cached.secret",
       defaultControllerId: "webhooks/cached",

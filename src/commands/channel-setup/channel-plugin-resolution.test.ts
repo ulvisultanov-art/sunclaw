@@ -168,11 +168,11 @@ describe("resolveInstallableChannelPlugin", () => {
 
   it("returns an existing plugin that lacks the requested capability without reinstalling", async () => {
     const catalogEntry = createCatalogEntry({
-      id: "openclaw-weixin",
-      pluginId: "@tencent-weixin/openclaw-weixin",
+      id: "sunclaw-weixin",
+      pluginId: "@tencent-weixin/sunclaw-weixin",
       origin: "bundled",
     });
-    const installedPlugin = createPlugin("openclaw-weixin");
+    const installedPlugin = createPlugin("sunclaw-weixin");
 
     mocks.listChannelPluginCatalogEntries.mockReturnValue([catalogEntry]);
     mocks.getChannelPlugin.mockReturnValue(installedPlugin);
@@ -180,7 +180,7 @@ describe("resolveInstallableChannelPlugin", () => {
     const result = await resolveInstallableChannelPlugin({
       cfg: { plugins: { enabled: true } },
       runtime: {} as never,
-      rawChannel: "openclaw-weixin",
+      rawChannel: "sunclaw-weixin",
       allowInstall: true,
       supports: (plugin) => Boolean(plugin.directory),
     });
@@ -193,11 +193,11 @@ describe("resolveInstallableChannelPlugin", () => {
 
   it("returns a scoped installed plugin that lacks the requested capability without reinstalling", async () => {
     const catalogEntry = createCatalogEntry({
-      id: "openclaw-weixin",
-      pluginId: "@tencent-weixin/openclaw-weixin",
+      id: "sunclaw-weixin",
+      pluginId: "@tencent-weixin/sunclaw-weixin",
       origin: "bundled",
     });
-    const scopedPlugin = createPlugin("openclaw-weixin");
+    const scopedPlugin = createPlugin("sunclaw-weixin");
 
     mocks.listChannelPluginCatalogEntries.mockReturnValue([catalogEntry]);
     mocks.loadChannelSetupPluginRegistrySnapshotForChannel.mockReturnValue({
@@ -208,7 +208,7 @@ describe("resolveInstallableChannelPlugin", () => {
     const result = await resolveInstallableChannelPlugin({
       cfg: { plugins: { enabled: true } },
       runtime: {} as never,
-      rawChannel: "openclaw-weixin",
+      rawChannel: "sunclaw-weixin",
       allowInstall: true,
       supports: (plugin) => Boolean(plugin.directory),
     });

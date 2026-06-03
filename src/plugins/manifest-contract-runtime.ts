@@ -1,5 +1,5 @@
-import { sortUniqueStrings } from "@openclaw/normalization-core/string-normalization";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { sortUniqueStrings } from "@sunclaw/normalization-core/string-normalization";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import {
   hasManifestContractValue,
   listAvailableManifestContractPlugins,
@@ -17,7 +17,7 @@ const DEMAND_ONLY_CONTRACT_LOOKUP_OPTIONS = {
 } as const;
 
 export function resolveManifestContractRuntimePluginResolution(params: {
-  cfg?: OpenClawConfig;
+  cfg?: SunClawConfig;
   contract: PluginManifestContractListKey;
   value?: string;
 }): ManifestContractRuntimePluginResolution {

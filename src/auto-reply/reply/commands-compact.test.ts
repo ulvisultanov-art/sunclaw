@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { SunClawConfig } from "../../config/config.js";
 import {
   resolveAgentDirMock,
   resolveSessionAgentIdMock,
@@ -30,7 +30,7 @@ const { handleCompactCommand } = await import("./commands-compact.js");
 
 function buildCompactParams(
   commandBodyNormalized: string,
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
 ): HandleCommandsParams {
   return {
     cfg,
@@ -65,7 +65,7 @@ function requireCompactEmbeddedAgentSessionCall(index = 0) {
 function requireResolveSessionAgentIdCall(index = 0) {
   const call = (
     resolveSessionAgentIdMock.mock.calls[index] as unknown as [unknown] | undefined
-  )?.[0] as { sessionKey?: string; config?: OpenClawConfig } | undefined;
+  )?.[0] as { sessionKey?: string; config?: SunClawConfig } | undefined;
   if (!call) {
     throw new Error(`resolveSessionAgentId call ${index} missing`);
   }
@@ -73,7 +73,7 @@ function requireResolveSessionAgentIdCall(index = 0) {
 }
 
 function requireResolveAgentDirCall(index = 0) {
-  const call = resolveAgentDirMock.mock.calls[index] as [OpenClawConfig, string] | undefined;
+  const call = resolveAgentDirMock.mock.calls[index] as [SunClawConfig, string] | undefined;
   if (!call) {
     throw new Error(`resolveAgentDir call ${index} missing`);
   }
@@ -92,7 +92,7 @@ describe("handleCompactCommand", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     resolveAgentDirMock.mockImplementation(
-      (_cfg: unknown, agentId: string) => `/tmp/workspace/.openclaw/agents/${agentId}/agent`,
+      (_cfg: unknown, agentId: string) => `/tmp/workspace/.sunclaw/agents/${agentId}/agent`,
     );
     resolveSessionAgentIdMock.mockReturnValue("main");
   });
@@ -102,7 +102,7 @@ describe("handleCompactCommand", () => {
       buildCompactParams("/status", {
         commands: { text: true },
         channels: { whatsapp: { allowFrom: ["*"] } },
-      } as OpenClawConfig),
+      } as SunClawConfig),
       true,
     );
 
@@ -114,7 +114,7 @@ describe("handleCompactCommand", () => {
     const params = buildCompactParams("/compact", {
       commands: { text: true },
       channels: { whatsapp: { allowFrom: ["*"] } },
-    } as OpenClawConfig);
+    } as SunClawConfig);
 
     const result = await handleCompactCommand(
       {
@@ -143,8 +143,8 @@ describe("handleCompactCommand", () => {
         ...buildCompactParams("/compact", {
           commands: { text: true },
           channels: { whatsapp: { allowFrom: ["*"] } },
-          session: { store: "/tmp/openclaw-session-store.json" },
-        } as OpenClawConfig),
+          session: { store: "/tmp/sunclaw-session-store.json" },
+        } as SunClawConfig),
         ctx: {
           Provider: "whatsapp",
           Surface: "whatsapp",
@@ -156,7 +156,7 @@ describe("handleCompactCommand", () => {
           SenderUsername: "alice_u",
           SenderE164: "+15551234567",
         },
-        agentDir: "/tmp/openclaw-agent-compact",
+        agentDir: "/tmp/sunclaw-agent-compact",
         sessionEntry: {
           sessionId: "session-1",
           updatedAt: Date.now(),
@@ -188,7 +188,7 @@ describe("handleCompactCommand", () => {
     expect(call.senderName).toBe("Alice");
     expect(call.senderUsername).toBe("alice_u");
     expect(call.senderE164).toBe("+15551234567");
-    expect(call.agentDir).toBe("/tmp/openclaw-agent-compact");
+    expect(call.agentDir).toBe("/tmp/sunclaw-agent-compact");
     expect(call.authProfileId).toBe("github-copilot:work");
   });
 
@@ -204,7 +204,7 @@ describe("handleCompactCommand", () => {
         ...buildCompactParams("/compact", {
           commands: { text: true },
           channels: { whatsapp: { allowFrom: ["*"] } },
-        } as OpenClawConfig),
+        } as SunClawConfig),
         sessionEntry: {
           sessionId: "session-1",
           updatedAt: Date.now(),
@@ -228,8 +228,8 @@ describe("handleCompactCommand", () => {
     const cfg = {
       commands: { text: true },
       channels: { whatsapp: { allowFrom: ["*"] } },
-      session: { store: "/tmp/openclaw-session-store.json" },
-    } as OpenClawConfig;
+      session: { store: "/tmp/sunclaw-session-store.json" },
+    } as SunClawConfig;
 
     await handleCompactCommand(
       {
@@ -264,7 +264,7 @@ describe("handleCompactCommand", () => {
     const cfg = {
       commands: { text: true },
       channels: { whatsapp: { allowFrom: ["*"] } },
-    } as OpenClawConfig;
+    } as SunClawConfig;
 
     await handleCompactCommand(
       {
@@ -298,7 +298,7 @@ describe("handleCompactCommand", () => {
         ...buildCompactParams("/compact", {
           commands: { text: true },
           channels: { whatsapp: { allowFrom: ["*"] } },
-        } as OpenClawConfig),
+        } as SunClawConfig),
         sessionKey: "agent:target:whatsapp:direct:12345",
         sessionEntry: {
           sessionId: "wrapper-session",
@@ -352,7 +352,7 @@ describe("handleCompactCommand", () => {
         ...buildCompactParams("/compact", {
           commands: { text: true },
           channels: { whatsapp: { allowFrom: ["*"] } },
-        } as OpenClawConfig),
+        } as SunClawConfig),
         sessionKey: "agent:target:whatsapp:direct:12345",
         sessionEntry: {
           sessionId: "wrapper-session",
@@ -398,7 +398,7 @@ describe("handleCompactCommand", () => {
         ...buildCompactParams("/compact", {
           commands: { text: true },
           channels: { whatsapp: { allowFrom: ["*"] } },
-        } as OpenClawConfig),
+        } as SunClawConfig),
         sessionEntry: {
           sessionId: "live-session",
           updatedAt: Date.now(),
@@ -444,7 +444,7 @@ describe("handleCompactCommand", () => {
               },
             },
           },
-        } as unknown as OpenClawConfig),
+        } as unknown as SunClawConfig),
         provider: "openai",
         model: "openai/gpt-5.5",
         contextTokens: 0,

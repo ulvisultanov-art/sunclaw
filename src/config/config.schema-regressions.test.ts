@@ -412,7 +412,7 @@ describe("config schema regressions", () => {
       discovery: {
         wideArea: {
           enabled: true,
-          domain: "openclaw.internal",
+          domain: "sunclaw.internal",
         },
       },
     });
@@ -420,7 +420,7 @@ describe("config schema regressions", () => {
     expect(res.ok).toBe(true);
   });
 
-  it("rejects bindings referencing an agentId missing from agents.list (openclaw#84692)", () => {
+  it("rejects bindings referencing an agentId missing from agents.list (sunclaw#84692)", () => {
     const res = validateConfigObject({
       agents: {
         list: [{ id: "alpha", model: "anthropic/claude-3-5-sonnet" }],

@@ -12,8 +12,8 @@ export function getRuntimeApiMockState() {
   return runtimeApiMockState;
 }
 
-vi.mock("openclaw/plugin-sdk/channel-inbound", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/channel-inbound")>();
+vi.mock("sunclaw/plugin-sdk/channel-inbound", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("sunclaw/plugin-sdk/channel-inbound")>();
   return {
     ...actual,
     dispatchReplyFromConfigWithSettledDispatcher:

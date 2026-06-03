@@ -23,13 +23,13 @@ describe("resolveActiveErrorContext", () => {
     expect(result).toEqual({ provider: "openai", model: "gpt-5.4-codex" });
   });
 
-  it("ignores the embedded OpenClaw harness provider when the model provider is known", () => {
+  it("ignores the embedded SunClaw harness provider when the model provider is known", () => {
     const result = resolveActiveErrorContext({
       provider: "openrouter",
       model: "openai/gpt-5.4",
       assistant: {
-        provider: "openclaw",
-        model: "openclaw",
+        provider: "sunclaw",
+        model: "sunclaw",
       },
     });
 

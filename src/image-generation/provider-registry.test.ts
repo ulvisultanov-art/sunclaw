@@ -1,5 +1,5 @@
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.js";
+import type { SunClawConfig } from "../config/types.js";
 import type { ImageGenerationProviderPlugin } from "../plugins/types.js";
 
 type ProviderRegistryModule = typeof import("./provider-registry.js");
@@ -50,7 +50,7 @@ describe("image-generation provider registry", () => {
   };
 
   beforeAll(async () => {
-    const cfg = {} as OpenClawConfig;
+    const cfg = {} as SunClawConfig;
     const { listImageGenerationProviders } = await loadProviderRegistry();
     const providers = listImageGenerationProviders(cfg);
     delegationCase = {
@@ -66,7 +66,7 @@ describe("image-generation provider registry", () => {
   });
 
   it("delegates provider resolution to the capability provider boundary", () => {
-    const cfg = {} as OpenClawConfig;
+    const cfg = {} as SunClawConfig;
 
     expect(delegationCase.providers).toStrictEqual([]);
     expect(delegationCase.calls).toContainEqual([

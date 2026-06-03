@@ -2,28 +2,28 @@
 set -euo pipefail
 
 SCRIPT_ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-ROOT_DIR="${OPENCLAW_LIVE_DOCKER_REPO_ROOT:-$SCRIPT_ROOT_DIR}"
+ROOT_DIR="${SUNCLAW_LIVE_DOCKER_REPO_ROOT:-$SCRIPT_ROOT_DIR}"
 ROOT_DIR="$(cd "$ROOT_DIR" && pwd)"
-TRUSTED_HARNESS_DIR="${OPENCLAW_LIVE_DOCKER_TRUSTED_HARNESS_DIR:-$SCRIPT_ROOT_DIR}"
+TRUSTED_HARNESS_DIR="${SUNCLAW_LIVE_DOCKER_TRUSTED_HARNESS_DIR:-$SCRIPT_ROOT_DIR}"
 if [[ -z "$TRUSTED_HARNESS_DIR" || ! -d "$TRUSTED_HARNESS_DIR" ]]; then
   echo "ERROR: trusted live Docker harness directory not found: ${TRUSTED_HARNESS_DIR:-<empty>}." >&2
   exit 1
 fi
 TRUSTED_HARNESS_DIR="$(cd "$TRUSTED_HARNESS_DIR" && pwd)"
 source "$TRUSTED_HARNESS_DIR/scripts/lib/live-docker-auth.sh"
-IMAGE_NAME="${OPENCLAW_IMAGE:-openclaw:local}"
-LIVE_IMAGE_NAME="${OPENCLAW_LIVE_IMAGE:-${IMAGE_NAME}-live}"
-CONFIG_DIR="${OPENCLAW_CONFIG_DIR:-$HOME/.openclaw}"
-WORKSPACE_DIR="${OPENCLAW_WORKSPACE_DIR:-$HOME/.openclaw/workspace}"
-PROFILE_FILE="$(openclaw_live_default_profile_file)"
-DEFAULT_PROVIDER="${OPENCLAW_DOCKER_CLI_BACKEND_PROVIDER:-claude-cli}"
-CLI_MODEL="${OPENCLAW_LIVE_CLI_BACKEND_MODEL:-}"
+IMAGE_NAME="${SUNCLAW_IMAGE:-sunclaw:local}"
+LIVE_IMAGE_NAME="${SUNCLAW_LIVE_IMAGE:-${IMAGE_NAME}-live}"
+CONFIG_DIR="${SUNCLAW_CONFIG_DIR:-$HOME/.sunclaw}"
+WORKSPACE_DIR="${SUNCLAW_WORKSPACE_DIR:-$HOME/.sunclaw/workspace}"
+PROFILE_FILE="$(sunclaw_live_default_profile_file)"
+DEFAULT_PROVIDER="${SUNCLAW_DOCKER_CLI_BACKEND_PROVIDER:-claude-cli}"
+CLI_MODEL="${SUNCLAW_LIVE_CLI_BACKEND_MODEL:-}"
 CLI_PROVIDER="${CLI_MODEL%%/*}"
-CLI_DISABLE_MCP_CONFIG="${OPENCLAW_LIVE_CLI_BACKEND_DISABLE_MCP_CONFIG:-}"
-CLI_AUTH_MODE="${OPENCLAW_LIVE_CLI_BACKEND_AUTH:-auto}"
-CLI_SETUP_TIMEOUT_SECONDS="${OPENCLAW_LIVE_CLI_BACKEND_SETUP_TIMEOUT_SECONDS:-180}"
+CLI_DISABLE_MCP_CONFIG="${SUNCLAW_LIVE_CLI_BACKEND_DISABLE_MCP_CONFIG:-}"
+CLI_AUTH_MODE="${SUNCLAW_LIVE_CLI_BACKEND_AUTH:-auto}"
+CLI_SETUP_TIMEOUT_SECONDS="${SUNCLAW_LIVE_CLI_BACKEND_SETUP_TIMEOUT_SECONDS:-180}"
 TEMP_DIRS=()
-DOCKER_USER="${OPENCLAW_DOCKER_USER:-node}"
+DOCKER_USER="${SUNCLAW_DOCKER_USER:-node}"
 DOCKER_HOME_MOUNT=()
 DOCKER_EXTRA_ENV_FILES=()
 DOCKER_AUTH_PRESTAGED=0
@@ -44,13 +44,13 @@ case "$CLI_AUTH_MODE" in
   auto | api-key | subscription)
     ;;
   *)
-    echo "ERROR: OPENCLAW_LIVE_CLI_BACKEND_AUTH must be one of: auto, api-key, subscription." >&2
+    echo "ERROR: SUNCLAW_LIVE_CLI_BACKEND_AUTH must be one of: auto, api-key, subscription." >&2
     exit 1
     ;;
 esac
 
 if [[ "$CLI_AUTH_MODE" == "subscription" && "$CLI_PROVIDER" != "claude-cli" ]]; then
-  echo "ERROR: OPENCLAW_LIVE_CLI_BACKEND_AUTH=subscription is only supported for claude-cli." >&2
+  echo "ERROR: SUNCLAW_LIVE_CLI_BACKEND_AUTH=subscription is only supported for claude-cli." >&2
   exit 1
 fi
 
@@ -80,9 +80,9 @@ if [[ "$CLI_PROVIDER" == "claude-cli" && -z "$CLI_DISABLE_MCP_CONFIG" ]]; then
     CLI_DISABLE_MCP_CONFIG="0"
   fi
 fi
-export OPENCLAW_LIVE_CLI_BACKEND_MODEL_SWITCH_PROBE="${OPENCLAW_LIVE_CLI_BACKEND_MODEL_SWITCH_PROBE:-0}"
-export OPENCLAW_LIVE_CLI_BACKEND_IMAGE_PROBE="${OPENCLAW_LIVE_CLI_BACKEND_IMAGE_PROBE:-0}"
-export OPENCLAW_LIVE_CLI_BACKEND_MCP_PROBE="${OPENCLAW_LIVE_CLI_BACKEND_MCP_PROBE:-0}"
+export SUNCLAW_LIVE_CLI_BACKEND_MODEL_SWITCH_PROBE="${SUNCLAW_LIVE_CLI_BACKEND_MODEL_SWITCH_PROBE:-0}"
+export SUNCLAW_LIVE_CLI_BACKEND_IMAGE_PROBE="${SUNCLAW_LIVE_CLI_BACKEND_IMAGE_PROBE:-0}"
+export SUNCLAW_LIVE_CLI_BACKEND_MCP_PROBE="${SUNCLAW_LIVE_CLI_BACKEND_MCP_PROBE:-0}"
 
 cleanup_temp_dirs() {
   if ((${#TEMP_DIRS[@]} > 0)); then
@@ -91,28 +91,28 @@ cleanup_temp_dirs() {
 }
 trap cleanup_temp_dirs EXIT
 
-if [[ -n "${OPENCLAW_DOCKER_CLI_TOOLS_DIR:-}" ]]; then
-  CLI_TOOLS_DIR="${OPENCLAW_DOCKER_CLI_TOOLS_DIR}"
-elif openclaw_live_is_ci; then
-  CLI_TOOLS_DIR="$(mktemp -d "${RUNNER_TEMP:-/tmp}/openclaw-docker-cli-tools.XXXXXX")"
+if [[ -n "${SUNCLAW_DOCKER_CLI_TOOLS_DIR:-}" ]]; then
+  CLI_TOOLS_DIR="${SUNCLAW_DOCKER_CLI_TOOLS_DIR}"
+elif sunclaw_live_is_ci; then
+  CLI_TOOLS_DIR="$(mktemp -d "${RUNNER_TEMP:-/tmp}/sunclaw-docker-cli-tools.XXXXXX")"
   TEMP_DIRS+=("$CLI_TOOLS_DIR")
 else
-  CLI_TOOLS_DIR="$HOME/.cache/openclaw/docker-cli-tools"
+  CLI_TOOLS_DIR="$HOME/.cache/sunclaw/docker-cli-tools"
 fi
-if [[ -n "${OPENCLAW_DOCKER_CACHE_HOME_DIR:-}" ]]; then
-  CACHE_HOME_DIR="${OPENCLAW_DOCKER_CACHE_HOME_DIR}"
-elif openclaw_live_is_ci; then
-  CACHE_HOME_DIR="$(mktemp -d "${RUNNER_TEMP:-/tmp}/openclaw-docker-cache.XXXXXX")"
+if [[ -n "${SUNCLAW_DOCKER_CACHE_HOME_DIR:-}" ]]; then
+  CACHE_HOME_DIR="${SUNCLAW_DOCKER_CACHE_HOME_DIR}"
+elif sunclaw_live_is_ci; then
+  CACHE_HOME_DIR="$(mktemp -d "${RUNNER_TEMP:-/tmp}/sunclaw-docker-cache.XXXXXX")"
   TEMP_DIRS+=("$CACHE_HOME_DIR")
 else
-  CACHE_HOME_DIR="$HOME/.cache/openclaw/docker-cache"
+  CACHE_HOME_DIR="$HOME/.cache/sunclaw/docker-cache"
 fi
 
 mkdir -p "$CLI_TOOLS_DIR"
 mkdir -p "$CACHE_HOME_DIR"
-if openclaw_live_is_ci; then
+if sunclaw_live_is_ci; then
   DOCKER_USER="$(id -u):$(id -g)"
-  DOCKER_HOME_DIR="$(mktemp -d "${RUNNER_TEMP:-/tmp}/openclaw-docker-home.XXXXXX")"
+  DOCKER_HOME_DIR="$(mktemp -d "${RUNNER_TEMP:-/tmp}/sunclaw-docker-home.XXXXXX")"
   TEMP_DIRS+=("$DOCKER_HOME_DIR")
   DOCKER_HOME_MOUNT=(-v "$DOCKER_HOME_DIR":/home/node)
 fi
@@ -146,25 +146,25 @@ if [[ "$CLI_PROVIDER" == "claude-cli" && "$CLI_AUTH_MODE" == "subscription" ]]; 
     echo "  - CLAUDE_CODE_OAUTH_TOKEN from 'claude setup-token'." >&2
     exit 1
   fi
-  if [[ -z "${OPENCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV:-}" ]]; then
+  if [[ -z "${SUNCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV:-}" ]]; then
     if [[ "$CLAUDE_SUBSCRIPTION_AUTH_SOURCE" == "env-token" ]]; then
-      export OPENCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV='["CLAUDE_CODE_OAUTH_TOKEN"]'
+      export SUNCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV='["CLAUDE_CODE_OAUTH_TOKEN"]'
     else
-      export OPENCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV="[]"
+      export SUNCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV="[]"
     fi
   fi
-  if [[ "$OPENCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV" == *ANTHROPIC_API_KEY* ]]; then
+  if [[ "$SUNCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV" == *ANTHROPIC_API_KEY* ]]; then
     echo "ERROR: subscription auth smoke must not preserve Anthropic API-key env vars." >&2
     exit 1
   fi
-  if [[ "$CLAUDE_SUBSCRIPTION_AUTH_SOURCE" == "env-token" && "$OPENCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV" != *CLAUDE_CODE_OAUTH_TOKEN* ]]; then
+  if [[ "$CLAUDE_SUBSCRIPTION_AUTH_SOURCE" == "env-token" && "$SUNCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV" != *CLAUDE_CODE_OAUTH_TOKEN* ]]; then
     echo "ERROR: CLAUDE_CODE_OAUTH_TOKEN subscription smoke must preserve CLAUDE_CODE_OAUTH_TOKEN for the Gateway child process." >&2
     exit 1
   fi
-  export OPENCLAW_LIVE_CLI_BACKEND_MODEL_SWITCH_PROBE="${OPENCLAW_LIVE_CLI_BACKEND_MODEL_SWITCH_PROBE:-0}"
-  export OPENCLAW_LIVE_CLI_BACKEND_RESUME_PROBE="${OPENCLAW_LIVE_CLI_BACKEND_RESUME_PROBE:-1}"
-  export OPENCLAW_LIVE_CLI_BACKEND_IMAGE_PROBE="${OPENCLAW_LIVE_CLI_BACKEND_IMAGE_PROBE:-0}"
-  export OPENCLAW_LIVE_CLI_BACKEND_MCP_PROBE="${OPENCLAW_LIVE_CLI_BACKEND_MCP_PROBE:-0}"
+  export SUNCLAW_LIVE_CLI_BACKEND_MODEL_SWITCH_PROBE="${SUNCLAW_LIVE_CLI_BACKEND_MODEL_SWITCH_PROBE:-0}"
+  export SUNCLAW_LIVE_CLI_BACKEND_RESUME_PROBE="${SUNCLAW_LIVE_CLI_BACKEND_RESUME_PROBE:-1}"
+  export SUNCLAW_LIVE_CLI_BACKEND_IMAGE_PROBE="${SUNCLAW_LIVE_CLI_BACKEND_IMAGE_PROBE:-0}"
+  export SUNCLAW_LIVE_CLI_BACKEND_MCP_PROBE="${SUNCLAW_LIVE_CLI_BACKEND_MCP_PROBE:-0}"
 fi
 
 PROFILE_MOUNT=()
@@ -176,43 +176,43 @@ fi
 
 AUTH_DIRS=()
 AUTH_FILES=()
-if [[ -n "${OPENCLAW_DOCKER_AUTH_DIRS:-}" ]]; then
+if [[ -n "${SUNCLAW_DOCKER_AUTH_DIRS:-}" ]]; then
   while IFS= read -r auth_dir; do
     [[ -n "$auth_dir" ]] || continue
     AUTH_DIRS+=("$auth_dir")
-  done < <(openclaw_live_collect_auth_dirs)
+  done < <(sunclaw_live_collect_auth_dirs)
   while IFS= read -r auth_file; do
     [[ -n "$auth_file" ]] || continue
     AUTH_FILES+=("$auth_file")
-  done < <(openclaw_live_collect_auth_files)
+  done < <(sunclaw_live_collect_auth_files)
 else
   while IFS= read -r auth_dir; do
     [[ -n "$auth_dir" ]] || continue
     AUTH_DIRS+=("$auth_dir")
-  done < <(openclaw_live_collect_auth_dirs_from_csv "$CLI_PROVIDER")
+  done < <(sunclaw_live_collect_auth_dirs_from_csv "$CLI_PROVIDER")
   while IFS= read -r auth_file; do
     [[ -n "$auth_file" ]] || continue
     AUTH_FILES+=("$auth_file")
-  done < <(openclaw_live_collect_auth_files_from_csv "$CLI_PROVIDER")
+  done < <(sunclaw_live_collect_auth_files_from_csv "$CLI_PROVIDER")
 fi
 AUTH_DIRS_CSV=""
 if ((${#AUTH_DIRS[@]} > 0)); then
-  AUTH_DIRS_CSV="$(openclaw_live_join_csv "${AUTH_DIRS[@]}")"
+  AUTH_DIRS_CSV="$(sunclaw_live_join_csv "${AUTH_DIRS[@]}")"
 fi
 AUTH_FILES_CSV=""
 if ((${#AUTH_FILES[@]} > 0)); then
-  AUTH_FILES_CSV="$(openclaw_live_join_csv "${AUTH_FILES[@]}")"
+  AUTH_FILES_CSV="$(sunclaw_live_join_csv "${AUTH_FILES[@]}")"
 fi
 
 if [[ -n "${DOCKER_HOME_DIR:-}" ]]; then
-  openclaw_live_stage_auth_into_home "$DOCKER_HOME_DIR" "${AUTH_DIRS[@]}" --files "${AUTH_FILES[@]}"
+  sunclaw_live_stage_auth_into_home "$DOCKER_HOME_DIR" "${AUTH_DIRS[@]}" --files "${AUTH_FILES[@]}"
   DOCKER_AUTH_PRESTAGED=1
 fi
 
 EXTERNAL_AUTH_MOUNTS=()
 if ((${#AUTH_DIRS[@]} > 0)); then
   for auth_dir in "${AUTH_DIRS[@]}"; do
-    auth_dir="$(openclaw_live_validate_relative_home_path "$auth_dir")"
+    auth_dir="$(sunclaw_live_validate_relative_home_path "$auth_dir")"
     host_path="$HOME/$auth_dir"
     if [[ -d "$host_path" ]]; then
       EXTERNAL_AUTH_MOUNTS+=(-v "$host_path":/host-auth/"$auth_dir":ro)
@@ -221,7 +221,7 @@ if ((${#AUTH_DIRS[@]} > 0)); then
 fi
 if ((${#AUTH_FILES[@]} > 0)); then
   for auth_file in "${AUTH_FILES[@]}"; do
-    auth_file="$(openclaw_live_validate_relative_home_path "$auth_file")"
+    auth_file="$(sunclaw_live_validate_relative_home_path "$auth_file")"
     host_path="$HOME/$auth_file"
     if [[ -f "$host_path" ]]; then
       EXTERNAL_AUTH_MOUNTS+=(-v "$host_path":/host-auth-files/"$auth_file":ro)
@@ -242,7 +242,7 @@ mkdir -p "$NPM_CONFIG_PREFIX" "$XDG_CACHE_HOME" "$COREPACK_HOME" "$NPM_CONFIG_CA
 chmod 700 "$XDG_CACHE_HOME" "$COREPACK_HOME" "$NPM_CONFIG_CACHE" || true
 export PATH="$NPM_CONFIG_PREFIX/bin:$PATH"
 run_setup_command() {
-  local timeout_value="${OPENCLAW_LIVE_CLI_BACKEND_SETUP_TIMEOUT_SECONDS:-180}s"
+  local timeout_value="${SUNCLAW_LIVE_CLI_BACKEND_SETUP_TIMEOUT_SECONDS:-180}s"
   local timeout_bin=""
   if command -v timeout >/dev/null 2>&1; then
     timeout_bin="timeout"
@@ -258,9 +258,9 @@ run_setup_command() {
     "$timeout_bin" "$timeout_value" "$@"
   fi
 }
-if [ "${OPENCLAW_DOCKER_AUTH_PRESTAGED:-0}" != "1" ]; then
-  IFS=',' read -r -a auth_dirs <<<"${OPENCLAW_DOCKER_AUTH_DIRS_RESOLVED:-}"
-  IFS=',' read -r -a auth_files <<<"${OPENCLAW_DOCKER_AUTH_FILES_RESOLVED:-}"
+if [ "${SUNCLAW_DOCKER_AUTH_PRESTAGED:-0}" != "1" ]; then
+  IFS=',' read -r -a auth_dirs <<<"${SUNCLAW_DOCKER_AUTH_DIRS_RESOLVED:-}"
+  IFS=',' read -r -a auth_files <<<"${SUNCLAW_DOCKER_AUTH_FILES_RESOLVED:-}"
   if ((${#auth_dirs[@]} > 0)); then
     for auth_dir in "${auth_dirs[@]}"; do
       [ -n "$auth_dir" ] || continue
@@ -282,15 +282,15 @@ if [ "${OPENCLAW_DOCKER_AUTH_PRESTAGED:-0}" != "1" ]; then
     done
   fi
 fi
-provider="${OPENCLAW_DOCKER_CLI_BACKEND_PROVIDER:-claude-cli}"
-default_command="${OPENCLAW_DOCKER_CLI_BACKEND_COMMAND_DEFAULT:-}"
-docker_package="${OPENCLAW_DOCKER_CLI_BACKEND_NPM_PACKAGE:-}"
-binary_name="${OPENCLAW_DOCKER_CLI_BACKEND_BINARY_NAME:-}"
+provider="${SUNCLAW_DOCKER_CLI_BACKEND_PROVIDER:-claude-cli}"
+default_command="${SUNCLAW_DOCKER_CLI_BACKEND_COMMAND_DEFAULT:-}"
+docker_package="${SUNCLAW_DOCKER_CLI_BACKEND_NPM_PACKAGE:-}"
+binary_name="${SUNCLAW_DOCKER_CLI_BACKEND_BINARY_NAME:-}"
 if [ -z "$binary_name" ] && [ -n "$default_command" ]; then
   binary_name="$(basename "$default_command")"
 fi
-if [ -z "${OPENCLAW_LIVE_CLI_BACKEND_COMMAND:-}" ] && [ -n "$binary_name" ]; then
-  export OPENCLAW_LIVE_CLI_BACKEND_COMMAND="$NPM_CONFIG_PREFIX/bin/$binary_name"
+if [ -z "${SUNCLAW_LIVE_CLI_BACKEND_COMMAND:-}" ] && [ -n "$binary_name" ]; then
+  export SUNCLAW_LIVE_CLI_BACKEND_COMMAND="$NPM_CONFIG_PREFIX/bin/$binary_name"
 fi
 package_has_explicit_version() {
   case "$1" in
@@ -302,17 +302,17 @@ package_has_explicit_version() {
     *) return 1 ;;
   esac
 }
-if [ -n "${OPENCLAW_LIVE_CLI_BACKEND_COMMAND:-}" ] && [ ! -x "${OPENCLAW_LIVE_CLI_BACKEND_COMMAND}" ] && [ -n "$docker_package" ]; then
+if [ -n "${SUNCLAW_LIVE_CLI_BACKEND_COMMAND:-}" ] && [ ! -x "${SUNCLAW_LIVE_CLI_BACKEND_COMMAND}" ] && [ -n "$docker_package" ]; then
   run_setup_command npm install -g "$docker_package"
 elif [ -n "$docker_package" ] && package_has_explicit_version "$docker_package"; then
   run_setup_command npm install -g "$docker_package"
 fi
-if [ -n "${OPENCLAW_LIVE_CLI_BACKEND_COMMAND:-}" ] && [ -x "${OPENCLAW_LIVE_CLI_BACKEND_COMMAND}" ]; then
-  echo "==> CLI backend binary: ${OPENCLAW_LIVE_CLI_BACKEND_COMMAND}"
-  "${OPENCLAW_LIVE_CLI_BACKEND_COMMAND}" -V || "${OPENCLAW_LIVE_CLI_BACKEND_COMMAND}" --version || true
+if [ -n "${SUNCLAW_LIVE_CLI_BACKEND_COMMAND:-}" ] && [ -x "${SUNCLAW_LIVE_CLI_BACKEND_COMMAND}" ]; then
+  echo "==> CLI backend binary: ${SUNCLAW_LIVE_CLI_BACKEND_COMMAND}"
+  "${SUNCLAW_LIVE_CLI_BACKEND_COMMAND}" -V || "${SUNCLAW_LIVE_CLI_BACKEND_COMMAND}" --version || true
 fi
 if [ "$provider" = "claude-cli" ]; then
-  auth_mode="${OPENCLAW_LIVE_CLI_BACKEND_AUTH:-auto}"
+  auth_mode="${SUNCLAW_LIVE_CLI_BACKEND_AUTH:-auto}"
   if [ "$auth_mode" = "subscription" ]; then
     unset ANTHROPIC_API_KEY
     unset ANTHROPIC_API_KEY_OLD
@@ -344,22 +344,22 @@ NODE
     cat > "$NPM_CONFIG_PREFIX/bin/claude" <<WRAP
 #!/usr/bin/env bash
 script_dir="\$(CDPATH= cd -- "\$(dirname -- "\$0")" && pwd)"
-if [ -n "\${OPENCLAW_LIVE_CLI_BACKEND_ANTHROPIC_API_KEY:-}" ]; then
-  export ANTHROPIC_API_KEY="\${OPENCLAW_LIVE_CLI_BACKEND_ANTHROPIC_API_KEY}"
+if [ -n "\${SUNCLAW_LIVE_CLI_BACKEND_ANTHROPIC_API_KEY:-}" ]; then
+  export ANTHROPIC_API_KEY="\${SUNCLAW_LIVE_CLI_BACKEND_ANTHROPIC_API_KEY}"
 fi
-if [ -n "\${OPENCLAW_LIVE_CLI_BACKEND_ANTHROPIC_API_KEY_OLD:-}" ]; then
-  export ANTHROPIC_API_KEY_OLD="\${OPENCLAW_LIVE_CLI_BACKEND_ANTHROPIC_API_KEY_OLD}"
+if [ -n "\${SUNCLAW_LIVE_CLI_BACKEND_ANTHROPIC_API_KEY_OLD:-}" ]; then
+  export ANTHROPIC_API_KEY_OLD="\${SUNCLAW_LIVE_CLI_BACKEND_ANTHROPIC_API_KEY_OLD}"
 fi
 exec "\$script_dir/claude-real" "\$@"
 WRAP
     chmod +x "$NPM_CONFIG_PREFIX/bin/claude"
   fi
-  if [ -z "${OPENCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV:-}" ]; then
-    export OPENCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV='["ANTHROPIC_API_KEY","ANTHROPIC_API_KEY_OLD"]'
+  if [ -z "${SUNCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV:-}" ]; then
+    export SUNCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV='["ANTHROPIC_API_KEY","ANTHROPIC_API_KEY_OLD"]'
   fi
   if [ "$auth_mode" = "subscription" ]; then
     claude --version
-    direct_token="OPENCLAW-CLAUDE-SUBSCRIPTION-DIRECT"
+    direct_token="SUNCLAW-CLAUDE-SUBSCRIPTION-DIRECT"
     direct_output="$(
       claude \
         -p "Reply exactly: $direct_token" \
@@ -382,21 +382,21 @@ WRAP
   fi
 fi
 tmp_dir="$(mktemp -d)"
-trusted_scripts_dir="${OPENCLAW_LIVE_DOCKER_SCRIPTS_DIR:-/src/scripts}"
+trusted_scripts_dir="${SUNCLAW_LIVE_DOCKER_SCRIPTS_DIR:-/src/scripts}"
 source "$trusted_scripts_dir/lib/live-docker-stage.sh"
-openclaw_live_stage_source_tree "$tmp_dir"
+sunclaw_live_stage_source_tree "$tmp_dir"
 # Use a writable node_modules overlay in the temp repo. Vite writes bundled
 # config artifacts under the nearest node_modules/.vite-temp path, and the
 # build-stage /app/node_modules tree is root-owned in this Docker lane.
-openclaw_live_stage_node_modules "$tmp_dir"
-openclaw_live_link_runtime_tree "$tmp_dir"
-openclaw_live_stage_state_dir "$tmp_dir/.openclaw-state"
-openclaw_live_prepare_staged_config
+sunclaw_live_stage_node_modules "$tmp_dir"
+sunclaw_live_link_runtime_tree "$tmp_dir"
+sunclaw_live_stage_state_dir "$tmp_dir/.sunclaw-state"
+sunclaw_live_prepare_staged_config
 cd "$tmp_dir"
 node scripts/test-live.mjs -- src/gateway/gateway-cli-backend.live.test.ts
 EOF
 
-OPENCLAW_LIVE_DOCKER_REPO_ROOT="$ROOT_DIR" "$TRUSTED_HARNESS_DIR/scripts/test-live-build-docker.sh"
+SUNCLAW_LIVE_DOCKER_REPO_ROOT="$ROOT_DIR" "$TRUSTED_HARNESS_DIR/scripts/test-live-build-docker.sh"
 
 echo "==> Run CLI backend live test in Docker"
 echo "==> Model: $CLI_MODEL"
@@ -411,73 +411,73 @@ fi
 echo "==> External auth dirs: ${AUTH_DIRS_CSV:-none}"
 echo "==> External auth files: ${AUTH_FILES_CSV:-none}"
 DOCKER_AUTH_ENV=(
-  -e OPENCLAW_LIVE_CLI_BACKEND_AUTH="$CLI_AUTH_MODE"
+  -e SUNCLAW_LIVE_CLI_BACKEND_AUTH="$CLI_AUTH_MODE"
 )
 if [[ "$CLI_PROVIDER" == "claude-cli" && "$CLI_AUTH_MODE" == "subscription" ]]; then
   DOCKER_AUTH_ENV+=(
     -e CLAUDE_CODE_OAUTH_TOKEN="${CLAUDE_CODE_OAUTH_TOKEN:-}"
-    -e OPENCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV="$OPENCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV"
+    -e SUNCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV="$SUNCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV"
   )
 else
   DOCKER_AUTH_ENV+=(
     -e ANTHROPIC_API_KEY
     -e ANTHROPIC_API_KEY_OLD
-    -e OPENCLAW_LIVE_CLI_BACKEND_ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY:-}"
-    -e OPENCLAW_LIVE_CLI_BACKEND_ANTHROPIC_API_KEY_OLD="${ANTHROPIC_API_KEY_OLD:-}"
-    -e OPENCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV="${OPENCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV:-}"
+    -e SUNCLAW_LIVE_CLI_BACKEND_ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY:-}"
+    -e SUNCLAW_LIVE_CLI_BACKEND_ANTHROPIC_API_KEY_OLD="${ANTHROPIC_API_KEY_OLD:-}"
+    -e SUNCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV="${SUNCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV:-}"
   )
 fi
 
 DOCKER_RUN_ARGS=()
-openclaw_live_init_docker_run_args DOCKER_RUN_ARGS "${OPENCLAW_LIVE_CLI_BACKEND_DOCKER_RUN_TIMEOUT:-2700s}"
+sunclaw_live_init_docker_run_args DOCKER_RUN_ARGS "${SUNCLAW_LIVE_CLI_BACKEND_DOCKER_RUN_TIMEOUT:-2700s}"
 DOCKER_RUN_ARGS+=(--rm -t \
   -u "$DOCKER_USER" \
   --entrypoint bash \
   -e COREPACK_ENABLE_DOWNLOAD_PROMPT=0 \
   -e HOME=/home/node \
-  -e NODE_OPTIONS="$(openclaw_live_container_node_options)" \
-  -e OPENCLAW_SKIP_CHANNELS=1 \
-  -e OPENCLAW_VITEST_FS_MODULE_CACHE=0 \
-  -e OPENCLAW_DOCKER_AUTH_PRESTAGED="$DOCKER_AUTH_PRESTAGED" \
-  -e OPENCLAW_DOCKER_AUTH_DIRS_RESOLVED="$AUTH_DIRS_CSV" \
-  -e OPENCLAW_DOCKER_AUTH_FILES_RESOLVED="$AUTH_FILES_CSV" \
-  -e OPENCLAW_LIVE_DOCKER_SCRIPTS_DIR="${DOCKER_TRUSTED_HARNESS_CONTAINER_DIR}/scripts" \
-  -e OPENCLAW_LIVE_DOCKER_SOURCE_STAGE_MODE="${OPENCLAW_LIVE_DOCKER_SOURCE_STAGE_MODE:-copy}" \
-  -e OPENCLAW_LIVE_CLI_BACKEND_SETUP_TIMEOUT_SECONDS="$CLI_SETUP_TIMEOUT_SECONDS" \
-  -e OPENCLAW_DOCKER_CLI_BACKEND_PROVIDER="$CLI_PROVIDER" \
-  -e OPENCLAW_DOCKER_CLI_BACKEND_COMMAND_DEFAULT="$CLI_DEFAULT_COMMAND" \
-  -e OPENCLAW_DOCKER_CLI_BACKEND_NPM_PACKAGE="$CLI_DOCKER_NPM_PACKAGE" \
-  -e OPENCLAW_DOCKER_CLI_BACKEND_BINARY_NAME="$CLI_DOCKER_BINARY_NAME" \
-  -e OPENCLAW_LIVE_TEST=1 \
-  -e OPENCLAW_LIVE_CLI_BACKEND=1 \
-  -e OPENCLAW_LIVE_CLI_BACKEND_DEBUG="${OPENCLAW_LIVE_CLI_BACKEND_DEBUG:-}" \
-  -e OPENCLAW_CLI_BACKEND_LOG_OUTPUT="${OPENCLAW_CLI_BACKEND_LOG_OUTPUT:-}" \
-  -e OPENCLAW_TEST_CONSOLE="${OPENCLAW_TEST_CONSOLE:-}" \
-  -e OPENCLAW_LIVE_CLI_BACKEND_MODEL="$CLI_MODEL" \
-  -e OPENCLAW_LIVE_CLI_BACKEND_COMMAND="${OPENCLAW_LIVE_CLI_BACKEND_COMMAND:-}" \
-  -e OPENCLAW_LIVE_CLI_BACKEND_ARGS="${OPENCLAW_LIVE_CLI_BACKEND_ARGS:-}" \
-  -e OPENCLAW_LIVE_CLI_BACKEND_RESUME_ARGS="${OPENCLAW_LIVE_CLI_BACKEND_RESUME_ARGS:-}" \
-  -e OPENCLAW_LIVE_CLI_BACKEND_CLEAR_ENV="${OPENCLAW_LIVE_CLI_BACKEND_CLEAR_ENV:-}" \
-  -e OPENCLAW_LIVE_CLI_BACKEND_DISABLE_MCP_CONFIG="$CLI_DISABLE_MCP_CONFIG" \
-  -e OPENCLAW_LIVE_CLI_BACKEND_RESUME_PROBE="${OPENCLAW_LIVE_CLI_BACKEND_RESUME_PROBE:-}" \
-  -e OPENCLAW_LIVE_CLI_BACKEND_MODEL_SWITCH_PROBE="${OPENCLAW_LIVE_CLI_BACKEND_MODEL_SWITCH_PROBE:-}" \
-  -e OPENCLAW_LIVE_CLI_BACKEND_IMAGE_PROBE="${OPENCLAW_LIVE_CLI_BACKEND_IMAGE_PROBE:-}" \
-  -e OPENCLAW_LIVE_CLI_BACKEND_MCP_PROBE="${OPENCLAW_LIVE_CLI_BACKEND_MCP_PROBE:-}" \
-  -e OPENCLAW_LIVE_CLI_BACKEND_MCP_SCHEMA_PROBE="${OPENCLAW_LIVE_CLI_BACKEND_MCP_SCHEMA_PROBE:-}" \
-  -e OPENCLAW_LIVE_CLI_BACKEND_IMAGE_ARG="${OPENCLAW_LIVE_CLI_BACKEND_IMAGE_ARG:-}" \
-  -e OPENCLAW_LIVE_CLI_BACKEND_IMAGE_MODE="${OPENCLAW_LIVE_CLI_BACKEND_IMAGE_MODE:-}")
-openclaw_live_append_array DOCKER_RUN_ARGS DOCKER_HOME_MOUNT
-openclaw_live_append_array DOCKER_RUN_ARGS DOCKER_EXTRA_ENV_FILES
-openclaw_live_append_array DOCKER_RUN_ARGS DOCKER_TRUSTED_HARNESS_MOUNT
+  -e NODE_OPTIONS="$(sunclaw_live_container_node_options)" \
+  -e SUNCLAW_SKIP_CHANNELS=1 \
+  -e SUNCLAW_VITEST_FS_MODULE_CACHE=0 \
+  -e SUNCLAW_DOCKER_AUTH_PRESTAGED="$DOCKER_AUTH_PRESTAGED" \
+  -e SUNCLAW_DOCKER_AUTH_DIRS_RESOLVED="$AUTH_DIRS_CSV" \
+  -e SUNCLAW_DOCKER_AUTH_FILES_RESOLVED="$AUTH_FILES_CSV" \
+  -e SUNCLAW_LIVE_DOCKER_SCRIPTS_DIR="${DOCKER_TRUSTED_HARNESS_CONTAINER_DIR}/scripts" \
+  -e SUNCLAW_LIVE_DOCKER_SOURCE_STAGE_MODE="${SUNCLAW_LIVE_DOCKER_SOURCE_STAGE_MODE:-copy}" \
+  -e SUNCLAW_LIVE_CLI_BACKEND_SETUP_TIMEOUT_SECONDS="$CLI_SETUP_TIMEOUT_SECONDS" \
+  -e SUNCLAW_DOCKER_CLI_BACKEND_PROVIDER="$CLI_PROVIDER" \
+  -e SUNCLAW_DOCKER_CLI_BACKEND_COMMAND_DEFAULT="$CLI_DEFAULT_COMMAND" \
+  -e SUNCLAW_DOCKER_CLI_BACKEND_NPM_PACKAGE="$CLI_DOCKER_NPM_PACKAGE" \
+  -e SUNCLAW_DOCKER_CLI_BACKEND_BINARY_NAME="$CLI_DOCKER_BINARY_NAME" \
+  -e SUNCLAW_LIVE_TEST=1 \
+  -e SUNCLAW_LIVE_CLI_BACKEND=1 \
+  -e SUNCLAW_LIVE_CLI_BACKEND_DEBUG="${SUNCLAW_LIVE_CLI_BACKEND_DEBUG:-}" \
+  -e SUNCLAW_CLI_BACKEND_LOG_OUTPUT="${SUNCLAW_CLI_BACKEND_LOG_OUTPUT:-}" \
+  -e SUNCLAW_TEST_CONSOLE="${SUNCLAW_TEST_CONSOLE:-}" \
+  -e SUNCLAW_LIVE_CLI_BACKEND_MODEL="$CLI_MODEL" \
+  -e SUNCLAW_LIVE_CLI_BACKEND_COMMAND="${SUNCLAW_LIVE_CLI_BACKEND_COMMAND:-}" \
+  -e SUNCLAW_LIVE_CLI_BACKEND_ARGS="${SUNCLAW_LIVE_CLI_BACKEND_ARGS:-}" \
+  -e SUNCLAW_LIVE_CLI_BACKEND_RESUME_ARGS="${SUNCLAW_LIVE_CLI_BACKEND_RESUME_ARGS:-}" \
+  -e SUNCLAW_LIVE_CLI_BACKEND_CLEAR_ENV="${SUNCLAW_LIVE_CLI_BACKEND_CLEAR_ENV:-}" \
+  -e SUNCLAW_LIVE_CLI_BACKEND_DISABLE_MCP_CONFIG="$CLI_DISABLE_MCP_CONFIG" \
+  -e SUNCLAW_LIVE_CLI_BACKEND_RESUME_PROBE="${SUNCLAW_LIVE_CLI_BACKEND_RESUME_PROBE:-}" \
+  -e SUNCLAW_LIVE_CLI_BACKEND_MODEL_SWITCH_PROBE="${SUNCLAW_LIVE_CLI_BACKEND_MODEL_SWITCH_PROBE:-}" \
+  -e SUNCLAW_LIVE_CLI_BACKEND_IMAGE_PROBE="${SUNCLAW_LIVE_CLI_BACKEND_IMAGE_PROBE:-}" \
+  -e SUNCLAW_LIVE_CLI_BACKEND_MCP_PROBE="${SUNCLAW_LIVE_CLI_BACKEND_MCP_PROBE:-}" \
+  -e SUNCLAW_LIVE_CLI_BACKEND_MCP_SCHEMA_PROBE="${SUNCLAW_LIVE_CLI_BACKEND_MCP_SCHEMA_PROBE:-}" \
+  -e SUNCLAW_LIVE_CLI_BACKEND_IMAGE_ARG="${SUNCLAW_LIVE_CLI_BACKEND_IMAGE_ARG:-}" \
+  -e SUNCLAW_LIVE_CLI_BACKEND_IMAGE_MODE="${SUNCLAW_LIVE_CLI_BACKEND_IMAGE_MODE:-}")
+sunclaw_live_append_array DOCKER_RUN_ARGS DOCKER_HOME_MOUNT
+sunclaw_live_append_array DOCKER_RUN_ARGS DOCKER_EXTRA_ENV_FILES
+sunclaw_live_append_array DOCKER_RUN_ARGS DOCKER_TRUSTED_HARNESS_MOUNT
 DOCKER_RUN_ARGS+=(\
   -v "$CACHE_HOME_DIR":/home/node/.cache \
   -v "$ROOT_DIR":/src:ro \
-  -v "$CONFIG_DIR":/home/node/.openclaw \
-  -v "$WORKSPACE_DIR":/home/node/.openclaw/workspace \
+  -v "$CONFIG_DIR":/home/node/.sunclaw \
+  -v "$WORKSPACE_DIR":/home/node/.sunclaw/workspace \
   -v "$CLI_TOOLS_DIR":/home/node/.npm-global)
-openclaw_live_append_array DOCKER_RUN_ARGS EXTERNAL_AUTH_MOUNTS
-openclaw_live_append_array DOCKER_RUN_ARGS DOCKER_AUTH_ENV
-openclaw_live_append_array DOCKER_RUN_ARGS PROFILE_MOUNT
+sunclaw_live_append_array DOCKER_RUN_ARGS EXTERNAL_AUTH_MOUNTS
+sunclaw_live_append_array DOCKER_RUN_ARGS DOCKER_AUTH_ENV
+sunclaw_live_append_array DOCKER_RUN_ARGS PROFILE_MOUNT
 DOCKER_RUN_ARGS+=(\
   "$LIVE_IMAGE_NAME" \
   -lc "$LIVE_TEST_CMD")

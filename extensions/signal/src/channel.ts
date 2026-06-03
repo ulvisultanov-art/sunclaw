@@ -1,25 +1,25 @@
-import { DEFAULT_ACCOUNT_ID } from "openclaw/plugin-sdk/account-id";
-import { buildDmGroupAccountAllowlistAdapter } from "openclaw/plugin-sdk/allowlist-config-edit";
-import { createChatChannelPlugin, type ChannelPlugin } from "openclaw/plugin-sdk/channel-core";
-import { defineChannelMessageAdapter } from "openclaw/plugin-sdk/channel-outbound";
-import { resolveOutboundSendDep } from "openclaw/plugin-sdk/channel-outbound";
-import { createPairingPrefixStripper } from "openclaw/plugin-sdk/channel-pairing";
+import { DEFAULT_ACCOUNT_ID } from "sunclaw/plugin-sdk/account-id";
+import { buildDmGroupAccountAllowlistAdapter } from "sunclaw/plugin-sdk/allowlist-config-edit";
+import { createChatChannelPlugin, type ChannelPlugin } from "sunclaw/plugin-sdk/channel-core";
+import { defineChannelMessageAdapter } from "sunclaw/plugin-sdk/channel-outbound";
+import { resolveOutboundSendDep } from "sunclaw/plugin-sdk/channel-outbound";
+import { createPairingPrefixStripper } from "sunclaw/plugin-sdk/channel-pairing";
 import {
   attachChannelToResult,
   attachChannelToResults,
-} from "openclaw/plugin-sdk/channel-send-result";
-import { PAIRING_APPROVED_MESSAGE } from "openclaw/plugin-sdk/channel-status";
-import { resolveMarkdownTableMode } from "openclaw/plugin-sdk/markdown-table-runtime";
-import { resolveChannelMediaMaxBytes } from "openclaw/plugin-sdk/media-runtime";
-import { chunkText, resolveTextChunkLimit } from "openclaw/plugin-sdk/reply-chunking";
-import { buildOutboundBaseSessionKey, type RoutePeer } from "openclaw/plugin-sdk/routing";
+} from "sunclaw/plugin-sdk/channel-send-result";
+import { PAIRING_APPROVED_MESSAGE } from "sunclaw/plugin-sdk/channel-status";
+import { resolveMarkdownTableMode } from "sunclaw/plugin-sdk/markdown-table-runtime";
+import { resolveChannelMediaMaxBytes } from "sunclaw/plugin-sdk/media-runtime";
+import { chunkText, resolveTextChunkLimit } from "sunclaw/plugin-sdk/reply-chunking";
+import { buildOutboundBaseSessionKey, type RoutePeer } from "sunclaw/plugin-sdk/routing";
 import {
   buildBaseChannelStatusSummary,
   collectStatusIssuesFromLastError,
   createComputedAccountStatusAdapter,
   createDefaultChannelRuntimeState,
-} from "openclaw/plugin-sdk/status-helpers";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/status-helpers";
+import { normalizeLowercaseStringOrEmpty } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { resolveSignalAccount, type ResolvedSignalAccount } from "./accounts.js";
 import {
   shouldSuppressLocalSignalExecApprovalPrompt,

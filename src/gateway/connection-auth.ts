@@ -1,11 +1,11 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { resolveGatewayCredentialsWithSecretInputs } from "./credentials-secret-inputs.js";
 import { resolveGatewayCredentialsFromConfig } from "./credentials.js";
 
 type GatewayCredentialConfigOptions = Parameters<typeof resolveGatewayCredentialsFromConfig>[0];
 
 export type GatewayConnectionAuthOptions = Omit<GatewayCredentialConfigOptions, "cfg"> & {
-  config: OpenClawConfig;
+  config: SunClawConfig;
 };
 
 function toGatewayCredentialOptions(

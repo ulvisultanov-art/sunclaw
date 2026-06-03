@@ -1,6 +1,6 @@
-# OpenClaw Installer for Windows
-# Usage: powershell -c "irm https://openclaw.ai/install.ps1 | iex"
-#        powershell -c "& ([scriptblock]::Create((irm https://openclaw.ai/install.ps1))) -Tag beta -NoOnboard -DryRun"
+# SunClaw Installer for Windows
+# Usage: powershell -c "irm https://docs.sunclaw.complex.az/install.ps1 | iex"
+#        powershell -c "& ([scriptblock]::Create((irm https://docs.sunclaw.complex.az/install.ps1))) -Tag beta -NoOnboard -DryRun"
 
 param(
     [string]$Tag = "latest",
@@ -101,11 +101,11 @@ function Complete-Install {
         exit $script:InstallExitCode
     }
 
-    throw "OpenClaw installation failed with exit code $($script:InstallExitCode)."
+    throw "SunClaw installation failed with exit code $($script:InstallExitCode)."
 }
 
 Write-Host ""
-Write-Host "  OpenClaw Installer" -ForegroundColor Cyan
+Write-Host "  SunClaw Installer" -ForegroundColor Cyan
 Write-Host ""
 
 # Check if running in PowerShell
@@ -118,34 +118,34 @@ if ($PSVersionTable.PSVersion.Major -lt 5) {
 Write-Host "[OK] Windows detected" -ForegroundColor Green
 
 if (-not $PSBoundParameters.ContainsKey("InstallMethod")) {
-    if (-not [string]::IsNullOrWhiteSpace($env:OPENCLAW_INSTALL_METHOD)) {
-        $InstallMethod = $env:OPENCLAW_INSTALL_METHOD
+    if (-not [string]::IsNullOrWhiteSpace($env:SUNCLAW_INSTALL_METHOD)) {
+        $InstallMethod = $env:SUNCLAW_INSTALL_METHOD
     }
 }
 if (-not $PSBoundParameters.ContainsKey("GitDir")) {
-    if (-not [string]::IsNullOrWhiteSpace($env:OPENCLAW_GIT_DIR)) {
-        $GitDir = $env:OPENCLAW_GIT_DIR
+    if (-not [string]::IsNullOrWhiteSpace($env:SUNCLAW_GIT_DIR)) {
+        $GitDir = $env:SUNCLAW_GIT_DIR
     }
 }
 if (-not $PSBoundParameters.ContainsKey("NoOnboard")) {
-    if ($env:OPENCLAW_NO_ONBOARD -eq "1") {
+    if ($env:SUNCLAW_NO_ONBOARD -eq "1") {
         $NoOnboard = $true
     }
 }
 if (-not $PSBoundParameters.ContainsKey("NoGitUpdate")) {
-    if ($env:OPENCLAW_GIT_UPDATE -eq "0") {
+    if ($env:SUNCLAW_GIT_UPDATE -eq "0") {
         $NoGitUpdate = $true
     }
 }
 if (-not $PSBoundParameters.ContainsKey("DryRun")) {
-    if ($env:OPENCLAW_DRY_RUN -eq "1") {
+    if ($env:SUNCLAW_DRY_RUN -eq "1") {
         $DryRun = $true
     }
 }
 
 if ([string]::IsNullOrWhiteSpace($GitDir)) {
     $userHome = [Environment]::GetFolderPath("UserProfile")
-    $GitDir = (Join-Path $userHome "openclaw")
+    $GitDir = (Join-Path $userHome "sunclaw")
 }
 
 # Check for Node.js
@@ -180,7 +180,7 @@ function Get-WindowsNodeArchitecture {
     return "x64"
 }
 
-function Get-OpenClawDepsRoot {
+function Get-SunClawDepsRoot {
     $localAppData = $env:LOCALAPPDATA
     if ([string]::IsNullOrWhiteSpace($localAppData)) {
         $localAppData = [Environment]::GetFolderPath("LocalApplicationData")
@@ -188,11 +188,11 @@ function Get-OpenClawDepsRoot {
     if ([string]::IsNullOrWhiteSpace($localAppData)) {
         $localAppData = Join-Path ([Environment]::GetFolderPath("UserProfile")) "AppData\Local"
     }
-    return (Join-Path $localAppData "OpenClaw\deps")
+    return (Join-Path $localAppData "SunClaw\deps")
 }
 
 function Get-PortableNodeRoot {
-    return (Join-Path (Get-OpenClawDepsRoot) "portable-node")
+    return (Join-Path (Get-SunClawDepsRoot) "portable-node")
 }
 
 function Get-PortableNodeCommandPath {
@@ -222,7 +222,7 @@ function Ensure-PortableNodeOnUserPath {
 
     $nodeDir = Split-Path -Parent $nodeExe
     if (Add-ToUserPath $nodeDir) {
-        Write-Host "[!] Added $nodeDir to user PATH (restart terminal if node or openclaw is not found)" -ForegroundColor Yellow
+        Write-Host "[!] Added $nodeDir to user PATH (restart terminal if node or sunclaw is not found)" -ForegroundColor Yellow
     }
 }
 
@@ -392,10 +392,10 @@ function Install-Node {
     return $false
 }
 
-# Check for existing OpenClaw installation
-function Check-ExistingOpenClaw {
-    if (Get-OpenClawCommandPath) {
-        Write-Host "[*] Existing OpenClaw installation detected" -ForegroundColor Yellow
+# Check for existing SunClaw installation
+function Check-ExistingSunClaw {
+    if (Get-SunClawCommandPath) {
+        Write-Host "[*] Existing SunClaw installation detected" -ForegroundColor Yellow
         return $true
     }
     return $false
@@ -456,7 +456,7 @@ function Add-ToUserPath {
 }
 
 function Get-PortableGitRoot {
-    return (Join-Path (Get-OpenClawDepsRoot) "portable-git")
+    return (Join-Path (Get-SunClawDepsRoot) "portable-git")
 }
 
 function Get-PortableGitCommandPath {
@@ -520,7 +520,7 @@ function Ensure-PortableGitOnUserPath {
 function Resolve-PortableGitDownload {
     $releaseApi = "https://api.github.com/repos/git-for-windows/git/releases/latest"
     $headers = @{
-        "User-Agent" = "openclaw-installer"
+        "User-Agent" = "sunclaw-installer"
         "Accept" = "application/vnd.github+json"
     }
     $release = Invoke-RestMethod -Uri $releaseApi -Headers $headers
@@ -559,7 +559,7 @@ function Install-PortableGit {
     $portableRoot = Get-PortableGitRoot
     $portableParent = Split-Path -Parent $portableRoot
     $tmpZip = Join-Path $env:TEMP $download.Name
-    $tmpExtract = Join-Path $env:TEMP ("openclaw-portable-git-" + [guid]::NewGuid().ToString("N"))
+    $tmpExtract = Join-Path $env:TEMP ("sunclaw-portable-git-" + [guid]::NewGuid().ToString("N"))
 
     New-Item -ItemType Directory -Force -Path $portableParent | Out-Null
     if (Test-Path $portableRoot) {
@@ -609,50 +609,50 @@ function Ensure-Git {
     }
 
     Write-Host ""
-    Write-Host "Error: Git is required to install OpenClaw." -ForegroundColor Red
+    Write-Host "Error: Git is required to install SunClaw." -ForegroundColor Red
     Write-Host "Auto-bootstrap of user-local Git did not succeed." -ForegroundColor Yellow
     Write-Host "Install Git for Windows manually, then re-run this installer:" -ForegroundColor Yellow
     Write-Host "  https://git-scm.com/download/win" -ForegroundColor Cyan
     return $false
 }
 
-function Get-OpenClawCommandPath {
-    $openclawCmd = Get-Command openclaw.cmd -ErrorAction SilentlyContinue
-    if ($openclawCmd -and $openclawCmd.Source) {
-        return $openclawCmd.Source
+function Get-SunClawCommandPath {
+    $sunclawCmd = Get-Command sunclaw.cmd -ErrorAction SilentlyContinue
+    if ($sunclawCmd -and $sunclawCmd.Source) {
+        return $sunclawCmd.Source
     }
 
-    $openclaw = Get-Command openclaw -ErrorAction SilentlyContinue
-    if ($openclaw -and $openclaw.Source) {
-        return $openclaw.Source
+    $sunclaw = Get-Command sunclaw -ErrorAction SilentlyContinue
+    if ($sunclaw -and $sunclaw.Source) {
+        return $sunclaw.Source
     }
 
     return $null
 }
 
-function Invoke-OpenClawCommand {
+function Invoke-SunClawCommand {
     param(
         [Parameter(ValueFromRemainingArguments = $true)]
         [string[]]$Arguments
     )
 
-    $commandPath = Get-OpenClawCommandPath
+    $commandPath = Get-SunClawCommandPath
     if (-not $commandPath) {
-        throw "openclaw command not found on PATH."
+        throw "sunclaw command not found on PATH."
     }
 
     & $commandPath @Arguments
 }
 
-function Invoke-InteractiveOpenClawCommand {
+function Invoke-InteractiveSunClawCommand {
     param(
         [Parameter(ValueFromRemainingArguments = $true)]
         [string[]]$Arguments
     )
 
-    $commandPath = Get-OpenClawCommandPath
+    $commandPath = Get-SunClawCommandPath
     if (-not $commandPath) {
-        throw "openclaw command not found on PATH."
+        throw "sunclaw command not found on PATH."
     }
 
     $null = Start-Process -FilePath $commandPath -ArgumentList $Arguments -NoNewWindow -Wait -PassThru
@@ -754,8 +754,8 @@ function Get-NpmGlobalBinCandidates {
     return $candidates | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -Unique
 }
 
-function Ensure-OpenClawOnPath {
-    if (Get-OpenClawCommandPath) {
+function Ensure-SunClawOnPath {
+    if (Get-SunClawCommandPath) {
         return $true
     }
 
@@ -768,7 +768,7 @@ function Ensure-OpenClawOnPath {
 
     $npmBins = Get-NpmGlobalBinCandidates -NpmPrefix $npmPrefix
     foreach ($npmBin in $npmBins) {
-        if (-not (Test-Path (Join-Path $npmBin "openclaw.cmd"))) {
+        if (-not (Test-Path (Join-Path $npmBin "sunclaw.cmd"))) {
             continue
         }
 
@@ -778,7 +778,7 @@ function Ensure-OpenClawOnPath {
         return $true
     }
 
-    Write-Host "[!] openclaw is not on PATH yet." -ForegroundColor Yellow
+    Write-Host "[!] sunclaw is not on PATH yet." -ForegroundColor Yellow
     Write-Host "Restart PowerShell or add the npm global install folder to PATH." -ForegroundColor Yellow
     if ($npmBins.Count -gt 0) {
         Write-Host "Expected path (one of):" -ForegroundColor Gray
@@ -898,7 +898,7 @@ function Ensure-Pnpm {
     Write-Host "[OK] pnpm installed" -ForegroundColor Green
 }
 
-# Install OpenClaw
+# Install SunClaw
 function Resolve-LocalNpmPackagePath {
     param([string]$PackagePath)
 
@@ -945,7 +945,7 @@ function Resolve-LocalNpmPackageInstallSpec {
     }
 }
 
-function Resolve-NpmOpenClawInstallSpec {
+function Resolve-NpmSunClawInstallSpec {
     param(
         [string]$PackageName,
         [string]$RequestedTag
@@ -970,7 +970,7 @@ function Resolve-NpmOpenClawInstallSpec {
     return "$PackageName@$trimmedTag"
 }
 
-function Test-OpenClawSourcePackageInstallSpec {
+function Test-SunClawSourcePackageInstallSpec {
     param([string]$RequestedTag)
 
     if ([string]::IsNullOrWhiteSpace($RequestedTag)) {
@@ -978,14 +978,14 @@ function Test-OpenClawSourcePackageInstallSpec {
     }
 
     $normalizedTag = $RequestedTag.Trim().ToLowerInvariant()
-    if ($normalizedTag.StartsWith("openclaw@")) {
-        $normalizedTag = $normalizedTag.Substring("openclaw@".Length)
+    if ($normalizedTag.StartsWith("sunclaw@")) {
+        $normalizedTag = $normalizedTag.Substring("sunclaw@".Length)
     }
 
     if ($normalizedTag -eq "main") {
         return $true
     }
-    if ($normalizedTag -match '^github:openclaw/openclaw($|[#/])') {
+    if ($normalizedTag -match '^github:sunclaw/sunclaw($|[#/])') {
         return $true
     }
 
@@ -993,10 +993,10 @@ function Test-OpenClawSourcePackageInstallSpec {
         $normalizedTag = $normalizedTag.Substring("git+".Length)
     }
     return (
-        $normalizedTag -match '^https?://github\.com/openclaw/openclaw(\.git)?($|[?#])' -or
-        $normalizedTag -match '^ssh://git@github\.com[:/]openclaw/openclaw(\.git)?($|[?#])' -or
-        $normalizedTag -match '^git://github\.com/openclaw/openclaw(\.git)?($|[?#])' -or
-        $normalizedTag -match '^git@github\.com:openclaw/openclaw(\.git)?($|[?#])'
+        $normalizedTag -match '^https?://github\.com/sunclaw/sunclaw(\.git)?($|[?#])' -or
+        $normalizedTag -match '^ssh://git@github\.com[:/]sunclaw/sunclaw(\.git)?($|[?#])' -or
+        $normalizedTag -match '^git://github\.com/sunclaw/sunclaw(\.git)?($|[?#])' -or
+        $normalizedTag -match '^git@github\.com:sunclaw/sunclaw(\.git)?($|[?#])'
     )
 }
 
@@ -1057,12 +1057,12 @@ function Test-NpmConfigRawKey {
     return $false
 }
 
-function Install-OpenClaw {
+function Install-SunClaw {
     if ([string]::IsNullOrWhiteSpace($Tag)) {
         $Tag = "latest"
     }
-    if (Test-OpenClawSourcePackageInstallSpec -RequestedTag $Tag) {
-        Write-Host "Error: npm installs do not support OpenClaw GitHub source targets like '$Tag'." -ForegroundColor Red
+    if (Test-SunClawSourcePackageInstallSpec -RequestedTag $Tag) {
+        Write-Host "Error: npm installs do not support SunClaw GitHub source targets like '$Tag'." -ForegroundColor Red
         Write-Host "Use -InstallMethod git -Tag main for the moving main checkout, or use latest, beta, an exact version, or a built .tgz package." -ForegroundColor Yellow
         return $false
     }
@@ -1070,13 +1070,13 @@ function Install-OpenClaw {
         return $false
     }
 
-    # Use openclaw package for beta, openclaw for stable
-    $packageName = "openclaw"
+    # Use sunclaw package for beta, sunclaw for stable
+    $packageName = "sunclaw"
     if ($Tag -eq "beta" -or $Tag -match "^beta\.") {
-        $packageName = "openclaw"
+        $packageName = "sunclaw"
     }
-    $installSpec = Resolve-NpmOpenClawInstallSpec -PackageName $packageName -RequestedTag $Tag
-    Write-Host "[*] Installing OpenClaw ($installSpec)..." -ForegroundColor Yellow
+    $installSpec = Resolve-NpmSunClawInstallSpec -PackageName $packageName -RequestedTag $Tag
+    Write-Host "[*] Installing SunClaw ($installSpec)..." -ForegroundColor Yellow
     $freshnessArgs = @("--min-release-age=0")
     $minReleaseAge = (Invoke-NpmCommand -Arguments @("config", "get", "min-release-age", "--global") 2>$null)
     $minReleaseAgeStatus = $LASTEXITCODE
@@ -1114,7 +1114,7 @@ function Install-OpenClaw {
                 Write-Host "  https://git-scm.com/download/win" -ForegroundColor Cyan
             } else {
                 Write-Host "Re-run with verbose output to see the full error:" -ForegroundColor Yellow
-                Write-Host '  powershell -c "irm https://openclaw.ai/install.ps1 | iex"' -ForegroundColor Cyan
+                Write-Host '  powershell -c "irm https://docs.sunclaw.complex.az/install.ps1 | iex"' -ForegroundColor Cyan
             }
             $npmOutput | ForEach-Object { Write-Host $_ }
             return $false
@@ -1129,12 +1129,12 @@ function Install-OpenClaw {
         $env:NPM_CONFIG_BEFORE = $prevBefore
         $env:NPM_CONFIG_MIN_RELEASE_AGE = $prevMinReleaseAge
     }
-    Write-Host "[OK] OpenClaw installed" -ForegroundColor Green
+    Write-Host "[OK] SunClaw installed" -ForegroundColor Green
     return $true
 }
 
-# Install OpenClaw from GitHub
-function Install-OpenClawFromGit {
+# Install SunClaw from GitHub
+function Install-SunClawFromGit {
     param(
         [string]$RepoDir,
         [switch]$SkipUpdate
@@ -1143,8 +1143,8 @@ function Install-OpenClawFromGit {
         return $false
     }
 
-    $repoUrl = "https://github.com/openclaw/openclaw.git"
-    Write-Host "[*] Installing OpenClaw from GitHub ($repoUrl)..." -ForegroundColor Yellow
+    $repoUrl = "https://github.com/ulvisultanov-art/sunclaw.git"
+    Write-Host "[*] Installing SunClaw from GitHub ($repoUrl)..." -ForegroundColor Yellow
 
     if (-not (Test-Path $RepoDir)) {
         git clone $repoUrl $RepoDir
@@ -1237,7 +1237,7 @@ function Install-OpenClawFromGit {
 
     $entryPath = Join-Path $RepoDir "dist\\entry.js"
     if (-not (Test-Path $entryPath)) {
-        Write-Host "[!] OpenClaw build did not produce $entryPath" -ForegroundColor Red
+        Write-Host "[!] SunClaw build did not produce $entryPath" -ForegroundColor Red
         return $false
     }
 
@@ -1245,7 +1245,7 @@ function Install-OpenClawFromGit {
     if (-not (Test-Path $binDir)) {
         New-Item -ItemType Directory -Force -Path $binDir | Out-Null
     }
-    $cmdPath = Join-Path $binDir "openclaw.cmd"
+    $cmdPath = Join-Path $binDir "sunclaw.cmd"
     $cmdContents = "@echo off`r`nnode ""$entryPath"" %*`r`n"
     Set-Content -Path $cmdPath -Value $cmdContents -NoNewline
 
@@ -1253,7 +1253,7 @@ function Install-OpenClawFromGit {
         Write-Host "[!] Added $binDir to user PATH (restart terminal if command not found)" -ForegroundColor Yellow
     }
 
-    Write-Host "[OK] OpenClaw wrapper installed to $cmdPath" -ForegroundColor Green
+    Write-Host "[OK] SunClaw wrapper installed to $cmdPath" -ForegroundColor Green
     Write-Host "[i] This checkout uses pnpm. For deps, run: pnpm install (avoid npm install in the repo)." -ForegroundColor Gray
     return $true
 }
@@ -1262,7 +1262,7 @@ function Install-OpenClawFromGit {
 function Run-Doctor {
     Write-Host "[*] Running doctor to migrate settings..." -ForegroundColor Yellow
     try {
-        Invoke-OpenClawCommand doctor --non-interactive
+        Invoke-SunClawCommand doctor --non-interactive
     } catch {
         # Ignore errors from doctor
     }
@@ -1271,7 +1271,7 @@ function Run-Doctor {
 
 function Test-GatewayServiceLoaded {
     try {
-        $statusJson = (Invoke-OpenClawCommand daemon status --json 2>$null)
+        $statusJson = (Invoke-SunClawCommand daemon status --json 2>$null)
         if ([string]::IsNullOrWhiteSpace($statusJson)) {
             return $false
         }
@@ -1286,7 +1286,7 @@ function Test-GatewayServiceLoaded {
 }
 
 function Refresh-GatewayServiceIfLoaded {
-    if (-not (Get-OpenClawCommandPath)) {
+    if (-not (Get-SunClawCommandPath)) {
         return
     }
     if (-not (Test-GatewayServiceLoaded)) {
@@ -1295,15 +1295,15 @@ function Refresh-GatewayServiceIfLoaded {
 
     Write-Host "[*] Refreshing loaded gateway service..." -ForegroundColor Yellow
     try {
-        Invoke-OpenClawCommand gateway install --force | Out-Null
+        Invoke-SunClawCommand gateway install --force | Out-Null
     } catch {
         Write-Host "[!] Gateway service refresh failed; continuing." -ForegroundColor Yellow
         return
     }
 
     try {
-        Invoke-OpenClawCommand gateway restart | Out-Null
-        Invoke-OpenClawCommand gateway status --json | Out-Null
+        Invoke-SunClawCommand gateway restart | Out-Null
+        Invoke-SunClawCommand gateway status --json | Out-Null
         Write-Host "[OK] Gateway service refreshed" -ForegroundColor Green
     } catch {
         Write-Host "[!] Gateway service restart failed; continuing." -ForegroundColor Yellow
@@ -1311,11 +1311,11 @@ function Refresh-GatewayServiceIfLoaded {
 }
 
 function Get-LegacyRepoDir {
-    if (-not [string]::IsNullOrWhiteSpace($env:OPENCLAW_GIT_DIR)) {
-        return $env:OPENCLAW_GIT_DIR
+    if (-not [string]::IsNullOrWhiteSpace($env:SUNCLAW_GIT_DIR)) {
+        return $env:SUNCLAW_GIT_DIR
     }
     $userHome = [Environment]::GetFolderPath("UserProfile")
-    return (Join-Path $userHome "openclaw")
+    return (Join-Path $userHome "sunclaw")
 }
 
 function Remove-LegacySubmodule {
@@ -1357,7 +1357,7 @@ function Main {
     }
 
     # Check for existing installation
-    $isUpgrade = Check-ExistingOpenClaw
+    $isUpgrade = Check-ExistingSunClaw
 
     # Step 1: Node.js
     if (-not (Check-Node)) {
@@ -1376,35 +1376,35 @@ function Main {
 
     $finalGitDir = $null
 
-    # Step 2: OpenClaw
+    # Step 2: SunClaw
     if ($InstallMethod -eq "git") {
         try {
             $npmCommand = Get-NpmCommandPath
             if ($npmCommand) {
-                Invoke-NpmCommand -Arguments @("uninstall", "-g", "openclaw") 2>$null | Out-Null
+                Invoke-NpmCommand -Arguments @("uninstall", "-g", "sunclaw") 2>$null | Out-Null
                 Write-Host "[OK] Removed npm global install if present" -ForegroundColor Green
             }
         } catch { }
         $finalGitDir = $GitDir
-        $gitInstallResults = @(Install-OpenClawFromGit -RepoDir $GitDir -SkipUpdate:$NoGitUpdate)
+        $gitInstallResults = @(Install-SunClawFromGit -RepoDir $GitDir -SkipUpdate:$NoGitUpdate)
         if (-not (Test-BooleanSuccessResult -Results $gitInstallResults)) {
             return (Fail-Install)
         }
     } else {
-        $gitWrapper = Join-Path (Join-Path $env:USERPROFILE ".local\\bin") "openclaw.cmd"
+        $gitWrapper = Join-Path (Join-Path $env:USERPROFILE ".local\\bin") "sunclaw.cmd"
         if (Test-Path $gitWrapper) {
             Remove-Item -Force $gitWrapper
             Write-Host "[OK] Removed git wrapper (switching to npm)" -ForegroundColor Green
         }
-        $npmInstallResults = @(Install-OpenClaw)
+        $npmInstallResults = @(Install-SunClaw)
         if (-not (Test-BooleanSuccessResult -Results $npmInstallResults)) {
             return (Fail-Install)
         }
     }
 
-    if (-not (Ensure-OpenClawOnPath)) {
-        Write-Host "Install completed, but OpenClaw is not on PATH yet." -ForegroundColor Yellow
-        Write-Host "Open a new terminal, then run: openclaw doctor" -ForegroundColor Cyan
+    if (-not (Ensure-SunClawOnPath)) {
+        Write-Host "Install completed, but SunClaw is not on PATH yet." -ForegroundColor Yellow
+        Write-Host "Open a new terminal, then run: sunclaw doctor" -ForegroundColor Cyan
         return
     }
 
@@ -1417,15 +1417,15 @@ function Main {
 
     $installedVersion = $null
     try {
-        $installedVersion = (Invoke-OpenClawCommand --version 2>$null).Trim()
+        $installedVersion = (Invoke-SunClawCommand --version 2>$null).Trim()
     } catch {
         $installedVersion = $null
     }
     if (-not $installedVersion) {
         try {
             $npmList = Invoke-NpmCommand -Arguments @("list", "-g", "--depth", "0", "--json") 2>$null | ConvertFrom-Json
-            if ($npmList -and $npmList.dependencies -and $npmList.dependencies.openclaw -and $npmList.dependencies.openclaw.version) {
-                $installedVersion = $npmList.dependencies.openclaw.version
+            if ($npmList -and $npmList.dependencies -and $npmList.dependencies.sunclaw -and $npmList.dependencies.sunclaw.version) {
+                $installedVersion = $npmList.dependencies.sunclaw.version
             }
         } catch {
             $installedVersion = $null
@@ -1434,9 +1434,9 @@ function Main {
 
     Write-Host ""
     if ($installedVersion) {
-        Write-Host "OpenClaw installed successfully ($installedVersion)!" -ForegroundColor Green
+        Write-Host "SunClaw installed successfully ($installedVersion)!" -ForegroundColor Green
     } else {
-        Write-Host "OpenClaw installed successfully!" -ForegroundColor Green
+        Write-Host "SunClaw installed successfully!" -ForegroundColor Green
     }
     Write-Host ""
     if ($isUpgrade) {
@@ -1483,23 +1483,23 @@ function Main {
 
     if ($InstallMethod -eq "git") {
         Write-Host "Source checkout: $finalGitDir" -ForegroundColor Cyan
-        Write-Host "Wrapper: $env:USERPROFILE\\.local\\bin\\openclaw.cmd" -ForegroundColor Cyan
+        Write-Host "Wrapper: $env:USERPROFILE\\.local\\bin\\sunclaw.cmd" -ForegroundColor Cyan
         Write-Host ""
     }
 
     if ($isUpgrade) {
         Write-Host "Upgrade complete. Run " -NoNewline
-        Write-Host "openclaw doctor" -ForegroundColor Cyan -NoNewline
+        Write-Host "sunclaw doctor" -ForegroundColor Cyan -NoNewline
         Write-Host " to check for additional migrations."
     } else {
         if ($NoOnboard) {
             Write-Host "Skipping onboard (requested). Run " -NoNewline
-            Write-Host "openclaw onboard" -ForegroundColor Cyan -NoNewline
+            Write-Host "sunclaw onboard" -ForegroundColor Cyan -NoNewline
             Write-Host " later."
         } else {
             Write-Host "Starting setup..." -ForegroundColor Cyan
             Write-Host ""
-            Invoke-InteractiveOpenClawCommand onboard
+            Invoke-InteractiveSunClawCommand onboard
         }
     }
 

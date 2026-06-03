@@ -1,21 +1,21 @@
-import type { OutboundIdentity } from "openclaw/plugin-sdk/channel-outbound";
-import { resolveOutboundSendDep } from "openclaw/plugin-sdk/channel-outbound";
+import type { OutboundIdentity } from "sunclaw/plugin-sdk/channel-outbound";
+import { resolveOutboundSendDep } from "sunclaw/plugin-sdk/channel-outbound";
 import {
   attachChannelToResult,
   type ChannelOutboundAdapter,
   createAttachedChannelResultAdapter,
-} from "openclaw/plugin-sdk/channel-send-result";
+} from "sunclaw/plugin-sdk/channel-send-result";
 import {
   resolveInteractiveTextFallback,
   type InteractiveReply,
   type MessagePresentation,
-} from "openclaw/plugin-sdk/interactive-runtime";
+} from "sunclaw/plugin-sdk/interactive-runtime";
 import {
   resolvePayloadMediaUrls,
   sendPayloadMediaSequenceAndFinalize,
   sendTextMediaPayload,
-} from "openclaw/plugin-sdk/reply-payload";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/reply-payload";
+import { normalizeOptionalString } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { parseSlackBlocksInput } from "./blocks-input.js";
 import {
   buildSlackInteractiveBlocks,

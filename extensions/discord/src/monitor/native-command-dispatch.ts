@@ -1,6 +1,6 @@
-import type { ChatCommandDefinition, CommandArgs } from "openclaw/plugin-sdk/command-auth-native";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { ResolvedAgentRoute } from "openclaw/plugin-sdk/routing";
+import type { ChatCommandDefinition, CommandArgs } from "sunclaw/plugin-sdk/command-auth-native";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import type { ResolvedAgentRoute } from "sunclaw/plugin-sdk/routing";
 import type {
   ButtonInteraction,
   CommandInteraction,
@@ -8,14 +8,14 @@ import type {
 } from "../internal/discord.js";
 import type { ThreadBindingManager } from "./thread-bindings.js";
 
-type DiscordConfig = NonNullable<OpenClawConfig["channels"]>["discord"];
+type DiscordConfig = NonNullable<SunClawConfig["channels"]>["discord"];
 
 export type DispatchDiscordCommandInteractionParams = {
   interaction: CommandInteraction | ButtonInteraction | StringSelectMenuInteraction;
   prompt: string;
   command: ChatCommandDefinition;
   commandArgs?: CommandArgs;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   discordConfig: DiscordConfig;
   accountId: string;
   sessionPrefix: string;

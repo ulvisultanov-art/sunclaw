@@ -1,5 +1,5 @@
-import { createSetupTranslator } from "openclaw/plugin-sdk/setup-runtime";
-import { normalizeStringEntries } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { createSetupTranslator } from "sunclaw/plugin-sdk/setup-runtime";
+import { normalizeStringEntries } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import {
   applyTlonSetupConfig,
   createTlonSetupWizardBase,

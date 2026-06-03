@@ -1,9 +1,9 @@
-import { normalizeOpenClawProviderIndex } from "./normalize.js";
-import { OPENCLAW_PROVIDER_INDEX } from "./openclaw-provider-index.js";
-import type { OpenClawProviderIndex } from "./types.js";
+import { normalizeSunClawProviderIndex } from "./normalize.js";
+import { SUNCLAW_PROVIDER_INDEX } from "./sunclaw-provider-index.js";
+import type { SunClawProviderIndex } from "./types.js";
 
-export function loadOpenClawProviderIndex(
-  source: unknown = OPENCLAW_PROVIDER_INDEX,
-): OpenClawProviderIndex {
-  return normalizeOpenClawProviderIndex(source) ?? { version: 1, providers: {} };
+export function loadSunClawProviderIndex(
+  source: unknown = SUNCLAW_PROVIDER_INDEX,
+): SunClawProviderIndex {
+  return normalizeSunClawProviderIndex(source) ?? { version: 1, providers: {} };
 }

@@ -1,10 +1,10 @@
 import { writeSync } from "node:fs";
-import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
-import { type Api, completeSimple, type Model } from "openclaw/plugin-sdk/llm";
+import { normalizeProviderId } from "@sunclaw/model-catalog-core/provider-id";
+import { type Api, completeSimple, type Model } from "sunclaw/plugin-sdk/llm";
 import { Type } from "typebox";
 import { describe, expect, it, vi } from "vitest";
 import { getRuntimeConfig } from "../config/config.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { coerceSecretRef, type SecretInput } from "../config/types.secrets.js";
 import { parseLiveCsvFilter } from "../media-generation/live-test-helpers.js";
 import { withBundledPluginEnablementCompat } from "../plugins/bundled-compat.js";
@@ -68,28 +68,28 @@ import {
   resolveUsableCustomProviderApiKey,
 } from "./model-auth.js";
 import { shouldSuppressBuiltInModel } from "./model-suppression.js";
-import { ensureOpenClawModelsJson } from "./models-config.js";
+import { ensureSunClawModelsJson } from "./models-config.js";
 import type { StreamFn } from "./runtime/index.js";
 import { prepareModelForSimpleCompletion } from "./simple-completion-transport.js";
 
 const LIVE = isLiveTestEnabled();
-const DIRECT_ENABLED = Boolean(process.env.OPENCLAW_LIVE_MODELS?.trim());
+const DIRECT_ENABLED = Boolean(process.env.SUNCLAW_LIVE_MODELS?.trim());
 const REQUIRE_PROFILE_KEYS = isLiveProfileKeyModeEnabled();
-const LIVE_HEARTBEAT_MS = Math.max(1_000, toInt(process.env.OPENCLAW_LIVE_HEARTBEAT_MS, 30_000));
+const LIVE_HEARTBEAT_MS = Math.max(1_000, toInt(process.env.SUNCLAW_LIVE_HEARTBEAT_MS, 30_000));
 const LIVE_SETUP_TIMEOUT_MS = Math.max(
   1_000,
-  toInt(process.env.OPENCLAW_LIVE_SETUP_TIMEOUT_MS, 45_000),
+  toInt(process.env.SUNCLAW_LIVE_SETUP_TIMEOUT_MS, 45_000),
 );
 const LIVE_TEST_TIMEOUT_MS = Math.max(
   1_000,
-  toInt(process.env.OPENCLAW_LIVE_TEST_TIMEOUT_MS, 60 * 60 * 1000),
+  toInt(process.env.SUNCLAW_LIVE_TEST_TIMEOUT_MS, 60 * 60 * 1000),
 );
 const DEFAULT_LIVE_MODEL_CONCURRENCY = 20;
 const LIVE_MODEL_CONCURRENCY = resolveLiveModelConcurrency(
-  process.env.OPENCLAW_LIVE_MODEL_CONCURRENCY,
+  process.env.SUNCLAW_LIVE_MODEL_CONCURRENCY,
 );
 const LIVE_MODELS_JSON_TIMEOUT_MS = resolveLiveModelsJsonTimeoutMs(
-  process.env.OPENCLAW_LIVE_MODELS_JSON_TIMEOUT_MS,
+  process.env.SUNCLAW_LIVE_MODELS_JSON_TIMEOUT_MS,
 );
 const LIVE_FILE_PROBE_ENABLED = isLiveModelProbeEnabled(process.env, LIVE_MODEL_FILE_PROBE_ENV);
 const LIVE_IMAGE_PROBE_ENABLED = isLiveModelProbeEnabled(process.env, LIVE_MODEL_IMAGE_PROBE_ENV);
@@ -106,7 +106,7 @@ const LOCAL_OLLAMA_HOSTNAMES = new Set([
   "host.docker.internal",
   "host.orb.internal",
 ]);
-let activeLiveCompletionConfig: OpenClawConfig | undefined;
+let activeLiveCompletionConfig: SunClawConfig | undefined;
 
 type OllamaRuntimeApi = {
   createConfiguredOllamaStreamFn: (params: {
@@ -178,7 +178,7 @@ function filterLiveModelRefsByProvider(
 function findUnmatchedExplicitLiveModelRefs(params: {
   refs: readonly { provider: string; id: string }[];
   models: readonly Pick<Model, "provider" | "id">[];
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   env?: NodeJS.ProcessEnv;
 }): string[] {
   const unmatched: string[] = [];
@@ -221,7 +221,7 @@ function resolveLiveProviderDiscoveryProviderIds(params: {
 }
 
 function resolveLiveProviderDiscoveryPluginIds(params: {
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   providers: readonly string[] | undefined;
   env?: NodeJS.ProcessEnv;
 }): string[] {
@@ -245,10 +245,10 @@ function resolveLiveProviderDiscoveryPluginIds(params: {
 }
 
 function applyLiveProviderDiscoveryPluginCompat(params: {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   providers: readonly string[] | undefined;
   env?: NodeJS.ProcessEnv;
-}): OpenClawConfig {
+}): SunClawConfig {
   const pluginIds = resolveLiveProviderDiscoveryPluginIds(params);
   const pluginConfig =
     pluginIds.length > 0 ? enableLiveProviderPlugins(params.config, pluginIds) : params.config;
@@ -260,9 +260,9 @@ function applyLiveProviderDiscoveryPluginCompat(params: {
 }
 
 function enableLiveProviderPlugins(
-  config: OpenClawConfig,
+  config: SunClawConfig,
   pluginIds: readonly string[],
-): OpenClawConfig {
+): SunClawConfig {
   const compatConfig =
     withBundledPluginEnablementCompat({
       config,
@@ -287,16 +287,16 @@ function enableLiveProviderPlugins(
 }
 
 function applyLiveOllamaProviderEnvCompat(params: {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   providers: readonly string[] | undefined;
   env?: NodeJS.ProcessEnv;
-}): OpenClawConfig {
+}): SunClawConfig {
   if (!params.providers?.some((provider) => normalizeProviderId(provider) === "ollama")) {
     return params.config;
   }
   const existingProvider = params.config.models?.providers?.ollama;
   const configuredBaseUrl = readConfiguredOllamaBaseUrl(existingProvider);
-  const liveBaseUrl = params.env?.OPENCLAW_LIVE_OLLAMA_BASE_URL?.trim();
+  const liveBaseUrl = params.env?.SUNCLAW_LIVE_OLLAMA_BASE_URL?.trim();
   const baseUrl = liveBaseUrl || configuredBaseUrl || OLLAMA_DEFAULT_BASE_URL;
   const shouldPreserveConfiguredApiKey =
     !liveBaseUrl ||
@@ -329,7 +329,7 @@ function applyLiveOllamaProviderEnvCompat(params: {
 }
 
 async function ensureLiveProviderApisRegistered(params: {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   providers: readonly string[] | undefined;
 }): Promise<void> {
   if (!params.providers?.some((provider) => normalizeProviderId(provider) === "ollama")) {
@@ -426,7 +426,7 @@ function isLocalOllamaBaseUrl(baseUrl: string): boolean {
   }
 }
 
-function resolveLiveOllamaBaseUrl(model: Pick<Model, "baseUrl">, config?: OpenClawConfig): string {
+function resolveLiveOllamaBaseUrl(model: Pick<Model, "baseUrl">, config?: SunClawConfig): string {
   return (
     readStringProperty(model, "baseUrl") ||
     readConfiguredOllamaBaseUrl(config?.models?.providers?.ollama) ||
@@ -436,7 +436,7 @@ function resolveLiveOllamaBaseUrl(model: Pick<Model, "baseUrl">, config?: OpenCl
 
 function isLiveLocalOllamaModel(
   model: Pick<Model, "provider" | "baseUrl">,
-  config?: OpenClawConfig,
+  config?: SunClawConfig,
 ): boolean {
   return (
     normalizeProviderId(model.provider) === "ollama" &&
@@ -446,7 +446,7 @@ function isLiveLocalOllamaModel(
 
 function canReuseConfiguredLocalOllamaApiKey(
   model: Pick<Model, "baseUrl">,
-  config?: OpenClawConfig,
+  config?: SunClawConfig,
 ): boolean {
   const providerConfig = config?.models?.providers?.ollama;
   if (isOllamaRemoteApiKeyReference(providerConfig?.apiKey)) {
@@ -481,7 +481,7 @@ function canonicalOllamaCredentialBaseUrl(baseUrl: string): string {
 
 async function resolveLiveModelApiKeyInfo(params: {
   model: Model;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   requireProfileKeys: boolean;
 }): Promise<Awaited<ReturnType<typeof getApiKeyForModel>>> {
   if (isLiveLocalOllamaModel(params.model, params.cfg)) {
@@ -809,7 +809,7 @@ describe("explicit live model discovery scope", () => {
     ).toEqual(["together", "zai"]);
   });
 
-  it("merges explicit model providers with OPENCLAW_LIVE_PROVIDERS", () => {
+  it("merges explicit model providers with SUNCLAW_LIVE_PROVIDERS", () => {
     const explicitRefs = parseExplicitLiveModelRefs(parseModelFilter("zai/glm-5.1"));
 
     expect(
@@ -848,7 +848,7 @@ describe("explicit live model discovery scope", () => {
           openai: { enabled: true },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies SunClawConfig;
 
     const result = applyLiveProviderDiscoveryPluginCompat({
       config: cfg,
@@ -867,13 +867,13 @@ describe("explicit live model discovery scope", () => {
       plugins: {
         bundledDiscovery: "compat",
       },
-    } satisfies OpenClawConfig;
+    } satisfies SunClawConfig;
 
     const result = applyLiveProviderDiscoveryPluginCompat({
       config: cfg,
       providers: ["ollama"],
       env: {
-        OPENCLAW_LIVE_OLLAMA_BASE_URL: "https://ollama.com",
+        SUNCLAW_LIVE_OLLAMA_BASE_URL: "https://ollama.com",
       },
     });
 
@@ -891,7 +891,7 @@ describe("explicit live model discovery scope", () => {
       plugins: {
         bundledDiscovery: "compat",
       },
-    } satisfies OpenClawConfig;
+    } satisfies SunClawConfig;
 
     const result = applyLiveProviderDiscoveryPluginCompat({
       config: cfg,
@@ -922,7 +922,7 @@ describe("explicit live model discovery scope", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies SunClawConfig;
 
     const result = applyLiveProviderDiscoveryPluginCompat({
       config: cfg,
@@ -952,7 +952,7 @@ describe("explicit live model discovery scope", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as SunClawConfig;
 
     const result = applyLiveProviderDiscoveryPluginCompat({
       config: cfg,
@@ -974,7 +974,7 @@ describe("explicit live model discovery scope", () => {
       plugins: {
         bundledDiscovery: "compat",
       },
-    } satisfies OpenClawConfig;
+    } satisfies SunClawConfig;
 
     for (const baseUrl of [
       "http://127.0.0.1:11434",
@@ -986,7 +986,7 @@ describe("explicit live model discovery scope", () => {
         config: cfg,
         providers: ["ollama"],
         env: {
-          OPENCLAW_LIVE_OLLAMA_BASE_URL: baseUrl,
+          SUNCLAW_LIVE_OLLAMA_BASE_URL: baseUrl,
         },
       });
 
@@ -1022,7 +1022,7 @@ describe("explicit live model discovery scope", () => {
             },
           },
         },
-      } satisfies OpenClawConfig;
+      } satisfies SunClawConfig;
 
       const result = applyLiveProviderDiscoveryPluginCompat({
         config: cfg,
@@ -1056,13 +1056,13 @@ describe("explicit live model discovery scope", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies SunClawConfig;
 
     const result = applyLiveProviderDiscoveryPluginCompat({
       config: cfg,
       providers: ["ollama"],
       env: {
-        OPENCLAW_LIVE_OLLAMA_BASE_URL: "http://127.0.0.1:11434",
+        SUNCLAW_LIVE_OLLAMA_BASE_URL: "http://127.0.0.1:11434",
       },
     });
 
@@ -1089,13 +1089,13 @@ describe("explicit live model discovery scope", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies SunClawConfig;
 
     const result = applyLiveProviderDiscoveryPluginCompat({
       config: cfg,
       providers: ["ollama"],
       env: {
-        OPENCLAW_LIVE_OLLAMA_BASE_URL: "http://127.0.0.1:11434",
+        SUNCLAW_LIVE_OLLAMA_BASE_URL: "http://127.0.0.1:11434",
       },
     });
 
@@ -1116,7 +1116,7 @@ describe("explicit live model discovery scope", () => {
       },
       providers: ["ollama"],
       env: {
-        OPENCLAW_LIVE_OLLAMA_BASE_URL: "http://127.0.0.1:11434",
+        SUNCLAW_LIVE_OLLAMA_BASE_URL: "http://127.0.0.1:11434",
         OLLAMA_API_KEY: "real-cloud-key",
       },
     });
@@ -1151,7 +1151,7 @@ describe("explicit live model discovery scope", () => {
         },
         providers: ["ollama"],
         env: {
-          OPENCLAW_LIVE_OLLAMA_BASE_URL: "https://ollama.com",
+          SUNCLAW_LIVE_OLLAMA_BASE_URL: "https://ollama.com",
         },
       });
 
@@ -1716,13 +1716,13 @@ describeLive("live models (profile keys)", () => {
         Promise.resolve().then(() => getRuntimeConfig()),
         "[live-models] load config",
       );
-      const rawModels = process.env.OPENCLAW_LIVE_MODELS?.trim();
+      const rawModels = process.env.SUNCLAW_LIVE_MODELS?.trim();
       const useModern = rawModels === "modern" || rawModels === "all";
       const useSmall = rawModels === "small";
       const useExplicit = Boolean(rawModels) && !useModern && !useSmall;
       const filter = useExplicit ? parseModelFilter(rawModels) : null;
       const explicitRefs = useExplicit ? parseExplicitLiveModelRefs(filter) : [];
-      const providers = parseProviderFilter(process.env.OPENCLAW_LIVE_PROVIDERS);
+      const providers = parseProviderFilter(process.env.SUNCLAW_LIVE_PROVIDERS);
       const priorityRefs = useSmall
         ? filterLiveModelRefsByProvider(listPrioritizedSmallLiveModelRefs(), providers)
         : [];
@@ -1743,7 +1743,7 @@ describeLive("live models (profile keys)", () => {
       activeLiveCompletionConfig = cfg;
       logProgress("[live-models] preparing models.json");
       await withLiveStageTimeout(
-        ensureOpenClawModelsJson(
+        ensureSunClawModelsJson(
           cfg,
           undefined,
           providerList ? { providerDiscoveryProviderIds: providerList } : undefined,
@@ -1753,7 +1753,7 @@ describeLive("live models (profile keys)", () => {
       );
       if (!DIRECT_ENABLED) {
         logProgress(
-          "[live-models] skipping (set OPENCLAW_LIVE_MODELS=modern|small|all|<list>; all=modern)",
+          "[live-models] skipping (set SUNCLAW_LIVE_MODELS=modern|small|all|<list>; all=modern)",
         );
         return;
       }
@@ -1819,9 +1819,9 @@ describeLive("live models (profile keys)", () => {
         }
         return augmented.models;
       })();
-      const perModelTimeoutMs = toInt(process.env.OPENCLAW_LIVE_MODEL_TIMEOUT_MS, 30_000);
+      const perModelTimeoutMs = toInt(process.env.SUNCLAW_LIVE_MODEL_TIMEOUT_MS, 30_000);
       const maxModels = resolveHighSignalLiveModelLimit({
-        rawMaxModels: process.env.OPENCLAW_LIVE_MAX_MODELS,
+        rawMaxModels: process.env.SUNCLAW_LIVE_MAX_MODELS,
         useExplicitModels: useExplicit,
         ...(useSmall ? { defaultLimit: DEFAULT_SMALL_LIVE_MODEL_LIMIT } : {}),
       });
@@ -1945,7 +1945,7 @@ describeLive("live models (profile keys)", () => {
       logProgress(`[live-models] selection=${selectionLabel}`);
       if (selectedCandidates.length < candidates.length) {
         logProgress(
-          `[live-models] capped to ${selectedCandidates.length}/${candidates.length} via OPENCLAW_LIVE_MAX_MODELS=${maxModels}`,
+          `[live-models] capped to ${selectedCandidates.length}/${candidates.length} via SUNCLAW_LIVE_MAX_MODELS=${maxModels}`,
         );
       }
       logProgress(`[live-models] running ${selectedCandidates.length} models`);

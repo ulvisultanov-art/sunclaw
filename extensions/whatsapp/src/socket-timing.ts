@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
 
 export type WhatsAppSocketTimingOptions = {
   keepAliveIntervalMs?: number;
@@ -17,7 +17,7 @@ function positiveInteger(value: number | undefined): number | undefined {
 }
 
 export function resolveWhatsAppSocketTiming(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   overrides?: WhatsAppSocketTimingOptions,
 ): Required<WhatsAppSocketTimingOptions> {
   const configured = cfg.web?.whatsapp;

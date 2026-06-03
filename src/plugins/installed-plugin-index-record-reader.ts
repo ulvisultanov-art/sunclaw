@@ -1,10 +1,10 @@
 import fs from "node:fs";
 import path from "node:path";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord } from "@sunclaw/normalization-core/record-coerce";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
 import { tryReadJsonSync } from "../infra/json-files.js";
-import type { OpenClawStateDatabaseOptions } from "../state/openclaw-state-db.js";
-import { openOpenClawStateDatabase } from "../state/openclaw-state-db.js";
+import type { SunClawStateDatabaseOptions } from "../state/sunclaw-state-db.js";
+import { openSunClawStateDatabase } from "../state/sunclaw-state-db.js";
 import { resolveDefaultPluginNpmDir, validatePluginId } from "./install-paths.js";
 import {
   getInstalledPluginIndexInstallRecordsCache,
@@ -73,16 +73,16 @@ function readStringRecord(value: unknown): Record<string, string> {
 }
 
 function hasPackagePluginMetadata(manifest: Record<string, unknown>): boolean {
-  const openclaw = manifest.openclaw;
-  if (!isRecord(openclaw)) {
+  const sunclaw = manifest.sunclaw;
+  if (!isRecord(sunclaw)) {
     return false;
   }
-  const extensions = openclaw.extensions;
+  const extensions = sunclaw.extensions;
   return Array.isArray(extensions) && extensions.some((entry) => typeof entry === "string");
 }
 
 function readManifestPluginId(packageDir: string): string | undefined {
-  const manifest = readJsonObjectFileSync(path.join(packageDir, "openclaw.plugin.json"));
+  const manifest = readJsonObjectFileSync(path.join(packageDir, "sunclaw.plugin.json"));
   const id = typeof manifest?.id === "string" ? manifest.id.trim() : "";
   return id || undefined;
 }
@@ -247,7 +247,7 @@ type InstalledPluginIndexRecordRow = {
 
 function resolveStateDatabaseOptions(
   options: InstalledPluginIndexStoreOptions = {},
-): OpenClawStateDatabaseOptions {
+): SunClawStateDatabaseOptions {
   if (options.filePath) {
     return {
       ...(options.env ? { env: options.env } : {}),
@@ -258,7 +258,7 @@ function resolveStateDatabaseOptions(
     return {
       env: {
         ...(options.env ?? process.env),
-        OPENCLAW_STATE_DIR: options.stateDir,
+        SUNCLAW_STATE_DIR: options.stateDir,
       },
     };
   }
@@ -284,7 +284,7 @@ function readPersistedInstalledPluginIndexForRecords(
     return tryReadJsonSync(options.filePath);
   }
   try {
-    const database = openOpenClawStateDatabase(resolveStateDatabaseOptions(options));
+    const database = openSunClawStateDatabase(resolveStateDatabaseOptions(options));
     const row = database.db
       .prepare(
         `

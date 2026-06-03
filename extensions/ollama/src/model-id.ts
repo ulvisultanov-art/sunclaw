@@ -1,5 +1,5 @@
-import { normalizeProviderId } from "openclaw/plugin-sdk/provider-model-shared";
-import { uniqueStrings } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { normalizeProviderId } from "sunclaw/plugin-sdk/provider-model-shared";
+import { uniqueStrings } from "sunclaw/plugin-sdk/string-coerce-runtime";
 
 const OLLAMA_PROVIDER_ID = "ollama";
 

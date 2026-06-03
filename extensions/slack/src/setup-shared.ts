@@ -1,18 +1,18 @@
-import { describeAccountSnapshot } from "openclaw/plugin-sdk/account-helpers";
-import { hasConfiguredSecretInput } from "openclaw/plugin-sdk/secret-input";
-import { patchChannelConfigForAccount } from "openclaw/plugin-sdk/setup-runtime";
-import { formatDocsLink } from "openclaw/plugin-sdk/setup-tools";
+import { describeAccountSnapshot } from "sunclaw/plugin-sdk/account-helpers";
+import { hasConfiguredSecretInput } from "sunclaw/plugin-sdk/secret-input";
+import { patchChannelConfigForAccount } from "sunclaw/plugin-sdk/setup-runtime";
+import { formatDocsLink } from "sunclaw/plugin-sdk/setup-tools";
 import type { ResolvedSlackAccount } from "./accounts.js";
-import type { OpenClawConfig } from "./channel-api.js";
+import type { SunClawConfig } from "./channel-api.js";
 
 export const SLACK_CHANNEL = "slack" as const;
 
-export function buildSlackManifest(botName = "OpenClaw") {
-  const safeName = botName.trim() || "OpenClaw";
+export function buildSlackManifest(botName = "SunClaw") {
+  const safeName = botName.trim() || "SunClaw";
   const manifest = {
     display_information: {
       name: safeName,
-      description: `${safeName} connector for OpenClaw`,
+      description: `${safeName} connector for SunClaw`,
     },
     features: {
       bot_user: {
@@ -25,7 +25,7 @@ export function buildSlackManifest(botName = "OpenClaw") {
         messages_tab_read_only_enabled: false,
       },
       assistant_view: {
-        assistant_description: `${safeName} connects Slack assistant threads to OpenClaw agents.`,
+        assistant_description: `${safeName} connects Slack assistant threads to SunClaw agents.`,
         suggested_prompts: [
           {
             title: "What can you do?",
@@ -43,8 +43,8 @@ export function buildSlackManifest(botName = "OpenClaw") {
       },
       slash_commands: [
         {
-          command: "/openclaw",
-          description: "Send a message to OpenClaw",
+          command: "/sunclaw",
+          description: "Send a message to SunClaw",
           should_escape: false,
         },
       ],
@@ -118,10 +118,10 @@ export function buildSlackSetupLines(): string[] {
 }
 
 export function setSlackChannelAllowlist(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   accountId: string,
   channelKeys: string[],
-): OpenClawConfig {
+): SunClawConfig {
   const channels = Object.fromEntries(channelKeys.map((key) => [key, { enabled: true }]));
   return patchChannelConfigForAccount({
     cfg,

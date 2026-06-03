@@ -528,7 +528,7 @@ function shouldAttemptNativeHarnessCompaction(params: {
   selectedHarnessRuntime?: string | null;
 }): boolean {
   const selectedRuntime = normalizeOptionalAgentRuntimeId(params.selectedHarnessRuntime);
-  if (!selectedRuntime || selectedRuntime === "auto" || selectedRuntime === "openclaw") {
+  if (!selectedRuntime || selectedRuntime === "auto" || selectedRuntime === "sunclaw") {
     return false;
   }
   return isOpenAIProvider(params.provider) ? params.contextProvider !== undefined : true;

@@ -1,5 +1,5 @@
-import { installChannelOutboundPayloadContractSuite } from "openclaw/plugin-sdk/channel-contract-testing";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
+import { installChannelOutboundPayloadContractSuite } from "sunclaw/plugin-sdk/channel-contract-testing";
+import type { ReplyPayload } from "sunclaw/plugin-sdk/reply-runtime";
 import { describe, expect, it } from "vitest";
 import { createSlackOutboundPayloadHarness, slackOutbound } from "../test-api.js";
 
@@ -151,7 +151,7 @@ describe("slackOutbound sendPayload", () => {
             blocks: [
               {
                 type: "actions",
-                block_id: "openclaw_reply_buttons_1",
+                block_id: "sunclaw_reply_buttons_1",
                 elements: [],
               },
             ],
@@ -183,11 +183,11 @@ describe("slackOutbound sendPayload", () => {
     expect(call[0]).toBe(to);
     expect(call[1]).toBe("Deploy?");
     const blocks = sendOptions(call).blocks;
-    expect(blocks?.[0]?.block_id).toBe("openclaw_reply_buttons_1");
-    expect(blocks?.[1]?.block_id).toBe("openclaw_reply_buttons_2");
-    expect(blocks?.[1]?.elements?.[0]?.action_id).toBe("openclaw:reply_button:2:1");
-    expect(blocks?.[2]?.block_id).toBe("openclaw_reply_buttons_3");
-    expect(blocks?.[2]?.elements?.[0]?.action_id).toBe("openclaw:reply_button:3:1");
+    expect(blocks?.[0]?.block_id).toBe("sunclaw_reply_buttons_1");
+    expect(blocks?.[1]?.block_id).toBe("sunclaw_reply_buttons_2");
+    expect(blocks?.[1]?.elements?.[0]?.action_id).toBe("sunclaw:reply_button:2:1");
+    expect(blocks?.[2]?.block_id).toBe("sunclaw_reply_buttons_3");
+    expect(blocks?.[2]?.elements?.[0]?.action_id).toBe("sunclaw:reply_button:3:1");
   });
 });
 

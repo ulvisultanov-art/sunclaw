@@ -1,6 +1,6 @@
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord } from "@sunclaw/normalization-core/record-coerce";
 
-export const LEGACY_OAUTH_REF_SOURCE = "openclaw-credentials";
+export const LEGACY_OAUTH_REF_SOURCE = "sunclaw-credentials";
 export const LEGACY_OAUTH_REF_PROVIDER = "openai-codex";
 
 export type LegacyOAuthRef = {

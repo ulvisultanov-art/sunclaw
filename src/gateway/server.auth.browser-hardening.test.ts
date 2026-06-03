@@ -178,7 +178,7 @@ async function createSignedBrowserDevice(
     scopes: ["operator.admin"],
     clientId: client.id,
     clientMode: client.mode,
-    identityPath: path.join(os.tmpdir(), `openclaw-${identityName}-device-${randomUUID()}.json`),
+    identityPath: path.join(os.tmpdir(), `sunclaw-${identityName}-device-${randomUUID()}.json`),
     nonce: nonce ?? "",
   });
 }

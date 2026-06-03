@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "./config/types.openclaw.js";
+import type { SunClawConfig } from "./config/types.sunclaw.js";
 import { runBestEffortCleanup } from "./infra/non-fatal-cleanup.js";
 import { closeTrackedBrowserTabsForSessions } from "./plugin-sdk/browser-maintenance.js";
 
@@ -13,12 +13,12 @@ function normalizeSessionKeys(sessionKeys: string[]): string[] {
   return [...keys];
 }
 
-function isBrowserCleanupDisabled(cfg: OpenClawConfig | undefined): boolean {
+function isBrowserCleanupDisabled(cfg: SunClawConfig | undefined): boolean {
   return cfg?.browser?.enabled === false || cfg?.plugins?.entries?.browser?.enabled === false;
 }
 
 export async function cleanupBrowserSessionsForLifecycleEnd(params: {
-  cfg?: OpenClawConfig;
+  cfg?: SunClawConfig;
   sessionKeys: string[];
   onWarn?: (message: string) => void;
   onError?: (error: unknown) => void;

@@ -1,6 +1,6 @@
 import { getSafeLocalStorage } from "../../local-storage.ts";
 
-const PREFIX = "openclaw:deleted:";
+const PREFIX = "sunclaw:deleted:";
 
 export class DeletedMessages {
   private key: string;

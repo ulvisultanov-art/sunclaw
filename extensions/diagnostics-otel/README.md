@@ -1,13 +1,13 @@
-# @openclaw/diagnostics-otel
+# @sunclaw/diagnostics-otel
 
-Official OpenTelemetry diagnostics exporter for OpenClaw.
+Official OpenTelemetry diagnostics exporter for SunClaw.
 
-This plugin exports OpenClaw Gateway traces, metrics, and logs to an OTLP collector for observability stacks such as Grafana, Datadog, Honeycomb, New Relic, Tempo, and compatible collectors.
+This plugin exports SunClaw Gateway traces, metrics, and logs to an OTLP collector for observability stacks such as Grafana, Datadog, Honeycomb, New Relic, Tempo, and compatible collectors.
 
 ## Install
 
 ```bash
-openclaw plugins install @openclaw/diagnostics-otel
+sunclaw plugins install @sunclaw/diagnostics-otel
 ```
 
 Restart the Gateway after installing or updating the plugin.
@@ -18,10 +18,10 @@ Enable the plugin and set the OTLP endpoint in `plugins.entries.diagnostics-otel
 
 The full config surface, metric names, span names, and collector examples live in the docs:
 
-- https://docs.openclaw.ai/gateway/opentelemetry
+- https://docs.sunclaw.complex.az/gateway/opentelemetry
 
 ## Package
 
 - Plugin id: `diagnostics-otel`
-- Package: `@openclaw/diagnostics-otel`
-- Minimum OpenClaw host: `2026.4.25`
+- Package: `@sunclaw/diagnostics-otel`
+- Minimum SunClaw host: `2026.4.25`

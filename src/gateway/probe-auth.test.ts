@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { SunClawConfig } from "../config/config.js";
 import {
   resolveGatewayProbeAuthSafe,
   resolveGatewayProbeAuthSafeWithSecretInputs,
@@ -23,7 +23,7 @@ function tokenAuthConfig(id: string) {
   } as const;
 }
 
-function configWithDefaultEnvProvider(gateway: NonNullable<OpenClawConfig["gateway"]>) {
+function configWithDefaultEnvProvider(gateway: NonNullable<SunClawConfig["gateway"]>) {
   return {
     gateway,
     secrets: {
@@ -31,10 +31,10 @@ function configWithDefaultEnvProvider(gateway: NonNullable<OpenClawConfig["gatew
         default: { source: "env" },
       },
     },
-  } as OpenClawConfig;
+  } as SunClawConfig;
 }
 
-function resolveSafeProbeAuth(cfg: OpenClawConfig, mode: "local" | "remote" = "local") {
+function resolveSafeProbeAuth(cfg: SunClawConfig, mode: "local" | "remote" = "local") {
   return resolveGatewayProbeAuthSafe({
     cfg,
     mode,
@@ -42,7 +42,7 @@ function resolveSafeProbeAuth(cfg: OpenClawConfig, mode: "local" | "remote" = "l
   });
 }
 
-function expectUnresolvedProbeTokenWarning(cfg: OpenClawConfig) {
+function expectUnresolvedProbeTokenWarning(cfg: SunClawConfig) {
   const result = resolveSafeProbeAuth(cfg);
 
   expect(result.auth).toStrictEqual({});
@@ -58,7 +58,7 @@ describe("resolveGatewayProbeAuthSafe", () => {
           token: "token-value",
         },
       },
-    } as OpenClawConfig);
+    } as SunClawConfig);
 
     expect(result).toEqual({
       auth: {
@@ -98,7 +98,7 @@ describe("resolveGatewayProbeAuthSafe", () => {
           password: "remote-password", // pragma: allowlist secret
         },
       },
-    } as OpenClawConfig);
+    } as SunClawConfig);
 
     expect(result).toEqual({
       auth: EMPTY_PROBE_AUTH,
@@ -130,7 +130,7 @@ describe("resolveGatewayProbeTarget", () => {
         gateway: {
           mode: "remote",
         },
-      } as OpenClawConfig),
+      } as SunClawConfig),
     ).toEqual({
       gatewayMode: "remote",
       mode: "local",
@@ -147,7 +147,7 @@ describe("resolveGatewayProbeTarget", () => {
             url: "wss://gateway.example",
           },
         },
-      } as OpenClawConfig),
+      } as SunClawConfig),
     ).toEqual({
       gatewayMode: "remote",
       mode: "remote",
@@ -160,11 +160,11 @@ describe("resolveGatewayProbeAuthSafeWithSecretInputs", () => {
   it("resolves env SecretRef token via async secret-inputs path", async () => {
     const result = await resolveGatewayProbeAuthSafeWithSecretInputs({
       cfg: configWithDefaultEnvProvider({
-        auth: tokenAuthConfig("OPENCLAW_GATEWAY_TOKEN"),
+        auth: tokenAuthConfig("SUNCLAW_GATEWAY_TOKEN"),
       }),
       mode: "local",
       env: {
-        OPENCLAW_GATEWAY_TOKEN: "test-token-from-env",
+        SUNCLAW_GATEWAY_TOKEN: "test-token-from-env",
       } as NodeJS.ProcessEnv,
     });
 

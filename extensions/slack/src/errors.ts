@@ -1,5 +1,5 @@
-import { redactSensitiveText } from "openclaw/plugin-sdk/logging-core";
-import { isRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { redactSensitiveText } from "sunclaw/plugin-sdk/logging-core";
+import { isRecord } from "sunclaw/plugin-sdk/string-coerce-runtime";
 
 const NO_ERROR_DETAIL = "no error detail";
 

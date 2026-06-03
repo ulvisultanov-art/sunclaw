@@ -1,8 +1,8 @@
 import fs from "node:fs/promises";
 import os from "node:os";
-import { MAX_IMAGE_BYTES } from "@openclaw/media-core/constants";
-import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { MAX_IMAGE_BYTES } from "@sunclaw/media-core/constants";
+import { normalizeProviderId } from "@sunclaw/model-catalog-core/provider-id";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
 import { isAcpRuntimeSpawnAvailable } from "../../../acp/runtime/availability.js";
 import { buildHierarchyReinforcementMessage } from "../../../auto-reply/handoff-summarizer.js";
 import { filterHeartbeatTranscriptArtifacts } from "../../../auto-reply/heartbeat-filter.js";
@@ -20,7 +20,7 @@ import {
 } from "../../../config/sessions/transcript-write-context.js";
 import {
   assertContextEngineHostSupport,
-  OPENCLAW_EMBEDDED_CONTEXT_ENGINE_HOST,
+  SUNCLAW_EMBEDDED_CONTEXT_ENGINE_HOST,
 } from "../../../context-engine/host-compat.js";
 import { resolveContextEngineOwnerPluginId } from "../../../context-engine/registry.js";
 import type { AssembleResult } from "../../../context-engine/types.js";
@@ -96,7 +96,7 @@ import {
   toClientToolDefinitions,
 } from "../../agent-tool-definition-adapter.js";
 import {
-  createOpenClawCodingTools,
+  createSunClawCodingTools,
   resolveProcessToolScopeKey,
   resolveToolLoopDetectionConfig,
 } from "../../agent-tools.js";
@@ -139,7 +139,7 @@ import {
   resolveCodeModeConfig,
 } from "../../code-mode.js";
 import { DEFAULT_CONTEXT_TOKENS } from "../../defaults.js";
-import { resolveOpenClawReferencePaths } from "../../docs-path.js";
+import { resolveSunClawReferencePaths } from "../../docs-path.js";
 import {
   isCloudCodeAssistFormatError,
   resolveBootstrapMaxChars,
@@ -1058,7 +1058,7 @@ export async function runEmbeddedAttempt(
       assertContextEngineHostSupport({
         contextEngine: activeContextEngine,
         operation: "agent-run",
-        host: OPENCLAW_EMBEDDED_CONTEXT_ENGINE_HOST,
+        host: SUNCLAW_EMBEDDED_CONTEXT_ENGINE_HOST,
       });
     }
     const resolveActiveContextEnginePluginId = () =>
@@ -1158,7 +1158,7 @@ export async function runEmbeddedAttempt(
     const toolsRaw = !shouldConstructTools
       ? []
       : (() => {
-          const allTools = createOpenClawCodingTools({
+          const allTools = createSunClawCodingTools({
             agentId: sessionAgentId,
             ...buildEmbeddedAttemptToolRunContext({ ...params, trace: runTrace }),
             exec: {
@@ -1252,7 +1252,7 @@ export async function runEmbeddedAttempt(
               abortSessionForYield?.();
             },
           });
-          corePluginToolStages.mark("attempt:create-openclaw-coding-tools");
+          corePluginToolStages.mark("attempt:create-sunclaw-coding-tools");
           const filteredTools = applyEmbeddedAttemptToolsAllow(allTools, effectiveToolsAllow, {
             toolMeta: (tool) => getPluginToolMeta(tool),
           });
@@ -1777,7 +1777,7 @@ export async function runEmbeddedAttempt(
     // When toolsAllow is set, use minimal prompt and strip skills catalog
     const effectivePromptMode = params.toolsAllow?.length ? ("minimal" as const) : promptMode;
     const effectiveSkillsPrompt = params.toolsAllow?.length ? undefined : skillsPrompt;
-    const openClawReferences = await resolveOpenClawReferencePaths({
+    const sunClawReferences = await resolveSunClawReferencePaths({
       workspaceDir: effectiveWorkspace,
       argv1: process.argv[1],
       cwd: effectiveCwd,
@@ -1839,8 +1839,8 @@ export async function runEmbeddedAttempt(
         reasoningTagHint,
         heartbeatPrompt,
         skillsPrompt: effectiveSkillsPrompt,
-        docsPath: openClawReferences.docsPath ?? undefined,
-        sourcePath: openClawReferences.sourcePath ?? undefined,
+        docsPath: sunClawReferences.docsPath ?? undefined,
+        sourcePath: sunClawReferences.sourcePath ?? undefined,
         workspaceNotes: workspaceNotes?.length ? workspaceNotes : undefined,
         reactionGuidance,
         promptMode: effectivePromptMode,
@@ -2071,9 +2071,9 @@ export async function runEmbeddedAttempt(
         extensionFactories,
       });
       await resourceLoader.reload();
-      // DefaultResourceLoader.reload() rehydrates settings from disk and can drop OpenClaw
+      // DefaultResourceLoader.reload() rehydrates settings from disk and can drop SunClaw
       // compaction overrides applied in createPreparedEmbeddedAgentSettingsManager — same
-      // rehydration also restores OpenClaw runtime's auto-compaction (openclaw#75799), so re-apply
+      // rehydration also restores SunClaw runtime's auto-compaction (sunclaw#75799), so re-apply
       // both guards.
       applyAgentCompactionSettingsFromConfig({
         settingsManager,
@@ -2216,7 +2216,7 @@ export async function runEmbeddedAttempt(
 
       const allCustomTools = [...customTools, ...clientToolDefs];
       // The session runtime treats `tools` as a name allowlist during session creation. Pass the
-      // exact OpenClaw-managed registrations so custom tools survive startup and
+      // exact SunClaw-managed registrations so custom tools survive startup and
       // client-provided names do not broaden the prompt/runtime boundary.
       const sessionToolAllowlist = toSessionToolAllowlist(
         collectRegisteredToolNames(allCustomTools),
@@ -2263,7 +2263,7 @@ export async function runEmbeddedAttempt(
         // Raw model probes should measure exactly the requested prompt against
         // the selected provider/model. Reset clears restored transcript state
         // and queues; the empty system prompt prevents the runtime from rebuilding the
-        // normal OpenClaw agent/tool prompt when `session.prompt()` starts.
+        // normal SunClaw agent/tool prompt when `session.prompt()` starts.
         activeSession.agent.reset();
         setActiveSessionSystemPrompt("");
       }
@@ -3853,7 +3853,7 @@ export async function runEmbeddedAttempt(
               content: [{ type: "text" as const, text: block.message }],
               timestamp: nowMs,
               idempotencyKey,
-              __openclaw: {
+              __sunclaw: {
                 beforeAgentRunBlocked: {
                   blockedBy: block.pluginId,
                   blockedAt: nowMs,
@@ -4523,7 +4523,7 @@ export async function runEmbeddedAttempt(
           // Previously this was before the prompt, which caused a custom entry to be
           // inserted between compaction and the next prompt — breaking the
           // prepareCompaction() guard that checks the last entry type, leading to
-          // double-compaction. See: https://github.com/openclaw/openclaw/issues/9282
+          // double-compaction. See: https://github.com/ulvisultanov-art/sunclaw/issues/9282
           // Skip when timed out during compaction — session state may be inconsistent.
           // Also skip when compaction ran this attempt — appending a custom entry
           // after compaction would break the guard again. See: #28491
@@ -4611,7 +4611,7 @@ export async function runEmbeddedAttempt(
 
           if (promptError && promptErrorSource === "prompt" && !compactionOccurredThisAttempt) {
             try {
-              activeSessionManager.appendCustomEntry("openclaw:prompt-error", {
+              activeSessionManager.appendCustomEntry("sunclaw:prompt-error", {
                 timestamp: Date.now(),
                 runId: params.runId,
                 sessionId: params.sessionId,
@@ -5165,7 +5165,7 @@ export async function runEmbeddedAttempt(
       // *before* tool execution completes in the retried agent loop. Without this wait,
       // flushPendingToolResults() fires while tools are still executing, inserting
       // synthetic "missing tool result" errors and causing silent agent failures.
-      // See: https://github.com/openclaw/openclaw/issues/8643
+      // See: https://github.com/ulvisultanov-art/sunclaw/issues/8643
       let cleanupError: unknown;
       try {
         clearToolSearchCatalog({

@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/types.js";
+import type { SunClawConfig } from "../config/types.js";
 import {
   resolveConfiguredSecretInputWithFallback,
   resolveRequiredConfiguredSecretRefInputString,
 } from "./resolve-configured-secret-input-string.js";
 
-function createConfig(value: unknown): OpenClawConfig {
+function createConfig(value: unknown): SunClawConfig {
   return {
     gateway: {
       auth: {
@@ -17,7 +17,7 @@ function createConfig(value: unknown): OpenClawConfig {
         default: { source: "env" },
       },
     },
-  } as OpenClawConfig;
+  } as SunClawConfig;
 }
 
 describe("resolveConfiguredSecretInputWithFallback", () => {

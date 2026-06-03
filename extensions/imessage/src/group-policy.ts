@@ -2,11 +2,11 @@ import {
   resolveChannelGroupRequireMention,
   resolveChannelGroupToolsPolicy,
   type GroupToolPolicyConfig,
-} from "openclaw/plugin-sdk/channel-policy";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/core";
+} from "sunclaw/plugin-sdk/channel-policy";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/core";
 
 type IMessageGroupContext = {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   accountId?: string | null;
   groupId?: string | null;
   senderId?: string | null;

@@ -5,8 +5,8 @@ import type {
   SessionAcpIdentitySource,
   SessionAcpIdentityState,
   SessionAcpMeta,
-} from "@openclaw/acp-core/types";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+} from "@sunclaw/acp-core/types";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
 import type { ChatType } from "../../channels/chat-type.js";
 import type { ChannelId } from "../../channels/plugins/channel-id.types.js";
 import type { ChannelRouteRef } from "../../plugin-sdk/channel-route.js";

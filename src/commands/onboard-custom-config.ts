@@ -2,12 +2,12 @@ import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@sunclaw/normalization-core/string-coerce";
 import { CONTEXT_WINDOW_HARD_MIN_TOKENS } from "../agents/context-window-guard.js";
 import { DEFAULT_PROVIDER } from "../agents/defaults.js";
 import { buildModelAliasIndex, modelKey } from "../agents/model-selection.js";
 import type { ModelProviderConfig } from "../config/types.models.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { isSecretRef, type SecretInput } from "../config/types.secrets.js";
 import { applyPrimaryModel } from "../plugins/provider-model-primary.js";
 import { normalizeOptionalSecretInput } from "../utils/normalize-secret-input.js";
@@ -169,14 +169,14 @@ function hasSameHost(a: string, b: string): boolean {
 
 export type CustomApiCompatibility = "openai" | "openai-responses" | "anthropic";
 export type CustomApiResult = {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   providerId?: string;
   modelId?: string;
   providerIdRenamedFrom?: string;
 };
 
 export type ApplyCustomApiConfigParams = {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   baseUrl: string;
   modelId: string;
   compatibility: CustomApiCompatibility;
@@ -223,7 +223,7 @@ export class CustomApiError extends Error {
 }
 
 export type ResolveCustomProviderIdParams = {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   baseUrl: string;
   providerId?: string;
 };
@@ -278,7 +278,7 @@ function resolveUniqueEndpointId(params: {
 
 export function resolveCustomModelAliasError(params: {
   raw: string;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   modelRef: string;
 }): string | undefined {
   const trimmed = params.raw.trim();
@@ -636,7 +636,7 @@ export function applyCustomApiConfig(params: ApplyCustomApiConfigParams): Custom
     : resolveProviderApi(params.compatibility);
   const azureHeaders = isAzure && normalizedApiKey ? { "api-key": normalizedApiKey } : undefined;
 
-  let config: OpenClawConfig = {
+  let config: SunClawConfig = {
     ...params.config,
     models: {
       ...params.config.models,

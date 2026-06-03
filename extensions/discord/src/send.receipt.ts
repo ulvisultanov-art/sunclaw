@@ -3,7 +3,7 @@ import {
   type MessageReceipt,
   type MessageReceiptPartKind,
   type MessageReceiptSourceResult,
-} from "openclaw/plugin-sdk/channel-outbound";
+} from "sunclaw/plugin-sdk/channel-outbound";
 import type { DiscordSendResult } from "./send.types.js";
 
 export type DiscordReceiptResultSource = {

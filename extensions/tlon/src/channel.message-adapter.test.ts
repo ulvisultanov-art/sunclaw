@@ -1,6 +1,6 @@
-import { verifyChannelMessageAdapterCapabilityProofs } from "openclaw/plugin-sdk/channel-outbound";
+import { verifyChannelMessageAdapterCapabilityProofs } from "sunclaw/plugin-sdk/channel-outbound";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../runtime-api.js";
+import type { SunClawConfig } from "../runtime-api.js";
 
 const mocks = vi.hoisted(() => ({
   sendText: vi.fn(),
@@ -24,7 +24,7 @@ const cfg = {
       code: "lidlut-tabwed-pillex-ridrup",
     },
   },
-} as OpenClawConfig;
+} as SunClawConfig;
 
 describe("tlon channel message adapter", () => {
   beforeEach(() => {

@@ -1,10 +1,10 @@
-import type { ProviderStreamOptions } from "openclaw/plugin-sdk/llm";
+import type { ProviderStreamOptions } from "sunclaw/plugin-sdk/llm";
 import {
   describeImageWithModelPayloadTransform,
   describeImagesWithModelPayloadTransform,
   type MediaUnderstandingProvider,
-} from "openclaw/plugin-sdk/media-understanding";
-import { isRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/media-understanding";
+import { isRecord } from "sunclaw/plugin-sdk/string-coerce-runtime";
 
 export function stripOpencodeDisabledResponsesReasoningPayload(payload: unknown): void {
   if (!isRecord(payload)) {

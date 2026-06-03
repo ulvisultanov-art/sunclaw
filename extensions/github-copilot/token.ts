@@ -3,4 +3,4 @@ export {
   deriveCopilotApiBaseUrlFromToken,
   resolveCopilotApiToken,
   type CachedCopilotToken,
-} from "openclaw/plugin-sdk/provider-auth";
+} from "sunclaw/plugin-sdk/provider-auth";

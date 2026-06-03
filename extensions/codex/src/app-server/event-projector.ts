@@ -18,12 +18,12 @@ import {
   type MessagingToolSend,
   type MessagingToolSourceReplyPayload,
   type ToolProgressDetailMode,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
-import { emitTrustedDiagnosticEvent } from "openclaw/plugin-sdk/diagnostic-runtime";
-import { generatedImageAssetFromBase64 } from "openclaw/plugin-sdk/image-generation";
-import type { AssistantMessage, Usage } from "openclaw/plugin-sdk/llm";
-import { saveMediaBuffer } from "openclaw/plugin-sdk/media-store";
-import { asDateTimestampMs } from "openclaw/plugin-sdk/number-runtime";
+} from "sunclaw/plugin-sdk/agent-harness-runtime";
+import { emitTrustedDiagnosticEvent } from "sunclaw/plugin-sdk/diagnostic-runtime";
+import { generatedImageAssetFromBase64 } from "sunclaw/plugin-sdk/image-generation";
+import type { AssistantMessage, Usage } from "sunclaw/plugin-sdk/llm";
+import { saveMediaBuffer } from "sunclaw/plugin-sdk/media-store";
+import { asDateTimestampMs } from "sunclaw/plugin-sdk/number-runtime";
 import { resolveCodexLocalRuntimeAttribution } from "./local-runtime-attribution.js";
 import {
   readCodexNotificationThreadId,
@@ -110,10 +110,10 @@ const CODEX_PROMPT_TOTAL_INPUT_KEYS = [
 const MAX_TOOL_OUTPUT_DELTA_MESSAGES_PER_ITEM = 20;
 const TOOL_TRANSCRIPT_OUTPUT_MAX_CHARS = 12_000;
 const MISSING_TOOL_RESULT_ERROR =
-  "OpenClaw recorded a native Codex tool.call without a matching tool.result before the turn completed.";
+  "SunClaw recorded a native Codex tool.call without a matching tool.result before the turn completed.";
 const GENERATED_IMAGE_MEDIA_SUBDIR = "tool-image-generation";
 const BYTES_PER_MB = 1024 * 1024;
-// Match OpenClaw's default image media cap for generated image tool outputs.
+// Match SunClaw's default image media cap for generated image tool outputs.
 const DEFAULT_GENERATED_IMAGE_MAX_BYTES = 6 * BYTES_PER_MB;
 const TRANSCRIPT_PROGRESS_SUPPRESSED_TOOL_NAMES = new Set([
   "message",
@@ -317,7 +317,7 @@ export class CodexAppServerEventProjector {
       ? []
       : [attachCodexMirrorIdentity(buildCodexUserPromptMessage(this.params), `${turnId}:prompt`)];
     // Codex owns the canonical thread. These mirror records keep enough local
-    // context for OpenClaw history, search, and future harness switching.
+    // context for SunClaw history, search, and future harness switching.
     if (reasoningText) {
       messagesSnapshot.push(
         attachCodexMirrorIdentity(
@@ -2114,7 +2114,7 @@ function shouldSuppressChannelProgressForItem(item: CodexThreadItem): boolean {
   if (shouldSynthesizeToolProgressForItem(item)) {
     return true;
   }
-  // Dynamic OpenClaw tool requests are emitted at the item/tool/call request
+  // Dynamic SunClaw tool requests are emitted at the item/tool/call request
   // boundary in run-attempt.ts. Re-emitting item notifications to channels can
   // duplicate start/result progress when the app-server sends both signals.
   return item.type === "dynamicToolCall";

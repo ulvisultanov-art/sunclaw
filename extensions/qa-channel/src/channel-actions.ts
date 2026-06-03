@@ -1,5 +1,5 @@
-import { jsonResult, readStringParam } from "openclaw/plugin-sdk/channel-actions";
-import { extractToolSend } from "openclaw/plugin-sdk/tool-send";
+import { jsonResult, readStringParam } from "sunclaw/plugin-sdk/channel-actions";
+import { extractToolSend } from "sunclaw/plugin-sdk/tool-send";
 import { Type } from "typebox";
 import { resolveQaChannelAccount } from "./accounts.js";
 import {

@@ -412,14 +412,14 @@ export function createNpmShrinkwrapExecOptions(invocation, cwd, env = process.en
     cwd,
     env: invocation.env ?? env,
     maxBuffer: readPositiveIntEnv(
-      "OPENCLAW_NPM_SHRINKWRAP_COMMAND_MAX_BUFFER_BYTES",
+      "SUNCLAW_NPM_SHRINKWRAP_COMMAND_MAX_BUFFER_BYTES",
       NPM_SHRINKWRAP_COMMAND_MAX_BUFFER_BYTES,
       env,
     ),
     shell: invocation.shell,
     stdio: ["ignore", "pipe", "pipe"],
     timeout: readPositiveIntEnv(
-      "OPENCLAW_NPM_SHRINKWRAP_COMMAND_TIMEOUT_MS",
+      "SUNCLAW_NPM_SHRINKWRAP_COMMAND_TIMEOUT_MS",
       NPM_SHRINKWRAP_COMMAND_TIMEOUT_MS,
       env,
     ),
@@ -686,7 +686,7 @@ function normalizeNpmVersionDrift(lockfile) {
 }
 
 function generateShrinkwrap(packageDir, options = {}) {
-  const tempDir = mkdtempSync(path.join(tmpdir(), "openclaw-shrinkwrap-"));
+  const tempDir = mkdtempSync(path.join(tmpdir(), "sunclaw-shrinkwrap-"));
   try {
     const packageJson = JSON.parse(readFileSync(path.join(packageDir, "package.json"), "utf8"));
     const currentShrinkwrap = readCurrentShrinkwrap(packageDir);
@@ -1064,7 +1064,7 @@ function listPublishablePluginPackageDirs() {
         return false;
       }
       const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf8"));
-      return packageJson.openclaw?.release?.publishToNpm === true;
+      return packageJson.sunclaw?.release?.publishToNpm === true;
     })
     .toSorted((left, right) => left.localeCompare(right));
 }

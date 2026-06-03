@@ -1,5 +1,5 @@
 import type { ModelApi } from "../provider-model-shared.js";
-import type { OpenClawConfig } from "../testing.js";
+import type { SunClawConfig } from "../testing.js";
 
 export const EXPECTED_FALLBACKS = ["anthropic/claude-opus-4-5"] as const;
 
@@ -10,7 +10,7 @@ export function createLegacyProviderConfig(params: {
   modelName?: string;
   baseUrl?: string;
   apiKey?: string;
-}): OpenClawConfig {
+}): SunClawConfig {
   return {
     models: {
       providers: {
@@ -32,10 +32,10 @@ export function createLegacyProviderConfig(params: {
         },
       },
     },
-  } as OpenClawConfig;
+  } as SunClawConfig;
 }
 
-export function createConfigWithFallbacks(): OpenClawConfig {
+export function createConfigWithFallbacks(): SunClawConfig {
   return {
     agents: {
       defaults: {

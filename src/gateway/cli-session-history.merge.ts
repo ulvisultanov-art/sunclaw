@@ -1,8 +1,8 @@
-import { asFiniteNumber } from "@openclaw/normalization-core/number-coercion";
+import { asFiniteNumber } from "@sunclaw/normalization-core/number-coercion";
 import {
   normalizeOptionalString,
   readStringValue,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@sunclaw/normalization-core/string-coerce";
 import { stripInboundMetadata } from "../auto-reply/reply/strip-inbound-meta.js";
 
 const DEDUPE_TIMESTAMP_WINDOW_MS = 5 * 60 * 1000;
@@ -68,10 +68,10 @@ function resolveImportedExternalIdentity(message: unknown): ImportedExternalIden
     return undefined;
   }
   const meta =
-    "__openclaw" in message &&
-    (message as { __openclaw?: unknown })["__openclaw"] &&
-    typeof (message as { __openclaw?: unknown })["__openclaw"] === "object"
-      ? ((message as { __openclaw?: Record<string, unknown> })["__openclaw"] ?? {})
+    "__sunclaw" in message &&
+    (message as { __sunclaw?: unknown })["__sunclaw"] &&
+    typeof (message as { __sunclaw?: unknown })["__sunclaw"] === "object"
+      ? ((message as { __sunclaw?: Record<string, unknown> })["__sunclaw"] ?? {})
       : undefined;
   const externalId = normalizeOptionalString(meta?.externalId);
   return externalId

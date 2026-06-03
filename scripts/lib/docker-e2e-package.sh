@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # Shared package helpers for Docker E2E scripts.
-# Builds or resolves one OpenClaw npm tarball and exposes mount/build-context
+# Builds or resolves one SunClaw npm tarball and exposes mount/build-context
 # helpers so Docker lanes test the package artifact instead of repo sources.
 
 DOCKER_E2E_PACKAGE_LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -16,10 +16,10 @@ fi
 if ! declare -F docker_e2e_docker_run_cmd >/dev/null 2>&1; then
   docker_e2e_docker_run_cmd() {
     if declare -F docker_e2e_timeout_cmd >/dev/null 2>&1; then
-      docker_e2e_timeout_cmd "${DOCKER_COMMAND_TIMEOUT:-${OPENCLAW_DOCKER_E2E_RUN_TIMEOUT:-3600s}}" docker "$@"
+      docker_e2e_timeout_cmd "${DOCKER_COMMAND_TIMEOUT:-${SUNCLAW_DOCKER_E2E_RUN_TIMEOUT:-3600s}}" docker "$@"
       return
     fi
-    local timeout_value="${DOCKER_COMMAND_TIMEOUT:-${OPENCLAW_DOCKER_E2E_RUN_TIMEOUT:-3600s}}"
+    local timeout_value="${DOCKER_COMMAND_TIMEOUT:-${SUNCLAW_DOCKER_E2E_RUN_TIMEOUT:-3600s}}"
     local timeout_bin=""
     if command -v timeout >/dev/null 2>&1; then
       timeout_bin="timeout"
@@ -46,11 +46,11 @@ docker_e2e_abs_path() {
 
 docker_e2e_prepare_package_tgz() {
   local label="$1"
-  local package_tgz="${2:-${OPENCLAW_CURRENT_PACKAGE_TGZ:-}}"
+  local package_tgz="${2:-${SUNCLAW_CURRENT_PACKAGE_TGZ:-}}"
 
   if [ -n "$package_tgz" ]; then
     if [ ! -f "$package_tgz" ]; then
-      echo "OpenClaw package tarball does not exist: $package_tgz" >&2
+      echo "SunClaw package tarball does not exist: $package_tgz" >&2
       return 1
     fi
     docker_e2e_abs_path "$package_tgz"
@@ -58,34 +58,34 @@ docker_e2e_prepare_package_tgz() {
   fi
 
   local pack_dir
-  pack_dir="$(mktemp -d "${TMPDIR:-/tmp}/openclaw-docker-e2e-pack.XXXXXX")"
+  pack_dir="$(mktemp -d "${TMPDIR:-/tmp}/sunclaw-docker-e2e-pack.XXXXXX")"
   local pack_status=0
   package_tgz="$(
-    node "$ROOT_DIR/scripts/package-openclaw-for-docker.mjs" \
+    node "$ROOT_DIR/scripts/package-sunclaw-for-docker.mjs" \
       --output-dir "$pack_dir" \
-      --output-name openclaw-current.tgz
+      --output-name sunclaw-current.tgz
   )" || pack_status="$?"
   if [ "$pack_status" -ne 0 ]; then
     rm -rf "$pack_dir"
     return "$pack_status"
   fi
   if [ -z "$package_tgz" ]; then
-    echo "missing packed OpenClaw tarball" >&2
+    echo "missing packed SunClaw tarball" >&2
     rm -rf "$pack_dir"
     return 1
   fi
-  touch "$pack_dir/.openclaw-docker-e2e-generated-package"
+  touch "$pack_dir/.sunclaw-docker-e2e-generated-package"
   docker_e2e_abs_path "$package_tgz"
 }
 
 docker_e2e_prepare_package_context() {
   local package_tgz="$1"
   local context_dir
-  context_dir="$(mktemp -d "${TMPDIR:-/tmp}/openclaw-docker-e2e-package-context.XXXXXX")"
+  context_dir="$(mktemp -d "${TMPDIR:-/tmp}/sunclaw-docker-e2e-package-context.XXXXXX")"
   # BuildKit named contexts must be directories, so expose the tarball as a
   # stable filename inside a tiny temporary context.
   local copy_status=0
-  cp "$package_tgz" "$context_dir/openclaw-current.tgz" || copy_status="$?"
+  cp "$package_tgz" "$context_dir/sunclaw-current.tgz" || copy_status="$?"
   if [ "$copy_status" -ne 0 ]; then
     rm -rf "$context_dir"
     return "$copy_status"
@@ -95,24 +95,24 @@ docker_e2e_prepare_package_context() {
 
 docker_e2e_package_mount_args() {
   local package_tgz="$1"
-  local target="${2:-/tmp/openclaw-current.tgz}"
-  DOCKER_E2E_PACKAGE_ARGS=(-v "$package_tgz:$target:ro" -e "OPENCLAW_CURRENT_PACKAGE_TGZ=$target")
-  if [ -n "${OPENCLAW_E2E_NPM_INSTALL_TIMEOUT:-}" ]; then
-    DOCKER_E2E_PACKAGE_ARGS+=(-e "OPENCLAW_E2E_NPM_INSTALL_TIMEOUT=$OPENCLAW_E2E_NPM_INSTALL_TIMEOUT")
+  local target="${2:-/tmp/sunclaw-current.tgz}"
+  DOCKER_E2E_PACKAGE_ARGS=(-v "$package_tgz:$target:ro" -e "SUNCLAW_CURRENT_PACKAGE_TGZ=$target")
+  if [ -n "${SUNCLAW_E2E_NPM_INSTALL_TIMEOUT:-}" ]; then
+    DOCKER_E2E_PACKAGE_ARGS+=(-e "SUNCLAW_E2E_NPM_INSTALL_TIMEOUT=$SUNCLAW_E2E_NPM_INSTALL_TIMEOUT")
   fi
-  if [ -n "${OPENCLAW_E2E_COMMAND_TIMEOUT:-}" ]; then
-    DOCKER_E2E_PACKAGE_ARGS+=(-e "OPENCLAW_E2E_COMMAND_TIMEOUT=$OPENCLAW_E2E_COMMAND_TIMEOUT")
+  if [ -n "${SUNCLAW_E2E_COMMAND_TIMEOUT:-}" ]; then
+    DOCKER_E2E_PACKAGE_ARGS+=(-e "SUNCLAW_E2E_COMMAND_TIMEOUT=$SUNCLAW_E2E_COMMAND_TIMEOUT")
   fi
 }
 
 docker_e2e_cleanup_package_tgz() {
   local package_tgz="${1:-}"
   [ -n "$package_tgz" ] || return 0
-  [ "$(basename "$package_tgz")" = "openclaw-current.tgz" ] || return 0
+  [ "$(basename "$package_tgz")" = "sunclaw-current.tgz" ] || return 0
 
   local pack_dir
   pack_dir="$(dirname "$package_tgz")"
-  if [ -f "$pack_dir/.openclaw-docker-e2e-generated-package" ]; then
+  if [ -f "$pack_dir/.sunclaw-docker-e2e-generated-package" ]; then
     rm -rf "$pack_dir"
   fi
 }
@@ -158,7 +158,7 @@ docker_e2e_run_with_harness() {
   local run_status=0
   local cid_dir
   local cidfile
-  cid_dir="$(mktemp -d "${TMPDIR:-/tmp}/openclaw-docker-e2e-container.XXXXXX")"
+  cid_dir="$(mktemp -d "${TMPDIR:-/tmp}/sunclaw-docker-e2e-container.XXXXXX")"
   cidfile="$cid_dir/container.cid"
   docker_e2e_docker_run_cmd run --rm --cidfile "$cidfile" "${DOCKER_E2E_HARNESS_ARGS[@]}" "$@" ||
     run_status="$?"
@@ -184,7 +184,7 @@ docker_e2e_run_logged_print_with_harness() {
   shift
   run_logged_print_heartbeat \
     "$label" \
-    "${OPENCLAW_DOCKER_E2E_LOG_HEARTBEAT_SECONDS:-30}" \
+    "${SUNCLAW_DOCKER_E2E_LOG_HEARTBEAT_SECONDS:-30}" \
     docker_e2e_run_with_harness \
     "$@"
 }

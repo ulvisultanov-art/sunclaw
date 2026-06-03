@@ -1,17 +1,17 @@
 import path from "node:path";
-import { markMigrationItemSkipped, summarizeMigrationItems } from "openclaw/plugin-sdk/migration";
+import { markMigrationItemSkipped, summarizeMigrationItems } from "sunclaw/plugin-sdk/migration";
 import {
   archiveMigrationItem,
   copyMigrationFileItem,
   withCachedMigrationConfigRuntime,
   writeMigrationReport,
-} from "openclaw/plugin-sdk/migration-runtime";
+} from "sunclaw/plugin-sdk/migration-runtime";
 import type {
   MigrationApplyResult,
   MigrationItem,
   MigrationPlan,
   MigrationProviderContext,
-} from "openclaw/plugin-sdk/plugin-entry";
+} from "sunclaw/plugin-sdk/plugin-entry";
 import { applyAuthItem } from "./auth.js";
 import { applyConfigItem, applyManualItem } from "./config.js";
 import { appendItem } from "./helpers.js";

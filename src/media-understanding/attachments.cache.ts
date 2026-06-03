@@ -3,8 +3,8 @@ import path from "node:path";
 import {
   isInboundPathAllowed,
   mergeInboundPathRoots,
-} from "@openclaw/media-core/inbound-path-policy";
-import { detectMime } from "@openclaw/media-core/mime";
+} from "@sunclaw/media-core/inbound-path-policy";
+import { detectMime } from "@sunclaw/media-core/mime";
 import { logVerbose, shouldLogVerbose } from "../globals.js";
 import { FsSafeError, openLocalFileSafely } from "../infra/fs-safe.js";
 import type { SsrFPolicy } from "../infra/net/ssrf.js";
@@ -260,7 +260,7 @@ export class MediaAttachmentCache {
     });
     const extension = path.extname(bufferResult.fileName || "") || "";
     const tmpPath = buildRandomTempFilePath({
-      prefix: "openclaw-media",
+      prefix: "sunclaw-media",
       extension,
     });
     await fs.writeFile(tmpPath, bufferResult.buffer);

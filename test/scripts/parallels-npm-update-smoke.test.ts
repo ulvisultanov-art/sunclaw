@@ -28,7 +28,7 @@ const TEST_AUTH = {
 const tempDirs: string[] = [];
 
 function makeTempDir(): string {
-  const root = mkdtempSync(path.join(tmpdir(), "openclaw-parallels-npm-update-"));
+  const root = mkdtempSync(path.join(tmpdir(), "sunclaw-parallels-npm-update-"));
   tempDirs.push(root);
   return root;
 }
@@ -96,7 +96,7 @@ describe("parallels npm update smoke", () => {
       const smoke = new FailingNpmUpdateSmoke({
         ...TEST_AUTH,
         json: false,
-        packageSpec: "openclaw@latest",
+        packageSpec: "sunclaw@latest",
         platforms: new Set<Platform>(["linux"]),
         provider: "openai",
         updateTarget: "local-main",
@@ -118,9 +118,9 @@ describe("parallels npm update smoke", () => {
     const script = readFileSync(SCRIPT_PATH, "utf8");
 
     expect(script).toContain("--beta-validation [target]");
-    expect(script).toContain("resolveOpenClawRegistryVersion");
+    expect(script).toContain("resolveSunClawRegistryVersion");
     expect(script).toContain("this.options.updateTarget = version");
-    expect(script).toContain("this.options.freshTargetSpec = `openclaw@${version}`");
+    expect(script).toContain("this.options.freshTargetSpec = `sunclaw@${version}`");
     expect(script).toContain("runFreshTargetInstalls");
     expect(script).toContain("freshTargetStatus");
   });
@@ -130,8 +130,8 @@ describe("parallels npm update smoke", () => {
 
     expect(script).toContain("assertPublishedTargetMatchesHarnessCheckout");
     expect(script).toContain("readHarnessCheckoutVersion");
-    expect(script).toContain("openClawVersionFamily");
-    expect(script).toContain("OPENCLAW_PARALLELS_ALLOW_HARNESS_TARGET_MISMATCH");
+    expect(script).toContain("sunClawVersionFamily");
+    expect(script).toContain("SUNCLAW_PARALLELS_ALLOW_HARNESS_TARGET_MISMATCH");
     expect(script).toContain("checkout the matching release branch");
   });
 
@@ -189,20 +189,20 @@ describe("parallels npm update smoke", () => {
   });
 
   it("sets platform-aware fresh lane timeouts", () => {
-    const previous = process.env.OPENCLAW_PARALLELS_NPM_UPDATE_FRESH_TIMEOUT_S;
+    const previous = process.env.SUNCLAW_PARALLELS_NPM_UPDATE_FRESH_TIMEOUT_S;
     try {
-      delete process.env.OPENCLAW_PARALLELS_NPM_UPDATE_FRESH_TIMEOUT_S;
+      delete process.env.SUNCLAW_PARALLELS_NPM_UPDATE_FRESH_TIMEOUT_S;
       expect(freshLaneTimeoutMs("macos")).toBe(75 * 60 * 1000);
       expect(freshLaneTimeoutMs("linux")).toBe(75 * 60 * 1000);
       expect(freshLaneTimeoutMs("windows")).toBe(90 * 60 * 1000);
 
-      process.env.OPENCLAW_PARALLELS_NPM_UPDATE_FRESH_TIMEOUT_S = "3";
+      process.env.SUNCLAW_PARALLELS_NPM_UPDATE_FRESH_TIMEOUT_S = "3";
       expect(freshLaneTimeoutMs("macos")).toBe(3000);
     } finally {
       if (previous === undefined) {
-        delete process.env.OPENCLAW_PARALLELS_NPM_UPDATE_FRESH_TIMEOUT_S;
+        delete process.env.SUNCLAW_PARALLELS_NPM_UPDATE_FRESH_TIMEOUT_S;
       } else {
-        process.env.OPENCLAW_PARALLELS_NPM_UPDATE_FRESH_TIMEOUT_S = previous;
+        process.env.SUNCLAW_PARALLELS_NPM_UPDATE_FRESH_TIMEOUT_S = previous;
       }
     }
   });
@@ -251,8 +251,8 @@ describe("parallels npm update smoke", () => {
 
     expect(script).toContain("runWindowsBackgroundPowerShell");
     expect(transports).toContain("runWindowsBackgroundPowerShell");
-    expect(transports).toContain("__OPENCLAW_BACKGROUND_EXIT__");
-    expect(transports).toContain("__OPENCLAW_BACKGROUND_DONE__");
+    expect(transports).toContain("__SUNCLAW_BACKGROUND_EXIT__");
+    expect(transports).toContain("__SUNCLAW_BACKGROUND_DONE__");
     expect(transports).toContain("${options.label} timed out");
   });
 
@@ -285,7 +285,7 @@ describe("parallels npm update smoke", () => {
     expect(commands).toContain("-PassThru");
     expect(commands).toContain("[System.IO.File]::Open($logPath");
     expect(commands).toContain("[Math]::Min($length - $offset, 64)");
-    expect(commands).toContain("Stop-OpenClawBackgroundProcessTree ([int]$backgroundPid)");
+    expect(commands).toContain("Stop-SunClawBackgroundProcessTree ([int]$backgroundPid)");
     expect(commands).toContain(
       'Get-CimInstance Win32_Process -Filter "ParentProcessId=$ProcessId"',
     );
@@ -305,7 +305,7 @@ describe("parallels npm update smoke", () => {
       if (decoded.includes("Start-Process")) {
         return { status: 0, stderr: "", stdout: "started\n" };
       }
-      if (decoded.includes("__OPENCLAW_LOG_LENGTH__")) {
+      if (decoded.includes("__SUNCLAW_LOG_LENGTH__")) {
         pollCount += 1;
         return {
           status: 0,
@@ -313,19 +313,19 @@ describe("parallels npm update smoke", () => {
           stdout:
             pollCount === 1
               ? [
-                  "__OPENCLAW_LOG_LENGTH__:128",
-                  "__OPENCLAW_LOG_OFFSET__:64",
+                  "__SUNCLAW_LOG_LENGTH__:128",
+                  "__SUNCLAW_LOG_OFFSET__:64",
                   "first chunk",
-                  "__OPENCLAW_BACKGROUND_EXIT__:0",
-                  "__OPENCLAW_BACKGROUND_DONE__",
+                  "__SUNCLAW_BACKGROUND_EXIT__:0",
+                  "__SUNCLAW_BACKGROUND_DONE__",
                   "",
                 ].join("\n")
               : [
-                  "__OPENCLAW_LOG_LENGTH__:128",
-                  "__OPENCLAW_LOG_OFFSET__:128",
+                  "__SUNCLAW_LOG_LENGTH__:128",
+                  "__SUNCLAW_LOG_OFFSET__:128",
                   "second chunk",
-                  "__OPENCLAW_BACKGROUND_EXIT__:0",
-                  "__OPENCLAW_BACKGROUND_DONE__",
+                  "__SUNCLAW_BACKGROUND_EXIT__:0",
+                  "__SUNCLAW_BACKGROUND_DONE__",
                   "",
                 ].join("\n"),
         };
@@ -350,7 +350,7 @@ describe("parallels npm update smoke", () => {
     expect(pollCount).toBe(2);
     expect(output.join("")).toContain("first chunk");
     expect(output.join("")).toContain("second chunk");
-    expect(decodedCommands.join("\n")).not.toContain("Stop-OpenClawBackgroundProcessTree");
+    expect(decodedCommands.join("\n")).not.toContain("Stop-SunClawBackgroundProcessTree");
     expect(decodedCommands.join("\n")).toContain(
       "Remove-Item -Path $scriptPath, $logPath, $donePath, $exitPath, $pidPath",
     );
@@ -375,21 +375,21 @@ describe("parallels npm update smoke", () => {
     expect(script).toContain("scrub_future_plugin_entries");
     expect(script).toContain("delete plugins.entries.feishu");
     expect(script).toContain("delete plugins.entries.whatsapp");
-    expect(script).toContain("Remove-FuturePluginEntries\nStop-OpenClawGatewayProcesses");
-    expect(script).toContain("scrub_future_plugin_entries\nstop_openclaw_gateway_processes");
-    expect(script).toContain("Invoke-WithScopedEnv @{ OPENCLAW_DISABLE_BUNDLED_PLUGINS = '1'");
-    expect(macosScript).toContain('OPENCLAW_BIN="$(resolve_required_command openclaw)"');
+    expect(script).toContain("Remove-FuturePluginEntries\nStop-SunClawGatewayProcesses");
+    expect(script).toContain("scrub_future_plugin_entries\nstop_sunclaw_gateway_processes");
+    expect(script).toContain("Invoke-WithScopedEnv @{ SUNCLAW_DISABLE_BUNDLED_PLUGINS = '1'");
+    expect(macosScript).toContain('SUNCLAW_BIN="$(resolve_required_command sunclaw)"');
     expect(macosScript).toContain("/usr/local/bin:/usr/local/sbin");
     expect(macosScript).toContain(
-      'OPENCLAW_DISABLE_BUNDLED_PLUGINS=1 "$OPENCLAW_BIN" update --tag',
+      'SUNCLAW_DISABLE_BUNDLED_PLUGINS=1 "$SUNCLAW_BIN" update --tag',
     );
-    expect(macosScript).not.toContain("/opt/homebrew/bin/openclaw");
-    expect(script).toContain("OPENCLAW_DISABLE_BUNDLED_PLUGINS=1 openclaw update --tag");
+    expect(macosScript).not.toContain("/opt/homebrew/bin/sunclaw");
+    expect(script).toContain("SUNCLAW_DISABLE_BUNDLED_PLUGINS=1 sunclaw update --tag");
     expect(macosScript).toContain(
-      'OPENCLAW_DISABLE_BUNDLED_PLUGINS=1 "$OPENCLAW_BIN" gateway stop',
+      'SUNCLAW_DISABLE_BUNDLED_PLUGINS=1 "$SUNCLAW_BIN" gateway stop',
     );
     expect(script).toContain(
-      "OPENCLAW_DISABLE_BUNDLED_PLUGINS=1 OPENCLAW_ALLOW_ROOT=1 openclaw gateway stop",
+      "SUNCLAW_DISABLE_BUNDLED_PLUGINS=1 SUNCLAW_ALLOW_ROOT=1 sunclaw gateway stop",
     );
   });
 
@@ -400,11 +400,11 @@ describe("parallels npm update smoke", () => {
       updateTarget: "2026.5.3-beta.2",
     });
 
-    const updateIndex = script.indexOf("Invoke-OpenClaw update --tag");
-    const scopedIndex = script.indexOf("Invoke-WithScopedEnv @{ OPENCLAW_DISABLE_BUNDLED_PLUGINS");
-    const versionIndex = script.indexOf("Invoke-OpenClaw --version", scopedIndex);
-    const restartIndex = script.indexOf("Invoke-OpenClaw gateway restart");
-    const agentIndex = script.indexOf("Invoke-OpenClaw agent --local");
+    const updateIndex = script.indexOf("Invoke-SunClaw update --tag");
+    const scopedIndex = script.indexOf("Invoke-WithScopedEnv @{ SUNCLAW_DISABLE_BUNDLED_PLUGINS");
+    const versionIndex = script.indexOf("Invoke-SunClaw --version", scopedIndex);
+    const restartIndex = script.indexOf("Invoke-SunClaw gateway restart");
+    const agentIndex = script.indexOf("Invoke-SunClaw agent --local");
 
     expect(updateIndex).toBeGreaterThanOrEqual(0);
     expect(scopedIndex).toBeGreaterThanOrEqual(0);
@@ -412,7 +412,7 @@ describe("parallels npm update smoke", () => {
     expect(versionIndex).toBeGreaterThan(updateIndex);
     expect(restartIndex).toBeGreaterThan(updateIndex);
     expect(agentIndex).toBeGreaterThan(updateIndex);
-    expect(script).not.toContain("$env:OPENCLAW_DISABLE_BUNDLED_PLUGINS = '1'");
+    expect(script).not.toContain("$env:SUNCLAW_DISABLE_BUNDLED_PLUGINS = '1'");
   });
 
   it("generates a .NET-safe Windows stale import regex in the update-failure guard", () => {
@@ -434,13 +434,13 @@ describe("parallels npm update smoke", () => {
     expect(staleImportLine).toContain("$updateText -match 'ERR_MODULE_NOT_FOUND'");
     expect(staleImportLine).toContain(`$updateText -match '${staleImportPattern}'`);
     expect(staleImportPattern).toBe(
-      String.raw`node_modules\\openclaw\\dist\\[^\\]+-[A-Za-z0-9_-]+\.js`,
+      String.raw`node_modules\\sunclaw\\dist\\[^\\]+-[A-Za-z0-9_-]+\.js`,
     );
-    expect(staleImportPattern).not.toContain("node_modules\\openclaw\\dist\\");
+    expect(staleImportPattern).not.toContain("node_modules\\sunclaw\\dist\\");
     expect(staleImportPattern.match(/\\\\/g)).toHaveLength(4);
-    const representativeUpdateFailure = String.raw`Error [ERR_MODULE_NOT_FOUND]: Cannot find module 'C:\Users\runner\AppData\Roaming\npm\node_modules\openclaw\dist\main-a1_B2.js' imported from C:\Users\runner\AppData\Roaming\npm\node_modules\openclaw\dist\cli.js`;
+    const representativeUpdateFailure = String.raw`Error [ERR_MODULE_NOT_FOUND]: Cannot find module 'C:\Users\runner\AppData\Roaming\npm\node_modules\sunclaw\dist\main-a1_B2.js' imported from C:\Users\runner\AppData\Roaming\npm\node_modules\sunclaw\dist\cli.js`;
     const generatedRegex = new RegExp(staleImportPattern);
     expect(generatedRegex.test(representativeUpdateFailure)).toBe(true);
-    expect(generatedRegex.test(String.raw`node_modules\openclaw\dist\main.js`)).toBe(false);
+    expect(generatedRegex.test(String.raw`node_modules\sunclaw\dist\main.js`)).toBe(false);
   });
 });

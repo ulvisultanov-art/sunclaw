@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type { PluginManifestRegistry } from "../plugins/manifest-registry.js";
 import type { PluginMetadataSnapshot } from "../plugins/plugin-metadata-snapshot.js";
 
@@ -97,7 +97,7 @@ const loadPluginLookUpTable = vi.hoisted(() =>
     metrics: pluginLookUpTableMetrics,
   })),
 );
-const resolveOpenClawPackageRootSync = vi.hoisted(() => vi.fn((_params: unknown) => "/package"));
+const resolveSunClawPackageRootSync = vi.hoisted(() => vi.fn((_params: unknown) => "/package"));
 const runChannelPluginStartupMaintenance = vi.hoisted(() =>
   vi.fn(async (_params: unknown) => undefined),
 );
@@ -120,8 +120,8 @@ vi.mock("../config/plugin-auto-enable.js", () => ({
   applyPluginAutoEnable: (params: { config: unknown }) => applyPluginAutoEnable(params),
 }));
 
-vi.mock("../infra/openclaw-root.js", () => ({
-  resolveOpenClawPackageRootSync: (params: unknown) => resolveOpenClawPackageRootSync(params),
+vi.mock("../infra/sunclaw-root.js", () => ({
+  resolveSunClawPackageRootSync: (params: unknown) => resolveSunClawPackageRootSync(params),
 }));
 
 vi.mock("../plugins/plugin-lookup-table.js", () => ({
@@ -189,16 +189,16 @@ function mockDeferredSlackStartupPlugins(): void {
   });
 }
 
-function slackConfig(): OpenClawConfig {
+function slackConfig(): SunClawConfig {
   return {
     channels: {
       slack: { enabled: true, token: "token" },
     },
-  } as OpenClawConfig;
+  } as SunClawConfig;
 }
 
 async function prepareBootstrapWithRuntimeConfig(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   options: {
     loadRuntimePlugins?: boolean;
     loadSetupRuntimePlugins?: boolean;
@@ -246,7 +246,7 @@ describe("prepareGatewayPluginBootstrap startup plugins", () => {
       },
       metrics: pluginLookUpTableMetrics,
     });
-    resolveOpenClawPackageRootSync.mockClear().mockReturnValue("/package");
+    resolveSunClawPackageRootSync.mockClear().mockReturnValue("/package");
     runChannelPluginStartupMaintenance.mockClear();
     runStartupSessionMigration.mockClear();
   });
@@ -260,7 +260,7 @@ describe("prepareGatewayPluginBootstrap startup plugins", () => {
       plugins: {
         allow: ["bench-plugin"],
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
     const activationConfig = {
       channels: {
         telegram: {
@@ -276,7 +276,7 @@ describe("prepareGatewayPluginBootstrap startup plugins", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
     const runtimeConfig = {
       channels: {
         telegram: {
@@ -302,7 +302,7 @@ describe("prepareGatewayPluginBootstrap startup plugins", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
     applyPluginAutoEnable.mockReturnValueOnce({
       config: activationConfig,
       changes: [],
@@ -326,9 +326,9 @@ describe("prepareGatewayPluginBootstrap startup plugins", () => {
       manifestRegistry: pluginManifestRegistry,
     });
     const lookupInput = firstCallArg<{
-      activationSourceConfig?: OpenClawConfig;
+      activationSourceConfig?: SunClawConfig;
       metadataSnapshot?: PluginMetadataSnapshot;
-      config?: OpenClawConfig;
+      config?: SunClawConfig;
     }>(loadPluginLookUpTable);
     expect(lookupInput.activationSourceConfig).toBe(sourceConfig);
     expect(lookupInput.metadataSnapshot).toBe(pluginMetadataSnapshot);
@@ -345,8 +345,8 @@ describe("prepareGatewayPluginBootstrap startup plugins", () => {
     });
 
     const startupInput = firstCallArg<{
-      activationSourceConfig?: OpenClawConfig;
-      cfg?: OpenClawConfig;
+      activationSourceConfig?: SunClawConfig;
+      cfg?: SunClawConfig;
       baseMethods?: string[];
       coreGatewayMethodNames?: string[];
     }>(loadGatewayStartupPlugins);
@@ -409,7 +409,7 @@ describe("prepareGatewayPluginBootstrap startup plugins", () => {
           telegram: { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
 
     const result = await prepareBootstrapWithRuntimeConfig(cfg);
     expect(result.startupPluginIds).toEqual([]);
@@ -419,7 +419,7 @@ describe("prepareGatewayPluginBootstrap startup plugins", () => {
 
     expect(loadPluginLookUpTable).not.toHaveBeenCalled();
     const startupInput = firstCallArg<{
-      cfg?: OpenClawConfig;
+      cfg?: SunClawConfig;
       pluginIds?: string[];
       pluginLookUpTable?: unknown;
       preferSetupRuntimeForChannelPlugins?: boolean;

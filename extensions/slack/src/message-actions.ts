@@ -1,11 +1,11 @@
-import { createActionGate } from "openclaw/plugin-sdk/channel-actions";
-import type { ChannelMessageActionName } from "openclaw/plugin-sdk/channel-contract";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { extractToolSend, type ChannelToolSend } from "openclaw/plugin-sdk/tool-send";
+import { createActionGate } from "sunclaw/plugin-sdk/channel-actions";
+import type { ChannelMessageActionName } from "sunclaw/plugin-sdk/channel-contract";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import { extractToolSend, type ChannelToolSend } from "sunclaw/plugin-sdk/tool-send";
 import { listEnabledSlackAccounts, resolveSlackAccount } from "./accounts.js";
 
 export function listSlackMessageActions(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   accountId?: string | null,
 ): ChannelMessageActionName[] {
   const accounts = (

@@ -1,7 +1,7 @@
-import type { StreamFn } from "openclaw/plugin-sdk/agent-core";
-import type { ProviderWrapStreamFnContext } from "openclaw/plugin-sdk/plugin-entry";
-import { createAnthropicThinkingPrefillPayloadWrapper } from "openclaw/plugin-sdk/provider-stream-shared";
-import { createSubsystemLogger } from "openclaw/plugin-sdk/runtime-env";
+import type { StreamFn } from "sunclaw/plugin-sdk/agent-core";
+import type { ProviderWrapStreamFnContext } from "sunclaw/plugin-sdk/plugin-entry";
+import { createAnthropicThinkingPrefillPayloadWrapper } from "sunclaw/plugin-sdk/provider-stream-shared";
+import { createSubsystemLogger } from "sunclaw/plugin-sdk/runtime-env";
 
 const log = createSubsystemLogger("cloudflare-ai-gateway-stream");
 

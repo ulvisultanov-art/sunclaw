@@ -1,10 +1,10 @@
-import { resolveTimerTimeoutMs } from "openclaw/plugin-sdk/number-runtime";
-import type { ModelDefinitionConfig } from "openclaw/plugin-sdk/provider-model-types";
+import { resolveTimerTimeoutMs } from "sunclaw/plugin-sdk/number-runtime";
+import type { ModelDefinitionConfig } from "sunclaw/plugin-sdk/provider-model-types";
 import {
   fetchWithSsrFGuard,
   ssrfPolicyFromHttpBaseUrlAllowedHostname,
-} from "openclaw/plugin-sdk/ssrf-runtime";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/ssrf-runtime";
+import { normalizeLowercaseStringOrEmpty } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { isHuggingfaceModelDiscoveryTestEnvironment } from "./model-discovery-env.js";
 
 export const HUGGINGFACE_BASE_URL = "https://router.huggingface.co/v1";

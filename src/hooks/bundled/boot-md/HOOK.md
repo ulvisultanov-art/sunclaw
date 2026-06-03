@@ -1,15 +1,15 @@
 ---
 name: boot-md
 description: "Run BOOT.md on gateway startup"
-homepage: https://docs.openclaw.ai/automation/hooks#boot-md
+homepage: https://docs.sunclaw.complex.az/automation/hooks#boot-md
 metadata:
   {
-    "openclaw":
+    "sunclaw":
       {
         "emoji": "🚀",
         "events": ["gateway:startup"],
         "requires": { "config": ["workspace.dir"] },
-        "install": [{ "id": "bundled", "kind": "bundled", "label": "Bundled with OpenClaw" }],
+        "install": [{ "id": "bundled", "kind": "bundled", "label": "Bundled with SunClaw" }],
       },
   }
 ---

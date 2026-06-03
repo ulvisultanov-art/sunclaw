@@ -1,5 +1,5 @@
 export const POLICY_TOOL_GROUPS: Record<string, readonly string[]> = {
-  "group:openclaw": [
+  "group:sunclaw": [
     "code_execution",
     "web_search",
     "web_fetch",

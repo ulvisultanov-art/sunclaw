@@ -1,5 +1,5 @@
-import { createScopedChannelConfigAdapter } from "openclaw/plugin-sdk/channel-config-helpers";
-import { normalizeStringEntries } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { createScopedChannelConfigAdapter } from "sunclaw/plugin-sdk/channel-config-helpers";
+import { normalizeStringEntries } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import {
   listLineAccountIds,
   resolveDefaultLineAccountId,

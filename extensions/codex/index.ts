@@ -1,7 +1,7 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { mutateConfigFile } from "openclaw/plugin-sdk/config-mutation";
-import { resolveLivePluginConfigObject } from "openclaw/plugin-sdk/plugin-config-runtime";
-import { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import { mutateConfigFile } from "sunclaw/plugin-sdk/config-mutation";
+import { resolveLivePluginConfigObject } from "sunclaw/plugin-sdk/plugin-config-runtime";
+import { definePluginEntry } from "sunclaw/plugin-sdk/plugin-entry";
 import { createCodexAppServerAgentHarness } from "./harness.js";
 import { buildCodexMediaUnderstandingProvider } from "./media-understanding-provider.js";
 import { buildCodexProvider } from "./provider.js";
@@ -26,7 +26,7 @@ export default definePluginEntry({
   description: "Codex app-server harness and Codex-managed GPT model catalog.",
   register(api) {
     const resolveCurrentConfig = () =>
-      api.runtime.config?.current ? (api.runtime.config.current() as OpenClawConfig) : undefined;
+      api.runtime.config?.current ? (api.runtime.config.current() as SunClawConfig) : undefined;
     const resolveCurrentPluginConfig = () =>
       resolveLivePluginConfigObject(
         resolveCurrentConfig,
@@ -57,7 +57,7 @@ export default definePluginEntry({
             resolveCodexCliSessionForBindingOnNode({ runtime: api.runtime, ...params }),
           codexPluginsManagementIo: {
             readConfig: () => {
-              const current = (api.runtime.config?.current?.() ?? {}) as OpenClawConfig;
+              const current = (api.runtime.config?.current?.() ?? {}) as SunClawConfig;
               const plugins = (current as Record<string, unknown>).plugins;
               if (!plugins || typeof plugins !== "object") {
                 return Promise.resolve({});

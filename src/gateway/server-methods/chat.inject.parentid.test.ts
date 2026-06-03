@@ -40,7 +40,7 @@ function readLastTranscriptRecord(transcriptPath: string): Record<string, unknow
 describe("gateway chat.inject transcript writes", () => {
   it("appends a agent session entry that includes parentId", async () => {
     const { dir, transcriptPath } = createTranscriptFixtureSync({
-      prefix: "openclaw-chat-inject-",
+      prefix: "sunclaw-chat-inject-",
       sessionId: "sess-1",
     });
 
@@ -60,7 +60,7 @@ describe("gateway chat.inject transcript writes", () => {
 
   it("uses raw append for oversized append-only transcripts", async () => {
     const { dir, transcriptPath } = createTranscriptFixtureSync({
-      prefix: "openclaw-chat-inject-large-",
+      prefix: "sunclaw-chat-inject-large-",
       sessionId: "sess-1",
     });
 
@@ -92,7 +92,7 @@ describe("gateway chat.inject transcript writes", () => {
 
   it("emits and returns the redacted injected assistant message", async () => {
     const { dir, transcriptPath } = createTranscriptFixtureSync({
-      prefix: "openclaw-chat-inject-redact-",
+      prefix: "sunclaw-chat-inject-redact-",
       sessionId: "sess-redact",
     });
     const fakeApiKey = "sk-proj-FAKEKEYFORTESTINGONLY1234567890";

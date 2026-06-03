@@ -1,5 +1,5 @@
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import type { MemorySource } from "openclaw/plugin-sdk/memory-core-host-engine-storage";
+import { formatErrorMessage } from "sunclaw/plugin-sdk/error-runtime";
+import type { MemorySource } from "sunclaw/plugin-sdk/memory-core-host-engine-storage";
 import {
   asToolParamsRecord,
   jsonResult,
@@ -7,17 +7,17 @@ import {
   readPositiveIntegerParam,
   readStringParam,
   type MemoryCorpusSearchResult,
-  type OpenClawConfig,
-} from "openclaw/plugin-sdk/memory-core-host-runtime-core";
+  type SunClawConfig,
+} from "sunclaw/plugin-sdk/memory-core-host-runtime-core";
 import type {
   MemorySearchResult,
   MemorySearchRuntimeDebug,
-} from "openclaw/plugin-sdk/memory-core-host-runtime-files";
+} from "sunclaw/plugin-sdk/memory-core-host-runtime-files";
 import {
   resolveMemoryCorePluginConfig,
   resolveMemoryDreamingConfig,
   resolveMemoryDeepDreamingConfig,
-} from "openclaw/plugin-sdk/memory-core-host-status";
+} from "sunclaw/plugin-sdk/memory-core-host-status";
 import { asRecord } from "./dreaming-shared.js";
 import { filterMemorySearchHitsBySessionVisibility } from "./session-search-visibility.js";
 import { recordShortTermRecalls } from "./short-term-promotion.js";
@@ -113,7 +113,7 @@ async function runMemorySearchToolWithDeadline<T>(params: {
 const PAUSED_MEMORY_INDEX_WARNING =
   "Tell the user: memory search is paused because the memory index was built with a different embedding provider/model/settings.";
 const PAUSED_MEMORY_INDEX_ACTION =
-  "Tell the user to run: openclaw memory status --index or openclaw memory index --force.";
+  "Tell the user to run: sunclaw memory status --index or sunclaw memory index --force.";
 
 function resolvePausedMemoryIndexIdentityReason(status: { custom?: unknown }): string | undefined {
   const indexIdentity = asRecord(asRecord(status.custom)?.indexIdentity);
@@ -236,7 +236,7 @@ function isActiveMemorySessionKey(sessionKey?: string): boolean {
 }
 
 function resolveActiveMemoryQmdSearchModeOverride(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   sessionKey?: string,
 ): "search" | "vsearch" | "query" | undefined {
   if (!isActiveMemorySessionKey(sessionKey)) {
@@ -328,8 +328,8 @@ async function executeMemoryReadResult<T>(params: {
 }
 
 export function createMemorySearchTool(options: {
-  config?: OpenClawConfig;
-  getConfig?: () => OpenClawConfig | undefined;
+  config?: SunClawConfig;
+  getConfig?: () => SunClawConfig | undefined;
   agentId?: string;
   agentSessionKey?: string;
   sandboxed?: boolean;
@@ -590,8 +590,8 @@ export function createMemorySearchTool(options: {
 }
 
 export function createMemoryGetTool(options: {
-  config?: OpenClawConfig;
-  getConfig?: () => OpenClawConfig | undefined;
+  config?: SunClawConfig;
+  getConfig?: () => SunClawConfig | undefined;
   agentId?: string;
   agentSessionKey?: string;
 }) {

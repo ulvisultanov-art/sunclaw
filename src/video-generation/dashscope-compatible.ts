@@ -1,6 +1,6 @@
-import { readResponseWithLimit } from "@openclaw/media-core/read-response-with-limit";
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
+import { readResponseWithLimit } from "@sunclaw/media-core/read-response-with-limit";
+import { normalizeLowercaseStringOrEmpty } from "@sunclaw/normalization-core/string-coerce";
+import { uniqueStrings } from "@sunclaw/normalization-core/string-normalization";
 import {
   assertOkOrThrowHttpError,
   createProviderOperationDeadline,
@@ -11,7 +11,7 @@ import {
   resolveProviderOperationTimeoutMs,
   waitProviderOperationPollInterval,
   type ProviderOperationTimeoutMs,
-} from "openclaw/plugin-sdk/provider-http";
+} from "sunclaw/plugin-sdk/provider-http";
 import { resolveGeneratedMediaMaxBytes } from "../media/configured-max-bytes.js";
 import type {
   GeneratedVideoAsset,

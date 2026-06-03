@@ -2,7 +2,7 @@ import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@sunclaw/normalization-core/string-coerce";
 
 export type NodeMatchCandidate = {
   nodeId: string;
@@ -43,9 +43,9 @@ function formatNodeCandidateLabel(node: NodeMatchCandidate): string {
   return `${label} [${details.join(", ")}]`;
 }
 
-function isCurrentOpenClawClient(clientId: string | undefined): boolean {
+function isCurrentSunClawClient(clientId: string | undefined): boolean {
   const normalized = normalizeOptionalLowercaseString(clientId) ?? "";
-  return normalized.startsWith("openclaw-");
+  return normalized.startsWith("sunclaw-");
 }
 
 function isLegacyClawdbotClient(clientId: string | undefined): boolean {
@@ -56,7 +56,7 @@ function isLegacyClawdbotClient(clientId: string | undefined): boolean {
 function pickPreferredLegacyMigrationMatch(
   matches: NodeMatchCandidate[],
 ): NodeMatchCandidate | undefined {
-  const current = matches.filter((match) => isCurrentOpenClawClient(match.clientId));
+  const current = matches.filter((match) => isCurrentSunClawClient(match.clientId));
   if (current.length !== 1) {
     return undefined;
   }
@@ -64,7 +64,7 @@ function pickPreferredLegacyMigrationMatch(
   if (legacyCount === 0 || current.length + legacyCount !== matches.length) {
     return undefined;
   }
-  // During Clawdbot -> OpenClaw migration, a unique current client should win only
+  // During Clawdbot -> SunClaw migration, a unique current client should win only
   // when every other tie is a known legacy client for the same human-facing node.
   return current[0];
 }
@@ -95,7 +95,7 @@ function scoreNodeCandidate(node: NodeMatchCandidate, matchScore: number): numbe
   if (node.connected === true) {
     score += 100;
   }
-  if (isCurrentOpenClawClient(node.clientId)) {
+  if (isCurrentSunClawClient(node.clientId)) {
     score += 10;
   } else if (isLegacyClawdbotClient(node.clientId)) {
     score -= 10;

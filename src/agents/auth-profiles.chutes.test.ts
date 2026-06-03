@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { withOpenClawTestState } from "../test-utils/openclaw-test-state.js";
+import { withSunClawTestState } from "../test-utils/sunclaw-test-state.js";
 import type { AuthProfileStore } from "./auth-profiles.js";
 import { CHUTES_TOKEN_ENDPOINT } from "./chutes-oauth.js";
 
@@ -42,10 +42,10 @@ describe("auth-profiles (chutes)", () => {
   });
 
   it("refreshes expired Chutes OAuth credentials", async () => {
-    await withOpenClawTestState(
+    await withSunClawTestState(
       {
         layout: "state-only",
-        prefix: "openclaw-chutes-",
+        prefix: "sunclaw-chutes-",
         agentEnv: "main",
         env: {
           CHUTES_CLIENT_ID: undefined,

@@ -1,10 +1,10 @@
-import type { AckReactionHandle } from "openclaw/plugin-sdk/channel-feedback";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { getReplyFromConfig } from "openclaw/plugin-sdk/reply-runtime";
-import type { MsgContext } from "openclaw/plugin-sdk/reply-runtime";
-import { resolveAgentRoute } from "openclaw/plugin-sdk/routing";
-import { buildGroupHistoryKey } from "openclaw/plugin-sdk/routing";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
+import type { AckReactionHandle } from "sunclaw/plugin-sdk/channel-feedback";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import type { getReplyFromConfig } from "sunclaw/plugin-sdk/reply-runtime";
+import type { MsgContext } from "sunclaw/plugin-sdk/reply-runtime";
+import { resolveAgentRoute } from "sunclaw/plugin-sdk/routing";
+import { buildGroupHistoryKey } from "sunclaw/plugin-sdk/routing";
+import { logVerbose } from "sunclaw/plugin-sdk/runtime-env";
 import { resolveWhatsAppAccount } from "../../accounts.js";
 import { resolveWhatsAppGroupSessionRoute } from "../../group-session-key.js";
 import { getPrimaryIdentityId, getSenderIdentity } from "../../identity.js";
@@ -26,8 +26,8 @@ import {
 } from "./status-reaction.js";
 
 export function createWebOnMessageHandler(params: {
-  cfg: OpenClawConfig;
-  loadConfig?: () => OpenClawConfig;
+  cfg: SunClawConfig;
+  loadConfig?: () => SunClawConfig;
   verbose: boolean;
   connectionId: string;
   maxMediaBytes: number;
@@ -37,12 +37,12 @@ export function createWebOnMessageHandler(params: {
   echoTracker: EchoTracker;
   backgroundTasks: Set<Promise<unknown>>;
   replyResolver: typeof getReplyFromConfig;
-  replyLogger: ReturnType<(typeof import("openclaw/plugin-sdk/runtime-env"))["getChildLogger"]>;
+  replyLogger: ReturnType<(typeof import("sunclaw/plugin-sdk/runtime-env"))["getChildLogger"]>;
   baseMentionConfig: MentionConfig;
   account: { authDir?: string; accountId?: string; selfChatMode?: boolean };
 }) {
   const processForRoute = async (
-    cfg: OpenClawConfig,
+    cfg: SunClawConfig,
     msg: WebInboundMsg,
     route: ReturnType<typeof resolveAgentRoute>,
     groupHistoryKey: string,

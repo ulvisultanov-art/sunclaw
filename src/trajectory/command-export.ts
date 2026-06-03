@@ -51,10 +51,10 @@ async function resolveTrajectoryExportBaseDir(workspaceDir: string): Promise<{
 }> {
   const workspacePath = path.resolve(workspaceDir);
   const realWorkspace = await fsp.realpath(workspacePath);
-  const stateDir = path.join(workspacePath, ".openclaw");
+  const stateDir = path.join(workspacePath, ".sunclaw");
   await mkdirIfMissingThenValidate({
     dir: stateDir,
-    label: "OpenClaw state directory",
+    label: "SunClaw state directory",
     realWorkspace,
   });
   const baseDir = path.join(stateDir, "trajectory-exports");

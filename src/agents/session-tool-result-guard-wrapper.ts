@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { getGlobalHookRunner } from "../plugins/hook-runner-global.js";
 import {
   applyInputProvenanceToUserMessage,
@@ -30,7 +30,7 @@ export function guardSessionManager(
   opts?: {
     agentId?: string;
     sessionKey?: string;
-    config?: OpenClawConfig;
+    config?: SunClawConfig;
     contextWindowTokens?: number;
     inputProvenance?: InputProvenance;
     allowSyntheticToolResults?: boolean;

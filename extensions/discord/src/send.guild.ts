@@ -9,9 +9,9 @@ import type {
 import {
   resolveExpiresAtMsFromDurationMs,
   timestampMsToIsoString,
-} from "openclaw/plugin-sdk/number-runtime";
-import { normalizeOptionalLowercaseString } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { loadWebMediaRaw } from "openclaw/plugin-sdk/web-media";
+} from "sunclaw/plugin-sdk/number-runtime";
+import { normalizeOptionalLowercaseString } from "sunclaw/plugin-sdk/string-coerce-runtime";
+import { loadWebMediaRaw } from "sunclaw/plugin-sdk/web-media";
 import {
   addGuildMemberRole,
   createGuildBan,

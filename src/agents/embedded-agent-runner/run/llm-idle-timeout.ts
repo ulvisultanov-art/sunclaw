@@ -2,9 +2,9 @@ import {
   finiteSecondsToTimerSafeMilliseconds,
   clampTimerTimeoutMs,
   MAX_TIMER_TIMEOUT_MS,
-} from "@openclaw/normalization-core/number-coercion";
+} from "@sunclaw/normalization-core/number-coercion";
 import { DEFAULT_LLM_IDLE_TIMEOUT_SECONDS } from "../../../config/agent-timeout-defaults.js";
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../../config/types.sunclaw.js";
 import type { StreamFn } from "../../runtime/index.js";
 import type { MutableAssistantMessageEventStream } from "../../stream-compat.js";
 import { createStreamIteratorWrapper } from "../../stream-iterator-wrapper.js";
@@ -113,7 +113,7 @@ function isOllamaCloudModel(model: { id?: string; provider?: string } | undefine
  * @returns Idle timeout in milliseconds, or 0 to disable
  */
 export function resolveLlmIdleTimeoutMs(params?: {
-  cfg?: OpenClawConfig;
+  cfg?: SunClawConfig;
   trigger?: EmbeddedRunTrigger;
   runTimeoutMs?: number;
   modelRequestTimeoutMs?: number;

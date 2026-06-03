@@ -30,21 +30,21 @@ export function clearActiveMcpLoopbackRuntimeByOwnerToken(ownerToken: string): v
 export function createMcpLoopbackServerConfig(port: number) {
   return {
     mcpServers: {
-      openclaw: {
+      sunclaw: {
         type: "http",
         url: `http://127.0.0.1:${port}/mcp`,
         headers: {
-          Authorization: "Bearer ${OPENCLAW_MCP_TOKEN}",
-          "x-session-key": "${OPENCLAW_MCP_SESSION_KEY}",
-          "x-openclaw-agent-id": "${OPENCLAW_MCP_AGENT_ID}",
-          "x-openclaw-account-id": "${OPENCLAW_MCP_ACCOUNT_ID}",
-          "x-openclaw-message-channel": "${OPENCLAW_MCP_MESSAGE_CHANNEL}",
-          "x-openclaw-current-channel-id": "${OPENCLAW_MCP_CURRENT_CHANNEL_ID}",
-          "x-openclaw-current-thread-ts": "${OPENCLAW_MCP_CURRENT_THREAD_TS}",
-          "x-openclaw-current-message-id": "${OPENCLAW_MCP_CURRENT_MESSAGE_ID}",
-          "x-openclaw-current-inbound-audio": "${OPENCLAW_MCP_CURRENT_INBOUND_AUDIO}",
-          "x-openclaw-inbound-event-kind": "${OPENCLAW_MCP_INBOUND_EVENT_KIND}",
-          "x-openclaw-source-reply-delivery-mode": "${OPENCLAW_MCP_SOURCE_REPLY_DELIVERY_MODE}",
+          Authorization: "Bearer ${SUNCLAW_MCP_TOKEN}",
+          "x-session-key": "${SUNCLAW_MCP_SESSION_KEY}",
+          "x-sunclaw-agent-id": "${SUNCLAW_MCP_AGENT_ID}",
+          "x-sunclaw-account-id": "${SUNCLAW_MCP_ACCOUNT_ID}",
+          "x-sunclaw-message-channel": "${SUNCLAW_MCP_MESSAGE_CHANNEL}",
+          "x-sunclaw-current-channel-id": "${SUNCLAW_MCP_CURRENT_CHANNEL_ID}",
+          "x-sunclaw-current-thread-ts": "${SUNCLAW_MCP_CURRENT_THREAD_TS}",
+          "x-sunclaw-current-message-id": "${SUNCLAW_MCP_CURRENT_MESSAGE_ID}",
+          "x-sunclaw-current-inbound-audio": "${SUNCLAW_MCP_CURRENT_INBOUND_AUDIO}",
+          "x-sunclaw-inbound-event-kind": "${SUNCLAW_MCP_INBOUND_EVENT_KIND}",
+          "x-sunclaw-source-reply-delivery-mode": "${SUNCLAW_MCP_SOURCE_REPLY_DELIVERY_MODE}",
         },
       },
     },

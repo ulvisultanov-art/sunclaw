@@ -1,16 +1,16 @@
 {
-  "name": "@openclaw/openai-provider",
+  "name": "@sunclaw/openai-provider",
   "version": "2026.6.2",
   "private": true,
-  "description": "OpenClaw OpenAI provider plugins",
+  "description": "SunClaw OpenAI provider plugins",
   "type": "module",
   "dependencies": {
     "ws": "8.21.0"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@sunclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ]

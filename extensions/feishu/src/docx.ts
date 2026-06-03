@@ -3,11 +3,11 @@ import { homedir } from "node:os";
 import { isAbsolute, resolve } from "node:path";
 import { basename } from "node:path";
 import type * as Lark from "@larksuiteoapi/node-sdk";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { extensionForMime } from "openclaw/plugin-sdk/media-mime";
-import { normalizeOptionalString, uniqueStrings } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { formatErrorMessage } from "sunclaw/plugin-sdk/error-runtime";
+import { extensionForMime } from "sunclaw/plugin-sdk/media-mime";
+import { normalizeOptionalString, uniqueStrings } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { Type } from "typebox";
-import type { OpenClawPluginApi } from "../runtime-api.js";
+import type { SunClawPluginApi } from "../runtime-api.js";
 import { listEnabledFeishuAccounts } from "./accounts.js";
 import { FeishuDocSchema, type FeishuDocParams } from "./doc-schema.js";
 import { BATCH_SIZE, insertBlocksInBatches } from "./docx-batch-insert.js";
@@ -1365,7 +1365,7 @@ async function listAppScopes(client: Lark.Client) {
 
 // ============ Tool Registration ============
 
-export function registerFeishuDocTools(api: OpenClawPluginApi) {
+export function registerFeishuDocTools(api: SunClawPluginApi) {
   if (!api.config) {
     return;
   }

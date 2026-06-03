@@ -1,6 +1,6 @@
-import { resolveChannelConfigWrites } from "openclaw/plugin-sdk/channel-config-writes";
-import { parseStrictNonNegativeInteger } from "openclaw/plugin-sdk/number-runtime";
-import type { ResolvedAgentRoute } from "openclaw/plugin-sdk/routing";
+import { resolveChannelConfigWrites } from "sunclaw/plugin-sdk/channel-config-writes";
+import { parseStrictNonNegativeInteger } from "sunclaw/plugin-sdk/number-runtime";
+import type { ResolvedAgentRoute } from "sunclaw/plugin-sdk/routing";
 import { resolveFeishuRuntimeAccount } from "./accounts.js";
 import { createFeishuClient } from "./client.js";
 import { createFeishuCommentReplyDispatcher } from "./comment-dispatcher.js";

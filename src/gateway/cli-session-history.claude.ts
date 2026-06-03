@@ -1,8 +1,8 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { asFiniteNumber } from "@openclaw/normalization-core/number-coercion";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { asFiniteNumber } from "@sunclaw/normalization-core/number-coercion";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
 import {
   isToolCallBlock,
   isToolResultBlock,
@@ -10,7 +10,7 @@ import {
   type ToolContentBlock,
 } from "../chat/tool-content.js";
 import type { SessionEntry } from "../config/sessions.js";
-import { attachOpenClawTranscriptMeta } from "./session-utils.fs.js";
+import { attachSunClawTranscriptMeta } from "./session-utils.fs.js";
 
 export const CLAUDE_CLI_PROVIDER = "claude-cli";
 const CLAUDE_PROJECTS_RELATIVE_DIR = path.join(".claude", "projects");
@@ -243,7 +243,7 @@ function parseClaudeCliHistoryEntry(
   }
 
   if (type === "user") {
-    return attachOpenClawTranscriptMeta(
+    return attachSunClawTranscriptMeta(
       {
         role: "user",
         content,
@@ -253,7 +253,7 @@ function parseClaudeCliHistoryEntry(
     ) as TranscriptLikeMessage;
   }
 
-  return attachOpenClawTranscriptMeta(
+  return attachSunClawTranscriptMeta(
     {
       role: "assistant",
       content,

@@ -22,23 +22,23 @@ const ROOT_COMMANDS_HINT =
   "Hint: commands suffixed with * have subcommands. Run <command> --help for details.";
 
 const EXAMPLES = [
-  ["openclaw onboard", "Run guided setup for a local Gateway, workspace, auth, and channels."],
-  ["openclaw setup", "Create the baseline config, workspace, and session folders."],
-  ["openclaw configure", "Change models, Gateway, channels, plugins, skills, and health checks."],
-  ["openclaw status", "Check Gateway, channel, model, and recent-session status."],
-  ["openclaw doctor --fix", "Repair common config, service, plugin, and channel problems."],
-  ["openclaw channels add", "Add or update a chat channel account with guided prompts."],
-  ["openclaw channels status", "See connected messaging accounts and login state."],
-  ["openclaw --dev gateway", "Run a dev Gateway (isolated state/config) on ws://127.0.0.1:19001."],
-  ["openclaw gateway run --force", "Start the Gateway and replace anything bound to its port."],
-  ["openclaw models status", "Show model/provider auth health before running agents."],
-  ["openclaw plugins list", "Inspect enabled, disabled, and installed plugins."],
+  ["sunclaw onboard", "Run guided setup for a local Gateway, workspace, auth, and channels."],
+  ["sunclaw setup", "Create the baseline config, workspace, and session folders."],
+  ["sunclaw configure", "Change models, Gateway, channels, plugins, skills, and health checks."],
+  ["sunclaw status", "Check Gateway, channel, model, and recent-session status."],
+  ["sunclaw doctor --fix", "Repair common config, service, plugin, and channel problems."],
+  ["sunclaw channels add", "Add or update a chat channel account with guided prompts."],
+  ["sunclaw channels status", "See connected messaging accounts and login state."],
+  ["sunclaw --dev gateway", "Run a dev Gateway (isolated state/config) on ws://127.0.0.1:19001."],
+  ["sunclaw gateway run --force", "Start the Gateway and replace anything bound to its port."],
+  ["sunclaw models status", "Show model/provider auth health before running agents."],
+  ["sunclaw plugins list", "Inspect enabled, disabled, and installed plugins."],
   [
-    'openclaw agent --to +15555550123 --message "Run summary" --deliver',
+    'sunclaw agent --to +15555550123 --message "Run summary" --deliver',
     "Run one agent turn through the Gateway and optionally deliver the reply.",
   ],
   [
-    'openclaw message send --channel telegram --target @mychat --message "Hi"',
+    'sunclaw message send --channel telegram --target @mychat --message "Hi"',
     "Send via your Telegram bot.",
   ],
 ] as const;
@@ -59,15 +59,15 @@ export function configureProgramHelp(
     .version(ctx.programVersion)
     .option(
       "--container <name>",
-      "Run the CLI inside a running Podman/Docker container named <name> (default: env OPENCLAW_CONTAINER)",
+      "Run the CLI inside a running Podman/Docker container named <name> (default: env SUNCLAW_CONTAINER)",
     )
     .option(
       "--dev",
-      "Dev profile: isolate state under ~/.openclaw-dev, default gateway port 19001, and shift derived ports (browser/canvas)",
+      "Dev profile: isolate state under ~/.sunclaw-dev, default gateway port 19001, and shift derived ports (browser/canvas)",
     )
     .option(
       "--profile <name>",
-      "Use a named profile (isolates OPENCLAW_STATE_DIR/OPENCLAW_CONFIG_PATH under ~/.openclaw-<name>)",
+      "Use a named profile (isolates SUNCLAW_STATE_DIR/SUNCLAW_CONFIG_PATH under ~/.sunclaw-<name>)",
     )
     .option(
       "--log-level <level>",
@@ -120,13 +120,13 @@ export function configureProgramHelp(
   if (isRootVersionInvocation(process.argv)) {
     const commit = resolveCommitHash({ moduleUrl: import.meta.url });
     console.log(
-      commit ? `OpenClaw ${ctx.programVersion} (${commit})` : `OpenClaw ${ctx.programVersion}`,
+      commit ? `SunClaw ${ctx.programVersion} (${commit})` : `SunClaw ${ctx.programVersion}`,
     );
     process.exit(0);
   }
 
   program.addHelpText("beforeAll", () => {
-    if (hasEmittedCliBanner() || process.env.OPENCLAW_SUPPRESS_HELP_BANNER === "1") {
+    if (hasEmittedCliBanner() || process.env.SUNCLAW_SUPPRESS_HELP_BANNER === "1") {
       return "";
     }
     const rich = isRich();
@@ -142,7 +142,7 @@ export function configureProgramHelp(
     if (command !== program) {
       return "";
     }
-    const docs = formatDocsLink("/cli", "docs.openclaw.ai/cli");
+    const docs = formatDocsLink("/cli", "docs.sunclaw.complex.az/cli");
     return `\n${theme.heading("Examples:")}\n${fmtExamples}\n\n${theme.muted("Docs:")} ${docs}\n`;
   });
 }

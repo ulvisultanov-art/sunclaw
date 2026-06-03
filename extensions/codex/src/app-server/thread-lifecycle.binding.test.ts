@@ -68,7 +68,7 @@ function createDeferredNamedDynamicTool(
 ): Parameters<typeof startOrResumeThread>[0]["dynamicTools"][number] {
   return {
     ...createNamedDynamicTool(name),
-    namespace: "openclaw",
+    namespace: "sunclaw",
     deferLoading: true,
   };
 }
@@ -819,7 +819,7 @@ describe("Codex app-server thread lifecycle bindings", () => {
       "features.hooks": true,
       "hooks.PreToolUse": [
         {
-          hooks: [{ type: "command", command: "openclaw-native-hook-relay", timeout: 5 }],
+          hooks: [{ type: "command", command: "sunclaw-native-hook-relay", timeout: 5 }],
         },
       ],
     };

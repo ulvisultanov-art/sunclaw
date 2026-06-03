@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import type { Socket } from "node:net";
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@sunclaw/normalization-core/string-coerce";
 import type { RawData, WebSocket, WebSocketServer } from "ws";
 import {
   GATEWAY_STARTUP_CLOSE_CODE,
@@ -249,15 +249,15 @@ export function attachGatewayWsConnectionHandler(params: AttachGatewayWsConnecti
     const { remoteAddr, remotePort, localAddr, localPort, endpoint } = resolveSocketAddress(socket);
     const preauthBudgetKey = (
       socket as WebSocket & {
-        __openclawPreauthBudgetClaimed?: boolean;
-        __openclawPreauthBudgetKey?: string;
+        __sunclawPreauthBudgetClaimed?: boolean;
+        __sunclawPreauthBudgetKey?: string;
       }
-    )["__openclawPreauthBudgetKey"];
+    )["__sunclawPreauthBudgetKey"];
     (
       socket as WebSocket & {
-        __openclawPreauthBudgetClaimed?: boolean;
+        __sunclawPreauthBudgetClaimed?: boolean;
       }
-    )["__openclawPreauthBudgetClaimed"] = true;
+    )["__sunclawPreauthBudgetClaimed"] = true;
     const headerValue = (value: string | string[] | undefined) =>
       Array.isArray(value) ? value[0] : value;
     const requestHost = headerValue(upgradeReq.headers.host);

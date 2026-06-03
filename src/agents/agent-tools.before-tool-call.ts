@@ -1,7 +1,7 @@
 import os from "node:os";
 import path from "node:path";
-import { addTimerTimeoutGraceMs } from "@openclaw/normalization-core/number-coercion";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { addTimerTimeoutGraceMs } from "@sunclaw/normalization-core/number-coercion";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type { ToolLoopDetectionConfig } from "../config/types.tools.js";
 import {
   diagnosticErrorCategory,
@@ -83,7 +83,7 @@ export function isAbortSignalCancellation(err: unknown, signal?: AbortSignal): b
 
 export type HookContext = {
   agentId?: string;
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   /** Tool execution cwd for host-derived path facts. */
   cwd?: string;
   /** Host workspace used to resolve relative tool params for diagnostics only. */

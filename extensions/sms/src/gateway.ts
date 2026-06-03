@@ -1,5 +1,5 @@
-import { waitUntilAbort } from "openclaw/plugin-sdk/channel-outbound";
-import { registerPluginHttpRoute } from "openclaw/plugin-sdk/webhook-ingress";
+import { waitUntilAbort } from "sunclaw/plugin-sdk/channel-outbound";
+import { registerPluginHttpRoute } from "sunclaw/plugin-sdk/webhook-ingress";
 import type { ResolvedSmsAccount } from "./types.js";
 import { createSmsWebhookHandler, type SmsWebhookHandlerParams } from "./webhook.js";
 

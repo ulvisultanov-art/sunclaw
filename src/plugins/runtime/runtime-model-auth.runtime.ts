@@ -2,7 +2,7 @@ import {
   getApiKeyForModel as resolveModelApiKey,
   resolveApiKeyForProvider as resolveProviderApiKey,
 } from "../../agents/model-auth.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import type { Model } from "../../llm/types.js";
 import { prepareProviderRuntimeAuth } from "../provider-runtime.runtime.js";
 import type { ResolvedProviderRuntimeAuth } from "./model-auth-types.js";
@@ -25,7 +25,7 @@ export async function resolveApiKeyForProvider(
  */
 export async function getRuntimeAuthForModel(params: {
   model: Model;
-  cfg?: OpenClawConfig;
+  cfg?: SunClawConfig;
   workspaceDir?: string;
 }): Promise<ResolvedProviderRuntimeAuth> {
   const resolvedAuth = await resolveModelApiKey({

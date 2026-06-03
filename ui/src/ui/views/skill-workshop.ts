@@ -148,7 +148,7 @@ export function renderSkillWorkshop(props: SkillWorkshopProps) {
     </section>
     ${preview && selected
       ? html`
-          <openclaw-file-preview-modal
+          <sunclaw-file-preview-modal
             .files=${selected.supportFiles}
             .activePath=${preview.path}
             .query=${props.filePreviewQuery}
@@ -158,7 +158,7 @@ export function renderSkillWorkshop(props: SkillWorkshopProps) {
             @file-preview-select=${(event: CustomEvent<string>) =>
               props.onPreviewFile(selected.key, event.detail)}
             @file-preview-close=${props.onClosePreview}
-          ></openclaw-file-preview-modal>
+          ></sunclaw-file-preview-modal>
         `
       : nothing}
     ${revisionProposal ? renderRevisionDialog(props, revisionProposal) : nothing}

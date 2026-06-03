@@ -1,9 +1,9 @@
 import {
   normalizeTrimmedStringList,
   uniqueStrings,
-} from "@openclaw/normalization-core/string-normalization";
+} from "@sunclaw/normalization-core/string-normalization";
 import type { SecretRefSource } from "../config/types.secrets.js";
-import { listOpenClawPluginManifestMetadata } from "../plugins/manifest-metadata-scan.js";
+import { listSunClawPluginManifestMetadata } from "../plugins/manifest-metadata-scan.js";
 import { listKnownProviderEnvApiKeyNames } from "./model-auth-env-vars.js";
 
 /** @deprecated MiniMax provider-owned marker; do not use from third-party plugins. */
@@ -56,7 +56,7 @@ function listKnownEnvApiKeyMarkers(): Set<string> {
 export function listKnownNonSecretApiKeyMarkers(): string[] {
   knownNonSecretApiKeyMarkersCache ??= uniqueStrings([
     ...CORE_NON_SECRET_API_KEY_MARKERS,
-    ...listOpenClawPluginManifestMetadata().flatMap((plugin) =>
+    ...listSunClawPluginManifestMetadata().flatMap((plugin) =>
       plugin.origin === "bundled"
         ? normalizeTrimmedStringList(plugin.manifest.nonSecretAuthMarkers)
         : [],

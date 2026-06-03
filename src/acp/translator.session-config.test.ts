@@ -1,4 +1,4 @@
-import { createInMemorySessionStore } from "@openclaw/acp-core/session";
+import { createInMemorySessionStore } from "@sunclaw/acp-core/session";
 import { describe, expect, it, vi } from "vitest";
 import type { GatewayClient } from "../gateway/client.js";
 import {
@@ -260,7 +260,7 @@ describe("acp setSessionConfigOption bridge behavior", () => {
     sessionStore.clearAllSessionsForTest();
   });
 
-  it("accepts forwarded timeout config options without failing OpenClaw ACP bridge turns", async () => {
+  it("accepts forwarded timeout config options without failing SunClaw ACP bridge turns", async () => {
     const sessionStore = createInMemorySessionStore();
     const connection = createAcpConnection();
     const requestMock = vi.fn(async (method: string) => {

@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type {
   PluginWebFetchProviderEntry,
   PluginWebSearchProviderEntry,
@@ -12,7 +12,7 @@ type CommonWebProviderTestParams = {
   requiresCredential?: boolean;
   authProviderId?: string;
   getCredentialValue?: (config?: Record<string, unknown>) => unknown;
-  getConfiguredCredentialValue?: (config?: OpenClawConfig) => unknown;
+  getConfiguredCredentialValue?: (config?: SunClawConfig) => unknown;
   getConfiguredCredentialFallback?:
     | PluginWebSearchProviderEntry["getConfiguredCredentialFallback"]
     | PluginWebFetchProviderEntry["getConfiguredCredentialFallback"];

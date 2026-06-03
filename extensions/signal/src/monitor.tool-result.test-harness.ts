@@ -1,4 +1,4 @@
-import type { MockFn } from "openclaw/plugin-sdk/plugin-test-runtime";
+import type { MockFn } from "sunclaw/plugin-sdk/plugin-test-runtime";
 import { beforeEach, vi } from "vitest";
 import type { SignalDaemonExitEvent, SignalDaemonHandle } from "./daemon.js";
 
@@ -28,7 +28,7 @@ const signalCheckMock = vi.hoisted(() => vi.fn()) as unknown as MockFn;
 const signalRpcRequestMock = vi.hoisted(() => vi.fn()) as unknown as MockFn;
 const spawnSignalDaemonMock = vi.hoisted(() => vi.fn()) as unknown as MockFn;
 const signalToolResultSessionStorePath = vi.hoisted(
-  () => `/tmp/openclaw-signal-tool-result-sessions-${process.pid}.json`,
+  () => `/tmp/sunclaw-signal-tool-result-sessions-${process.pid}.json`,
 );
 
 export function getSignalToolResultTestMocks(): SignalToolResultTestMocks {
@@ -93,19 +93,19 @@ export function createMockSignalDaemonHandle(
 
 // Use importActual so shared-worker mocks from earlier test files do not leak
 // into this harness's partial overrides.
-vi.mock("openclaw/plugin-sdk/runtime-config-snapshot", async () => {
+vi.mock("sunclaw/plugin-sdk/runtime-config-snapshot", async () => {
   const actual = await vi.importActual<
-    typeof import("openclaw/plugin-sdk/runtime-config-snapshot")
-  >("openclaw/plugin-sdk/runtime-config-snapshot");
+    typeof import("sunclaw/plugin-sdk/runtime-config-snapshot")
+  >("sunclaw/plugin-sdk/runtime-config-snapshot");
   return {
     ...actual,
     getRuntimeConfig: () => config,
   };
 });
 
-vi.mock("openclaw/plugin-sdk/session-store-runtime", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/session-store-runtime")>(
-    "openclaw/plugin-sdk/session-store-runtime",
+vi.mock("sunclaw/plugin-sdk/session-store-runtime", async () => {
+  const actual = await vi.importActual<typeof import("sunclaw/plugin-sdk/session-store-runtime")>(
+    "sunclaw/plugin-sdk/session-store-runtime",
   );
   return {
     ...actual,
@@ -116,9 +116,9 @@ vi.mock("openclaw/plugin-sdk/session-store-runtime", async () => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/reply-runtime", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/reply-runtime")>(
-    "openclaw/plugin-sdk/reply-runtime",
+vi.mock("sunclaw/plugin-sdk/reply-runtime", async () => {
+  const actual = await vi.importActual<typeof import("sunclaw/plugin-sdk/reply-runtime")>(
+    "sunclaw/plugin-sdk/reply-runtime",
   );
   return {
     ...actual,
@@ -156,9 +156,9 @@ vi.mock("./send.js", async () => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/conversation-runtime", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/conversation-runtime")>(
-    "openclaw/plugin-sdk/conversation-runtime",
+vi.mock("sunclaw/plugin-sdk/conversation-runtime", async () => {
+  const actual = await vi.importActual<typeof import("sunclaw/plugin-sdk/conversation-runtime")>(
+    "sunclaw/plugin-sdk/conversation-runtime",
   );
   return {
     ...actual,
@@ -167,9 +167,9 @@ vi.mock("openclaw/plugin-sdk/conversation-runtime", async () => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/security-runtime", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/security-runtime")>(
-    "openclaw/plugin-sdk/security-runtime",
+vi.mock("sunclaw/plugin-sdk/security-runtime", async () => {
+  const actual = await vi.importActual<typeof import("sunclaw/plugin-sdk/security-runtime")>(
+    "sunclaw/plugin-sdk/security-runtime",
   );
   return {
     ...actual,
@@ -197,9 +197,9 @@ vi.mock("./daemon.js", async (importOriginal) => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/system-event-runtime", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/system-event-runtime")>(
-    "openclaw/plugin-sdk/system-event-runtime",
+vi.mock("sunclaw/plugin-sdk/system-event-runtime", async () => {
+  const actual = await vi.importActual<typeof import("sunclaw/plugin-sdk/system-event-runtime")>(
+    "sunclaw/plugin-sdk/system-event-runtime",
   );
   return {
     ...actual,
@@ -210,15 +210,15 @@ vi.mock("openclaw/plugin-sdk/system-event-runtime", async () => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/transport-ready-runtime", () => ({
+vi.mock("sunclaw/plugin-sdk/transport-ready-runtime", () => ({
   waitForTransportReady: (...args: unknown[]) => waitForTransportReadyMock(...args),
 }));
 
 export function installSignalToolResultTestHooks() {
   beforeEach(async () => {
     const [{ resetInboundDedupe }, { resetSystemEventsForTest }] = await Promise.all([
-      import("openclaw/plugin-sdk/reply-runtime"),
-      import("openclaw/plugin-sdk/system-event-runtime"),
+      import("sunclaw/plugin-sdk/reply-runtime"),
+      import("sunclaw/plugin-sdk/system-event-runtime"),
     ]);
     resetInboundDedupe();
     config = {

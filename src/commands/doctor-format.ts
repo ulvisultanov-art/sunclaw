@@ -63,14 +63,14 @@ export function buildGatewayRuntimeHints(
     return hints;
   }
   if (runtime.cachedLabel && platform === "darwin") {
-    const label = resolveGatewayLaunchAgentLabel(env.OPENCLAW_PROFILE);
+    const label = resolveGatewayLaunchAgentLabel(env.SUNCLAW_PROFILE);
     hints.push(
       `LaunchAgent label cached but plist missing. Clear with: launchctl bootout gui/$UID/${label}`,
     );
-    hints.push(`Then reinstall: ${formatCliCommand("openclaw gateway install", env)}`);
+    hints.push(`Then reinstall: ${formatCliCommand("sunclaw gateway install", env)}`);
   }
   if (runtime.missingUnit) {
-    hints.push(`Service not installed. Run: ${formatCliCommand("openclaw gateway install", env)}`);
+    hints.push(`Service not installed. Run: ${formatCliCommand("sunclaw gateway install", env)}`);
     if (fileLog) {
       hints.push(`File logs: ${fileLog}`);
     }
@@ -78,7 +78,7 @@ export function buildGatewayRuntimeHints(
   }
   if (runtime.missingSupervision && platform === "darwin") {
     hints.push(
-      `LaunchAgent installed but not loaded. Run: ${formatCliCommand("openclaw gateway restart", env)}`,
+      `LaunchAgent installed but not loaded. Run: ${formatCliCommand("sunclaw gateway restart", env)}`,
     );
     if (fileLog) {
       hints.push(`File logs: ${fileLog}`);
@@ -94,14 +94,14 @@ export function buildGatewayRuntimeHints(
       ...buildPlatformRuntimeLogHints({
         platform,
         env,
-        systemdServiceName: resolveGatewaySystemdServiceName(env.OPENCLAW_PROFILE),
-        windowsTaskName: resolveGatewayWindowsTaskName(env.OPENCLAW_PROFILE),
+        systemdServiceName: resolveGatewaySystemdServiceName(env.SUNCLAW_PROFILE),
+        windowsTaskName: resolveGatewayWindowsTaskName(env.SUNCLAW_PROFILE),
       }),
     );
   }
   if (platform === "linux" && isSystemdCgroupHygieneRisk(runtime.systemd)) {
     const unit =
-      runtime.systemd?.unit ?? `${resolveGatewaySystemdServiceName(env.OPENCLAW_PROFILE)}.service`;
+      runtime.systemd?.unit ?? `${resolveGatewaySystemdServiceName(env.SUNCLAW_PROFILE)}.service`;
     const summary = getSystemdCgroupHygieneSummary(runtime.systemd);
     if (summary) {
       hints.push(
@@ -109,7 +109,7 @@ export function buildGatewayRuntimeHints(
         "This usually means old helper or browser processes may still be attached to the gateway service.",
         `Run: systemctl --user show ${unit} -p KillMode -p TasksCurrent -p MemoryCurrent -p MainPID`,
         `Run: systemd-cgls --user-unit ${unit}`,
-        `After reviewing service settings, run: ${formatCliCommand("openclaw gateway restart", env)}`,
+        `After reviewing service settings, run: ${formatCliCommand("sunclaw gateway restart", env)}`,
       );
     }
   }

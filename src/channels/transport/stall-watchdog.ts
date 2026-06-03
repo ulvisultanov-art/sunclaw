@@ -1,4 +1,4 @@
-import { resolveTimerTimeoutMs } from "@openclaw/normalization-core/number-coercion";
+import { resolveTimerTimeoutMs } from "@sunclaw/normalization-core/number-coercion";
 import type { RuntimeEnv } from "../../runtime.js";
 
 export type StallWatchdogTimeoutMeta = {

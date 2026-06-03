@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
-import type { StreamFn } from "openclaw/plugin-sdk/agent-core";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
+import type { StreamFn } from "sunclaw/plugin-sdk/agent-core";
+import { formatErrorMessage } from "sunclaw/plugin-sdk/error-runtime";
 import type {
   AssistantMessage,
   StopReason,
@@ -9,31 +9,31 @@ import type {
   ToolCall,
   Tool,
   Usage,
-} from "openclaw/plugin-sdk/llm";
-import { createAssistantMessageEventStream, streamSimple } from "openclaw/plugin-sdk/llm";
+} from "sunclaw/plugin-sdk/llm";
+import { createAssistantMessageEventStream, streamSimple } from "sunclaw/plugin-sdk/llm";
 import type {
-  OpenClawConfig,
+  SunClawConfig,
   ProviderRuntimeModel,
   ProviderWrapStreamFnContext,
-} from "openclaw/plugin-sdk/plugin-entry";
-import { isNonSecretApiKeyMarker } from "openclaw/plugin-sdk/provider-auth";
+} from "sunclaw/plugin-sdk/plugin-entry";
+import { isNonSecretApiKeyMarker } from "sunclaw/plugin-sdk/provider-auth";
 import {
   DEFAULT_CONTEXT_TOKENS,
   normalizeProviderId,
-} from "openclaw/plugin-sdk/provider-model-shared";
+} from "sunclaw/plugin-sdk/provider-model-shared";
 import {
   createMoonshotThinkingWrapper,
   createPlainTextToolCallCompatWrapper,
   resolveMoonshotThinkingType,
   streamWithPayloadPatch,
-} from "openclaw/plugin-sdk/provider-stream-shared";
-import { createSubsystemLogger } from "openclaw/plugin-sdk/runtime-env";
-import { fetchWithSsrFGuard } from "openclaw/plugin-sdk/ssrf-runtime";
+} from "sunclaw/plugin-sdk/provider-stream-shared";
+import { createSubsystemLogger } from "sunclaw/plugin-sdk/runtime-env";
+import { fetchWithSsrFGuard } from "sunclaw/plugin-sdk/ssrf-runtime";
 import {
   isRecord,
   normalizeLowercaseStringOrEmpty,
   readStringValue,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { OLLAMA_DEFAULT_BASE_URL } from "./defaults.js";
 import { shouldWrapOllamaCompatMoonshotThinking } from "./model-behavior.js";
 import { normalizeOllamaWireModelId } from "./model-id.js";
@@ -153,7 +153,7 @@ export function resolveOllamaBaseUrlForRun(params: {
 }
 
 export function resolveConfiguredOllamaProviderConfig(params: {
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   providerId?: string;
 }) {
   const providerId = params.providerId?.trim();
@@ -213,7 +213,7 @@ export function isOllamaCompatProvider(model: {
 }
 
 export function resolveOllamaCompatNumCtxEnabled(params: {
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   providerId?: string;
 }): boolean {
   return resolveConfiguredOllamaProviderConfig(params)?.injectNumCtxForOpenAICompat ?? true;
@@ -221,7 +221,7 @@ export function resolveOllamaCompatNumCtxEnabled(params: {
 
 export function shouldInjectOllamaCompatNumCtx(params: {
   model: { api?: string; provider?: string; baseUrl?: string };
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   providerId?: string;
 }): boolean {
   if (params.model.api !== "openai-completions") {

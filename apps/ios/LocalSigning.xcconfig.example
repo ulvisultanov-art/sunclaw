@@ -1,17 +1,17 @@
 // Copy to LocalSigning.xcconfig for personal local signing overrides.
 // This file is only an example and should stay committed.
 
-OPENCLAW_CODE_SIGN_STYLE = Automatic
-OPENCLAW_DEVELOPMENT_TEAM = YOUR_TEAM_ID
+SUNCLAW_CODE_SIGN_STYLE = Automatic
+SUNCLAW_DEVELOPMENT_TEAM = YOUR_TEAM_ID
 
-OPENCLAW_APP_BUNDLE_ID = ai.openclaw.client
-OPENCLAW_SHARE_BUNDLE_ID = ai.openclaw.client.share
-OPENCLAW_ACTIVITY_WIDGET_BUNDLE_ID = ai.openclaw.client.activitywidget
-OPENCLAW_WATCH_APP_BUNDLE_ID = ai.openclaw.client.watchkitapp
-OPENCLAW_WATCH_EXTENSION_BUNDLE_ID = ai.openclaw.client.watchkitapp.extension
+SUNCLAW_APP_BUNDLE_ID = ai.sunclaw.client
+SUNCLAW_SHARE_BUNDLE_ID = ai.sunclaw.client.share
+SUNCLAW_ACTIVITY_WIDGET_BUNDLE_ID = ai.sunclaw.client.activitywidget
+SUNCLAW_WATCH_APP_BUNDLE_ID = ai.sunclaw.client.watchkitapp
+SUNCLAW_WATCH_EXTENSION_BUNDLE_ID = ai.sunclaw.client.watchkitapp.extension
 
 // Leave empty with automatic signing.
-OPENCLAW_APP_PROFILE =
-OPENCLAW_SHARE_PROFILE =
-OPENCLAW_WATCH_APP_PROFILE =
-OPENCLAW_WATCH_EXTENSION_PROFILE =
+SUNCLAW_APP_PROFILE =
+SUNCLAW_SHARE_PROFILE =
+SUNCLAW_WATCH_APP_PROFILE =
+SUNCLAW_WATCH_EXTENSION_PROFILE =

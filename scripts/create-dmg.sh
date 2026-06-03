@@ -73,7 +73,7 @@ for vol in "/Volumes/$DMG_VOLUME_NAME"* "/Volumes/$APP_NAME"*; do
   fi
 done
 
-DMG_TEMP="$(mktemp -d "${TMPDIR:-/tmp}/openclaw-dmg.XXXXXX")"
+DMG_TEMP="$(mktemp -d "${TMPDIR:-/tmp}/sunclaw-dmg.XXXXXX")"
 trap 'hdiutil detach "/Volumes/'"$DMG_VOLUME_NAME"'" -force 2>/dev/null || true; rm -rf "$DMG_TEMP" 2>/dev/null || true' EXIT
 
 cp -R "$APP_PATH" "$DMG_TEMP/"
@@ -111,7 +111,7 @@ if [[ "${SKIP_DMG_STYLE:-0}" != "1" ]]; then
   fi
 
   # Volume icon: reuse the app icon if available.
-  ICON_SRC="$ROOT_DIR/apps/macos/Sources/OpenClaw/Resources/OpenClaw.icns"
+  ICON_SRC="$ROOT_DIR/apps/macos/Sources/SunClaw/Resources/SunClaw.icns"
   if [[ -f "$ICON_SRC" ]]; then
     cp "$ICON_SRC" "$MOUNT_POINT/.VolumeIcon.icns"
     if command -v SetFile >/dev/null 2>&1; then

@@ -1,8 +1,8 @@
-import { maxBytesForKind } from "@openclaw/media-core/constants";
-import { extensionForMime } from "@openclaw/media-core/mime";
-import { readResponseWithLimit } from "@openclaw/media-core/read-response-with-limit";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { maxBytesForKind } from "@sunclaw/media-core/constants";
+import { extensionForMime } from "@sunclaw/media-core/mime";
+import { readResponseWithLimit } from "@sunclaw/media-core/read-response-with-limit";
+import { isRecord } from "@sunclaw/normalization-core/record-coerce";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
 import { fetchProviderDownloadResponse } from "../media-understanding/shared.js";
 import type { GeneratedMusicAsset } from "./types.js";
 

@@ -1,12 +1,12 @@
 import { createHash } from "node:crypto";
-import { normalizeAccountId as normalizeSharedAccountId } from "openclaw/plugin-sdk/account-id";
+import { normalizeAccountId as normalizeSharedAccountId } from "sunclaw/plugin-sdk/account-id";
 import {
   MAX_DATE_TIMESTAMP_MS,
   resolveDateTimestampMs,
   resolveTimestampMsToIsoString,
-} from "openclaw/plugin-sdk/number-runtime";
-import { normalizeProviderId } from "openclaw/plugin-sdk/provider-model-shared";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/number-runtime";
+import { normalizeProviderId } from "sunclaw/plugin-sdk/provider-model-shared";
+import { normalizeOptionalString } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { getDiscordRuntime } from "../runtime.js";
 
 const DEFAULT_RECENT_LIMIT = 5;

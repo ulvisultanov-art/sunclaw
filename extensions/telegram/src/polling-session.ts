@@ -1,22 +1,22 @@
 import { type RunOptions, run } from "@grammyjs/runner";
-import type { ChannelAccountSnapshot } from "openclaw/plugin-sdk/channel-contract";
-import type { TelegramNetworkConfig } from "openclaw/plugin-sdk/config-contracts";
-import { drainPendingDeliveries } from "openclaw/plugin-sdk/delivery-queue-runtime";
+import type { ChannelAccountSnapshot } from "sunclaw/plugin-sdk/channel-contract";
+import type { TelegramNetworkConfig } from "sunclaw/plugin-sdk/config-contracts";
+import { drainPendingDeliveries } from "sunclaw/plugin-sdk/delivery-queue-runtime";
 import {
   collectErrorGraphCandidates,
   formatErrorMessage,
   readErrorName,
-} from "openclaw/plugin-sdk/error-runtime";
+} from "sunclaw/plugin-sdk/error-runtime";
 import {
   clampPositiveTimerTimeoutMs,
   resolvePositiveTimerTimeoutMs,
-} from "openclaw/plugin-sdk/number-runtime";
+} from "sunclaw/plugin-sdk/number-runtime";
 import {
   computeBackoff,
   formatDurationPrecise,
   sleepWithAbort,
-} from "openclaw/plugin-sdk/runtime-env";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/runtime-env";
+import { normalizeLowercaseStringOrEmpty } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { withTelegramApiErrorLogging } from "./api-logging.js";
 import { createTelegramBot } from "./bot.js";
 import type { TelegramTransport } from "./fetch.js";
@@ -63,7 +63,7 @@ const POLL_WATCHDOG_INTERVAL_MS = 30_000;
 const POLL_STOP_GRACE_MS = 15_000;
 const ISOLATED_INGRESS_BACKLOG_STALL_MS = 25 * 60_000;
 const TELEGRAM_SPOOLED_HANDLER_ABORT_GRACE_MS = 5_000;
-const TELEGRAM_SPOOLED_HANDLER_TIMEOUT_ENV = "OPENCLAW_TELEGRAM_SPOOLED_HANDLER_TIMEOUT_MS";
+const TELEGRAM_SPOOLED_HANDLER_TIMEOUT_ENV = "SUNCLAW_TELEGRAM_SPOOLED_HANDLER_TIMEOUT_MS";
 const TELEGRAM_SPOOLED_DRAIN_START_LIMIT = 100;
 const TELEGRAM_SPOOLED_DRAIN_SCAN_LIMIT = TELEGRAM_SPOOLED_DRAIN_START_LIMIT * 10;
 const TELEGRAM_POLLING_CLIENT_TIMEOUT_FLOOR_SECONDS = Math.ceil(
@@ -315,7 +315,7 @@ export class TelegramPollingSession {
     } finally {
       // Release the transport's dispatchers on session shutdown. Without
       // this, the undici keep-alive sockets survive beyond the session and
-      // leak to api.telegram.org; see openclaw#68128.
+      // leak to api.telegram.org; see sunclaw#68128.
       await this.#transportState.dispose();
       this.#status.notePollingStop();
     }
@@ -1114,7 +1114,7 @@ export class TelegramPollingSession {
       const reason = isConflict ? "getUpdates conflict" : "network error";
       const errMsg = formatErrorMessage(err);
       const conflictHint = isConflict
-        ? " Another OpenClaw gateway, script, or Telegram poller may be using this bot token; stop the duplicate poller or switch this account to webhook mode."
+        ? " Another SunClaw gateway, script, or Telegram poller may be using this bot token; stop the duplicate poller or switch this account to webhook mode."
         : "";
       this.opts.log(
         `[telegram][diag] polling cycle error reason=${reason} ${liveness.formatDiagnosticFields("lastGetUpdatesError")} err=${errMsg}${conflictHint}`,

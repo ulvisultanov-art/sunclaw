@@ -433,10 +433,10 @@ describe("buildTailscaleHttpsUrl", () => {
       buildTailscaleHttpsUrl({
         tailscaleMode: "serve",
         tailscaleDns: "node.tailnet.ts.net",
-        serviceName: "svc:openclaw",
+        serviceName: "svc:sunclaw",
         controlUiBasePath: "/control",
       }),
-    ).toBe("https://openclaw.tailnet.ts.net/control");
+    ).toBe("https://sunclaw.tailnet.ts.net/control");
   });
 
   it("does not advertise a node-IP URL for named Services", () => {
@@ -444,7 +444,7 @@ describe("buildTailscaleHttpsUrl", () => {
       buildTailscaleHttpsUrl({
         tailscaleMode: "serve",
         tailscaleDns: "100.64.0.8",
-        serviceName: "svc:openclaw",
+        serviceName: "svc:sunclaw",
       }),
     ).toBeNull();
   });
@@ -467,7 +467,7 @@ describe("resolveSharedMemoryStatusSnapshot", () => {
     };
     const resolveMemoryConfig = vi.fn(() => null);
     const getMemorySearchManager = vi.fn(async () => ({ manager }));
-    const requireDefaultStore = vi.fn(() => `/tmp/openclaw-missing-memory-${process.pid}.sqlite`);
+    const requireDefaultStore = vi.fn(() => `/tmp/sunclaw-missing-memory-${process.pid}.sqlite`);
 
     const result = await resolveSharedMemoryStatusSnapshot({
       cfg: {
@@ -558,7 +558,7 @@ describe("resolveSharedMemoryStatusSnapshot", () => {
       memoryPlugin: { enabled: true, slot: "memory-core" },
       resolveMemoryConfig,
       getMemorySearchManager,
-      requireDefaultStore: () => `/tmp/openclaw-missing-memory-${process.pid}.sqlite`,
+      requireDefaultStore: () => `/tmp/sunclaw-missing-memory-${process.pid}.sqlite`,
     });
 
     expect(result).toBeNull();

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import {
   listOpenAIAuthProfileProvidersForAgentRuntime,
   modelSelectionShouldEnsureCodexPlugin,
@@ -15,7 +15,7 @@ describe("OpenAI runtime routing policy", () => {
     expect(
       modelSelectionShouldEnsureCodexPlugin({
         model: "openai/gpt-5.5",
-        config: {} as OpenClawConfig,
+        config: {} as SunClawConfig,
       }),
     ).toBe(true);
   });
@@ -30,7 +30,7 @@ describe("OpenAI runtime routing policy", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies SunClawConfig;
 
     expect(openAIProviderUsesCodexRuntimeByDefault({ provider: "openai", config })).toBe(false);
     expect(modelSelectionShouldEnsureCodexPlugin({ model: "openai/gpt-5.5", config })).toBe(false);
@@ -53,7 +53,7 @@ describe("OpenAI runtime routing policy", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies SunClawConfig;
 
     expect(openAIProviderUsesCodexRuntimeByDefault({ provider: "openai", config })).toBe(false);
     expect(modelSelectionShouldEnsureCodexPlugin({ model: "openai/gpt-5.5", config })).toBe(false);
@@ -78,7 +78,7 @@ describe("OpenAI runtime routing policy", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies SunClawConfig;
 
     expect(
       resolveContextConfigProviderForRuntime({
@@ -89,17 +89,17 @@ describe("OpenAI runtime routing policy", () => {
     ).toBe("openai");
   });
 
-  it("keeps explicit OpenClaw plus Codex auth profile under the unified OpenAI provider", () => {
+  it("keeps explicit SunClaw plus Codex auth profile under the unified OpenAI provider", () => {
     expect(
       listOpenAIAuthProfileProvidersForAgentRuntime({
         provider: "openai",
-        harnessRuntime: "openclaw",
+        harnessRuntime: "sunclaw",
       }),
     ).toEqual(["openai"]);
     expect(
       resolveOpenAIRuntimeProvider({
         provider: "openai",
-        harnessRuntime: "openclaw",
+        harnessRuntime: "sunclaw",
         authProfileProvider: "openai",
         authProfileId: "openai:work",
       }),
@@ -113,26 +113,26 @@ describe("OpenAI runtime routing policy", () => {
           openai: ["openai:work", "openai:backup"],
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies SunClawConfig;
 
     expect(
       listOpenAIAuthProfileProvidersForAgentRuntime({
         provider: "openai",
-        harnessRuntime: "openclaw",
+        harnessRuntime: "sunclaw",
         config,
       }),
     ).toEqual(["openai"]);
     expect(
       resolveSelectedOpenAIRuntimeProvider({
         provider: "openai",
-        harnessRuntime: "openclaw",
+        harnessRuntime: "sunclaw",
         config,
       }),
     ).toBe("openai");
     expect(
       resolveOpenAIRuntimeProvider({
         provider: "openai",
-        harnessRuntime: "openclaw",
+        harnessRuntime: "sunclaw",
         config,
       }),
     ).toBe("openai");
@@ -145,43 +145,43 @@ describe("OpenAI runtime routing policy", () => {
           openai: ["openai:work", "openai:backup"],
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies SunClawConfig;
 
     expect(
       listOpenAIAuthProfileProvidersForAgentRuntime({
         provider: "openai",
-        harnessRuntime: "openclaw",
+        harnessRuntime: "sunclaw",
         config,
       }),
     ).toEqual(["openai"]);
   });
 
-  it("keeps explicit OpenAI OpenClaw API-key auth order ahead of Codex backups", () => {
+  it("keeps explicit OpenAI SunClaw API-key auth order ahead of Codex backups", () => {
     const config = {
       auth: {
         order: {
           openai: ["openai:backup", "openai:work"],
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies SunClawConfig;
 
     expect(
       listOpenAIAuthProfileProvidersForAgentRuntime({
         provider: "openai",
-        harnessRuntime: "openclaw",
+        harnessRuntime: "sunclaw",
         config,
       }),
     ).toEqual(["openai"]);
     expect(
       resolveSelectedOpenAIRuntimeProvider({
         provider: "openai",
-        harnessRuntime: "openclaw",
+        harnessRuntime: "sunclaw",
         config,
       }),
     ).toBe("openai");
   });
 
-  it("does not route custom OpenAI-compatible OpenClaw configs through Codex auth order", () => {
+  it("does not route custom OpenAI-compatible SunClaw configs through Codex auth order", () => {
     const config = {
       models: {
         providers: {
@@ -196,19 +196,19 @@ describe("OpenAI runtime routing policy", () => {
           openai: ["openai:work", "openai:backup"],
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies SunClawConfig;
 
     expect(
       listOpenAIAuthProfileProvidersForAgentRuntime({
         provider: "openai",
-        harnessRuntime: "openclaw",
+        harnessRuntime: "sunclaw",
         config,
       }),
     ).toEqual(["openai"]);
     expect(
       resolveSelectedOpenAIRuntimeProvider({
         provider: "openai",
-        harnessRuntime: "openclaw",
+        harnessRuntime: "sunclaw",
         config,
       }),
     ).toBe("openai");

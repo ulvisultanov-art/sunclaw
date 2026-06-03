@@ -1,6 +1,6 @@
-import { DEFAULT_ACCOUNT_ID } from "openclaw/plugin-sdk/account-id";
+import { DEFAULT_ACCOUNT_ID } from "sunclaw/plugin-sdk/account-id";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../runtime-api.js";
+import type { SunClawConfig } from "../runtime-api.js";
 import {
   getZcaUserInfo,
   listEnabledZalouserAccounts,
@@ -21,8 +21,8 @@ const mockGetUserInfo = vi.mocked(getZaloUserInfo);
 const originalZalouserProfile = process.env.ZALOUSER_PROFILE;
 const originalZcaProfile = process.env.ZCA_PROFILE;
 
-function asConfig(value: unknown): OpenClawConfig {
-  return value as OpenClawConfig;
+function asConfig(value: unknown): SunClawConfig {
+  return value as SunClawConfig;
 }
 
 describe("zalouser account resolution", () => {

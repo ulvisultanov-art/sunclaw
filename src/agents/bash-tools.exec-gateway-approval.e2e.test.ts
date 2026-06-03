@@ -18,17 +18,17 @@ import { createExecTool } from "./bash-tools.exec.js";
 
 const TEST_ENV_KEYS = [
   "HOME",
-  "OPENCLAW_STATE_DIR",
-  "OPENCLAW_CONFIG_PATH",
-  "OPENCLAW_GATEWAY_TOKEN",
-  "OPENCLAW_GATEWAY_PORT",
-  "OPENCLAW_SKIP_CHANNELS",
-  "OPENCLAW_SKIP_GMAIL_WATCHER",
-  "OPENCLAW_SKIP_CRON",
-  "OPENCLAW_SKIP_CANVAS_HOST",
-  "OPENCLAW_SKIP_BROWSER_CONTROL_SERVER",
-  "OPENCLAW_SKIP_PROVIDERS",
-  "OPENCLAW_TEST_MINIMAL_GATEWAY",
+  "SUNCLAW_STATE_DIR",
+  "SUNCLAW_CONFIG_PATH",
+  "SUNCLAW_GATEWAY_TOKEN",
+  "SUNCLAW_GATEWAY_PORT",
+  "SUNCLAW_SKIP_CHANNELS",
+  "SUNCLAW_SKIP_GMAIL_WATCHER",
+  "SUNCLAW_SKIP_CRON",
+  "SUNCLAW_SKIP_CANVAS_HOST",
+  "SUNCLAW_SKIP_BROWSER_CONTROL_SERVER",
+  "SUNCLAW_SKIP_PROVIDERS",
+  "SUNCLAW_TEST_MINIMAL_GATEWAY",
 ];
 
 type Cleanup = () => Promise<void> | void;
@@ -60,20 +60,20 @@ describe("gateway-hosted exec approvals", () => {
     clearSessionStoreCacheForTest();
   });
 
-  it("lets OpenClaw-style gateway tool calls request and wait for approval over separate connections", async () => {
+  it("lets SunClaw-style gateway tool calls request and wait for approval over separate connections", async () => {
     const envSnapshot = captureEnv(TEST_ENV_KEYS);
     cleanup.push(() => envSnapshot.restore());
 
-    const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-exec-approval-e2e-"));
+    const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-exec-approval-e2e-"));
     cleanup.push(() => fs.rm(tempHome, { recursive: true, force: true, maxRetries: 5 }));
 
-    const stateDir = path.join(tempHome, ".openclaw");
+    const stateDir = path.join(tempHome, ".sunclaw");
     const workspaceDir = path.join(tempHome, "workspace");
     await fs.mkdir(workspaceDir, { recursive: true });
 
     const port = await getFreeGatewayPort();
     const token = "exec-approval-e2e-token";
-    const configPath = path.join(stateDir, "openclaw.json");
+    const configPath = path.join(stateDir, "sunclaw.json");
     await fs.mkdir(stateDir, { recursive: true });
     await fs.writeFile(
       configPath,
@@ -98,17 +98,17 @@ describe("gateway-hosted exec approvals", () => {
     );
 
     process.env.HOME = tempHome;
-    process.env.OPENCLAW_STATE_DIR = stateDir;
-    process.env.OPENCLAW_CONFIG_PATH = configPath;
-    process.env.OPENCLAW_GATEWAY_TOKEN = token;
-    process.env.OPENCLAW_GATEWAY_PORT = String(port);
-    process.env.OPENCLAW_SKIP_CHANNELS = "1";
-    process.env.OPENCLAW_SKIP_GMAIL_WATCHER = "1";
-    process.env.OPENCLAW_SKIP_CRON = "1";
-    process.env.OPENCLAW_SKIP_CANVAS_HOST = "1";
-    process.env.OPENCLAW_SKIP_BROWSER_CONTROL_SERVER = "1";
-    process.env.OPENCLAW_SKIP_PROVIDERS = "1";
-    process.env.OPENCLAW_TEST_MINIMAL_GATEWAY = "1";
+    process.env.SUNCLAW_STATE_DIR = stateDir;
+    process.env.SUNCLAW_CONFIG_PATH = configPath;
+    process.env.SUNCLAW_GATEWAY_TOKEN = token;
+    process.env.SUNCLAW_GATEWAY_PORT = String(port);
+    process.env.SUNCLAW_SKIP_CHANNELS = "1";
+    process.env.SUNCLAW_SKIP_GMAIL_WATCHER = "1";
+    process.env.SUNCLAW_SKIP_CRON = "1";
+    process.env.SUNCLAW_SKIP_CANVAS_HOST = "1";
+    process.env.SUNCLAW_SKIP_BROWSER_CONTROL_SERVER = "1";
+    process.env.SUNCLAW_SKIP_PROVIDERS = "1";
+    process.env.SUNCLAW_TEST_MINIMAL_GATEWAY = "1";
     clearRuntimeConfigSnapshot();
     clearConfigCache();
     clearSessionStoreCacheForTest();

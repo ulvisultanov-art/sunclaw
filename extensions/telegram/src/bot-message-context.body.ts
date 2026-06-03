@@ -7,25 +7,25 @@ import {
   resolveInboundMentionDecision,
   type BuildMentionRegexesOptions,
   type NormalizedLocation,
-} from "openclaw/plugin-sdk/channel-inbound";
-import { resolveChannelGroupPolicy } from "openclaw/plugin-sdk/channel-policy";
-import { hasControlCommand } from "openclaw/plugin-sdk/command-detection";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+} from "sunclaw/plugin-sdk/channel-inbound";
+import { resolveChannelGroupPolicy } from "sunclaw/plugin-sdk/channel-policy";
+import { hasControlCommand } from "sunclaw/plugin-sdk/command-detection";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
 import type {
   TelegramDirectConfig,
   TelegramGroupConfig,
   TelegramTopicConfig,
-} from "openclaw/plugin-sdk/config-contracts";
+} from "sunclaw/plugin-sdk/config-contracts";
 import {
   createInternalHookEvent,
   fireAndForgetHook,
   toInternalMessageReceivedContext,
   triggerInternalHook,
-} from "openclaw/plugin-sdk/hook-runtime";
-import { createChannelHistoryWindow, type HistoryEntry } from "openclaw/plugin-sdk/reply-history";
-import type { MsgContext } from "openclaw/plugin-sdk/reply-runtime";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { normalizeOptionalLowercaseString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/hook-runtime";
+import { createChannelHistoryWindow, type HistoryEntry } from "sunclaw/plugin-sdk/reply-history";
+import type { MsgContext } from "sunclaw/plugin-sdk/reply-runtime";
+import { logVerbose } from "sunclaw/plugin-sdk/runtime-env";
+import { normalizeOptionalLowercaseString } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import type { NormalizedAllowFrom } from "./bot-access.js";
 import type {
   TelegramLogger,
@@ -119,7 +119,7 @@ function formatSavedMediaPlaceholder(allMedia: TelegramMediaRef[]): string | und
 }
 
 async function resolveStickerVisionSupport(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   agentId?: string;
 }): Promise<boolean> {
   try {
@@ -131,7 +131,7 @@ async function resolveStickerVisionSupport(params: {
 }
 
 export async function resolveTelegramInboundBody(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   primaryCtx: TelegramContext;
   msg: TelegramContext["message"];
   allMedia: TelegramMediaRef[];

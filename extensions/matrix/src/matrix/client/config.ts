@@ -1,12 +1,12 @@
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { resolveOptionalIntegerOption } from "openclaw/plugin-sdk/number-runtime";
-import { requireRuntimeConfig } from "openclaw/plugin-sdk/plugin-config-runtime";
-import { retryAsync } from "openclaw/plugin-sdk/retry-runtime";
+import { formatErrorMessage } from "sunclaw/plugin-sdk/error-runtime";
+import { resolveOptionalIntegerOption } from "sunclaw/plugin-sdk/number-runtime";
+import { requireRuntimeConfig } from "sunclaw/plugin-sdk/plugin-config-runtime";
+import { retryAsync } from "sunclaw/plugin-sdk/retry-runtime";
 import {
   coerceSecretRef,
   normalizeResolvedSecretInputString,
-} from "openclaw/plugin-sdk/secret-input-runtime";
-import type { PinnedDispatcherPolicy } from "openclaw/plugin-sdk/ssrf-dispatcher";
+} from "sunclaw/plugin-sdk/secret-input-runtime";
+import type { PinnedDispatcherPolicy } from "sunclaw/plugin-sdk/ssrf-dispatcher";
 import {
   requiresExplicitMatrixDefaultAccount,
   resolveMatrixDefaultOrOnlyAccountId,
@@ -737,7 +737,7 @@ export async function resolveMatrixAuth(params?: {
       identifier: { type: "m.id.user", user: resolved.userId },
       password,
       device_id: resolved.deviceId,
-      initial_device_display_name: resolved.deviceName ?? "OpenClaw Gateway",
+      initial_device_display_name: resolved.deviceName ?? "SunClaw Gateway",
     })) as {
       access_token?: string;
       user_id?: string;

@@ -1,5 +1,5 @@
-import { logDebug } from "openclaw/plugin-sdk/logging-core";
-import { logVerbose, shouldLogVerbose } from "openclaw/plugin-sdk/runtime-env";
+import { logDebug } from "sunclaw/plugin-sdk/logging-core";
+import { logVerbose, shouldLogVerbose } from "sunclaw/plugin-sdk/runtime-env";
 import type { DiscordChannelConfigResolved } from "./allow-list.js";
 
 export function logDiscordPreflightChannelConfig(params: {

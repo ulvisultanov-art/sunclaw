@@ -1,11 +1,11 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import type { StreamFn } from "openclaw/plugin-sdk/agent-core";
-import type { Context, Model } from "openclaw/plugin-sdk/llm";
+import type { StreamFn } from "sunclaw/plugin-sdk/agent-core";
+import type { Context, Model } from "sunclaw/plugin-sdk/llm";
 import {
   registerProviderPlugin,
   requireRegisteredProvider,
-} from "openclaw/plugin-sdk/plugin-test-runtime";
+} from "sunclaw/plugin-sdk/plugin-test-runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { registerMinimaxProviders } from "./provider-registration.js";
 import { createMiniMaxWebSearchProvider } from "./src/minimax-web-search-provider.js";
@@ -33,7 +33,7 @@ afterEach(() => {
 describe("minimax provider hooks", () => {
   it("declares CN provider auth aliases in the manifest", () => {
     const pluginJson = JSON.parse(
-      readFileSync(resolve(import.meta.dirname, "openclaw.plugin.json"), "utf-8"),
+      readFileSync(resolve(import.meta.dirname, "sunclaw.plugin.json"), "utf-8"),
     );
 
     expect(pluginJson.providerAuthAliases).toEqual({

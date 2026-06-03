@@ -1,5 +1,5 @@
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { isRecord } from "@sunclaw/normalization-core/record-coerce";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
 import {
   ErrorCodes,
   errorShape,

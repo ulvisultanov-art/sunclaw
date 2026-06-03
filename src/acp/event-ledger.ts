@@ -2,15 +2,15 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import type { DatabaseSync } from "node:sqlite";
 import type { ContentBlock, SessionUpdate } from "@agentclientprotocol/sdk";
-import { resolveIntegerOption } from "@openclaw/acp-core/numeric-options";
+import { resolveIntegerOption } from "@sunclaw/acp-core/numeric-options";
 import { resolveStateDir } from "../config/paths.js";
 import { withFileLock } from "../infra/file-lock.js";
 import { readJsonFile, writeTextAtomic } from "../infra/json-files.js";
 import {
-  openOpenClawStateDatabase,
-  type OpenClawStateDatabaseOptions,
-  runOpenClawStateWriteTransaction,
-} from "../state/openclaw-state-db.js";
+  openSunClawStateDatabase,
+  type SunClawStateDatabaseOptions,
+  runSunClawStateWriteTransaction,
+} from "../state/sunclaw-state-db.js";
 import { isRecord } from "../utils.js";
 
 const LEDGER_VERSION = 1;
@@ -503,7 +503,7 @@ export function createFileAcpEventLedger(
 }
 
 export async function migrateFileAcpEventLedgerToSqlite(
-  params: { filePath: string; archiveSource?: boolean } & OpenClawStateDatabaseOptions,
+  params: { filePath: string; archiveSource?: boolean } & SunClawStateDatabaseOptions,
 ): Promise<{ importedSessions: number; importedEvents: number; archived?: boolean }> {
   if (!(await fileExists(params.filePath))) {
     return { importedSessions: 0, importedEvents: 0 };
@@ -519,7 +519,7 @@ export async function migrateFileAcpEventLedgerToSqlite(
 
   let importedSessions = 0;
   let importedEvents = 0;
-  runOpenClawStateWriteTransaction((database) => {
+  runSunClawStateWriteTransaction((database) => {
     const sessionExists = database.db.prepare(
       "SELECT 1 FROM acp_replay_sessions WHERE session_id = ?",
     );
@@ -882,7 +882,7 @@ function buildSqliteReplay(session: LedgerSession | undefined): AcpEventLedgerRe
 }
 
 export function createSqliteAcpEventLedger(
-  params: OpenClawStateDatabaseOptions & LedgerOptions = {},
+  params: SunClawStateDatabaseOptions & LedgerOptions = {},
 ): AcpEventLedger {
   const normalized = normalizeLedgerOptions(params);
   const dbOptions = { env: params.env, path: params.path };
@@ -890,8 +890,8 @@ export function createSqliteAcpEventLedger(
     ...normalized,
   };
   const mutate = (fn: (db: DatabaseSync) => void) =>
-    runOpenClawStateWriteTransaction((database) => fn(database.db), dbOptions);
-  const read = <T>(fn: (db: DatabaseSync) => T): T => fn(openOpenClawStateDatabase(dbOptions).db);
+    runSunClawStateWriteTransaction((database) => fn(database.db), dbOptions);
+  const read = <T>(fn: (db: DatabaseSync) => T): T => fn(openSunClawStateDatabase(dbOptions).db);
 
   return {
     async startSession(sessionParams) {

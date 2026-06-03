@@ -1,7 +1,7 @@
 import crypto from "node:crypto";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
 import type { GatewayAuthConfig, GatewayTailscaleConfig } from "../config/types.gateway.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import {
   hasConfiguredGatewayAuthSecretInput,
   resolveGatewayPasswordSecretRefValue,
@@ -19,7 +19,7 @@ import { assertGatewayAuthNotKnownWeak } from "./known-weak-gateway-secrets.js";
 export { assertGatewayAuthNotKnownWeak } from "./known-weak-gateway-secrets.js";
 
 const HOOKS_GATEWAY_AUTH_REUSE_WARNING =
-  "Security warning: hooks.token matches active Gateway shared-secret auth. Startup continues for compatibility; rotate hooks.token or Gateway auth. Run openclaw security audit for a full report, and run openclaw doctor --fix when the reused hooks.token is persisted in config.";
+  "Security warning: hooks.token matches active Gateway shared-secret auth. Startup continues for compatibility; rotate hooks.token or Gateway auth. Run sunclaw security audit for a full report, and run sunclaw doctor --fix when the reused hooks.token is persisted in config.";
 
 /** Merge sparse runtime auth overrides into persisted Gateway auth config. */
 export function mergeGatewayAuthConfig(
@@ -76,7 +76,7 @@ export function mergeGatewayTailscaleConfig(
 }
 
 function resolveGatewayAuthFromConfig(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   env: NodeJS.ProcessEnv;
   authOverride?: GatewayAuthConfig;
   tailscaleOverride?: GatewayTailscaleConfig;
@@ -104,7 +104,7 @@ function findActiveGatewaySharedSecret(auth: ResolvedGatewayAuth): string {
 }
 
 function warnHooksTokenReuseGatewayAuth(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   auth: ResolvedGatewayAuth;
   warn?: (message: string) => void;
 }): void {
@@ -120,11 +120,11 @@ function warnHooksTokenReuseGatewayAuth(params: {
 
 /** Check every source that can satisfy token auth before startup generates one. */
 function hasGatewayTokenCandidate(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   env: NodeJS.ProcessEnv;
   authOverride?: GatewayAuthConfig;
 }): boolean {
-  const envToken = trimToUndefined(params.env.OPENCLAW_GATEWAY_TOKEN);
+  const envToken = trimToUndefined(params.env.SUNCLAW_GATEWAY_TOKEN);
   if (envToken) {
     return true;
   }
@@ -158,7 +158,7 @@ function hasGatewayPasswordOverrideCandidate(params: {
 
 /** Ensure startup has effective Gateway auth, generating only an ephemeral token if needed. */
 export async function ensureGatewayStartupAuth(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   env?: NodeJS.ProcessEnv;
   authOverride?: GatewayAuthConfig;
   tailscaleOverride?: GatewayTailscaleConfig;
@@ -170,7 +170,7 @@ export async function ensureGatewayStartupAuth(params: {
   persist?: boolean;
   baseHash?: string;
 }): Promise<{
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   auth: ReturnType<typeof resolveGatewayAuth>;
   generatedToken?: string;
   persistedGeneratedToken: boolean;
@@ -228,7 +228,7 @@ export async function ensureGatewayStartupAuth(params: {
   }
 
   const generatedToken = crypto.randomBytes(24).toString("hex");
-  const nextCfg: OpenClawConfig = {
+  const nextCfg: SunClawConfig = {
     ...params.cfg,
     gateway: {
       ...params.cfg.gateway,

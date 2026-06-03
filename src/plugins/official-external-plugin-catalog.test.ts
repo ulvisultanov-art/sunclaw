@@ -18,34 +18,34 @@ function expectCatalogEntry(id: string): OfficialExternalPluginCatalogEntry {
 describe("official external plugin catalog", () => {
   it("resolves third-party channel lookup aliases to published plugin ids", () => {
     const wecomByChannel = expectCatalogEntry("wecom");
-    const wecomByPlugin = expectCatalogEntry("wecom-openclaw-plugin");
+    const wecomByPlugin = expectCatalogEntry("wecom-sunclaw-plugin");
     const yuanbaoByChannel = expectCatalogEntry("yuanbao");
 
-    expect(resolveOfficialExternalPluginId(wecomByChannel)).toBe("wecom-openclaw-plugin");
-    expect(resolveOfficialExternalPluginId(wecomByPlugin)).toBe("wecom-openclaw-plugin");
+    expect(resolveOfficialExternalPluginId(wecomByChannel)).toBe("wecom-sunclaw-plugin");
+    expect(resolveOfficialExternalPluginId(wecomByPlugin)).toBe("wecom-sunclaw-plugin");
     expect(resolveOfficialExternalPluginInstall(wecomByChannel)?.npmSpec).toBe(
-      "@wecom/wecom-openclaw-plugin@2026.5.7",
+      "@wecom/wecom-sunclaw-plugin@2026.5.7",
     );
-    expect(resolveOfficialExternalPluginId(yuanbaoByChannel)).toBe("openclaw-plugin-yuanbao");
+    expect(resolveOfficialExternalPluginId(yuanbaoByChannel)).toBe("sunclaw-plugin-yuanbao");
     expect(resolveOfficialExternalPluginInstall(yuanbaoByChannel)?.npmSpec).toBe(
-      "openclaw-plugin-yuanbao@2.13.1",
+      "sunclaw-plugin-yuanbao@2.13.1",
     );
   });
 
   it("keeps official launch package specs on the production package names", () => {
     expect(resolveOfficialExternalPluginInstall(expectCatalogEntry("acpx"))?.npmSpec).toBe(
-      "@openclaw/acpx",
+      "@sunclaw/acpx",
     );
     expect(resolveOfficialExternalPluginInstall(expectCatalogEntry("googlechat"))?.npmSpec).toBe(
-      "@openclaw/googlechat",
+      "@sunclaw/googlechat",
     );
     expect(resolveOfficialExternalPluginInstall(expectCatalogEntry("line"))?.npmSpec).toBe(
-      "@openclaw/line",
+      "@sunclaw/line",
     );
     expect(resolveOfficialExternalPluginInstall(expectCatalogEntry("diffs-language-pack"))).toEqual(
       {
-        npmSpec: "@openclaw/diffs-language-pack",
-        clawhubSpec: "clawhub:@openclaw/diffs-language-pack",
+        npmSpec: "@sunclaw/diffs-language-pack",
+        clawhubSpec: "clawhub:@sunclaw/diffs-language-pack",
         defaultChoice: "npm",
         minHostVersion: ">=2026.5.27",
       },
@@ -54,15 +54,15 @@ describe("official external plugin catalog", () => {
 
   it("allows invalid-config recovery for externalized stock plugins", () => {
     expect(resolveOfficialExternalPluginInstall(expectCatalogEntry("brave"))).toMatchObject({
-      npmSpec: "@openclaw/brave-plugin",
+      npmSpec: "@sunclaw/brave-plugin",
       allowInvalidConfigRecovery: true,
     });
     expect(resolveOfficialExternalPluginInstall(expectCatalogEntry("slack"))).toMatchObject({
-      npmSpec: "@openclaw/slack",
+      npmSpec: "@sunclaw/slack",
       allowInvalidConfigRecovery: true,
     });
     expect(resolveOfficialExternalPluginInstall(expectCatalogEntry("discord"))).toMatchObject({
-      npmSpec: "@openclaw/discord",
+      npmSpec: "@sunclaw/discord",
       allowInvalidConfigRecovery: true,
     });
   });
@@ -79,8 +79,8 @@ describe("official external plugin catalog", () => {
     expect(ids.has("matrix")).toBe(true);
     expect(ids.has("mattermost")).toBe(false);
     expect(resolveOfficialExternalPluginInstall(expectCatalogEntry("matrix"))).toEqual({
-      clawhubSpec: "clawhub:@openclaw/matrix",
-      npmSpec: "@openclaw/matrix",
+      clawhubSpec: "clawhub:@sunclaw/matrix",
+      npmSpec: "@sunclaw/matrix",
       defaultChoice: "clawhub",
       minHostVersion: ">=2026.4.10",
       allowInvalidConfigRecovery: true,

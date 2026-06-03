@@ -1,6 +1,6 @@
 import { normalizePluginsConfig } from "./config-state.js";
 import {
-  discoverOpenClawPlugins,
+  discoverSunClawPlugins,
   type PluginCandidate,
   type PluginDiscoveryResult,
 } from "./discovery.js";
@@ -32,7 +32,7 @@ export function resolveInstalledPluginIndexRegistry(params: LoadInstalledPluginI
     params.installRecords ?? loadInstalledPluginIndexInstallRecordsSync({ env: params.env });
   const discovery =
     params.discovery ??
-    discoverOpenClawPlugins({
+    discoverSunClawPlugins({
       workspaceDir: params.workspaceDir,
       extraPaths: normalized.loadPaths,
       env: params.env,

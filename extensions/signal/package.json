@@ -1,16 +1,16 @@
 {
-  "name": "@openclaw/signal",
+  "name": "@sunclaw/signal",
   "version": "2026.6.2",
   "private": true,
-  "description": "OpenClaw Signal channel plugin",
+  "description": "SunClaw Signal channel plugin",
   "type": "module",
   "dependencies": {
     "ws": "8.21.0"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@sunclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ],

@@ -1,8 +1,8 @@
-import { readChannelAllowFromStore } from "openclaw/plugin-sdk/conversation-runtime";
-import { getPluginCommandSpecs } from "openclaw/plugin-sdk/plugin-runtime";
-import { dispatchReplyWithBufferedBlockDispatcher } from "openclaw/plugin-sdk/reply-dispatch-runtime";
-import { getRuntimeConfig } from "openclaw/plugin-sdk/runtime-config-snapshot";
-import { listSkillCommandsForAgents } from "openclaw/plugin-sdk/skill-commands-runtime";
+import { readChannelAllowFromStore } from "sunclaw/plugin-sdk/conversation-runtime";
+import { getPluginCommandSpecs } from "sunclaw/plugin-sdk/plugin-runtime";
+import { dispatchReplyWithBufferedBlockDispatcher } from "sunclaw/plugin-sdk/reply-dispatch-runtime";
+import { getRuntimeConfig } from "sunclaw/plugin-sdk/runtime-config-snapshot";
+import { listSkillCommandsForAgents } from "sunclaw/plugin-sdk/skill-commands-runtime";
 import type { TelegramBotDeps } from "./bot-deps.js";
 import { syncTelegramMenuCommands } from "./bot-native-command-menu.js";
 

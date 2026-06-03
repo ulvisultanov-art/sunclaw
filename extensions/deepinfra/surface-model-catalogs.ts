@@ -1,11 +1,11 @@
 import type {
   UnifiedModelCatalogEntry,
   UnifiedModelCatalogProviderContext,
-} from "openclaw/plugin-sdk/plugin-entry";
+} from "sunclaw/plugin-sdk/plugin-entry";
 import type {
   VideoGenerationModelCapabilitiesContext,
   VideoGenerationProviderCapabilities,
-} from "openclaw/plugin-sdk/video-generation";
+} from "sunclaw/plugin-sdk/video-generation";
 import {
   DEEPINFRA_VIDEO_ASPECT_RATIOS,
   DEEPINFRA_VIDEO_DURATIONS,

@@ -1,9 +1,9 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
 import type {
-  OpenClawPluginApi,
-  OpenClawPluginCommandDefinition,
+  SunClawPluginApi,
+  SunClawPluginCommandDefinition,
   PluginCommandContext,
-} from "openclaw/plugin-sdk/plugin-entry";
+} from "sunclaw/plugin-sdk/plugin-entry";
 import { describe, expect, it } from "vitest";
 import {
   getWrittenQQBotConfig,
@@ -12,7 +12,7 @@ import {
 import { ensurePlatformAdapter } from "../bootstrap.js";
 import { registerQQBotFrameworkCommands } from "./framework-registration.js";
 
-function createConfig(): OpenClawConfig {
+function createConfig(): SunClawConfig {
   return {
     channels: {
       qqbot: {
@@ -30,24 +30,24 @@ function createConfig(): OpenClawConfig {
   };
 }
 
-function registerCommands(): OpenClawPluginCommandDefinition[] {
+function registerCommands(): SunClawPluginCommandDefinition[] {
   ensurePlatformAdapter();
-  const commands: OpenClawPluginCommandDefinition[] = [];
+  const commands: SunClawPluginCommandDefinition[] = [];
   const api = {
     logger: {},
-    registerCommand: (command: OpenClawPluginCommandDefinition) => {
+    registerCommand: (command: SunClawPluginCommandDefinition) => {
       commands.push(command);
     },
-  } as unknown as OpenClawPluginApi;
+  } as unknown as SunClawPluginApi;
 
   registerQQBotFrameworkCommands(api);
   return commands;
 }
 
 function findCommand(
-  commands: OpenClawPluginCommandDefinition[],
+  commands: SunClawPluginCommandDefinition[],
   name: string,
-): OpenClawPluginCommandDefinition {
+): SunClawPluginCommandDefinition {
   const command = commands.find((entry) => entry.name === name);
   if (!command) {
     throw new Error(`expected QQBot command ${name}`);
@@ -56,7 +56,7 @@ function findCommand(
 }
 
 function createCommandContext(
-  config: OpenClawConfig,
+  config: SunClawConfig,
   from: string | undefined,
 ): PluginCommandContext {
   return {
@@ -83,7 +83,7 @@ describe("registerQQBotFrameworkCommands", () => {
 
   it("preserves the private-chat guard for bot-streaming on generic framework calls", async () => {
     const config = createConfig();
-    const writes: OpenClawConfig[] = [];
+    const writes: SunClawConfig[] = [];
     installCommandRuntime(config, writes);
     const command = findCommand(registerCommands(), "bot-streaming");
 
@@ -101,7 +101,7 @@ describe("registerQQBotFrameworkCommands", () => {
 
   it("allows bot-streaming on explicit QQBot private-chat framework calls", async () => {
     const config = createConfig();
-    const writes: OpenClawConfig[] = [];
+    const writes: SunClawConfig[] = [];
     installCommandRuntime(config, writes);
     const command = findCommand(registerCommands(), "bot-streaming");
 

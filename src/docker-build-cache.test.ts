@@ -71,7 +71,7 @@ describe("docker build cache layout", () => {
         dockerfile,
         `${path} should use a shared pnpm store cache under the active user's home`,
       ).toMatch(
-        /--mount=type=cache,id=openclaw-pnpm-store,target=\/(?:root|home\/appuser)\/\.local\/share\/pnpm\/store,sharing=locked/,
+        /--mount=type=cache,id=sunclaw-pnpm-store,target=\/(?:root|home\/appuser)\/\.local\/share\/pnpm\/store,sharing=locked/,
       );
     }
   });
@@ -112,17 +112,17 @@ describe("docker build cache layout", () => {
     expect(dockerfile).not.toContain("pnpm install --frozen-lockfile");
     expect(dockerfile).not.toContain("COPY . .");
     expect(dockerfile).toMatch(
-      /^COPY --from=openclaw_package --chown=appuser:appuser openclaw-current\.tgz \/tmp\/openclaw-current\.tgz$/m,
+      /^COPY --from=sunclaw_package --chown=appuser:appuser sunclaw-current\.tgz \/tmp\/sunclaw-current\.tgz$/m,
     );
     expect(dockerfile).toContain(
-      "npm install -g --prefix /tmp/openclaw-prefix /tmp/openclaw-current.tgz --no-fund --no-audit",
+      "npm install -g --prefix /tmp/sunclaw-prefix /tmp/sunclaw-current.tgz --no-fund --no-audit",
     );
     expect(dockerfile).not.toContain(
-      "cp -a /tmp/openclaw-prefix/lib/node_modules/. /app/node_modules/",
+      "cp -a /tmp/sunclaw-prefix/lib/node_modules/. /app/node_modules/",
     );
-    expect(dockerfile).toContain("cp -a /tmp/openclaw-prefix/lib/node_modules/openclaw/. /app/");
-    expect(dockerfile).toContain("rm -rf /app/node_modules/openclaw");
-    expect(dockerfile).toContain("ln -sf /app /app/node_modules/openclaw");
+    expect(dockerfile).toContain("cp -a /tmp/sunclaw-prefix/lib/node_modules/sunclaw/. /app/");
+    expect(dockerfile).toContain("rm -rf /app/node_modules/sunclaw");
+    expect(dockerfile).toContain("ln -sf /app /app/node_modules/sunclaw");
   });
 
   it("copies manifests before install in the qr-import image", async () => {

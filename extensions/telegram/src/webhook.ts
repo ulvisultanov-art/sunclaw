@@ -2,33 +2,33 @@ import { createServer } from "node:http";
 import type { IncomingMessage } from "node:http";
 import net from "node:net";
 import { InputFile } from "grammy";
-import type { ChannelAccountSnapshot } from "openclaw/plugin-sdk/channel-contract";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { isDiagnosticsEnabled } from "openclaw/plugin-sdk/diagnostic-runtime";
+import type { ChannelAccountSnapshot } from "sunclaw/plugin-sdk/channel-contract";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import { isDiagnosticsEnabled } from "sunclaw/plugin-sdk/diagnostic-runtime";
 import {
   logWebhookError,
   logWebhookProcessed,
   logWebhookReceived,
   startDiagnosticHeartbeat,
   stopDiagnosticHeartbeat,
-} from "openclaw/plugin-sdk/logging-core";
-import { parseStrictNonNegativeInteger } from "openclaw/plugin-sdk/number-runtime";
-import type { BackoffPolicy, RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
+} from "sunclaw/plugin-sdk/logging-core";
+import { parseStrictNonNegativeInteger } from "sunclaw/plugin-sdk/number-runtime";
+import type { BackoffPolicy, RuntimeEnv } from "sunclaw/plugin-sdk/runtime-env";
 import {
   computeBackoff,
   defaultRuntime,
   formatDurationPrecise,
   sleepWithAbort,
-} from "openclaw/plugin-sdk/runtime-env";
-import { safeEqualSecret } from "openclaw/plugin-sdk/security-runtime";
-import { formatErrorMessage } from "openclaw/plugin-sdk/ssrf-runtime";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/runtime-env";
+import { safeEqualSecret } from "sunclaw/plugin-sdk/security-runtime";
+import { formatErrorMessage } from "sunclaw/plugin-sdk/ssrf-runtime";
+import { normalizeOptionalString } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import {
   applyBasicWebhookRequestGuards,
   createFixedWindowRateLimiter,
   WEBHOOK_RATE_LIMIT_DEFAULTS,
-} from "openclaw/plugin-sdk/webhook-ingress";
-import { readJsonBodyWithLimit } from "openclaw/plugin-sdk/webhook-request-guards";
+} from "sunclaw/plugin-sdk/webhook-ingress";
+import { readJsonBodyWithLimit } from "sunclaw/plugin-sdk/webhook-request-guards";
 import { resolveTelegramAllowedUpdates } from "./allowed-updates.js";
 import { withTelegramApiErrorLogging } from "./api-logging.js";
 import { createTelegramBot } from "./bot.js";
@@ -200,7 +200,7 @@ function resolveForwardedClientIp(
   return undefined;
 }
 
-function resolveTelegramWebhookClientIp(req: IncomingMessage, config?: OpenClawConfig): string {
+function resolveTelegramWebhookClientIp(req: IncomingMessage, config?: SunClawConfig): string {
   const remoteAddress = parseIpLiteral(req.socket.remoteAddress);
   const trustedProxies = config?.gateway?.trustedProxies;
   if (!remoteAddress) {
@@ -228,7 +228,7 @@ function resolveTelegramWebhookClientIp(req: IncomingMessage, config?: OpenClawC
 function resolveTelegramWebhookRateLimitKey(
   req: IncomingMessage,
   path: string,
-  config?: OpenClawConfig,
+  config?: SunClawConfig,
 ): string {
   return `${path}:${resolveTelegramWebhookClientIp(req, config)}`;
 }
@@ -236,7 +236,7 @@ function resolveTelegramWebhookRateLimitKey(
 export async function startTelegramWebhook(opts: {
   token: string;
   accountId?: string;
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   path?: string;
   port?: number;
   host?: string;

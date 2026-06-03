@@ -2,9 +2,9 @@ import { execFile } from "node:child_process";
 import {
   asDateTimestampMs,
   resolveExpiresAtMsFromDurationMs,
-} from "@openclaw/normalization-core/number-coercion";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
-import { normalizeStringEntries } from "@openclaw/normalization-core/string-normalization";
+} from "@sunclaw/normalization-core/number-coercion";
+import { isRecord } from "@sunclaw/normalization-core/record-coerce";
+import { normalizeStringEntries } from "@sunclaw/normalization-core/string-normalization";
 import {
   ErrorCodes,
   errorShape,
@@ -36,7 +36,7 @@ import {
 } from "../../config/redact-snapshot.js";
 import { loadGatewayRuntimeConfigSchema } from "../../config/runtime-schema.js";
 import { lookupConfigSchema, type ConfigSchemaResponse } from "../../config/schema.js";
-import type { ConfigValidationIssue, OpenClawConfig } from "../../config/types.openclaw.js";
+import type { ConfigValidationIssue, SunClawConfig } from "../../config/types.sunclaw.js";
 import { isBuiltInModelProviderOverlayId } from "../../config/zod-schema.core.js";
 import { formatErrorMessage, toErrorObject } from "../../infra/errors.js";
 import {
@@ -273,7 +273,7 @@ function parseValidateConfigFromRawOrRespond(
   requestName: string,
   snapshot: Awaited<ReturnType<typeof readConfigFileSnapshot>>,
   respond: RespondFn,
-): { config: OpenClawConfig; writeConfig: OpenClawConfig; schema: ConfigSchemaResponse } | null {
+): { config: SunClawConfig; writeConfig: SunClawConfig; schema: ConfigSchemaResponse } | null {
   const rawValue = parseRawConfigOrRespond(params, requestName, respond);
   if (!rawValue) {
     return null;
@@ -332,7 +332,7 @@ function parseValidateConfigFromRawOrRespond(
   }
   return {
     config: validated.config,
-    writeConfig: validationCandidate as OpenClawConfig,
+    writeConfig: validationCandidate as SunClawConfig,
     schema,
   };
 }
@@ -352,7 +352,7 @@ function summarizeConfigValidationIssues(issues: ReadonlyArray<ConfigValidationI
 }
 
 async function ensureResolvableSecretRefsOrRespond(params: {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   respond: RespondFn;
 }): Promise<PreparedSecretsRuntimeSnapshot | null> {
   try {
@@ -426,8 +426,8 @@ async function respondWithConfigRestartWrite(params: {
 }
 
 function shouldDisconnectSharedAuthClientsForConfigWrite(params: {
-  prevConfig: OpenClawConfig;
-  nextConfig: OpenClawConfig;
+  prevConfig: SunClawConfig;
+  nextConfig: SunClawConfig;
   preparedSecretsSnapshot: PreparedSecretsRuntimeSnapshot;
 }): boolean {
   return (
@@ -441,7 +441,7 @@ function shouldDisconnectSharedAuthClientsForConfigWrite(params: {
 
 function respondConfigPatchNoop(params: {
   snapshot: Awaited<ReturnType<typeof readConfigFileSnapshot>>;
-  config: OpenClawConfig;
+  config: SunClawConfig;
   uiHints: ConfigRedactionHints;
   actor: ReturnType<typeof resolveControlPlaneActor>;
   context: GatewayRequestContext | undefined;

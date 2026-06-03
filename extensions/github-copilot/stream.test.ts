@@ -278,7 +278,7 @@ describe("wrapCopilotAnthropicStream", () => {
     expect(baseStreamFn).toHaveBeenCalledOnce();
   });
 
-  it("does not claim provider transport before OpenClaw chooses one", () => {
+  it("does not claim provider transport before SunClaw chooses one", () => {
     expect(
       wrapCopilotProviderStream({
         streamFn: undefined,

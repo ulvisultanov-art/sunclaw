@@ -6,25 +6,25 @@ import type {
   WAMessage,
   WASocket,
 } from "baileys";
-import { recordChannelActivity } from "openclaw/plugin-sdk/channel-activity-runtime";
-import { formatLocationText } from "openclaw/plugin-sdk/channel-inbound";
-import { createInboundDebouncer } from "openclaw/plugin-sdk/channel-inbound-debounce";
-import { getChildLogger } from "openclaw/plugin-sdk/logging-core";
+import { recordChannelActivity } from "sunclaw/plugin-sdk/channel-activity-runtime";
+import { formatLocationText } from "sunclaw/plugin-sdk/channel-inbound";
+import { createInboundDebouncer } from "sunclaw/plugin-sdk/channel-inbound-debounce";
+import { getChildLogger } from "sunclaw/plugin-sdk/logging-core";
 import {
   asDateTimestampMs,
   parseStrictFiniteNumber,
   resolveExpiresAtMsFromDurationMs,
-} from "openclaw/plugin-sdk/number-runtime";
-import { defaultRuntime } from "openclaw/plugin-sdk/runtime-env";
-import { createSubsystemLogger } from "openclaw/plugin-sdk/runtime-env";
-import { uniqueStrings } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/number-runtime";
+import { defaultRuntime } from "sunclaw/plugin-sdk/runtime-env";
+import { createSubsystemLogger } from "sunclaw/plugin-sdk/runtime-env";
+import { uniqueStrings } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { maybeResolveWhatsAppApprovalReaction } from "../approval-reactions.js";
 import { readWebSelfIdentityForDecision, WhatsAppAuthUnstableError } from "../auth-store.js";
 import { getPrimaryIdentityId, resolveComparableIdentity } from "../identity.js";
 import { addWhatsAppImagePreviewFields } from "../image-preview.js";
 import { cacheInboundMessageMeta } from "../quoted-message.js";
 import { DEFAULT_RECONNECT_POLICY, computeBackoff, sleepWithAbort } from "../reconnect.js";
-import type { OpenClawConfig } from "../runtime-api.js";
+import type { SunClawConfig } from "../runtime-api.js";
 import { createWaSocket, formatError, getStatusCode, waitForWaConnection } from "../session.js";
 import { resolveWhatsAppSocketTiming } from "../socket-timing.js";
 import { resolveJidToE164 } from "../text-runtime.js";
@@ -176,8 +176,8 @@ function isNonEmptyString(value: string | undefined): value is string {
 }
 
 type MonitorWebInboxOptions = {
-  cfg: OpenClawConfig;
-  loadConfig?: () => OpenClawConfig;
+  cfg: SunClawConfig;
+  loadConfig?: () => SunClawConfig;
   verbose: boolean;
   accountId: string;
   authDir: string;

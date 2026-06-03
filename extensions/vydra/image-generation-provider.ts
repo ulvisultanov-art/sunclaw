@@ -1,6 +1,6 @@
-import type { ImageGenerationProvider } from "openclaw/plugin-sdk/image-generation";
-import { isProviderApiKeyConfigured } from "openclaw/plugin-sdk/provider-auth";
-import { assertOkOrThrowHttpError, postJsonRequest } from "openclaw/plugin-sdk/provider-http";
+import type { ImageGenerationProvider } from "sunclaw/plugin-sdk/image-generation";
+import { isProviderApiKeyConfigured } from "sunclaw/plugin-sdk/provider-auth";
+import { assertOkOrThrowHttpError, postJsonRequest } from "sunclaw/plugin-sdk/provider-http";
 import {
   DEFAULT_VYDRA_IMAGE_MODEL,
   downloadVydraAsset,

@@ -1,7 +1,7 @@
-import { readChannelAllowFromStore } from "openclaw/plugin-sdk/conversation-runtime";
-import { resolveNativeSkillsEnabled } from "openclaw/plugin-sdk/native-command-config-runtime";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
-import type { OpenClawConfig } from "../runtime-api.js";
+import { readChannelAllowFromStore } from "sunclaw/plugin-sdk/conversation-runtime";
+import { resolveNativeSkillsEnabled } from "sunclaw/plugin-sdk/native-command-config-runtime";
+import { normalizeOptionalString } from "sunclaw/plugin-sdk/string-coerce-runtime";
+import type { SunClawConfig } from "../runtime-api.js";
 import type { ResolvedTelegramAccount } from "./accounts.js";
 import { isNumericTelegramSenderUserId, normalizeTelegramAllowFromEntry } from "./allow-from.js";
 
@@ -51,7 +51,7 @@ function appendInvalidTelegramAllowFromFinding(
 }
 
 export async function collectTelegramSecurityAuditFindings(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   accountId?: string | null;
   account: ResolvedTelegramAccount;
 }) {

@@ -1,7 +1,7 @@
 import crypto from "node:crypto";
 import path from "node:path";
-import { detectMime } from "openclaw/plugin-sdk/media-mime";
-import { root } from "openclaw/plugin-sdk/security-runtime";
+import { detectMime } from "sunclaw/plugin-sdk/media-mime";
+import { root } from "sunclaw/plugin-sdk/security-runtime";
 import {
   classifyFsSafeReadError,
   readAbsolutePath,

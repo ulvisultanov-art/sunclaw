@@ -1,9 +1,9 @@
-import { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
-import { readConfiguredProviderCatalogEntries } from "openclaw/plugin-sdk/provider-catalog-shared";
+import { definePluginEntry } from "sunclaw/plugin-sdk/plugin-entry";
+import { readConfiguredProviderCatalogEntries } from "sunclaw/plugin-sdk/provider-catalog-shared";
 import {
   NATIVE_ANTHROPIC_REPLAY_HOOKS,
   resolveClaudeThinkingProfile,
-} from "openclaw/plugin-sdk/provider-model-shared";
+} from "sunclaw/plugin-sdk/provider-model-shared";
 import {
   hasAnthropicVertexAvailableAuth,
   mergeImplicitAnthropicVertexProvider,

@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type { TalkTransport } from "./talk-events.js";
 
 export type RealtimeVoiceProviderId = string;
@@ -92,17 +92,17 @@ export type RealtimeVoiceProviderCapabilities = {
 };
 
 export type RealtimeVoiceProviderResolveConfigContext = {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   rawConfig: RealtimeVoiceProviderConfig;
 };
 
 export type RealtimeVoiceProviderConfiguredContext = {
-  cfg?: OpenClawConfig;
+  cfg?: SunClawConfig;
   providerConfig: RealtimeVoiceProviderConfig;
 };
 
 export type RealtimeVoiceBridgeCreateRequest = RealtimeVoiceBridgeCallbacks & {
-  cfg?: OpenClawConfig;
+  cfg?: SunClawConfig;
   providerConfig: RealtimeVoiceProviderConfig;
   audioFormat?: RealtimeVoiceAudioFormat;
   instructions?: string;
@@ -112,7 +112,7 @@ export type RealtimeVoiceBridgeCreateRequest = RealtimeVoiceBridgeCallbacks & {
 };
 
 export type RealtimeVoiceBrowserSessionCreateRequest = {
-  cfg?: OpenClawConfig;
+  cfg?: SunClawConfig;
   providerConfig: RealtimeVoiceProviderConfig;
   instructions?: string;
   tools?: RealtimeVoiceTool[];

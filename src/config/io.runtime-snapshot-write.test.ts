@@ -5,9 +5,9 @@ import {
   setRuntimeConfigSnapshotRefreshHandler,
   setRuntimeConfigSnapshot,
 } from "./io.js";
-import type { OpenClawConfig } from "./types.js";
+import type { SunClawConfig } from "./types.js";
 
-function createSourceConfig(): OpenClawConfig {
+function createSourceConfig(): SunClawConfig {
   return {
     models: {
       providers: {
@@ -21,7 +21,7 @@ function createSourceConfig(): OpenClawConfig {
   };
 }
 
-function createRuntimeConfig(): OpenClawConfig {
+function createRuntimeConfig(): SunClawConfig {
   return {
     models: {
       providers: {
@@ -50,7 +50,7 @@ describe("runtime config snapshot writes", () => {
   });
 
   it("skips source projection for non-runtime-derived configs", () => {
-    const sourceConfig: OpenClawConfig = {
+    const sourceConfig: SunClawConfig = {
       ...createSourceConfig(),
       gateway: {
         auth: {
@@ -58,7 +58,7 @@ describe("runtime config snapshot writes", () => {
         },
       },
     };
-    const runtimeConfig: OpenClawConfig = {
+    const runtimeConfig: SunClawConfig = {
       ...createRuntimeConfig(),
       gateway: {
         auth: {
@@ -66,7 +66,7 @@ describe("runtime config snapshot writes", () => {
         },
       },
     };
-    const independentConfig: OpenClawConfig = {
+    const independentConfig: SunClawConfig = {
       models: {
         providers: {
           openai: {

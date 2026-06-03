@@ -1,4 +1,4 @@
 export {
   parseJsonObjectPreservingUnsafeIntegers,
   parseJsonPreservingUnsafeIntegers,
-} from "openclaw/plugin-sdk/json-unsafe-integers";
+} from "sunclaw/plugin-sdk/json-unsafe-integers";

@@ -1,6 +1,6 @@
-import { buildManifestModelProviderConfig } from "openclaw/plugin-sdk/provider-catalog-shared";
-import type { ModelDefinitionConfig } from "openclaw/plugin-sdk/provider-model-shared";
-import manifest from "./openclaw.plugin.json" with { type: "json" };
+import { buildManifestModelProviderConfig } from "sunclaw/plugin-sdk/provider-catalog-shared";
+import type { ModelDefinitionConfig } from "sunclaw/plugin-sdk/provider-model-shared";
+import manifest from "./sunclaw.plugin.json" with { type: "json" };
 
 const MISTRAL_MANIFEST_CATALOG = manifest.modelCatalog.providers.mistral;
 

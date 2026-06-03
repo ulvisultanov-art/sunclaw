@@ -1,11 +1,11 @@
-# OpenClaw Nextcloud Talk
+# SunClaw Nextcloud Talk
 
-Official OpenClaw channel plugin for Nextcloud Talk conversations.
+Official SunClaw channel plugin for Nextcloud Talk conversations.
 
-Install from OpenClaw:
+Install from SunClaw:
 
 ```bash
-openclaw plugin add @openclaw/nextcloud-talk
+sunclaw plugin add @sunclaw/nextcloud-talk
 ```
 
-Configure the Nextcloud server and Talk credentials in OpenClaw, then enable the conversations where agents should receive and send messages.
+Configure the Nextcloud server and Talk credentials in SunClaw, then enable the conversations where agents should receive and send messages.

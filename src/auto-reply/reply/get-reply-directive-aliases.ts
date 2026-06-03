@@ -1,8 +1,8 @@
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+} from "@sunclaw/normalization-core/string-coerce";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import type { SkillCommandSpec } from "../../skills/types.js";
 
 export function reserveSkillCommandNames(params: {
@@ -15,7 +15,7 @@ export function reserveSkillCommandNames(params: {
 }
 
 export function resolveConfiguredDirectiveAliases(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   commandTextHasSlash: boolean;
   reservedCommands: Set<string>;
 }) {

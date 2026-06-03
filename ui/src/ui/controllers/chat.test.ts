@@ -899,7 +899,7 @@ describe("handleChatEvent", () => {
       role: "assistant",
       content: [
         { type: "text", text: "OK" },
-        { type: "canvas", url: "/__openclaw__/canvas/documents/repeat/index.html" },
+        { type: "canvas", url: "/__sunclaw__/canvas/documents/repeat/index.html" },
       ],
       timestamp: 3,
     };
@@ -1529,7 +1529,7 @@ describe("loadChatHistory filtering", () => {
         content: [
           {
             type: "text",
-            text: "[openclaw] missing tool result in session history; inserted synthetic error result for transcript repair.",
+            text: "[sunclaw] missing tool result in session history; inserted synthetic error result for transcript repair.",
           },
         ],
       },
@@ -1555,11 +1555,11 @@ describe("loadChatHistory filtering", () => {
 
   it("keeps image-only user messages that carry transcript media paths", async () => {
     const messages = [
-      { role: "user", content: "", MediaPath: "/tmp/openclaw/user-upload.png" },
+      { role: "user", content: "", MediaPath: "/tmp/sunclaw/user-upload.png" },
       {
         role: "user",
         content: "",
-        MediaPaths: ["/tmp/openclaw/first.png", "/tmp/openclaw/second.jpg"],
+        MediaPaths: ["/tmp/sunclaw/first.png", "/tmp/sunclaw/second.jpg"],
       },
       { role: "user", content: "" },
     ];
@@ -1583,7 +1583,7 @@ describe("loadChatHistory filtering", () => {
         content: [
           {
             type: "text",
-            text: "[openclaw] missing tool result in session history; inserted synthetic error result for transcript repair.",
+            text: "[sunclaw] missing tool result in session history; inserted synthetic error result for transcript repair.",
           },
         ],
       },
@@ -2214,9 +2214,9 @@ describe("loadChatHistory retry handling", () => {
             {
               type: "text",
               text: [
-                "<<<BEGIN_OPENCLAW_INTERNAL_CONTEXT>>>",
+                "<<<BEGIN_SUNCLAW_INTERNAL_CONTEXT>>>",
                 "subagent completion payload",
-                "<<<END_OPENCLAW_INTERNAL_CONTEXT>>>",
+                "<<<END_SUNCLAW_INTERNAL_CONTEXT>>>",
               ].join("\n"),
             },
           ],
@@ -2241,7 +2241,7 @@ describe("loadChatHistory retry handling", () => {
     const persistedUser = {
       role: "user",
       content: [{ type: "text", text: "first" }],
-      __openclaw: { seq: 1 },
+      __sunclaw: { seq: 1 },
     };
     const optimisticUser = {
       role: "user",
@@ -2273,7 +2273,7 @@ describe("loadChatHistory retry handling", () => {
     const persistedUser = {
       role: "user",
       content: [{ type: "text", text: "first" }],
-      __openclaw: { seq: 1 },
+      __sunclaw: { seq: 1 },
     };
     const optimisticUser = {
       role: "user",
@@ -2305,7 +2305,7 @@ describe("loadChatHistory retry handling", () => {
     const persistedUser = {
       role: "user",
       content: [{ type: "text", text: "latest ask" }],
-      __openclaw: { seq: 1 },
+      __sunclaw: { seq: 1 },
     };
     const persistedToolResult = {
       role: "toolResult",
@@ -2313,7 +2313,7 @@ describe("loadChatHistory retry handling", () => {
       toolName: "shell",
       content: [{ type: "text", text: "tool output" }],
       timestamp: 2,
-      __openclaw: { seq: 2 },
+      __sunclaw: { seq: 2 },
     };
     const request = vi.fn().mockResolvedValue({
       messages: [persistedUser, persistedToolResult],
@@ -2359,7 +2359,7 @@ describe("loadChatHistory retry handling", () => {
     const persistedUser = {
       role: "user",
       content: [{ type: "text", text: "latest ask" }],
-      __openclaw: { seq: 1 },
+      __sunclaw: { seq: 1 },
     };
     const firstToolResult = {
       role: "toolResult",
@@ -2367,7 +2367,7 @@ describe("loadChatHistory retry handling", () => {
       toolName: "shell",
       content: [{ type: "text", text: "first output" }],
       timestamp: 2,
-      __openclaw: { seq: 2 },
+      __sunclaw: { seq: 2 },
     };
     const secondToolResult = {
       role: "toolResult",
@@ -2375,7 +2375,7 @@ describe("loadChatHistory retry handling", () => {
       toolName: "shell",
       content: [{ type: "text", text: "second output" }],
       timestamp: 4,
-      __openclaw: { seq: 3 },
+      __sunclaw: { seq: 3 },
     };
     const request = vi.fn().mockResolvedValue({
       messages: [persistedUser, firstToolResult, secondToolResult],
@@ -2427,7 +2427,7 @@ describe("loadChatHistory retry handling", () => {
     const persistedUser = {
       role: "user",
       content: [{ type: "text", text: "latest ask" }],
-      __openclaw: { seq: 1 },
+      __sunclaw: { seq: 1 },
     };
     const firstToolResult = {
       role: "toolResult",
@@ -2435,7 +2435,7 @@ describe("loadChatHistory retry handling", () => {
       toolName: "shell",
       content: [{ type: "text", text: "first output" }],
       timestamp: 2,
-      __openclaw: { seq: 2 },
+      __sunclaw: { seq: 2 },
     };
     const secondLiveToolResult = {
       role: "assistant",
@@ -2501,7 +2501,7 @@ describe("loadChatHistory retry handling", () => {
     const persistedUser = {
       role: "user",
       content: [{ type: "text", text: "latest ask" }],
-      __openclaw: { seq: 1 },
+      __sunclaw: { seq: 1 },
     };
     const firstToolResult = {
       role: "toolResult",
@@ -2509,7 +2509,7 @@ describe("loadChatHistory retry handling", () => {
       toolName: "shell",
       content: [{ type: "text", text: "first output" }],
       timestamp: 2,
-      __openclaw: { seq: 2 },
+      __sunclaw: { seq: 2 },
     };
     const secondToolResult = {
       role: "toolResult",
@@ -2517,7 +2517,7 @@ describe("loadChatHistory retry handling", () => {
       toolName: "shell",
       content: [{ type: "text", text: "second output" }],
       timestamp: 4,
-      __openclaw: { seq: 3 },
+      __sunclaw: { seq: 3 },
     };
     const request = vi.fn().mockResolvedValue({
       messages: [persistedUser, firstToolResult, secondToolResult],
@@ -2564,7 +2564,7 @@ describe("loadChatHistory retry handling", () => {
     const persistedUser = {
       role: "user",
       content: [{ type: "text", text: "latest ask" }],
-      __openclaw: { seq: 1 },
+      __sunclaw: { seq: 1 },
     };
     const persistedToolResult = {
       role: "toolResult",
@@ -2572,7 +2572,7 @@ describe("loadChatHistory retry handling", () => {
       toolName: "shell",
       content: [{ type: "text", text: "tool output" }],
       timestamp: 2,
-      __openclaw: { seq: 2 },
+      __sunclaw: { seq: 2 },
     };
     const request = vi.fn().mockResolvedValue({
       messages: [persistedUser, persistedToolResult],
@@ -2616,19 +2616,19 @@ describe("loadChatHistory retry handling", () => {
     const olderUser = {
       role: "user",
       content: [{ type: "text", text: "older ask" }],
-      __openclaw: { seq: 1 },
+      __sunclaw: { seq: 1 },
     };
     const olderToolResult = {
       role: "toolResult",
       toolCallId: "call_old",
       toolName: "shell",
       content: [{ type: "text", text: "old tool output" }],
-      __openclaw: { seq: 2 },
+      __sunclaw: { seq: 2 },
     };
     const latestUser = {
       role: "user",
       content: [{ type: "text", text: "latest ask" }],
-      __openclaw: { seq: 3 },
+      __sunclaw: { seq: 3 },
     };
     const liveToolMessage = {
       role: "assistant",
@@ -2676,7 +2676,7 @@ describe("loadChatHistory retry handling", () => {
     const persistedUser = {
       role: "user",
       content: [{ type: "text", text: "latest ask" }],
-      __openclaw: { seq: 1 },
+      __sunclaw: { seq: 1 },
     };
     const persistedToolCall = {
       role: "assistant",
@@ -2689,7 +2689,7 @@ describe("loadChatHistory retry handling", () => {
         },
       ],
       timestamp: 2,
-      __openclaw: { seq: 2 },
+      __sunclaw: { seq: 2 },
     };
     const request = vi.fn().mockResolvedValue({
       messages: [persistedUser, persistedToolCall],
@@ -2742,7 +2742,7 @@ describe("loadChatHistory retry handling", () => {
     const persistedUser = {
       role: "user",
       content: [{ type: "text", text: "latest ask" }],
-      __openclaw: { seq: 1 },
+      __sunclaw: { seq: 1 },
     };
     const persistedToolResult = {
       role: "toolResult",
@@ -2750,7 +2750,7 @@ describe("loadChatHistory retry handling", () => {
       toolName: "shell",
       content: [{ type: "text", text: "tool output" }],
       timestamp: 2,
-      __openclaw: { seq: 2 },
+      __sunclaw: { seq: 2 },
     };
     const request = vi.fn().mockResolvedValue({
       messages: [persistedUser, persistedToolResult],
@@ -2796,7 +2796,7 @@ describe("loadChatHistory retry handling", () => {
     const persistedUser = {
       role: "user",
       content: [{ type: "text", text: "first" }],
-      __openclaw: { seq: 1 },
+      __sunclaw: { seq: 1 },
     };
     const request = vi.fn().mockResolvedValue({
       messages: [persistedUser],
@@ -2829,7 +2829,7 @@ describe("loadChatHistory retry handling", () => {
       role: "user",
       content: [{ type: "text", text: "first" }],
       timestamp: 200,
-      __openclaw: { seq: 1 },
+      __sunclaw: { seq: 1 },
     };
     const request = vi.fn().mockResolvedValue({
       messages: [persistedUser],
@@ -2862,14 +2862,14 @@ describe("loadChatHistory retry handling", () => {
     const persistedUser = {
       role: "user",
       content: [{ type: "text", text: "latest ask" }],
-      __openclaw: { seq: 1 },
+      __sunclaw: { seq: 1 },
     };
     const persistedToolResult = {
       role: "toolResult",
       toolCallId: "call_1",
       toolName: "shell",
       content: [{ type: "text", text: "tool output" }],
-      __openclaw: { seq: 2 },
+      __sunclaw: { seq: 2 },
     };
     const request = vi.fn().mockResolvedValue({
       messages: [persistedUser, persistedToolResult],
@@ -2913,12 +2913,12 @@ describe("loadChatHistory retry handling", () => {
     const persistedUser = {
       role: "user",
       content: [{ type: "text", text: "latest ask" }],
-      __openclaw: { seq: 1 },
+      __sunclaw: { seq: 1 },
     };
     const historyAssistant = {
       role: "assistant",
       content: [{ type: "text", text: "First visible stream text. More final text." }],
-      __openclaw: { seq: 2 },
+      __sunclaw: { seq: 2 },
     };
     const request = vi.fn().mockResolvedValue({
       messages: [persistedUser, historyAssistant],
@@ -2944,12 +2944,12 @@ describe("loadChatHistory retry handling", () => {
     const persistedUser = {
       role: "user",
       content: [{ type: "text", text: "latest ask" }],
-      __openclaw: { seq: 1 },
+      __sunclaw: { seq: 1 },
     };
     const historyAssistant = {
       role: "assistant",
       content: [{ type: "text", text: "First visible stream text. More final text." }],
-      __openclaw: { seq: 2 },
+      __sunclaw: { seq: 2 },
     };
     const liveToolMessage = {
       role: "assistant",
@@ -3028,12 +3028,12 @@ describe("loadChatHistory retry handling", () => {
     const historyUser = {
       role: "user",
       content: [{ type: "text", text: "latest ask" }],
-      __openclaw: { seq: 1 },
+      __sunclaw: { seq: 1 },
     };
     const historyAssistant = {
       role: "assistant",
       content: [{ type: "text", text: "latest answer" }],
-      __openclaw: { seq: 2 },
+      __sunclaw: { seq: 2 },
     };
     const request = vi.fn().mockResolvedValue({
       messages: [historyUser, historyAssistant],

@@ -1,13 +1,13 @@
 {
-  "name": "@openclaw/stepfun-provider",
+  "name": "@sunclaw/stepfun-provider",
   "version": "2026.6.2",
   "private": true,
-  "description": "OpenClaw StepFun provider plugin",
+  "description": "SunClaw StepFun provider plugin",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@sunclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ]

@@ -4,7 +4,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import type { DatabaseSync } from "node:sqlite";
-import { resolveDateTimestampMs } from "@openclaw/normalization-core/number-coercion";
+import { resolveDateTimestampMs } from "@sunclaw/normalization-core/number-coercion";
 import {
   buildBackupArchiveBasename,
   buildBackupArchivePath,
@@ -13,7 +13,7 @@ import {
   resolveBackupPlanFromDisk,
 } from "../commands/backup-shared.js";
 import { isPathWithin } from "../commands/cleanup-utils.js";
-import { resolveOpenClawStateSqlitePath } from "../state/openclaw-state-db.paths.js";
+import { resolveSunClawStateSqlitePath } from "../state/sunclaw-state-db.paths.js";
 import { resolveHomeDir, resolveUserPath } from "../utils.js";
 import { resolveRuntimeServiceVersion } from "../version.js";
 import { isVolatileBackupPath } from "./backup-volatile-filter.js";
@@ -480,9 +480,9 @@ async function createSanitizedStateSqliteBackupAsset(params: {
   stateDir: string;
   tempDir: string;
 }): Promise<SanitizedSqliteBackupAsset | undefined> {
-  const archiveSourcePath = resolveOpenClawStateSqlitePath({
+  const archiveSourcePath = resolveSunClawStateSqlitePath({
     ...process.env,
-    OPENCLAW_STATE_DIR: params.stateDir,
+    SUNCLAW_STATE_DIR: params.stateDir,
   });
   if (!(await pathExists(archiveSourcePath))) {
     return undefined;
@@ -490,7 +490,7 @@ async function createSanitizedStateSqliteBackupAsset(params: {
 
   const sqlite = requireNodeSqlite();
   const source = new sqlite.DatabaseSync(archiveSourcePath, { readOnly: true });
-  const sourcePath = path.join(params.tempDir, "openclaw-state-backup.sqlite");
+  const sourcePath = path.join(params.tempDir, "sunclaw-state-backup.sqlite");
   try {
     source.exec("PRAGMA busy_timeout = 30000;");
     source.prepare("VACUUM INTO ?").run(sourcePath);
@@ -537,8 +537,8 @@ export async function createBackupArchive(
   if (plan.included.length === 0) {
     throw new Error(
       onlyConfig
-        ? "No OpenClaw config file was found to back up."
-        : "No local OpenClaw state was found to back up.",
+        ? "No SunClaw config file was found to back up."
+        : "No local SunClaw state was found to back up.",
     );
   }
 
@@ -577,7 +577,7 @@ export async function createBackupArchive(
   await fs.mkdir(path.dirname(outputPath), { recursive: true });
   const tempRoot = await chooseBackupTempRoot({ assets: result.assets, outputPath });
   await fs.mkdir(tempRoot, { recursive: true });
-  const tempDir = await fs.mkdtemp(path.join(tempRoot, "openclaw-backup-"));
+  const tempDir = await fs.mkdtemp(path.join(tempRoot, "sunclaw-backup-"));
   const manifestPath = path.join(tempDir, "manifest.json");
   const tempArchivePath = buildTempArchivePath(outputPath);
   const stateAsset = result.assets.find((asset) => asset.kind === "state");

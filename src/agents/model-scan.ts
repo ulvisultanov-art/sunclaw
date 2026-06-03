@@ -1,16 +1,16 @@
-import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
+import { normalizeProviderId } from "@sunclaw/model-catalog-core/provider-id";
 import {
   asDateTimestampMs,
   resolveTimerTimeoutMs,
-} from "@openclaw/normalization-core/number-coercion";
+} from "@sunclaw/normalization-core/number-coercion";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@sunclaw/normalization-core/string-coerce";
 import {
   normalizeStringEntries,
   uniqueStrings,
-} from "@openclaw/normalization-core/string-normalization";
+} from "@sunclaw/normalization-core/string-normalization";
 import { Type } from "typebox";
 import { formatErrorMessage } from "../infra/errors.js";
 import { getEnvApiKey } from "../llm/env-api-keys.js";

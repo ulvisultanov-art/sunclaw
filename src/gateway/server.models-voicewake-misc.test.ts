@@ -205,7 +205,7 @@ const expectedConfiguredProviderModel = (params: ConfiguredProviderModelFixture)
 
 describe("gateway server models + voicewake", () => {
   const listModels = async (params?: { view?: "default" | "configured" | "all" }) =>
-    withEnvAsync({ OPENCLAW_DISABLE_BUNDLED_PLUGINS: "1" }, async () =>
+    withEnvAsync({ SUNCLAW_DISABLE_BUNDLED_PLUGINS: "1" }, async () =>
       params
         ? await rpcReq<{ models: ModelCatalogRpcEntry[] }>(ws, "models.list", params)
         : await rpcReq<{ models: ModelCatalogRpcEntry[] }>(ws, "models.list"),
@@ -222,9 +222,9 @@ describe("gateway server models + voicewake", () => {
   };
 
   const withModelsConfig = async <T>(config: unknown, run: () => Promise<T>): Promise<T> => {
-    const configPath = process.env.OPENCLAW_CONFIG_PATH;
+    const configPath = process.env.SUNCLAW_CONFIG_PATH;
     if (!configPath) {
-      throw new Error("Missing OPENCLAW_CONFIG_PATH");
+      throw new Error("Missing SUNCLAW_CONFIG_PATH");
     }
     let previousConfig: string | undefined;
     try {
@@ -254,7 +254,7 @@ describe("gateway server models + voicewake", () => {
   };
 
   const withTempHome = async <T>(fn: (homeDir: string) => Promise<T>): Promise<T> => {
-    const tempHome = await createTempHomeEnv("openclaw-home-");
+    const tempHome = await createTempHomeEnv("sunclaw-home-");
     try {
       return await fn(tempHome.home);
     } finally {
@@ -340,7 +340,7 @@ describe("gateway server models + voicewake", () => {
       await withTempHome(async (homeDir) => {
         const initial = await rpcReq<{ triggers: string[] }>(ws, "voicewake.get");
         expect(initial.ok).toBe(true);
-        expect(initial.payload?.triggers).toEqual(["openclaw", "claude", "computer"]);
+        expect(initial.payload?.triggers).toEqual(["sunclaw", "claude", "computer"]);
 
         const changedP = onceMessage(
           ws,
@@ -365,7 +365,7 @@ describe("gateway server models + voicewake", () => {
         expect(after.payload?.triggers).toEqual(["hi", "there"]);
 
         const onDisk = JSON.parse(
-          await fs.readFile(path.join(homeDir, ".openclaw", "settings", "voicewake.json"), "utf8"),
+          await fs.readFile(path.join(homeDir, ".sunclaw", "settings", "voicewake.json"), "utf8"),
         ) as { triggers?: unknown; updatedAtMs?: unknown };
         expect(onDisk.triggers).toEqual(["hi", "there"]);
         expect(typeof onDisk.updatedAtMs).toBe("number");
@@ -377,7 +377,7 @@ describe("gateway server models + voicewake", () => {
     await withConnectedNodeEvent("voicewake.changed", async (nodeWs, first) => {
       expect(first.event).toBe("voicewake.changed");
       expect((first.payload as { triggers?: unknown } | undefined)?.triggers).toEqual([
-        "openclaw",
+        "sunclaw",
         "claude",
         "computer",
       ]);
@@ -387,14 +387,14 @@ describe("gateway server models + voicewake", () => {
         (o) => o.type === "event" && o.event === "voicewake.changed",
       );
       const setRes = await rpcReq(ws, "voicewake.set", {
-        triggers: ["openclaw", "computer"],
+        triggers: ["sunclaw", "computer"],
       });
       expect(setRes.ok).toBe(true);
 
       const broadcast = (await broadcastP) as { event?: string; payload?: unknown };
       expect(broadcast.event).toBe("voicewake.changed");
       expect((broadcast.payload as { triggers?: unknown } | undefined)?.triggers).toEqual([
-        "openclaw",
+        "sunclaw",
         "computer",
       ]);
     });
@@ -446,7 +446,7 @@ describe("gateway server models + voicewake", () => {
 
       const onDisk = JSON.parse(
         await fs.readFile(
-          path.join(homeDir, ".openclaw", "settings", "voicewake-routing.json"),
+          path.join(homeDir, ".sunclaw", "settings", "voicewake-routing.json"),
           "utf8",
         ),
       ) as { routes?: unknown };

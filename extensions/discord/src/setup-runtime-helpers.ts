@@ -7,4 +7,4 @@ export {
   promptLegacyChannelAllowFromForAccount,
   resolveEntriesWithOptionalToken,
   setSetupChannelEnabled,
-} from "openclaw/plugin-sdk/setup-runtime";
+} from "sunclaw/plugin-sdk/setup-runtime";

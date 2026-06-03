@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from "vitest";
-import { withOpenClawTestState } from "../test-utils/openclaw-test-state.js";
+import { withSunClawTestState } from "../test-utils/sunclaw-test-state.js";
 import { createRunningTaskRun as createRunningTaskRunOrNull } from "./task-executor.js";
 import {
   createFlowRecord as createFlowRecordOrNull,
@@ -21,7 +21,7 @@ import {
 } from "./task-registry.js";
 import type { TaskRecord } from "./task-registry.types.js";
 
-const ORIGINAL_STATE_DIR = process.env.OPENCLAW_STATE_DIR;
+const ORIGINAL_STATE_DIR = process.env.SUNCLAW_STATE_DIR;
 
 function createFlowRecord(params: Parameters<typeof createFlowRecordOrNull>[0]): TaskFlowRecord {
   const flow = createFlowRecordOrNull(params);
@@ -54,10 +54,10 @@ function createRunningTaskRun(
 async function withTaskFlowMaintenanceStateDir(
   run: (root: string) => Promise<void>,
 ): Promise<void> {
-  await withOpenClawTestState(
+  await withSunClawTestState(
     {
       layout: "state-only",
-      prefix: "openclaw-task-flow-maintenance-",
+      prefix: "sunclaw-task-flow-maintenance-",
     },
     async (state) => {
       resetTaskRegistryDeliveryRuntimeForTests();
@@ -77,9 +77,9 @@ async function withTaskFlowMaintenanceStateDir(
 describe("task-flow-registry maintenance", () => {
   afterEach(() => {
     if (ORIGINAL_STATE_DIR === undefined) {
-      delete process.env.OPENCLAW_STATE_DIR;
+      delete process.env.SUNCLAW_STATE_DIR;
     } else {
-      process.env.OPENCLAW_STATE_DIR = ORIGINAL_STATE_DIR;
+      process.env.SUNCLAW_STATE_DIR = ORIGINAL_STATE_DIR;
     }
     resetTaskRegistryDeliveryRuntimeForTests();
     resetTaskRegistryForTests();

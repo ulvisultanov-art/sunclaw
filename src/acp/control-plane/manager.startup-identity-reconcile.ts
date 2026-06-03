@@ -2,8 +2,8 @@ import {
   identityHasStableSessionId,
   isSessionIdentityPending,
   resolveSessionIdentityFromMeta,
-} from "@openclaw/acp-core/runtime/session-identity";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+} from "@sunclaw/acp-core/runtime/session-identity";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { logVerbose } from "../../globals.js";
 import type {
   AcpSessionManagerDeps,
@@ -15,7 +15,7 @@ import type {
 } from "./manager.types.js";
 
 export async function runManagerStartupIdentityReconcile(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   deps: Pick<AcpSessionManagerDeps, "listAcpSessions">;
   withSessionActor: WithManagerSessionActor;
   resolveSession: ResolveManagerSession;

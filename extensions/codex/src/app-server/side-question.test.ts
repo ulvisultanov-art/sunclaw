@@ -1,14 +1,14 @@
-import { nativeHookRelayTesting } from "openclaw/plugin-sdk/agent-harness-runtime";
+import { nativeHookRelayTesting } from "sunclaw/plugin-sdk/agent-harness-runtime";
 import {
   onInternalDiagnosticEvent,
   resetDiagnosticEventsForTest,
   type DiagnosticEventPayload,
-} from "openclaw/plugin-sdk/diagnostic-runtime";
+} from "sunclaw/plugin-sdk/diagnostic-runtime";
 import {
   initializeGlobalHookRunner,
   resetGlobalHookRunner,
-} from "openclaw/plugin-sdk/hook-runtime";
-import { createMockPluginRegistry } from "openclaw/plugin-sdk/plugin-test-runtime";
+} from "sunclaw/plugin-sdk/hook-runtime";
+import { createMockPluginRegistry } from "sunclaw/plugin-sdk/plugin-test-runtime";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CodexServerNotification, JsonObject, RpcRequest } from "./protocol.js";
 
@@ -16,7 +16,7 @@ const readCodexAppServerBindingMock = vi.fn();
 const isCodexAppServerNativeAuthProfileMock = vi.fn();
 const getSharedCodexAppServerClientMock = vi.fn();
 const refreshCodexAppServerAuthTokensMock = vi.fn();
-const createOpenClawCodingToolsMock = vi.fn();
+const createSunClawCodingToolsMock = vi.fn();
 const toolExecuteMock = vi.fn();
 const handleCodexAppServerApprovalRequestMock = vi.fn();
 
@@ -45,8 +45,8 @@ vi.mock("./approval-bridge.js", () => ({
     handleCodexAppServerApprovalRequestMock(...args),
 }));
 
-vi.mock("openclaw/plugin-sdk/agent-harness", () => ({
-  createOpenClawCodingTools: (...args: unknown[]) => createOpenClawCodingToolsMock(...args),
+vi.mock("sunclaw/plugin-sdk/agent-harness", () => ({
+  createSunClawCodingTools: (...args: unknown[]) => createSunClawCodingToolsMock(...args),
 }));
 
 const { testing, runCodexAppServerSideQuestion } = await import("./side-question.js");
@@ -328,14 +328,14 @@ describe("runCodexAppServerSideQuestion", () => {
     isCodexAppServerNativeAuthProfileMock.mockReset();
     getSharedCodexAppServerClientMock.mockReset();
     refreshCodexAppServerAuthTokensMock.mockReset();
-    createOpenClawCodingToolsMock.mockReset();
+    createSunClawCodingToolsMock.mockReset();
     toolExecuteMock.mockReset();
     handleCodexAppServerApprovalRequestMock.mockReset();
 
     toolExecuteMock.mockResolvedValue({
       content: [{ type: "text", text: "tool output" }],
     });
-    createOpenClawCodingToolsMock.mockReturnValue([
+    createSunClawCodingToolsMock.mockReturnValue([
       {
         name: "wiki_status",
         description: "Check wiki status",
@@ -471,7 +471,7 @@ describe("runCodexAppServerSideQuestion", () => {
     ]);
     expect(client.request.mock.calls.some(([method]) => method === "turn/interrupt")).toBe(false);
 
-    const [toolOptions] = mockCall(createOpenClawCodingToolsMock);
+    const [toolOptions] = mockCall(createSunClawCodingToolsMock);
     expect(toolOptions).toHaveProperty("agentDir", "/tmp/agent");
     expect(toolOptions).toHaveProperty("workspaceDir", "/tmp/workspace");
     expect(toolOptions).toHaveProperty("sessionId", "session-1");
@@ -509,7 +509,7 @@ describe("runCodexAppServerSideQuestion", () => {
     expect(result).toEqual({ text: "Nested answer." });
   });
 
-  it("rejects /btw before forking when the current OpenClaw session is sandboxed", async () => {
+  it("rejects /btw before forking when the current SunClaw session is sandboxed", async () => {
     await expect(
       runCodexAppServerSideQuestion(
         sideParams({
@@ -518,7 +518,7 @@ describe("runCodexAppServerSideQuestion", () => {
         }),
       ),
     ).rejects.toThrow(
-      "Codex-native /btw side-question mode is unavailable because OpenClaw sandboxing is active for this session.",
+      "Codex-native /btw side-question mode is unavailable because SunClaw sandboxing is active for this session.",
     );
 
     expect(getSharedCodexAppServerClientMock).not.toHaveBeenCalled();
@@ -533,7 +533,7 @@ describe("runCodexAppServerSideQuestion", () => {
         }),
       ),
     ).rejects.toThrow(
-      "Codex-native /btw side-question mode is unavailable because OpenClaw exec host=node is active for this session.",
+      "Codex-native /btw side-question mode is unavailable because SunClaw exec host=node is active for this session.",
     );
 
     expect(getSharedCodexAppServerClientMock).not.toHaveBeenCalled();
@@ -911,7 +911,7 @@ describe("runCodexAppServerSideQuestion", () => {
     expect(relayId).toBe(relayIdDuringFork);
   });
 
-  it("bridges side-thread dynamic tool requests to OpenClaw tools", async () => {
+  it("bridges side-thread dynamic tool requests to SunClaw tools", async () => {
     const client = createFakeClient();
     let toolResponse: unknown;
     client.request.mockImplementation(async (method: string) => {
@@ -1095,7 +1095,7 @@ describe("runCodexAppServerSideQuestion", () => {
     ).resolves.toEqual({ text: "Tool answer." });
 
     expect(beforeToolCall).toHaveBeenCalledTimes(1);
-    expect(createOpenClawCodingToolsMock).toHaveBeenCalledWith(
+    expect(createSunClawCodingToolsMock).toHaveBeenCalledWith(
       expect.objectContaining({ hookChannelId: "voice-room" }),
     );
     expect(toolExecuteMock).toHaveBeenCalledTimes(1);
@@ -1214,7 +1214,7 @@ describe("runCodexAppServerSideQuestion", () => {
 
   it("cleans up notification handlers when side tool setup fails", async () => {
     const client = createFakeClient();
-    createOpenClawCodingToolsMock.mockImplementation(() => {
+    createSunClawCodingToolsMock.mockImplementation(() => {
       throw new Error("tool setup failed");
     });
     getSharedCodexAppServerClientMock.mockResolvedValue(client);

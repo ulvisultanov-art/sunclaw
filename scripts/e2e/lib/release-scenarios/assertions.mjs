@@ -61,8 +61,8 @@ function fileContainsText(file, needle) {
 
 function configPath() {
   return (
-    process.env.OPENCLAW_CONFIG_PATH ??
-    path.join(process.env.HOME ?? "", ".openclaw", "openclaw.json")
+    process.env.SUNCLAW_CONFIG_PATH ??
+    path.join(process.env.HOME ?? "", ".sunclaw", "sunclaw.json")
   );
 }
 
@@ -73,7 +73,7 @@ function writeConfig(cfg) {
 function authProfilesPath() {
   return path.join(
     process.env.HOME ?? "",
-    ".openclaw",
+    ".sunclaw",
     "agents",
     "main",
     "agent",
@@ -98,7 +98,7 @@ function assertOpenAiEnvRef() {
   const state = readStateText();
   assert(state.includes("OPENAI_API_KEY"), "OpenAI env ref was not persisted");
   assert(!state.includes(rawKey), "raw OpenAI key was persisted");
-  assert(fs.existsSync(configPath()), "openclaw.json missing");
+  assert(fs.existsSync(configPath()), "sunclaw.json missing");
 }
 
 function assertAgentTurn() {
@@ -139,7 +139,7 @@ function assertImageDescribe() {
   assert(payload.ok === true, `image describe failed: ${JSON.stringify(payload)}`);
   assert(payload.capability === "image.describe", "wrong image describe capability");
   const output = payload.outputs?.[0];
-  assert(output?.text?.includes("OPENCLAW_E2E_OK"), "image description marker missing");
+  assert(output?.text?.includes("SUNCLAW_E2E_OK"), "image description marker missing");
   assert(output.provider === "openai", `unexpected image provider: ${output?.provider}`);
   assert(
     fileContainsText(requestLogPath, "/v1/responses"),
@@ -180,7 +180,7 @@ function assertPluginUninstalled() {
   assert(!cfg.plugins?.entries?.[pluginId], `plugin config entry still present for ${pluginId}`);
   const managedRoot = path.join(
     process.env.HOME ?? "",
-    ".openclaw",
+    ".sunclaw",
     "plugins",
     "installed",
     pluginId,

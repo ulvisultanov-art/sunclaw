@@ -4,7 +4,7 @@ type CronActiveJobState = {
   activeJobIds: Set<string>;
 };
 
-const CRON_ACTIVE_JOB_STATE_KEY = Symbol.for("openclaw.cron.activeJobs");
+const CRON_ACTIVE_JOB_STATE_KEY = Symbol.for("sunclaw.cron.activeJobs");
 
 function getCronActiveJobState(): CronActiveJobState {
   // Cron runs can cross module reload boundaries in tests and dev watch; keep

@@ -1,7 +1,7 @@
 import { spawn } from "node:child_process";
 import os from "node:os";
 import path from "node:path";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
 import { sanitizeForLog } from "../../packages/terminal-core/src/ansi.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import { sanitizeHostExecEnv } from "../infra/host-env-security.js";
@@ -30,8 +30,8 @@ const START_AFTER_EXIT_PRINT_RETRY_DELAY_SECONDS = 0.2;
 type LaunchdRestartLogEnv = {
   HOME?: string;
   USERPROFILE?: string;
-  OPENCLAW_STATE_DIR?: string;
-  OPENCLAW_PROFILE?: string;
+  SUNCLAW_STATE_DIR?: string;
+  SUNCLAW_PROFILE?: string;
 };
 
 function assertValidLaunchAgentLabel(label: string): string {
@@ -65,17 +65,17 @@ function collectRestartLogEnv(env?: Record<string, string | undefined>): Launchd
   return {
     HOME: source.HOME,
     USERPROFILE: source.USERPROFILE,
-    OPENCLAW_STATE_DIR: source.OPENCLAW_STATE_DIR,
-    OPENCLAW_PROFILE: source.OPENCLAW_PROFILE,
+    SUNCLAW_STATE_DIR: source.SUNCLAW_STATE_DIR,
+    SUNCLAW_PROFILE: source.SUNCLAW_PROFILE,
   };
 }
 
 function resolveLaunchAgentLabel(env?: Record<string, string | undefined>): string {
-  const envLabel = normalizeOptionalString(env?.OPENCLAW_LAUNCHD_LABEL);
+  const envLabel = normalizeOptionalString(env?.SUNCLAW_LAUNCHD_LABEL);
   if (envLabel) {
     return assertValidLaunchAgentLabel(envLabel);
   }
-  return assertValidLaunchAgentLabel(resolveGatewayLaunchAgentLabel(env?.OPENCLAW_PROFILE));
+  return assertValidLaunchAgentLabel(resolveGatewayLaunchAgentLabel(env?.SUNCLAW_PROFILE));
 }
 
 function resolveLaunchdRestartTarget(
@@ -100,7 +100,7 @@ function buildLaunchdRestartScript(
   const waitForCallerPid = `wait_pid="$4"
 label="$5"
 ${renderPosixRestartLogSetup(restartLogEnv)}
-printf '[%s] openclaw restart attempt source=launchd-handoff mode=${mode} target=%s waitPid=%s\\n' "$(date -u +%FT%TZ)" "$service_target" "$wait_pid" >&2
+printf '[%s] sunclaw restart attempt source=launchd-handoff mode=${mode} target=%s waitPid=%s\\n' "$(date -u +%FT%TZ)" "$service_target" "$wait_pid" >&2
 if [ -n "$wait_pid" ] && [ "$wait_pid" -gt 1 ] 2>/dev/null; then
   while kill -0 "$wait_pid" >/dev/null 2>&1; do
     sleep 0.1
@@ -128,9 +128,9 @@ else
   fi
 fi
 if [ "$status" -eq 0 ]; then
-  printf '[%s] openclaw restart done source=launchd-handoff mode=${mode}\\n' "$(date -u +%FT%TZ)" >&2
+  printf '[%s] sunclaw restart done source=launchd-handoff mode=${mode}\\n' "$(date -u +%FT%TZ)" >&2
 else
-  printf '[%s] openclaw restart failed source=launchd-handoff mode=${mode} status=%s\\n' "$(date -u +%FT%TZ)" "$status" >&2
+  printf '[%s] sunclaw restart failed source=launchd-handoff mode=${mode} status=%s\\n' "$(date -u +%FT%TZ)" "$status" >&2
 fi
 exit "$status"
 `;
@@ -168,9 +168,9 @@ else
   status=$?
 fi
 if [ "$status" -eq 0 ]; then
-  printf '[%s] openclaw restart done source=launchd-handoff mode=${mode}\\n' "$(date -u +%FT%TZ)" >&2
+  printf '[%s] sunclaw restart done source=launchd-handoff mode=${mode}\\n' "$(date -u +%FT%TZ)" >&2
 else
-  printf '[%s] openclaw restart failed source=launchd-handoff mode=${mode} status=%s\\n' "$(date -u +%FT%TZ)" "$status" >&2
+  printf '[%s] sunclaw restart failed source=launchd-handoff mode=${mode} status=%s\\n' "$(date -u +%FT%TZ)" "$status" >&2
 fi
 exit "$status"
 `;
@@ -179,7 +179,7 @@ exit "$status"
   const verifyLaunchdReload = `print_retry_count="${START_AFTER_EXIT_PRINT_RETRY_COUNT}"
 while [ "$print_retry_count" -gt 0 ]; do
   if launchctl print "$service_target" >/dev/null 2>&1; then
-    printf '[%s] openclaw restart done source=launchd-handoff mode=${mode} reason=launchd-auto-reload\\n' "$(date -u +%FT%TZ)" >&2
+    printf '[%s] sunclaw restart done source=launchd-handoff mode=${mode} reason=launchd-auto-reload\\n' "$(date -u +%FT%TZ)" >&2
     exit 0
   fi
   print_retry_count=$((print_retry_count - 1))
@@ -203,9 +203,9 @@ else
   status=$?
 fi
 if [ "$status" -eq 0 ]; then
-  printf '[%s] openclaw restart done source=launchd-handoff mode=${mode}\\n' "$(date -u +%FT%TZ)" >&2
+  printf '[%s] sunclaw restart done source=launchd-handoff mode=${mode}\\n' "$(date -u +%FT%TZ)" >&2
 else
-  printf '[%s] openclaw restart failed source=launchd-handoff mode=${mode} status=%s\\n' "$(date -u +%FT%TZ)" "$status" >&2
+  printf '[%s] sunclaw restart failed source=launchd-handoff mode=${mode} status=%s\\n' "$(date -u +%FT%TZ)" "$status" >&2
 fi
 exit "$status"
 `;
@@ -232,7 +232,7 @@ export function scheduleDetachedLaunchdRestartHandoff(params: {
       [
         "-c",
         buildLaunchdRestartScript(params.mode, restartLogEnv),
-        "openclaw-launchd-restart-handoff",
+        "sunclaw-launchd-restart-handoff",
         target.serviceTarget,
         target.domain,
         target.plistPath,

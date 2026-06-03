@@ -1,9 +1,9 @@
 import {
   findNormalizedProviderValue,
   normalizeProviderId,
-} from "@openclaw/model-catalog-core/provider-id";
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+} from "@sunclaw/model-catalog-core/provider-id";
+import { normalizeLowercaseStringOrEmpty } from "@sunclaw/normalization-core/string-coerce";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type { Model } from "../llm/types.js";
 import type {
   prepareProviderDynamicModel,
@@ -49,7 +49,7 @@ function liveModelKey(provider: string, id: string): string | null {
 
 export async function appendPrioritizedDynamicLiveModels(params: {
   models: Model[];
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   agentDir: string;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;

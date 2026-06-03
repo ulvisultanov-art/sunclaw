@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type { BundleLspServerConfig } from "../plugins/bundle-lsp.js";
 import { loadEnabledBundleLspConfig } from "../plugins/bundle-lsp.js";
 
@@ -9,7 +9,7 @@ type EmbeddedAgentLspConfig = {
 
 export function loadEmbeddedAgentLspConfig(params: {
   workspaceDir: string;
-  cfg?: OpenClawConfig;
+  cfg?: SunClawConfig;
 }): EmbeddedAgentLspConfig {
   const bundleLsp = loadEnabledBundleLspConfig({
     workspaceDir: params.workspaceDir,

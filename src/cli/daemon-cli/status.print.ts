@@ -134,7 +134,7 @@ export function printDaemonStatus(status: DaemonStatus, opts: { json: boolean; d
     }
     defaultRuntime.error(
       warnText(
-        `Recommendation: run "${formatCliCommand("openclaw doctor")}" (or "${formatCliCommand("openclaw doctor --repair")}").`,
+        `Recommendation: run "${formatCliCommand("sunclaw doctor")}" (or "${formatCliCommand("sunclaw doctor --repair")}").`,
       ),
     );
   }
@@ -188,7 +188,7 @@ export function printDaemonStatus(status: DaemonStatus, opts: { json: boolean; d
       );
       defaultRuntime.error(
         errorText(
-          `Fix: rerun \`${formatCliCommand("openclaw gateway install --force")}\` from the same --profile / OPENCLAW_STATE_DIR you expect.`,
+          `Fix: rerun \`${formatCliCommand("sunclaw gateway install --force")}\` from the same --profile / SUNCLAW_STATE_DIR you expect.`,
         ),
       );
     }
@@ -230,12 +230,12 @@ export function printDaemonStatus(status: DaemonStatus, opts: { json: boolean; d
     if (status.cli?.version && status.cli.version !== gatewayVersion) {
       defaultRuntime.error(
         warnText(
-          `Warning: this OpenClaw command is version ${status.cli.version}, but the running Gateway is version ${gatewayVersion}.`,
+          `Warning: this SunClaw command is version ${status.cli.version}, but the running Gateway is version ${gatewayVersion}.`,
         ),
       );
       defaultRuntime.error(
         warnText(
-          "Check `openclaw --version`, `which openclaw`, and `openclaw gateway status --deep`; if this mismatch is unexpected, update PATH so `openclaw` points to the version you want, or reinstall the Gateway service from that same OpenClaw install.",
+          "Check `sunclaw --version`, `which sunclaw`, and `sunclaw gateway status --deep`; if this mismatch is unexpected, update PATH so `sunclaw` points to the version you want, or reinstall the Gateway service from that same SunClaw install.",
         ),
       );
     }
@@ -293,7 +293,7 @@ export function printDaemonStatus(status: DaemonStatus, opts: { json: boolean; d
     );
     defaultRuntime.error(
       errorText(
-        `Fix: run ${formatCliCommand("openclaw gateway restart")} and re-check with ${formatCliCommand("openclaw gateway status --deep")}.`,
+        `Fix: run ${formatCliCommand("sunclaw gateway restart")} and re-check with ${formatCliCommand("sunclaw gateway status --deep")}.`,
       ),
     );
     spacer();
@@ -313,7 +313,7 @@ export function printDaemonStatus(status: DaemonStatus, opts: { json: boolean; d
     }
     defaultRuntime.log(
       warnText(
-        "If logs show protocol mismatch after rollback, stop stale OpenClaw client processes listed here and re-run gateway status.",
+        "If logs show protocol mismatch after rollback, stop stale SunClaw client processes listed here and re-run gateway status.",
       ),
     );
     spacer();
@@ -368,20 +368,20 @@ export function printDaemonStatus(status: DaemonStatus, opts: { json: boolean; d
 
   if (service.runtime?.cachedLabel) {
     const env = service.command?.environment ?? process.env;
-    const labelValue = resolveGatewayLaunchAgentLabel(env.OPENCLAW_PROFILE);
+    const labelValue = resolveGatewayLaunchAgentLabel(env.SUNCLAW_PROFILE);
     defaultRuntime.error(
       errorText(
         `LaunchAgent label cached but plist missing. Clear with: launchctl bootout gui/$UID/${labelValue}`,
       ),
     );
     defaultRuntime.error(
-      errorText(`Then reinstall: ${formatCliCommand("openclaw gateway install")}`),
+      errorText(`Then reinstall: ${formatCliCommand("sunclaw gateway install")}`),
     );
     spacer();
   }
 
   if (service.staleUpdateLaunchdJobs?.length) {
-    defaultRuntime.error(errorText("Stale OpenClaw updater launchd job(s) detected."));
+    defaultRuntime.error(errorText("Stale SunClaw updater launchd job(s) detected."));
     for (const job of service.staleUpdateLaunchdJobs) {
       const exitStatus =
         job.lastExitStatus !== undefined ? `, last exit ${job.lastExitStatus}` : "";
@@ -390,7 +390,7 @@ export function printDaemonStatus(status: DaemonStatus, opts: { json: boolean; d
     }
     defaultRuntime.error(
       errorText(
-        `Fix after confirming no update is running: launchctl remove <label>, then run ${formatCliCommand("openclaw gateway restart")}.`,
+        `Fix after confirming no update is running: launchctl remove <label>, then run ${formatCliCommand("sunclaw gateway restart")}.`,
       ),
     );
     spacer();
@@ -427,7 +427,7 @@ export function printDaemonStatus(status: DaemonStatus, opts: { json: boolean; d
       defaultRuntime.error(`${errorText("Last gateway error:")} ${status.lastError}`);
     }
     if (process.platform === "linux") {
-      const unit = resolveGatewaySystemdServiceName(serviceEnv.OPENCLAW_PROFILE);
+      const unit = resolveGatewaySystemdServiceName(serviceEnv.SUNCLAW_PROFILE);
       defaultRuntime.error(
         errorText(`Logs: journalctl --user -u ${unit}.service -n 200 --no-pager`),
       );
@@ -470,12 +470,12 @@ export function printDaemonStatus(status: DaemonStatus, opts: { json: boolean; d
         );
       }
       defaultRuntime.log(
-        `${label("Fix:")} ${formatCliCommand("openclaw plugins update <plugin-id>")} for each drifted plugin, then ${formatCliCommand("openclaw gateway restart")}.`,
+        `${label("Fix:")} ${formatCliCommand("sunclaw plugins update <plugin-id>")} for each drifted plugin, then ${formatCliCommand("sunclaw gateway restart")}.`,
       );
     } else {
       defaultRuntime.log(
         infoText(
-          `Run ${formatCliCommand("openclaw gateway status --deep")} for affected plugin ids and fix commands.`,
+          `Run ${formatCliCommand("sunclaw gateway status --deep")} for affected plugin ids and fix commands.`,
         ),
       );
     }
@@ -496,6 +496,6 @@ export function printDaemonStatus(status: DaemonStatus, opts: { json: boolean; d
     spacer();
   }
 
-  defaultRuntime.log(`${label("Troubles:")} run ${formatCliCommand("openclaw status")}`);
-  defaultRuntime.log(`${label("Troubleshooting:")} https://docs.openclaw.ai/troubleshooting`);
+  defaultRuntime.log(`${label("Troubles:")} run ${formatCliCommand("sunclaw status")}`);
+  defaultRuntime.log(`${label("Troubleshooting:")} https://docs.sunclaw.complex.az/troubleshooting`);
 }

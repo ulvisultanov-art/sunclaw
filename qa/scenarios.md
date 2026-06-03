@@ -1,4 +1,4 @@
-# OpenClaw QA Scenarios
+# SunClaw QA Scenarios
 
 Canonical scenario source now lives in:
 

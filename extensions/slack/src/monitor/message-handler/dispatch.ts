@@ -1,4 +1,4 @@
-import { resolveHumanDelayConfig } from "openclaw/plugin-sdk/agent-runtime";
+import { resolveHumanDelayConfig } from "sunclaw/plugin-sdk/agent-runtime";
 import {
   createStatusReactionController,
   DEFAULT_TIMING,
@@ -6,22 +6,22 @@ import {
   logTypingFailure,
   removeAckReactionAfterReply,
   type StatusReactionAdapter,
-} from "openclaw/plugin-sdk/channel-feedback";
+} from "sunclaw/plugin-sdk/channel-feedback";
 import {
   dispatchChannelInboundReply,
   type InboundReplyRecordOptions,
-} from "openclaw/plugin-sdk/channel-inbound";
+} from "sunclaw/plugin-sdk/channel-inbound";
 import {
   type ChannelBotLoopProtectionFacts,
   hasVisibleInboundReplyDispatch,
-} from "openclaw/plugin-sdk/channel-inbound";
+} from "sunclaw/plugin-sdk/channel-inbound";
 import {
   createChannelMessageReplyPipeline,
   defineFinalizableLivePreviewAdapter,
   deliverWithFinalizableLivePreviewAdapter,
   resolveChannelMessageSourceReplyDeliveryMode,
-} from "openclaw/plugin-sdk/channel-outbound";
-import { resolveAgentOutboundIdentity } from "openclaw/plugin-sdk/channel-outbound";
+} from "sunclaw/plugin-sdk/channel-outbound";
+import { resolveAgentOutboundIdentity } from "sunclaw/plugin-sdk/channel-outbound";
 import {
   buildChannelProgressDraftLine,
   buildChannelProgressDraftLineForEntry,
@@ -38,20 +38,20 @@ import {
   resolveChannelStreamingPreviewToolProgress,
   resolveChannelStreamingSuppressDefaultToolProgressMessages,
   type ChannelProgressDraftLine,
-} from "openclaw/plugin-sdk/channel-outbound";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { mergePairLoopGuardConfig } from "openclaw/plugin-sdk/pair-loop-guard-runtime";
+} from "sunclaw/plugin-sdk/channel-outbound";
+import { formatErrorMessage } from "sunclaw/plugin-sdk/error-runtime";
+import { mergePairLoopGuardConfig } from "sunclaw/plugin-sdk/pair-loop-guard-runtime";
 import {
   buildTtsSupplementMediaPayload,
   getReplyPayloadTtsSupplement,
   resolveSendableOutboundReplyParts,
-} from "openclaw/plugin-sdk/reply-payload";
-import type { ReplyDispatchKind, ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
-import { resolveInboundLastRouteSessionKey } from "openclaw/plugin-sdk/routing";
-import { danger, logVerbose, shouldLogVerbose, sleep } from "openclaw/plugin-sdk/runtime-env";
-import { resolvePinnedMainDmOwnerFromAllowlist } from "openclaw/plugin-sdk/security-runtime";
-import { normalizeOptionalLowercaseString } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { stripReasoningTagsFromText } from "openclaw/plugin-sdk/text-chunking";
+} from "sunclaw/plugin-sdk/reply-payload";
+import type { ReplyDispatchKind, ReplyPayload } from "sunclaw/plugin-sdk/reply-runtime";
+import { resolveInboundLastRouteSessionKey } from "sunclaw/plugin-sdk/routing";
+import { danger, logVerbose, shouldLogVerbose, sleep } from "sunclaw/plugin-sdk/runtime-env";
+import { resolvePinnedMainDmOwnerFromAllowlist } from "sunclaw/plugin-sdk/security-runtime";
+import { normalizeOptionalLowercaseString } from "sunclaw/plugin-sdk/string-coerce-runtime";
+import { stripReasoningTagsFromText } from "sunclaw/plugin-sdk/text-chunking";
 import { reactSlackMessage, removeSlackReaction } from "../../actions.js";
 import { createSlackDraftStream } from "../../draft-stream.js";
 import { formatSlackError } from "../../errors.js";

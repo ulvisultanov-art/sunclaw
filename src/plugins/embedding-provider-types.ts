@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type { SecretInput } from "../config/types.secrets.js";
 
 export type EmbeddingInput =
@@ -36,7 +36,7 @@ export type EmbeddingProvider = {
 };
 
 export type EmbeddingProviderCreateOptions = {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   agentDir?: string;
   provider?: string;
   remote?: {

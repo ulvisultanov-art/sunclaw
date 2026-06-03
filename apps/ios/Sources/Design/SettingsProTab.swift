@@ -1,4 +1,4 @@
-import OpenClawKit
+import SunClawKit
 import SwiftUI
 import UIKit
 import UserNotifications
@@ -13,7 +13,7 @@ struct SettingsProTab: View {
     @AppStorage("node.displayName") var displayName: String = "iOS Node"
     @AppStorage("node.instanceId") var instanceId: String = UUID().uuidString
     @AppStorage("camera.enabled") var cameraEnabled: Bool = true
-    @AppStorage("location.enabledMode") var locationModeRaw: String = OpenClawLocationMode.off.rawValue
+    @AppStorage("location.enabledMode") var locationModeRaw: String = SunClawLocationMode.off.rawValue
     @AppStorage("screen.preventSleep") var preventSleep: Bool = true
     @AppStorage("talk.enabled") var talkEnabled: Bool = false
     @AppStorage(TalkModeProviderSelection.storageKey) var talkProviderSelectionRaw: String =
@@ -54,7 +54,7 @@ struct SettingsProTab: View {
     @State var showResetOnboardingAlert = false
     @State var suppressCredentialPersist = false
     @State var locationStatusText: String?
-    @State var previousLocationModeRaw: String = OpenClawLocationMode.off.rawValue
+    @State var previousLocationModeRaw: String = SunClawLocationMode.off.rawValue
     @State var notificationStatusText = "Checking"
     @State var notificationActionText = "Request Access"
     @State var diagnosticsLastRunText = "Not run"
@@ -63,7 +63,7 @@ struct SettingsProTab: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                OpenClawProBackground()
+                SunClawProBackground()
                 ScrollView {
                     VStack(alignment: .leading, spacing: 18) {
                         self.settingsHeader
@@ -73,7 +73,7 @@ struct SettingsProTab: View {
                     }
                     .padding(.vertical, 18)
                 }
-                .safeAreaPadding(.bottom, OpenClawProMetric.bottomScrollInset)
+                .safeAreaPadding(.bottom, SunClawProMetric.bottomScrollInset)
             }
             .navigationBarHidden(true)
             .navigationDestination(for: SettingsRoute.self) { route in

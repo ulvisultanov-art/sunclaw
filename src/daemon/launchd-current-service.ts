@@ -1,4 +1,4 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
 
 export type CurrentProcessLaunchdServiceLabelOptions = {
   allowConfiguredLabelFallback?: boolean;
@@ -22,13 +22,13 @@ export function isCurrentProcessLaunchdServiceLabel(
     }
   }
 
-  const configuredLabel = normalizeOptionalString(env.OPENCLAW_LAUNCHD_LABEL);
+  const configuredLabel = normalizeOptionalString(env.SUNCLAW_LAUNCHD_LABEL);
   if (!configuredLabel || configuredLabel !== label) {
     return false;
   }
   if (
-    normalizeOptionalString(env.OPENCLAW_SERVICE_MARKER) === "openclaw" &&
-    Boolean(normalizeOptionalString(env.OPENCLAW_SERVICE_KIND))
+    normalizeOptionalString(env.SUNCLAW_SERVICE_MARKER) === "sunclaw" &&
+    Boolean(normalizeOptionalString(env.SUNCLAW_SERVICE_KIND))
   ) {
     return true;
   }

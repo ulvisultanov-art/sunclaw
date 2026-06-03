@@ -6,36 +6,36 @@ describe("SUPERVISOR_HINT_ENV_VARS", () => {
     const envVars = new Set(SUPERVISOR_HINT_ENV_VARS);
     expect(envVars.has("LAUNCH_JOB_LABEL")).toBe(true);
     expect(envVars.has("INVOCATION_ID")).toBe(true);
-    expect(envVars.has("OPENCLAW_WINDOWS_TASK_NAME")).toBe(true);
-    expect(envVars.has("OPENCLAW_SERVICE_MARKER")).toBe(true);
-    expect(envVars.has("OPENCLAW_SERVICE_KIND")).toBe(true);
+    expect(envVars.has("SUNCLAW_WINDOWS_TASK_NAME")).toBe(true);
+    expect(envVars.has("SUNCLAW_SERVICE_MARKER")).toBe(true);
+    expect(envVars.has("SUNCLAW_SERVICE_KIND")).toBe(true);
   });
 });
 
 describe("detectRespawnSupervisor", () => {
-  it("detects launchd from OpenClaw's explicit marker or current gateway launchd job", () => {
+  it("detects launchd from SunClaw's explicit marker or current gateway launchd job", () => {
     expect(
-      detectRespawnSupervisor({ OPENCLAW_LAUNCHD_LABEL: " ai.openclaw.gateway " }, "darwin"),
+      detectRespawnSupervisor({ SUNCLAW_LAUNCHD_LABEL: " ai.sunclaw.gateway " }, "darwin"),
     ).toBe("launchd");
-    expect(detectRespawnSupervisor({ OPENCLAW_LAUNCHD_LABEL: "   " }, "darwin")).toBeNull();
-    expect(detectRespawnSupervisor({ LAUNCH_JOB_LABEL: "ai.openclaw.gateway" }, "darwin")).toBe(
+    expect(detectRespawnSupervisor({ SUNCLAW_LAUNCHD_LABEL: "   " }, "darwin")).toBeNull();
+    expect(detectRespawnSupervisor({ LAUNCH_JOB_LABEL: "ai.sunclaw.gateway" }, "darwin")).toBe(
       "launchd",
     );
     expect(
       detectRespawnSupervisor(
-        { LAUNCH_JOB_NAME: "ai.openclaw.work", OPENCLAW_PROFILE: "work" },
+        { LAUNCH_JOB_NAME: "ai.sunclaw.work", SUNCLAW_PROFILE: "work" },
         "darwin",
       ),
     ).toBe("launchd");
-    expect(detectRespawnSupervisor({ LAUNCH_JOB_LABEL: "ai.openclaw.mac" }, "darwin")).toBeNull();
-    expect(detectRespawnSupervisor({ XPC_SERVICE_NAME: "ai.openclaw.mac" }, "darwin")).toBeNull();
+    expect(detectRespawnSupervisor({ LAUNCH_JOB_LABEL: "ai.sunclaw.mac" }, "darwin")).toBeNull();
+    expect(detectRespawnSupervisor({ XPC_SERVICE_NAME: "ai.sunclaw.mac" }, "darwin")).toBeNull();
     expect(
       detectRespawnSupervisor(
-        { XPC_SERVICE_NAME: "ai.openclaw.mac", OPENCLAW_PROFILE: "mac" },
+        { XPC_SERVICE_NAME: "ai.sunclaw.mac", SUNCLAW_PROFILE: "mac" },
         "darwin",
       ),
     ).toBeNull();
-    expect(detectRespawnSupervisor({ XPC_SERVICE_NAME: "ai.openclaw.gateway" }, "darwin")).toBe(
+    expect(detectRespawnSupervisor({ XPC_SERVICE_NAME: "ai.sunclaw.gateway" }, "darwin")).toBe(
       "launchd",
     );
   });
@@ -47,13 +47,13 @@ describe("detectRespawnSupervisor", () => {
 
   it("detects scheduled-task supervision on Windows from either hint family", () => {
     expect(
-      detectRespawnSupervisor({ OPENCLAW_WINDOWS_TASK_NAME: "OpenClaw Gateway" }, "win32"),
+      detectRespawnSupervisor({ SUNCLAW_WINDOWS_TASK_NAME: "SunClaw Gateway" }, "win32"),
     ).toBe("schtasks");
     expect(
       detectRespawnSupervisor(
         {
-          OPENCLAW_SERVICE_MARKER: "openclaw",
-          OPENCLAW_SERVICE_KIND: "gateway",
+          SUNCLAW_SERVICE_MARKER: "sunclaw",
+          SUNCLAW_SERVICE_KIND: "gateway",
         },
         "win32",
       ),
@@ -61,8 +61,8 @@ describe("detectRespawnSupervisor", () => {
     expect(
       detectRespawnSupervisor(
         {
-          OPENCLAW_SERVICE_MARKER: "openclaw",
-          OPENCLAW_SERVICE_KIND: "worker",
+          SUNCLAW_SERVICE_MARKER: "sunclaw",
+          SUNCLAW_SERVICE_KIND: "worker",
         },
         "win32",
       ),
@@ -73,14 +73,14 @@ describe("detectRespawnSupervisor", () => {
     expect(
       detectRespawnSupervisor(
         {
-          OPENCLAW_SERVICE_MARKER: "openclaw",
-          OPENCLAW_SERVICE_KIND: "gateway",
+          SUNCLAW_SERVICE_MARKER: "sunclaw",
+          SUNCLAW_SERVICE_KIND: "gateway",
         },
         "linux",
       ),
     ).toBeNull();
     expect(
-      detectRespawnSupervisor({ LAUNCH_JOB_LABEL: "ai.openclaw.gateway" }, "freebsd"),
+      detectRespawnSupervisor({ LAUNCH_JOB_LABEL: "ai.sunclaw.gateway" }, "freebsd"),
     ).toBeNull();
   });
 });

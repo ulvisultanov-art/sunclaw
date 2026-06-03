@@ -3,8 +3,8 @@ import {
   listMemoryEmbeddingProviders,
   listRegisteredMemoryEmbeddingProviderAdapters,
   type MemoryEmbeddingProviderAdapter,
-} from "openclaw/plugin-sdk/memory-core-host-embedding-registry";
-import { getProviderEnvVars } from "openclaw/plugin-sdk/provider-env-vars";
+} from "sunclaw/plugin-sdk/memory-core-host-embedding-registry";
+import { getProviderEnvVars } from "sunclaw/plugin-sdk/provider-env-vars";
 import { formatErrorMessage } from "../dreaming-shared.js";
 import { filterUnregisteredMemoryEmbeddingProviderAdapters } from "./provider-adapter-registration.js";
 
@@ -54,7 +54,7 @@ function formatLocalSetupError(err: unknown): string {
     "To enable local embeddings:",
     "1) Use Node 24 (recommended for installs/updates; Node 22 LTS, currently 22.19+, remains supported)",
     missing
-      ? `2) Install ${NODE_LLAMA_CPP_RUNTIME_PACKAGE} next to the OpenClaw package or source checkout`
+      ? `2) Install ${NODE_LLAMA_CPP_RUNTIME_PACKAGE} next to the SunClaw package or source checkout`
       : null,
     `3) If you use pnpm: pnpm approve-builds (select ${NODE_LLAMA_CPP_RUNTIME_PACKAGE}), then pnpm rebuild ${NODE_LLAMA_CPP_RUNTIME_PACKAGE}`,
     ...listRemoteEmbeddingSetupHints(),
@@ -72,7 +72,7 @@ const localAdapter: MemoryEmbeddingProviderAdapter = {
   shouldContinueAutoSelection: () => true,
   create: async (options) => {
     const { createLocalEmbeddingProvider } =
-      await import("openclaw/plugin-sdk/memory-core-host-engine-embeddings");
+      await import("sunclaw/plugin-sdk/memory-core-host-engine-embeddings");
     const provider = await createLocalEmbeddingProvider({
       ...options,
       provider: "local",

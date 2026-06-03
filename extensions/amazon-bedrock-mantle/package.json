@@ -1,10 +1,10 @@
 {
-  "name": "@openclaw/amazon-bedrock-mantle-provider",
+  "name": "@sunclaw/amazon-bedrock-mantle-provider",
   "version": "2026.6.2",
-  "description": "OpenClaw Amazon Bedrock Mantle provider plugin for OpenAI-compatible model routing.",
+  "description": "SunClaw Amazon Bedrock Mantle provider plugin for OpenAI-compatible model routing.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/ulvisultanov-art/sunclaw"
   },
   "type": "module",
   "dependencies": {
@@ -12,14 +12,14 @@
     "@aws/bedrock-token-generator": "1.1.0"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@sunclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "npmSpec": "@openclaw/amazon-bedrock-mantle-provider",
+      "npmSpec": "@sunclaw/amazon-bedrock-mantle-provider",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.5.12-beta.1"
     },
@@ -27,7 +27,7 @@
       "pluginApi": ">=2026.6.2"
     },
     "build": {
-      "openclawVersion": "2026.6.2",
+      "sunclawVersion": "2026.6.2",
       "bundledDist": false
     },
     "release": {

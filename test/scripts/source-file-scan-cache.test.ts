@@ -7,7 +7,7 @@ import { collectSourceFileContents } from "../../scripts/lib/source-file-scan-ca
 const tempDirs: string[] = [];
 
 async function makeTempRepo() {
-  const repoRoot = await mkdtemp(path.join(os.tmpdir(), "openclaw-source-scan-"));
+  const repoRoot = await mkdtemp(path.join(os.tmpdir(), "sunclaw-source-scan-"));
   tempDirs.push(repoRoot);
   return repoRoot;
 }

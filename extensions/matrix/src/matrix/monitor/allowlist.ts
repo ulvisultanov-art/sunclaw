@@ -1,9 +1,9 @@
 import {
   resolveAllowlistMatchByCandidates,
   type AllowlistMatch,
-} from "openclaw/plugin-sdk/allow-from";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { normalizeStringEntries } from "openclaw/plugin-sdk/string-normalization-runtime";
+} from "sunclaw/plugin-sdk/allow-from";
+import { normalizeLowercaseStringOrEmpty } from "sunclaw/plugin-sdk/string-coerce-runtime";
+import { normalizeStringEntries } from "sunclaw/plugin-sdk/string-normalization-runtime";
 
 function normalizeAllowList(list?: Array<string | number>) {
   return normalizeStringEntries(list);

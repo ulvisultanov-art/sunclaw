@@ -4,7 +4,7 @@ import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { clearConfigCache, clearRuntimeConfigSnapshot } from "../config/config.js";
 import { clearSessionStoreCacheForTest } from "../config/sessions/store.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { captureEnv } from "../test-utils/env.js";
 import { ADMIN_SCOPE, APPROVALS_SCOPE } from "./method-scopes.js";
 import { withOperatorApprovalsGatewayClient } from "./operator-approvals-client.js";
@@ -17,12 +17,12 @@ import {
 
 const TEST_ENV_KEYS = [
   "HOME",
-  "OPENCLAW_STATE_DIR",
-  "OPENCLAW_CONFIG_PATH",
-  "OPENCLAW_GATEWAY_URL",
-  "OPENCLAW_GATEWAY_TOKEN",
-  "OPENCLAW_GATEWAY_PASSWORD",
-  "OPENCLAW_GATEWAY_PORT",
+  "SUNCLAW_STATE_DIR",
+  "SUNCLAW_CONFIG_PATH",
+  "SUNCLAW_GATEWAY_URL",
+  "SUNCLAW_GATEWAY_TOKEN",
+  "SUNCLAW_GATEWAY_PASSWORD",
+  "SUNCLAW_GATEWAY_PORT",
 ];
 
 type Cleanup = () => Promise<void> | void;
@@ -62,23 +62,23 @@ describe("operator approval gateway client runtime token source", () => {
   it("uses runtime authority only for generated local gateway URLs", async () => {
     const envSnapshot = captureEnv(TEST_ENV_KEYS);
     cleanup.push(() => envSnapshot.restore());
-    delete process.env.OPENCLAW_CONFIG_PATH;
-    delete process.env.OPENCLAW_GATEWAY_URL;
-    delete process.env.OPENCLAW_GATEWAY_TOKEN;
-    delete process.env.OPENCLAW_GATEWAY_PASSWORD;
+    delete process.env.SUNCLAW_CONFIG_PATH;
+    delete process.env.SUNCLAW_GATEWAY_URL;
+    delete process.env.SUNCLAW_GATEWAY_TOKEN;
+    delete process.env.SUNCLAW_GATEWAY_PASSWORD;
 
-    const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-approval-client-e2e-"));
+    const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-approval-client-e2e-"));
     cleanup.push(() => fs.rm(tempHome, { recursive: true, force: true, maxRetries: 5 }));
 
-    const stateDir = path.join(tempHome, ".openclaw");
+    const stateDir = path.join(tempHome, ".sunclaw");
     await fs.mkdir(stateDir, { recursive: true });
     process.env.HOME = tempHome;
-    process.env.OPENCLAW_STATE_DIR = stateDir;
+    process.env.SUNCLAW_STATE_DIR = stateDir;
 
     const port = await getFreeGatewayPort();
     const token = "approval-client-e2e-token";
     const url = `ws://127.0.0.1:${port}`;
-    process.env.OPENCLAW_GATEWAY_PORT = String(port);
+    process.env.SUNCLAW_GATEWAY_PORT = String(port);
 
     const server = await startGatewayServer(port, {
       bind: "loopback",
@@ -111,7 +111,7 @@ describe("operator approval gateway client runtime token source", () => {
         port,
         auth: { mode: "token", token },
       },
-    } satisfies OpenClawConfig;
+    } satisfies SunClawConfig;
 
     await requestExecApproval({ requester, id: "local-source-approval" });
     await withOperatorApprovalsGatewayClient(
@@ -134,7 +134,7 @@ describe("operator approval gateway client runtime token source", () => {
         remote: { url },
         auth: { mode: "token", token },
       },
-    } satisfies OpenClawConfig;
+    } satisfies SunClawConfig;
 
     await requestExecApproval({ requester, id: "remote-loopback-approval" });
     await expect(

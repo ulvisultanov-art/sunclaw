@@ -3,7 +3,7 @@ import { chmodSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "nod
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
-import { bundledPluginFile, bundledPluginRoot } from "openclaw/plugin-sdk/test-fixtures";
+import { bundledPluginFile, bundledPluginRoot } from "sunclaw/plugin-sdk/test-fixtures";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 import {
   detectChangedExtensionIds,
@@ -294,7 +294,7 @@ describe("scripts/test-extension.mjs", () => {
 
   it("can fail safe to all extensions when the base revision is unavailable", () => {
     const extensionIds = listChangedExtensionIds({
-      base: "refs/heads/openclaw-test-missing-base",
+      base: "refs/heads/sunclaw-test-missing-base",
       unavailableBaseBehavior: "all",
     });
 
@@ -581,7 +581,7 @@ describe("scripts/test-extension.mjs", () => {
         testFileCount: 6,
       },
       {
-        env: { OPENCLAW_EXTENSION_BATCH_PARALLEL: "2" },
+        env: { SUNCLAW_EXTENSION_BATCH_PARALLEL: "2" },
         runGroup,
         vitestArgs: ["--reporter=dot"],
       },
@@ -604,8 +604,8 @@ describe("scripts/test-extension.mjs", () => {
       args: ["--reporter=dot"],
       config: "heavy",
       env: {
-        OPENCLAW_EXTENSION_BATCH_PARALLEL: "2",
-        OPENCLAW_VITEST_FS_MODULE_CACHE_PATH: path.join(
+        SUNCLAW_EXTENSION_BATCH_PARALLEL: "2",
+        SUNCLAW_VITEST_FS_MODULE_CACHE_PATH: path.join(
           process.cwd(),
           "node_modules",
           ".experimental-vitest-cache",
@@ -618,16 +618,16 @@ describe("scripts/test-extension.mjs", () => {
   });
 
   it("keeps extension batch parallelism bounded by group count", () => {
-    expect(resolveExtensionBatchParallelism(3, { OPENCLAW_EXTENSION_BATCH_PARALLEL: "2" })).toBe(2);
-    expect(resolveExtensionBatchParallelism(1, { OPENCLAW_EXTENSION_BATCH_PARALLEL: "4" })).toBe(1);
+    expect(resolveExtensionBatchParallelism(3, { SUNCLAW_EXTENSION_BATCH_PARALLEL: "2" })).toBe(2);
+    expect(resolveExtensionBatchParallelism(1, { SUNCLAW_EXTENSION_BATCH_PARALLEL: "4" })).toBe(1);
     expect(resolveExtensionBatchParallelism(3, {})).toBe(1);
   });
 
   it("rejects malformed extension batch parallelism", () => {
     for (const value of ["nope", "2x", "0"]) {
       expect(() =>
-        resolveExtensionBatchParallelism(3, { OPENCLAW_EXTENSION_BATCH_PARALLEL: value }),
-      ).toThrow("OPENCLAW_EXTENSION_BATCH_PARALLEL must be a positive integer");
+        resolveExtensionBatchParallelism(3, { SUNCLAW_EXTENSION_BATCH_PARALLEL: value }),
+      ).toThrow("SUNCLAW_EXTENSION_BATCH_PARALLEL must be a positive integer");
     }
   });
 
@@ -668,7 +668,7 @@ describe("scripts/test-extension.mjs", () => {
   posixIt(
     "preserves wrapper termination when the pnpm child exits cleanly after SIGTERM",
     async () => {
-      const root = mkdtempSync(path.join(tmpdir(), "openclaw-test-extension-signal-"));
+      const root = mkdtempSync(path.join(tmpdir(), "sunclaw-test-extension-signal-"));
       const fakePnpmPath = path.join(root, "pnpm");
       const childPidPath = path.join(root, "child.pid");
       const signaledPath = path.join(root, "signaled");
@@ -678,8 +678,8 @@ describe("scripts/test-extension.mjs", () => {
         cwd: process.cwd(),
         env: {
           ...process.env,
-          OPENCLAW_FAKE_PNPM_PID_PATH: childPidPath,
-          OPENCLAW_FAKE_PNPM_SIGNALED_PATH: signaledPath,
+          SUNCLAW_FAKE_PNPM_PID_PATH: childPidPath,
+          SUNCLAW_FAKE_PNPM_SIGNALED_PATH: signaledPath,
           npm_execpath: fakePnpmPath,
         },
         stdio: "ignore",
@@ -810,9 +810,9 @@ function writeFakePnpm(filePath: string): void {
     [
       "#!/usr/bin/env node",
       'const fs = require("node:fs");',
-      "fs.writeFileSync(process.env.OPENCLAW_FAKE_PNPM_PID_PATH, String(process.pid));",
+      "fs.writeFileSync(process.env.SUNCLAW_FAKE_PNPM_PID_PATH, String(process.pid));",
       'process.on("SIGTERM", () => {',
-      '  fs.writeFileSync(process.env.OPENCLAW_FAKE_PNPM_SIGNALED_PATH, "SIGTERM");',
+      '  fs.writeFileSync(process.env.SUNCLAW_FAKE_PNPM_SIGNALED_PATH, "SIGTERM");',
       "  process.exit(0);",
       "});",
       "setInterval(() => {}, 1000);",

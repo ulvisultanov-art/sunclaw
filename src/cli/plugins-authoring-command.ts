@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
+import { uniqueStrings } from "@sunclaw/normalization-core/string-normalization";
 import { getToolPluginMetadata, type ToolPluginMetadata } from "../plugin-sdk/tool-plugin.js";
 import {
   loadPluginManifest,
@@ -189,20 +189,20 @@ export function buildToolPluginPackageManifest(params: {
   packageManifest: JsonObject;
   entry: string;
 }): JsonObject {
-  const openclaw =
-    params.packageManifest.openclaw &&
-    typeof params.packageManifest.openclaw === "object" &&
-    !Array.isArray(params.packageManifest.openclaw)
-      ? { ...(params.packageManifest.openclaw as JsonObject) }
+  const sunclaw =
+    params.packageManifest.sunclaw &&
+    typeof params.packageManifest.sunclaw === "object" &&
+    !Array.isArray(params.packageManifest.sunclaw)
+      ? { ...(params.packageManifest.sunclaw as JsonObject) }
       : {};
-  const existingExtensions = Array.isArray(openclaw.extensions)
-    ? openclaw.extensions.filter((entry): entry is string => typeof entry === "string")
+  const existingExtensions = Array.isArray(sunclaw.extensions)
+    ? sunclaw.extensions.filter((entry): entry is string => typeof entry === "string")
     : [];
   const extensions = uniqueStrings([...existingExtensions, params.entry]);
   return {
     ...params.packageManifest,
-    openclaw: {
-      ...openclaw,
+    sunclaw: {
+      ...sunclaw,
       extensions,
     },
   };
@@ -221,15 +221,15 @@ export function validateToolPluginProject(params: {
     existingManifest: params.manifest,
   });
   if (JSON.stringify(params.manifest) !== JSON.stringify(expectedManifest)) {
-    errors.push("openclaw.plugin.json generated metadata is stale. Run openclaw plugins build.");
+    errors.push("sunclaw.plugin.json generated metadata is stale. Run sunclaw plugins build.");
   }
   if (params.manifest.id !== params.metadata.id) {
     errors.push(
-      `openclaw.plugin.json id (${String(params.manifest.id)}) must match entry id (${params.metadata.id})`,
+      `sunclaw.plugin.json id (${String(params.manifest.id)}) must match entry id (${params.metadata.id})`,
     );
   }
   if (!params.manifest.configSchema || typeof params.manifest.configSchema !== "object") {
-    errors.push("openclaw.plugin.json must include object configSchema");
+    errors.push("sunclaw.plugin.json must include object configSchema");
   }
   const manifestContracts = params.manifest.contracts as { tools?: unknown } | undefined;
   const manifestTools = Array.isArray(manifestContracts?.tools)
@@ -239,11 +239,11 @@ export function validateToolPluginProject(params: {
   const missing = metadataTools.filter((tool) => !manifestTools.includes(tool));
   const extra = manifestTools.filter((tool) => !metadataTools.includes(tool));
   if (missing.length > 0) {
-    errors.push(`openclaw.plugin.json contracts.tools is missing: ${missing.join(", ")}`);
+    errors.push(`sunclaw.plugin.json contracts.tools is missing: ${missing.join(", ")}`);
   }
   if (extra.length > 0) {
     errors.push(
-      `openclaw.plugin.json contracts.tools has no matching defineToolPlugin tool: ${extra.join(
+      `sunclaw.plugin.json contracts.tools has no matching defineToolPlugin tool: ${extra.join(
         ", ",
       )}`,
     );
@@ -252,11 +252,11 @@ export function validateToolPluginProject(params: {
   if (extensionResolution.status !== "ok") {
     errors.push(
       extensionResolution.status === "missing" || extensionResolution.status === "empty"
-        ? "package.json must include openclaw.extensions"
+        ? "package.json must include sunclaw.extensions"
         : extensionResolution.error,
     );
   } else if (!extensionResolution.entries.includes(params.entry)) {
-    errors.push(`package.json openclaw.extensions must include ${params.entry}`);
+    errors.push(`package.json sunclaw.extensions must include ${params.entry}`);
   }
   return errors;
 }
@@ -286,7 +286,7 @@ export async function runPluginsBuildCommand(opts: PluginsBuildOptions): Promise
       JSON.stringify(currentManifest) !== JSON.stringify(manifest) ||
       JSON.stringify(currentPackage) !== JSON.stringify(nextPackageManifest)
     ) {
-      defaultRuntime.error("Generated plugin metadata is out of date. Run openclaw plugins build.");
+      defaultRuntime.error("Generated plugin metadata is out of date. Run sunclaw plugins build.");
       return defaultRuntime.exit(1);
     }
     defaultRuntime.log("Plugin metadata is up to date.");
@@ -350,37 +350,37 @@ export async function runPluginsInitCommand(id: string, opts: PluginsInitOptions
   fs.mkdirSync(path.join(rootDir, "src"), { recursive: true });
 
   const packageManifest = {
-    name: `openclaw-plugin-${id}`,
+    name: `sunclaw-plugin-${id}`,
     version: "0.1.0",
     type: "module",
     private: true,
     scripts: {
       build: "tsc -p tsconfig.json",
-      "plugin:build": "npm run build && openclaw plugins build --entry ./dist/index.js",
-      "plugin:validate": "npm run build && openclaw plugins validate --entry ./dist/index.js",
+      "plugin:build": "npm run build && sunclaw plugins build --entry ./dist/index.js",
+      "plugin:validate": "npm run build && sunclaw plugins validate --entry ./dist/index.js",
       test: "vitest run",
     },
-    files: ["dist", "openclaw.plugin.json", "README.md"],
+    files: ["dist", "sunclaw.plugin.json", "README.md"],
     peerDependencies: {
-      openclaw: ">=2026.5.17",
+      sunclaw: ">=2026.5.17",
     },
     dependencies: {
       typebox: "^1.1.38",
     },
     devDependencies: {
-      openclaw: "latest",
+      sunclaw: "latest",
       typescript: "^5.9.0",
       vitest: "^3.2.0",
     },
-    openclaw: {
+    sunclaw: {
       extensions: ["./dist/index.js"],
     },
   };
   const idLiteral = jsStringLiteral(id);
   const nameLiteral = jsStringLiteral(name);
-  const descriptionLiteral = jsStringLiteral(`Add ${name} tools to OpenClaw.`);
+  const descriptionLiteral = jsStringLiteral(`Add ${name} tools to SunClaw.`);
   const indexSource = `import { Type } from "typebox";
-import { defineToolPlugin } from "openclaw/plugin-sdk/tool-plugin";
+import { defineToolPlugin } from "sunclaw/plugin-sdk/tool-plugin";
 
 export default defineToolPlugin({
   id: ${idLiteral},
@@ -400,7 +400,7 @@ export default defineToolPlugin({
 `;
   const testSource = `import { describe, expect, it } from "vitest";
 import entry from "./index.js";
-import { getToolPluginMetadata } from "openclaw/plugin-sdk/tool-plugin";
+import { getToolPluginMetadata } from "sunclaw/plugin-sdk/tool-plugin";
 
 describe(${idLiteral}, () => {
   it("declares tool metadata", () => {
@@ -410,7 +410,7 @@ describe(${idLiteral}, () => {
 `;
   const readmeSource = `# ${name}
 
-Simple OpenClaw tool plugin.
+Simple SunClaw tool plugin.
 
 ## Build
 
@@ -442,7 +442,7 @@ npm test
   writeJsonFile(path.join(rootDir, PLUGIN_MANIFEST_FILENAME), {
     id,
     name,
-    description: `Add ${name} tools to OpenClaw.`,
+    description: `Add ${name} tools to SunClaw.`,
     version: packageManifest.version,
     configSchema: {
       type: "object",

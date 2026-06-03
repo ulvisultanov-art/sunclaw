@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { SunClawConfig } from "../../config/config.js";
 import { ensureOutboundSessionEntry, resolveOutboundSessionRoute } from "./outbound-session.js";
 import { setMinimalOutboundSessionPluginRegistryForTests } from "./outbound-session.test-helpers.js";
 
@@ -42,8 +42,8 @@ describe("resolveOutboundSessionRoute", () => {
     setMinimalOutboundSessionPluginRegistryForTests();
   });
 
-  const baseConfig = {} as OpenClawConfig;
-  const perChannelPeerCfg = { session: { dmScope: "per-channel-peer" } } as OpenClawConfig;
+  const baseConfig = {} as SunClawConfig;
+  const perChannelPeerCfg = { session: { dmScope: "per-channel-peer" } } as SunClawConfig;
   const identityLinksCfg = {
     session: {
       dmScope: "per-peer",
@@ -51,7 +51,7 @@ describe("resolveOutboundSessionRoute", () => {
         alice: ["guildchat:123"],
       },
     },
-  } as OpenClawConfig;
+  } as SunClawConfig;
   const workspaceMpimCfg = {
     channels: {
       workspace: {
@@ -60,10 +60,10 @@ describe("resolveOutboundSessionRoute", () => {
         },
       },
     },
-  } as OpenClawConfig;
+  } as SunClawConfig;
 
   async function expectResolvedRoute(params: {
-    cfg: OpenClawConfig;
+    cfg: SunClawConfig;
     channel: string;
     target: string;
     replyToId?: string;
@@ -102,7 +102,7 @@ describe("resolveOutboundSessionRoute", () => {
   type RouteCase = Parameters<typeof expectResolvedRoute>[0];
   type NamedRouteCase = RouteCase & { name: string };
 
-  const perChannelPeerSessionCfg = { session: { dmScope: "per-channel-peer" } } as OpenClawConfig;
+  const perChannelPeerSessionCfg = { session: { dmScope: "per-channel-peer" } } as SunClawConfig;
 
   it.each([
     {
@@ -506,7 +506,7 @@ describe("ensureOutboundSessionEntry", () => {
         session: {
           store: "/stores/{agentId}.json",
         },
-      } as OpenClawConfig,
+      } as SunClawConfig,
       channel: "workspace",
       route: {
         sessionKey: "agent:main:workspace:channel:c1",

@@ -1,12 +1,12 @@
-import type { ProviderPrepareRuntimeAuthContext } from "openclaw/plugin-sdk/core";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
+import type { ProviderPrepareRuntimeAuthContext } from "sunclaw/plugin-sdk/core";
+import { formatErrorMessage } from "sunclaw/plugin-sdk/error-runtime";
 import {
   asDateTimestampMs,
   resolveDateTimestampMs,
   resolveExpiresAtMsFromDurationMs,
-} from "openclaw/plugin-sdk/number-runtime";
-import { ensureAuthProfileStore } from "openclaw/plugin-sdk/provider-auth";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/number-runtime";
+import { ensureAuthProfileStore } from "sunclaw/plugin-sdk/provider-auth";
+import { normalizeOptionalString } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { getAccessTokenResultAsync } from "./cli.js";
 import {
   type CachedTokenEntry,

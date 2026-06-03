@@ -1,10 +1,10 @@
-import { sendDurableMessageBatch } from "openclaw/plugin-sdk/channel-outbound";
+import { sendDurableMessageBatch } from "sunclaw/plugin-sdk/channel-outbound";
 import {
   createEmptyPluginRegistry,
   createTestRegistry,
   resetPluginRuntimeStateForTest,
   setActivePluginRegistry,
-} from "openclaw/plugin-sdk/plugin-test-runtime";
+} from "sunclaw/plugin-sdk/plugin-test-runtime";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import {
   createDiscordOutboundHoisted,

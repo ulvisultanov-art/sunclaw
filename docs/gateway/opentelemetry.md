@@ -1,13 +1,13 @@
 ---
-summary: "Export OpenClaw diagnostics to any OpenTelemetry collector via the diagnostics-otel plugin (OTLP/HTTP)"
+summary: "Export SunClaw diagnostics to any OpenTelemetry collector via the diagnostics-otel plugin (OTLP/HTTP)"
 title: "OpenTelemetry export"
 read_when:
-  - You want to send OpenClaw model usage, message flow, or session metrics to an OpenTelemetry collector
+  - You want to send SunClaw model usage, message flow, or session metrics to an OpenTelemetry collector
   - You are wiring traces, metrics, or logs into Grafana, Datadog, Honeycomb, New Relic, Tempo, or another OTLP backend
   - You need the exact metric names, span names, or attribute shapes to build dashboards or alerts
 ---
 
-OpenClaw exports diagnostics through the official `diagnostics-otel` plugin
+SunClaw exports diagnostics through the official `diagnostics-otel` plugin
 using **OTLP/HTTP (protobuf)**. Any collector or backend that accepts OTLP/HTTP
 works without code changes. For local file logs and how to read them, see
 [Logging](/logging).
@@ -19,7 +19,7 @@ works without code changes. For local file logs and how to read them, see
   and exec.
 - **`diagnostics-otel` plugin** subscribes to those events and exports them as
   OpenTelemetry **metrics**, **traces**, and **logs** over OTLP/HTTP.
-- **Provider calls** receive a W3C `traceparent` header from OpenClaw's
+- **Provider calls** receive a W3C `traceparent` header from SunClaw's
   trusted model-call span context when the provider transport accepts custom
   headers. Plugin-emitted trace context is not propagated.
 - Exporters only attach when both the diagnostics surface and the plugin are
@@ -30,7 +30,7 @@ works without code changes. For local file logs and how to read them, see
 For packaged installs, install the plugin first:
 
 ```bash
-openclaw plugins install clawhub:@openclaw/diagnostics-otel
+sunclaw plugins install clawhub:@sunclaw/diagnostics-otel
 ```
 
 ```json5
@@ -47,7 +47,7 @@ openclaw plugins install clawhub:@openclaw/diagnostics-otel
       enabled: true,
       endpoint: "http://otel-collector:4318",
       protocol: "http/protobuf",
-      serviceName: "openclaw-gateway",
+      serviceName: "sunclaw-gateway",
       traces: true,
       metrics: true,
       logs: true,
@@ -61,7 +61,7 @@ openclaw plugins install clawhub:@openclaw/diagnostics-otel
 You can also enable the plugin from the CLI:
 
 ```bash
-openclaw plugins enable diagnostics-otel
+sunclaw plugins enable diagnostics-otel
 ```
 
 <Note>
@@ -93,7 +93,7 @@ are exported only when `diagnostics.otel.logs` is explicitly `true`.
       metricsEndpoint: "http://otel-collector:4318/v1/metrics",
       logsEndpoint: "http://otel-collector:4318/v1/logs",
       protocol: "http/protobuf", // grpc is ignored
-      serviceName: "openclaw-gateway",
+      serviceName: "sunclaw-gateway",
       headers: { "x-collector-token": "..." },
       traces: true,
       metrics: true,
@@ -123,7 +123,7 @@ are exported only when `diagnostics.otel.logs` is explicitly `true`.
 | `OTEL_SERVICE_NAME`                                                                                               | Override `diagnostics.otel.serviceName`.                                                                                                                                                                                                                                                                                                       |
 | `OTEL_EXPORTER_OTLP_PROTOCOL`                                                                                     | Override the wire protocol (only `http/protobuf` is honored today).                                                                                                                                                                                                                                                                            |
 | `OTEL_SEMCONV_STABILITY_OPT_IN`                                                                                   | Set to `gen_ai_latest_experimental` to emit the latest experimental GenAI inference span shape, including `{gen_ai.operation.name} {gen_ai.request.model}` span names, `CLIENT` span kind, and `gen_ai.provider.name` instead of the legacy `gen_ai.system`. GenAI metrics always use bounded, low-cardinality semantic attributes regardless. |
-| `OPENCLAW_OTEL_PRELOADED`                                                                                         | Set to `1` when another preload or host process already registered the global OpenTelemetry SDK. The plugin then skips its own NodeSDK lifecycle but still wires diagnostic listeners and honors `traces`/`metrics`/`logs`.                                                                                                                    |
+| `SUNCLAW_OTEL_PRELOADED`                                                                                         | Set to `1` when another preload or host process already registered the global OpenTelemetry SDK. The plugin then skips its own NodeSDK lifecycle but still wires diagnostic listeners and honors `traces`/`metrics`/`logs`.                                                                                                                    |
 
 ## Privacy and content capture
 
@@ -141,7 +141,7 @@ provider, and event type. They do not include transcripts, audio payloads,
 session ids, turn ids, call ids, room ids, or handoff tokens.
 
 Outbound model requests may include a W3C `traceparent` header. That header is
-generated only from OpenClaw-owned diagnostic trace context for the active model
+generated only from SunClaw-owned diagnostic trace context for the active model
 call. Existing caller-supplied `traceparent` headers are replaced, so plugins or
 custom provider options cannot spoof cross-service trace ancestry.
 
@@ -157,7 +157,7 @@ text. Each subkey is opt-in independently:
 - `toolDefinitions` - model tool names, descriptions, and schemas.
 
 When any subkey is enabled, model and tool spans get bounded, redacted
-`openclaw.content.*` attributes for that class only. Use boolean
+`sunclaw.content.*` attributes for that class only. Use boolean
 `captureContent: true` only for broad diagnostics captures where OTLP log
 message bodies are also approved for export.
 
@@ -182,64 +182,64 @@ message bodies are also approved for export.
 
 ### Model usage
 
-- `openclaw.tokens` (counter, attrs: `openclaw.token`, `openclaw.channel`, `openclaw.provider`, `openclaw.model`, `openclaw.agent`)
-- `openclaw.cost.usd` (counter, attrs: `openclaw.channel`, `openclaw.provider`, `openclaw.model`)
-- `openclaw.run.duration_ms` (histogram, attrs: `openclaw.channel`, `openclaw.provider`, `openclaw.model`)
-- `openclaw.context.tokens` (histogram, attrs: `openclaw.context`, `openclaw.channel`, `openclaw.provider`, `openclaw.model`)
+- `sunclaw.tokens` (counter, attrs: `sunclaw.token`, `sunclaw.channel`, `sunclaw.provider`, `sunclaw.model`, `sunclaw.agent`)
+- `sunclaw.cost.usd` (counter, attrs: `sunclaw.channel`, `sunclaw.provider`, `sunclaw.model`)
+- `sunclaw.run.duration_ms` (histogram, attrs: `sunclaw.channel`, `sunclaw.provider`, `sunclaw.model`)
+- `sunclaw.context.tokens` (histogram, attrs: `sunclaw.context`, `sunclaw.channel`, `sunclaw.provider`, `sunclaw.model`)
 - `gen_ai.client.token.usage` (histogram, GenAI semantic-conventions metric, attrs: `gen_ai.token.type` = `input`/`output`, `gen_ai.provider.name`, `gen_ai.operation.name`, `gen_ai.request.model`)
 - `gen_ai.client.operation.duration` (histogram, seconds, GenAI semantic-conventions metric, attrs: `gen_ai.provider.name`, `gen_ai.operation.name`, `gen_ai.request.model`, optional `error.type`)
-- `openclaw.model_call.duration_ms` (histogram, attrs: `openclaw.provider`, `openclaw.model`, `openclaw.api`, `openclaw.transport`, plus `openclaw.errorCategory` and `openclaw.failureKind` on classified errors)
-- `openclaw.model_call.request_bytes` (histogram, UTF-8 byte size of the final model request payload; no raw payload content)
-- `openclaw.model_call.response_bytes` (histogram, UTF-8 byte size of streamed model response events excluding accumulated `partial` snapshots on delta events; no raw response content)
-- `openclaw.model_call.time_to_first_byte_ms` (histogram, elapsed time before the first streamed response event)
-- `openclaw.model.failover` (counter, attrs: `openclaw.provider`, `openclaw.model`, `openclaw.failover.to_provider`, `openclaw.failover.to_model`, `openclaw.failover.reason`, `openclaw.failover.suspended`, `openclaw.lane`)
-- `openclaw.skill.used` (counter, attrs: `openclaw.skill.name`, `openclaw.skill.source`, `openclaw.skill.activation`, optional `openclaw.agent`, optional `openclaw.toolName`)
+- `sunclaw.model_call.duration_ms` (histogram, attrs: `sunclaw.provider`, `sunclaw.model`, `sunclaw.api`, `sunclaw.transport`, plus `sunclaw.errorCategory` and `sunclaw.failureKind` on classified errors)
+- `sunclaw.model_call.request_bytes` (histogram, UTF-8 byte size of the final model request payload; no raw payload content)
+- `sunclaw.model_call.response_bytes` (histogram, UTF-8 byte size of streamed model response events excluding accumulated `partial` snapshots on delta events; no raw response content)
+- `sunclaw.model_call.time_to_first_byte_ms` (histogram, elapsed time before the first streamed response event)
+- `sunclaw.model.failover` (counter, attrs: `sunclaw.provider`, `sunclaw.model`, `sunclaw.failover.to_provider`, `sunclaw.failover.to_model`, `sunclaw.failover.reason`, `sunclaw.failover.suspended`, `sunclaw.lane`)
+- `sunclaw.skill.used` (counter, attrs: `sunclaw.skill.name`, `sunclaw.skill.source`, `sunclaw.skill.activation`, optional `sunclaw.agent`, optional `sunclaw.toolName`)
 
 ### Message flow
 
-- `openclaw.webhook.received` (counter, attrs: `openclaw.channel`, `openclaw.webhook`)
-- `openclaw.webhook.error` (counter, attrs: `openclaw.channel`, `openclaw.webhook`)
-- `openclaw.webhook.duration_ms` (histogram, attrs: `openclaw.channel`, `openclaw.webhook`)
-- `openclaw.message.queued` (counter, attrs: `openclaw.channel`, `openclaw.source`)
-- `openclaw.message.received` (counter, attrs: `openclaw.channel`, `openclaw.source`)
-- `openclaw.message.dispatch.started` (counter, attrs: `openclaw.channel`, `openclaw.source`)
-- `openclaw.message.dispatch.completed` (counter, attrs: `openclaw.channel`, `openclaw.outcome`, `openclaw.reason`, `openclaw.source`)
-- `openclaw.message.dispatch.duration_ms` (histogram, attrs: `openclaw.channel`, `openclaw.outcome`, `openclaw.reason`, `openclaw.source`)
-- `openclaw.message.processed` (counter, attrs: `openclaw.channel`, `openclaw.outcome`)
-- `openclaw.message.duration_ms` (histogram, attrs: `openclaw.channel`, `openclaw.outcome`)
-- `openclaw.message.delivery.started` (counter, attrs: `openclaw.channel`, `openclaw.delivery.kind`)
-- `openclaw.message.delivery.duration_ms` (histogram, attrs: `openclaw.channel`, `openclaw.delivery.kind`, `openclaw.outcome`, `openclaw.errorCategory`)
+- `sunclaw.webhook.received` (counter, attrs: `sunclaw.channel`, `sunclaw.webhook`)
+- `sunclaw.webhook.error` (counter, attrs: `sunclaw.channel`, `sunclaw.webhook`)
+- `sunclaw.webhook.duration_ms` (histogram, attrs: `sunclaw.channel`, `sunclaw.webhook`)
+- `sunclaw.message.queued` (counter, attrs: `sunclaw.channel`, `sunclaw.source`)
+- `sunclaw.message.received` (counter, attrs: `sunclaw.channel`, `sunclaw.source`)
+- `sunclaw.message.dispatch.started` (counter, attrs: `sunclaw.channel`, `sunclaw.source`)
+- `sunclaw.message.dispatch.completed` (counter, attrs: `sunclaw.channel`, `sunclaw.outcome`, `sunclaw.reason`, `sunclaw.source`)
+- `sunclaw.message.dispatch.duration_ms` (histogram, attrs: `sunclaw.channel`, `sunclaw.outcome`, `sunclaw.reason`, `sunclaw.source`)
+- `sunclaw.message.processed` (counter, attrs: `sunclaw.channel`, `sunclaw.outcome`)
+- `sunclaw.message.duration_ms` (histogram, attrs: `sunclaw.channel`, `sunclaw.outcome`)
+- `sunclaw.message.delivery.started` (counter, attrs: `sunclaw.channel`, `sunclaw.delivery.kind`)
+- `sunclaw.message.delivery.duration_ms` (histogram, attrs: `sunclaw.channel`, `sunclaw.delivery.kind`, `sunclaw.outcome`, `sunclaw.errorCategory`)
 
 ### Talk
 
-- `openclaw.talk.event` (counter, attrs: `openclaw.talk.event_type`, `openclaw.talk.mode`, `openclaw.talk.transport`, `openclaw.talk.brain`, `openclaw.talk.provider`)
-- `openclaw.talk.event.duration_ms` (histogram, attrs: same as `openclaw.talk.event`; emitted when a Talk event reports duration)
-- `openclaw.talk.audio.bytes` (histogram, attrs: same as `openclaw.talk.event`; emitted for Talk audio frame events that report byte length)
+- `sunclaw.talk.event` (counter, attrs: `sunclaw.talk.event_type`, `sunclaw.talk.mode`, `sunclaw.talk.transport`, `sunclaw.talk.brain`, `sunclaw.talk.provider`)
+- `sunclaw.talk.event.duration_ms` (histogram, attrs: same as `sunclaw.talk.event`; emitted when a Talk event reports duration)
+- `sunclaw.talk.audio.bytes` (histogram, attrs: same as `sunclaw.talk.event`; emitted for Talk audio frame events that report byte length)
 
 ### Queues and sessions
 
-- `openclaw.queue.lane.enqueue` (counter, attrs: `openclaw.lane`)
-- `openclaw.queue.lane.dequeue` (counter, attrs: `openclaw.lane`)
-- `openclaw.queue.depth` (histogram, attrs: `openclaw.lane` or `openclaw.channel=heartbeat`)
-- `openclaw.queue.wait_ms` (histogram, attrs: `openclaw.lane`)
-- `openclaw.session.state` (counter, attrs: `openclaw.state`, `openclaw.reason`)
-- `openclaw.session.stuck` (counter, attrs: `openclaw.state`; emitted for recoverable stale session bookkeeping)
-- `openclaw.session.stuck_age_ms` (histogram, attrs: `openclaw.state`; emitted for recoverable stale session bookkeeping)
-- `openclaw.session.turn.created` (counter, attrs: `openclaw.agent`, `openclaw.channel`, `openclaw.trigger`)
-- `openclaw.session.recovery.requested` (counter, attrs: `openclaw.state`, `openclaw.action`, `openclaw.active_work_kind`, `openclaw.reason`)
-- `openclaw.session.recovery.completed` (counter, attrs: `openclaw.state`, `openclaw.action`, `openclaw.status`, `openclaw.active_work_kind`, `openclaw.reason`)
-- `openclaw.session.recovery.age_ms` (histogram, attrs: same as the matching recovery counter)
-- `openclaw.run.attempt` (counter, attrs: `openclaw.attempt`)
+- `sunclaw.queue.lane.enqueue` (counter, attrs: `sunclaw.lane`)
+- `sunclaw.queue.lane.dequeue` (counter, attrs: `sunclaw.lane`)
+- `sunclaw.queue.depth` (histogram, attrs: `sunclaw.lane` or `sunclaw.channel=heartbeat`)
+- `sunclaw.queue.wait_ms` (histogram, attrs: `sunclaw.lane`)
+- `sunclaw.session.state` (counter, attrs: `sunclaw.state`, `sunclaw.reason`)
+- `sunclaw.session.stuck` (counter, attrs: `sunclaw.state`; emitted for recoverable stale session bookkeeping)
+- `sunclaw.session.stuck_age_ms` (histogram, attrs: `sunclaw.state`; emitted for recoverable stale session bookkeeping)
+- `sunclaw.session.turn.created` (counter, attrs: `sunclaw.agent`, `sunclaw.channel`, `sunclaw.trigger`)
+- `sunclaw.session.recovery.requested` (counter, attrs: `sunclaw.state`, `sunclaw.action`, `sunclaw.active_work_kind`, `sunclaw.reason`)
+- `sunclaw.session.recovery.completed` (counter, attrs: `sunclaw.state`, `sunclaw.action`, `sunclaw.status`, `sunclaw.active_work_kind`, `sunclaw.reason`)
+- `sunclaw.session.recovery.age_ms` (histogram, attrs: same as the matching recovery counter)
+- `sunclaw.run.attempt` (counter, attrs: `sunclaw.attempt`)
 
 ### Session liveness telemetry
 
 `diagnostics.stuckSessionWarnMs` is the no-progress age threshold for session
 liveness diagnostics. A `processing` session does not age toward this threshold
-while OpenClaw observes reply, tool, status, block, or ACP runtime progress.
+while SunClaw observes reply, tool, status, block, or ACP runtime progress.
 Typing keepalives are not counted as progress, so a silent model or harness can
 still be detected.
 
-OpenClaw classifies sessions by the work it can still observe:
+SunClaw classifies sessions by the work it can still observe:
 
 - `session.long_running`: active embedded work, model calls, or tool calls are
   still making progress.
@@ -258,8 +258,8 @@ Recovery emits structured `session.recovery.requested` and
 only after a mutating recovery outcome (`aborted` or `released`) and only if the
 same processing generation is still current.
 
-Only `session.stuck` emits the `openclaw.session.stuck` counter, the
-`openclaw.session.stuck_age_ms` histogram, and the `openclaw.session.stuck`
+Only `session.stuck` emits the `sunclaw.session.stuck` counter, the
+`sunclaw.session.stuck_age_ms` histogram, and the `sunclaw.session.stuck`
 span. Repeated `session.stuck` diagnostics back off while the session remains
 unchanged, so dashboards should alert on sustained increases rather than every
 heartbeat tick. For the config knob and defaults, see
@@ -267,78 +267,78 @@ heartbeat tick. For the config knob and defaults, see
 
 Liveness warnings also emit:
 
-- `openclaw.liveness.warning` (counter, attrs: `openclaw.liveness.reason`)
-- `openclaw.liveness.event_loop_delay_p99_ms` (histogram, attrs: `openclaw.liveness.reason`)
-- `openclaw.liveness.event_loop_delay_max_ms` (histogram, attrs: `openclaw.liveness.reason`)
-- `openclaw.liveness.event_loop_utilization` (histogram, attrs: `openclaw.liveness.reason`)
-- `openclaw.liveness.cpu_core_ratio` (histogram, attrs: `openclaw.liveness.reason`)
+- `sunclaw.liveness.warning` (counter, attrs: `sunclaw.liveness.reason`)
+- `sunclaw.liveness.event_loop_delay_p99_ms` (histogram, attrs: `sunclaw.liveness.reason`)
+- `sunclaw.liveness.event_loop_delay_max_ms` (histogram, attrs: `sunclaw.liveness.reason`)
+- `sunclaw.liveness.event_loop_utilization` (histogram, attrs: `sunclaw.liveness.reason`)
+- `sunclaw.liveness.cpu_core_ratio` (histogram, attrs: `sunclaw.liveness.reason`)
 
 ### Harness lifecycle
 
-- `openclaw.harness.duration_ms` (histogram, attrs: `openclaw.harness.id`, `openclaw.harness.plugin`, `openclaw.outcome`, `openclaw.harness.phase` on errors)
+- `sunclaw.harness.duration_ms` (histogram, attrs: `sunclaw.harness.id`, `sunclaw.harness.plugin`, `sunclaw.outcome`, `sunclaw.harness.phase` on errors)
 
 ### Tool execution
 
-- `openclaw.tool.execution.duration_ms` (histogram, attrs: `gen_ai.tool.name`, `openclaw.toolName`, `openclaw.tool.source`, `openclaw.tool.owner`, `openclaw.tool.params.kind`, plus `openclaw.errorCategory` on errors)
-- `openclaw.tool.execution.blocked` (counter, attrs: `gen_ai.tool.name`, `openclaw.toolName`, `openclaw.tool.source`, `openclaw.tool.owner`, `openclaw.tool.params.kind`, `openclaw.deniedReason`)
+- `sunclaw.tool.execution.duration_ms` (histogram, attrs: `gen_ai.tool.name`, `sunclaw.toolName`, `sunclaw.tool.source`, `sunclaw.tool.owner`, `sunclaw.tool.params.kind`, plus `sunclaw.errorCategory` on errors)
+- `sunclaw.tool.execution.blocked` (counter, attrs: `gen_ai.tool.name`, `sunclaw.toolName`, `sunclaw.tool.source`, `sunclaw.tool.owner`, `sunclaw.tool.params.kind`, `sunclaw.deniedReason`)
 
 ### Exec
 
-- `openclaw.exec.duration_ms` (histogram, attrs: `openclaw.exec.target`, `openclaw.exec.mode`, `openclaw.outcome`, `openclaw.failureKind`)
+- `sunclaw.exec.duration_ms` (histogram, attrs: `sunclaw.exec.target`, `sunclaw.exec.mode`, `sunclaw.outcome`, `sunclaw.failureKind`)
 
 ### Diagnostics internals (memory and tool loop)
 
-- `openclaw.payload.large` (counter, attrs: `openclaw.payload.surface`, `openclaw.payload.action`, `openclaw.channel`, `openclaw.plugin`, `openclaw.reason`)
-- `openclaw.payload.large_bytes` (histogram, attrs: same as `openclaw.payload.large`)
-- `openclaw.memory.heap_used_bytes` (histogram, attrs: `openclaw.memory.kind`)
-- `openclaw.memory.rss_bytes` (histogram)
-- `openclaw.memory.pressure` (counter, attrs: `openclaw.memory.level`)
-- `openclaw.tool.loop.iterations` (counter, attrs: `openclaw.toolName`, `openclaw.outcome`)
-- `openclaw.tool.loop.duration_ms` (histogram, attrs: `openclaw.toolName`, `openclaw.outcome`)
+- `sunclaw.payload.large` (counter, attrs: `sunclaw.payload.surface`, `sunclaw.payload.action`, `sunclaw.channel`, `sunclaw.plugin`, `sunclaw.reason`)
+- `sunclaw.payload.large_bytes` (histogram, attrs: same as `sunclaw.payload.large`)
+- `sunclaw.memory.heap_used_bytes` (histogram, attrs: `sunclaw.memory.kind`)
+- `sunclaw.memory.rss_bytes` (histogram)
+- `sunclaw.memory.pressure` (counter, attrs: `sunclaw.memory.level`)
+- `sunclaw.tool.loop.iterations` (counter, attrs: `sunclaw.toolName`, `sunclaw.outcome`)
+- `sunclaw.tool.loop.duration_ms` (histogram, attrs: `sunclaw.toolName`, `sunclaw.outcome`)
 
 ## Exported spans
 
-- `openclaw.model.usage`
-  - `openclaw.channel`, `openclaw.provider`, `openclaw.model`
-  - `openclaw.tokens.*` (input/output/cache_read/cache_write/total)
+- `sunclaw.model.usage`
+  - `sunclaw.channel`, `sunclaw.provider`, `sunclaw.model`
+  - `sunclaw.tokens.*` (input/output/cache_read/cache_write/total)
   - `gen_ai.system` by default, or `gen_ai.provider.name` when the latest GenAI semantic conventions are opted in
   - `gen_ai.request.model`, `gen_ai.operation.name`, `gen_ai.usage.*`
-- `openclaw.run`
-  - `openclaw.outcome`, `openclaw.channel`, `openclaw.provider`, `openclaw.model`, `openclaw.errorCategory`
-- `openclaw.model.call`
+- `sunclaw.run`
+  - `sunclaw.outcome`, `sunclaw.channel`, `sunclaw.provider`, `sunclaw.model`, `sunclaw.errorCategory`
+- `sunclaw.model.call`
   - `gen_ai.system` by default, or `gen_ai.provider.name` when the latest GenAI semantic conventions are opted in
-  - `gen_ai.request.model`, `gen_ai.operation.name`, `openclaw.provider`, `openclaw.model`, `openclaw.api`, `openclaw.transport`
-  - `openclaw.errorCategory` and optional `openclaw.failureKind` on errors
-  - `openclaw.model_call.request_bytes`, `openclaw.model_call.response_bytes`, `openclaw.model_call.time_to_first_byte_ms`
-  - `openclaw.provider.request_id_hash` (bounded SHA-based hash of the upstream provider request id; raw ids are not exported)
-  - With `OTEL_SEMCONV_STABILITY_OPT_IN=gen_ai_latest_experimental`, model-call spans use the latest GenAI inference span name `{gen_ai.operation.name} {gen_ai.request.model}` and `CLIENT` span kind instead of `openclaw.model.call`.
-- `openclaw.harness.run`
-  - `openclaw.harness.id`, `openclaw.harness.plugin`, `openclaw.outcome`, `openclaw.provider`, `openclaw.model`, `openclaw.channel`
-  - On completion: `openclaw.harness.result_classification`, `openclaw.harness.yield_detected`, `openclaw.harness.items.started`, `openclaw.harness.items.completed`, `openclaw.harness.items.active`
-  - On error: `openclaw.harness.phase`, `openclaw.errorCategory`, optional `openclaw.harness.cleanup_failed`
-- `openclaw.tool.execution`
-  - `gen_ai.tool.name`, `openclaw.toolName`, `openclaw.errorCategory`, `openclaw.tool.params.*`
-- `openclaw.exec`
-  - `openclaw.exec.target`, `openclaw.exec.mode`, `openclaw.outcome`, `openclaw.failureKind`, `openclaw.exec.command_length`, `openclaw.exec.exit_code`, `openclaw.exec.timed_out`
-- `openclaw.webhook.processed`
-  - `openclaw.channel`, `openclaw.webhook`
-- `openclaw.webhook.error`
-  - `openclaw.channel`, `openclaw.webhook`, `openclaw.error`
-- `openclaw.message.processed`
-  - `openclaw.channel`, `openclaw.outcome`, `openclaw.reason`
-- `openclaw.message.delivery`
-  - `openclaw.channel`, `openclaw.delivery.kind`, `openclaw.outcome`, `openclaw.errorCategory`, `openclaw.delivery.result_count`
-- `openclaw.session.stuck`
-  - `openclaw.state`, `openclaw.ageMs`, `openclaw.queueDepth`
-- `openclaw.context.assembled`
-  - `openclaw.prompt.size`, `openclaw.history.size`, `openclaw.context.tokens`, `openclaw.errorCategory` (no prompt, history, response, or session-key content)
-- `openclaw.tool.loop`
-  - `openclaw.toolName`, `openclaw.outcome`, `openclaw.iterations`, `openclaw.errorCategory` (no loop messages, params, or tool output)
-- `openclaw.memory.pressure`
-  - `openclaw.memory.level`, `openclaw.memory.heap_used_bytes`, `openclaw.memory.rss_bytes`
+  - `gen_ai.request.model`, `gen_ai.operation.name`, `sunclaw.provider`, `sunclaw.model`, `sunclaw.api`, `sunclaw.transport`
+  - `sunclaw.errorCategory` and optional `sunclaw.failureKind` on errors
+  - `sunclaw.model_call.request_bytes`, `sunclaw.model_call.response_bytes`, `sunclaw.model_call.time_to_first_byte_ms`
+  - `sunclaw.provider.request_id_hash` (bounded SHA-based hash of the upstream provider request id; raw ids are not exported)
+  - With `OTEL_SEMCONV_STABILITY_OPT_IN=gen_ai_latest_experimental`, model-call spans use the latest GenAI inference span name `{gen_ai.operation.name} {gen_ai.request.model}` and `CLIENT` span kind instead of `sunclaw.model.call`.
+- `sunclaw.harness.run`
+  - `sunclaw.harness.id`, `sunclaw.harness.plugin`, `sunclaw.outcome`, `sunclaw.provider`, `sunclaw.model`, `sunclaw.channel`
+  - On completion: `sunclaw.harness.result_classification`, `sunclaw.harness.yield_detected`, `sunclaw.harness.items.started`, `sunclaw.harness.items.completed`, `sunclaw.harness.items.active`
+  - On error: `sunclaw.harness.phase`, `sunclaw.errorCategory`, optional `sunclaw.harness.cleanup_failed`
+- `sunclaw.tool.execution`
+  - `gen_ai.tool.name`, `sunclaw.toolName`, `sunclaw.errorCategory`, `sunclaw.tool.params.*`
+- `sunclaw.exec`
+  - `sunclaw.exec.target`, `sunclaw.exec.mode`, `sunclaw.outcome`, `sunclaw.failureKind`, `sunclaw.exec.command_length`, `sunclaw.exec.exit_code`, `sunclaw.exec.timed_out`
+- `sunclaw.webhook.processed`
+  - `sunclaw.channel`, `sunclaw.webhook`
+- `sunclaw.webhook.error`
+  - `sunclaw.channel`, `sunclaw.webhook`, `sunclaw.error`
+- `sunclaw.message.processed`
+  - `sunclaw.channel`, `sunclaw.outcome`, `sunclaw.reason`
+- `sunclaw.message.delivery`
+  - `sunclaw.channel`, `sunclaw.delivery.kind`, `sunclaw.outcome`, `sunclaw.errorCategory`, `sunclaw.delivery.result_count`
+- `sunclaw.session.stuck`
+  - `sunclaw.state`, `sunclaw.ageMs`, `sunclaw.queueDepth`
+- `sunclaw.context.assembled`
+  - `sunclaw.prompt.size`, `sunclaw.history.size`, `sunclaw.context.tokens`, `sunclaw.errorCategory` (no prompt, history, response, or session-key content)
+- `sunclaw.tool.loop`
+  - `sunclaw.toolName`, `sunclaw.outcome`, `sunclaw.iterations`, `sunclaw.errorCategory` (no loop messages, params, or tool output)
+- `sunclaw.memory.pressure`
+  - `sunclaw.memory.level`, `sunclaw.memory.heap_used_bytes`, `sunclaw.memory.rss_bytes`
 
 When content capture is explicitly enabled, model and tool spans can also
-include bounded, redacted `openclaw.content.*` attributes for the specific
+include bounded, redacted `sunclaw.content.*` attributes for the specific
 content classes you opted into.
 
 ## Diagnostic event catalog
@@ -406,7 +406,7 @@ flags. Flags are case-insensitive and support wildcards (e.g. `telegram.*` or
 Or as a one-off env override:
 
 ```bash
-OPENCLAW_DIAGNOSTICS=telegram.http,telegram.payload openclaw gateway
+SUNCLAW_DIAGNOSTICS=telegram.http,telegram.payload sunclaw gateway
 ```
 
 Flag output goes to the standard log file (`logging.file`) and is still
@@ -422,7 +422,7 @@ redacted by `logging.redactSensitive`. Full guide:
 ```
 
 You can also leave `diagnostics-otel` out of `plugins.allow`, or run
-`openclaw plugins disable diagnostics-otel`.
+`sunclaw plugins disable diagnostics-otel`.
 
 ## Related
 

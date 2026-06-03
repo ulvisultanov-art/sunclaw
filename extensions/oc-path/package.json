@@ -1,8 +1,8 @@
 {
-  "name": "@openclaw/oc-path",
+  "name": "@sunclaw/oc-path",
   "version": "2026.6.2",
   "private": true,
-  "description": "OpenClaw oc:// workspace path plugin",
+  "description": "SunClaw oc:// workspace path plugin",
   "type": "module",
   "dependencies": {
     "commander": "14.0.3",
@@ -11,18 +11,18 @@
     "yaml": "2.9.0"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "2026.5.28"
+    "@sunclaw/plugin-sdk": "workspace:*",
+    "sunclaw": "2026.5.28"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.6.2"
+    "sunclaw": ">=2026.6.2"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "sunclaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ]

@@ -8,13 +8,13 @@ export function isLiveTestEnabled(
   extraEnvVars: readonly string[] = [],
   env: NodeJS.ProcessEnv = process.env,
 ): boolean {
-  return [...extraEnvVars, "LIVE", "OPENCLAW_LIVE_TEST"].some((name) =>
+  return [...extraEnvVars, "LIVE", "SUNCLAW_LIVE_TEST"].some((name) =>
     isTruthyEnvValue(env[name]),
   );
 }
 
 export function isLiveProfileKeyModeEnabled(env: NodeJS.ProcessEnv = process.env): boolean {
-  return isTruthyEnvValue(env.OPENCLAW_LIVE_REQUIRE_PROFILE_KEYS);
+  return isTruthyEnvValue(env.SUNCLAW_LIVE_REQUIRE_PROFILE_KEYS);
 }
 
 export function requiresLiveProfileCredential(

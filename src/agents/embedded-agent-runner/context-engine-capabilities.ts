@@ -1,10 +1,10 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import type { ContextEngineRuntimeContext } from "../../context-engine/types.js";
 import { resolveBoundAgentIdForSession } from "../session-agent-binding.js";
 
 export type ResolveContextEngineCapabilitiesParams = {
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   sessionKey?: string;
   agentId?: string;
   authProfileId?: string;

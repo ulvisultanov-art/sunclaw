@@ -1,7 +1,7 @@
 import {
   createContractRunResult,
   OUTCOME_FALLBACK_RUNTIME_CONTRACT,
-} from "openclaw/plugin-sdk/agent-runtime-test-contracts";
+} from "sunclaw/plugin-sdk/agent-runtime-test-contracts";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 import { classifyEmbeddedAgentRunResultForModelFallback } from "./embedded-agent-runner/result-fallback-classifier.js";
 import { runWithModelFallback } from "./model-fallback.js";

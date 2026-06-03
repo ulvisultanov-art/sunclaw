@@ -6,17 +6,17 @@ import { promisify } from "node:util";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { prepareAcpxCodexAuthConfig } from "./codex-auth-bridge.js";
 import { resolveAcpxPluginConfig } from "./config.js";
-import { OPENCLAW_ACPX_LEASE_ID_ARG, OPENCLAW_GATEWAY_INSTANCE_ID_ARG } from "./process-lease.js";
+import { SUNCLAW_ACPX_LEASE_ID_ARG, SUNCLAW_GATEWAY_INSTANCE_ID_ARG } from "./process-lease.js";
 
 const execFileAsync = promisify(execFile);
 const tempDirs: string[] = [];
 const previousEnv = {
   CODEX_HOME: process.env.CODEX_HOME,
-  OPENCLAW_AGENT_DIR: process.env.OPENCLAW_AGENT_DIR,
+  SUNCLAW_AGENT_DIR: process.env.SUNCLAW_AGENT_DIR,
 };
 
 async function makeTempDir(): Promise<string> {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-acpx-codex-auth-"));
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-acpx-codex-auth-"));
   tempDirs.push(dir);
   return dir;
 }
@@ -90,14 +90,14 @@ async function expectPathMissing(targetPath: string): Promise<void> {
 afterEach(async () => {
   vi.restoreAllMocks();
   restoreEnv("CODEX_HOME");
-  restoreEnv("OPENCLAW_AGENT_DIR");
+  restoreEnv("SUNCLAW_AGENT_DIR");
   for (const dir of tempDirs.splice(0)) {
     await fs.rm(dir, { recursive: true, force: true });
   }
 });
 
 describe("prepareAcpxCodexAuthConfig", () => {
-  it("installs an isolated Codex ACP wrapper without synthesizing auth from canonical OpenClaw OAuth", async () => {
+  it("installs an isolated Codex ACP wrapper without synthesizing auth from canonical SunClaw OAuth", async () => {
     const root = await makeTempDir();
     const agentDir = path.join(root, "agent");
     const stateDir = path.join(root, "state");
@@ -111,7 +111,7 @@ describe("prepareAcpxCodexAuthConfig", () => {
       "bin",
       "codex-acp.js",
     );
-    process.env.OPENCLAW_AGENT_DIR = agentDir;
+    process.env.SUNCLAW_AGENT_DIR = agentDir;
 
     const pluginConfig = resolveAcpxPluginConfig({
       rawConfig: {},
@@ -297,9 +297,9 @@ describe("prepareAcpxCodexAuthConfig", () => {
       process.execPath,
       [
         generated.wrapperPath,
-        "--openclaw-acpx-lease-id",
+        "--sunclaw-acpx-lease-id",
         "lease-1",
-        "--openclaw-gateway-instance-id",
+        "--sunclaw-gateway-instance-id",
         "gateway-1",
       ],
       {
@@ -501,7 +501,7 @@ describe("prepareAcpxCodexAuthConfig", () => {
       ].join("\n"),
     );
     process.env.CODEX_HOME = sourceCodexHome;
-    process.env.OPENCLAW_AGENT_DIR = agentDir;
+    process.env.SUNCLAW_AGENT_DIR = agentDir;
 
     const pluginConfig = resolveAcpxPluginConfig({
       rawConfig: {},
@@ -711,12 +711,12 @@ describe("prepareAcpxCodexAuthConfig", () => {
     await expect(
       execFileAsync(process.execPath, [
         generated.wrapperPath,
-        "--openclaw-run-configured",
+        "--sunclaw-run-configured",
         process.execPath,
         stderrScript,
-        OPENCLAW_ACPX_LEASE_ID_ARG,
+        SUNCLAW_ACPX_LEASE_ID_ARG,
         "lease-secret",
-        OPENCLAW_GATEWAY_INSTANCE_ID_ARG,
+        SUNCLAW_GATEWAY_INSTANCE_ID_ARG,
         "gateway-test",
       ]),
     ).rejects.toMatchObject({ code: 1 });

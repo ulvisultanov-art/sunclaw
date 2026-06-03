@@ -1,13 +1,13 @@
 ---
-summary: "Plain-English and technical explanation of npm shrinkwrap in OpenClaw releases"
+summary: "Plain-English and technical explanation of npm shrinkwrap in SunClaw releases"
 read_when:
-  - You want to know what npm shrinkwrap means in an OpenClaw release
+  - You want to know what npm shrinkwrap means in an SunClaw release
   - You are reviewing package lockfiles, dependency changes, or supply-chain risk
   - You are validating root or plugin npm packages before publishing
 title: "npm shrinkwrap"
 ---
 
-OpenClaw source checkouts use `pnpm-lock.yaml`. Published OpenClaw npm
+SunClaw source checkouts use `pnpm-lock.yaml`. Published SunClaw npm
 packages use `npm-shrinkwrap.json`, npm's publishable dependency lockfile, so
 package installs use the dependency graph reviewed during release.
 
@@ -16,7 +16,7 @@ package installs use the dependency graph reviewed during release.
 Shrinkwrap is a receipt for the dependency tree that ships with an npm package.
 It tells npm which exact transitive package versions to install.
 
-For OpenClaw releases, that means:
+For SunClaw releases, that means:
 
 - the published package does not ask npm to invent a fresh dependency graph at
   install time;
@@ -26,20 +26,20 @@ For OpenClaw releases, that means:
   publishing.
 
 Shrinkwrap is not a sandbox. It does not make a dependency safe by itself, and
-it does not replace host isolation, `openclaw security audit`, package
+it does not replace host isolation, `sunclaw security audit`, package
 provenance, or install smoke tests.
 
 The short mental model:
 
 | File                  | Where it matters         | What it means                     |
 | --------------------- | ------------------------ | --------------------------------- |
-| `pnpm-lock.yaml`      | OpenClaw source checkout | Maintainer dependency graph       |
+| `pnpm-lock.yaml`      | SunClaw source checkout | Maintainer dependency graph       |
 | `npm-shrinkwrap.json` | Published npm package    | npm install graph for users       |
-| `package-lock.json`   | Local npm apps           | Not the OpenClaw publish contract |
+| `package-lock.json`   | Local npm apps           | Not the SunClaw publish contract |
 
-## Why OpenClaw uses it
+## Why SunClaw uses it
 
-OpenClaw is a gateway, plugin host, model router, and agent runtime. A default
+SunClaw is a gateway, plugin host, model router, and agent runtime. A default
 install can affect startup time, disk use, native package downloads, and
 supply-chain exposure.
 
@@ -56,8 +56,8 @@ with clear ownership.
 
 ## Technical details
 
-The root `openclaw` npm package and OpenClaw-owned npm plugin packages include
-`npm-shrinkwrap.json` when they publish. Suitable OpenClaw-owned plugin
+The root `sunclaw` npm package and SunClaw-owned npm plugin packages include
+`npm-shrinkwrap.json` when they publish. Suitable SunClaw-owned plugin
 packages can also publish with explicit `bundledDependencies`, so their runtime
 dependency files are carried in the plugin tarball instead of depending only on
 install-time resolution.
@@ -88,24 +88,24 @@ Review these files as security-sensitive:
 - bundled plugin dependency payloads
 - any `package-lock.json` diff
 
-OpenClaw package validators require shrinkwrap in new root package tarballs.
+SunClaw package validators require shrinkwrap in new root package tarballs.
 The plugin npm publish path checks plugin-local shrinkwrap, installs
 package-local bundled dependencies, and then packs or publishes. Package
-validators reject `package-lock.json` for published OpenClaw packages.
+validators reject `package-lock.json` for published SunClaw packages.
 
 To inspect a published root package:
 
 ```bash
-npm pack openclaw@<version> --json --pack-destination /tmp/openclaw-pack
-tar -tf /tmp/openclaw-pack/openclaw-<version>.tgz | grep '^package/npm-shrinkwrap.json$'
+npm pack sunclaw@<version> --json --pack-destination /tmp/sunclaw-pack
+tar -tf /tmp/sunclaw-pack/sunclaw-<version>.tgz | grep '^package/npm-shrinkwrap.json$'
 ```
 
-To inspect an OpenClaw-owned plugin package:
+To inspect an SunClaw-owned plugin package:
 
 ```bash
-npm pack @openclaw/discord@<version> --json --pack-destination /tmp/openclaw-plugin-pack
-tar -tf /tmp/openclaw-plugin-pack/openclaw-discord-<version>.tgz | grep '^package/npm-shrinkwrap.json$'
-tar -tf /tmp/openclaw-plugin-pack/openclaw-discord-<version>.tgz | grep '^package/node_modules/'
+npm pack @sunclaw/discord@<version> --json --pack-destination /tmp/sunclaw-plugin-pack
+tar -tf /tmp/sunclaw-plugin-pack/sunclaw-discord-<version>.tgz | grep '^package/npm-shrinkwrap.json$'
+tar -tf /tmp/sunclaw-plugin-pack/sunclaw-discord-<version>.tgz | grep '^package/node_modules/'
 ```
 
 Background: [npm-shrinkwrap.json](https://docs.npmjs.com/cli/v11/configuring-npm/npm-shrinkwrap-json).

@@ -2,7 +2,7 @@ import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@sunclaw/normalization-core/string-coerce";
 import { ErrorCodes } from "../../../packages/gateway-protocol/src/index.js";
 import {
   getVoiceProviderConfig,
@@ -10,7 +10,7 @@ import {
   resolveSupportedVoiceModelRefs,
   type VoiceModelProvider,
 } from "../../../packages/speech-core/voice-models.js";
-import type { OpenClawConfig } from "../../config/types.js";
+import type { SunClawConfig } from "../../config/types.js";
 import { listRealtimeTranscriptionProviders } from "../../realtime-transcription/provider-registry.js";
 import type { RealtimeTranscriptionProviderConfig } from "../../realtime-transcription/provider-types.js";
 import { REALTIME_VOICE_AGENT_CONSULT_TOOL_NAME } from "../../talk/agent-consult-tool.js";
@@ -73,7 +73,7 @@ function singleRecordKey(record: Record<string, unknown> | undefined): string | 
 }
 
 function getVoiceCallProviderConfig<TConfig extends Record<string, unknown>>(
-  config: OpenClawConfig,
+  config: SunClawConfig,
   sectionName: "realtime" | "streaming",
 ): {
   provider?: string;
@@ -100,14 +100,14 @@ function getVoiceCallProviderConfig<TConfig extends Record<string, unknown>>(
   };
 }
 
-function getVoiceCallRealtimeConfig(config: OpenClawConfig): {
+function getVoiceCallRealtimeConfig(config: SunClawConfig): {
   provider?: string;
   providers?: Record<string, RealtimeVoiceProviderConfig>;
 } {
   return getVoiceCallProviderConfig(config, "realtime");
 }
 
-export function getVoiceCallStreamingConfig(config: OpenClawConfig): {
+export function getVoiceCallStreamingConfig(config: SunClawConfig): {
   provider?: string;
   providers?: Record<string, RealtimeTranscriptionProviderConfig>;
 } {
@@ -115,12 +115,12 @@ export function getVoiceCallStreamingConfig(config: OpenClawConfig): {
 }
 
 type RealtimeProviderWithConfig<TConfig extends Record<string, unknown>> = VoiceModelProvider & {
-  resolveConfig?: (ctx: { cfg: OpenClawConfig; rawConfig: TConfig }) => TConfig;
-  isConfigured: (ctx: { cfg: OpenClawConfig; providerConfig: TConfig }) => boolean;
+  resolveConfig?: (ctx: { cfg: SunClawConfig; rawConfig: TConfig }) => TConfig;
+  isConfigured: (ctx: { cfg: SunClawConfig; providerConfig: TConfig }) => boolean;
 };
 
 function resolveConfiguredVoiceModelDefaultRef<TConfig extends Record<string, unknown>>(params: {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   provider: string | undefined;
   providerConfigs: Record<string, TConfig>;
   providers: readonly RealtimeProviderWithConfig<TConfig>[];
@@ -157,7 +157,7 @@ function resolveConfiguredVoiceModelDefaultRef<TConfig extends Record<string, un
   return undefined;
 }
 
-export function buildTalkRealtimeConfig(config: OpenClawConfig, requestedProvider?: string) {
+export function buildTalkRealtimeConfig(config: SunClawConfig, requestedProvider?: string) {
   const voiceCallRealtime = getVoiceCallRealtimeConfig(config);
   const talkRealtime = getRecord(config.talk?.realtime);
   const talkRealtimeProviderConfigs = talkRealtime?.providers as
@@ -201,7 +201,7 @@ export function buildTalkRealtimeConfig(config: OpenClawConfig, requestedProvide
   };
 }
 
-export function buildTalkTranscriptionConfig(config: OpenClawConfig, requestedProvider?: string) {
+export function buildTalkTranscriptionConfig(config: SunClawConfig, requestedProvider?: string) {
   const streamingConfig = getVoiceCallStreamingConfig(config);
   const provider = normalizeOptionalString(requestedProvider) ?? streamingConfig.provider;
   const providerConfigs = streamingConfig.providers ?? {};
@@ -227,7 +227,7 @@ export function configuredOrFalse(callback: () => boolean): boolean {
 }
 
 export function resolveConfiguredRealtimeTranscriptionProvider(params: {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   configuredProviderId?: string;
   providerConfigs: Record<string, RealtimeTranscriptionProviderConfig>;
   defaultModel?: string;
@@ -271,12 +271,12 @@ export function resolveConfiguredRealtimeTranscriptionProvider(params: {
 }
 
 const DEFAULT_REALTIME_INSTRUCTIONS = [
-  "You are OpenClaw's realtime voice interface. Keep spoken replies concise.",
-  `If the user asks for code, repository state, files, current OpenClaw context, tool-backed actions, or deeper reasoning, call ${REALTIME_VOICE_AGENT_CONSULT_TOOL_NAME} and then summarize the result naturally.`,
-  `Do not claim you cannot use tools, perform actions, or reach OpenClaw unless ${REALTIME_VOICE_AGENT_CONSULT_TOOL_NAME} returns that failure.`,
-  `When ${REALTIME_VOICE_AGENT_CONSULT_TOOL_NAME} is in progress, speak one brief acknowledgement such as "Let me check that for you", then wait for the final OpenClaw result before answering with the actual result.`,
-  `If OpenClaw is already working through ${REALTIME_VOICE_AGENT_CONSULT_TOOL_NAME} and the user asks in any language for progress, cancellation, a redirect/change, or a follow-up, call ${REALTIME_VOICE_AGENT_CONTROL_TOOL_NAME} with the semantic mode.`,
-  "For greetings and casual chatter while OpenClaw is working, answer naturally and do not redirect the active work.",
+  "You are SunClaw's realtime voice interface. Keep spoken replies concise.",
+  `If the user asks for code, repository state, files, current SunClaw context, tool-backed actions, or deeper reasoning, call ${REALTIME_VOICE_AGENT_CONSULT_TOOL_NAME} and then summarize the result naturally.`,
+  `Do not claim you cannot use tools, perform actions, or reach SunClaw unless ${REALTIME_VOICE_AGENT_CONSULT_TOOL_NAME} returns that failure.`,
+  `When ${REALTIME_VOICE_AGENT_CONSULT_TOOL_NAME} is in progress, speak one brief acknowledgement such as "Let me check that for you", then wait for the final SunClaw result before answering with the actual result.`,
+  `If SunClaw is already working through ${REALTIME_VOICE_AGENT_CONSULT_TOOL_NAME} and the user asks in any language for progress, cancellation, a redirect/change, or a follow-up, call ${REALTIME_VOICE_AGENT_CONTROL_TOOL_NAME} with the semantic mode.`,
+  "For greetings and casual chatter while SunClaw is working, answer naturally and do not redirect the active work.",
 ].join(" ");
 
 export function buildRealtimeInstructions(configuredInstructions?: string): string {

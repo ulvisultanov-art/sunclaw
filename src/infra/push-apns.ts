@@ -1,11 +1,11 @@
 import { createHash, createPrivateKey, sign as signJwt } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { resolveTimerTimeoutMs } from "@openclaw/normalization-core/number-coercion";
+import { resolveTimerTimeoutMs } from "@sunclaw/normalization-core/number-coercion";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@sunclaw/normalization-core/string-coerce";
 import { resolveStateDir } from "../config/paths.js";
 import type { DeviceIdentity } from "./device-identity.js";
 import { formatErrorMessage } from "./errors.js";
@@ -73,8 +73,8 @@ export type ApnsPushResult = {
 type ApnsPushAlertResult = ApnsPushResult;
 type ApnsPushWakeResult = ApnsPushResult;
 
-const EXEC_APPROVAL_GENERIC_ALERT_BODY = "Open OpenClaw to review this request.";
-const EXEC_APPROVAL_NOTIFICATION_CATEGORY = "openclaw.exec-approval";
+const EXEC_APPROVAL_GENERIC_ALERT_BODY = "Open SunClaw to review this request.";
+const EXEC_APPROVAL_NOTIFICATION_CATEGORY = "sunclaw.exec-approval";
 
 type ApnsPushType = "alert" | "background";
 
@@ -644,18 +644,18 @@ export function shouldClearStoredApnsRegistration(params: {
 export async function resolveApnsAuthConfigFromEnv(
   env: NodeJS.ProcessEnv = process.env,
 ): Promise<ApnsAuthConfigResolution> {
-  const teamId = normalizeNonEmptyString(env.OPENCLAW_APNS_TEAM_ID);
-  const keyId = normalizeNonEmptyString(env.OPENCLAW_APNS_KEY_ID);
+  const teamId = normalizeNonEmptyString(env.SUNCLAW_APNS_TEAM_ID);
+  const keyId = normalizeNonEmptyString(env.SUNCLAW_APNS_KEY_ID);
   if (!teamId || !keyId) {
     return {
       ok: false,
-      error: "APNs auth missing: set OPENCLAW_APNS_TEAM_ID and OPENCLAW_APNS_KEY_ID",
+      error: "APNs auth missing: set SUNCLAW_APNS_TEAM_ID and SUNCLAW_APNS_KEY_ID",
     };
   }
 
   const inlineKeyRaw =
-    normalizeNonEmptyString(env.OPENCLAW_APNS_PRIVATE_KEY_P8) ??
-    normalizeNonEmptyString(env.OPENCLAW_APNS_PRIVATE_KEY);
+    normalizeNonEmptyString(env.SUNCLAW_APNS_PRIVATE_KEY_P8) ??
+    normalizeNonEmptyString(env.SUNCLAW_APNS_PRIVATE_KEY);
   if (inlineKeyRaw) {
     return {
       ok: true,
@@ -667,12 +667,12 @@ export async function resolveApnsAuthConfigFromEnv(
     };
   }
 
-  const keyPath = normalizeNonEmptyString(env.OPENCLAW_APNS_PRIVATE_KEY_PATH);
+  const keyPath = normalizeNonEmptyString(env.SUNCLAW_APNS_PRIVATE_KEY_PATH);
   if (!keyPath) {
     return {
       ok: false,
       error:
-        "APNs private key missing: set OPENCLAW_APNS_PRIVATE_KEY_P8 or OPENCLAW_APNS_PRIVATE_KEY_PATH",
+        "APNs private key missing: set SUNCLAW_APNS_PRIVATE_KEY_P8 or SUNCLAW_APNS_PRIVATE_KEY_PATH",
     };
   }
   try {
@@ -689,7 +689,7 @@ export async function resolveApnsAuthConfigFromEnv(
     const message = formatErrorMessage(err);
     return {
       ok: false,
-      error: `failed reading OPENCLAW_APNS_PRIVATE_KEY_PATH (${keyPath}): ${message}`,
+      error: `failed reading SUNCLAW_APNS_PRIVATE_KEY_PATH (${keyPath}): ${message}`,
     };
   }
 }
@@ -930,7 +930,7 @@ function createAlertPayload(params: { nodeId: string; title: string; body: strin
       },
       sound: "default",
     },
-    openclaw: toPushMetadata({
+    sunclaw: toPushMetadata({
       kind: "push.test",
       nodeId: params.nodeId,
     }),
@@ -942,7 +942,7 @@ function createBackgroundPayload(params: { nodeId: string; wakeReason?: string }
     aps: {
       "content-available": 1,
     },
-    openclaw: toPushMetadata({
+    sunclaw: toPushMetadata({
       kind: "node.wake",
       reason: params.wakeReason ?? "node.invoke",
       nodeId: params.nodeId,
@@ -965,7 +965,7 @@ function createExecApprovalAlertPayload(params: { nodeId: string; approvalId: st
       category: EXEC_APPROVAL_NOTIFICATION_CATEGORY,
       "content-available": 1,
     },
-    openclaw: {
+    sunclaw: {
       kind: "exec.approval.requested",
       approvalId: params.approvalId,
       ts: Date.now(),
@@ -978,7 +978,7 @@ function createExecApprovalResolvedPayload(params: { nodeId: string; approvalId:
     aps: {
       "content-available": 1,
     },
-    openclaw: {
+    sunclaw: {
       kind: "exec.approval.resolved",
       approvalId: params.approvalId,
       ts: Date.now(),

@@ -1,4 +1,4 @@
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@sunclaw/normalization-core/string-coerce";
 
 export const POSIX_INLINE_COMMAND_FLAGS = new Set(["-lc", "-c", "--command"]);
 

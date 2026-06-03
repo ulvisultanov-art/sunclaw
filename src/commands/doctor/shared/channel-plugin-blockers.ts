@@ -1,6 +1,6 @@
-import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalLowercaseString } from "@sunclaw/normalization-core/string-coerce";
 import { sanitizeForLog } from "../../../../packages/terminal-core/src/ansi.js";
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../../config/types.sunclaw.js";
 import {
   listExplicitConfiguredChannelIdsForConfig,
   resolveConfiguredChannelPresencePolicy,
@@ -17,7 +17,7 @@ export type ChannelPluginBlockerHit = {
   reason: "disabled in config" | "plugins disabled";
 };
 
-function hasExplicitChannelPluginBlockerConfig(cfg: OpenClawConfig): boolean {
+function hasExplicitChannelPluginBlockerConfig(cfg: SunClawConfig): boolean {
   if (cfg.plugins?.enabled === false) {
     return true;
   }
@@ -37,7 +37,7 @@ function hasExplicitChannelPluginBlockerConfig(cfg: OpenClawConfig): boolean {
 }
 
 export function scanConfiguredChannelPluginBlockers(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   env: NodeJS.ProcessEnv = process.env,
 ): ChannelPluginBlockerHit[] {
   if (!hasExplicitChannelPluginBlockerConfig(cfg)) {

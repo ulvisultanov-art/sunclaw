@@ -1,4 +1,4 @@
-import type { MessagePresentation } from "openclaw/plugin-sdk/interactive-runtime";
+import type { MessagePresentation } from "sunclaw/plugin-sdk/interactive-runtime";
 
 export type CodexCommandPickerButton = { label: string; command: string };
 

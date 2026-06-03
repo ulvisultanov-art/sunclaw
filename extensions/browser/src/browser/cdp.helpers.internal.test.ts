@@ -9,15 +9,15 @@ const { registerManagedProxyBrowserCdpBypassMock } = vi.hoisted(() => ({
   ),
 }));
 
-vi.mock("openclaw/plugin-sdk/ssrf-runtime", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/ssrf-runtime")>();
+vi.mock("sunclaw/plugin-sdk/ssrf-runtime", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("sunclaw/plugin-sdk/ssrf-runtime")>();
   return {
     ...actual,
     fetchWithSsrFGuard: (...args: unknown[]) => fetchWithSsrFGuardMock(...args),
   };
 });
 
-vi.mock("openclaw/plugin-sdk/ssrf-runtime-internal", () => ({
+vi.mock("sunclaw/plugin-sdk/ssrf-runtime-internal", () => ({
   registerManagedProxyBrowserCdpBypass: registerManagedProxyBrowserCdpBypassMock,
 }));
 
@@ -140,7 +140,7 @@ describe("cdp.helpers internal", () => {
       });
 
       const { release: guardedRelease } = await fetchCdpChecked(
-        "http://openclaw:secret@127.0.0.1:9222/json/version",
+        "http://sunclaw:secret@127.0.0.1:9222/json/version",
         250,
         undefined,
         { dangerouslyAllowPrivateNetwork: false, allowedHostnames: ["127.0.0.1"] },

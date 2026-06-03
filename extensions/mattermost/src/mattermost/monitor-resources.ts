@@ -1,8 +1,8 @@
 import {
   asDateTimestampMs,
   resolveExpiresAtMsFromDurationMs,
-} from "openclaw/plugin-sdk/number-runtime";
-import { normalizeStringEntries } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/number-runtime";
+import { normalizeStringEntries } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import {
   fetchMattermostChannel,
   fetchMattermostUser,

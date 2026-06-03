@@ -1,5 +1,5 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { sanitizeTerminalText } from "openclaw/plugin-sdk/test-fixtures";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import { sanitizeTerminalText } from "sunclaw/plugin-sdk/test-fixtures";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { resetIMessageShortIdState, rememberIMessageReplyCache } from "../monitor-reply-cache.js";
 import { installIMessageStateRuntimeForTest } from "../test-support/runtime.js";
@@ -17,7 +17,7 @@ beforeEach(() => {
 });
 
 describe("resolveIMessageInboundDecision echo detection", () => {
-  const cfg = {} as OpenClawConfig;
+  const cfg = {} as SunClawConfig;
   type InboundDecisionParams = Parameters<typeof resolveIMessageInboundDecision>[0];
 
   function createInboundDecisionParams(
@@ -193,7 +193,7 @@ describe("resolveIMessageInboundDecision echo detection", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
     const createdAt = "2026-03-02T20:58:10.649Z";
 
     expect(
@@ -736,7 +736,7 @@ describe("describeIMessageEchoDropLog", () => {
 describe("buildIMessageInboundContext", () => {
   it("keeps numeric row id and provider GUID separately for action tooling", async () => {
     const decision = await resolveIMessageInboundDecision({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as SunClawConfig,
       accountId: "default",
       message: {
         id: 12345,
@@ -766,7 +766,7 @@ describe("buildIMessageInboundContext", () => {
     }
 
     const { ctxPayload } = await buildIMessageInboundContext({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as SunClawConfig,
       decision,
       message: {
         id: 12345,
@@ -786,7 +786,7 @@ describe("buildIMessageInboundContext", () => {
 
   it("prepends direct-message history when supplied", async () => {
     const decision = await resolveIMessageInboundDecision({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as SunClawConfig,
       accountId: "default",
       message: {
         id: 12346,
@@ -816,7 +816,7 @@ describe("buildIMessageInboundContext", () => {
     }
 
     const { ctxPayload, inboundHistory } = await buildIMessageInboundContext({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as SunClawConfig,
       decision,
       message: {
         id: 12346,
@@ -842,7 +842,7 @@ describe("buildIMessageInboundContext", () => {
 });
 
 describe("resolveIMessageInboundDecision command auth", () => {
-  const cfg = {} as OpenClawConfig;
+  const cfg = {} as SunClawConfig;
   const resolveDmCommandDecision = (params: {
     messageId: number;
     storeAllowFrom: string[];
@@ -995,7 +995,7 @@ describe("buildIMessageInboundContext MessageSid handling (rowid-leak regression
       hasControlCommand: false,
     };
     return {
-      cfg: {} as OpenClawConfig,
+      cfg: {} as SunClawConfig,
       decision: decision as unknown as Parameters<
         typeof buildIMessageInboundContext
       >[0]["decision"],

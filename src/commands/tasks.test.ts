@@ -15,8 +15,8 @@ import {
 } from "../tasks/task-registry.js";
 import * as taskRegistryMaintenance from "../tasks/task-registry.maintenance.js";
 import type { TaskRecord } from "../tasks/task-registry.types.js";
-import { withOpenClawTestState } from "../test-utils/openclaw-test-state.js";
-import type { OpenClawTestState } from "../test-utils/openclaw-test-state.js";
+import { withSunClawTestState } from "../test-utils/sunclaw-test-state.js";
+import type { SunClawTestState } from "../test-utils/sunclaw-test-state.js";
 import { tasksAuditCommand, tasksMaintenanceCommand, tasksShowCommand } from "./tasks.js";
 
 function createRuntime(): RuntimeEnv {
@@ -66,10 +66,10 @@ const zeroTaskAuditCounts = {
 };
 
 async function withTaskCommandStateDir(
-  run: (state: OpenClawTestState) => Promise<void>,
+  run: (state: SunClawTestState) => Promise<void>,
 ): Promise<void> {
-  await withOpenClawTestState(
-    { layout: "state-only", prefix: "openclaw-tasks-command-" },
+  await withSunClawTestState(
+    { layout: "state-only", prefix: "sunclaw-tasks-command-" },
     async (state) => {
       resetTaskRegistryDeliveryRuntimeForTests();
       resetTaskRegistryForTests({ persist: false });

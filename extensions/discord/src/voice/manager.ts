@@ -1,9 +1,9 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { DiscordAccountConfig } from "openclaw/plugin-sdk/config-contracts";
-import { resolveAgentRoute } from "openclaw/plugin-sdk/routing";
-import { createSubsystemLogger } from "openclaw/plugin-sdk/runtime-env";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
-import { formatErrorMessage } from "openclaw/plugin-sdk/ssrf-runtime";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import type { DiscordAccountConfig } from "sunclaw/plugin-sdk/config-contracts";
+import { resolveAgentRoute } from "sunclaw/plugin-sdk/routing";
+import { createSubsystemLogger } from "sunclaw/plugin-sdk/runtime-env";
+import type { RuntimeEnv } from "sunclaw/plugin-sdk/runtime-env";
+import { formatErrorMessage } from "sunclaw/plugin-sdk/ssrf-runtime";
 import { resolveDiscordAccountAllowFrom } from "../accounts.js";
 import {
   type APIVoiceState,
@@ -227,7 +227,7 @@ function startAutoJoin(manager: Pick<DiscordVoiceManager, "autoJoin">) {
 }
 
 function resolveDiscordVoiceAgentRoute(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   accountId: string;
   guildId: string;
   sessionChannelId: string;
@@ -301,7 +301,7 @@ export class DiscordVoiceManager {
   constructor(
     private params: {
       client: Client;
-      cfg: OpenClawConfig;
+      cfg: SunClawConfig;
       discordConfig: DiscordAccountConfig;
       accountId: string;
       runtime: RuntimeEnv;

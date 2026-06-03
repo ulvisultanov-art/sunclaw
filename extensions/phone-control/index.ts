@@ -1,17 +1,17 @@
 import {
   asDateTimestampMs,
   resolveExpiresAtMsFromDurationMs,
-} from "openclaw/plugin-sdk/number-runtime";
+} from "sunclaw/plugin-sdk/number-runtime";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
   normalizeStringEntries,
   sortUniqueStrings,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/string-coerce-runtime";
 import {
   definePluginEntry,
-  type OpenClawPluginApi,
-  type OpenClawPluginService,
+  type SunClawPluginApi,
+  type SunClawPluginService,
 } from "./runtime-api.js";
 
 type ArmGroup = "camera" | "screen" | "writes" | "all";
@@ -106,18 +106,18 @@ function formatDuration(ms: number): string {
   return `${d}d`;
 }
 
-function openArmStateStore(api: OpenClawPluginApi) {
+function openArmStateStore(api: SunClawPluginApi) {
   return api.runtime.state.openKeyedStore<ArmStateFile>({
     namespace: ARM_STATE_NAMESPACE,
     maxEntries: 1,
   });
 }
 
-async function readArmState(api: OpenClawPluginApi): Promise<ArmStateFile | null> {
+async function readArmState(api: SunClawPluginApi): Promise<ArmStateFile | null> {
   return (await openArmStateStore(api).lookup(ARM_STATE_KEY)) ?? null;
 }
 
-async function writeArmState(api: OpenClawPluginApi, state: ArmStateFile | null): Promise<void> {
+async function writeArmState(api: SunClawPluginApi, state: ArmStateFile | null): Promise<void> {
   const store = openArmStateStore(api);
   if (!state) {
     await store.delete(ARM_STATE_KEY);
@@ -140,9 +140,9 @@ function hasPhoneControlAllowOverride(cfg: PhoneControlConfigView): boolean {
 }
 
 function patchConfigNodeLists(
-  cfg: OpenClawPluginApi["config"],
+  cfg: SunClawPluginApi["config"],
   next: { allowCommands: string[]; denyCommands: string[] },
-): OpenClawPluginApi["config"] {
+): SunClawPluginApi["config"] {
   return {
     ...cfg,
     gateway: {
@@ -157,7 +157,7 @@ function patchConfigNodeLists(
 }
 
 async function disarmNow(params: {
-  api: OpenClawPluginApi;
+  api: SunClawPluginApi;
   reason: string;
 }): Promise<{ changed: boolean; restored: string[]; removed: string[] }> {
   const { api, reason } = params;
@@ -301,11 +301,11 @@ export default definePluginEntry({
   id: "phone-control",
   name: "Phone Control",
   description: "Temporary allowlist control for phone automation commands",
-  register(api: OpenClawPluginApi) {
+  register(api: SunClawPluginApi) {
     let expiryInterval: ReturnType<typeof setInterval> | null = null;
     let initialExpiryTick: ReturnType<typeof setImmediate> | null = null;
 
-    const timerService: OpenClawPluginService = {
+    const timerService: SunClawPluginService = {
       id: "phone-control-expiry",
       start: async (ctx) => {
         const tick = async () => {

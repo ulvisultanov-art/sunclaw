@@ -1,16 +1,16 @@
 import { applyPluginAutoEnable } from "../config/plugin-auto-enable.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { getCurrentPluginMetadataSnapshot } from "../plugins/current-plugin-metadata-snapshot.js";
 import type { PluginMetadataSnapshot } from "../plugins/plugin-metadata-snapshot.types.js";
 
 type CachedGatewayPluginConfig = {
   snapshot: PluginMetadataSnapshot;
-  config: OpenClawConfig;
+  config: SunClawConfig;
 };
 
-const gatewayPluginConfigCache = new WeakMap<OpenClawConfig, CachedGatewayPluginConfig>();
+const gatewayPluginConfigCache = new WeakMap<SunClawConfig, CachedGatewayPluginConfig>();
 
-export function resolveGatewayPluginConfig(params: { config: OpenClawConfig }): OpenClawConfig {
+export function resolveGatewayPluginConfig(params: { config: SunClawConfig }): SunClawConfig {
   const currentSnapshot = getCurrentPluginMetadataSnapshot({
     config: params.config,
     allowWorkspaceScopedSnapshot: true,

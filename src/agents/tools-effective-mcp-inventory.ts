@@ -1,8 +1,8 @@
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+} from "@sunclaw/normalization-core/string-coerce";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type { ProviderRuntimeModel } from "../plugins/provider-runtime-model.types.js";
 import { normalizeAgentRuntimeTools } from "./runtime-plan/tools.js";
 import { summarizeToolDescriptionText } from "./tool-description-summary.js";
@@ -87,7 +87,7 @@ function buildMcpToolInventoryEntries(
 
 export function buildRuntimeCompatibleMcpToolInventory(params: {
   tools: readonly AnyAgentTool[];
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   workspaceDir?: string;
   modelProvider?: string;
   modelId?: string;

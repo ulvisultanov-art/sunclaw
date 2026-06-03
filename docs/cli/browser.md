@@ -1,15 +1,15 @@
 ---
-summary: "CLI reference for `openclaw browser` (lifecycle, profiles, tabs, actions, state, and debugging)"
+summary: "CLI reference for `sunclaw browser` (lifecycle, profiles, tabs, actions, state, and debugging)"
 read_when:
-  - You use `openclaw browser` and want examples for common tasks
+  - You use `sunclaw browser` and want examples for common tasks
   - You want to control a browser running on another machine via a node host
   - You want to attach to your local signed-in Chrome via Chrome MCP
 title: "Browser"
 ---
 
-# `openclaw browser`
+# `sunclaw browser`
 
-Manage OpenClaw's browser control surface and run browser actions (lifecycle, profiles, tabs, snapshots, screenshots, navigation, input, state emulation, and debugging).
+Manage SunClaw's browser control surface and run browser actions (lifecycle, profiles, tabs, snapshots, screenshots, navigation, input, state emulation, and debugging).
 
 Related:
 
@@ -27,10 +27,10 @@ Related:
 ## Quick start (local)
 
 ```bash
-openclaw browser profiles
-openclaw browser --browser-profile openclaw start
-openclaw browser --browser-profile openclaw open https://example.com
-openclaw browser --browser-profile openclaw snapshot
+sunclaw browser profiles
+sunclaw browser --browser-profile sunclaw start
+sunclaw browser --browser-profile sunclaw open https://example.com
+sunclaw browser --browser-profile sunclaw snapshot
 ```
 
 Agents can run the same readiness check with `browser({ action: "doctor" })`.
@@ -42,10 +42,10 @@ If `start` fails with `not reachable after start`, troubleshoot CDP readiness fi
 Minimal sequence:
 
 ```bash
-openclaw browser --browser-profile openclaw doctor
-openclaw browser --browser-profile openclaw start
-openclaw browser --browser-profile openclaw tabs
-openclaw browser --browser-profile openclaw open https://example.com
+sunclaw browser --browser-profile sunclaw doctor
+sunclaw browser --browser-profile sunclaw start
+sunclaw browser --browser-profile sunclaw tabs
+sunclaw browser --browser-profile sunclaw open https://example.com
 ```
 
 Detailed guidance: [Browser troubleshooting](/tools/browser#cdp-startup-failure-vs-navigation-ssrf-block)
@@ -53,37 +53,37 @@ Detailed guidance: [Browser troubleshooting](/tools/browser#cdp-startup-failure-
 ## Lifecycle
 
 ```bash
-openclaw browser status
-openclaw browser doctor
-openclaw browser doctor --deep
-openclaw browser start
-openclaw browser start --headless
-openclaw browser stop
-openclaw browser --browser-profile openclaw reset-profile
+sunclaw browser status
+sunclaw browser doctor
+sunclaw browser doctor --deep
+sunclaw browser start
+sunclaw browser start --headless
+sunclaw browser stop
+sunclaw browser --browser-profile sunclaw reset-profile
 ```
 
 Notes:
 
 - `doctor --deep` adds a live snapshot probe. It is useful when basic CDP
   readiness is green but you want proof that the current tab can be inspected.
-- For `attachOnly` and remote CDP profiles, `openclaw browser stop` closes the
+- For `attachOnly` and remote CDP profiles, `sunclaw browser stop` closes the
   active control session and clears temporary emulation overrides even when
-  OpenClaw did not launch the browser process itself.
-- For local managed profiles, `openclaw browser stop` stops the spawned browser
+  SunClaw did not launch the browser process itself.
+- For local managed profiles, `sunclaw browser stop` stops the spawned browser
   process.
-- `openclaw browser start --headless` applies only to that start request and
-  only when OpenClaw launches a local managed browser. It does not rewrite
+- `sunclaw browser start --headless` applies only to that start request and
+  only when SunClaw launches a local managed browser. It does not rewrite
   `browser.headless` or profile config, and it is a no-op for an already-running
   browser.
 - On Linux hosts without `DISPLAY` or `WAYLAND_DISPLAY`, local managed profiles
-  run headless automatically unless `OPENCLAW_BROWSER_HEADLESS=0`,
+  run headless automatically unless `SUNCLAW_BROWSER_HEADLESS=0`,
   `browser.headless=false`, or `browser.profiles.<name>.headless=false`
   explicitly requests a visible browser.
 
 ## If the command is missing
 
-If `openclaw browser` is an unknown command, check `plugins.allow` in
-`~/.openclaw/openclaw.json`.
+If `sunclaw browser` is an unknown command, check `plugins.allow` in
+`~/.sunclaw/sunclaw.json`.
 
 When `plugins.allow` is present, list the bundled browser plugin explicitly
 unless the config already has a root `browser` block:
@@ -106,35 +106,35 @@ Related: [Browser tool](/tools/browser#missing-browser-command-or-tool)
 
 Profiles are named browser routing configs. In practice:
 
-- `openclaw`: launches or attaches to a dedicated OpenClaw-managed Chrome instance (isolated user data dir).
+- `sunclaw`: launches or attaches to a dedicated SunClaw-managed Chrome instance (isolated user data dir).
 - `user`: controls your existing signed-in Chrome session via Chrome DevTools MCP.
 - custom CDP profiles: point at a local or remote CDP endpoint.
 
 ```bash
-openclaw browser profiles
-openclaw browser create-profile --name work --color "#FF5A36"
-openclaw browser create-profile --name chrome-live --driver existing-session
-openclaw browser create-profile --name remote --cdp-url https://browser-host.example.com
-openclaw browser delete-profile --name work
+sunclaw browser profiles
+sunclaw browser create-profile --name work --color "#FF5A36"
+sunclaw browser create-profile --name chrome-live --driver existing-session
+sunclaw browser create-profile --name remote --cdp-url https://browser-host.example.com
+sunclaw browser delete-profile --name work
 ```
 
 Use a specific profile:
 
 ```bash
-openclaw browser --browser-profile work tabs
+sunclaw browser --browser-profile work tabs
 ```
 
 ## Tabs
 
 ```bash
-openclaw browser tabs
-openclaw browser tab new --label docs
-openclaw browser tab label t1 docs
-openclaw browser tab select 2
-openclaw browser tab close 2
-openclaw browser open https://docs.openclaw.ai --label docs
-openclaw browser focus docs
-openclaw browser close t1
+sunclaw browser tabs
+sunclaw browser tab new --label docs
+sunclaw browser tab label t1 docs
+sunclaw browser tab select 2
+sunclaw browser tab close 2
+sunclaw browser open https://docs.sunclaw.complex.az --label docs
+sunclaw browser focus docs
+sunclaw browser close t1
 ```
 
 `tabs` returns `suggestedTargetId` first, then the stable `tabId` such as `t1`,
@@ -146,7 +146,7 @@ The request field is still named `targetId` for compatibility, but it accepts
 these tab references. Treat raw target ids as diagnostic handles, not durable
 agent memory.
 When Chromium replaces the underlying raw target during a navigation or form
-submit, OpenClaw keeps the stable `tabId`/label attached to the replacement tab
+submit, SunClaw keeps the stable `tabId`/label attached to the replacement tab
 when it can prove the match. Raw target ids remain volatile; prefer
 `suggestedTargetId`.
 
@@ -155,17 +155,17 @@ when it can prove the match. Raw target ids remain volatile; prefer
 Snapshot:
 
 ```bash
-openclaw browser snapshot
-openclaw browser snapshot --urls
+sunclaw browser snapshot
+sunclaw browser snapshot --urls
 ```
 
 Screenshot:
 
 ```bash
-openclaw browser screenshot
-openclaw browser screenshot --full-page
-openclaw browser screenshot --ref e12
-openclaw browser screenshot --labels
+sunclaw browser screenshot
+sunclaw browser screenshot --full-page
+sunclaw browser screenshot --ref e12
+sunclaw browser screenshot --labels
 ```
 
 Notes:
@@ -182,50 +182,50 @@ Notes:
 Navigate/click/type (ref-based UI automation):
 
 ```bash
-openclaw browser navigate https://example.com
-openclaw browser click <ref>
-openclaw browser click-coords 120 340
-openclaw browser type <ref> "hello"
-openclaw browser press Enter
-openclaw browser hover <ref>
-openclaw browser scrollintoview <ref>
-openclaw browser drag <startRef> <endRef>
-openclaw browser select <ref> OptionA OptionB
-openclaw browser fill --fields '[{"ref":"1","value":"Ada"}]'
-openclaw browser wait --text "Done"
-openclaw browser evaluate --fn '(el) => el.textContent' --ref <ref>
-openclaw browser evaluate --timeout-ms 30000 --fn 'async () => { await window.ready; return true; }'
+sunclaw browser navigate https://example.com
+sunclaw browser click <ref>
+sunclaw browser click-coords 120 340
+sunclaw browser type <ref> "hello"
+sunclaw browser press Enter
+sunclaw browser hover <ref>
+sunclaw browser scrollintoview <ref>
+sunclaw browser drag <startRef> <endRef>
+sunclaw browser select <ref> OptionA OptionB
+sunclaw browser fill --fields '[{"ref":"1","value":"Ada"}]'
+sunclaw browser wait --text "Done"
+sunclaw browser evaluate --fn '(el) => el.textContent' --ref <ref>
+sunclaw browser evaluate --timeout-ms 30000 --fn 'async () => { await window.ready; return true; }'
 ```
 
 Use `evaluate --timeout-ms <ms>` when the page-side function may need longer
 than the default evaluate timeout.
 
 Action responses return the current raw `targetId` after action-triggered page
-replacement when OpenClaw can prove the replacement tab. Scripts should still
+replacement when SunClaw can prove the replacement tab. Scripts should still
 store and pass `suggestedTargetId`/labels for long-lived workflows.
 
 File + dialog helpers:
 
 ```bash
-openclaw browser upload /tmp/openclaw/uploads/file.pdf --ref <ref>
-openclaw browser upload media://inbound/file.pdf --ref <ref>
-openclaw browser waitfordownload
-openclaw browser download <ref> report.pdf
-openclaw browser dialog --accept
-openclaw browser dialog --dismiss --dialog-id d1
+sunclaw browser upload /tmp/sunclaw/uploads/file.pdf --ref <ref>
+sunclaw browser upload media://inbound/file.pdf --ref <ref>
+sunclaw browser waitfordownload
+sunclaw browser download <ref> report.pdf
+sunclaw browser dialog --accept
+sunclaw browser dialog --dismiss --dialog-id d1
 ```
 
-Managed Chrome profiles save ordinary click-triggered downloads into the OpenClaw
-downloads directory (`/tmp/openclaw/downloads` by default, or the configured temp
+Managed Chrome profiles save ordinary click-triggered downloads into the SunClaw
+downloads directory (`/tmp/sunclaw/downloads` by default, or the configured temp
 root). Use `waitfordownload` or `download` when the agent needs to wait for a
 specific file and return its path; those explicit waiters own the next download.
-Uploads accept files from the OpenClaw temp uploads root and OpenClaw-managed
+Uploads accept files from the SunClaw temp uploads root and SunClaw-managed
 inbound media, including `media://inbound/<id>` and sandbox-relative
 `media/inbound/<id>` references. Nested media refs, traversal, and arbitrary
 local paths remain rejected.
 When an action opens a modal dialog, the action response returns
 `blockedByDialog` with `browserState.dialogs.pending`; pass `--dialog-id` to
-answer it directly. Dialogs handled outside OpenClaw appear under
+answer it directly. Dialogs handled outside SunClaw appear under
 `browserState.dialogs.recent`.
 
 ## State and storage
@@ -233,40 +233,40 @@ answer it directly. Dialogs handled outside OpenClaw appear under
 Viewport + emulation:
 
 ```bash
-openclaw browser resize 1280 720
-openclaw browser set viewport 1280 720
-openclaw browser set offline on
-openclaw browser set media dark
-openclaw browser set timezone Europe/London
-openclaw browser set locale en-GB
-openclaw browser set geo 51.5074 -0.1278 --accuracy 25
-openclaw browser set device "iPhone 14"
-openclaw browser set headers '{"x-test":"1"}'
-openclaw browser set credentials myuser mypass
+sunclaw browser resize 1280 720
+sunclaw browser set viewport 1280 720
+sunclaw browser set offline on
+sunclaw browser set media dark
+sunclaw browser set timezone Europe/London
+sunclaw browser set locale en-GB
+sunclaw browser set geo 51.5074 -0.1278 --accuracy 25
+sunclaw browser set device "iPhone 14"
+sunclaw browser set headers '{"x-test":"1"}'
+sunclaw browser set credentials myuser mypass
 ```
 
 Cookies + storage:
 
 ```bash
-openclaw browser cookies
-openclaw browser cookies set session abc123 --url https://example.com
-openclaw browser cookies clear
-openclaw browser storage local get
-openclaw browser storage local set token abc123
-openclaw browser storage session clear
+sunclaw browser cookies
+sunclaw browser cookies set session abc123 --url https://example.com
+sunclaw browser cookies clear
+sunclaw browser storage local get
+sunclaw browser storage local set token abc123
+sunclaw browser storage session clear
 ```
 
 ## Debugging
 
 ```bash
-openclaw browser console --level error
-openclaw browser pdf
-openclaw browser responsebody "**/api"
-openclaw browser highlight <ref>
-openclaw browser errors --clear
-openclaw browser requests --filter api
-openclaw browser trace start
-openclaw browser trace stop --out trace.zip
+sunclaw browser console --level error
+sunclaw browser pdf
+sunclaw browser responsebody "**/api"
+sunclaw browser highlight <ref>
+sunclaw browser errors --clear
+sunclaw browser requests --filter api
+sunclaw browser trace start
+sunclaw browser trace stop --out trace.zip
 ```
 
 ## Existing Chrome via MCP
@@ -274,10 +274,10 @@ openclaw browser trace stop --out trace.zip
 Use the built-in `user` profile, or create your own `existing-session` profile:
 
 ```bash
-openclaw browser --browser-profile user tabs
-openclaw browser create-profile --name chrome-live --driver existing-session
-openclaw browser create-profile --name brave-live --driver existing-session --user-data-dir "~/Library/Application Support/BraveSoftware/Brave-Browser"
-openclaw browser --browser-profile chrome-live tabs
+sunclaw browser --browser-profile user tabs
+sunclaw browser create-profile --name chrome-live --driver existing-session
+sunclaw browser create-profile --name brave-live --driver existing-session --user-data-dir "~/Library/Application Support/BraveSoftware/Brave-Browser"
+sunclaw browser --browser-profile chrome-live tabs
 ```
 
 This path is host-only. For Docker, headless servers, Browserless, or other remote setups, use a CDP profile instead.

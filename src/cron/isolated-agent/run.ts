@@ -1,4 +1,4 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
 import { retireSessionMcpRuntime } from "../../agents/agent-bundle-mcp-tools.js";
 import { hasAnyAuthProfileStoreSource } from "../../agents/auth-profiles/source-check.js";
 import { resolveAgentHarnessPolicy } from "../../agents/harness/policy.js";
@@ -12,7 +12,7 @@ import {
   selectApplicableRuntimeConfig,
 } from "../../config/config.js";
 import type { AgentDefaultsConfig } from "../../config/types.agent-defaults.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { clearAgentRunContext } from "../../infra/agent-events.js";
 import { isDiagnosticsEnabled } from "../../infra/diagnostic-events.js";
 import {
@@ -152,7 +152,7 @@ async function loadRuntimePlugins() {
   return await runtimePluginsLoader.load();
 }
 
-function hasConfiguredAuthProfiles(cfg: OpenClawConfig): boolean {
+function hasConfiguredAuthProfiles(cfg: SunClawConfig): boolean {
   return (
     Boolean(cfg.auth?.profiles && Object.keys(cfg.auth.profiles).length > 0) ||
     Boolean(cfg.auth?.order && Object.keys(cfg.auth.order).length > 0)
@@ -351,7 +351,7 @@ function canPromptForMessageTool(params: {
 }
 
 async function resolveCronDeliveryContext(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   job: CronJob;
   agentId: string;
 }) {
@@ -437,7 +437,7 @@ async function loadUsageFormatRuntime() {
 }
 
 type RunCronAgentTurnParams = {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   deps: CliDeps;
   job: CronJob;
   message: string;
@@ -456,7 +456,7 @@ type WithRunSession = (
 
 type PreparedCronRunContext = {
   input: RunCronAgentTurnParams;
-  cfgWithAgentDefaults: OpenClawConfig;
+  cfgWithAgentDefaults: SunClawConfig;
   agentId: string;
   agentCfg: AgentDefaultsConfig;
   agentDir: string;
@@ -494,7 +494,7 @@ type CronPreparationResult =
   | { ok: true; context: PreparedCronRunContext }
   | { ok: false; result: RunCronAgentTurnResult };
 
-function resolveCronActiveRuntimeConfig(cfg: OpenClawConfig): OpenClawConfig {
+function resolveCronActiveRuntimeConfig(cfg: SunClawConfig): SunClawConfig {
   const runtimeConfig = getRuntimeConfigSnapshot();
   const runtimeSourceConfig = getRuntimeConfigSourceSnapshot();
   if (!runtimeConfig || !runtimeSourceConfig) {
@@ -531,7 +531,7 @@ async function prepareCronRunContext(params: {
     defaults: runtimeCfg.agents?.defaults,
     agentConfigOverride,
   });
-  const cfgWithAgentDefaults: OpenClawConfig = {
+  const cfgWithAgentDefaults: SunClawConfig = {
     ...runtimeCfg,
     agents: Object.assign({}, runtimeCfg.agents, { defaults: agentCfg }),
   };
@@ -1207,7 +1207,7 @@ async function disposeCronRunContext(params: {
 
 /** Runs one isolated cron agent turn, including setup, execution, delivery, and persistence. */
 export async function runCronIsolatedAgentTurn(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   deps: CliDeps;
   job: CronJob;
   message: string;
@@ -1227,7 +1227,7 @@ export async function runCronIsolatedAgentTurn(params: {
       ? reason.trim()
       : "cron: job execution timed out";
   };
-  const isFastTestEnv = process.env.OPENCLAW_TEST_FAST === "1";
+  const isFastTestEnv = process.env.SUNCLAW_TEST_FAST === "1";
   const prepared = await prepareCronRunContext({ input: params, isFastTestEnv });
   if (!prepared.ok) {
     return prepared.result;

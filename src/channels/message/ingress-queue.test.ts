@@ -3,28 +3,28 @@ import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { executeSqliteQuerySync, getNodeSqliteKysely } from "../../infra/kysely-sync.js";
-import type { DB as OpenClawStateKyselyDatabase } from "../../state/openclaw-state-db.generated.js";
+import type { DB as SunClawStateKyselyDatabase } from "../../state/sunclaw-state-db.generated.js";
 import {
-  closeOpenClawStateDatabaseForTest,
-  openOpenClawStateDatabase,
-} from "../../state/openclaw-state-db.js";
+  closeSunClawStateDatabaseForTest,
+  openSunClawStateDatabase,
+} from "../../state/sunclaw-state-db.js";
 import { createChannelIngressQueue } from "./ingress-queue.js";
 
-type ChannelIngressTestDatabase = Pick<OpenClawStateKyselyDatabase, "channel_ingress_events">;
+type ChannelIngressTestDatabase = Pick<SunClawStateKyselyDatabase, "channel_ingress_events">;
 
 async function withTempState<T>(fn: (stateDir: string) => Promise<T>): Promise<T> {
-  const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-ingress-queue-"));
+  const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-ingress-queue-"));
   try {
     return await fn(stateDir);
   } finally {
-    closeOpenClawStateDatabaseForTest();
+    closeSunClawStateDatabaseForTest();
     await fs.rm(stateDir, { recursive: true, force: true });
   }
 }
 
 describe("channel ingress queue", () => {
   afterEach(() => {
-    closeOpenClawStateDatabaseForTest();
+    closeSunClawStateDatabaseForTest();
   });
 
   it("deduplicates pending and completed ingress events", async () => {
@@ -282,8 +282,8 @@ describe("channel ingress queue", () => {
       await queue.release("retry", { lastError: "stale retry text", releasedAt: 26 });
       await queue.complete("retry", { completedAt: 27 });
 
-      const database = openOpenClawStateDatabase({
-        env: { ...process.env, OPENCLAW_STATE_DIR: stateDir },
+      const database = openSunClawStateDatabase({
+        env: { ...process.env, SUNCLAW_STATE_DIR: stateDir },
       });
       const kysely = getNodeSqliteKysely<ChannelIngressTestDatabase>(database.db);
       const rows = executeSqliteQuerySync(

@@ -1,14 +1,14 @@
 import {
   defineBundledChannelEntry,
-  type OpenClawPluginCommandDefinition,
-  type OpenClawPluginApi,
-} from "openclaw/plugin-sdk/channel-entry-contract";
+  type SunClawPluginCommandDefinition,
+  type SunClawPluginApi,
+} from "sunclaw/plugin-sdk/channel-entry-contract";
 
-type RegisteredLineCardCommand = OpenClawPluginCommandDefinition;
+type RegisteredLineCardCommand = SunClawPluginCommandDefinition;
 
 let lineCardCommandPromise: Promise<RegisteredLineCardCommand> | null = null;
 
-async function loadLineCardCommand(api: OpenClawPluginApi): Promise<RegisteredLineCardCommand> {
+async function loadLineCardCommand(api: SunClawPluginApi): Promise<RegisteredLineCardCommand> {
   lineCardCommandPromise ??= (async () => {
     let registered: RegisteredLineCardCommand | null = null;
     const { registerLineCardCommand } = await import("./src/card-command.js");

@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
-import { timestampMsToIsoString } from "openclaw/plugin-sdk/number-runtime";
-import { FsSafeError, root as fsRoot } from "openclaw/plugin-sdk/security-runtime";
+import { timestampMsToIsoString } from "sunclaw/plugin-sdk/number-runtime";
+import { FsSafeError, root as fsRoot } from "sunclaw/plugin-sdk/security-runtime";
 import {
   setImportedSourceEntry,
   shouldSkipImportedSourceWrite,

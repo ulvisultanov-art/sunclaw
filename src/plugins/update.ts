@@ -1,20 +1,20 @@
 import path from "node:path";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { isRecord } from "@sunclaw/normalization-core/record-coerce";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
 import { parseClawHubPluginSpec } from "../infra/clawhub-spec.js";
 import { satisfiesPluginApiRange } from "../infra/clawhub.js";
 import type { NpmSpecResolution } from "../infra/install-source-utils.js";
 import { resolveNpmSpecMetadata } from "../infra/install-source-utils.js";
 import {
-  compareOpenClawReleaseVersions,
-  isOpenClawOrgNpmSpec,
+  compareSunClawReleaseVersions,
+  isSunClawOrgNpmSpec,
   isPrereleaseResolutionAllowed,
   parseRegistryNpmSpec,
 } from "../infra/npm-registry-spec.js";
 import {
   expectedIntegrityForUpdate,
-  installedPackageNeedsOpenClawPeerLinkRepair,
+  installedPackageNeedsSunClawPeerLinkRepair,
   readInstalledPackagePeerDependencies,
   readInstalledPackageVersion,
 } from "../infra/package-update-utils.js";
@@ -57,7 +57,7 @@ import {
   resolveOfficialExternalPluginInstall,
 } from "./official-external-plugin-catalog.js";
 import { resolvePackagePluginApiRange } from "./package-compat.js";
-import { linkOpenClawPeerDependencies } from "./plugin-peer-link.js";
+import { linkSunClawPeerDependencies } from "./plugin-peer-link.js";
 import { defaultSlotIdForKey } from "./slots.js";
 
 export type PluginUpdateLogger = {
@@ -77,7 +77,7 @@ export type PluginUpdateOutcome = {
 };
 
 export type PluginUpdateSummary = {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   changed: boolean;
   outcomes: PluginUpdateOutcome[];
 };
@@ -101,7 +101,7 @@ export type PluginChannelSyncSummary = {
 };
 
 export type PluginChannelSyncResult = {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   changed: boolean;
   summary: PluginChannelSyncSummary;
 };
@@ -221,7 +221,7 @@ function shouldBypassTrustedOfficialUnchangedNpmCheck(params: {
 
 function isNpmMetadataCompatibleWithCurrentHost(metadata: NpmSpecResolution): boolean {
   const hostVersion = resolveCompatibilityHostVersion();
-  const installMetadata = metadata.packageOpenClaw?.install;
+  const installMetadata = metadata.packageSunClaw?.install;
   const minHostVersionCheck = checkMinHostVersion({
     currentVersion: hostVersion,
     minHostVersion: isRecord(installMetadata) ? installMetadata.minHostVersion : undefined,
@@ -229,7 +229,7 @@ function isNpmMetadataCompatibleWithCurrentHost(metadata: NpmSpecResolution): bo
   if (!minHostVersionCheck.ok) {
     return false;
   }
-  const pluginApiRangeCheck = resolvePackagePluginApiRange(metadata.packageOpenClaw);
+  const pluginApiRangeCheck = resolvePackagePluginApiRange(metadata.packageSunClaw);
   if (!pluginApiRangeCheck.ok) {
     return false;
   }
@@ -241,7 +241,7 @@ function isNpmMetadataCompatibleWithCurrentHost(metadata: NpmSpecResolution): bo
 }
 
 function isBundledVersionNewer(bundledVersion: string, installedVersion: string): boolean {
-  const releaseCmp = compareOpenClawReleaseVersions(bundledVersion, installedVersion);
+  const releaseCmp = compareSunClawReleaseVersions(bundledVersion, installedVersion);
   if (releaseCmp !== null) {
     return releaseCmp > 0;
   }
@@ -403,7 +403,7 @@ function resolveBridgeInstallRecord(params: {
 }
 
 function isBridgeChannelEnabledByConfig(params: {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   bridge: ExternalizedBundledPluginBridge;
 }): boolean {
   const channels = params.config.channels;
@@ -423,7 +423,7 @@ function isBridgeChannelEnabledByConfig(params: {
 }
 
 function isExternalizedBundledPluginEnabled(params: {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   bridge: ExternalizedBundledPluginBridge;
 }): boolean {
   const normalized = normalizePluginsConfig(params.config.plugins);
@@ -463,7 +463,7 @@ function shouldFallbackClawHubBridgeToNpm(params: {
   result: { ok: false; code?: string };
   npmSpec?: string;
 }): boolean {
-  if (!isOpenClawOrgNpmSpec(params.npmSpec)) {
+  if (!isSunClawOrgNpmSpec(params.npmSpec)) {
     return false;
   }
   return (
@@ -547,7 +547,7 @@ function isOfficialClawHubInstallRecord(record: PluginInstallRecord): boolean {
   if (record.source !== "clawhub" || record.clawhubChannel !== "official") {
     return false;
   }
-  return (record.clawhubUrl ?? "").replace(/\/+$/, "") === "https://clawhub.ai";
+  return (record.clawhubUrl ?? "").replace(/\/+$/, "") === "https://clawhub.complex.az";
 }
 
 function resolveTrustedSourceLinkedOfficialNpmFallbackForClawHubUpdate(params: {
@@ -749,7 +749,7 @@ function replacePluginIdInList(
   return next;
 }
 
-function migratePluginConfigId(cfg: OpenClawConfig, fromId: string, toId: string): OpenClawConfig {
+function migratePluginConfigId(cfg: SunClawConfig, fromId: string, toId: string): SunClawConfig {
   if (fromId === toId) {
     return cfg;
   }
@@ -804,7 +804,7 @@ function migratePluginConfigId(cfg: OpenClawConfig, fromId: string, toId: string
   };
 }
 
-function withoutPluginInstallRecord(cfg: OpenClawConfig, pluginId: string): OpenClawConfig {
+function withoutPluginInstallRecord(cfg: SunClawConfig, pluginId: string): SunClawConfig {
   const installs = cfg.plugins?.installs;
   if (!installs || !Object.hasOwn(installs, pluginId)) {
     return cfg;
@@ -857,9 +857,9 @@ function removeDisabledPluginIdFromList(
 }
 
 function resetDisabledPluginSlots(
-  slots: NonNullable<OpenClawConfig["plugins"]>["slots"] | undefined,
+  slots: NonNullable<SunClawConfig["plugins"]>["slots"] | undefined,
   pluginId: string,
-): NonNullable<OpenClawConfig["plugins"]>["slots"] | undefined {
+): NonNullable<SunClawConfig["plugins"]>["slots"] | undefined {
   if (!slots) {
     return slots;
   }
@@ -879,7 +879,7 @@ function resetDisabledPluginSlots(
   return next;
 }
 
-function disablePluginConfigEntry(config: OpenClawConfig, pluginId: string): OpenClawConfig {
+function disablePluginConfigEntry(config: SunClawConfig, pluginId: string): SunClawConfig {
   const pluginsConfig = config.plugins ?? {};
   const existingEntry = pluginsConfig.entries?.[pluginId];
   return {
@@ -900,8 +900,8 @@ function disablePluginConfigEntry(config: OpenClawConfig, pluginId: string): Ope
   };
 }
 
-async function repairOpenClawPeerLinksForNpmInstalls(params: {
-  config: OpenClawConfig;
+async function repairSunClawPeerLinksForNpmInstalls(params: {
+  config: SunClawConfig;
   logger: PluginUpdateLogger;
 }): Promise<boolean> {
   let repaired = false;
@@ -917,23 +917,23 @@ async function repairOpenClawPeerLinksForNpmInstalls(params: {
       );
     } catch (err) {
       params.logger.warn?.(
-        `Could not repair openclaw peer link for "${pluginId}" due to invalid install path: ${String(err)}`,
+        `Could not repair sunclaw peer link for "${pluginId}" due to invalid install path: ${String(err)}`,
       );
       continue;
     }
 
-    if (!installedPackageNeedsOpenClawPeerLinkRepair(installPath)) {
+    if (!installedPackageNeedsSunClawPeerLinkRepair(installPath)) {
       continue;
     }
 
     const peerDependencies = readInstalledPackagePeerDependencies(installPath);
-    if (!Object.hasOwn(peerDependencies, "openclaw")) {
+    if (!Object.hasOwn(peerDependencies, "sunclaw")) {
       continue;
     }
 
     try {
       const warnings: string[] = [];
-      const peerLinkRepair = await linkOpenClawPeerDependencies({
+      const peerLinkRepair = await linkSunClawPeerDependencies({
         installedDir: installPath,
         peerDependencies,
         logger: {
@@ -943,14 +943,14 @@ async function repairOpenClawPeerLinksForNpmInstalls(params: {
       });
       if (peerLinkRepair.skipped > 0) {
         params.logger.warn?.(
-          `Could not repair openclaw peer link for "${pluginId}" at ${installPath}: ${warnings.join("; ") || "peer link repair was skipped"}`,
+          `Could not repair sunclaw peer link for "${pluginId}" at ${installPath}: ${warnings.join("; ") || "peer link repair was skipped"}`,
         );
         continue;
       }
-      repaired = !installedPackageNeedsOpenClawPeerLinkRepair(installPath) || repaired;
+      repaired = !installedPackageNeedsSunClawPeerLinkRepair(installPath) || repaired;
     } catch (err) {
       params.logger.warn?.(
-        `Could not repair openclaw peer link for "${pluginId}" at ${installPath}: ${String(err)}`,
+        `Could not repair sunclaw peer link for "${pluginId}" at ${installPath}: ${String(err)}`,
       );
     }
   }
@@ -958,7 +958,7 @@ async function repairOpenClawPeerLinksForNpmInstalls(params: {
 }
 
 export async function updateNpmInstalledPlugins(params: {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   logger?: PluginUpdateLogger;
   pluginIds?: string[];
   skipIds?: Set<string>;
@@ -993,7 +993,7 @@ export async function updateNpmInstalledPlugins(params: {
   const recordFailure = (pluginId: string, message: string) => {
     if (params.disableOnFailure && !params.dryRun) {
       const disabledMessage =
-        `Disabled "${pluginId}" after plugin update failure; OpenClaw will continue without it. ` +
+        `Disabled "${pluginId}" after plugin update failure; SunClaw will continue without it. ` +
         message;
       logger.warn?.(disabledMessage);
       next = disablePluginConfigEntry(next, pluginId);
@@ -1222,7 +1222,7 @@ export async function updateNpmInstalledPlugins(params: {
             trustedSourceLinkedOfficialInstall,
           }) &&
           isNpmMetadataCompatibleWithCurrentHost(metadataResult.metadata) &&
-          !installedPackageNeedsOpenClawPeerLinkRepair(installPath) &&
+          !installedPackageNeedsSunClawPeerLinkRepair(installPath) &&
           shouldSkipUnchangedNpmInstall({
             currentVersion,
             record,
@@ -1777,7 +1777,7 @@ export async function updateNpmInstalledPlugins(params: {
 
   if (ranNpmInstaller) {
     changed =
-      (await repairOpenClawPeerLinksForNpmInstalls({
+      (await repairSunClawPeerLinksForNpmInstalls({
         config: next,
         logger,
       })) || changed;
@@ -1787,7 +1787,7 @@ export async function updateNpmInstalledPlugins(params: {
 }
 
 export async function syncPluginsForUpdateChannel(params: {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   channel: UpdateChannel;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;

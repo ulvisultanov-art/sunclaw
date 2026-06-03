@@ -1,14 +1,14 @@
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { resetPluginStateStoreForTests } from "openclaw/plugin-sdk/plugin-state-test-runtime";
-import { importFreshModule } from "openclaw/plugin-sdk/test-fixtures";
+import { resetPluginStateStoreForTests } from "sunclaw/plugin-sdk/plugin-state-test-runtime";
+import { importFreshModule } from "sunclaw/plugin-sdk/test-fixtures";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 async function withOpenRouterStateDir(run: (stateDir: string) => Promise<void>) {
-  const stateDir = mkdtempSync(join(tmpdir(), "openclaw-openrouter-capabilities-"));
+  const stateDir = mkdtempSync(join(tmpdir(), "sunclaw-openrouter-capabilities-"));
   resetPluginStateStoreForTests();
-  process.env.OPENCLAW_STATE_DIR = stateDir;
+  process.env.SUNCLAW_STATE_DIR = stateDir;
   for (const key of [
     "ALL_PROXY",
     "all_proxy",
@@ -38,7 +38,7 @@ describe("openrouter-model-capabilities", () => {
   afterEach(() => {
     resetPluginStateStoreForTests();
     vi.unstubAllGlobals();
-    delete process.env.OPENCLAW_STATE_DIR;
+    delete process.env.SUNCLAW_STATE_DIR;
   });
 
   it("uses top-level OpenRouter max token fields when top_provider is absent", async () => {

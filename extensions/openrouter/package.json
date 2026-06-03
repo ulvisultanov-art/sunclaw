@@ -1,13 +1,13 @@
 {
-  "name": "@openclaw/openrouter-provider",
+  "name": "@sunclaw/openrouter-provider",
   "version": "2026.6.2",
   "private": true,
-  "description": "OpenClaw OpenRouter provider plugin",
+  "description": "SunClaw OpenRouter provider plugin",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@sunclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ]

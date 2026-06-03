@@ -1,12 +1,12 @@
-import type { Model } from "openclaw/plugin-sdk/llm";
+import type { Model } from "sunclaw/plugin-sdk/llm";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { SunClawConfig } from "../config/config.js";
 
 const createAnthropicVertexStreamFnForModel = vi.fn();
 const ensureCustomApiRegistered = vi.fn();
 const resolveProviderStreamFn = vi.fn();
 const buildTransportAwareSimpleStreamFn = vi.fn();
-const createOpenClawTransportStreamFnForModel = vi.fn();
+const createSunClawTransportStreamFnForModel = vi.fn();
 const createTransportAwareStreamFnForModel = vi.fn();
 const prepareTransportAwareSimpleModel = vi.fn();
 const resolveTransportAwareSimpleApi = vi.fn();
@@ -26,7 +26,7 @@ vi.mock("./google-simple-completion-stream.js", () => ({
 
 vi.mock("./provider-transport-stream.js", () => ({
   buildTransportAwareSimpleStreamFn,
-  createOpenClawTransportStreamFnForModel,
+  createSunClawTransportStreamFnForModel,
   createTransportAwareStreamFnForModel,
   prepareTransportAwareSimpleModel,
   resolveTransportAwareSimpleApi,
@@ -54,7 +54,7 @@ describe("prepareModelForSimpleCompletion", () => {
     ensureCustomApiRegistered.mockReset();
     resolveProviderStreamFn.mockReset();
     buildTransportAwareSimpleStreamFn.mockReset();
-    createOpenClawTransportStreamFnForModel.mockReset();
+    createSunClawTransportStreamFnForModel.mockReset();
     createTransportAwareStreamFnForModel.mockReset();
     prepareTransportAwareSimpleModel.mockReset();
     resolveTransportAwareSimpleApi.mockReset();
@@ -62,7 +62,7 @@ describe("prepareModelForSimpleCompletion", () => {
     createAnthropicVertexStreamFnForModel.mockReturnValue("vertex-stream");
     resolveProviderStreamFn.mockReturnValue("ollama-stream");
     buildTransportAwareSimpleStreamFn.mockReturnValue(undefined);
-    createOpenClawTransportStreamFnForModel.mockReturnValue(undefined);
+    createSunClawTransportStreamFnForModel.mockReturnValue(undefined);
     createTransportAwareStreamFnForModel.mockReturnValue(undefined);
     prepareTransportAwareSimpleModel.mockImplementation((model) => model);
     resolveTransportAwareSimpleApi.mockReturnValue(undefined);
@@ -83,7 +83,7 @@ describe("prepareModelForSimpleCompletion", () => {
       maxTokens: 4096,
       headers: {},
     };
-    const cfg: OpenClawConfig = {
+    const cfg: SunClawConfig = {
       models: {
         providers: {
           ollama: {
@@ -136,12 +136,12 @@ describe("prepareModelForSimpleCompletion", () => {
 
     expect(createAnthropicVertexStreamFnForModel).toHaveBeenCalledWith(model);
     expect(ensureCustomApiRegistered).toHaveBeenCalledWith(
-      "openclaw-anthropic-vertex-simple:https%3A%2F%2Fus-central1-aiplatform.googleapis.com",
+      "sunclaw-anthropic-vertex-simple:https%3A%2F%2Fus-central1-aiplatform.googleapis.com",
       "vertex-stream",
     );
     expect(result).toEqual({
       ...model,
-      api: "openclaw-anthropic-vertex-simple:https%3A%2F%2Fus-central1-aiplatform.googleapis.com",
+      api: "sunclaw-anthropic-vertex-simple:https%3A%2F%2Fus-central1-aiplatform.googleapis.com",
     });
   });
 
@@ -163,7 +163,7 @@ describe("prepareModelForSimpleCompletion", () => {
     buildTransportAwareSimpleStreamFn.mockReturnValueOnce("transport-stream");
     prepareTransportAwareSimpleModel.mockReturnValueOnce({
       ...model,
-      api: "openclaw-openai-responses-transport",
+      api: "sunclaw-openai-responses-transport",
     });
 
     const result = prepareModelForSimpleCompletion({ model });
@@ -171,12 +171,12 @@ describe("prepareModelForSimpleCompletion", () => {
     expect(prepareTransportAwareSimpleModel).toHaveBeenCalledWith(model, { cfg: undefined });
     expect(buildTransportAwareSimpleStreamFn).toHaveBeenCalledWith(model, { cfg: undefined });
     expect(ensureCustomApiRegistered).toHaveBeenCalledWith(
-      "openclaw-openai-responses-transport",
+      "sunclaw-openai-responses-transport",
       "transport-stream",
     );
     expect(result).toEqual({
       ...model,
-      api: "openclaw-openai-responses-transport",
+      api: "sunclaw-openai-responses-transport",
     });
   });
 
@@ -196,7 +196,7 @@ describe("prepareModelForSimpleCompletion", () => {
     };
     prepareGoogleSimpleCompletionModel.mockImplementationOnce((m: unknown) => ({
       ...(m as Model<"google-generative-ai">),
-      api: "openclaw-google-generative-ai-simple",
+      api: "sunclaw-google-generative-ai-simple",
     }));
     resolveProviderStreamFn.mockReturnValueOnce(undefined);
 
@@ -207,7 +207,7 @@ describe("prepareModelForSimpleCompletion", () => {
     expect(buildTransportAwareSimpleStreamFn).not.toHaveBeenCalled();
     expect(result).toEqual({
       ...model,
-      api: "openclaw-google-generative-ai-simple",
+      api: "sunclaw-google-generative-ai-simple",
     });
   });
 
@@ -228,7 +228,7 @@ describe("prepareModelForSimpleCompletion", () => {
 
     const transportModel = {
       ...model,
-      api: "openclaw-google-generative-ai-transport",
+      api: "sunclaw-google-generative-ai-transport",
     };
     resolveProviderStreamFn.mockReturnValueOnce(undefined);
     buildTransportAwareSimpleStreamFn.mockReturnValueOnce("google-transport-stream");
@@ -238,7 +238,7 @@ describe("prepareModelForSimpleCompletion", () => {
 
     expect(buildTransportAwareSimpleStreamFn).toHaveBeenCalledWith(model, { cfg: undefined });
     expect(ensureCustomApiRegistered).toHaveBeenCalledWith(
-      "openclaw-google-generative-ai-transport",
+      "sunclaw-google-generative-ai-transport",
       "google-transport-stream",
     );
     expect(prepareGoogleSimpleCompletionModel).not.toHaveBeenCalled();
@@ -257,7 +257,7 @@ describe("prepareModelForSimpleCompletion", () => {
       "https://proxy.example.test/openai/codex",
     ],
   ])(
-    "uses OpenClaw transport for OpenAI Codex-response simple completions with baseUrl %s",
+    "uses SunClaw transport for OpenAI Codex-response simple completions with baseUrl %s",
     (baseUrl, expectedBaseUrl) => {
       const model: Model<"openai-chatgpt-responses"> = {
         id: "gpt-5.5",
@@ -273,12 +273,12 @@ describe("prepareModelForSimpleCompletion", () => {
       };
 
       resolveProviderStreamFn.mockReturnValueOnce(undefined);
-      createOpenClawTransportStreamFnForModel.mockReturnValueOnce("codex-transport-stream");
-      resolveTransportAwareSimpleApi.mockReturnValueOnce("openclaw-openai-responses-transport");
+      createSunClawTransportStreamFnForModel.mockReturnValueOnce("codex-transport-stream");
+      resolveTransportAwareSimpleApi.mockReturnValueOnce("sunclaw-openai-responses-transport");
 
       const result = prepareModelForSimpleCompletion({ model });
 
-      expect(createOpenClawTransportStreamFnForModel).toHaveBeenCalledWith(
+      expect(createSunClawTransportStreamFnForModel).toHaveBeenCalledWith(
         {
           ...model,
           baseUrl: expectedBaseUrl,
@@ -286,13 +286,13 @@ describe("prepareModelForSimpleCompletion", () => {
         { cfg: undefined },
       );
       expect(ensureCustomApiRegistered).toHaveBeenCalledWith(
-        "openclaw-openai-responses-transport",
+        "sunclaw-openai-responses-transport",
         "codex-transport-stream",
       );
       expect(result).toEqual({
         ...model,
         baseUrl: expectedBaseUrl,
-        api: "openclaw-openai-responses-transport",
+        api: "sunclaw-openai-responses-transport",
       });
       expect(prepareTransportAwareSimpleModel).not.toHaveBeenCalled();
     },

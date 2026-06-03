@@ -11,7 +11,7 @@ import {
   resetTaskRegistryForTests,
 } from "../tasks/task-registry.js";
 import type { TaskRecord } from "../tasks/task-registry.types.js";
-import { withOpenClawTestState } from "../test-utils/openclaw-test-state.js";
+import { withSunClawTestState } from "../test-utils/sunclaw-test-state.js";
 import { flowsCancelCommand, flowsListCommand, flowsShowCommand } from "./flows.js";
 
 vi.mock("../config/config.js", () => ({
@@ -19,7 +19,7 @@ vi.mock("../config/config.js", () => ({
   loadConfig: vi.fn(() => ({})),
 }));
 
-const ORIGINAL_STATE_DIR = process.env.OPENCLAW_STATE_DIR;
+const ORIGINAL_STATE_DIR = process.env.SUNCLAW_STATE_DIR;
 
 function jsonRoundTrip<T>(value: T): T {
   const serialized = JSON.stringify(value);
@@ -62,10 +62,10 @@ function createRuntime(): TestRuntime {
 }
 
 async function withTaskFlowCommandStateDir(run: (root: string) => Promise<void>): Promise<void> {
-  await withOpenClawTestState(
+  await withSunClawTestState(
     {
       layout: "state-only",
-      prefix: "openclaw-flows-command-",
+      prefix: "sunclaw-flows-command-",
     },
     async (state) => {
       resetTaskRegistryDeliveryRuntimeForTests();
@@ -85,9 +85,9 @@ async function withTaskFlowCommandStateDir(run: (root: string) => Promise<void>)
 describe("flows commands", () => {
   afterEach(() => {
     if (ORIGINAL_STATE_DIR === undefined) {
-      delete process.env.OPENCLAW_STATE_DIR;
+      delete process.env.SUNCLAW_STATE_DIR;
     } else {
-      process.env.OPENCLAW_STATE_DIR = ORIGINAL_STATE_DIR;
+      process.env.SUNCLAW_STATE_DIR = ORIGINAL_STATE_DIR;
     }
     resetTaskRegistryDeliveryRuntimeForTests();
     resetTaskRegistryForTests({ persist: false });

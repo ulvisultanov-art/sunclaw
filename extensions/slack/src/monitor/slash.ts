@@ -1,30 +1,30 @@
 import type { SlackActionMiddlewareArgs, SlackCommandMiddlewareArgs } from "@slack/bolt";
-import { resolveDefaultModelForAgent } from "openclaw/plugin-sdk/agent-runtime";
-import { createChannelMessageReplyPipeline } from "openclaw/plugin-sdk/channel-outbound";
+import { resolveDefaultModelForAgent } from "sunclaw/plugin-sdk/agent-runtime";
+import { createChannelMessageReplyPipeline } from "sunclaw/plugin-sdk/channel-outbound";
 import {
   formatCommandArgMenuTitle,
   resolveStoredModelOverride,
   type ChatCommandDefinition,
-} from "openclaw/plugin-sdk/command-auth-native";
+} from "sunclaw/plugin-sdk/command-auth-native";
 import {
   type CommandArgs,
   resolveNativeCommandSessionTargets,
-} from "openclaw/plugin-sdk/command-auth-native";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
+} from "sunclaw/plugin-sdk/command-auth-native";
+import { formatErrorMessage } from "sunclaw/plugin-sdk/error-runtime";
 import {
   resolveNativeCommandsEnabled,
   resolveNativeSkillsEnabled,
-} from "openclaw/plugin-sdk/native-command-config-runtime";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
-import type { ResolvedAgentRoute } from "openclaw/plugin-sdk/routing";
-import { danger, logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { loadSessionStore, resolveStorePath } from "openclaw/plugin-sdk/session-store-runtime";
+} from "sunclaw/plugin-sdk/native-command-config-runtime";
+import type { ReplyPayload } from "sunclaw/plugin-sdk/reply-runtime";
+import type { ResolvedAgentRoute } from "sunclaw/plugin-sdk/routing";
+import { danger, logVerbose } from "sunclaw/plugin-sdk/runtime-env";
+import { loadSessionStore, resolveStorePath } from "sunclaw/plugin-sdk/session-store-runtime";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
   normalizeStringEntriesLower,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
-import { chunkItems } from "openclaw/plugin-sdk/text-chunking";
+} from "sunclaw/plugin-sdk/string-coerce-runtime";
+import { chunkItems } from "sunclaw/plugin-sdk/text-chunking";
 import type { ResolvedSlackAccount } from "../accounts.js";
 import { SLACK_MAX_BLOCKS } from "../blocks-input.js";
 import { formatSlackError } from "../errors.js";
@@ -50,8 +50,8 @@ import { resolveSlackRoomContextHints } from "./room-context.js";
 
 type SlackBlock = { type: string; [key: string]: unknown };
 
-const SLACK_COMMAND_ARG_ACTION_ID = "openclaw_cmdarg";
-const SLACK_COMMAND_ARG_ACTION_LISTENER = /^openclaw_cmdarg/;
+const SLACK_COMMAND_ARG_ACTION_ID = "sunclaw_cmdarg";
+const SLACK_COMMAND_ARG_ACTION_LISTENER = /^sunclaw_cmdarg/;
 const SLACK_COMMAND_ARG_VALUE_PREFIX = "cmdarg";
 const SLACK_COMMAND_ARG_BUTTON_ROW_SIZE = 5;
 const SLACK_COMMAND_ARG_OVERFLOW_MIN = 3;

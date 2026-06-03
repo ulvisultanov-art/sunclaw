@@ -24,10 +24,10 @@ function resolveTranscriptMessageId(message: Record<string, unknown>): string | 
   if (typeof message.messageId === "string" && message.messageId.trim()) {
     return message.messageId;
   }
-  const openClawMeta = message["__openclaw"];
+  const sunClawMeta = message["__sunclaw"];
   const transcriptMeta =
-    openClawMeta && typeof openClawMeta === "object" && !Array.isArray(openClawMeta)
-      ? (openClawMeta as Record<string, unknown>)
+    sunClawMeta && typeof sunClawMeta === "object" && !Array.isArray(sunClawMeta)
+      ? (sunClawMeta as Record<string, unknown>)
       : null;
   return typeof transcriptMeta?.id === "string" && transcriptMeta.id.trim()
     ? transcriptMeta.id

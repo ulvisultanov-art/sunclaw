@@ -78,7 +78,7 @@ export const resolveSessionAgentIdsMock = vi.fn(() => ({
   sessionAgentId: "main",
 }));
 export const estimateTokensMock = vi.fn((_message?: unknown) => 10);
-export const resolveAgentHarnessPolicyMock = vi.fn(() => ({ runtime: "openclaw" }));
+export const resolveAgentHarnessPolicyMock = vi.fn(() => ({ runtime: "sunclaw" }));
 export const resolveContextWindowInfoMock = vi.fn(() => ({ tokens: 128_000 }));
 function createDefaultSessionMessages(): unknown[] {
   return [
@@ -142,7 +142,7 @@ function createMockToolDefinitions(tools: unknown[] = []) {
     };
   });
 }
-export const createOpenClawCodingToolsMock = vi.fn(() => []);
+export const createSunClawCodingToolsMock = vi.fn(() => []);
 export const guardSessionManagerMock = vi.fn(() => ({
   flushPendingToolResults: vi.fn(),
 }));
@@ -329,7 +329,7 @@ export function resetCompactSessionStateMocks(): void {
   maybeCompactAgentHarnessSessionMock.mockReset();
   maybeCompactAgentHarnessSessionMock.mockResolvedValue(undefined);
   resolveAgentHarnessPolicyMock.mockReset();
-  resolveAgentHarnessPolicyMock.mockReturnValue({ runtime: "openclaw" });
+  resolveAgentHarnessPolicyMock.mockReturnValue({ runtime: "sunclaw" });
   resolveContextWindowInfoMock.mockReset();
   resolveContextWindowInfoMock.mockReturnValue({ tokens: 128_000 });
   rotateTranscriptAfterCompactionMock.mockReset();
@@ -380,7 +380,7 @@ export function resetCompactHooksHarnessMocks(): void {
     modelRegistry: {},
   });
   resolveAgentHarnessPolicyMock.mockReset();
-  resolveAgentHarnessPolicyMock.mockReturnValue({ runtime: "openclaw" });
+  resolveAgentHarnessPolicyMock.mockReturnValue({ runtime: "sunclaw" });
   resolveContextWindowInfoMock.mockReset();
   resolveContextWindowInfoMock.mockReturnValue({ tokens: 128_000 });
 
@@ -394,8 +394,8 @@ export function resetCompactHooksHarnessMocks(): void {
 
   triggerInternalHook.mockReset();
   resetCompactSessionStateMocks();
-  createOpenClawCodingToolsMock.mockReset();
-  createOpenClawCodingToolsMock.mockReturnValue([]);
+  createSunClawCodingToolsMock.mockReset();
+  createSunClawCodingToolsMock.mockReturnValue([]);
   guardSessionManagerMock.mockReset();
   guardSessionManagerMock.mockReturnValue({
     flushPendingToolResults: vi.fn(),
@@ -529,7 +529,7 @@ export async function loadCompactHooksHarness(): Promise<{
   }));
 
   vi.doMock("../models-config.js", () => ({
-    ensureOpenClawModelsJson: vi.fn(async () => {}),
+    ensureSunClawModelsJson: vi.fn(async () => {}),
   }));
 
   vi.doMock("../model-auth.js", () => ({
@@ -614,7 +614,7 @@ export async function loadCompactHooksHarness(): Promise<{
   }));
 
   vi.doMock("../docs-path.js", () => ({
-    resolveOpenClawReferencePaths: vi.fn(async () => ({
+    resolveSunClawReferencePaths: vi.fn(async () => ({
       docsPath: undefined,
       sourcePath: undefined,
     })),
@@ -626,7 +626,7 @@ export async function loadCompactHooksHarness(): Promise<{
   }));
 
   vi.doMock("../agent-tools.js", () => ({
-    createOpenClawCodingTools: createOpenClawCodingToolsMock,
+    createSunClawCodingTools: createSunClawCodingToolsMock,
     resolveProcessToolScopeKey: ({
       scopeKey,
       sessionKey,

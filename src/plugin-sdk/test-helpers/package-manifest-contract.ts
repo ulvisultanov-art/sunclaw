@@ -6,7 +6,7 @@ import { isAtLeast, parseMinHostVersionRequirement, parseSemver } from "../testi
 type PackageManifest = {
   dependencies?: Record<string, string>;
   optionalDependencies?: Record<string, string>;
-  openclaw?: {
+  sunclaw?: {
     install?: {
       minHostVersion?: string;
     };
@@ -61,12 +61,12 @@ export function describePackageManifestContract(params: PackageManifestContractP
 
         const manifest = readPackageManifest(packagePath);
         const requirement = parseMinHostVersionRequirement(
-          manifest.openclaw?.install?.minHostVersion ?? null,
+          manifest.sunclaw?.install?.minHostVersion ?? null,
         );
 
         expect(
           requirement,
-          `${packagePath} should declare openclaw.install.minHostVersion`,
+          `${packagePath} should declare sunclaw.install.minHostVersion`,
         ).not.toBeNull();
         if (!requirement) {
           return;
@@ -80,7 +80,7 @@ export function describePackageManifestContract(params: PackageManifestContractP
 
         expect(
           isAtLeast(minimum, baseline),
-          `${packagePath} should require at least OpenClaw ${minHostVersionBaseline}`,
+          `${packagePath} should require at least SunClaw ${minHostVersionBaseline}`,
         ).toBe(true);
       });
     }

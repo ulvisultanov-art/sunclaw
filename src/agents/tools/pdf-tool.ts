@@ -1,9 +1,9 @@
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@sunclaw/normalization-core/string-coerce";
 import { Type } from "typebox";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { complete } from "../../llm/stream.js";
 import type { Context } from "../../llm/types.js";
 import {
@@ -42,7 +42,7 @@ import {
   createSandboxBridgeReadFile,
   discoverAuthStorage,
   discoverModels,
-  ensureOpenClawModelsJson,
+  ensureSunClawModelsJson,
   resolveSandboxedBridgeMediaPath,
   runWithImageModelFallback,
   type AnyAgentTool,
@@ -83,7 +83,7 @@ export const PdfToolSchema = Type.Object({
 
 export { resolvePdfModelConfigForTool } from "./pdf-tool.model-config.js";
 
-function hasExplicitPdfToolModelConfig(config?: OpenClawConfig): boolean {
+function hasExplicitPdfToolModelConfig(config?: SunClawConfig): boolean {
   return (
     hasToolModelConfig(coercePdfModelConfig(config)) ||
     hasToolModelConfig(coerceImageModelConfig(config))
@@ -140,7 +140,7 @@ type PdfSandboxConfig = {
 };
 
 async function runPdfPrompt(params: {
-  cfg?: OpenClawConfig;
+  cfg?: SunClawConfig;
   agentDir: string;
   workspaceDir?: string;
   pdfModelConfig: ImageModelConfig;
@@ -160,7 +160,7 @@ async function runPdfPrompt(params: {
   const effectiveCfg = applyImageModelConfigDefaults(params.cfg, params.pdfModelConfig);
 
   const modelsOptions = params.workspaceDir ? { workspaceDir: params.workspaceDir } : undefined;
-  await ensureOpenClawModelsJson(effectiveCfg, params.agentDir, modelsOptions);
+  await ensureSunClawModelsJson(effectiveCfg, params.agentDir, modelsOptions);
   const authStorage = discoverAuthStorage(params.agentDir);
   const modelRegistry = discoverModels(authStorage, params.agentDir, modelsOptions);
 
@@ -275,7 +275,7 @@ async function runPdfPrompt(params: {
 // ---------------------------------------------------------------------------
 
 export function createPdfTool(options?: {
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   agentDir?: string;
   authProfileStore?: AuthProfileStore;
   workspaceDir?: string;

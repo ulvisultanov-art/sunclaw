@@ -1,5 +1,5 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { coerceSecretRef, resolveSecretInputRef } from "../config/types.secrets.js";
 import { normalizeOptionalSecretInput } from "../utils/normalize-secret-input.js";
 import type { AuthProfileStore } from "./auth-profiles/types.js";
@@ -13,7 +13,7 @@ import {
 import { resolveAwsSdkEnvVarName } from "./model-auth-runtime-shared.js";
 import { resolveProviderIdForAuth } from "./provider-auth-aliases.js";
 
-type ModelsConfig = NonNullable<OpenClawConfig["models"]>;
+type ModelsConfig = NonNullable<SunClawConfig["models"]>;
 export type ProviderConfig = NonNullable<ModelsConfig["providers"]>[string];
 
 export type SecretDefaults = {

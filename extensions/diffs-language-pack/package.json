@@ -1,22 +1,22 @@
 {
-  "name": "@openclaw/diffs-language-pack",
+  "name": "@sunclaw/diffs-language-pack",
   "version": "2026.6.2",
-  "description": "OpenClaw diffs viewer syntax highlighting language pack",
+  "description": "SunClaw diffs viewer syntax highlighting language pack",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/ulvisultanov-art/sunclaw"
   },
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@sunclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "npmSpec": "@openclaw/diffs-language-pack",
-      "clawhubSpec": "clawhub:@openclaw/diffs-language-pack",
+      "npmSpec": "@sunclaw/diffs-language-pack",
+      "clawhubSpec": "clawhub:@sunclaw/diffs-language-pack",
       "localPath": "extensions/diffs-language-pack",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.5.27"
@@ -28,7 +28,7 @@
       "build": "node ../../scripts/build-diffs-viewer-runtime.mjs full"
     },
     "build": {
-      "openclawVersion": "2026.6.2",
+      "sunclawVersion": "2026.6.2",
       "staticAssets": [
         {
           "source": "./assets/viewer-runtime.js",

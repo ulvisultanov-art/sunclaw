@@ -1,6 +1,6 @@
 import { createHash, randomUUID } from "node:crypto";
 import path from "node:path";
-import type { PluginStateSyncKeyedStore } from "openclaw/plugin-sdk/plugin-state-runtime";
+import type { PluginStateSyncKeyedStore } from "sunclaw/plugin-sdk/plugin-state-runtime";
 import { getOptionalVoiceCallStateRuntime } from "../runtime-state.js";
 import { CallRecordSchema, TerminalStates, type CallId, type CallRecord } from "../types.js";
 
@@ -43,7 +43,7 @@ export function resolveVoiceCallLegacyCallLogPath(storePath: string): string {
 }
 
 function resolvePluginStateEnv(storePath: string): NodeJS.ProcessEnv {
-  return { ...process.env, OPENCLAW_STATE_DIR: storePath };
+  return { ...process.env, SUNCLAW_STATE_DIR: storePath };
 }
 
 function createCallRecordStateStores(storePath: string): CallRecordStateStores | null {

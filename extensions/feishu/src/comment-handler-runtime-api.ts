@@ -1,3 +1,3 @@
-export type { OpenClawConfig as ClawdbotConfig } from "openclaw/plugin-sdk/config-contracts";
-export type { RuntimeEnv } from "openclaw/plugin-sdk/runtime";
-export { createChannelPairingController } from "openclaw/plugin-sdk/channel-pairing";
+export type { SunClawConfig as ClawdbotConfig } from "sunclaw/plugin-sdk/config-contracts";
+export type { RuntimeEnv } from "sunclaw/plugin-sdk/runtime";
+export { createChannelPairingController } from "sunclaw/plugin-sdk/channel-pairing";

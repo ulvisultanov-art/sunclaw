@@ -1,4 +1,4 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
 import {
   ErrorCodes,
   errorShape,
@@ -17,7 +17,7 @@ import {
   resolveCoreToolProfiles,
 } from "../../agents/tool-catalog.js";
 import { summarizeToolDescriptionText } from "../../agents/tool-description-summary.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { getActivePluginRegistry } from "../../plugins/runtime.js";
 import {
   buildPluginToolMetadataKey,
@@ -66,7 +66,7 @@ function buildCoreGroups(): ToolCatalogGroup[] {
 }
 
 function buildPluginGroups(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   agentId: string;
   existingToolNames: Set<string>;
 }): ToolCatalogGroup[] {
@@ -190,7 +190,7 @@ function buildPluginGroups(params: {
 }
 
 export function buildToolsCatalogResult(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   agentId?: string;
   includePlugins?: boolean;
 }): ToolsCatalogResult {

@@ -1,23 +1,23 @@
 import fs from "node:fs/promises";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { canResolveEnvSecretRefInReadOnlyPath } from "openclaw/plugin-sdk/extension-shared";
-import { extensionForMime } from "openclaw/plugin-sdk/media-mime";
-import { resolvePositiveTimerTimeoutMs } from "openclaw/plugin-sdk/number-runtime";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import { canResolveEnvSecretRefInReadOnlyPath } from "sunclaw/plugin-sdk/extension-shared";
+import { extensionForMime } from "sunclaw/plugin-sdk/media-mime";
+import { resolvePositiveTimerTimeoutMs } from "sunclaw/plugin-sdk/number-runtime";
 import {
   isProviderApiKeyConfigured,
   type AuthProfileStore,
-} from "openclaw/plugin-sdk/provider-auth";
-import { resolveApiKeyForProvider } from "openclaw/plugin-sdk/provider-auth-runtime";
+} from "sunclaw/plugin-sdk/provider-auth";
+import { resolveApiKeyForProvider } from "sunclaw/plugin-sdk/provider-auth-runtime";
 import {
   assertOkOrThrowHttpError,
   normalizeBaseUrl,
   resolveProviderHttpRequestConfig,
-} from "openclaw/plugin-sdk/provider-http";
-import { readResponseWithLimit } from "openclaw/plugin-sdk/response-limit-runtime";
+} from "sunclaw/plugin-sdk/provider-http";
+import { readResponseWithLimit } from "sunclaw/plugin-sdk/response-limit-runtime";
 import {
   normalizeSecretInputString,
   resolveSecretInputString,
-} from "openclaw/plugin-sdk/secret-input-runtime";
+} from "sunclaw/plugin-sdk/secret-input-runtime";
 import {
   buildHostnameAllowlistPolicyFromSuffixAllowlist,
   fetchWithSsrFGuard,
@@ -25,15 +25,15 @@ import {
   mergeSsrFPolicies,
   ssrfPolicyFromDangerouslyAllowPrivateNetwork,
   type SsrFPolicy,
-} from "openclaw/plugin-sdk/ssrf-runtime";
+} from "sunclaw/plugin-sdk/ssrf-runtime";
 import {
   asBoolean,
   isRecord,
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
   uniqueStrings,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
-import { resolveUserPath } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "sunclaw/plugin-sdk/string-coerce-runtime";
+import { resolveUserPath } from "sunclaw/plugin-sdk/text-utility-runtime";
 
 const DEFAULT_COMFY_LOCAL_BASE_URL = "http://127.0.0.1:8188";
 const DEFAULT_COMFY_CLOUD_BASE_URL = "https://cloud.comfy.org";
@@ -118,7 +118,7 @@ export function setComfyFetchGuardForTesting(impl: typeof fetchWithSsrFGuard | n
 }
 
 function resolveComfyGeneratedOutputMaxBytes(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   capability: ComfyCapability;
 }): number {
   const configured = params.cfg.agents?.defaults?.mediaMaxMb;
@@ -139,7 +139,7 @@ function readConfigInteger(config: ComfyProviderConfig, key: string): number | u
   return typeof value === "number" && Number.isInteger(value) && value > 0 ? value : undefined;
 }
 
-export function getComfyConfig(cfg?: OpenClawConfig): ComfyProviderConfig {
+export function getComfyConfig(cfg?: SunClawConfig): ComfyProviderConfig {
   const pluginConfig = cfg?.plugins?.entries?.comfy?.config;
   if (isRecord(pluginConfig)) {
     return pluginConfig;
@@ -174,7 +174,7 @@ function resolveComfyMode(config: ComfyProviderConfig): ComfyMode {
 
 function resolveComfyApiKey(
   config: ComfyProviderConfig,
-  cfg?: OpenClawConfig,
+  cfg?: SunClawConfig,
 ): ComfyApiKeyResolution {
   const resolved = resolveSecretInputString({
     value: config.apiKey,
@@ -628,7 +628,7 @@ async function downloadOutputFile(params: {
 }
 
 export function isComfyCapabilityConfigured(params: {
-  cfg?: OpenClawConfig;
+  cfg?: SunClawConfig;
   agentDir?: string;
   capability: ComfyCapability;
 }): boolean {
@@ -659,7 +659,7 @@ export function isComfyCapabilityConfigured(params: {
 }
 
 export async function runComfyWorkflow(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   agentDir?: string;
   authStore?: AuthProfileStore;
   prompt: string;

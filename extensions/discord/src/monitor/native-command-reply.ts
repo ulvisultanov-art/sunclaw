@@ -1,10 +1,10 @@
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-dispatch-runtime";
+import type { ReplyPayload } from "sunclaw/plugin-sdk/reply-dispatch-runtime";
 import {
   resolveSendableOutboundReplyParts,
   resolveTextChunksWithFallback,
-} from "openclaw/plugin-sdk/reply-payload";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { loadWebMedia } from "openclaw/plugin-sdk/web-media";
+} from "sunclaw/plugin-sdk/reply-payload";
+import { logVerbose } from "sunclaw/plugin-sdk/runtime-env";
+import { loadWebMedia } from "sunclaw/plugin-sdk/web-media";
 import { chunkDiscordTextWithMode } from "../chunk.js";
 import type {
   ButtonInteraction,

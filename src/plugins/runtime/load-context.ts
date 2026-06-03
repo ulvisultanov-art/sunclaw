@@ -1,7 +1,7 @@
 import { resolveAgentWorkspaceDir, resolveDefaultAgentId } from "../../agents/agent-scope.js";
 import { getRuntimeConfig } from "../../config/config.js";
 import { applyPluginAutoEnable } from "../../config/plugin-auto-enable.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import type { PluginInstallRecord } from "../../config/types.plugins.js";
 import { createSubsystemLogger } from "../../logging.js";
 import { resolvePluginActivationSourceConfig } from "../activation-source-config.js";
@@ -19,9 +19,9 @@ import type { PluginLogger } from "../types.js";
 const log = createSubsystemLogger("plugins");
 
 export type PluginRuntimeLoadContext = {
-  rawConfig: OpenClawConfig;
-  config: OpenClawConfig;
-  activationSourceConfig: OpenClawConfig;
+  rawConfig: SunClawConfig;
+  config: SunClawConfig;
+  activationSourceConfig: SunClawConfig;
   autoEnabledReasons: Readonly<Record<string, string[]>>;
   workspaceDir: string | undefined;
   env: NodeJS.ProcessEnv;
@@ -43,8 +43,8 @@ export type PluginRuntimeResolvedLoadValues = Pick<
 >;
 
 export type PluginRuntimeLoadContextOptions = {
-  config?: OpenClawConfig;
-  activationSourceConfig?: OpenClawConfig;
+  config?: SunClawConfig;
+  activationSourceConfig?: SunClawConfig;
   env?: NodeJS.ProcessEnv;
   workspaceDir?: string;
   logger?: PluginLogger;

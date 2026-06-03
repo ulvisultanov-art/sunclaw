@@ -1,9 +1,9 @@
 import net from "node:net";
-import { isPrivateOrLoopbackIpAddress } from "@openclaw/net-policy/ip";
+import { isPrivateOrLoopbackIpAddress } from "@sunclaw/net-policy/ip";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@sunclaw/normalization-core/string-coerce";
 import { isLoopbackHost, normalizeHostHeader, resolveHostName } from "./net.js";
 
 type OriginCheckResult =

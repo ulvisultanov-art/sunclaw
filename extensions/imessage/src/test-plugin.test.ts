@@ -2,12 +2,12 @@ import {
   createMessageReceiptFromOutboundResults,
   verifyChannelMessageAdapterCapabilityProofs,
   verifyDurableFinalCapabilityProofs,
-} from "openclaw/plugin-sdk/channel-outbound";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+} from "sunclaw/plugin-sdk/channel-outbound";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
 import {
   listImportedBundledPluginFacadeIds,
   resetFacadeRuntimeStateForTest,
-} from "openclaw/plugin-sdk/plugin-test-runtime";
+} from "sunclaw/plugin-sdk/plugin-test-runtime";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { imessagePlugin } from "./channel.js";
 import { createIMessageTestPlugin } from "./imessage.test-plugin.js";
@@ -131,7 +131,7 @@ describe("createIMessageTestPlugin", () => {
               enabled: true,
             },
           },
-        } as OpenClawConfig,
+        } as SunClawConfig,
         accountId: "default",
         payload: {
           text: "Approval required.",

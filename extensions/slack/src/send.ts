@@ -5,25 +5,25 @@ import {
   type MessageReceipt,
   type MessageReceiptPartKind,
   type MessageReceiptSourceResult,
-} from "openclaw/plugin-sdk/channel-outbound";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { withTrustedEnvProxyGuardedFetchMode } from "openclaw/plugin-sdk/fetch-runtime";
-import { resolveMarkdownTableMode } from "openclaw/plugin-sdk/markdown-table-runtime";
-import { requireRuntimeConfig } from "openclaw/plugin-sdk/plugin-config-runtime";
+} from "sunclaw/plugin-sdk/channel-outbound";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import { withTrustedEnvProxyGuardedFetchMode } from "sunclaw/plugin-sdk/fetch-runtime";
+import { resolveMarkdownTableMode } from "sunclaw/plugin-sdk/markdown-table-runtime";
+import { requireRuntimeConfig } from "sunclaw/plugin-sdk/plugin-config-runtime";
 import {
   chunkMarkdownTextWithMode,
   isSilentReplyText,
   resolveChunkMode,
   resolveTextChunkLimit,
-} from "openclaw/plugin-sdk/reply-chunking";
-import { resolveTextChunksWithFallback } from "openclaw/plugin-sdk/reply-payload";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { fetchWithSsrFGuard } from "openclaw/plugin-sdk/ssrf-runtime";
+} from "sunclaw/plugin-sdk/reply-chunking";
+import { resolveTextChunksWithFallback } from "sunclaw/plugin-sdk/reply-payload";
+import { logVerbose } from "sunclaw/plugin-sdk/runtime-env";
+import { fetchWithSsrFGuard } from "sunclaw/plugin-sdk/ssrf-runtime";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
   normalizeOptionalString as normalizeSlackApiString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/string-coerce-runtime";
 import type { SlackTokenSource } from "./accounts.js";
 import { resolveSlackAccount } from "./accounts.js";
 import { buildSlackBlocksFallbackText } from "./blocks-fallback.js";
@@ -93,7 +93,7 @@ type SlackBasePostMessagePayload = SlackPostThreadPayload & {
 };
 
 type SlackSendOpts = {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   token?: string;
   accountId?: string;
   mediaUrl?: string;
@@ -673,7 +673,7 @@ export async function sendMessageSlack(
 async function sendMessageSlackQueued(params: {
   trimmedMessage: string;
   opts: SlackSendOpts;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   account: ReturnType<typeof resolveSlackAccount>;
   token: string;
   recipient: SlackRecipient;
@@ -689,7 +689,7 @@ async function sendMessageSlackQueued(params: {
 async function sendMessageSlackQueuedInner(params: {
   trimmedMessage: string;
   opts: SlackSendOpts;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   account: ReturnType<typeof resolveSlackAccount>;
   token: string;
   recipient: SlackRecipient;

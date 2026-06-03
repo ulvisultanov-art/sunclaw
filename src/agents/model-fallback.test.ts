@@ -1,7 +1,7 @@
 import crypto from "node:crypto";
 import path from "node:path";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { SunClawConfig } from "../config/config.js";
 import { resetLogger, setLoggerOverride } from "../logging/logger.js";
 import { createWarnLogCapture } from "../logging/test-helpers/warn-log-capture.js";
 import {
@@ -226,7 +226,7 @@ function createModelNormalizerSnapshot(params: {
     plugins: [
       {
         pluginId: "fallback-normalizer",
-        manifestPath: `/tmp/fallback-normalizer-${params.manifestHash}/openclaw.plugin.json`,
+        manifestPath: `/tmp/fallback-normalizer-${params.manifestHash}/sunclaw.plugin.json`,
         manifestHash: params.manifestHash,
         source: `/tmp/fallback-normalizer-${params.manifestHash}/index.ts`,
         rootDir: `/tmp/fallback-normalizer-${params.manifestHash}`,
@@ -291,7 +291,7 @@ async function runModelFallbackCase(name: string, run: () => Promise<void>): Pro
   }
 }
 
-function makeFallbacksOnlyCfg(): OpenClawConfig {
+function makeFallbacksOnlyCfg(): SunClawConfig {
   return {
     agents: {
       defaults: {
@@ -300,10 +300,10 @@ function makeFallbacksOnlyCfg(): OpenClawConfig {
         },
       },
     },
-  } as OpenClawConfig;
+  } as SunClawConfig;
 }
 
-function makeProviderFallbackCfg(provider: string): OpenClawConfig {
+function makeProviderFallbackCfg(provider: string): SunClawConfig {
   return makeCfg({
     agents: {
       defaults: {
@@ -318,7 +318,7 @@ function makeProviderFallbackCfg(provider: string): OpenClawConfig {
 
 function makeProviderOrderFallbackCfg(
   entries: Array<[provider: string, model: string]>,
-): OpenClawConfig {
+): SunClawConfig {
   return {
     agents: {
       defaults: {
@@ -338,7 +338,7 @@ function makeProviderOrderFallbackCfg(
         ]),
       ),
     },
-  } as unknown as OpenClawConfig;
+  } as unknown as SunClawConfig;
 }
 
 async function withTempAuthStore<T>(
@@ -351,12 +351,12 @@ async function withTempAuthStore<T>(
 }
 
 async function makeAuthTempDir(): Promise<string> {
-  authTempRoot ||= path.join("/tmp", "openclaw-auth-suite-mock");
+  authTempRoot ||= path.join("/tmp", "sunclaw-auth-suite-mock");
   return path.join(authTempRoot, `case-${++authTempCounter}`);
 }
 
 async function runWithStoredAuth(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   store: AuthProfileStore;
   provider: string;
   run: (provider: string, model: string) => Promise<string>;
@@ -526,14 +526,14 @@ async function expectSkippedUnavailableProvider(params: {
 }
 
 // Issue-backed Anthropic/OpenAI-compatible insufficient_quota payload under HTTP 400:
-// https://github.com/openclaw/openclaw/issues/23440
+// https://github.com/ulvisultanov-art/sunclaw/issues/23440
 const INSUFFICIENT_QUOTA_PAYLOAD =
   '{"type":"error","error":{"type":"insufficient_quota","message":"Your account has insufficient quota balance to run this request."}}';
 
 describe("runWithModelFallback", () => {
   it("uses the opt-in auth skip cache on the second turn for the same session", async () => {
-    const previous = process.env.OPENCLAW_FALLBACK_SKIP_TTL_MS;
-    process.env.OPENCLAW_FALLBACK_SKIP_TTL_MS = "60000";
+    const previous = process.env.SUNCLAW_FALLBACK_SKIP_TTL_MS;
+    process.env.SUNCLAW_FALLBACK_SKIP_TTL_MS = "60000";
     try {
       const cfg = makeCfg({
         agents: {
@@ -593,9 +593,9 @@ describe("runWithModelFallback", () => {
       );
     } finally {
       if (previous === undefined) {
-        delete process.env.OPENCLAW_FALLBACK_SKIP_TTL_MS;
+        delete process.env.SUNCLAW_FALLBACK_SKIP_TTL_MS;
       } else {
-        process.env.OPENCLAW_FALLBACK_SKIP_TTL_MS = previous;
+        process.env.SUNCLAW_FALLBACK_SKIP_TTL_MS = previous;
       }
     }
   });
@@ -608,13 +608,13 @@ describe("runWithModelFallback", () => {
       cfg: makeCfg(),
       provider: "openai",
       model: "gpt-4.1-mini",
-      agentDir: "/tmp/openclaw-no-auth-profiles",
+      agentDir: "/tmp/sunclaw-no-auth-profiles",
       run,
     });
 
     expect(result.result).toBe("ok");
     expect(authSourceCheckMock.hasAnyAuthProfileStoreSource).toHaveBeenCalledWith(
-      "/tmp/openclaw-no-auth-profiles",
+      "/tmp/sunclaw-no-auth-profiles",
     );
     expect(authRuntimeMock.runtime.ensureAuthProfileStore).not.toHaveBeenCalled();
     expect(run).toHaveBeenCalledWith("openai", "gpt-4.1-mini");
@@ -689,7 +689,7 @@ describe("runWithModelFallback", () => {
       },
     ] satisfies Array<{
       name: string;
-      cfg: OpenClawConfig;
+      cfg: SunClawConfig;
       provider: string;
       model: string;
       expected: [string, string];
@@ -726,20 +726,20 @@ describe("runWithModelFallback", () => {
     expect(result.attempts[0].reason).toBe("unknown");
   });
 
-  it("does not prepare agent harness plugins for forced OpenClaw candidates", async () => {
+  it("does not prepare agent harness plugins for forced SunClaw candidates", async () => {
     const cfg = makeCfg({
       models: {
         providers: {
           openai: {
             baseUrl: "https://api.openai.com/v1",
-            agentRuntime: { id: "openclaw" },
+            agentRuntime: { id: "sunclaw" },
             models: [],
           },
         },
       },
     });
     const prepareAgentHarnessRuntime = vi.fn(() => {
-      throw new Error("OpenClaw candidates should not prepare plugin harnesses");
+      throw new Error("SunClaw candidates should not prepare plugin harnesses");
     });
     const run = vi.fn().mockResolvedValueOnce("ok");
 
@@ -756,20 +756,20 @@ describe("runWithModelFallback", () => {
     expect(run).toHaveBeenCalledTimes(1);
   });
 
-  it("does not prepare agent harness plugins for forced OpenClaw runtime candidates", async () => {
+  it("does not prepare agent harness plugins for forced SunClaw runtime candidates", async () => {
     const cfg = makeCfg({
       models: {
         providers: {
           openai: {
             baseUrl: "https://api.openai.com/v1",
-            agentRuntime: { id: "openclaw" },
+            agentRuntime: { id: "sunclaw" },
             models: [],
           },
         },
       },
     });
     const prepareAgentHarnessRuntime = vi.fn(() => {
-      throw new Error("OpenClaw candidates should not prepare plugin harnesses");
+      throw new Error("SunClaw candidates should not prepare plugin harnesses");
     });
     const run = vi.fn().mockResolvedValueOnce("ok");
 
@@ -1153,7 +1153,7 @@ describe("runWithModelFallback", () => {
     const lockError = new SessionWriteLockTimeoutError({
       timeoutMs: 10_000,
       owner: "pid=37121",
-      lockPath: "/tmp/openclaw/session.jsonl.lock",
+      lockPath: "/tmp/sunclaw/session.jsonl.lock",
     });
     const run = vi.fn().mockRejectedValue(lockError);
 
@@ -1182,7 +1182,7 @@ describe("runWithModelFallback", () => {
     const lockError = new SessionWriteLockTimeoutError({
       timeoutMs: 10_000,
       owner: "pid=37121",
-      lockPath: "/tmp/openclaw/session.jsonl.lock",
+      lockPath: "/tmp/sunclaw/session.jsonl.lock",
     });
     const providerError = {
       status: 429,
@@ -2093,7 +2093,7 @@ describe("runWithModelFallback", () => {
   });
 
   it("warns when falling back due to model_not_found", async () => {
-    const warnLogs = createWarnLogCapture("openclaw-model-fallback-test");
+    const warnLogs = createWarnLogCapture("sunclaw-model-fallback-test");
     try {
       const cfg = makeCfg();
       const run = vi
@@ -2120,7 +2120,7 @@ describe("runWithModelFallback", () => {
   });
 
   it("sanitizes model identifiers in model_not_found warnings", async () => {
-    const warnLogs = createWarnLogCapture("openclaw-model-fallback-test");
+    const warnLogs = createWarnLogCapture("sunclaw-model-fallback-test");
     try {
       const cfg = makeCfg();
       const run = vi
@@ -2721,7 +2721,7 @@ describe("runWithModelFallback", () => {
         },
       ] satisfies Array<{
         name: string;
-        cfg: OpenClawConfig;
+        cfg: SunClawConfig;
         provider: string;
         model: string;
         calls: Array<[string, string]>;
@@ -3031,7 +3031,7 @@ describe("runWithImageModelFallback", () => {
       },
     ] satisfies Array<{
       name: string;
-      cfg: OpenClawConfig;
+      cfg: SunClawConfig;
       modelOverride: string;
       expected: Array<[string, string]>;
     }>;

@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { renderQaMarkdownReport } from "openclaw/plugin-sdk/qa-runtime";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+import { renderQaMarkdownReport } from "sunclaw/plugin-sdk/qa-runtime";
 import type { QaBusState } from "./bus-state.js";
 import { createQaTransportAdapter, type QaTransportId } from "./qa-transport-registry.js";
 import { runQaScenario, type QaScenarioResult } from "./scenario.js";
@@ -24,7 +24,7 @@ export function resolveQaSelfCheckOutputPath(params?: { outputPath?: string; rep
 
 export async function runQaSelfCheckAgainstState(params: {
   state: QaBusState;
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   transportId?: QaTransportId;
   outputPath?: string;
   repoRoot?: string;
@@ -70,7 +70,7 @@ export async function runQaSelfCheckAgainstState(params: {
     }
   });
   const report = renderQaMarkdownReport({
-    title: "OpenClaw QA E2E Self-Check",
+    title: "SunClaw QA E2E Self-Check",
     startedAt,
     finishedAt,
     checks,

@@ -1,11 +1,11 @@
 {
-  "name": "@openclaw/lobster",
+  "name": "@sunclaw/lobster",
   "version": "2026.6.2",
   "lockfileVersion": 3,
   "requires": true,
   "packages": {
     "": {
-      "name": "@openclaw/lobster",
+      "name": "@sunclaw/lobster",
       "version": "2026.6.2",
       "dependencies": {
         "@clawdbot/lobster": "2026.5.22",
@@ -24,7 +24,7 @@
       "bin": {
         "clawd.invoke": "bin/clawd.invoke.js",
         "lobster": "bin/lobster.js",
-        "openclaw.invoke": "bin/openclaw.invoke.js"
+        "sunclaw.invoke": "bin/sunclaw.invoke.js"
       },
       "engines": {
         "node": ">=20"

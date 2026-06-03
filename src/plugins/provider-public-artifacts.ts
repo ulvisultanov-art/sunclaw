@@ -1,6 +1,6 @@
-import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
+import { normalizeProviderId } from "@sunclaw/model-catalog-core/provider-id";
 import type { ModelProviderConfig } from "../config/types.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { resolveBundledPluginsDir } from "./bundled-dir.js";
 import { loadPluginManifestRegistry, type PluginManifestRegistry } from "./manifest-registry.js";
 import type {
@@ -21,7 +21,7 @@ export type BundledProviderPolicySurface = {
   normalizeConfig?: (ctx: ProviderNormalizeConfigContext) => ModelProviderConfig | null | undefined;
   applyConfigDefaults?: (
     ctx: ProviderApplyConfigDefaultsContext,
-  ) => OpenClawConfig | null | undefined;
+  ) => SunClawConfig | null | undefined;
   resolveConfigApiKey?: (ctx: ProviderResolveConfigApiKeyContext) => string | null | undefined;
   resolveThinkingProfile?: (
     ctx: ProviderDefaultThinkingPolicyContext,

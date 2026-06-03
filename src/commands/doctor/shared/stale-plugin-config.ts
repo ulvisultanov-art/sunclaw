@@ -2,7 +2,7 @@ import { sanitizeForLog } from "../../../../packages/terminal-core/src/ansi.js";
 import { resolveAgentWorkspaceDir, resolveDefaultAgentId } from "../../../agents/agent-scope.js";
 import { CHANNEL_IDS } from "../../../channels/ids.js";
 import { shouldSuppressMissingCodexPluginDiagnostics } from "../../../config/codex-plugin-diagnostics.js";
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { SunClawConfig } from "../../../config/types.sunclaw.js";
 import { normalizePluginId } from "../../../plugins/config-state.js";
 import { loadInstalledPluginIndexInstallRecordsSync } from "../../../plugins/installed-plugin-index-records.js";
 import { loadManifestMetadataSnapshot } from "../../../plugins/manifest-contract-eligibility.js";
@@ -35,7 +35,7 @@ type StalePluginRegistryState = {
 };
 
 function collectPluginRegistryState(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   env?: NodeJS.ProcessEnv,
 ): StalePluginRegistryState {
   const workspaceDir = resolveAgentWorkspaceDir(cfg, resolveDefaultAgentId(cfg));
@@ -80,7 +80,7 @@ function collectPluginRegistryState(
 }
 
 export function isStalePluginAutoRepairBlocked(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   env?: NodeJS.ProcessEnv,
 ): boolean {
   if (cfg.plugins?.enabled === false) {
@@ -90,7 +90,7 @@ export function isStalePluginAutoRepairBlocked(
 }
 
 export function scanStalePluginConfig(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   env?: NodeJS.ProcessEnv,
 ): StalePluginConfigHit[] {
   if (cfg.plugins?.enabled === false) {
@@ -100,7 +100,7 @@ export function scanStalePluginConfig(
 }
 
 function scanStalePluginConfigWithState(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   registryState: StalePluginRegistryState,
 ): StalePluginConfigHit[] {
   const plugins = asObjectRecord(cfg.plugins);
@@ -207,7 +207,7 @@ function scanStalePluginConfigWithState(
 }
 
 function collectDanglingChannelIds(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   registryState: StalePluginRegistryState;
   staleEvidenceIds: ReadonlySet<string>;
 }): string[] {
@@ -237,7 +237,7 @@ function collectDanglingChannelIds(params: {
 }
 
 function collectDependentChannelConfigHits(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   channelIds: readonly string[],
 ): StalePluginConfigHit[] {
   if (channelIds.length === 0) {
@@ -327,11 +327,11 @@ export function collectStalePluginConfigWarnings(params: {
 }
 
 export function maybeRepairStalePluginConfig(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   env?: NodeJS.ProcessEnv,
   params?: { preservePluginIds?: Iterable<string> },
 ): {
-  config: OpenClawConfig;
+  config: SunClawConfig;
   changes: string[];
 } {
   if (cfg.plugins?.enabled === false) {
@@ -446,7 +446,7 @@ export function maybeRepairStalePluginConfig(
   return { config: next, changes };
 }
 
-function removeDanglingChannelReferences(config: OpenClawConfig, channelIds: readonly string[]) {
+function removeDanglingChannelReferences(config: SunClawConfig, channelIds: readonly string[]) {
   const staleChannelIds = new Set(channelIds.map((channelId) => normalizePluginId(channelId)));
   const channels = asObjectRecord(config.channels);
   if (channels) {

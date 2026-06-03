@@ -1,12 +1,12 @@
 import fs from "node:fs/promises";
 import type { WebClient as SlackWebClient } from "@slack/web-api";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { normalizeHostname } from "openclaw/plugin-sdk/host-runtime";
-import { resolveRequestUrl } from "openclaw/plugin-sdk/request-url";
+import { formatErrorMessage } from "sunclaw/plugin-sdk/error-runtime";
+import { normalizeHostname } from "sunclaw/plugin-sdk/host-runtime";
+import { resolveRequestUrl } from "sunclaw/plugin-sdk/request-url";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { formatSlackFileReference } from "../file-reference.js";
 import type { SlackAttachment, SlackFile } from "../types.js";
 export { MAX_SLACK_MEDIA_FILES, type SlackMediaResult } from "./media-types.js";

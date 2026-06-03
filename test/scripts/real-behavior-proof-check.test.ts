@@ -72,8 +72,8 @@ describe("real-behavior-proof-check GitHub lookups", () => {
       fetchProofComments({
         fetchImpl: fetch as typeof globalThis.fetch,
         issueNumber: 123,
-        owner: "openclaw",
-        repo: "openclaw",
+        owner: "sunclaw",
+        repo: "sunclaw",
         timeoutMs: 5,
         tokens: ["tok"],
       }),
@@ -87,8 +87,8 @@ describe("real-behavior-proof-check GitHub lookups", () => {
       fetchProofComments({
         fetchImpl: fetch as typeof globalThis.fetch,
         issueNumber: 123,
-        owner: "openclaw",
-        repo: "openclaw",
+        owner: "sunclaw",
+        repo: "sunclaw",
         timeoutMs: 5,
         tokens: ["tok"],
       }),
@@ -110,8 +110,8 @@ describe("real-behavior-proof-check GitHub lookups", () => {
       fetchProofComments({
         fetchImpl: fetch as typeof globalThis.fetch,
         issueNumber: 123,
-        owner: "openclaw",
-        repo: "openclaw",
+        owner: "sunclaw",
+        repo: "sunclaw",
         tokens: ["tok"],
       }),
     ).resolves.toEqual([]);
@@ -139,8 +139,8 @@ describe("real-behavior-proof-check GitHub lookups", () => {
       fetchProofComments({
         fetchImpl: fetch as typeof globalThis.fetch,
         issueNumber: 123,
-        owner: "openclaw",
-        repo: "openclaw",
+        owner: "sunclaw",
+        repo: "sunclaw",
         tokens: ["tok"],
       }),
     ).resolves.toEqual([]);
@@ -166,8 +166,8 @@ describe("real-behavior-proof-check GitHub lookups", () => {
       fetchProofComments({
         fetchImpl: fetch as typeof globalThis.fetch,
         issueNumber: 123,
-        owner: "openclaw",
-        repo: "openclaw",
+        owner: "sunclaw",
+        repo: "sunclaw",
         tokens: ["tok"],
       }),
     ).resolves.toEqual([{ id: 2, body: "trusted proof" }]);

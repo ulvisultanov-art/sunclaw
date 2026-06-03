@@ -1,5 +1,5 @@
-import { timestampMsToIsoString } from "openclaw/plugin-sdk/number-runtime";
-import { warn } from "openclaw/plugin-sdk/runtime-env";
+import { timestampMsToIsoString } from "sunclaw/plugin-sdk/number-runtime";
+import { warn } from "sunclaw/plugin-sdk/runtime-env";
 import type { IMessageRpcClient } from "../client.js";
 import {
   type CatchupDispatchFn,

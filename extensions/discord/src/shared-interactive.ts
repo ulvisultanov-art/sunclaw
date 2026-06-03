@@ -1,14 +1,14 @@
 import {
   reduceInteractiveReply,
   resolveMessagePresentationControlValue,
-} from "openclaw/plugin-sdk/interactive-runtime";
+} from "sunclaw/plugin-sdk/interactive-runtime";
 import type {
   InteractiveButtonStyle,
   InteractiveReply,
   MessagePresentation,
   MessagePresentationButton,
   MessagePresentationOption,
-} from "openclaw/plugin-sdk/interactive-runtime";
+} from "sunclaw/plugin-sdk/interactive-runtime";
 import type {
   DiscordComponentButtonSpec,
   DiscordComponentButtonStyle,

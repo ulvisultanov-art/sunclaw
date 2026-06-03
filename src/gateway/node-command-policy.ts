@@ -1,6 +1,6 @@
-import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
-import { normalizeUniqueStringEntries } from "@openclaw/normalization-core/string-normalization";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { normalizeOptionalLowercaseString } from "@sunclaw/normalization-core/string-coerce";
+import { normalizeUniqueStringEntries } from "@sunclaw/normalization-core/string-normalization";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import {
   NODE_BROWSER_PROXY_COMMAND,
   NODE_SYSTEM_NOTIFY_COMMAND,
@@ -319,7 +319,7 @@ function hasTalkSurface(node?: NodeCommandPolicyNode): boolean {
 }
 
 function resolveNodeCommandAllowlistInternal(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   node?: NodeCommandPolicyNode,
   options?: { includeDesktopHostCommands?: boolean },
 ): Set<string> {
@@ -359,14 +359,14 @@ function resolveNodeCommandAllowlistInternal(
 }
 
 export function resolveNodeCommandAllowlist(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   node?: NodeCommandPolicyNode,
 ): Set<string> {
   return resolveNodeCommandAllowlistInternal(cfg, node);
 }
 
 export function resolveNodePairingCommandAllowlist(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   node?: NodeCommandPolicyNode,
 ): Set<string> {
   return resolveNodeCommandAllowlistInternal(cfg, node, {

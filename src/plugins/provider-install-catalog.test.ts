@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-type LoadOpenClawProviderIndex =
-  typeof import("../model-catalog/index.js").loadOpenClawProviderIndex;
+type LoadSunClawProviderIndex =
+  typeof import("../model-catalog/index.js").loadSunClawProviderIndex;
 type LoadPluginRegistrySnapshot = typeof import("./plugin-registry.js").loadPluginRegistrySnapshot;
 type ResolveManifestProviderAuthChoices =
   typeof import("./provider-auth-choices.js").resolveManifestProviderAuthChoices;
@@ -12,8 +12,8 @@ type InstalledPluginInstallRecordInfo =
   import("./installed-plugin-index.js").InstalledPluginInstallRecordInfo;
 type InstalledPluginIndexRecord = import("./installed-plugin-index.js").InstalledPluginIndexRecord;
 
-const loadOpenClawProviderIndex = vi.hoisted(() =>
-  vi.fn<LoadOpenClawProviderIndex>(() => ({ version: 1, providers: {} })),
+const loadSunClawProviderIndex = vi.hoisted(() =>
+  vi.fn<LoadSunClawProviderIndex>(() => ({ version: 1, providers: {} })),
 );
 vi.mock("../model-catalog/index.js", async () => {
   const actual = await vi.importActual<typeof import("../model-catalog/index.js")>(
@@ -21,7 +21,7 @@ vi.mock("../model-catalog/index.js", async () => {
   );
   return {
     ...actual,
-    loadOpenClawProviderIndex,
+    loadSunClawProviderIndex,
   };
 });
 
@@ -90,9 +90,9 @@ function vllmPluginWithPackageInstall(): InstalledPluginIndexRecord {
   return {
     pluginId: "vllm",
     origin: "global",
-    manifestPath: "/Users/test/.openclaw/plugins/vllm/openclaw.plugin.json",
+    manifestPath: "/Users/test/.sunclaw/plugins/vllm/sunclaw.plugin.json",
     manifestHash: "hash",
-    rootDir: "/Users/test/.openclaw/plugins/vllm",
+    rootDir: "/Users/test/.sunclaw/plugins/vllm",
     enabled: true,
     startup: {
       sidecar: false,
@@ -101,11 +101,11 @@ function vllmPluginWithPackageInstall(): InstalledPluginIndexRecord {
       agentHarnesses: [],
     },
     compat: [],
-    packageName: "@openclaw/vllm",
+    packageName: "@sunclaw/vllm",
     packageInstall: {
       npm: {
-        spec: "@openclaw/vllm-fork@1.0.0",
-        packageName: "@openclaw/vllm-fork",
+        spec: "@sunclaw/vllm-fork@1.0.0",
+        packageName: "@sunclaw/vllm-fork",
         selector: "1.0.0",
         selectorKind: "exact-version",
         exactVersion: true,
@@ -133,7 +133,7 @@ function mockVllmAuthChoice() {
 describe("provider install catalog", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    loadOpenClawProviderIndex.mockReturnValue({ version: 1, providers: {} });
+    loadSunClawProviderIndex.mockReturnValue({ version: 1, providers: {} });
     loadPluginRegistrySnapshot.mockReturnValue({
       version: 1,
       hostContractVersion: "test",
@@ -162,7 +162,7 @@ describe("provider install catalog", () => {
         {
           pluginId: "openai",
           origin: "bundled",
-          manifestPath: "/repo/extensions/openai/openclaw.plugin.json",
+          manifestPath: "/repo/extensions/openai/sunclaw.plugin.json",
           manifestHash: "hash",
           rootDir: "/repo/extensions/openai",
           enabled: true,
@@ -173,12 +173,12 @@ describe("provider install catalog", () => {
             agentHarnesses: [],
           },
           compat: [],
-          packageName: "@openclaw/openai",
+          packageName: "@sunclaw/openai",
           packageInstall: {
             defaultChoice: "npm",
             npm: {
-              spec: "@openclaw/openai@1.2.3",
-              packageName: "@openclaw/openai",
+              spec: "@sunclaw/openai@1.2.3",
+              packageName: "@sunclaw/openai",
               selector: "1.2.3",
               selectorKind: "exact-version",
               exactVersion: true,
@@ -218,7 +218,7 @@ describe("provider install catalog", () => {
         label: "OpenAI",
         origin: "bundled",
         install: {
-          npmSpec: "@openclaw/openai@1.2.3",
+          npmSpec: "@sunclaw/openai@1.2.3",
           localPath: "extensions/openai",
           defaultChoice: "npm",
           expectedIntegrity: "sha512-openai",
@@ -226,8 +226,8 @@ describe("provider install catalog", () => {
         installSource: {
           defaultChoice: "npm",
           npm: {
-            spec: "@openclaw/openai@1.2.3",
-            packageName: "@openclaw/openai",
+            spec: "@sunclaw/openai@1.2.3",
+            packageName: "@sunclaw/openai",
             selector: "1.2.3",
             selectorKind: "exact-version",
             exactVersion: true,
@@ -249,8 +249,8 @@ describe("provider install catalog", () => {
         installRecords: {
           vllm: {
             source: "npm",
-            spec: "@openclaw/vllm",
-            resolvedSpec: "@openclaw/vllm@2.0.0",
+            spec: "@sunclaw/vllm",
+            resolvedSpec: "@sunclaw/vllm@2.0.0",
             integrity: "sha512-vllm",
           },
         },
@@ -269,15 +269,15 @@ describe("provider install catalog", () => {
       label: "vLLM",
       origin: "global",
       install: {
-        npmSpec: "@openclaw/vllm@2.0.0",
+        npmSpec: "@sunclaw/vllm@2.0.0",
         expectedIntegrity: "sha512-vllm",
         defaultChoice: "npm",
       },
       installSource: {
         defaultChoice: "npm",
         npm: {
-          spec: "@openclaw/vllm@2.0.0",
-          packageName: "@openclaw/vllm",
+          spec: "@sunclaw/vllm@2.0.0",
+          packageName: "@sunclaw/vllm",
           selector: "2.0.0",
           selectorKind: "exact-version",
           exactVersion: true,
@@ -295,9 +295,9 @@ describe("provider install catalog", () => {
         installRecords: {
           vllm: {
             source: "clawhub",
-            spec: "clawhub:openclaw/vllm@2026.5.2",
+            spec: "clawhub:sunclaw/vllm@2026.5.2",
             integrity: "sha256-clawpack",
-            clawhubPackage: "openclaw/vllm",
+            clawhubPackage: "sunclaw/vllm",
           },
         },
         plugins: [vllmPluginWithPackageInstall()],
@@ -315,14 +315,14 @@ describe("provider install catalog", () => {
       label: "vLLM",
       origin: "global",
       install: {
-        clawhubSpec: "clawhub:openclaw/vllm@2026.5.2",
+        clawhubSpec: "clawhub:sunclaw/vllm@2026.5.2",
         defaultChoice: "clawhub",
       },
       installSource: {
         defaultChoice: "clawhub",
         clawhub: {
-          spec: "clawhub:openclaw/vllm@2026.5.2",
-          packageName: "openclaw/vllm",
+          spec: "clawhub:sunclaw/vllm@2026.5.2",
+          packageName: "sunclaw/vllm",
           version: "2026.5.2",
           exactVersion: true,
         },
@@ -344,9 +344,9 @@ describe("provider install catalog", () => {
         {
           pluginId: "demo-provider",
           origin: "global",
-          manifestPath: "/Users/test/.openclaw/plugins/demo-provider/openclaw.plugin.json",
+          manifestPath: "/Users/test/.sunclaw/plugins/demo-provider/sunclaw.plugin.json",
           manifestHash: "hash",
-          rootDir: "/Users/test/.openclaw/plugins/demo-provider",
+          rootDir: "/Users/test/.sunclaw/plugins/demo-provider",
           enabled: true,
           startup: {
             sidecar: false,
@@ -398,7 +398,7 @@ describe("provider install catalog", () => {
         {
           pluginId: "openai",
           origin: "bundled",
-          manifestPath: "/repo/extensions/openai/openclaw.plugin.json",
+          manifestPath: "/repo/extensions/openai/sunclaw.plugin.json",
           manifestHash: "hash",
           rootDir: "/repo/extensions/openai",
           enabled: true,
@@ -409,12 +409,12 @@ describe("provider install catalog", () => {
             agentHarnesses: [],
           },
           compat: [],
-          packageName: "@openclaw/openai",
+          packageName: "@sunclaw/openai",
           packageInstall: {
             defaultChoice: "npm",
             npm: {
               spec: 12,
-              packageName: "@openclaw/openai",
+              packageName: "@sunclaw/openai",
               selectorKind: "exact-version",
               exactVersion: true,
               pinState: "exact-with-integrity",
@@ -451,7 +451,7 @@ describe("provider install catalog", () => {
         {
           pluginId: "demo-provider",
           origin: "workspace",
-          manifestPath: "/repo/extensions/demo-provider/openclaw.plugin.json",
+          manifestPath: "/repo/extensions/demo-provider/sunclaw.plugin.json",
           manifestHash: "hash",
           rootDir: "/repo/extensions/demo-provider",
           enabled: false,
@@ -495,7 +495,7 @@ describe("provider install catalog", () => {
   });
 
   it("surfaces provider-index install metadata when the provider plugin is not installed", () => {
-    loadOpenClawProviderIndex.mockReturnValue({
+    loadSunClawProviderIndex.mockReturnValue({
       version: 1,
       providers: {
         moonshot: {
@@ -503,9 +503,9 @@ describe("provider install catalog", () => {
           name: "Moonshot AI",
           plugin: {
             id: "moonshot",
-            package: "@openclaw/plugin-moonshot",
+            package: "@sunclaw/plugin-moonshot",
             install: {
-              npmSpec: "@openclaw/plugin-moonshot@1.2.3",
+              npmSpec: "@sunclaw/plugin-moonshot@1.2.3",
               defaultChoice: "npm",
               expectedIntegrity: "sha512-moonshot",
             },
@@ -536,15 +536,15 @@ describe("provider install catalog", () => {
       label: "Moonshot AI",
       origin: "bundled",
       install: {
-        npmSpec: "@openclaw/plugin-moonshot@1.2.3",
+        npmSpec: "@sunclaw/plugin-moonshot@1.2.3",
         defaultChoice: "npm",
         expectedIntegrity: "sha512-moonshot",
       },
       installSource: {
         defaultChoice: "npm",
         npm: {
-          spec: "@openclaw/plugin-moonshot@1.2.3",
-          packageName: "@openclaw/plugin-moonshot",
+          spec: "@sunclaw/plugin-moonshot@1.2.3",
+          packageName: "@sunclaw/plugin-moonshot",
           selector: "1.2.3",
           selectorKind: "exact-version",
           exactVersion: true,
@@ -559,10 +559,10 @@ describe("provider install catalog", () => {
   it("surfaces official external provider install metadata when the provider plugin is not installed", () => {
     listOfficialExternalProviderCatalogEntries.mockReturnValue([
       {
-        name: "@openclaw/codex",
+        name: "@sunclaw/codex",
         source: "official",
         kind: "provider",
-        openclaw: {
+        sunclaw: {
           plugin: { id: "codex", label: "Codex" },
           providers: [
             {
@@ -582,7 +582,7 @@ describe("provider install catalog", () => {
             },
           ],
           install: {
-            npmSpec: "@openclaw/codex",
+            npmSpec: "@sunclaw/codex",
             defaultChoice: "npm",
           },
         },
@@ -602,14 +602,14 @@ describe("provider install catalog", () => {
       label: "Codex",
       origin: "bundled",
       install: {
-        npmSpec: "@openclaw/codex",
+        npmSpec: "@sunclaw/codex",
         defaultChoice: "npm",
       },
       installSource: {
         defaultChoice: "npm",
         npm: {
-          spec: "@openclaw/codex",
-          packageName: "@openclaw/codex",
+          spec: "@sunclaw/codex",
+          packageName: "@sunclaw/codex",
           selectorKind: "none",
           exactVersion: false,
           pinState: "floating-without-integrity",
@@ -620,7 +620,7 @@ describe("provider install catalog", () => {
   });
 
   it("surfaces provider-index ClawHub install metadata as the preferred source", () => {
-    loadOpenClawProviderIndex.mockReturnValue({
+    loadSunClawProviderIndex.mockReturnValue({
       version: 1,
       providers: {
         moonshot: {
@@ -628,10 +628,10 @@ describe("provider install catalog", () => {
           name: "Moonshot AI",
           plugin: {
             id: "moonshot",
-            package: "@openclaw/plugin-moonshot",
+            package: "@sunclaw/plugin-moonshot",
             install: {
-              clawhubSpec: "clawhub:openclaw/moonshot@2026.5.2",
-              npmSpec: "@openclaw/plugin-moonshot@2026.5.2",
+              clawhubSpec: "clawhub:sunclaw/moonshot@2026.5.2",
+              npmSpec: "@sunclaw/plugin-moonshot@2026.5.2",
               defaultChoice: "clawhub",
               expectedIntegrity: "sha512-moonshot",
             },
@@ -660,22 +660,22 @@ describe("provider install catalog", () => {
       label: "Moonshot AI",
       origin: "bundled",
       install: {
-        clawhubSpec: "clawhub:openclaw/moonshot@2026.5.2",
-        npmSpec: "@openclaw/plugin-moonshot@2026.5.2",
+        clawhubSpec: "clawhub:sunclaw/moonshot@2026.5.2",
+        npmSpec: "@sunclaw/plugin-moonshot@2026.5.2",
         defaultChoice: "clawhub",
         expectedIntegrity: "sha512-moonshot",
       },
       installSource: {
         defaultChoice: "clawhub",
         clawhub: {
-          spec: "clawhub:openclaw/moonshot@2026.5.2",
-          packageName: "openclaw/moonshot",
+          spec: "clawhub:sunclaw/moonshot@2026.5.2",
+          packageName: "sunclaw/moonshot",
           version: "2026.5.2",
           exactVersion: true,
         },
         npm: {
-          spec: "@openclaw/plugin-moonshot@2026.5.2",
-          packageName: "@openclaw/plugin-moonshot",
+          spec: "@sunclaw/plugin-moonshot@2026.5.2",
+          packageName: "@sunclaw/plugin-moonshot",
           selector: "2026.5.2",
           selectorKind: "exact-version",
           exactVersion: true,
@@ -700,7 +700,7 @@ describe("provider install catalog", () => {
         {
           pluginId: "moonshot",
           origin: "bundled",
-          manifestPath: "/repo/extensions/moonshot/openclaw.plugin.json",
+          manifestPath: "/repo/extensions/moonshot/sunclaw.plugin.json",
           manifestHash: "hash",
           rootDir: "/repo/extensions/moonshot",
           enabled: true,
@@ -715,7 +715,7 @@ describe("provider install catalog", () => {
       ],
       diagnostics: [],
     });
-    loadOpenClawProviderIndex.mockReturnValue({
+    loadSunClawProviderIndex.mockReturnValue({
       version: 1,
       providers: {
         moonshot: {
@@ -723,9 +723,9 @@ describe("provider install catalog", () => {
           name: "Moonshot AI",
           plugin: {
             id: "moonshot",
-            package: "@openclaw/plugin-moonshot",
+            package: "@sunclaw/plugin-moonshot",
             install: {
-              npmSpec: "@openclaw/plugin-moonshot@1.2.3",
+              npmSpec: "@sunclaw/plugin-moonshot@1.2.3",
               expectedIntegrity: "sha512-moonshot",
             },
           },
@@ -756,7 +756,7 @@ describe("provider install catalog", () => {
         {
           pluginId: "moonshot",
           origin: "bundled",
-          manifestPath: "/repo/extensions/moonshot/openclaw.plugin.json",
+          manifestPath: "/repo/extensions/moonshot/sunclaw.plugin.json",
           manifestHash: "hash",
           rootDir: "/repo/extensions/moonshot",
           enabled: true,
@@ -771,7 +771,7 @@ describe("provider install catalog", () => {
       ],
       diagnostics: [],
     });
-    loadOpenClawProviderIndex.mockReturnValue({
+    loadSunClawProviderIndex.mockReturnValue({
       version: 1,
       providers: {
         groq: {
@@ -779,9 +779,9 @@ describe("provider install catalog", () => {
           name: "Groq",
           plugin: {
             id: "groq",
-            package: "@openclaw/plugin-groq",
+            package: "@sunclaw/plugin-groq",
             install: {
-              npmSpec: "@openclaw/plugin-groq@1.0.0",
+              npmSpec: "@sunclaw/plugin-groq@1.0.0",
               defaultChoice: "npm",
             },
           },
@@ -798,10 +798,10 @@ describe("provider install catalog", () => {
           name: "Moonshot AI",
           plugin: {
             id: "moonshot",
-            package: "@openclaw/plugin-moonshot",
+            package: "@sunclaw/plugin-moonshot",
             install: {
-              clawhubSpec: "clawhub:openclaw/moonshot@2026.5.2",
-              npmSpec: "@openclaw/plugin-moonshot@2026.5.2",
+              clawhubSpec: "clawhub:sunclaw/moonshot@2026.5.2",
+              npmSpec: "@sunclaw/plugin-moonshot@2026.5.2",
               defaultChoice: "clawhub",
             },
           },
@@ -818,10 +818,10 @@ describe("provider install catalog", () => {
           name: "vLLM",
           plugin: {
             id: "vllm",
-            package: "@openclaw/plugin-vllm",
+            package: "@sunclaw/plugin-vllm",
             install: {
-              clawhubSpec: "clawhub:openclaw/vllm@2026.5.2",
-              npmSpec: "@openclaw/plugin-vllm@2026.5.2",
+              clawhubSpec: "clawhub:sunclaw/vllm@2026.5.2",
+              npmSpec: "@sunclaw/plugin-vllm@2026.5.2",
               defaultChoice: "clawhub",
             },
           },
@@ -849,21 +849,21 @@ describe("provider install catalog", () => {
       label: "vLLM",
       origin: "bundled",
       install: {
-        clawhubSpec: "clawhub:openclaw/vllm@2026.5.2",
-        npmSpec: "@openclaw/plugin-vllm@2026.5.2",
+        clawhubSpec: "clawhub:sunclaw/vllm@2026.5.2",
+        npmSpec: "@sunclaw/plugin-vllm@2026.5.2",
         defaultChoice: "clawhub",
       },
       installSource: {
         defaultChoice: "clawhub",
         clawhub: {
-          spec: "clawhub:openclaw/vllm@2026.5.2",
-          packageName: "openclaw/vllm",
+          spec: "clawhub:sunclaw/vllm@2026.5.2",
+          packageName: "sunclaw/vllm",
           version: "2026.5.2",
           exactVersion: true,
         },
         npm: {
-          spec: "@openclaw/plugin-vllm@2026.5.2",
-          packageName: "@openclaw/plugin-vllm",
+          spec: "@sunclaw/plugin-vllm@2026.5.2",
+          packageName: "@sunclaw/plugin-vllm",
           selector: "2026.5.2",
           selectorKind: "exact-version",
           exactVersion: true,

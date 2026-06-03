@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
 import {
   clearLoadInstalledPluginIndexInstallRecordsCache,
@@ -67,9 +67,9 @@ export function writePersistedInstalledPluginIndexInstallRecordsSync(
 }
 
 export function withPluginInstallRecords(
-  config: OpenClawConfig,
+  config: SunClawConfig,
   records: Record<string, PluginInstallRecord>,
-): OpenClawConfig {
+): SunClawConfig {
   return {
     ...config,
     plugins: {
@@ -79,7 +79,7 @@ export function withPluginInstallRecords(
   };
 }
 
-export function withoutPluginInstallRecords(config: OpenClawConfig): OpenClawConfig {
+export function withoutPluginInstallRecords(config: SunClawConfig): SunClawConfig {
   if (!config.plugins?.installs) {
     return config;
   }

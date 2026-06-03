@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
 import { describe, expect, it } from "vitest";
 import {
   resolveTelegramGroupRequireMention,
@@ -24,7 +24,7 @@ describe("resolveTelegramGroupRequireMention", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
 
     expect(
       resolveTelegramGroupRequireMention({
@@ -54,7 +54,7 @@ describe("resolveTelegramGroupRequireMention", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
 
     expect(
       resolveTelegramGroupRequireMention({
@@ -78,7 +78,7 @@ describe("resolveTelegramGroupToolPolicy", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as SunClawConfig;
 
     expect(
       resolveTelegramGroupToolPolicy({

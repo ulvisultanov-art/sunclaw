@@ -3,28 +3,28 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 source "$ROOT_DIR/scripts/lib/docker-e2e-image.sh"
-IMAGE_NAME="$(docker_e2e_resolve_image "openclaw-bundled-plugin-install-uninstall-e2e" OPENCLAW_BUNDLED_PLUGIN_INSTALL_UNINSTALL_E2E_IMAGE)"
+IMAGE_NAME="$(docker_e2e_resolve_image "sunclaw-bundled-plugin-install-uninstall-e2e" SUNCLAW_BUNDLED_PLUGIN_INSTALL_UNINSTALL_E2E_IMAGE)"
 
 docker_e2e_build_or_reuse "$IMAGE_NAME" bundled-plugin-install-uninstall
-OPENCLAW_TEST_STATE_SCRIPT_B64="$(docker_e2e_test_state_shell_b64 bundled-plugin-install-uninstall empty)"
+SUNCLAW_TEST_STATE_SCRIPT_B64="$(docker_e2e_test_state_shell_b64 bundled-plugin-install-uninstall empty)"
 
 DOCKER_ENV_ARGS=(
   -e COREPACK_ENABLE_DOWNLOAD_PROMPT=0
-  -e "OPENCLAW_TEST_STATE_SCRIPT_B64=$OPENCLAW_TEST_STATE_SCRIPT_B64"
+  -e "SUNCLAW_TEST_STATE_SCRIPT_B64=$SUNCLAW_TEST_STATE_SCRIPT_B64"
 )
 for env_name in \
-  OPENCLAW_BUNDLED_PLUGIN_SWEEP_TOTAL \
-  OPENCLAW_BUNDLED_PLUGIN_SWEEP_INDEX \
-  OPENCLAW_BUNDLED_PLUGIN_SWEEP_IDS \
-  OPENCLAW_BUNDLED_PLUGIN_SWEEP_COMMAND_TIMEOUT \
-  OPENCLAW_BUNDLED_PLUGIN_RUNTIME_SMOKE \
-  OPENCLAW_BUNDLED_PLUGIN_RUNTIME_PORT_BASE \
-  OPENCLAW_BUNDLED_PLUGIN_RUNTIME_OUTPUT_CHARS \
-  OPENCLAW_BUNDLED_PLUGIN_RUNTIME_READY_MS \
-  OPENCLAW_BUNDLED_PLUGIN_RUNTIME_RPC_MS \
-  OPENCLAW_BUNDLED_PLUGIN_RUNTIME_WATCHDOG_MS \
-  OPENCLAW_BUNDLED_PLUGIN_TTS_LIVE_PROVIDER \
-  OPENCLAW_PLUGIN_LIFECYCLE_TRACE \
+  SUNCLAW_BUNDLED_PLUGIN_SWEEP_TOTAL \
+  SUNCLAW_BUNDLED_PLUGIN_SWEEP_INDEX \
+  SUNCLAW_BUNDLED_PLUGIN_SWEEP_IDS \
+  SUNCLAW_BUNDLED_PLUGIN_SWEEP_COMMAND_TIMEOUT \
+  SUNCLAW_BUNDLED_PLUGIN_RUNTIME_SMOKE \
+  SUNCLAW_BUNDLED_PLUGIN_RUNTIME_PORT_BASE \
+  SUNCLAW_BUNDLED_PLUGIN_RUNTIME_OUTPUT_CHARS \
+  SUNCLAW_BUNDLED_PLUGIN_RUNTIME_READY_MS \
+  SUNCLAW_BUNDLED_PLUGIN_RUNTIME_RPC_MS \
+  SUNCLAW_BUNDLED_PLUGIN_RUNTIME_WATCHDOG_MS \
+  SUNCLAW_BUNDLED_PLUGIN_TTS_LIVE_PROVIDER \
+  SUNCLAW_PLUGIN_LIFECYCLE_TRACE \
   OPENAI_API_KEY; do
   env_value="${!env_name:-}"
   if [[ -n "$env_value" && "$env_value" != "undefined" && "$env_value" != "null" ]]; then
@@ -33,7 +33,7 @@ for env_name in \
 done
 
 echo "Running bundled plugin install/uninstall Docker E2E..."
-RUN_LOG="$(mktemp "${TMPDIR:-/tmp}/openclaw-bundled-plugin-install-uninstall.XXXXXX")"
+RUN_LOG="$(mktemp "${TMPDIR:-/tmp}/sunclaw-bundled-plugin-install-uninstall.XXXXXX")"
 cleanup() {
   rm -f "$RUN_LOG"
 }

@@ -1,8 +1,8 @@
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+} from "@sunclaw/normalization-core/string-coerce";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import {
   createEffectiveEnableStateResolver,
   createPluginEnableStateResolver,
@@ -28,8 +28,8 @@ export type PluginActivationState = PluginActivationStateLike;
 
 export type PluginActivationConfigSource = {
   plugins: NormalizedPluginsConfig;
-  rootConfig?: OpenClawConfig;
-} & PluginActivationConfigSourceLike<OpenClawConfig>;
+  rootConfig?: SunClawConfig;
+} & PluginActivationConfigSourceLike<SunClawConfig>;
 
 export type NormalizedPluginsConfig = SharedNormalizedPluginsConfig;
 
@@ -78,13 +78,13 @@ export function normalizePluginId(id: string): string {
 }
 
 export const normalizePluginsConfig = (
-  config?: OpenClawConfig["plugins"],
+  config?: SunClawConfig["plugins"],
 ): NormalizedPluginsConfig => {
   return normalizePluginsConfigWithResolver(config, createScopedPluginIdNormalizer());
 };
 
 export function createPluginActivationSource(params: {
-  config?: OpenClawConfig;
+  config?: SunClawConfig;
   plugins?: NormalizedPluginsConfig;
 }): PluginActivationConfigSource {
   return {
@@ -93,19 +93,19 @@ export function createPluginActivationSource(params: {
   };
 }
 
-const hasExplicitMemorySlot = (plugins?: OpenClawConfig["plugins"]) =>
+const hasExplicitMemorySlot = (plugins?: SunClawConfig["plugins"]) =>
   Boolean(plugins?.slots && Object.hasOwn(plugins.slots, "memory"));
 
-const hasExplicitMemoryEntry = (plugins?: OpenClawConfig["plugins"]) =>
+const hasExplicitMemoryEntry = (plugins?: SunClawConfig["plugins"]) =>
   Boolean(plugins?.entries && Object.hasOwn(plugins.entries, defaultSlotIdForKey("memory")));
 
-export const hasExplicitPluginConfig = (plugins?: OpenClawConfig["plugins"]) =>
+export const hasExplicitPluginConfig = (plugins?: SunClawConfig["plugins"]) =>
   hasExplicitPluginConfigShared(plugins);
 
 export function applyTestPluginDefaults(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   env: NodeJS.ProcessEnv = process.env,
-): OpenClawConfig {
+): SunClawConfig {
   if (!env.VITEST) {
     return cfg;
   }
@@ -141,7 +141,7 @@ export function applyTestPluginDefaults(
 }
 
 export function isTestDefaultMemorySlotDisabled(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   env: NodeJS.ProcessEnv = process.env,
 ): boolean {
   if (!env.VITEST) {
@@ -158,7 +158,7 @@ export function resolvePluginActivationState(params: {
   id: string;
   origin: PluginOrigin;
   config: NormalizedPluginsConfig;
-  rootConfig?: OpenClawConfig;
+  rootConfig?: SunClawConfig;
   enabledByDefault?: boolean;
   activationSource?: PluginActivationConfigSource;
   autoEnabledReason?: string;
@@ -189,7 +189,7 @@ type EffectiveActivationParams = {
   id: string;
   origin: PluginOrigin;
   config: NormalizedPluginsConfig;
-  rootConfig?: OpenClawConfig;
+  rootConfig?: SunClawConfig;
   enabledByDefault?: boolean;
   activationSource?: PluginActivationConfigSource;
 };

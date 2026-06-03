@@ -4,13 +4,13 @@ import { promisify } from "node:util";
 import {
   resolveExpiresAtMsFromDurationSeconds,
   resolveTimestampMsToIsoString,
-} from "@openclaw/normalization-core/number-coercion";
-import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
+} from "@sunclaw/normalization-core/number-coercion";
+import { normalizeOptionalLowercaseString } from "@sunclaw/normalization-core/string-coerce";
 
 const execFileAsync = promisify(execFile);
 const LIVE_CRON_PROBE_DELAY_SECONDS = 7 * 24 * 60 * 60;
-const OPENCLAW_CLI_GATEWAY_TIMEOUT_MS = 30_000;
-const OPENCLAW_CLI_CHILD_TIMEOUT_MS = OPENCLAW_CLI_GATEWAY_TIMEOUT_MS + 45_000;
+const SUNCLAW_CLI_GATEWAY_TIMEOUT_MS = 30_000;
+const SUNCLAW_CLI_CHILD_TIMEOUT_MS = SUNCLAW_CLI_GATEWAY_TIMEOUT_MS + 45_000;
 
 type CronListCliResult = {
   jobs?: Array<{
@@ -98,40 +98,40 @@ export function buildLiveCronProbeMessage(params: {
   const claudeLike = isClaudeLikeLiveAgent(params.agent);
   if (params.attempt === 0) {
     return (
-      "Use the OpenClaw MCP tool `openclaw-tools/cron` (server `openclaw-tools`, tool `cron`). " +
-      "If the harness shows Claude-style MCP names, use `mcp__openclaw-tools__cron` or `mcp__openclaw_tools__cron`. " +
+      "Use the SunClaw MCP tool `sunclaw-tools/cron` (server `sunclaw-tools`, tool `cron`). " +
+      "If the harness shows Claude-style MCP names, use `mcp__sunclaw-tools__cron` or `mcp__sunclaw_tools__cron`. " +
       `Call it with JSON arguments ${params.argsJson}. ` +
       "Preserve the JSON exactly, including job.sessionTarget and job.sessionKey; do not omit, rename, or flatten those fields. " +
-      "Do the actual tool call; I will verify externally with the OpenClaw cron CLI. " +
+      "Do the actual tool call; I will verify externally with the SunClaw cron CLI. " +
       `After the cron job is created, reply exactly: ${params.exactReply}`
     );
   }
   if (claudeLike) {
     return (
-      "Retry the OpenClaw MCP tool `openclaw-tools/cron` now. " +
-      "If the harness shows Claude-style MCP names, use `mcp__openclaw-tools__cron` or `mcp__openclaw_tools__cron`. " +
+      "Retry the SunClaw MCP tool `sunclaw-tools/cron` now. " +
+      "If the harness shows Claude-style MCP names, use `mcp__sunclaw-tools__cron` or `mcp__sunclaw_tools__cron`. " +
       `Use these exact JSON arguments: ${params.argsJson}. ` +
       "Preserve job.sessionTarget and job.sessionKey exactly as provided. " +
       `If the cron job is created, reply exactly: ${params.exactReply}. ` +
       "If the tool call is cancelled, the job is not created, or you cannot confirm creation, " +
       "reply briefly saying that and ask me to retry. No markdown. " +
-      "I will verify externally with the OpenClaw cron CLI."
+      "I will verify externally with the SunClaw cron CLI."
     );
   }
   return (
-    "Your previous OpenClaw cron MCP tool call was cancelled before the job was created. " +
-    "Retry the OpenClaw MCP tool `openclaw-tools/cron` now. " +
-    "If the harness shows Claude-style MCP names, use `mcp__openclaw-tools__cron` or `mcp__openclaw_tools__cron`. " +
+    "Your previous SunClaw cron MCP tool call was cancelled before the job was created. " +
+    "Retry the SunClaw MCP tool `sunclaw-tools/cron` now. " +
+    "If the harness shows Claude-style MCP names, use `mcp__sunclaw-tools__cron` or `mcp__sunclaw_tools__cron`. " +
     `Use these exact JSON arguments: ${params.argsJson}. ` +
     "Preserve job.sessionTarget and job.sessionKey exactly as provided. " +
     `If the cron job is created, reply exactly: ${params.exactReply}. ` +
     "If the tool call is cancelled, the job is not created, or you cannot confirm creation, " +
     "reply briefly saying that and ask me to retry. No markdown. " +
-    "I will verify externally with the OpenClaw cron CLI."
+    "I will verify externally with the SunClaw cron CLI."
   );
 }
 
-export async function runOpenClawCliJson<T>(args: string[], env: NodeJS.ProcessEnv): Promise<T> {
+export async function runSunClawCliJson<T>(args: string[], env: NodeJS.ProcessEnv): Promise<T> {
   const childEnv = { ...env };
   delete childEnv.VITEST;
   delete childEnv.VITEST_MODE;
@@ -139,18 +139,18 @@ export async function runOpenClawCliJson<T>(args: string[], env: NodeJS.ProcessE
   delete childEnv.VITEST_WORKER_ID;
   const cliArgs = args.includes("--timeout")
     ? args
-    : [...args, "--timeout", String(OPENCLAW_CLI_GATEWAY_TIMEOUT_MS)];
-  const { stdout, stderr } = await execFileAsync(process.execPath, ["openclaw.mjs", ...cliArgs], {
+    : [...args, "--timeout", String(SUNCLAW_CLI_GATEWAY_TIMEOUT_MS)];
+  const { stdout, stderr } = await execFileAsync(process.execPath, ["sunclaw.mjs", ...cliArgs], {
     cwd: process.cwd(),
     env: childEnv,
-    timeout: OPENCLAW_CLI_CHILD_TIMEOUT_MS,
+    timeout: SUNCLAW_CLI_CHILD_TIMEOUT_MS,
     maxBuffer: 1024 * 1024,
   });
   const trimmed = stdout.trim();
   if (!trimmed) {
     throw new Error(
       [
-        `openclaw ${args.join(" ")} produced no JSON stdout`,
+        `sunclaw ${args.join(" ")} produced no JSON stdout`,
         stderr.trim() ? `stderr: ${stderr.trim()}` : undefined,
       ]
         .filter(Boolean)
@@ -162,7 +162,7 @@ export async function runOpenClawCliJson<T>(args: string[], env: NodeJS.ProcessE
   } catch (error) {
     throw new Error(
       [
-        `openclaw ${args.join(" ")} returned invalid JSON`,
+        `sunclaw ${args.join(" ")} returned invalid JSON`,
         `stdout: ${trimmed}`,
         stderr.trim() ? `stderr: ${stderr.trim()}` : undefined,
         error instanceof Error ? `cause: ${error.message}` : undefined,
@@ -181,7 +181,7 @@ export async function assertCronJobVisibleViaCli(params: {
   expectedName: string;
   expectedMessage: string;
 }): Promise<CronListJob | undefined> {
-  const cronList = await runOpenClawCliJson<CronListCliResult>(
+  const cronList = await runSunClawCliJson<CronListCliResult>(
     [
       "cron",
       "list",

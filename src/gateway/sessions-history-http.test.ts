@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import type { AssistantMessage } from "openclaw/plugin-sdk/llm";
+import type { AssistantMessage } from "sunclaw/plugin-sdk/llm";
 import { afterEach, describe, expect, test } from "vitest";
 import {
   appendAssistantMessageToSessionTranscript,
@@ -21,7 +21,7 @@ import {
 installGatewayTestHooks();
 
 const AUTH_HEADER = { Authorization: "Bearer test-gateway-token-1234567890" };
-const READ_SCOPE_HEADER = { "x-openclaw-scopes": "operator.read" };
+const READ_SCOPE_HEADER = { "x-sunclaw-scopes": "operator.read" };
 const cleanupDirs: string[] = [];
 
 afterEach(async () => {
@@ -31,7 +31,7 @@ afterEach(async () => {
 });
 
 async function createSessionStoreFile(): Promise<string> {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-session-history-"));
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-session-history-"));
   cleanupDirs.push(dir);
   const storePath = path.join(dir, "sessions.json");
   testState.sessionStorePath = storePath;
@@ -72,7 +72,7 @@ function makeTranscriptAssistantMessage(params: {
     role: "assistant" as const,
     content: params.content ?? [{ type: "text", text: params.text }],
     api: "openai-responses",
-    provider: "openclaw",
+    provider: "sunclaw",
     model: "delivery-mirror",
     usage: {
       input: 0,
@@ -165,7 +165,7 @@ async function withGatewayHarness<T>(
 
 type SessionHistoryMessage = {
   content?: Array<{ text?: string }>;
-  __openclaw?: { id?: string; seq?: number };
+  __sunclaw?: { id?: string; seq?: number };
 };
 
 type SessionHistoryBody = {
@@ -232,7 +232,7 @@ type SessionHistorySseStream = {
   streamState: { buffer: string };
 };
 
-function expectOpenClawMetadata(
+function expectSunClawMetadata(
   metadata: { id?: string; seq?: number } | undefined,
   expected: { id?: string; seq: number },
 ) {
@@ -306,9 +306,9 @@ async function expectMessageEventMatch(
   ).toBe(params.text);
   expect((event.data as { messageSeq?: number }).messageSeq).toBe(params.seq);
   if (params.id !== undefined) {
-    expectOpenClawMetadata(
-      (event.data as { message?: { __openclaw?: { id?: string; seq?: number } } }).message?.[
-        "__openclaw"
+    expectSunClawMetadata(
+      (event.data as { message?: { __sunclaw?: { id?: string; seq?: number } } }).message?.[
+        "__sunclaw"
       ],
       {
         id: params.id,
@@ -344,7 +344,7 @@ describe("session history HTTP endpoints", () => {
       expect(body.sessionKey).toBe("agent:main:main");
       expect(body.messages).toHaveLength(1);
       expect(body.messages?.[0]?.content?.[0]?.text).toBe("hello from history");
-      expectOpenClawMetadata(body.messages?.[0]?.["__openclaw"], {
+      expectSunClawMetadata(body.messages?.[0]?.["__sunclaw"], {
         seq: 1,
       });
     });
@@ -449,7 +449,7 @@ describe("session history HTTP endpoints", () => {
         "second message",
         "third message",
       ]);
-      expect(firstBody.messages?.map((message) => message["__openclaw"]?.seq)).toEqual([2, 3]);
+      expect(firstBody.messages?.map((message) => message["__sunclaw"]?.seq)).toEqual([2, 3]);
       expect(firstBody.hasMore).toBe(true);
       expect(firstBody.nextCursor).toBe("2");
 
@@ -461,7 +461,7 @@ describe("session history HTTP endpoints", () => {
       expect(secondBody.items?.map((message) => message.content?.[0]?.text)).toEqual([
         "first message",
       ]);
-      expect(secondBody.messages?.map((message) => message["__openclaw"]?.seq)).toEqual([1]);
+      expect(secondBody.messages?.map((message) => message["__sunclaw"]?.seq)).toEqual([1]);
       expect(secondBody.hasMore).toBe(false);
       expect(secondBody.nextCursor).toBeUndefined();
     });
@@ -485,11 +485,11 @@ describe("session history HTTP endpoints", () => {
       const nextData = nextEvent.data as {
         messages?: Array<{
           content?: Array<{ text?: string }>;
-          __openclaw?: { id?: string; seq?: number };
+          __sunclaw?: { id?: string; seq?: number };
         }>;
       };
       expect(nextData.messages?.[0]?.content?.[0]?.text).toBe("third message");
-      expectOpenClawMetadata(nextData.messages?.[0]?.["__openclaw"], {
+      expectSunClawMetadata(nextData.messages?.[0]?.["__sunclaw"], {
         id: thirdMessageId,
         seq: 3,
       });
@@ -514,10 +514,10 @@ describe("session history HTTP endpoints", () => {
       const refreshEvent = await readSseEvent(stream.reader, stream.streamState);
       expect(refreshEvent.event).toBe("history");
       const refreshData = refreshEvent.data as {
-        messages?: Array<{ content?: Array<{ text?: string }>; __openclaw?: { seq?: number } }>;
+        messages?: Array<{ content?: Array<{ text?: string }>; __sunclaw?: { seq?: number } }>;
       };
       expect(refreshData.messages?.[0]?.content?.[0]?.text).toBe("second message");
-      expect(refreshData.messages?.[0]?.["__openclaw"]?.seq).toBe(2);
+      expect(refreshData.messages?.[0]?.["__sunclaw"]?.seq).toBe(2);
 
       await stream.reader.cancel();
     });
@@ -573,13 +573,13 @@ describe("session history HTTP endpoints", () => {
         sessionKey?: string;
         messages?: Array<{
           content?: Array<{ text?: string }>;
-          __openclaw?: { id?: string; seq?: number };
+          __sunclaw?: { id?: string; seq?: number };
         }>;
       };
       expect(body.sessionKey).toBe("agent:main:main");
       expect(body.messages).toHaveLength(1);
       expect(body.messages?.[0]?.content?.[0]?.text).toBe("Done.");
-      expectOpenClawMetadata(body.messages?.[0]?.["__openclaw"], {
+      expectSunClawMetadata(body.messages?.[0]?.["__sunclaw"], {
         id: visibleMessageId,
         seq: 2,
       });

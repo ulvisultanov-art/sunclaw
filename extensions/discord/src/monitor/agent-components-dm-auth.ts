@@ -1,6 +1,6 @@
-import { createChannelPairingChallengeIssuer } from "openclaw/plugin-sdk/channel-pairing";
-import { isDangerousNameMatchingEnabled } from "openclaw/plugin-sdk/dangerous-name-runtime";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
+import { createChannelPairingChallengeIssuer } from "sunclaw/plugin-sdk/channel-pairing";
+import { isDangerousNameMatchingEnabled } from "sunclaw/plugin-sdk/dangerous-name-runtime";
+import { logVerbose } from "sunclaw/plugin-sdk/runtime-env";
 import {
   resolveComponentInteractionContext,
   resolveDiscordChannelContext,

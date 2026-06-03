@@ -1,9 +1,9 @@
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { resolveTimerTimeoutMs } from "openclaw/plugin-sdk/number-runtime";
+import { formatErrorMessage } from "sunclaw/plugin-sdk/error-runtime";
+import { resolveTimerTimeoutMs } from "sunclaw/plugin-sdk/number-runtime";
 import {
   fetchWithSsrFGuard,
   ssrfPolicyFromPrivateNetworkOptIn,
-} from "openclaw/plugin-sdk/ssrf-runtime";
+} from "sunclaw/plugin-sdk/ssrf-runtime";
 import { normalizeMattermostBaseUrl, readMattermostError, type MattermostUser } from "./client.js";
 import type { BaseProbeResult } from "./runtime-api.js";
 

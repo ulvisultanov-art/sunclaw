@@ -1,8 +1,8 @@
-import { asOptionalRecord as toRecord } from "@openclaw/normalization-core/record-coerce";
+import { asOptionalRecord as toRecord } from "@sunclaw/normalization-core/record-coerce";
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@sunclaw/normalization-core/string-coerce";
 
 export type InteractiveButtonStyle = "primary" | "secondary" | "success" | "danger";
 

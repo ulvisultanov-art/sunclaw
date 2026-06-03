@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { withTempHome as withTempHomeBase } from "openclaw/plugin-sdk/test-env";
+import { withTempHome as withTempHomeBase } from "sunclaw/plugin-sdk/test-env";
 import { beforeEach, describe, expect, it, type MockInstance, vi } from "vitest";
 import "./agent-command.test-mocks.js";
 import { testing as acpManagerTesting } from "../acp/control-plane/manager.js";
@@ -13,7 +13,7 @@ import { BASE_THINKING_LEVELS } from "../auto-reply/thinking.shared.js";
 import * as runtimeSnapshotModule from "../config/runtime-snapshot.js";
 import { loadSessionStore } from "../config/sessions/store-load.js";
 import { clearSessionStoreCacheForTest } from "../config/sessions/store.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import {
   emitAgentEvent,
   onAgentEvent,
@@ -155,7 +155,7 @@ vi.mock("../agents/command/delivery.runtime.js", () => {
   return {
     deliverAgentCommandResult: vi.fn(
       async (params: {
-        cfg: OpenClawConfig;
+        cfg: SunClawConfig;
         deps: {
           sendMessageTelegram?: (
             to: string,
@@ -216,7 +216,7 @@ vi.mock("../config/sessions/transcript-resolve.runtime.js", () => {
     return normalizedParts.join(separator);
   };
   const resolveSessionFile = (sessionId: string, agentId: string, sessionsDir?: string): string =>
-    joinPath(sessionsDir ?? ".openclaw", "agents", agentId, "sessions", `${sessionId}.jsonl`);
+    joinPath(sessionsDir ?? ".sunclaw", "agents", agentId, "sessions", `${sessionId}.jsonl`);
 
   return {
     resolveSessionTranscriptFile: vi.fn(
@@ -257,7 +257,7 @@ const runtime = createThrowingTestRuntime();
 
 async function withTempHome<T>(fn: (home: string) => Promise<T>): Promise<T> {
   return withTempHomeBase(fn, {
-    prefix: "openclaw-agent-",
+    prefix: "sunclaw-agent-",
     skipHomeCleanup: true,
     skipSessionCleanup: true,
   });
@@ -266,16 +266,16 @@ async function withTempHome<T>(fn: (home: string) => Promise<T>): Promise<T> {
 function mockConfig(
   home: string,
   storePath: string,
-  agentOverrides?: Partial<NonNullable<NonNullable<OpenClawConfig["agents"]>["defaults"]>>,
-  telegramOverrides?: Partial<NonNullable<NonNullable<OpenClawConfig["channels"]>["telegram"]>>,
-  agentsList?: NonNullable<NonNullable<OpenClawConfig["agents"]>["list"]>,
+  agentOverrides?: Partial<NonNullable<NonNullable<SunClawConfig["agents"]>["defaults"]>>,
+  telegramOverrides?: Partial<NonNullable<NonNullable<SunClawConfig["channels"]>["telegram"]>>,
+  agentsList?: NonNullable<NonNullable<SunClawConfig["agents"]>["list"]>,
 ) {
   const cfg = {
     agents: {
       defaults: {
         model: { primary: "anthropic/claude-opus-4-6" },
         models: { "anthropic/claude-opus-4-6": {} },
-        workspace: path.join(home, "openclaw"),
+        workspace: path.join(home, "sunclaw"),
         ...agentOverrides,
       },
       list: agentsList,
@@ -284,7 +284,7 @@ function mockConfig(
     channels: {
       telegram: telegramOverrides ? { ...telegramOverrides } : undefined,
     },
-  } as OpenClawConfig;
+  } as SunClawConfig;
   configIoMocks.loadConfig.mockReturnValue(cfg);
   return cfg;
 }
@@ -368,7 +368,7 @@ beforeEach(() => {
   vi.mocked(loadModelCatalog).mockResolvedValue([]);
   vi.mocked(modelSelectionModule.isCliProvider).mockImplementation(() => false);
   configIoMocks.readConfigFileSnapshotForWrite.mockResolvedValue({
-    snapshot: { valid: false, resolved: {} as OpenClawConfig },
+    snapshot: { valid: false, resolved: {} as SunClawConfig },
     writeOptions: {},
   });
 });
@@ -394,14 +394,14 @@ describe("agentCommand", () => {
         expect(registryLoad?.scope).toBe("all");
         expect(registryLoad?.config).toBeTypeOf("object");
         expect(registryLoad?.activationSourceConfig).toBeTypeOf("object");
-        expect(registryLoad?.workspaceDir).toBe(path.join(home, "openclaw"));
+        expect(registryLoad?.workspaceDir).toBe(path.join(home, "sunclaw"));
         expect(registryLoad?.onlyPluginIds).toEqual(["codex", "openai"]);
       }
       expectLastRunProviderModel("openai", "gpt-5.2");
     });
   });
 
-  it("does not enable Codex for one-shot OpenAI overrides when the provider forces OpenClaw", async () => {
+  it("does not enable Codex for one-shot OpenAI overrides when the provider forces SunClaw", async () => {
     await withTempHome(async (home) => {
       const storePath = path.join(home, "sessions.json");
       const cfg = mockConfig(home, storePath, { models: undefined });
@@ -409,7 +409,7 @@ describe("agentCommand", () => {
         providers: {
           openai: {
             baseUrl: "https://api.openai.com/v1",
-            agentRuntime: { id: "openclaw" },
+            agentRuntime: { id: "sunclaw" },
             models: [],
           },
         },
@@ -652,7 +652,7 @@ describe("agentCommand", () => {
 
       await agentCommand(
         {
-          message: "Reply with exactly OPENCLAW-MODEL-OK",
+          message: "Reply with exactly SUNCLAW-MODEL-OK",
           agentId: "main",
           model: "openrouter/auto",
           modelRun: true,
@@ -700,7 +700,7 @@ describe("agentCommand", () => {
 
       await agentCommand(
         {
-          message: "Reply with exactly OPENCLAW-MODEL-OK",
+          message: "Reply with exactly SUNCLAW-MODEL-OK",
           sessionKey,
           model: "openrouter/auto",
           modelRun: true,
@@ -713,7 +713,7 @@ describe("agentCommand", () => {
       const callArgs = getLastEmbeddedCall();
       expect(callArgs?.provider).toBe("openrouter");
       expect(callArgs?.model).toBe("openrouter/auto");
-      expect(callArgs?.prompt).toBe("Reply with exactly OPENCLAW-MODEL-OK");
+      expect(callArgs?.prompt).toBe("Reply with exactly SUNCLAW-MODEL-OK");
       expect(callArgs?.modelRun).toBe(true);
       expect(callArgs?.promptMode).toBe("none");
       expect(callArgs?.disableTools).toBe(true);

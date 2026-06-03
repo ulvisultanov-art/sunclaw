@@ -5,10 +5,10 @@ sidebarTitle: "CLI backend plugins"
 read_when:
   - You are building a local AI CLI backend plugin
   - You want to register a backend for model refs such as acme-cli/model
-  - You need to map a third-party CLI into OpenClaw's text fallback runner
+  - You need to map a third-party CLI into SunClaw's text fallback runner
 ---
 
-CLI backend plugins let OpenClaw call a local AI CLI as a text inference
+CLI backend plugins let SunClaw call a local AI CLI as a text inference
 backend. The backend appears as a provider prefix in model refs:
 
 ```text
@@ -32,8 +32,8 @@ A CLI backend plugin has three contracts:
 
 | Contract             | File                   | Purpose                                                   |
 | -------------------- | ---------------------- | --------------------------------------------------------- |
-| Package entry        | `package.json`         | Points OpenClaw at the plugin runtime module              |
-| Manifest ownership   | `openclaw.plugin.json` | Declares the backend id before runtime loads              |
+| Package entry        | `package.json`         | Points SunClaw at the plugin runtime module              |
+| Manifest ownership   | `sunclaw.plugin.json` | Declares the backend id before runtime loads              |
 | Runtime registration | `index.ts`             | Calls `api.registerCliBackend(...)` with command defaults |
 
 The manifest is discovery metadata. It does not execute the CLI and does not
@@ -46,22 +46,22 @@ register runtime behavior. Runtime behavior starts when the plugin entry calls
   <Step title="Create package metadata">
     ```json package.json
     {
-      "name": "@acme/openclaw-acme-cli",
+      "name": "@acme/sunclaw-acme-cli",
       "version": "1.0.0",
       "type": "module",
-      "openclaw": {
+      "sunclaw": {
         "extensions": ["./index.ts"],
         "compat": {
           "pluginApi": ">=2026.3.24-beta.2",
           "minGatewayVersion": "2026.3.24-beta.2"
         },
         "build": {
-          "openclawVersion": "2026.3.24-beta.2",
+          "sunclawVersion": "2026.3.24-beta.2",
           "pluginSdkVersion": "2026.3.24-beta.2"
         }
       },
       "dependencies": {
-        "openclaw": "^2026.3.24"
+        "sunclaw": "^2026.3.24"
       },
       "devDependencies": {
         "typescript": "^5.9.0"
@@ -70,17 +70,17 @@ register runtime behavior. Runtime behavior starts when the plugin entry calls
     ```
 
     Published packages must ship built JavaScript runtime files. If your source
-    entry is `./src/index.ts`, add `openclaw.runtimeExtensions` that points at
+    entry is `./src/index.ts`, add `sunclaw.runtimeExtensions` that points at
     the built JavaScript peer. See [Entry points](/plugins/sdk-entrypoints).
 
   </Step>
 
   <Step title="Declare backend ownership">
-    ```json openclaw.plugin.json
+    ```json sunclaw.plugin.json
     {
       "id": "acme-cli",
       "name": "Acme CLI",
-      "description": "Run Acme's local AI CLI through OpenClaw",
+      "description": "Run Acme's local AI CLI through SunClaw",
       "cliBackends": ["acme-cli"],
       "setup": {
         "cliBackends": ["acme-cli"],
@@ -96,7 +96,7 @@ register runtime behavior. Runtime behavior starts when the plugin entry calls
     }
     ```
 
-    `cliBackends` is the runtime ownership list. It lets OpenClaw auto-load the
+    `cliBackends` is the runtime ownership list. It lets SunClaw auto-load the
     plugin when config or model selection mentions `acme-cli/...`.
 
     `setup.cliBackends` is the descriptor-first setup surface. Add it when
@@ -108,12 +108,12 @@ register runtime behavior. Runtime behavior starts when the plugin entry calls
 
   <Step title="Register the backend">
     ```typescript index.ts
-    import { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
+    import { definePluginEntry } from "sunclaw/plugin-sdk/plugin-entry";
     import {
       CLI_FRESH_WATCHDOG_DEFAULTS,
       CLI_RESUME_WATCHDOG_DEFAULTS,
       type CliBackendPlugin,
-    } from "openclaw/plugin-sdk/cli-backend";
+    } from "sunclaw/plugin-sdk/cli-backend";
 
     function buildAcmeCliBackend(): CliBackendPlugin {
       return {
@@ -154,7 +154,7 @@ register runtime behavior. Runtime behavior starts when the plugin entry calls
     export default definePluginEntry({
       id: "acme-cli",
       name: "Acme CLI",
-      description: "Run Acme's local AI CLI through OpenClaw",
+      description: "Run Acme's local AI CLI through SunClaw",
       register(api) {
         api.registerCliBackend(buildAcmeCliBackend());
       },
@@ -170,7 +170,7 @@ register runtime behavior. Runtime behavior starts when the plugin entry calls
 
 ## Config shape
 
-`CliBackendConfig` describes how OpenClaw should launch and parse the CLI:
+`CliBackendConfig` describes how SunClaw should launch and parse the CLI:
 
 | Field                                     | Use                                                         |
 | ----------------------------------------- | ----------------------------------------------------------- |
@@ -180,10 +180,10 @@ register runtime behavior. Runtime behavior starts when the plugin entry calls
 | `output` / `resumeOutput`                 | Parser: `json`, `jsonl`, or `text`                          |
 | `input`                                   | Prompt transport: `arg` or `stdin`                          |
 | `modelArg`                                | Flag used before the model id                               |
-| `modelAliases`                            | Map OpenClaw model ids to CLI-native ids                    |
+| `modelAliases`                            | Map SunClaw model ids to CLI-native ids                    |
 | `sessionArg` / `sessionArgs`              | How to pass a session id                                    |
 | `sessionMode`                             | `always`, `existing`, or `none`                             |
-| `sessionIdFields`                         | JSON fields OpenClaw reads from CLI output                  |
+| `sessionIdFields`                         | JSON fields SunClaw reads from CLI output                  |
 | `systemPromptArg` / `systemPromptFileArg` | System prompt transport                                     |
 | `systemPromptWhen`                        | `first`, `always`, or `never`                               |
 | `imageArg` / `imageMode`                  | Image path support                                          |
@@ -204,25 +204,25 @@ only for behavior that really belongs to the backend.
 | `prepareExecution(ctx)`            | Create temporary auth or config bridges before launch  |
 | `transformSystemPrompt(ctx)`       | Apply a final CLI-specific system prompt transform     |
 | `textTransforms`                   | Bidirectional prompt/output replacements               |
-| `defaultAuthProfileId`             | Prefer a specific OpenClaw auth profile                |
+| `defaultAuthProfileId`             | Prefer a specific SunClaw auth profile                |
 | `authEpochMode`                    | Decide how auth changes invalidate stored CLI sessions |
 | `nativeToolMode`                   | Declare whether the CLI has always-on native tools     |
-| `bundleMcp` / `bundleMcpMode`      | Opt into OpenClaw's loopback MCP tool bridge           |
-| `ownsNativeCompaction`             | Backend owns its own compaction - OpenClaw defers      |
+| `bundleMcp` / `bundleMcpMode`      | Opt into SunClaw's loopback MCP tool bridge           |
+| `ownsNativeCompaction`             | Backend owns its own compaction - SunClaw defers      |
 
 Keep these hooks provider-owned. Do not add CLI-specific branches to core when a
 backend hook can express the behavior.
 
-### `ownsNativeCompaction`: opting out of OpenClaw compaction
+### `ownsNativeCompaction`: opting out of SunClaw compaction
 
 If your backend runs an agent that compacts its **own** transcript, set
-`ownsNativeCompaction: true` so OpenClaw's safeguard summarizer never runs against its
+`ownsNativeCompaction: true` so SunClaw's safeguard summarizer never runs against its
 sessions - the CLI compaction lifecycle returns a no-op and the turn proceeds. `claude-cli`
 declares it because Claude Code compacts internally with no harness endpoint. Native-harness
 sessions such as Codex keep routing to their harness compaction endpoint instead.
 
 **Only declare it when all of the following hold**, or a deferred over-budget session can
-stay over budget / go stale (OpenClaw no longer rescues it):
+stay over budget / go stale (SunClaw no longer rescues it):
 
 - the backend reliably compacts or bounds its own transcript as it nears its window;
 - it persists a resumable session so the compacted state survives turns
@@ -232,7 +232,7 @@ stay over budget / go stale (OpenClaw no longer rescues it):
 
 ## MCP tool bridge
 
-CLI backends do not receive OpenClaw tools by default. If the CLI can consume an
+CLI backends do not receive SunClaw tools by default. If the CLI can consume an
 MCP configuration, opt in explicitly:
 
 ```typescript
@@ -258,7 +258,7 @@ Supported bridge modes are:
 
 Only enable the bridge when the CLI can actually consume it. If the CLI has its
 own built-in tool layer that cannot be disabled, set `nativeToolMode:
-"always-on"` so OpenClaw can fail closed when a caller requires no native tools.
+"always-on"` so SunClaw can fail closed when a caller requires no native tools.
 
 ## User configuration
 
@@ -301,8 +301,8 @@ pnpm test extensions/acme-cli
 For local or installed plugins, verify discovery and one real model run:
 
 ```bash
-openclaw plugins inspect acme-cli --runtime --json
-openclaw agent --message "reply exactly: backend ok" --model acme-cli/acme-large
+sunclaw plugins inspect acme-cli --runtime --json
+sunclaw agent --message "reply exactly: backend ok" --model acme-cli/acme-large
 ```
 
 If the backend supports images or MCP, add a live smoke that proves those paths
@@ -311,8 +311,8 @@ session-resume behavior.
 
 ## Checklist
 
-<Check>`package.json` has `openclaw.extensions` and built runtime entries for published packages</Check>
-<Check>`openclaw.plugin.json` declares `cliBackends` and intentional `activation.onStartup`</Check>
+<Check>`package.json` has `sunclaw.extensions` and built runtime entries for published packages</Check>
+<Check>`sunclaw.plugin.json` declares `cliBackends` and intentional `activation.onStartup`</Check>
 <Check>`setup.cliBackends` is present when setup/model discovery should see the backend cold</Check>
 <Check>`api.registerCliBackend(...)` uses the same backend id as the manifest</Check>
 <Check>User overrides under `agents.defaults.cliBackends.<id>` still win</Check>

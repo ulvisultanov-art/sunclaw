@@ -1,6 +1,6 @@
-export type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-export { definePluginEntry, type OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
+export type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
+export { definePluginEntry, type SunClawPluginApi } from "sunclaw/plugin-sdk/plugin-entry";
 export {
   fetchWithSsrFGuard,
   ssrfPolicyFromDangerouslyAllowPrivateNetwork,
-} from "openclaw/plugin-sdk/ssrf-runtime";
+} from "sunclaw/plugin-sdk/ssrf-runtime";

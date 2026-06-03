@@ -195,7 +195,7 @@ function getNativeHookRelaySharedStateForTests(): NativeHookRelaySharedStateForT
     globalThis as typeof globalThis & {
       [key: symbol]: NativeHookRelaySharedStateForTests | undefined;
     }
-  )[Symbol.for("openclaw.nativeHookRelay.state")];
+  )[Symbol.for("sunclaw.nativeHookRelay.state")];
   if (!state) {
     throw new Error("Expected native hook relay shared state to be initialized");
   }
@@ -220,7 +220,7 @@ describe("native hook relay registry", () => {
       allowedEvents: ["pre_tool_use"],
       ttlMs: 10_000,
       command: {
-        executable: "/opt/Open Claw/openclaw.mjs",
+        executable: "/opt/Open Claw/sunclaw.mjs",
         nodeExecutable: "/usr/local/bin/node",
         timeoutMs: 1234,
       },
@@ -239,7 +239,7 @@ describe("native hook relay registry", () => {
       },
     );
     expect(relay.commandForEvent("pre_tool_use")).toBe(
-      "/usr/local/bin/node '/opt/Open Claw/openclaw.mjs' hooks relay --provider codex --relay-id " +
+      "/usr/local/bin/node '/opt/Open Claw/sunclaw.mjs' hooks relay --provider codex --relay-id " +
         `${relay.relayId} --generation ${relay.generation} --event pre_tool_use --timeout 1234`,
     );
   });
@@ -515,7 +515,7 @@ describe("native hook relay registry", () => {
       sessionId: "session-1",
       runId: "run-1",
       command: {
-        executable: "/opt/Open Claw/openclaw.mjs",
+        executable: "/opt/Open Claw/sunclaw.mjs",
         nodeExecutable: "/usr/local/bin/node",
         timeoutMs: 1234,
       },
@@ -526,7 +526,7 @@ describe("native hook relay registry", () => {
     expect(relay.shouldRelayEvent("before_agent_finalize")).toBe(false);
     expect(relay.shouldRelayEvent("permission_request")).toBe(true);
     expect(relay.commandForEvent("pre_tool_use")).toBe(
-      "/usr/local/bin/node '/opt/Open Claw/openclaw.mjs' hooks relay --provider codex --relay-id " +
+      "/usr/local/bin/node '/opt/Open Claw/sunclaw.mjs' hooks relay --provider codex --relay-id " +
         `${relay.relayId} --generation ${relay.generation} --event pre_tool_use --pre-tool-use-unavailable noop --timeout 1234`,
     );
   });
@@ -540,7 +540,7 @@ describe("native hook relay registry", () => {
       sessionId: "session-1",
       runId: "run-1",
       command: {
-        executable: "/opt/Open Claw/openclaw.mjs",
+        executable: "/opt/Open Claw/sunclaw.mjs",
         nodeExecutable: "/usr/local/bin/node",
         timeoutMs: 1234,
       },
@@ -548,7 +548,7 @@ describe("native hook relay registry", () => {
 
     expect(relay.shouldRelayEvent("pre_tool_use")).toBe(true);
     expect(relay.commandForEvent("pre_tool_use")).toBe(
-      "/usr/local/bin/node '/opt/Open Claw/openclaw.mjs' hooks relay --provider codex --relay-id " +
+      "/usr/local/bin/node '/opt/Open Claw/sunclaw.mjs' hooks relay --provider codex --relay-id " +
         `${relay.relayId} --generation ${relay.generation} --event pre_tool_use --timeout 1234`,
     );
   });
@@ -560,7 +560,7 @@ describe("native hook relay registry", () => {
       sessionKey: "agent:main:session-1",
       runId: "run-1",
       command: {
-        executable: "/opt/Open Claw/openclaw.mjs",
+        executable: "/opt/Open Claw/sunclaw.mjs",
         nodeExecutable: "/usr/local/bin/node",
         timeoutMs: 1234,
       },
@@ -568,7 +568,7 @@ describe("native hook relay registry", () => {
 
     expect(relay.shouldRelayEvent("pre_tool_use")).toBe(true);
     expect(relay.commandForEvent("pre_tool_use")).toBe(
-      "/usr/local/bin/node '/opt/Open Claw/openclaw.mjs' hooks relay --provider codex --relay-id " +
+      "/usr/local/bin/node '/opt/Open Claw/sunclaw.mjs' hooks relay --provider codex --relay-id " +
         `${relay.relayId} --generation ${relay.generation} --event pre_tool_use --timeout 1234`,
     );
   });
@@ -594,7 +594,7 @@ describe("native hook relay registry", () => {
       sessionId: "session-1",
       runId: "run-1",
       command: {
-        executable: "/opt/Open Claw/openclaw.mjs",
+        executable: "/opt/Open Claw/sunclaw.mjs",
         nodeExecutable: "/usr/local/bin/node",
         timeoutMs: 1234,
       },
@@ -604,7 +604,7 @@ describe("native hook relay registry", () => {
     expect(relay.shouldRelayEvent("post_tool_use")).toBe(true);
     expect(relay.shouldRelayEvent("before_agent_finalize")).toBe(false);
     expect(relay.commandForEvent("post_tool_use")).toBe(
-      "/usr/local/bin/node '/opt/Open Claw/openclaw.mjs' hooks relay --provider codex --relay-id " +
+      "/usr/local/bin/node '/opt/Open Claw/sunclaw.mjs' hooks relay --provider codex --relay-id " +
         `${relay.relayId} --generation ${relay.generation} --event post_tool_use --timeout 1234`,
     );
   });
@@ -618,7 +618,7 @@ describe("native hook relay registry", () => {
       sessionId: "session-1",
       runId: "run-1",
       command: {
-        executable: "/opt/Open Claw/openclaw.mjs",
+        executable: "/opt/Open Claw/sunclaw.mjs",
         nodeExecutable: "/usr/local/bin/node",
         timeoutMs: 1234,
       },
@@ -626,7 +626,7 @@ describe("native hook relay registry", () => {
 
     expect(relay.shouldRelayEvent("before_agent_finalize")).toBe(true);
     expect(relay.commandForEvent("before_agent_finalize")).toBe(
-      "/usr/local/bin/node '/opt/Open Claw/openclaw.mjs' hooks relay --provider codex --relay-id " +
+      "/usr/local/bin/node '/opt/Open Claw/sunclaw.mjs' hooks relay --provider codex --relay-id " +
         `${relay.relayId} --generation ${relay.generation} --event before_agent_finalize --timeout 1234`,
     );
   });
@@ -1588,7 +1588,7 @@ describe("native hook relay registry", () => {
     expect(testing.getNativeHookRelayBridgeRecordForTests(relay.relayId)).toBeUndefined();
   });
 
-  it("uses the Codex no-op output when no OpenClaw hook decides", async () => {
+  it("uses the Codex no-op output when no SunClaw hook decides", async () => {
     const relay = registerNativeHookRelay({
       provider: "codex",
       sessionId: "session-1",
@@ -1607,7 +1607,7 @@ describe("native hook relay registry", () => {
     }
   });
 
-  it("maps Codex PreToolUse to OpenClaw before_tool_call and blocks before execution", async () => {
+  it("maps Codex PreToolUse to SunClaw before_tool_call and blocks before execution", async () => {
     const beforeToolCall = vi.fn(async () => ({
       block: true,
       blockReason: "repo policy blocks this command",
@@ -1665,7 +1665,7 @@ describe("native hook relay registry", () => {
     });
   });
 
-  it("normalizes Codex exec_command cmd input before running OpenClaw policy", async () => {
+  it("normalizes Codex exec_command cmd input before running SunClaw policy", async () => {
     const beforeToolCall = vi.fn(async () => ({
       block: true,
       blockReason: "shell command blocked",
@@ -1764,7 +1764,7 @@ describe("native hook relay registry", () => {
     });
   });
 
-  it("normalizes Codex exec_command argv cmd input before running OpenClaw policy", async () => {
+  it("normalizes Codex exec_command argv cmd input before running SunClaw policy", async () => {
     const beforeToolCall = vi.fn(async () => ({
       block: true,
       blockReason: "argv command blocked",
@@ -1833,7 +1833,7 @@ describe("native hook relay registry", () => {
       event: "pre_tool_use",
       rawPayload: {
         hook_event_name: "PreToolUse",
-        openclaw_approval_mode: "report",
+        sunclaw_approval_mode: "report",
         cwd: "/repo",
         tool_name: "exec_command",
         tool_use_id: "native-report-rewrite-1",
@@ -1846,7 +1846,7 @@ describe("native hook relay registry", () => {
         hookEventName: "PreToolUse",
         permissionDecision: "deny",
         permissionDecisionReason:
-          "OpenClaw tool policy rewrote Codex app-server approval params; refusing original request.",
+          "SunClaw tool policy rewrote Codex app-server approval params; refusing original request.",
       },
     });
     expect(beforeToolCall).toHaveBeenCalledTimes(1);
@@ -1885,7 +1885,7 @@ describe("native hook relay registry", () => {
         hookEventName: "PreToolUse",
         permissionDecision: "deny",
         permissionDecisionReason:
-          "OpenClaw tool policy rewrote Codex app-server approval params; refusing original request.",
+          "SunClaw tool policy rewrote Codex app-server approval params; refusing original request.",
       },
     });
     expect(beforeToolCall).toHaveBeenCalledTimes(1);
@@ -1929,7 +1929,7 @@ describe("native hook relay registry", () => {
         hookEventName: "PreToolUse",
         permissionDecision: "deny",
         permissionDecisionReason:
-          "OpenClaw tool policy rewrote Codex app-server approval params; refusing original request.",
+          "SunClaw tool policy rewrote Codex app-server approval params; refusing original request.",
       },
     });
     expect(beforeToolCall).toHaveBeenCalledTimes(1);
@@ -1959,7 +1959,7 @@ describe("native hook relay registry", () => {
       event: "pre_tool_use",
       rawPayload: {
         hook_event_name: "PreToolUse",
-        openclaw_approval_mode: "report",
+        sunclaw_approval_mode: "report",
         cwd: "/repo",
         tool_name: "exec_command",
         tool_use_id: "native-approval-report-1",
@@ -1995,7 +1995,7 @@ describe("native hook relay registry", () => {
       event: "pre_tool_use",
       rawPayload: {
         hook_event_name: "PreToolUse",
-        openclaw_approval_mode: "report",
+        sunclaw_approval_mode: "report",
         cwd: "/repo",
         tool_name: "exec_command",
         tool_use_id: "native-approval-report-duplicate",
@@ -2045,7 +2045,7 @@ describe("native hook relay registry", () => {
   });
 
   it("passes config to trusted policies for native pre-tool session extension reads", async () => {
-    const stateDir = await fs.mkdtemp(path.join(tmpdir(), "openclaw-native-relay-policy-"));
+    const stateDir = await fs.mkdtemp(path.join(tmpdir(), "sunclaw-native-relay-policy-"));
     const storePath = path.join(stateDir, "sessions.json");
     const config = { session: { store: storePath } };
     const seen: unknown[] = [];
@@ -2144,7 +2144,7 @@ describe("native hook relay registry", () => {
       sessionKey: "agent:main:session-1",
       runId: "run-1",
     });
-    const cwd = path.join("/tmp", "openclaw-native-hook-cwd");
+    const cwd = path.join("/tmp", "sunclaw-native-hook-cwd");
     const patch = ["*** Begin Patch", "*** Add File: src/new.ts", "+x", "*** End Patch"].join("\n");
 
     const response = await invokeNativeHookRelay({
@@ -2208,7 +2208,7 @@ describe("native hook relay registry", () => {
         hookEventName: "PreToolUse",
         permissionDecision: "deny",
         permissionDecisionReason:
-          "OpenClaw tool policy rewrote Codex app-server approval params; refusing original request.",
+          "SunClaw tool policy rewrote Codex app-server approval params; refusing original request.",
       },
     });
     expect(response.stderr).toBe("");
@@ -2216,7 +2216,7 @@ describe("native hook relay registry", () => {
     expect(beforeToolCall).toHaveBeenCalledTimes(1);
   });
 
-  it("maps Codex PostToolUse to OpenClaw after_tool_call observation", async () => {
+  it("maps Codex PostToolUse to SunClaw after_tool_call observation", async () => {
     const afterToolCall = vi.fn();
     initializeGlobalHookRunner(
       createMockPluginRegistry([{ hookName: "after_tool_call", handler: afterToolCall }]),
@@ -2264,7 +2264,7 @@ describe("native hook relay registry", () => {
     });
   });
 
-  it("maps Codex MCP PreToolUse to OpenClaw before_tool_call and can block", async () => {
+  it("maps Codex MCP PreToolUse to SunClaw before_tool_call and can block", async () => {
     const beforeToolCall = vi.fn(async () => ({
       block: true,
       blockReason: "MCP writes require review",
@@ -2291,7 +2291,7 @@ describe("native hook relay registry", () => {
         tool_name: "mcp__memory__create_entities",
         tool_use_id: "mcp-call-1",
         tool_input: {
-          entities: [{ name: "OpenClaw", entityType: "project", observations: ["test"] }],
+          entities: [{ name: "SunClaw", entityType: "project", observations: ["test"] }],
         },
       },
     });
@@ -2307,7 +2307,7 @@ describe("native hook relay registry", () => {
     expectRecordFields(event, {
       toolName: "mcp__memory__create_entities",
       params: {
-        entities: [{ name: "OpenClaw", entityType: "project", observations: ["test"] }],
+        entities: [{ name: "SunClaw", entityType: "project", observations: ["test"] }],
       },
       runId: "run-1",
       toolCallId: "mcp-call-1",
@@ -2351,7 +2351,7 @@ describe("native hook relay registry", () => {
         tool_name: "mcp__shell__run_command",
         tool_use_id: "mcp-call-security",
         tool_input: {
-          command: "rm -rf /tmp/openclaw-important-state",
+          command: "rm -rf /tmp/sunclaw-important-state",
         },
       },
     });
@@ -2367,7 +2367,7 @@ describe("native hook relay registry", () => {
     expectRecordFields(event, {
       toolName: "mcp__shell__run_command",
       params: {
-        command: "rm -rf /tmp/openclaw-important-state",
+        command: "rm -rf /tmp/sunclaw-important-state",
       },
       toolCallId: "mcp-call-security",
     });
@@ -2378,7 +2378,7 @@ describe("native hook relay registry", () => {
     });
   });
 
-  it("maps Codex MCP PostToolUse to OpenClaw after_tool_call observation", async () => {
+  it("maps Codex MCP PostToolUse to SunClaw after_tool_call observation", async () => {
     const afterToolCall = vi.fn();
     initializeGlobalHookRunner(
       createMockPluginRegistry([{ hookName: "after_tool_call", handler: afterToolCall }]),
@@ -2401,7 +2401,7 @@ describe("native hook relay registry", () => {
         tool_use_id: "mcp-call-2",
         tool_input: { path: "/repo/package.json" },
         tool_response: {
-          content: [{ type: "text", text: '{ "name": "openclaw" }' }],
+          content: [{ type: "text", text: '{ "name": "sunclaw" }' }],
           structuredContent: { bytes: 22 },
         },
       },
@@ -2415,7 +2415,7 @@ describe("native hook relay registry", () => {
       runId: "run-1",
       toolCallId: "mcp-call-2",
       result: {
-        content: [{ type: "text", text: '{ "name": "openclaw" }' }],
+        content: [{ type: "text", text: '{ "name": "sunclaw" }' }],
         structuredContent: { bytes: 22 },
       },
     });
@@ -2426,7 +2426,7 @@ describe("native hook relay registry", () => {
     });
   });
 
-  it("routes Codex MCP PermissionRequest payloads through OpenClaw approval policy", async () => {
+  it("routes Codex MCP PermissionRequest payloads through SunClaw approval policy", async () => {
     const relay = registerNativeHookRelay({
       provider: "codex",
       agentId: "agent-1",
@@ -2448,8 +2448,8 @@ describe("native hook relay registry", () => {
         tool_name: "mcp__github__create_issue",
         tool_use_id: "mcp-call-3",
         tool_input: {
-          owner: "openclaw",
-          repo: "openclaw",
+          owner: "sunclaw",
+          repo: "sunclaw",
           title: "Test issue",
         },
       },
@@ -2467,8 +2467,8 @@ describe("native hook relay registry", () => {
       toolName: "mcp__github__create_issue",
       toolCallId: "mcp-call-3",
       toolInput: {
-        owner: "openclaw",
-        repo: "openclaw",
+        owner: "sunclaw",
+        repo: "sunclaw",
         title: "Test issue",
       },
     });
@@ -2803,7 +2803,7 @@ describe("native hook relay registry", () => {
     expect(approvalRequester).toHaveBeenCalledTimes(3);
   });
 
-  it("defers PermissionRequest when OpenClaw approval does not decide", async () => {
+  it("defers PermissionRequest when SunClaw approval does not decide", async () => {
     testing.setNativeHookRelayPermissionApprovalRequesterForTests(
       vi.fn(async () => "defer" as const),
     );
@@ -2982,7 +2982,7 @@ describe("native hook relay registry", () => {
         hook_event_name: "PermissionRequest",
         tool_name: "Bash",
         tool_use_id: "reused-call-id",
-        tool_input: { command: "rm -rf /tmp/openclaw-important-state" },
+        tool_input: { command: "rm -rf /tmp/sunclaw-important-state" },
       },
     });
 
@@ -3194,10 +3194,10 @@ describe("native hook relay command builder", () => {
         relayId: "relay-1",
         generation: "generation-1",
         event: "permission_request",
-        executable: "openclaw",
+        executable: "sunclaw",
       }),
     ).toBe(
-      "openclaw hooks relay --provider codex --relay-id relay-1 --generation generation-1 --event permission_request --timeout 5000",
+      "sunclaw hooks relay --provider codex --relay-id relay-1 --generation generation-1 --event permission_request --timeout 5000",
     );
   });
 
@@ -3209,10 +3209,10 @@ describe("native hook relay command builder", () => {
         generation: "generation-1",
         event: "pre_tool_use",
         preToolUseUnavailable: "noop",
-        executable: "openclaw",
+        executable: "sunclaw",
       }),
     ).toBe(
-      "openclaw hooks relay --provider codex --relay-id relay-1 --generation generation-1 --event pre_tool_use --pre-tool-use-unavailable noop --timeout 5000",
+      "sunclaw hooks relay --provider codex --relay-id relay-1 --generation generation-1 --event pre_tool_use --pre-tool-use-unavailable noop --timeout 5000",
     );
   });
 });

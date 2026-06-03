@@ -1,14 +1,14 @@
-import type { OutboundIdentity } from "openclaw/plugin-sdk/channel-outbound";
-import { resolveOutboundSendDep } from "openclaw/plugin-sdk/channel-outbound";
+import type { OutboundIdentity } from "sunclaw/plugin-sdk/channel-outbound";
+import { resolveOutboundSendDep } from "sunclaw/plugin-sdk/channel-outbound";
 import {
   type ChannelOutboundAdapter,
   createAttachedChannelResultAdapter,
-} from "openclaw/plugin-sdk/channel-send-result";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+} from "sunclaw/plugin-sdk/channel-send-result";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
 import {
   normalizeOptionalString,
   normalizeOptionalStringifiedId,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { chunkDiscordTextWithMode } from "./chunk.js";
 import { withDiscordDeliveryRetry } from "./delivery-retry.js";
 import { notifyDiscordInboundEventOutboundPayloadSuccess } from "./inbound-event-delivery.js";
@@ -62,7 +62,7 @@ function resolveDiscordWebhookIdentity(params: {
 }
 
 async function maybeSendDiscordWebhookText(params: {
-  cfg: OpenClawConfig;
+  cfg: SunClawConfig;
   text: string;
   threadId?: string | number | null;
   accountId?: string | null;

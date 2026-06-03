@@ -1,8 +1,8 @@
-import type { AgentToolResult } from "openclaw/plugin-sdk/agent-core";
+import type { AgentToolResult } from "sunclaw/plugin-sdk/agent-core";
 import {
   readNonNegativeIntegerParam,
   readPositiveIntegerParam,
-} from "openclaw/plugin-sdk/param-readers";
+} from "sunclaw/plugin-sdk/param-readers";
 import {
   DEFAULT_AI_SNAPSHOT_MAX_CHARS,
   browserAct,

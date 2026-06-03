@@ -10,18 +10,18 @@ export type {
   ChannelPlugin,
   ChatType,
   HistoryEntry,
-  OpenClawConfig,
-  OpenClawPluginApi,
+  SunClawConfig,
+  SunClawPluginApi,
   PluginRuntime,
-} from "openclaw/plugin-sdk/core";
-export type { RuntimeEnv } from "openclaw/plugin-sdk/runtime";
-export type { ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
-export type { ModelsProviderData } from "openclaw/plugin-sdk/models-provider-runtime";
+} from "sunclaw/plugin-sdk/core";
+export type { RuntimeEnv } from "sunclaw/plugin-sdk/runtime";
+export type { ReplyPayload } from "sunclaw/plugin-sdk/reply-runtime";
+export type { ModelsProviderData } from "sunclaw/plugin-sdk/models-provider-runtime";
 export type {
   BlockStreamingCoalesceConfig,
   DmPolicy,
   GroupPolicy,
-} from "openclaw/plugin-sdk/config-contracts";
+} from "sunclaw/plugin-sdk/config-contracts";
 export {
   DEFAULT_ACCOUNT_ID,
   buildChannelConfigSchema,
@@ -29,32 +29,32 @@ export {
   parseStrictPositiveInteger,
   resolveClientIp,
   isTrustedProxyAddress,
-} from "openclaw/plugin-sdk/core";
-export { buildComputedAccountStatusSnapshot } from "openclaw/plugin-sdk/channel-status";
-export { createAccountStatusSink } from "openclaw/plugin-sdk/channel-outbound";
-export { buildAgentMediaPayload } from "openclaw/plugin-sdk/agent-media-payload";
+} from "sunclaw/plugin-sdk/core";
+export { buildComputedAccountStatusSnapshot } from "sunclaw/plugin-sdk/channel-status";
+export { createAccountStatusSink } from "sunclaw/plugin-sdk/channel-outbound";
+export { buildAgentMediaPayload } from "sunclaw/plugin-sdk/agent-media-payload";
 export {
   listSkillCommandsForAgents,
   resolveControlCommandGate,
   resolveStoredModelOverride,
-} from "openclaw/plugin-sdk/command-auth-native";
-export { buildModelsProviderData } from "openclaw/plugin-sdk/models-provider-runtime";
+} from "sunclaw/plugin-sdk/command-auth-native";
+export { buildModelsProviderData } from "sunclaw/plugin-sdk/models-provider-runtime";
 export {
   GROUP_POLICY_BLOCKED_LABEL,
   resolveAllowlistProviderRuntimeGroupPolicy,
   resolveDefaultGroupPolicy,
   warnMissingProviderGroupPolicyFallbackOnce,
-} from "openclaw/plugin-sdk/runtime-group-policy";
-export { isDangerousNameMatchingEnabled } from "openclaw/plugin-sdk/dangerous-name-runtime";
-export { loadSessionStore, resolveStorePath } from "openclaw/plugin-sdk/session-store-runtime";
-export { formatInboundFromLabel } from "openclaw/plugin-sdk/channel-inbound";
-export { logInboundDrop } from "openclaw/plugin-sdk/channel-inbound";
-export { createChannelPairingController } from "openclaw/plugin-sdk/channel-pairing";
-export { createChannelMessageReplyPipeline } from "openclaw/plugin-sdk/channel-outbound";
-export { logTypingFailure } from "openclaw/plugin-sdk/channel-feedback";
-export { loadOutboundMediaFromUrl } from "openclaw/plugin-sdk/outbound-media";
-export { rawDataToString } from "openclaw/plugin-sdk/webhook-ingress";
-export { chunkTextForOutbound } from "openclaw/plugin-sdk/text-chunking";
+} from "sunclaw/plugin-sdk/runtime-group-policy";
+export { isDangerousNameMatchingEnabled } from "sunclaw/plugin-sdk/dangerous-name-runtime";
+export { loadSessionStore, resolveStorePath } from "sunclaw/plugin-sdk/session-store-runtime";
+export { formatInboundFromLabel } from "sunclaw/plugin-sdk/channel-inbound";
+export { logInboundDrop } from "sunclaw/plugin-sdk/channel-inbound";
+export { createChannelPairingController } from "sunclaw/plugin-sdk/channel-pairing";
+export { createChannelMessageReplyPipeline } from "sunclaw/plugin-sdk/channel-outbound";
+export { logTypingFailure } from "sunclaw/plugin-sdk/channel-feedback";
+export { loadOutboundMediaFromUrl } from "sunclaw/plugin-sdk/outbound-media";
+export { rawDataToString } from "sunclaw/plugin-sdk/webhook-ingress";
+export { chunkTextForOutbound } from "sunclaw/plugin-sdk/text-chunking";
 // Legacy map-helper exports stay for older plugin consumers. New message-turn
 // code should use createChannelHistoryWindow.
 export {
@@ -63,22 +63,22 @@ export {
   buildPendingHistoryContextFromMap,
   clearHistoryEntriesIfEnabled,
   recordPendingHistoryEntryIfEnabled,
-} from "openclaw/plugin-sdk/reply-history";
-export { normalizeAccountId, resolveThreadSessionKeys } from "openclaw/plugin-sdk/routing";
-export { resolveAllowlistMatchSimple } from "openclaw/plugin-sdk/allow-from";
-export { registerPluginHttpRoute } from "openclaw/plugin-sdk/webhook-targets";
+} from "sunclaw/plugin-sdk/reply-history";
+export { normalizeAccountId, resolveThreadSessionKeys } from "sunclaw/plugin-sdk/routing";
+export { resolveAllowlistMatchSimple } from "sunclaw/plugin-sdk/allow-from";
+export { registerPluginHttpRoute } from "sunclaw/plugin-sdk/webhook-targets";
 export {
   isRequestBodyLimitError,
   readRequestBodyWithLimit,
-} from "openclaw/plugin-sdk/webhook-ingress";
+} from "sunclaw/plugin-sdk/webhook-ingress";
 export {
   applyAccountNameToChannelSection,
   applySetupAccountConfigPatch,
   migrateBaseNameToDefaultAccount,
-} from "openclaw/plugin-sdk/setup";
+} from "sunclaw/plugin-sdk/setup";
 export {
   getAgentScopedMediaLocalRoots,
   resolveChannelMediaMaxBytes,
-} from "openclaw/plugin-sdk/media-runtime";
-export { normalizeProviderId } from "openclaw/plugin-sdk/provider-model-shared";
+} from "sunclaw/plugin-sdk/media-runtime";
+export { normalizeProviderId } from "sunclaw/plugin-sdk/provider-model-shared";
 export { setMattermostRuntime } from "./src/runtime.js";

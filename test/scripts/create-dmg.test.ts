@@ -8,9 +8,9 @@ const tempDirs: string[] = [];
 const scriptPath = "scripts/create-dmg.sh";
 
 function makeApp(plistEntries: string[]): string {
-  const dir = mkdtempSync(path.join(tmpdir(), "openclaw-create-dmg-"));
+  const dir = mkdtempSync(path.join(tmpdir(), "sunclaw-create-dmg-"));
   tempDirs.push(dir);
-  const app = path.join(dir, "OpenClaw.app");
+  const app = path.join(dir, "SunClaw.app");
   const contents = path.join(app, "Contents");
   mkdirSync(contents, { recursive: true });
   writeFileSync(
@@ -65,10 +65,10 @@ describe("create-dmg plist validation", () => {
   it("keeps temporary DMG artifacts scoped to one run", () => {
     const script = readFileSync(scriptPath, "utf8");
 
-    expect(script).toContain('DMG_TEMP="$(mktemp -d "${TMPDIR:-/tmp}/openclaw-dmg.XXXXXX")"');
+    expect(script).toContain('DMG_TEMP="$(mktemp -d "${TMPDIR:-/tmp}/sunclaw-dmg.XXXXXX")"');
     expect(script).toContain('DMG_LIMITS_PATH="$DMG_TEMP/resize-limits.txt"');
     expect(script).toContain('hdiutil resize -limits "$DMG_RW_PATH" >"$DMG_LIMITS_PATH"');
-    expect(script).not.toContain("/tmp/openclaw-dmg-limits.txt");
+    expect(script).not.toContain("/tmp/sunclaw-dmg-limits.txt");
   });
 
   it.runIf(process.platform === "darwin")(
@@ -76,7 +76,7 @@ describe("create-dmg plist validation", () => {
     () => {
       const app = makeApp([
         "<key>CFBundleName</key>",
-        "<string>OpenClaw</string>",
+        "<string>SunClaw</string>",
       ]);
       const result = runScript([app, path.join(path.dirname(app), "out.dmg")]);
 

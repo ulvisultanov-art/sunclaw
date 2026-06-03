@@ -1,6 +1,6 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
-import { resolveSendableOutboundReplyParts } from "openclaw/plugin-sdk/reply-payload";
+import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
+import { uniqueStrings } from "@sunclaw/normalization-core/string-normalization";
+import { resolveSendableOutboundReplyParts } from "sunclaw/plugin-sdk/reply-payload";
 import { createInlineCodeState } from "../../packages/markdown-core/src/code-spans.js";
 import {
   parseReplyDirectives,
@@ -41,13 +41,13 @@ function shouldSuppressAssistantVisibleOutput(message: AgentMessage | undefined)
   return resolveAssistantMessagePhase(message) === "commentary";
 }
 
-function isTranscriptOnlyOpenClawAssistantMessage(message: AgentMessage | undefined): boolean {
+function isTranscriptOnlySunClawAssistantMessage(message: AgentMessage | undefined): boolean {
   if (!message || message.role !== "assistant") {
     return false;
   }
   const provider = normalizeOptionalString(message.provider) ?? "";
   const model = normalizeOptionalString(message.model) ?? "";
-  return provider === "openclaw" && (model === "delivery-mirror" || model === "gateway-injected");
+  return provider === "sunclaw" && (model === "delivery-mirror" || model === "gateway-injected");
 }
 
 function isOpenAiResponsesAssistantMessage(message: AgentMessage | undefined): boolean {
@@ -63,7 +63,7 @@ function isOpenAiCompletionsAssistantMessage(message: AgentMessage | undefined):
     return false;
   }
   const api = normalizeOptionalString((message as { api?: unknown }).api) ?? "";
-  return api === "openai-completions" || api === "openclaw-openai-completions-transport";
+  return api === "openai-completions" || api === "sunclaw-openai-completions-transport";
 }
 
 function asRecord(value: unknown): Record<string, unknown> | undefined {
@@ -520,7 +520,7 @@ export function handleMessageStart(
   evt: AgentEvent & { message: AgentMessage },
 ) {
   const msg = evt.message;
-  if (msg?.role !== "assistant" || isTranscriptOnlyOpenClawAssistantMessage(msg)) {
+  if (msg?.role !== "assistant" || isTranscriptOnlySunClawAssistantMessage(msg)) {
     return;
   }
 
@@ -539,7 +539,7 @@ export function handleMessageUpdate(
   evt: AgentEvent & { message: AgentMessage; assistantMessageEvent?: unknown },
 ) {
   const msg = evt.message;
-  if (msg?.role !== "assistant" || isTranscriptOnlyOpenClawAssistantMessage(msg)) {
+  if (msg?.role !== "assistant" || isTranscriptOnlySunClawAssistantMessage(msg)) {
     return;
   }
 
@@ -818,7 +818,7 @@ export function handleMessageEnd(
   evt: AgentEvent & { message: AgentMessage },
 ): void | Promise<void> {
   const msg = evt.message;
-  if (msg?.role !== "assistant" || isTranscriptOnlyOpenClawAssistantMessage(msg)) {
+  if (msg?.role !== "assistant" || isTranscriptOnlySunClawAssistantMessage(msg)) {
     return;
   }
 

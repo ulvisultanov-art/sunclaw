@@ -1,16 +1,16 @@
 {
-  "name": "@openclaw/firecrawl-plugin",
+  "name": "@sunclaw/firecrawl-plugin",
   "version": "2026.6.2",
   "private": true,
-  "description": "OpenClaw Firecrawl plugin",
+  "description": "SunClaw Firecrawl plugin",
   "type": "module",
   "dependencies": {
     "typebox": "1.1.39"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@sunclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "sunclaw": {
     "extensions": [
       "./index.ts"
     ]

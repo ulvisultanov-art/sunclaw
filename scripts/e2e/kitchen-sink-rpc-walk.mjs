@@ -7,8 +7,8 @@ import { setTimeout as delay } from "node:timers/promises";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 const PLUGIN_SPEC =
-  process.env.OPENCLAW_KITCHEN_SINK_NPM_SPEC || "npm:@openclaw/kitchen-sink@latest";
-const PLUGIN_ID = process.env.OPENCLAW_KITCHEN_SINK_PLUGIN_ID || "openclaw-kitchen-sink-fixture";
+  process.env.SUNCLAW_KITCHEN_SINK_NPM_SPEC || "npm:@sunclaw/kitchen-sink@latest";
+const PLUGIN_ID = process.env.SUNCLAW_KITCHEN_SINK_PLUGIN_ID || "sunclaw-kitchen-sink-fixture";
 const CHANNEL_ID = "kitchen-sink-channel";
 const CHANNEL_ACCOUNT_ID = "local";
 const TOKEN = "kitchen-sink-rpc-token";
@@ -17,30 +17,30 @@ const EXPECTED_COMMANDS = ["kitchen", "kitchen-sink"];
 const EXPECTED_TOOLS = ["kitchen_sink_text", "kitchen_sink_search", "kitchen_sink_image_job"];
 const EXPECTED_PROVIDERS = ["kitchen-sink-provider", "kitchen-sink-llm"];
 const EXPECTED_SPEECH_PROVIDERS = ["kitchen-sink-speech", "kitchen-sink-speech-provider"];
-const READY_TIMEOUT_MS = readPositiveInt(process.env.OPENCLAW_KITCHEN_SINK_RPC_READY_MS, 240000);
+const READY_TIMEOUT_MS = readPositiveInt(process.env.SUNCLAW_KITCHEN_SINK_RPC_READY_MS, 240000);
 const COMMAND_TIMEOUT_MS = readPositiveInt(
-  process.env.OPENCLAW_KITCHEN_SINK_RPC_COMMAND_MS,
+  process.env.SUNCLAW_KITCHEN_SINK_RPC_COMMAND_MS,
   180000,
 );
 const INSTALL_TIMEOUT_MS = readPositiveInt(
-  process.env.OPENCLAW_KITCHEN_SINK_RPC_INSTALL_MS,
+  process.env.SUNCLAW_KITCHEN_SINK_RPC_INSTALL_MS,
   Math.max(COMMAND_TIMEOUT_MS, 600000),
 );
-const RPC_TIMEOUT_MS = readPositiveInt(process.env.OPENCLAW_KITCHEN_SINK_RPC_CALL_MS, 60000);
-const FETCH_TIMEOUT_MS = readPositiveInt(process.env.OPENCLAW_KITCHEN_SINK_RPC_FETCH_MS, 10000);
+const RPC_TIMEOUT_MS = readPositiveInt(process.env.SUNCLAW_KITCHEN_SINK_RPC_CALL_MS, 60000);
+const FETCH_TIMEOUT_MS = readPositiveInt(process.env.SUNCLAW_KITCHEN_SINK_RPC_FETCH_MS, 10000);
 const FETCH_BODY_MAX_BYTES = readPositiveInt(
-  process.env.OPENCLAW_KITCHEN_SINK_RPC_FETCH_BODY_BYTES,
+  process.env.SUNCLAW_KITCHEN_SINK_RPC_FETCH_BODY_BYTES,
   1024 * 1024,
 );
-const MAX_RSS_MIB = readPositiveInt(process.env.OPENCLAW_KITCHEN_SINK_MAX_RSS_MIB, 2048);
+const MAX_RSS_MIB = readPositiveInt(process.env.SUNCLAW_KITCHEN_SINK_MAX_RSS_MIB, 2048);
 const MAX_COMMAND_RSS_MIB = readPositiveInt(
-  process.env.OPENCLAW_KITCHEN_SINK_COMMAND_MAX_RSS_MIB,
+  process.env.SUNCLAW_KITCHEN_SINK_COMMAND_MAX_RSS_MIB,
   8192,
 );
 const GATEWAY_TEARDOWN_GRACE_MS = 10000;
 const GATEWAY_TEARDOWN_KILL_GRACE_MS = 2000;
 const OUTPUT_CAPTURE_CHARS = readPositiveInt(
-  process.env.OPENCLAW_KITCHEN_SINK_OUTPUT_CAPTURE_CHARS,
+  process.env.SUNCLAW_KITCHEN_SINK_OUTPUT_CAPTURE_CHARS,
   1024 * 1024,
 );
 const DEFAULT_PORT = 19000 + Math.floor(Math.random() * 1000);
@@ -67,19 +67,19 @@ let callGatewayModulePromise;
 function usage() {
   return `Usage: node scripts/e2e/kitchen-sink-rpc-walk.mjs
 
-Runs the external Kitchen Sink plugin RPC walk against a built OpenClaw entry.
+Runs the external Kitchen Sink plugin RPC walk against a built SunClaw entry.
 
 Environment:
-  OPENCLAW_ENTRY                         Built OpenClaw entrypoint. Defaults to dist/index.mjs or dist/index.js.
-  OPENCLAW_KITCHEN_SINK_NPM_SPEC         Plugin package spec. Default: npm:@openclaw/kitchen-sink@latest.
-  OPENCLAW_KITCHEN_SINK_PLUGIN_ID        Plugin id. Default: openclaw-kitchen-sink-fixture.
-  OPENCLAW_KITCHEN_SINK_RPC_READY_MS     Gateway readiness timeout.
-  OPENCLAW_KITCHEN_SINK_RPC_COMMAND_MS   OpenClaw command timeout.
-  OPENCLAW_KITCHEN_SINK_RPC_INSTALL_MS   Plugin install timeout.
-  OPENCLAW_KITCHEN_SINK_RPC_CALL_MS      RPC call timeout.
-  OPENCLAW_KITCHEN_SINK_MAX_RSS_MIB      Gateway RSS ceiling.
-  OPENCLAW_KITCHEN_SINK_COMMAND_MAX_RSS_MIB  Install/CLI command RSS ceiling.
-  OPENCLAW_KITCHEN_SINK_KEEP_TMP=1       Preserve the isolated temp home.
+  SUNCLAW_ENTRY                         Built SunClaw entrypoint. Defaults to dist/index.mjs or dist/index.js.
+  SUNCLAW_KITCHEN_SINK_NPM_SPEC         Plugin package spec. Default: npm:@sunclaw/kitchen-sink@latest.
+  SUNCLAW_KITCHEN_SINK_PLUGIN_ID        Plugin id. Default: sunclaw-kitchen-sink-fixture.
+  SUNCLAW_KITCHEN_SINK_RPC_READY_MS     Gateway readiness timeout.
+  SUNCLAW_KITCHEN_SINK_RPC_COMMAND_MS   SunClaw command timeout.
+  SUNCLAW_KITCHEN_SINK_RPC_INSTALL_MS   Plugin install timeout.
+  SUNCLAW_KITCHEN_SINK_RPC_CALL_MS      RPC call timeout.
+  SUNCLAW_KITCHEN_SINK_MAX_RSS_MIB      Gateway RSS ceiling.
+  SUNCLAW_KITCHEN_SINK_COMMAND_MAX_RSS_MIB  Install/CLI command RSS ceiling.
+  SUNCLAW_KITCHEN_SINK_KEEP_TMP=1       Preserve the isolated temp home.
 `;
 }
 
@@ -96,12 +96,12 @@ export function readPositiveInt(raw, fallback) {
   return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback;
 }
 
-function resolveOpenClawRunner() {
-  if (process.env.OPENCLAW_ENTRY) {
+function resolveSunClawRunner() {
+  if (process.env.SUNCLAW_ENTRY) {
     return {
       command: "node",
-      baseArgs: [process.env.OPENCLAW_ENTRY],
-      label: process.env.OPENCLAW_ENTRY,
+      baseArgs: [process.env.SUNCLAW_ENTRY],
+      label: process.env.SUNCLAW_ENTRY,
     };
   }
   for (const candidate of ["dist/index.mjs", "dist/index.js"]) {
@@ -110,13 +110,13 @@ function resolveOpenClawRunner() {
       return { command: "node", baseArgs: [resolved], label: resolved };
     }
   }
-  return { pnpm: true, baseArgs: ["openclaw"], label: "pnpm openclaw" };
+  return { pnpm: true, baseArgs: ["sunclaw"], label: "pnpm sunclaw" };
 }
 
 export function makeEnv() {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-kitchen-sink-rpc-"));
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "sunclaw-kitchen-sink-rpc-"));
   const home = path.join(root, "home");
-  const stateDir = path.join(home, ".openclaw");
+  const stateDir = path.join(home, ".sunclaw");
   fs.mkdirSync(stateDir, { recursive: true });
   return {
     root,
@@ -124,13 +124,13 @@ export function makeEnv() {
       ...process.env,
       HOME: home,
       USERPROFILE: home,
-      OPENCLAW_HOME: home,
-      OPENCLAW_STATE_DIR: stateDir,
-      OPENCLAW_CONFIG_PATH: path.join(stateDir, "openclaw.json"),
-      OPENCLAW_NO_ONBOARD: "1",
-      OPENCLAW_SKIP_PROVIDERS: "0",
-      OPENCLAW_KITCHEN_SINK_PERSONALITY:
-        process.env.OPENCLAW_KITCHEN_SINK_PERSONALITY || "conformance",
+      SUNCLAW_HOME: home,
+      SUNCLAW_STATE_DIR: stateDir,
+      SUNCLAW_CONFIG_PATH: path.join(stateDir, "sunclaw.json"),
+      SUNCLAW_NO_ONBOARD: "1",
+      SUNCLAW_SKIP_PROVIDERS: "0",
+      SUNCLAW_KITCHEN_SINK_PERSONALITY:
+        process.env.SUNCLAW_KITCHEN_SINK_PERSONALITY || "conformance",
     },
   };
 }
@@ -319,8 +319,8 @@ function signalProcessGroup(child, signal) {
   }
 }
 
-async function runOpenClaw(runner, args, env, options = {}) {
-  const command = await resolveOpenClawCommand(runner, args, env, {
+async function runSunClaw(runner, args, env, options = {}) {
+  const command = await resolveSunClawCommand(runner, args, env, {
     stdio: ["ignore", "pipe", "pipe"],
   });
   return runCommand(command.command, command.args, {
@@ -334,7 +334,7 @@ async function runOpenClaw(runner, args, env, options = {}) {
   });
 }
 
-async function resolveOpenClawCommand(runner, args, env, options = {}) {
+async function resolveSunClawCommand(runner, args, env, options = {}) {
   if (runner.pnpm) {
     const { createPnpmRunnerSpawnSpec } = await import("../pnpm-runner.mjs");
     return createPnpmRunnerSpawnSpec({
@@ -441,8 +441,8 @@ async function rpcCall(method, params, options) {
   const module = await loadCallGatewayModule(options.runner);
   const payload = module
     ? await module.callGateway({
-        config: readJson(options.env.OPENCLAW_CONFIG_PATH),
-        configPath: options.env.OPENCLAW_CONFIG_PATH,
+        config: readJson(options.env.SUNCLAW_CONFIG_PATH),
+        configPath: options.env.SUNCLAW_CONFIG_PATH,
         url: `ws://127.0.0.1:${options.port}`,
         token: TOKEN,
         method,
@@ -455,7 +455,7 @@ async function rpcCall(method, params, options) {
 }
 
 async function loadCallGatewayModule(runner) {
-  if (!usesBuiltOpenClawEntry(runner)) {
+  if (!usesBuiltSunClawEntry(runner)) {
     return null;
   }
   callGatewayModulePromise ??= importCallGatewayModule();
@@ -475,7 +475,7 @@ async function importCallGatewayModule() {
 }
 
 async function rpcCallViaCli(method, params, options) {
-  const { stdout } = await runOpenClaw(
+  const { stdout } = await runSunClaw(
     options.runner,
     [
       "gateway",
@@ -515,12 +515,12 @@ export function findDistCallGatewayModuleFiles(cwd = process.cwd()) {
     : [];
 }
 
-export function usesBuiltOpenClawEntry(runner, cwd = process.cwd(), env = process.env) {
+export function usesBuiltSunClawEntry(runner, cwd = process.cwd(), env = process.env) {
   if (runner?.pnpm || !runner?.baseArgs?.[0]) {
     return false;
   }
   const entry = runner.baseArgs[0];
-  if (env.OPENCLAW_ENTRY && entry === env.OPENCLAW_ENTRY) {
+  if (env.SUNCLAW_ENTRY && entry === env.SUNCLAW_ENTRY) {
     return true;
   }
   const relative = path.relative(path.resolve(cwd, "dist"), path.resolve(cwd, entry));
@@ -671,7 +671,7 @@ function createFetchBodyTooLargeError(byteLimit) {
 }
 
 function configureKitchenSink(env, port) {
-  const configPath = env.OPENCLAW_CONFIG_PATH;
+  const configPath = env.SUNCLAW_CONFIG_PATH;
   const config = fs.existsSync(configPath) ? readJson(configPath) : {};
   config.gateway = {
     ...config.gateway,
@@ -694,7 +694,7 @@ function configureKitchenSink(env, port) {
         enabled: true,
         config: {
           ...config.plugins?.entries?.[PLUGIN_ID]?.config,
-          personality: env.OPENCLAW_KITCHEN_SINK_PERSONALITY,
+          personality: env.SUNCLAW_KITCHEN_SINK_PERSONALITY,
         },
         hooks: {
           ...config.plugins?.entries?.[PLUGIN_ID]?.hooks,
@@ -730,7 +730,7 @@ function configureKitchenSink(env, port) {
 
 async function startGateway(runner, port, env, logPath) {
   const log = fs.openSync(logPath, "w");
-  const command = await resolveOpenClawCommand(
+  const command = await resolveSunClawCommand(
     runner,
     ["gateway", "--port", String(port), "--bind", "loopback", "--allow-unconfigured"],
     env,
@@ -1102,7 +1102,7 @@ async function samplePosixProcessTree(pid, run, commandLineNeedles) {
       ),
     );
     const gatewayTitleMatches = descendants.filter((row) =>
-      row.command.toLowerCase().includes("openclaw-gateway"),
+      row.command.toLowerCase().includes("sunclaw-gateway"),
     );
     const selected = selectPeakRssProcess(
       commandMatches.length > 0
@@ -1495,11 +1495,11 @@ function isNonEmptyString(value) {
 }
 
 export async function main() {
-  let runner = resolveOpenClawRunner();
-  const port = readPositiveInt(process.env.OPENCLAW_KITCHEN_SINK_RPC_PORT, DEFAULT_PORT);
+  let runner = resolveSunClawRunner();
+  const port = readPositiveInt(process.env.SUNCLAW_KITCHEN_SINK_RPC_PORT, DEFAULT_PORT);
   const { root, env } = makeEnv();
   const logPath = path.join(root, "gateway.log");
-  const keepTmp = process.env.OPENCLAW_KITCHEN_SINK_KEEP_TMP === "1";
+  const keepTmp = process.env.SUNCLAW_KITCHEN_SINK_KEEP_TMP === "1";
   let failed = false;
   let child;
 
@@ -1513,22 +1513,22 @@ export async function main() {
   let sampleTimer;
   try {
     console.log(`Kitchen Sink RPC walk using ${PLUGIN_SPEC} via ${runner.label}`);
-    await runOpenClaw(runner, ["plugins", "install", PLUGIN_SPEC], env, {
+    await runSunClaw(runner, ["plugins", "install", PLUGIN_SPEC], env, {
       ...commandResourceOptions,
       resourceLabel: "plugins install",
       timeoutMs: INSTALL_TIMEOUT_MS,
     });
-    runner = resolveOpenClawRunner();
+    runner = resolveSunClawRunner();
     console.log(`Kitchen Sink RPC runtime runner: ${runner.label}`);
     configureKitchenSink(env, port);
-    await runOpenClaw(runner, ["plugins", "enable", PLUGIN_ID], env, {
+    await runSunClaw(runner, ["plugins", "enable", PLUGIN_ID], env, {
       ...commandResourceOptions,
       resourceLabel: "plugins enable",
       timeoutMs: 60000,
     });
     const inspect = parseJsonOutput(
       (
-        await runOpenClaw(runner, ["plugins", "inspect", PLUGIN_ID, "--runtime", "--json"], env, {
+        await runSunClaw(runner, ["plugins", "inspect", PLUGIN_ID, "--runtime", "--json"], env, {
           ...commandResourceOptions,
           resourceLabel: "plugins inspect",
         })

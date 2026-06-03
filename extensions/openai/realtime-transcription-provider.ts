@@ -1,9 +1,9 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
 import {
   isProviderAuthProfileConfigured,
   resolveProviderAuthProfileApiKey,
-} from "openclaw/plugin-sdk/provider-auth";
-import { resolveProviderRequestHeaders } from "openclaw/plugin-sdk/provider-http";
+} from "sunclaw/plugin-sdk/provider-auth";
+import { resolveProviderRequestHeaders } from "sunclaw/plugin-sdk/provider-http";
 import {
   createRealtimeTranscriptionWebSocketSession,
   type RealtimeTranscriptionProviderConfig,
@@ -11,8 +11,8 @@ import {
   type RealtimeTranscriptionSession,
   type RealtimeTranscriptionSessionCreateRequest,
   type RealtimeTranscriptionWebSocketTransport,
-} from "openclaw/plugin-sdk/realtime-transcription";
-import { normalizeResolvedSecretInputString } from "openclaw/plugin-sdk/secret-input";
+} from "sunclaw/plugin-sdk/realtime-transcription";
+import { normalizeResolvedSecretInputString } from "sunclaw/plugin-sdk/secret-input";
 import {
   asFiniteNumber,
   createOpenAIRealtimeTranscriptionClientSecret,
@@ -32,7 +32,7 @@ type OpenAIRealtimeTranscriptionProviderConfig = {
 
 type OpenAIRealtimeTranscriptionSessionConfig = RealtimeTranscriptionSessionCreateRequest & {
   apiKey?: string;
-  cfg?: OpenClawConfig;
+  cfg?: SunClawConfig;
   language?: string;
   model: string;
   prompt?: string;

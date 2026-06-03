@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { SunClawConfig } from "../../config/config.js";
 import { createAcpDispatchDeliveryCoordinator } from "./dispatch-acp-delivery.js";
 import { createReplyDispatcher, type ReplyDispatcher } from "./reply-dispatcher.js";
 import { buildTestCtx } from "./test-ctx.js";
@@ -116,7 +116,7 @@ async function raceWithTimeoutResult<T>(
   }
 }
 
-function createVisibleChatAcpCoordinator(cfg: OpenClawConfig) {
+function createVisibleChatAcpCoordinator(cfg: SunClawConfig) {
   return createAcpDispatchDeliveryCoordinator({
     cfg,
     ctx: buildTestCtx({
@@ -133,7 +133,7 @@ function createVisibleChatAcpCoordinator(cfg: OpenClawConfig) {
 }
 
 async function expectVisibleChatBlockRoutesToAccount(
-  cfg: OpenClawConfig,
+  cfg: SunClawConfig,
   accountId: string | undefined,
 ): Promise<void> {
   const coordinator = createVisibleChatAcpCoordinator(cfg);
@@ -807,7 +807,7 @@ describe("createAcpDispatchDeliveryCoordinator", () => {
   });
 
   it("routes ACP replies when cfg.channels is missing", async () => {
-    await expectVisibleChatBlockRoutesToAccount({} as OpenClawConfig, undefined);
+    await expectVisibleChatBlockRoutesToAccount({} as SunClawConfig, undefined);
   });
 
   it("treats routed plugin-owned block text as visible", async () => {

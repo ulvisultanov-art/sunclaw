@@ -1,27 +1,27 @@
-import type { AgentToolResult } from "openclaw/plugin-sdk/agent-core";
-import type { AnyAgentTool } from "openclaw/plugin-sdk/agent-harness";
+import type { AgentToolResult } from "sunclaw/plugin-sdk/agent-core";
+import type { AnyAgentTool } from "sunclaw/plugin-sdk/agent-harness";
 import {
   HEARTBEAT_RESPONSE_TOOL_NAME,
   embeddedAgentLog,
   wrapToolWithBeforeToolCallHook,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
+} from "sunclaw/plugin-sdk/agent-harness-runtime";
 import {
   onInternalDiagnosticEvent,
   waitForDiagnosticEventsDrained,
   type DiagnosticEventPayload,
-} from "openclaw/plugin-sdk/diagnostic-runtime";
+} from "sunclaw/plugin-sdk/diagnostic-runtime";
 import {
   initializeGlobalHookRunner,
   resetGlobalHookRunner,
-} from "openclaw/plugin-sdk/hook-runtime";
+} from "sunclaw/plugin-sdk/hook-runtime";
 import {
   createEmptyPluginRegistry,
   createMockPluginRegistry,
   setActivePluginRegistry,
-} from "openclaw/plugin-sdk/plugin-test-runtime";
+} from "sunclaw/plugin-sdk/plugin-test-runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
-  CODEX_OPENCLAW_DYNAMIC_TOOL_NAMESPACE,
+  CODEX_SUNCLAW_DYNAMIC_TOOL_NAMESPACE,
   createCodexDynamicToolBridge,
 } from "./dynamic-tools.js";
 import type { JsonValue } from "./protocol.js";
@@ -161,7 +161,7 @@ afterEach(() => {
 });
 
 describe("createCodexDynamicToolBridge", () => {
-  it("keeps turn-yield direct while deferring OpenClaw session spawn", () => {
+  it("keeps turn-yield direct while deferring SunClaw session spawn", () => {
     const bridge = createCodexDynamicToolBridge({
       tools: [
         createTool({ name: "web_search" }),
@@ -181,22 +181,22 @@ describe("createCodexDynamicToolBridge", () => {
 
     expectDynamicSpec(webSearch, {
       name: "web_search",
-      namespace: CODEX_OPENCLAW_DYNAMIC_TOOL_NAMESPACE,
+      namespace: CODEX_SUNCLAW_DYNAMIC_TOOL_NAMESPACE,
       deferLoading: true,
     });
     expectDynamicSpec(message, {
       name: "message",
-      namespace: CODEX_OPENCLAW_DYNAMIC_TOOL_NAMESPACE,
+      namespace: CODEX_SUNCLAW_DYNAMIC_TOOL_NAMESPACE,
       deferLoading: true,
     });
     expectDynamicSpec(heartbeat, {
       name: HEARTBEAT_RESPONSE_TOOL_NAME,
-      namespace: CODEX_OPENCLAW_DYNAMIC_TOOL_NAMESPACE,
+      namespace: CODEX_SUNCLAW_DYNAMIC_TOOL_NAMESPACE,
       deferLoading: true,
     });
     expectDynamicSpec(sessionsSpawn, {
       name: "sessions_spawn",
-      namespace: CODEX_OPENCLAW_DYNAMIC_TOOL_NAMESPACE,
+      namespace: CODEX_SUNCLAW_DYNAMIC_TOOL_NAMESPACE,
       deferLoading: true,
     });
     expectNoNamespace(sessionsYield);
@@ -213,7 +213,7 @@ describe("createCodexDynamicToolBridge", () => {
     expectDynamicSpec(bridge.specs[0], { name: "message" });
     expectDynamicSpec(bridge.specs[1], {
       name: "web_search",
-      namespace: CODEX_OPENCLAW_DYNAMIC_TOOL_NAMESPACE,
+      namespace: CODEX_SUNCLAW_DYNAMIC_TOOL_NAMESPACE,
       deferLoading: true,
     });
     expectNoNamespace(bridge.specs[0]);
@@ -250,7 +250,7 @@ describe("createCodexDynamicToolBridge", () => {
       contentItems: [
         {
           type: "inputText",
-          text: `OpenClaw tool is not available for this turn: ${HEARTBEAT_RESPONSE_TOOL_NAME}`,
+          text: `SunClaw tool is not available for this turn: ${HEARTBEAT_RESPONSE_TOOL_NAME}`,
         },
       ],
     });
@@ -366,7 +366,7 @@ describe("createCodexDynamicToolBridge", () => {
 
     expect(result).toEqual({
       success: false,
-      contentItems: [{ type: "inputText", text: "Unknown OpenClaw tool: fuzzplugin_move_angles" }],
+      contentItems: [{ type: "inputText", text: "Unknown SunClaw tool: fuzzplugin_move_angles" }],
     });
     expect(badExecute).not.toHaveBeenCalled();
   });
@@ -425,7 +425,7 @@ describe("createCodexDynamicToolBridge", () => {
     }
     const text = firstItem.text;
     expect(text.length).toBeLessThanOrEqual(180);
-    expect(text).toContain("OpenClaw truncated dynamic tool result");
+    expect(text).toContain("SunClaw truncated dynamic tool result");
     expect(text).toContain("original 400 chars");
     expect(text).toContain("rerun with narrower args");
   });
@@ -476,7 +476,7 @@ describe("createCodexDynamicToolBridge", () => {
       throw new Error("expected inputText tool result");
     }
     expect(firstItem.text.length).toBeLessThanOrEqual(180);
-    expect(firstItem.text).toContain("OpenClaw truncated dynamic tool result");
+    expect(firstItem.text).toContain("SunClaw truncated dynamic tool result");
   });
 
   it("keeps truncation notices within tiny configured caps", async () => {
@@ -517,7 +517,7 @@ describe("createCodexDynamicToolBridge", () => {
       throw new Error("expected inputText tool result");
     }
     expect(firstItem.text.length).toBeLessThanOrEqual(32);
-    expect(firstItem.text).toBe("...(OpenClaw truncated dynamic tool".slice(0, 32));
+    expect(firstItem.text).toBe("...(SunClaw truncated dynamic tool".slice(0, 32));
   });
 
   it("budgets configured truncation across all text result blocks", async () => {
@@ -563,7 +563,7 @@ describe("createCodexDynamicToolBridge", () => {
       .map((item) => (item.type === "inputText" && typeof item.text === "string" ? item.text : ""))
       .join("");
     expect(text.length).toBeLessThanOrEqual(180);
-    expect(text).toContain("OpenClaw truncated dynamic tool result");
+    expect(text).toContain("SunClaw truncated dynamic tool result");
     expect(text).toContain("original 400 chars");
     expect(text).not.toContain("b".repeat(100));
   });
@@ -1076,7 +1076,7 @@ describe("createCodexDynamicToolBridge", () => {
   });
 
   it("keeps config out of Codex tool-result contexts", async () => {
-    const config = { session: { store: "/tmp/openclaw-session-store.json" } };
+    const config = { session: { store: "/tmp/sunclaw-session-store.json" } };
     const registry = createEmptyPluginRegistry();
     const middlewareContexts: Record<string, unknown>[] = [];
     const legacyContexts: Record<string, unknown>[] = [];
