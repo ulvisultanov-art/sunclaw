@@ -109,7 +109,10 @@ jobs:
       contents: read
       security-events: write
       actions: read
-    uses: google/osv-scanner-action/.github/workflows/osv-scanner-reusable.yml@v1.9.0
+    # Pinned to v1.9.0 commit SHA (19ec111) instead of the floating @v1.9.0
+    # tag -- same supply-chain rationale as the gitleaks-action pin above.
+    # Bump this SHA when reviewing upstream releases of osv-scanner-action.
+    uses: google/osv-scanner-action/.github/workflows/osv-scanner-reusable.yml@19ec1116569a47416e11a45848722b1af31a857b  # v1.9.0
     with:
       # Scan the lockfile directly -- faster + more deterministic than walking
       # node_modules. OSV covers npm + any other manifests that appear in the

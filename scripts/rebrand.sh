@@ -6,6 +6,13 @@ set -euo pipefail
 TARGET="${1:-.}"
 cd "$TARGET"
 
+# Sweep up any leftover sed -i.bak artefacts on any exit. Without this trap,
+# an interruption mid-loop (SIGTERM, disk full, OOM) leaves a stray <file>.bak
+# on disk that `upstream-merge.sh` would then `git add -A` into the repo. The
+# sweep is scoped to the rebrand target and bounded in depth so it cannot
+# accidentally touch unrelated .bak files elsewhere on the system.
+trap 'find . -maxdepth 12 -name "*.bak" -type f -delete 2>/dev/null || true' EXIT INT TERM
+
 # Directory names to prune from `find` (path-component match, not substring).
 EXCLUDE_DIRS=(
   ".git" "node_modules" "dist" "build" "out" ".turbo" ".next"
