@@ -54,9 +54,7 @@ const mocks = vi.hoisted(() => ({
   loadInstalledPluginIndex: vi.fn(),
   loadInstalledPluginIndexInstallRecords: vi.fn(),
   loadPluginMetadataSnapshot: vi.fn(),
-  getOfficialExternalPluginCatalogManifest: vi.fn(
-    (entry: { sunclaw?: unknown }) => entry.sunclaw,
-  ),
+  getOfficialExternalPluginCatalogManifest: vi.fn((entry: { sunclaw?: unknown }) => entry.sunclaw),
   resolveOfficialExternalPluginId: vi.fn((entry: { id?: string }) => entry.id),
   resolveOfficialExternalPluginInstall: vi.fn(
     (entry: { install?: unknown }) => entry.install ?? null,

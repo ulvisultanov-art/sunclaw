@@ -497,5 +497,7 @@ export function printDaemonStatus(status: DaemonStatus, opts: { json: boolean; d
   }
 
   defaultRuntime.log(`${label("Troubles:")} run ${formatCliCommand("sunclaw status")}`);
-  defaultRuntime.log(`${label("Troubleshooting:")} https://docs.sunclaw.complex.az/troubleshooting`);
+  defaultRuntime.log(
+    `${label("Troubleshooting:")} https://docs.sunclaw.complex.az/troubleshooting`,
+  );
 }

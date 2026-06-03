@@ -1,6 +1,6 @@
 import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
-import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { coerceSecretRef, resolveSecretInputRef } from "../config/types.secrets.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { normalizeOptionalSecretInput } from "../utils/normalize-secret-input.js";
 import type { AuthProfileStore } from "./auth-profiles/types.js";
 import { resolveEnvApiKey, type EnvApiKeyLookupOptions } from "./model-auth-env.js";

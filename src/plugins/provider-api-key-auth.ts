@@ -1,8 +1,8 @@
 import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
 import { normalizeUniqueStringEntries } from "@sunclaw/normalization-core/string-normalization";
 import { upsertAuthProfileWithLock } from "../agents/auth-profiles/profiles.js";
-import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type { SecretInput } from "../config/types.secrets.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { createLazyRuntimeSurface } from "../shared/lazy-runtime.js";
 import { normalizeOptionalSecretInput } from "../utils/normalize-secret-input.js";
 import type {

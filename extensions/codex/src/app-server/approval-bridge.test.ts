@@ -524,8 +524,7 @@ describe("Codex app-server approval bridge", () => {
     expect(mockCallGatewayTool).not.toHaveBeenCalled();
     findApprovalEvent(params, {
       status: "denied",
-      message:
-        "SunClaw native hook relay returned an unreadable Codex app-server approval result.",
+      message: "SunClaw native hook relay returned an unreadable Codex app-server approval result.",
     });
   });
 

@@ -1,11 +1,11 @@
 import { isDeepStrictEqual } from "node:util";
 import type { AuthProfileStore } from "../agents/auth-profiles/types.js";
-import type { SunClawConfig } from "../config/types.sunclaw.js";
 import {
   resolveSecretInputRef,
   type SecretProviderConfig,
   type SecretRef,
 } from "../config/types.secrets.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { parseConfigPathArrayIndex } from "../shared/path-array-index.js";
 import type { SecretsApplyPlan } from "./plan.js";
 import { isRecord } from "./shared.js";

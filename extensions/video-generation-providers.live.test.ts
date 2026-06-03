@@ -1,7 +1,4 @@
-import {
-  resolveApiKeyForProvider,
-  resolveDefaultAgentDir,
-} from "sunclaw/plugin-sdk/agent-runtime";
+import { resolveApiKeyForProvider, resolveDefaultAgentDir } from "sunclaw/plugin-sdk/agent-runtime";
 import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
 import {
   registerProviderPlugin,
@@ -67,9 +64,7 @@ const defaultSkippedProviders = providerFilter
   ? null
   : parseCsvFilter(process.env.SUNCLAW_LIVE_VIDEO_GENERATION_SKIP_PROVIDERS ?? "fal");
 const envModelMap = parseProviderModelMap(process.env.SUNCLAW_LIVE_VIDEO_GENERATION_MODELS);
-const RUN_FULL_VIDEO_MODES = isTruthyEnvValue(
-  process.env.SUNCLAW_LIVE_VIDEO_GENERATION_FULL_MODES,
-);
+const RUN_FULL_VIDEO_MODES = isTruthyEnvValue(process.env.SUNCLAW_LIVE_VIDEO_GENERATION_FULL_MODES);
 const LIVE_VIDEO_REQUESTED_DURATION_SECONDS = 1;
 const LIVE_VIDEO_OPERATION_TIMEOUT_MS = readPositiveIntegerEnv(
   process.env.SUNCLAW_LIVE_VIDEO_GENERATION_TIMEOUT_MS,

@@ -4,7 +4,9 @@ export type SunClawAgentToolResult<TResult = unknown> = AgentToolResult<TResult>
 
 export type AgentToolResultMiddlewareRuntime = "sunclaw" | "codex";
 /** @deprecated Use AgentToolResultMiddlewareRuntime. */
-export type AgentToolResultMiddlewareHarness = AgentToolResultMiddlewareRuntime | "codex-app-server";
+export type AgentToolResultMiddlewareHarness =
+  | AgentToolResultMiddlewareRuntime
+  | "codex-app-server";
 
 export type AgentToolResultMiddlewareEvent = {
   threadId?: string;

@@ -25,9 +25,7 @@ const LITELLM_SUPPORTED_SIZES = [
 ] as const;
 const LITELLM_MAX_INPUT_IMAGES = 5;
 
-type LitellmProviderConfig = NonNullable<
-  NonNullable<SunClawConfig["models"]>["providers"]
->[string];
+type LitellmProviderConfig = NonNullable<NonNullable<SunClawConfig["models"]>["providers"]>[string];
 
 function resolveLitellmProviderConfig(
   cfg: SunClawConfig | undefined,

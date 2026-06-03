@@ -45,10 +45,7 @@ export {
 } from "sunclaw/plugin-sdk/channel-status";
 export { buildBaseAccountStatusSnapshot } from "sunclaw/plugin-sdk/status-helpers";
 export { chunkTextForOutbound } from "sunclaw/plugin-sdk/text-chunking";
-export {
-  formatAllowFromLowercase,
-  isNormalizedSenderAllowed,
-} from "sunclaw/plugin-sdk/allow-from";
+export { formatAllowFromLowercase, isNormalizedSenderAllowed } from "sunclaw/plugin-sdk/allow-from";
 export { addWildcardAllowFrom } from "sunclaw/plugin-sdk/setup";
 export { resolveOpenProviderRuntimeGroupPolicy } from "sunclaw/plugin-sdk/runtime-group-policy";
 export {

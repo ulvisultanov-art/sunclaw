@@ -48,7 +48,7 @@ refresh their model catalogues live from `/v1/openai/models?sort_by=sunclaw&filt
 when `DEEPINFRA_API_KEY` is configured; the other surfaces use the curated
 static defaults below.
 
-| Surface                  | Default model                                                                                         | SunClaw config/tool                                     |
+| Surface                  | Default model                                                                                         | SunClaw config/tool                                      |
 | ------------------------ | ----------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
 | Chat / model provider    | first chat-tagged entry from live catalog (manifest fallback `deepseek-ai/DeepSeek-V4-Flash`)         | `agents.defaults.model`                                  |
 | Image generation/editing | first `image-gen`-tagged entry from live catalog (static fallback `black-forest-labs/FLUX-1-schnell`) | `image_generate`, `agents.defaults.imageGenerationModel` |

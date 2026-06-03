@@ -6,6 +6,10 @@ import {
   getOrCreateSessionMcpRuntime,
 } from "./agent-bundle-mcp-tools.js";
 import {
+  getLatestSubagentRunByChildSessionKey,
+  resetSubagentRegistryForTests,
+} from "./subagent-registry.js";
+import {
   getCallGatewayMock,
   getSessionsSpawnTool,
   resetSessionsSpawnAnnounceFlowOverride,
@@ -17,10 +21,6 @@ import {
   setSessionsSpawnConfigOverride,
   waitForSessionsSpawnEvent,
 } from "./sunclaw-tools.subagents.sessions-spawn.test-harness.js";
-import {
-  getLatestSubagentRunByChildSessionKey,
-  resetSubagentRegistryForTests,
-} from "./subagent-registry.js";
 
 const fastModeEnv = vi.hoisted(() => {
   const previous = process.env.SUNCLAW_TEST_FAST;

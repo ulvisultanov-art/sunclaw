@@ -270,12 +270,10 @@ describe("zalouser setup wizard", () => {
   });
 
   it("reports account-scoped config keys for named accounts", () => {
-    expect(zalouserSetupWizard.dmPolicy?.resolveConfigKeys?.({} as SunClawConfig, "work")).toEqual(
-      {
-        policyKey: "channels.zalouser.accounts.work.dmPolicy",
-        allowFromKey: "channels.zalouser.accounts.work.allowFrom",
-      },
-    );
+    expect(zalouserSetupWizard.dmPolicy?.resolveConfigKeys?.({} as SunClawConfig, "work")).toEqual({
+      policyKey: "channels.zalouser.accounts.work.dmPolicy",
+      allowFromKey: "channels.zalouser.accounts.work.allowFrom",
+    });
   });
 
   it("uses configured defaultAccount for omitted DM policy account context", () => {

@@ -252,9 +252,7 @@ describe("Mantis Telegram Desktop proof workflow", () => {
     expect(readFileSync(TELEGRAM_PROOF_SKILL, "utf8")).not.toContain(
       "pnpm qa:telegram-user:crabbox",
     );
-    expect(readFileSync(TELEGRAM_PROOF_SKILL, "utf8")).toContain(
-      "SUNCLAW_TELEGRAM_USER_PROOF_CMD",
-    );
+    expect(readFileSync(TELEGRAM_PROOF_SKILL, "utf8")).toContain("SUNCLAW_TELEGRAM_USER_PROOF_CMD");
     expect(readFileSync(PROOF_SCRIPT, "utf8")).not.toContain("pnpm qa:telegram-user:crabbox");
     const payloadValidationImport =
       "../../qa/convex-credential-broker/convex/payload-validation.js";

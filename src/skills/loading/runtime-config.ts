@@ -1,6 +1,6 @@
 import { getRuntimeConfigSnapshot } from "../../config/runtime-snapshot.js";
-import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { coerceSecretRef } from "../../config/types.secrets.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 
 function hasConfiguredSkillApiKeyRef(config?: SunClawConfig): boolean {
   const entries = config?.skills?.entries;

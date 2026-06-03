@@ -350,7 +350,10 @@ export async function loginOpenAICodexOAuth(params: {
     stopProgress("OpenAI OAuth failed");
     const rewrittenError = rewriteOpenAICodexOAuthError(err);
     runtime.error(String(rewrittenError));
-    await prompter.note("Trouble with OAuth? See https://docs.sunclaw.complex.az/start/faq", "OAuth help");
+    await prompter.note(
+      "Trouble with OAuth? See https://docs.sunclaw.complex.az/start/faq",
+      "OAuth help",
+    );
     throw rewrittenError;
   } finally {
     markLoginSettled();

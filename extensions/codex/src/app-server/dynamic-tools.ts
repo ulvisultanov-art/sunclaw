@@ -23,10 +23,7 @@ import {
 import { emitTrustedDiagnosticEvent } from "sunclaw/plugin-sdk/diagnostic-runtime";
 import type { ImageContent, TextContent } from "sunclaw/plugin-sdk/llm";
 import { normalizeAgentId } from "sunclaw/plugin-sdk/routing";
-import {
-  asOptionalRecord as readRecord,
-  isRecord,
-} from "sunclaw/plugin-sdk/string-coerce-runtime";
+import { asOptionalRecord as readRecord, isRecord } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import type { CodexDynamicToolsLoading } from "./config.js";
 import { invalidInlineImageText, sanitizeInlineImageDataUrl } from "./image-payload-sanitizer.js";
 import type {

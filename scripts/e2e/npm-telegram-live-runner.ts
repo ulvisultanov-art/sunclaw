@@ -31,9 +31,7 @@ async function resolveTrustedSunClawCommand(rawCommand: string) {
   }
   const commandName = path.basename(rawCommand);
   if (commandName !== "sunclaw" && commandName !== "sunclaw.cmd") {
-    throw new Error(
-      `SUNCLAW_NPM_TELEGRAM_SUT_COMMAND must point to sunclaw; got: ${commandName}`,
-    );
+    throw new Error(`SUNCLAW_NPM_TELEGRAM_SUT_COMMAND must point to sunclaw; got: ${commandName}`);
   }
   const npmPrefix = process.env.NPM_CONFIG_PREFIX?.trim();
   if (!npmPrefix) {

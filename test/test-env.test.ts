@@ -185,9 +185,9 @@ describe("installTestEnv", () => {
       preview: { chunk: { minChars: 120 } },
     });
 
-    expect(
-      fs.existsSync(path.join(testEnv.tempHome, ".sunclaw", "credentials", "token.txt")),
-    ).toBe(true);
+    expect(fs.existsSync(path.join(testEnv.tempHome, ".sunclaw", "credentials", "token.txt"))).toBe(
+      true,
+    );
     expect(
       fs.existsSync(
         path.join(

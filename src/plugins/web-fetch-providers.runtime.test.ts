@@ -132,13 +132,11 @@ describe("resolvePluginWebFetchProviders", () => {
         ? R
         : never,
     );
-    loadSunClawPluginsMock = vi
-      .spyOn(loaderModule, "loadSunClawPlugins")
-      .mockImplementation(() => {
-        const registry = createEmptyPluginRegistry();
-        registry.webFetchProviders = [createRuntimeWebFetchProvider()];
-        return registry;
-      });
+    loadSunClawPluginsMock = vi.spyOn(loaderModule, "loadSunClawPlugins").mockImplementation(() => {
+      const registry = createEmptyPluginRegistry();
+      registry.webFetchProviders = [createRuntimeWebFetchProvider()];
+      return registry;
+    });
     resetPluginRuntimeStateForTest();
   });
 

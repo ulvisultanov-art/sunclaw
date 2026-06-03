@@ -1,5 +1,5 @@
-import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { buildNpmResolutionFields, type NpmSpecResolution } from "../infra/install-source-utils.js";
 
 export type PluginInstallUpdate = PluginInstallRecord & { pluginId: string };

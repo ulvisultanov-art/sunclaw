@@ -208,9 +208,7 @@ export async function buildCodexWorkspaceBootstrapContext(params: {
     const developerInstructionFiles = shouldInjectCodexSunClawPromptContext(params.params)
       ? selectCodexWorkspaceInheritedDeveloperInstructionFiles(contextFiles)
       : [];
-    const turnScopedDeveloperInstructionFiles = shouldInjectCodexSunClawPromptContext(
-      params.params,
-    )
+    const turnScopedDeveloperInstructionFiles = shouldInjectCodexSunClawPromptContext(params.params)
       ? selectCodexWorkspaceTurnScopedDeveloperInstructionFiles(contextFiles)
       : [];
     const heartbeatReferenceFiles = selectCodexWorkspaceHeartbeatReferenceFiles(contextFiles);

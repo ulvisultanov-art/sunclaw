@@ -269,12 +269,7 @@ describe("resolveInstalledBinaryCommandInvocation", () => {
       ),
     ).toEqual({
       command: "C:\\Windows\\System32\\cmd.exe",
-      args: [
-        "/d",
-        "/s",
-        "/c",
-        '""C:\\sunclaw prefix\\sunclaw.cmd" agent --message "hello world""',
-      ],
+      args: ["/d", "/s", "/c", '""C:\\sunclaw prefix\\sunclaw.cmd" agent --message "hello world""'],
       windowsVerbatimArguments: true,
     });
   });

@@ -7,12 +7,12 @@ import {
   handleDiscordMessageAction,
   requestDiscord,
 } from "@sunclaw/discord/api.js";
+import { chromium } from "playwright-core";
 import { DEFAULT_EMOJIS } from "sunclaw/plugin-sdk/channel-feedback";
 import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
 import { formatErrorMessage } from "sunclaw/plugin-sdk/error-runtime";
 import { writeExternalFileWithinRoot } from "sunclaw/plugin-sdk/security-runtime";
 import { uniqueStrings } from "sunclaw/plugin-sdk/string-coerce-runtime";
-import { chromium } from "playwright-core";
 import { z } from "zod";
 import { startQaGatewayChild } from "../../gateway-child.js";
 import { DEFAULT_QA_LIVE_PROVIDER_MODE } from "../../providers/index.js";

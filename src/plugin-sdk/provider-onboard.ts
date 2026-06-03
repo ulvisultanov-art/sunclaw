@@ -278,10 +278,7 @@ export function applyOnboardAuthAgentModelsAndProviders(
   };
 }
 
-export function applyAgentDefaultModelPrimary(
-  cfg: SunClawConfig,
-  primary: string,
-): SunClawConfig {
+export function applyAgentDefaultModelPrimary(cfg: SunClawConfig, primary: string): SunClawConfig {
   const defaults = cfg.agents?.defaults;
   const existingFallbacks = extractAgentDefaultModelFallbacks(cfg.agents?.defaults?.model);
   const normalizedFallbacks = existingFallbacks?.map((fallback) =>

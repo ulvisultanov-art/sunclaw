@@ -272,9 +272,9 @@ describe("command-path-policy", () => {
     expect(resolveCliNetworkProxyPolicy(["node", "sunclaw", "agent", "--local"])).toBe("default");
     expect(resolveCliNetworkProxyPolicy(["node", "sunclaw", "agent", "run"])).toBe("bypass");
     expect(resolveCliNetworkProxyPolicy(["node", "sunclaw", "channels", "status"])).toBe("bypass");
-    expect(
-      resolveCliNetworkProxyPolicy(["node", "sunclaw", "channels", "status", "--probe"]),
-    ).toBe("default");
+    expect(resolveCliNetworkProxyPolicy(["node", "sunclaw", "channels", "status", "--probe"])).toBe(
+      "default",
+    );
     expect(resolveCliNetworkProxyPolicy(["node", "sunclaw", "models", "status"])).toBe("bypass");
     expect(resolveCliNetworkProxyPolicy(["node", "sunclaw", "models", "status", "--probe"])).toBe(
       "default",

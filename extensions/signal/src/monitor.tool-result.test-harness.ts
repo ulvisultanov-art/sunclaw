@@ -94,9 +94,9 @@ export function createMockSignalDaemonHandle(
 // Use importActual so shared-worker mocks from earlier test files do not leak
 // into this harness's partial overrides.
 vi.mock("sunclaw/plugin-sdk/runtime-config-snapshot", async () => {
-  const actual = await vi.importActual<
-    typeof import("sunclaw/plugin-sdk/runtime-config-snapshot")
-  >("sunclaw/plugin-sdk/runtime-config-snapshot");
+  const actual = await vi.importActual<typeof import("sunclaw/plugin-sdk/runtime-config-snapshot")>(
+    "sunclaw/plugin-sdk/runtime-config-snapshot",
+  );
   return {
     ...actual,
     getRuntimeConfig: () => config,

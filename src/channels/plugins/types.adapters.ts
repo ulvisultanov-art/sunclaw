@@ -125,9 +125,7 @@ export type ChannelConfigAdapter<ResolvedAccount> = {
   }) => SunClawConfig;
   deleteAccount?: (params: { cfg: SunClawConfig; accountId: string }) => SunClawConfig;
   isEnabled?: ChannelAdapterCallback<(account: ResolvedAccount, cfg: SunClawConfig) => boolean>;
-  disabledReason?: ChannelAdapterCallback<
-    (account: ResolvedAccount, cfg: SunClawConfig) => string
-  >;
+  disabledReason?: ChannelAdapterCallback<(account: ResolvedAccount, cfg: SunClawConfig) => string>;
   isConfigured?: ChannelAdapterCallback<
     (account: ResolvedAccount, cfg: SunClawConfig) => boolean | Promise<boolean>
   >;

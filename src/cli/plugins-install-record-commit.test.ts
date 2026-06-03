@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 
 const mocks = vi.hoisted(() => ({
   loadInstalledPluginIndexInstallRecords: vi.fn(),

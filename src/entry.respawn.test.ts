@@ -252,14 +252,10 @@ describe("runCliRespawnPlan", () => {
       },
     );
 
-    expect(spawn).toHaveBeenCalledWith(
-      "/usr/bin/node",
-      ["/repo/sunclaw/dist/entry.js", "status"],
-      {
-        stdio: "inherit",
-        env: { SUNCLAW_NODE_OPTIONS_READY: "1" },
-      },
-    );
+    expect(spawn).toHaveBeenCalledWith("/usr/bin/node", ["/repo/sunclaw/dist/entry.js", "status"], {
+      stdio: "inherit",
+      env: { SUNCLAW_NODE_OPTIONS_READY: "1" },
+    });
     const [bridgeChild, bridgeOptions] = requireFirstMockCall(
       attachChildProcessBridge,
       "child process bridge attach",

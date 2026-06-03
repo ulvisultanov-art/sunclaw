@@ -912,9 +912,7 @@ describe("createMcpLoopbackServerConfig", () => {
       mcpServers?: Record<string, { url?: string; headers?: Record<string, string> }>;
     };
     expect(config.mcpServers?.sunclaw?.url).toBe("http://127.0.0.1:23119/mcp");
-    expect(config.mcpServers?.sunclaw?.headers?.Authorization).toBe(
-      "Bearer ${SUNCLAW_MCP_TOKEN}",
-    );
+    expect(config.mcpServers?.sunclaw?.headers?.Authorization).toBe("Bearer ${SUNCLAW_MCP_TOKEN}");
     expect(config.mcpServers?.sunclaw?.headers?.["x-sunclaw-message-channel"]).toBe(
       "${SUNCLAW_MCP_MESSAGE_CHANNEL}",
     );

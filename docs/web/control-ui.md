@@ -231,12 +231,12 @@ The Control UI ships a `manifest.webmanifest` and a service worker, so modern br
 
 If the page shows **Protocol mismatch** right after an SunClaw update, first reopen the dashboard with `sunclaw dashboard` and hard-refresh the page. If it still fails, clear site data for the dashboard origin or test in a private browser window; an old tab or browser service-worker cache can keep running a pre-update Control UI bundle against the newer Gateway.
 
-| Surface                                               | What it does                                                       |
-| ----------------------------------------------------- | ------------------------------------------------------------------ |
-| `ui/public/manifest.webmanifest`                      | PWA manifest. Browsers offer "Install app" once it is reachable.   |
-| `ui/public/sw.js`                                     | Service worker that handles `push` events and notification clicks. |
+| Surface                                              | What it does                                                       |
+| ---------------------------------------------------- | ------------------------------------------------------------------ |
+| `ui/public/manifest.webmanifest`                     | PWA manifest. Browsers offer "Install app" once it is reachable.   |
+| `ui/public/sw.js`                                    | Service worker that handles `push` events and notification clicks. |
 | `push/vapid-keys.json` (under the SunClaw state dir) | Auto-generated VAPID keypair used to sign Web Push payloads.       |
-| `push/web-push-subscriptions.json`                    | Persisted browser subscription endpoints.                          |
+| `push/web-push-subscriptions.json`                   | Persisted browser subscription endpoints.                          |
 
 Override the VAPID keypair through env vars on the Gateway process when you want to pin keys (for multi-host deployments, secrets rotation, or tests):
 

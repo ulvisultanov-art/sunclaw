@@ -295,12 +295,7 @@ describe("respawnGatewayProcessForUpdate", () => {
     clearSupervisorHints();
     setPlatform("win32");
     process.execArgv = [];
-    process.argv = [
-      "C:\\Program Files\\node.exe",
-      "C:\\sunclaw\\dist\\index.js",
-      "gateway",
-      "run",
-    ];
+    process.argv = ["C:\\Program Files\\node.exe", "C:\\sunclaw\\dist\\index.js", "gateway", "run"];
     spawnMock.mockReturnValue({ pid: 5151, unref: vi.fn(), kill: vi.fn() });
 
     const result = respawnGatewayProcessForUpdate();

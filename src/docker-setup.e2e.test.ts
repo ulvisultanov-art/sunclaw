@@ -758,9 +758,9 @@ describe("scripts/docker/setup.sh", () => {
 
   it("keeps docker-compose gateway Bonjour advertising in auto mode by default", async () => {
     const compose = await readFile(join(repoRoot, "docker-compose.yml"), "utf8");
-    expect(
-      compose.match(/SUNCLAW_DISABLE_BONJOUR: \$\{SUNCLAW_DISABLE_BONJOUR:-\}/g),
-    ).toHaveLength(1);
+    expect(compose.match(/SUNCLAW_DISABLE_BONJOUR: \$\{SUNCLAW_DISABLE_BONJOUR:-\}/g)).toHaveLength(
+      1,
+    );
   });
 
   it("keeps docker-compose CLI network namespace settings in sync", async () => {
@@ -771,9 +771,7 @@ describe("scripts/docker/setup.sh", () => {
 
   it("keeps docker-compose gateway token env defaults aligned across services", async () => {
     const compose = await readFile(join(repoRoot, "docker-compose.yml"), "utf8");
-    expect(compose.match(/SUNCLAW_GATEWAY_TOKEN: \$\{SUNCLAW_GATEWAY_TOKEN:-\}/g)).toHaveLength(
-      2,
-    );
+    expect(compose.match(/SUNCLAW_GATEWAY_TOKEN: \$\{SUNCLAW_GATEWAY_TOKEN:-\}/g)).toHaveLength(2);
   });
 
   it("keeps docker-compose auth profile secret key source durable outside state", async () => {

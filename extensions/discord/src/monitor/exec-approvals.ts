@@ -1,10 +1,7 @@
 import { ButtonStyle } from "discord-api-types/v10";
 import { resolveApprovalOverGateway } from "sunclaw/plugin-sdk/approval-gateway-runtime";
 import type { ExecApprovalDecision } from "sunclaw/plugin-sdk/approval-runtime";
-import type {
-  DiscordExecApprovalConfig,
-  SunClawConfig,
-} from "sunclaw/plugin-sdk/config-contracts";
+import type { DiscordExecApprovalConfig, SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
 import { Button, type ButtonInteraction, type ComponentData } from "../internal/discord.js";
 export { buildExecApprovalCustomId } from "../approval-handler.runtime.js";
 import { getDiscordExecApprovalApprovers } from "../exec-approvals.js";

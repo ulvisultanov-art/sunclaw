@@ -1,10 +1,6 @@
 import { resolveFetch } from "sunclaw/plugin-sdk/fetch-runtime";
 import { resolveTimerTimeoutMs } from "sunclaw/plugin-sdk/number-runtime";
-import {
-  resolveRetryConfig,
-  retryAsync,
-  type RetryConfig,
-} from "sunclaw/plugin-sdk/retry-runtime";
+import { resolveRetryConfig, retryAsync, type RetryConfig } from "sunclaw/plugin-sdk/retry-runtime";
 import { isDiscordHtmlResponseBody, summarizeDiscordResponseBody } from "./error-body.js";
 import { parseDiscordRetryAfterBodySeconds, parseRetryAfterHeaderSeconds } from "./retry-after.js";
 

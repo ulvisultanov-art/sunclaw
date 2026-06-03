@@ -61,8 +61,7 @@ describe("native Gateway protocol levels", () => {
       );
     }
 
-    const swiftGeneratedPath =
-      "apps/shared/SunClawKit/Sources/SunClawProtocol/GatewayModels.swift";
+    const swiftGeneratedPath = "apps/shared/SunClawKit/Sources/SunClawProtocol/GatewayModels.swift";
     const swiftGenerated = await readRepoFile(swiftGeneratedPath);
     assertLevelsMatch(swiftGeneratedPath, {
       min: extractInteger(

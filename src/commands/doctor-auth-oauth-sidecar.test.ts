@@ -3,10 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { clearRuntimeAuthProfileStoreSnapshots } from "../agents/auth-profiles/store.js";
-import {
-  createSunClawTestState,
-  type SunClawTestState,
-} from "../test-utils/sunclaw-test-state.js";
+import { createSunClawTestState, type SunClawTestState } from "../test-utils/sunclaw-test-state.js";
 import { testing, maybeRepairLegacyOAuthSidecarProfiles } from "./doctor-auth-oauth-sidecar.js";
 import type { DoctorPrompter } from "./doctor-prompter.js";
 

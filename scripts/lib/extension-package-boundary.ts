@@ -71,9 +71,7 @@ export const EXTENSION_PACKAGE_BOUNDARY_BASE_PATHS = {
   ],
   "sunclaw/plugin-sdk/channel-streaming": ["../dist/plugin-sdk/channel-streaming.d.ts"],
   "sunclaw/plugin-sdk/error-runtime": ["../dist/plugin-sdk/error-runtime.d.ts"],
-  "sunclaw/plugin-sdk/provider-catalog-shared": [
-    "../dist/plugin-sdk/provider-catalog-shared.d.ts",
-  ],
+  "sunclaw/plugin-sdk/provider-catalog-shared": ["../dist/plugin-sdk/provider-catalog-shared.d.ts"],
   "sunclaw/plugin-sdk/provider-entry": ["../dist/plugin-sdk/provider-entry.d.ts"],
   "sunclaw/plugin-sdk/secret-ref-runtime": ["../dist/plugin-sdk/secret-ref-runtime.d.ts"],
   "sunclaw/plugin-sdk/ssrf-runtime": ["../dist/plugin-sdk/ssrf-runtime.d.ts"],

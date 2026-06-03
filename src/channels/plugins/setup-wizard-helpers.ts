@@ -4,8 +4,8 @@ import {
   uniqueStrings,
 } from "@sunclaw/normalization-core/string-normalization";
 import type { DmPolicy, GroupPolicy } from "../../config/types.base.js";
-import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import type { SecretInput } from "../../config/types.secrets.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { resolveSecretInputModeForEnvSelection } from "../../plugins/provider-auth-mode.js";
 import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "../../routing/session-key.js";
 import type { WizardPrompter } from "../../wizard/prompts.js";

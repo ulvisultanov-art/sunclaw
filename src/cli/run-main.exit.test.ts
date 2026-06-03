@@ -444,12 +444,7 @@ describe("runCli exit behavior", () => {
       argv: ["node", "sunclaw", "gateway", "--force"],
     });
     expect(addGatewayRunCommandMock).toHaveBeenCalledTimes(2);
-    expect(commanderParseAsyncMock).toHaveBeenCalledWith([
-      "node",
-      "sunclaw",
-      "gateway",
-      "--force",
-    ]);
+    expect(commanderParseAsyncMock).toHaveBeenCalledWith(["node", "sunclaw", "gateway", "--force"]);
   });
 
   it("installs console capture before parsing the gateway foreground fast path", async () => {

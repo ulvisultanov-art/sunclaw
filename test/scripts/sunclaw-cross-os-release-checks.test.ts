@@ -290,9 +290,9 @@ describe("scripts/sunclaw-cross-os-release-checks", () => {
     expect(resolveCrossOsAgentTurnOptional({ SUNCLAW_CROSS_OS_AGENT_TURN_OPTIONAL: "1" })).toBe(
       true,
     );
-    expect(
-      resolveCrossOsAgentTurnOptional({ SUNCLAW_CROSS_OS_AGENT_TURN_OPTIONAL: "false" }),
-    ).toBe(false);
+    expect(resolveCrossOsAgentTurnOptional({ SUNCLAW_CROSS_OS_AGENT_TURN_OPTIONAL: "false" })).toBe(
+      false,
+    );
   });
 
   it("detects embedded fallback agent turns as non-gateway proof", () => {
@@ -831,9 +831,15 @@ describe("scripts/sunclaw-cross-os-release-checks", () => {
   });
 
   it("uses the published installer URLs for native installer lanes", () => {
-    expect(resolvePublishedInstallerUrl("darwin")).toBe("https://docs.sunclaw.complex.az/install.sh");
-    expect(resolvePublishedInstallerUrl("linux")).toBe("https://docs.sunclaw.complex.az/install.sh");
-    expect(resolvePublishedInstallerUrl("win32")).toBe("https://docs.sunclaw.complex.az/install.ps1");
+    expect(resolvePublishedInstallerUrl("darwin")).toBe(
+      "https://docs.sunclaw.complex.az/install.sh",
+    );
+    expect(resolvePublishedInstallerUrl("linux")).toBe(
+      "https://docs.sunclaw.complex.az/install.sh",
+    );
+    expect(resolvePublishedInstallerUrl("win32")).toBe(
+      "https://docs.sunclaw.complex.az/install.ps1",
+    );
   });
 
   it("uses managed gateway services only on native Windows runners", () => {
@@ -914,14 +920,10 @@ describe("scripts/sunclaw-cross-os-release-checks", () => {
 
   it("normalizes Windows installed CLI paths to the cmd shim", () => {
     expect(
-      normalizeWindowsInstalledCliPath(
-        String.raw`C:\Users\runner\AppData\Roaming\npm\sunclaw.ps1`,
-      ),
+      normalizeWindowsInstalledCliPath(String.raw`C:\Users\runner\AppData\Roaming\npm\sunclaw.ps1`),
     ).toBe(String.raw`C:\Users\runner\AppData\Roaming\npm\sunclaw.cmd`);
     expect(
-      normalizeWindowsInstalledCliPath(
-        String.raw`C:\Users\runner\AppData\Roaming\npm\sunclaw.cmd`,
-      ),
+      normalizeWindowsInstalledCliPath(String.raw`C:\Users\runner\AppData\Roaming\npm\sunclaw.cmd`),
     ).toBe(String.raw`C:\Users\runner\AppData\Roaming\npm\sunclaw.cmd`);
   });
 
@@ -1083,9 +1085,7 @@ describe("scripts/sunclaw-cross-os-release-checks", () => {
 
     const dir = mkdtempSync(join(tmpdir(), "sunclaw-cross-os-run-command-signal-"));
     const childPidPath = join(dir, "child.pid");
-    const scriptUrl = pathToFileURL(
-      resolvePath("scripts/sunclaw-cross-os-release-checks.ts"),
-    ).href;
+    const scriptUrl = pathToFileURL(resolvePath("scripts/sunclaw-cross-os-release-checks.ts")).href;
     let childPid: number | undefined;
     let runnerPid: number | undefined;
 

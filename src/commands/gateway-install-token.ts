@@ -2,8 +2,8 @@ import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coer
 import { formatCliCommand } from "../cli/command-format.js";
 import type { ConfigWriteOptions } from "../config/io.js";
 import type { SunClawConfig } from "../config/types.js";
-import type { ConfigFileSnapshot } from "../config/types.sunclaw.js";
 import { resolveSecretInputRef } from "../config/types.secrets.js";
+import type { ConfigFileSnapshot } from "../config/types.sunclaw.js";
 import { shouldRequireGatewayTokenForInstall } from "../gateway/auth-install-policy.js";
 import { hasAmbiguousGatewayAuthModeConfig } from "../gateway/auth-mode-policy.js";
 import { resolveGatewayAuthToken } from "../gateway/auth-token-resolution.js";

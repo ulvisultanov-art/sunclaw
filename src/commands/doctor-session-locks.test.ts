@@ -1,10 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import {
-  createSunClawTestState,
-  type SunClawTestState,
-} from "../test-utils/sunclaw-test-state.js";
+import { createSunClawTestState, type SunClawTestState } from "../test-utils/sunclaw-test-state.js";
 
 const note = vi.hoisted(() => vi.fn());
 

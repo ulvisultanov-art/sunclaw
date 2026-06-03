@@ -22,8 +22,8 @@ import {
   resolveExpiresAtMsFromDurationMs,
 } from "@sunclaw/normalization-core/number-coercion";
 import type { SunClawConfig } from "../../config/types.sunclaw.js";
-import { resolveSunClawPackageRootSync } from "../../infra/sunclaw-root.js";
 import { privateFileStoreSync } from "../../infra/private-file-store.js";
+import { resolveSunClawPackageRootSync } from "../../infra/sunclaw-root.js";
 import { createSubsystemLogger } from "../../logging/subsystem.js";
 import { hasGlobalHooks } from "../../plugins/hook-runner-global.js";
 import { PluginApprovalResolutions } from "../../plugins/types.js";

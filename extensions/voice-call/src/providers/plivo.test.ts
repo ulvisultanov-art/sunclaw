@@ -88,6 +88,8 @@ describe("PlivoProvider", () => {
     const callbackMap = (provider as unknown as { callUuidToWebhookUrl: Map<string, string> })
       .callUuidToWebhookUrl;
 
-    expect(callbackMap.get("call-uuid")).toBe("https://voice.docs.sunclaw.complex.az/voice/webhook");
+    expect(callbackMap.get("call-uuid")).toBe(
+      "https://voice.docs.sunclaw.complex.az/voice/webhook",
+    );
   });
 });

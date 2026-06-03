@@ -155,9 +155,9 @@ not a supported way to prepare bundled plugin dependencies.
 
 | Install shape                    | Bundled plugin location               | Dependency owner                                                     |
 | -------------------------------- | ------------------------------------- | -------------------------------------------------------------------- |
-| `npm install -g sunclaw`        | Built runtime tree inside the package | SunClaw package and explicit plugin install/update/doctor flows     |
+| `npm install -g sunclaw`         | Built runtime tree inside the package | SunClaw package and explicit plugin install/update/doctor flows      |
 | Git checkout plus `pnpm install` | `extensions/<id>` workspace packages  | The pnpm workspace, including each plugin package's own dependencies |
-| `sunclaw plugins install ...`   | Managed npm project/git/ClawHub root  | The plugin install/update flow                                       |
+| `sunclaw plugins install ...`    | Managed npm project/git/ClawHub root  | The plugin install/update flow                                       |
 
 ## Legacy cleanup
 

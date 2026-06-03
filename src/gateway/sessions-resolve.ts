@@ -37,10 +37,7 @@ function noSessionFoundResult(key: string): SessionsResolveResult {
 }
 
 /** Rejects sessions whose owning agent no longer exists in config (#65524). */
-function validateSessionAgentExists(
-  cfg: SunClawConfig,
-  key: string,
-): SessionsResolveResult | null {
+function validateSessionAgentExists(cfg: SunClawConfig, key: string): SessionsResolveResult | null {
   const deletedAgentId = resolveDeletedAgentIdFromSessionKey(cfg, key);
   if (deletedAgentId === null) {
     return null;

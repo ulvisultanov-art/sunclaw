@@ -129,13 +129,13 @@ describe("warning filter", () => {
         { type: "Warning", code: "SUNCLAW_VISIBLE_OVERRIDE" },
       );
       await flushWarnings();
-      expect(
-        seenWarnings.find((warning) => warning.code === "SUNCLAW_TEST_WARNING"),
-      ).toStrictEqual({
-        code: "SUNCLAW_TEST_WARNING",
-        name: "Warning",
-        message: "Visible warning",
-      });
+      expect(seenWarnings.find((warning) => warning.code === "SUNCLAW_TEST_WARNING")).toStrictEqual(
+        {
+          code: "SUNCLAW_TEST_WARNING",
+          name: "Warning",
+          message: "Visible warning",
+        },
+      );
       expect(seenWarnings.find((warning) => warning.code === "DEP0040")).toStrictEqual({
         code: "DEP0040",
         name: "DeprecationWarning",

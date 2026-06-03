@@ -240,11 +240,7 @@ function computeBaseConfigSchemaStablePayload(): BaseConfigSchemaStablePayload {
     applyFieldDocumentation(schemaRoot, buildFieldDocumentation());
   }
   const baseHints = mapSensitivePaths(SunClawSchema, "", buildBaseHints());
-  const sensitiveUrlPaths = collectMatchingSchemaPaths(
-    SunClawSchema,
-    "",
-    isSensitiveUrlConfigPath,
-  );
+  const sensitiveUrlPaths = collectMatchingSchemaPaths(SunClawSchema, "", isSensitiveUrlConfigPath);
   const stablePayload = {
     schema: stripLegacyCompatSchemaPaths(stripChannelSchema(schema)),
     uiHints: stripLegacyCompatHints(

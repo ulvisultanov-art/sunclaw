@@ -1,5 +1,5 @@
-import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { resolveSecretInputRef } from "../config/types.secrets.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { trimToUndefined } from "./credentials.js";
 import {
   resolveConfiguredSecretInputString,

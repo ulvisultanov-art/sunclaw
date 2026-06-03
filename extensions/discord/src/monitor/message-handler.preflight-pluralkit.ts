@@ -5,9 +5,7 @@ import type { DiscordMessageEvent } from "./message-handler.preflight.types.js";
 export async function resolveDiscordPreflightPluralKitInfo(params: {
   message: DiscordMessageEvent["message"];
   config?: NonNullable<
-    NonNullable<
-      import("sunclaw/plugin-sdk/config-contracts").SunClawConfig["channels"]
-    >["discord"]
+    NonNullable<import("sunclaw/plugin-sdk/config-contracts").SunClawConfig["channels"]>["discord"]
   >["pluralkit"];
   abortSignal?: AbortSignal;
 }): Promise<Awaited<ReturnType<typeof import("../pluralkit.js").fetchPluralKitMessageInfo>>> {

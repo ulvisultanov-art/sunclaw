@@ -431,10 +431,7 @@ describe("SunClaw Codex sandbox exec-server", () => {
       client: client as never,
       sandbox,
     });
-    const unauthorizedUrl = execServerUrlFromClient(client).replace(
-      /\/sunclaw-[^/?#]+/u,
-      "/wrong",
-    );
+    const unauthorizedUrl = execServerUrlFromClient(client).replace(/\/sunclaw-[^/?#]+/u, "/wrong");
     const socket = await openSocket(unauthorizedUrl);
 
     await expect(waitForSocketClose(socket)).resolves.toEqual({ code: 1008 });

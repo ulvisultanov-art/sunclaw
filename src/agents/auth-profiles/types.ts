@@ -1,5 +1,5 @@
-import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import type { SecretRef } from "../../config/types.secrets.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import type { LegacyOAuthRef } from "./legacy-oauth-ref.js";
 
 export type OAuthProvider = string;

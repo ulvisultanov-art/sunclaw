@@ -79,9 +79,7 @@ function optionLabels(options: Array<{ value: unknown; label: string }> | undefi
 
 function expectUnknownChannelRemovalPrompt(unsafeChannel: string, label: string) {
   expectOption(selectArg().options, channelChoice(unsafeChannel), label);
-  expect(confirmArg().message).toBe(
-    `Delete ${label} configuration from ~/.sunclaw/sunclaw.json?`,
-  );
+  expect(confirmArg().message).toBe(`Delete ${label} configuration from ~/.sunclaw/sunclaw.json?`);
   expect(note).toHaveBeenCalledWith(
     `${label} removed from config.\nNote: credentials/sessions on disk are unchanged.`,
     "Channel removed",

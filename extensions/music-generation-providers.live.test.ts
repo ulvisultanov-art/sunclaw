@@ -1,7 +1,4 @@
-import {
-  resolveApiKeyForProvider,
-  resolveDefaultAgentDir,
-} from "sunclaw/plugin-sdk/agent-runtime";
+import { resolveApiKeyForProvider, resolveDefaultAgentDir } from "sunclaw/plugin-sdk/agent-runtime";
 import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
 import {
   registerProviderPlugin,

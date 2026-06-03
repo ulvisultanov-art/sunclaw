@@ -594,9 +594,7 @@ describe("TelegramPollingSession", () => {
     sleepWithAbortMock.mockReset().mockResolvedValue(undefined);
     drainPendingDeliveriesMock.mockReset().mockResolvedValue(undefined);
     resetTelegramReplyFenceForTests();
-    installTelegramIngressQueueRuntime(() =>
-      path.join(os.tmpdir(), "sunclaw-telegram-test-state"),
-    );
+    installTelegramIngressQueueRuntime(() => path.join(os.tmpdir(), "sunclaw-telegram-test-state"));
   });
 
   afterEach(() => {

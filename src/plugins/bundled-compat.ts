@@ -1,5 +1,5 @@
-import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type { PluginEntryConfig } from "../config/types.plugins.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { hasExplicitPluginConfig } from "./config-policy.js";
 import { normalizePluginId } from "./config-state.js";
 

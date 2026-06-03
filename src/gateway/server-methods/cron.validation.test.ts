@@ -8,9 +8,7 @@ import {
   createTestRegistry,
 } from "../../test-utils/channel-plugins.js";
 
-const getRuntimeConfig = vi.hoisted(() =>
-  vi.fn<() => SunClawConfig>(() => ({}) as SunClawConfig),
-);
+const getRuntimeConfig = vi.hoisted(() => vi.fn<() => SunClawConfig>(() => ({}) as SunClawConfig));
 
 vi.mock("../../config/config.js", async () => {
   const actual =

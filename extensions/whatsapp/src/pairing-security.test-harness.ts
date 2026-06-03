@@ -19,9 +19,9 @@ export function resetPairingSecurityMocks(config: Record<string, unknown>) {
 }
 
 vi.mock("sunclaw/plugin-sdk/runtime-config-snapshot", async () => {
-  const actual = await vi.importActual<
-    typeof import("sunclaw/plugin-sdk/runtime-config-snapshot")
-  >("sunclaw/plugin-sdk/runtime-config-snapshot");
+  const actual = await vi.importActual<typeof import("sunclaw/plugin-sdk/runtime-config-snapshot")>(
+    "sunclaw/plugin-sdk/runtime-config-snapshot",
+  );
   return {
     ...actual,
     getRuntimeConfig: (...args: unknown[]) => loadConfigMock(...args),

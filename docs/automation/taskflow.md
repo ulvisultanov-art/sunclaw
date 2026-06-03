@@ -137,8 +137,8 @@ sunclaw tasks flow show <lookup>
 sunclaw tasks flow cancel <lookup>
 ```
 
-| Command                           | Description                                   |
-| --------------------------------- | --------------------------------------------- |
+| Command                          | Description                                   |
+| -------------------------------- | --------------------------------------------- |
 | `sunclaw tasks flow list`        | Shows tracked flows with status and sync mode |
 | `sunclaw tasks flow show <id>`   | Inspect one flow by flow id or lookup key     |
 | `sunclaw tasks flow cancel <id>` | Cancel a running flow and its active tasks    |

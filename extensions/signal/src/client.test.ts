@@ -5,9 +5,8 @@ import { MAX_TIMER_TIMEOUT_MS } from "sunclaw/plugin-sdk/number-runtime";
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 
 vi.mock("sunclaw/plugin-sdk/core", async () => {
-  const actual = await vi.importActual<typeof import("sunclaw/plugin-sdk/core")>(
-    "sunclaw/plugin-sdk/core",
-  );
+  const actual =
+    await vi.importActual<typeof import("sunclaw/plugin-sdk/core")>("sunclaw/plugin-sdk/core");
   return {
     ...actual,
     generateSecureUuid: () => "test-id",

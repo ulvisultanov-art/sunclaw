@@ -97,8 +97,7 @@ function resolveRttCredentialSource(
   if (credentialSource) {
     return credentialSource;
   }
-  const rawSource =
-    env.SUNCLAW_NPM_TELEGRAM_CREDENTIAL_SOURCE ?? env.SUNCLAW_QA_CREDENTIAL_SOURCE;
+  const rawSource = env.SUNCLAW_NPM_TELEGRAM_CREDENTIAL_SOURCE ?? env.SUNCLAW_QA_CREDENTIAL_SOURCE;
   if (rawSource?.trim()) {
     return parseRttCredentialSource(rawSource);
   }

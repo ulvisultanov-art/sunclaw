@@ -133,7 +133,8 @@ describe("skills gateway handlers (clawhub)", () => {
           slug: "agentreceipt",
           requestedVersion: "1.2.3",
           version: "1.2.3",
-          securityAuditUrl: "https://clawhub.complex.az/sunclaw/agentreceipt/security-audit?version=1.2.3",
+          securityAuditUrl:
+            "https://clawhub.complex.az/sunclaw/agentreceipt/security-audit?version=1.2.3",
           security: { status: "clean", passed: true },
           scannerPayload: { ignored: true },
         },

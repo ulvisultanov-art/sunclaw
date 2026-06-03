@@ -31,11 +31,11 @@ provenance, or install smoke tests.
 
 The short mental model:
 
-| File                  | Where it matters         | What it means                     |
-| --------------------- | ------------------------ | --------------------------------- |
-| `pnpm-lock.yaml`      | SunClaw source checkout | Maintainer dependency graph       |
-| `npm-shrinkwrap.json` | Published npm package    | npm install graph for users       |
-| `package-lock.json`   | Local npm apps           | Not the SunClaw publish contract |
+| File                  | Where it matters        | What it means                    |
+| --------------------- | ----------------------- | -------------------------------- |
+| `pnpm-lock.yaml`      | SunClaw source checkout | Maintainer dependency graph      |
+| `npm-shrinkwrap.json` | Published npm package   | npm install graph for users      |
+| `package-lock.json`   | Local npm apps          | Not the SunClaw publish contract |
 
 ## Why SunClaw uses it
 

@@ -508,9 +508,7 @@ export function resolveCodexExternalSandboxPolicyForSunClawSandbox(
   };
 }
 
-function codexNetworkAccessForSunClawSandbox(
-  sandbox: SunClawSandboxContext | undefined,
-): boolean {
+function codexNetworkAccessForSunClawSandbox(sandbox: SunClawSandboxContext | undefined): boolean {
   if (sandbox?.backendId !== "docker") {
     return true;
   }

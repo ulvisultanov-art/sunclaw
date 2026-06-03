@@ -1057,9 +1057,8 @@ export function registerControlUiAndPairingSuite(): void {
       await import("../infra/device-pairing.js");
     const { server, port, prevToken } = await startControlUiServer("secret");
 
-    const { identityPath, identity } = await createOperatorIdentityFixture(
-      "sunclaw-bootstrap-node-",
-    );
+    const { identityPath, identity } =
+      await createOperatorIdentityFixture("sunclaw-bootstrap-node-");
     const client = {
       id: "sunclaw-ios",
       version: "2026.3.30",
@@ -1922,8 +1921,7 @@ export function registerControlUiAndPairingSuite(): void {
     const { server, port, prevToken } = await startControlUiServer("secret");
     const wsDockerCli = await openWs(port, { host: "172.17.0.2:18789" });
     try {
-      const { identity, identityPath } =
-        await createOperatorIdentityFixture("sunclaw-cli-docker-");
+      const { identity, identityPath } = await createOperatorIdentityFixture("sunclaw-cli-docker-");
       const nonce = await readConnectChallengeNonce(wsDockerCli);
       const dockerCli = await connectReq(wsDockerCli, {
         token: "secret",

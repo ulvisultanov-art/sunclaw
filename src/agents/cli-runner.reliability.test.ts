@@ -185,9 +185,7 @@ function buildPreparedContext(params?: {
     systemPrompt: "You are a helpful assistant.",
     systemPromptReport: {} as PreparedCliRunContext["systemPromptReport"],
     bootstrapPromptWarningLines: [],
-    ...(params?.sunClawHistoryPrompt
-      ? { sunClawHistoryPrompt: params.sunClawHistoryPrompt }
-      : {}),
+    ...(params?.sunClawHistoryPrompt ? { sunClawHistoryPrompt: params.sunClawHistoryPrompt } : {}),
     authEpochVersion: 2,
   };
 }

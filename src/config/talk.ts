@@ -11,8 +11,8 @@ import type {
   TalkProviderConfig,
   TalkRealtimeConfig,
 } from "./types.gateway.js";
-import type { SunClawConfig } from "./types.sunclaw.js";
 import { coerceSecretRef } from "./types.secrets.js";
+import type { SunClawConfig } from "./types.sunclaw.js";
 
 function normalizeTalkSecretInput(value: unknown): TalkProviderConfig["apiKey"] | undefined {
   if (typeof value === "string") {

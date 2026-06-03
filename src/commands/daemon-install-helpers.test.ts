@@ -1504,10 +1504,7 @@ describe("collectPreservedExistingServiceEnvVars — operator opt-in allowlist",
   const managedKeys = new Set<string>();
 
   it("continues to drop stale SUNCLAW_ALLOW_ROOT", () => {
-    const result = collectPreservedExistingServiceEnvVars(
-      { SUNCLAW_ALLOW_ROOT: "1" },
-      managedKeys,
-    );
+    const result = collectPreservedExistingServiceEnvVars({ SUNCLAW_ALLOW_ROOT: "1" }, managedKeys);
     expect(result.SUNCLAW_ALLOW_ROOT).toBeUndefined();
   });
 

@@ -172,9 +172,7 @@ describe("resolvePostInstallDoctorEnv", () => {
     expect(env.PATH).toBe("/bin");
     expect(env.NODE_DISABLE_COMPILE_CACHE).toBe("1");
     expect(env.SUNCLAW_STATE_DIR).toBe(path.join("/srv/sunclaw", "daemon-state"));
-    expect(env.SUNCLAW_CONFIG_PATH).toBe(
-      path.join("/srv/sunclaw", "daemon-state", "sunclaw.json"),
-    );
+    expect(env.SUNCLAW_CONFIG_PATH).toBe(path.join("/srv/sunclaw", "daemon-state", "sunclaw.json"));
     expect(env.SUNCLAW_PROFILE).toBe("work");
   });
 

@@ -67,9 +67,7 @@ describe("diagnostics timeline", () => {
     expect(isDiagnosticsTimelineEnabled({ env: { ...env, SUNCLAW_DIAGNOSTICS: "yes" } })).toBe(
       true,
     );
-    expect(isDiagnosticsTimelineEnabled({ env: { ...env, SUNCLAW_DIAGNOSTICS: "on" } })).toBe(
-      true,
-    );
+    expect(isDiagnosticsTimelineEnabled({ env: { ...env, SUNCLAW_DIAGNOSTICS: "on" } })).toBe(true);
     expect(isDiagnosticsTimelineEnabled({ env: { ...env, SUNCLAW_DIAGNOSTICS: "all" } })).toBe(
       true,
     );
@@ -82,9 +80,7 @@ describe("diagnostics timeline", () => {
     expect(
       isDiagnosticsTimelineEnabled({ env: { ...env, SUNCLAW_DIAGNOSTICS: "telegram.http" } }),
     ).toBe(false);
-    expect(isDiagnosticsTimelineEnabled({ env: { ...env, SUNCLAW_DIAGNOSTICS: "0" } })).toBe(
-      false,
-    );
+    expect(isDiagnosticsTimelineEnabled({ env: { ...env, SUNCLAW_DIAGNOSTICS: "0" } })).toBe(false);
     expect(
       isDiagnosticsTimelineEnabled({
         env: { ...env, SUNCLAW_DIAGNOSTICS_TIMELINE_PATH: "" },

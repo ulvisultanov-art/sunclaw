@@ -5,6 +5,10 @@ import { afterEach, describe, expect, it } from "vitest";
 import { executeSqliteQueryTakeFirstSync, getNodeSqliteKysely } from "../infra/kysely-sync.js";
 import { requireNodeSqlite } from "../infra/node-sqlite.js";
 import { readSqliteNumberPragma } from "../infra/sqlite-pragma.test-support.js";
+import {
+  collectSqliteSchemaShape,
+  createSqliteSchemaShapeFromSql,
+} from "./sqlite-schema-shape.test-support.js";
 import type { DB as SunClawAgentKyselyDatabase } from "./sunclaw-agent-db.generated.js";
 import {
   closeSunClawAgentDatabasesForTest,
@@ -12,14 +16,7 @@ import {
   openSunClawAgentDatabase,
   resolveSunClawAgentSqlitePath,
 } from "./sunclaw-agent-db.js";
-import {
-  closeSunClawStateDatabaseForTest,
-  openSunClawStateDatabase,
-} from "./sunclaw-state-db.js";
-import {
-  collectSqliteSchemaShape,
-  createSqliteSchemaShapeFromSql,
-} from "./sqlite-schema-shape.test-support.js";
+import { closeSunClawStateDatabaseForTest, openSunClawStateDatabase } from "./sunclaw-state-db.js";
 
 type AgentDbTestDatabase = Pick<SunClawAgentKyselyDatabase, "schema_meta">;
 
@@ -224,13 +221,7 @@ describe("sunclaw agent database", () => {
 
   it("refuses to open newer per-agent schema versions", () => {
     const stateDir = createTempStateDir();
-    const databasePath = path.join(
-      stateDir,
-      "agents",
-      "worker-1",
-      "agent",
-      "sunclaw-agent.sqlite",
-    );
+    const databasePath = path.join(stateDir, "agents", "worker-1", "agent", "sunclaw-agent.sqlite");
     fs.mkdirSync(path.dirname(databasePath), { recursive: true });
     const { DatabaseSync } = requireNodeSqlite();
     const db = new DatabaseSync(databasePath);

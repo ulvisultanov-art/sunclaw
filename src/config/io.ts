@@ -1676,13 +1676,10 @@ export function createConfigIO(
         });
         return {};
       }
-      const preValidationDuplicates = findDuplicateAgentDirs(
-        validationConfigRaw as SunClawConfig,
-        {
-          env: deps.env,
-          homedir: deps.homedir,
-        },
-      );
+      const preValidationDuplicates = findDuplicateAgentDirs(validationConfigRaw as SunClawConfig, {
+        env: deps.env,
+        homedir: deps.homedir,
+      });
       if (preValidationDuplicates.length > 0) {
         throw new DuplicateAgentDirError(preValidationDuplicates);
       }

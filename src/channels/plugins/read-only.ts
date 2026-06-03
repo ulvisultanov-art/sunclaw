@@ -1,10 +1,7 @@
 import { createHash } from "node:crypto";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import {
-  sortUniqueStrings,
-  uniqueStrings,
-} from "@sunclaw/normalization-core/string-normalization";
+import { sortUniqueStrings, uniqueStrings } from "@sunclaw/normalization-core/string-normalization";
 import { sanitizeForLog } from "../../../packages/terminal-core/src/ansi.js";
 import { resolveAgentWorkspaceDir, resolveDefaultAgentId } from "../../agents/agent-scope.js";
 import { resolveRuntimeConfigCacheKey } from "../../config/runtime-snapshot.js";
@@ -576,8 +573,7 @@ function rebindChannelPluginConfig(
   sourceChannelId: string,
   targetChannelId: string,
 ): ChannelPlugin["config"] {
-  const rebind = (cfg: SunClawConfig) =>
-    rebindChannelConfig(cfg, sourceChannelId, targetChannelId);
+  const rebind = (cfg: SunClawConfig) => rebindChannelConfig(cfg, sourceChannelId, targetChannelId);
   return {
     ...config,
     listAccountIds: (cfg) => config.listAccountIds(rebind(cfg)),

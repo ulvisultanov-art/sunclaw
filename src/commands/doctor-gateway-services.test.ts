@@ -1034,9 +1034,7 @@ describe("maybeRepairGatewayServiceConfig", () => {
 
   it("does not duplicate Gateway service config panels for a source-checkout entrypoint with audit findings", async () => {
     await withEnvAsync({}, async () => {
-      const root = await fs.mkdtemp(
-        path.join(os.tmpdir(), "sunclaw-doctor-service-config-dedup-"),
-      );
+      const root = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-doctor-service-config-dedup-"));
       try {
         await fs.mkdir(path.join(root, ".git"), { recursive: true });
         await fs.mkdir(path.join(root, "src"), { recursive: true });

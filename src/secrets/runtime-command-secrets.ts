@@ -1,7 +1,7 @@
 import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
 import { uniqueStrings } from "@sunclaw/normalization-core/string-normalization";
-import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { resolveSecretInputRef } from "../config/types.secrets.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { resolveManifestContractOwnerPluginId } from "../plugins/plugin-registry.js";
 import { resolveBundledExplicitWebSearchProvidersFromPublicArtifacts } from "../plugins/web-provider-public-artifacts.explicit.js";
 import {

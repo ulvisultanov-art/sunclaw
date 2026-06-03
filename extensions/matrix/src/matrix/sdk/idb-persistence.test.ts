@@ -2,10 +2,7 @@ import "fake-indexeddb/auto";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import {
-  drainFileLockStateForTest,
-  resetFileLockStateForTest,
-} from "sunclaw/plugin-sdk/file-lock";
+import { drainFileLockStateForTest, resetFileLockStateForTest } from "sunclaw/plugin-sdk/file-lock";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { persistIdbToDisk, restoreIdbFromDisk } from "./idb-persistence.js";
 import {

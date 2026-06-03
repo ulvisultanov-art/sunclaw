@@ -113,9 +113,7 @@ describe("shortenHomeInString", () => {
     vi.stubEnv("HOME", "/home/other");
     try {
       expect(
-        shortenHomeInString(
-          `config: ${path.resolve("/srv/sunclaw-home")}/.sunclaw/sunclaw.json`,
-        ),
+        shortenHomeInString(`config: ${path.resolve("/srv/sunclaw-home")}/.sunclaw/sunclaw.json`),
       ).toBe("config: $SUNCLAW_HOME/.sunclaw/sunclaw.json");
     } finally {
       vi.unstubAllEnvs();

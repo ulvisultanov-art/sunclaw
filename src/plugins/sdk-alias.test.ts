@@ -1105,9 +1105,8 @@ describe("plugin sdk alias helpers", () => {
     );
     fs.writeFileSync(shadowCodexEntry, 'export const plugin = "shadow";\n', "utf-8");
 
-    const aliases = withEnv(
-      { SUNCLAW_ENABLE_PRIVATE_QA_CLI: undefined, NODE_ENV: undefined },
-      () => buildPluginLoaderAliasMap(sourcePluginEntry),
+    const aliases = withEnv({ SUNCLAW_ENABLE_PRIVATE_QA_CLI: undefined, NODE_ENV: undefined }, () =>
+      buildPluginLoaderAliasMap(sourcePluginEntry),
     );
     const otherAliases = withEnv(
       { SUNCLAW_ENABLE_PRIVATE_QA_CLI: undefined, NODE_ENV: undefined },
@@ -1164,9 +1163,9 @@ describe("plugin sdk alias helpers", () => {
     expect(fs.realpathSync(aliases["sunclaw/plugin-sdk/codex-native-task-runtime"] ?? "")).toBe(
       fs.realpathSync(sourceCodexNativeTaskRuntimePath),
     );
-    expect(
-      fs.realpathSync(installedAliases["sunclaw/plugin-sdk/codex-mcp-projection"] ?? ""),
-    ).toBe(fs.realpathSync(distCodexMcpProjectionPath));
+    expect(fs.realpathSync(installedAliases["sunclaw/plugin-sdk/codex-mcp-projection"] ?? "")).toBe(
+      fs.realpathSync(distCodexMcpProjectionPath),
+    );
     expect(
       fs.realpathSync(installedAliases["sunclaw/plugin-sdk/codex-native-task-runtime"] ?? ""),
     ).toBe(fs.realpathSync(distCodexNativeTaskRuntimePath));

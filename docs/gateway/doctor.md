@@ -83,8 +83,8 @@ cat ~/.sunclaw/sunclaw.json
 `sunclaw doctor --fix`. Both use doctor health checks, but their posture is
 different:
 
-| Mode                     | Prompts   | Writes config/state     | Output                 | Use it for                      |
-| ------------------------ | --------- | ----------------------- | ---------------------- | ------------------------------- |
+| Mode                    | Prompts   | Writes config/state     | Output                 | Use it for                      |
+| ----------------------- | --------- | ----------------------- | ---------------------- | ------------------------------- |
 | `sunclaw doctor`        | yes       | no                      | friendly health report | a human checking status         |
 | `sunclaw doctor --fix`  | sometimes | yes, with repair policy | friendly repair log    | applying approved repairs       |
 | `sunclaw doctor --lint` | no        | no                      | structured findings    | CI, preflight, and review gates |

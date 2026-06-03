@@ -144,11 +144,7 @@ export const PLUGIN_COMPAT_RECORDS = [
     owner: "plugin-execution",
     introduced: "2026-04-29",
     docsPath: "/plugins/architecture-internals",
-    surfaces: [
-      "createCapturedPluginRegistration",
-      "capturePluginRegistration",
-      "SunClawPluginApi",
-    ],
+    surfaces: ["createCapturedPluginRegistration", "capturePluginRegistration", "SunClawPluginApi"],
     diagnostics: ["runtime registration capture contract probe"],
     tests: ["src/plugins/captured-registration.test.ts"],
   },

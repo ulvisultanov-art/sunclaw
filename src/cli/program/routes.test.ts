@@ -495,15 +495,7 @@ describe("program routes", () => {
     expect(rootRoute.loadPlugins).toBeUndefined();
     expect(rootRoute.canRun?.(["node", "sunclaw", "tasks"])).toBe(false);
     await expect(
-      rootRoute.run([
-        "node",
-        "sunclaw",
-        "tasks",
-        "--json",
-        "--runtime",
-        "cli",
-        "--status=running",
-      ]),
+      rootRoute.run(["node", "sunclaw", "tasks", "--json", "--runtime", "cli", "--status=running"]),
     ).resolves.toBe(true);
     expect(tasksListJsonCommandMock).toHaveBeenCalledWith(
       { json: true, runtime: "cli", status: "running" },

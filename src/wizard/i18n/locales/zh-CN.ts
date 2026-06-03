@@ -97,7 +97,8 @@ export const zh_CN = {
       websocketUrl: "Gateway WebSocket URL",
     },
     gatewayTailscale: {
-      docsNote: "文档：\nhttps://docs.sunclaw.complex.az/gateway/tailscale\nhttps://docs.sunclaw.complex.az/web",
+      docsNote:
+        "文档：\nhttps://docs.sunclaw.complex.az/gateway/tailscale\nhttps://docs.sunclaw.complex.az/web",
       funnel: "Funnel",
       funnelHint: "通过 Tailscale Funnel 暴露公网 HTTPS",
       missingBinNote:

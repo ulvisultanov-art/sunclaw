@@ -5,7 +5,8 @@ const validRule = {
   id: "ghsa-1234-abcd-5678.source-rule",
   metadata: {
     ghsa: "GHSA-1234-ABCD-5678",
-    "advisory-url": "https://github.com/ulvisultanov-art/sunclaw/security/advisories/GHSA-1234-ABCD-5678",
+    "advisory-url":
+      "https://github.com/ulvisultanov-art/sunclaw/security/advisories/GHSA-1234-ABCD-5678",
     "detector-bucket": "precise",
     "source-rule-id": "source-rule",
   },

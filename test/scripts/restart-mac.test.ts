@@ -91,10 +91,10 @@ describe("scripts/restart-mac.sh", () => {
     );
 
     expect(chooseBlock).toContain('fail "SUNCLAW_APP_BUNDLE does not exist: ${APP_BUNDLE}"');
-    expect(chooseBlock.indexOf('${ROOT_DIR}/dist/SunClaw.app')).toBeGreaterThan(-1);
-    expect(chooseBlock.indexOf('/Applications/SunClaw.app')).toBeGreaterThan(-1);
-    expect(chooseBlock.indexOf('${ROOT_DIR}/dist/SunClaw.app')).toBeLessThan(
-      chooseBlock.indexOf('/Applications/SunClaw.app'),
+    expect(chooseBlock.indexOf("${ROOT_DIR}/dist/SunClaw.app")).toBeGreaterThan(-1);
+    expect(chooseBlock.indexOf("/Applications/SunClaw.app")).toBeGreaterThan(-1);
+    expect(chooseBlock.indexOf("${ROOT_DIR}/dist/SunClaw.app")).toBeLessThan(
+      chooseBlock.indexOf("/Applications/SunClaw.app"),
     );
   });
 });

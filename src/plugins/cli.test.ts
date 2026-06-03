@@ -16,8 +16,7 @@ const mocks = vi.hoisted(() => ({
 }));
 
 vi.mock("./loader.js", () => ({
-  loadSunClawPluginCliRegistry: (...args: unknown[]) =>
-    mocks.loadSunClawPluginCliRegistry(...args),
+  loadSunClawPluginCliRegistry: (...args: unknown[]) => mocks.loadSunClawPluginCliRegistry(...args),
   loadSunClawPlugins: (...args: unknown[]) => mocks.loadSunClawPlugins(...args),
 }));
 

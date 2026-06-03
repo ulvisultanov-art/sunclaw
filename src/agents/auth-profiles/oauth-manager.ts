@@ -1,5 +1,5 @@
-import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { normalizeSecretInputString } from "../../config/types.secrets.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { formatErrorMessage } from "../../infra/errors.js";
 import { withFileLock } from "../../infra/file-lock.js";
 import { redactSensitiveText } from "../../logging/redact.js";

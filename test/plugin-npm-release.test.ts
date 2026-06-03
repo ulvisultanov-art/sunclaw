@@ -31,9 +31,10 @@ describe("parsePluginReleaseSelection", () => {
   });
 
   it("dedupes and sorts comma or whitespace separated package names", () => {
-    expect(
-      parsePluginReleaseSelection(" @sunclaw/zalo, @sunclaw/feishu  @sunclaw/zalo "),
-    ).toEqual(["@sunclaw/feishu", "@sunclaw/zalo"]);
+    expect(parsePluginReleaseSelection(" @sunclaw/zalo, @sunclaw/feishu  @sunclaw/zalo ")).toEqual([
+      "@sunclaw/feishu",
+      "@sunclaw/zalo",
+    ]);
   });
 });
 
@@ -65,12 +66,7 @@ describe("parsePluginReleaseArgs", () => {
 
   it("rejects plugin names when all-publishable mode is selected", () => {
     expect(() =>
-      parsePluginReleaseArgs([
-        "--selection-mode",
-        "all-publishable",
-        "--plugins",
-        "@sunclaw/zalo",
-      ]),
+      parsePluginReleaseArgs(["--selection-mode", "all-publishable", "--plugins", "@sunclaw/zalo"]),
     ).toThrowError("`--selection-mode all-publishable` must not be combined with `--plugins`.");
   });
 

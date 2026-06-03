@@ -158,8 +158,7 @@ describe("tasks gateway handlers", () => {
       ownerKey: "agent:main:main",
       scopeKind: "session",
       runId: "run-sanitized",
-      label:
-        "Compile artifact\nSunClaw runtime context (internal): Keep internal details private.",
+      label: "Compile artifact\nSunClaw runtime context (internal): Keep internal details private.",
       task: "Compile artifact",
       status: "running",
       deliveryStatus: "pending",

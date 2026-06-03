@@ -102,9 +102,7 @@ describe("plugin-sdk qa-runner-runtime", () => {
     expect(testApiCall?.dirName).toBe("matrix");
     expect(testApiCall?.artifactBasename).toBe("test-api.js");
     expect(testApiCall?.env?.SUNCLAW_ENABLE_PRIVATE_QA_CLI).toBe("1");
-    expect(testApiCall?.env?.SUNCLAW_BUNDLED_PLUGINS_DIR).toBe(
-      path.join(sourceRoot, "extensions"),
-    );
+    expect(testApiCall?.env?.SUNCLAW_BUNDLED_PLUGINS_DIR).toBe(path.join(sourceRoot, "extensions"));
   });
 
   it("reports the qa runtime as unavailable when the qa-lab surface is missing", async () => {

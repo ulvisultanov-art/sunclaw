@@ -159,7 +159,7 @@ guidance remain available to non-Codex prompt surfaces for compatibility.
 | `api.registerGatewayMethod(name, handler)`     | Gateway RPC method                      |
 | `api.registerGatewayDiscoveryService(service)` | Local Gateway discovery advertiser      |
 | `api.registerCli(registrar, opts?)`            | CLI subcommand                          |
-| `api.registerNodeCliFeature(registrar, opts?)` | Node feature CLI under `sunclaw nodes` |
+| `api.registerNodeCliFeature(registrar, opts?)` | Node feature CLI under `sunclaw nodes`  |
 | `api.registerService(service)`                 | Background service                      |
 | `api.registerInteractiveHandler(registration)` | Interactive handler                     |
 | `api.registerAgentToolResultMiddleware(...)`   | Runtime tool-result middleware          |
@@ -436,7 +436,7 @@ semantics.
 | `api.description`        | `string?`                 | Plugin description (optional)                                                               |
 | `api.source`             | `string`                  | Plugin source path                                                                          |
 | `api.rootDir`            | `string?`                 | Plugin root directory (optional)                                                            |
-| `api.config`             | `SunClawConfig`          | Current config snapshot (active in-memory runtime snapshot when available)                  |
+| `api.config`             | `SunClawConfig`           | Current config snapshot (active in-memory runtime snapshot when available)                  |
 | `api.pluginConfig`       | `Record<string, unknown>` | Plugin-specific config from `plugins.entries.<id>.config`                                   |
 | `api.runtime`            | `PluginRuntime`           | [Runtime helpers](/plugins/sdk-runtime)                                                     |
 | `api.logger`             | `PluginLogger`            | Scoped logger (`debug`, `info`, `warn`, `error`)                                            |

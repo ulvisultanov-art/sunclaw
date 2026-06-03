@@ -13,8 +13,8 @@ import type { AuthProfileCredential, AuthProfileStore } from "../agents/auth-pro
 import { formatCliCommand } from "../cli/command-format.js";
 import { resolveStateDir } from "../config/paths.js";
 import type { AuthProfileConfig } from "../config/types.auth.js";
-import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { coerceSecretRef } from "../config/types.secrets.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { loadJsonFile } from "../infra/json-file.js";
 import { shortenHomePath } from "../utils.js";
 import type { DoctorPrompter } from "./doctor-prompter.js";

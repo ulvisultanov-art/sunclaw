@@ -1,10 +1,7 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import {
-  initializeGlobalHookRunner,
-  resetGlobalHookRunner,
-} from "sunclaw/plugin-sdk/hook-runtime";
+import { initializeGlobalHookRunner, resetGlobalHookRunner } from "sunclaw/plugin-sdk/hook-runtime";
 import { createMockPluginRegistry } from "sunclaw/plugin-sdk/plugin-test-runtime";
 import { castAgentMessage } from "sunclaw/plugin-sdk/test-fixtures";
 import { afterEach, describe, expect, it } from "vitest";

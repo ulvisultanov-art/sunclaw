@@ -238,9 +238,9 @@ describe("parent command help fast paths", () => {
 
 describe("shouldUseSetupOnboardConfigureHelpFastPath", () => {
   it("uses the fast path only for setup, onboard, and configure help", () => {
-    expect(
-      shouldUseSetupOnboardConfigureHelpFastPath(["node", "sunclaw", "setup", "--help"]),
-    ).toBe(true);
+    expect(shouldUseSetupOnboardConfigureHelpFastPath(["node", "sunclaw", "setup", "--help"])).toBe(
+      true,
+    );
     expect(shouldUseSetupOnboardConfigureHelpFastPath(["node", "sunclaw", "onboard", "-h"])).toBe(
       true,
     );
@@ -288,9 +288,9 @@ describe("resolvePrecomputedSubcommandHelpFastPath", () => {
         "-h",
       ]),
     ).toBe("models");
-    expect(
-      resolvePrecomputedSubcommandHelpFastPath(["node", "sunclaw", "plugins", "--help"]),
-    ).toBe("plugins");
+    expect(resolvePrecomputedSubcommandHelpFastPath(["node", "sunclaw", "plugins", "--help"])).toBe(
+      "plugins",
+    );
     expect(
       resolvePrecomputedSubcommandHelpFastPath(["node", "sunclaw", "doctor", "--version"]),
     ).toBeNull();

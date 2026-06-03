@@ -52,8 +52,7 @@ export function shouldHideCliBannerForCommandPath(
   env: NodeJS.ProcessEnv = process.env,
 ): boolean {
   return (
-    isTruthyEnvValue(env.SUNCLAW_HIDE_BANNER) ||
-    resolveCliCommandPathPolicy(commandPath).hideBanner
+    isTruthyEnvValue(env.SUNCLAW_HIDE_BANNER) || resolveCliCommandPathPolicy(commandPath).hideBanner
   );
 }
 

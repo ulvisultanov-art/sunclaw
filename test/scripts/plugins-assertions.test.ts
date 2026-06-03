@@ -142,7 +142,10 @@ describe("plugins Docker assertions", () => {
 
     for (const scriptPath of scripts) {
       const script = readFileSync(scriptPath, "utf8");
-      const scriptWithoutDefaultScratch = script.replace('mktemp -d "/tmp/sunclaw-plugins.XXXXXX"', "");
+      const scriptWithoutDefaultScratch = script.replace(
+        'mktemp -d "/tmp/sunclaw-plugins.XXXXXX"',
+        "",
+      );
       expect(script).toContain("SUNCLAW_PLUGINS_TMP_DIR");
       expect(scriptWithoutDefaultScratch).not.toMatch(
         /\/tmp\/(?:plugins|marketplace|demo-plugin|is-number|sunclaw-plugin|sunclaw-clawhub)/,

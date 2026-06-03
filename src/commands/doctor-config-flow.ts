@@ -30,10 +30,7 @@ function hasLegacyInternalHookHandlers(raw: unknown): boolean {
   return Array.isArray(handlers) && handlers.length > 0;
 }
 
-function collectInvalidHookTransformsDirWarnings(
-  cfg: SunClawConfig,
-  configPath: string,
-): string[] {
+function collectInvalidHookTransformsDirWarnings(cfg: SunClawConfig, configPath: string): string[] {
   const transformsDir = cfg.hooks?.transformsDir?.trim();
   if (!transformsDir) {
     return [];

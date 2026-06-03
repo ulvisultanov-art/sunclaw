@@ -11,8 +11,8 @@ import type { ConfigSnapshotForInstallPersist } from "../../cli/plugins-install-
 import { refreshPluginRegistryAfterConfigMutation } from "../../cli/plugins-registry-refresh.js";
 import { readConfigFileSnapshot } from "../../config/config.js";
 import { assertConfigWriteAllowedInCurrentMode } from "../../config/nix-mode-write-guard.js";
-import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import type { PluginInstallRecord } from "../../config/types.plugins.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { resolveArchiveKind } from "../../infra/archive.js";
 import { parseClawHubPluginSpec } from "../../infra/clawhub.js";
 import { formatErrorMessage } from "../../infra/errors.js";

@@ -31,8 +31,8 @@ import { resolveConfigIncludes } from "../../config/includes.js";
 import { formatConfigIssueLines } from "../../config/issue-format.js";
 import { asResolvedSourceConfig, asRuntimeConfig } from "../../config/materialize.js";
 import { CONFIG_PATH, resolveIncludeRoots } from "../../config/paths.js";
-import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import type { PluginInstallRecord } from "../../config/types.plugins.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import {
   GATEWAY_SERVICE_KIND,
   GATEWAY_SERVICE_MARKER,
@@ -723,10 +723,7 @@ function formatPostUpdateGatewayRecoveryLine(platform: NodeJS.Platform): string 
     formatCliCommand("sunclaw gateway install --force"),
     CLI_NAME,
   );
-  const statusCommand = replaceCliName(
-    formatCliCommand("sunclaw gateway status --deep"),
-    CLI_NAME,
-  );
+  const statusCommand = replaceCliName(formatCliCommand("sunclaw gateway status --deep"), CLI_NAME);
   if (platform === "darwin") {
     return `Recovery: run \`${restartCommand}\`; if the LaunchAgent is installed but not loaded, run \`${installCommand}\` from the logged-in macOS user session, then rerun \`${statusCommand}\`.`;
   }

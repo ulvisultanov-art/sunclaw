@@ -1481,13 +1481,9 @@ grep -qx -- "SUNCLAW_E2E_COMMAND_TIMEOUT=23s" "$TMPDIR/package-args"
     const publishedRunner = readFileSync(UPGRADE_SURVIVOR_RUN_SCRIPT, "utf8");
     const updateRestartAuth = readFileSync(UPGRADE_SURVIVOR_UPDATE_RESTART_AUTH_PATH, "utf8");
 
-    expect(runner).toContain(
-      'COMMAND_TIMEOUT="${SUNCLAW_UPGRADE_SURVIVOR_COMMAND_TIMEOUT:-900s}"',
-    );
+    expect(runner).toContain('COMMAND_TIMEOUT="${SUNCLAW_UPGRADE_SURVIVOR_COMMAND_TIMEOUT:-900s}"');
     expect(runner).toContain('-e SUNCLAW_UPGRADE_SURVIVOR_COMMAND_TIMEOUT="$COMMAND_TIMEOUT"');
-    expect(runner).toContain(
-      'command_timeout="${SUNCLAW_UPGRADE_SURVIVOR_COMMAND_TIMEOUT:-900s}"',
-    );
+    expect(runner).toContain('command_timeout="${SUNCLAW_UPGRADE_SURVIVOR_COMMAND_TIMEOUT:-900s}"');
     expect(runner).toContain(
       'sunclaw_e2e_maybe_timeout "$command_timeout" env -u SUNCLAW_GATEWAY_TOKEN',
     );
@@ -1497,12 +1493,8 @@ grep -qx -- "SUNCLAW_E2E_COMMAND_TIMEOUT=23s" "$TMPDIR/package-args"
     expect(runner).toContain(
       'sunclaw_e2e_maybe_timeout "$command_timeout" sunclaw config validate',
     );
-    expect(runner).toContain(
-      'sunclaw_e2e_maybe_timeout "$command_timeout" sunclaw gateway status',
-    );
-    expect(runner).toContain(
-      'sunclaw gateway --port "$PORT" --bind loopback --allow-unconfigured',
-    );
+    expect(runner).toContain('sunclaw_e2e_maybe_timeout "$command_timeout" sunclaw gateway status');
+    expect(runner).toContain('sunclaw gateway --port "$PORT" --bind loopback --allow-unconfigured');
 
     expect(publishedRunner).toContain(
       'COMMAND_TIMEOUT="${SUNCLAW_UPGRADE_SURVIVOR_COMMAND_TIMEOUT:-900s}"',
@@ -2108,9 +2100,7 @@ output="$(run_logged_print_heartbeat plugins-run 08 bash -c 'printf "captured co
     expect(runner).toContain('curl -fsSL "$INSTALL_URL" | SUNCLAW_BETA=1 bash');
     expect(runner).toContain('curl -fsSL "$INSTALL_URL" | SUNCLAW_VERSION="$INSTALL_TAG" bash');
     expect(runner).not.toContain('SUNCLAW_BETA=1 curl -fsSL "$INSTALL_URL" | bash');
-    expect(runner).not.toContain(
-      'SUNCLAW_VERSION="$INSTALL_TAG" curl -fsSL "$INSTALL_URL" | bash',
-    );
+    expect(runner).not.toContain('SUNCLAW_VERSION="$INSTALL_TAG" curl -fsSL "$INSTALL_URL" | bash');
   });
 
   it("keeps installer E2E agent turns out of the interactive bootstrap ritual", () => {

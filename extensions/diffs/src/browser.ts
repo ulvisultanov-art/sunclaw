@@ -1,9 +1,9 @@
 import { constants as fsConstants } from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { chromium } from "playwright-core";
 import { formatErrorMessage } from "sunclaw/plugin-sdk/error-runtime";
 import { writeExternalFileWithinRoot } from "sunclaw/plugin-sdk/security-runtime";
-import { chromium } from "playwright-core";
 import type { SunClawConfig } from "../api.js";
 import type { DiffRenderOptions, DiffTheme } from "./types.js";
 import {

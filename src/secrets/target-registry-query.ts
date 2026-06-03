@@ -109,9 +109,7 @@ function getCompiledCoreSunClawTargetState() {
   return compiledCoreSunClawTargetState;
 }
 
-function getCompiledChannelSunClawTargets(
-  channelId: string,
-): CompiledTargetRegistryEntry[] | null {
+function getCompiledChannelSunClawTargets(channelId: string): CompiledTargetRegistryEntry[] | null {
   const normalizedChannelId = channelId.trim();
   if (!normalizedChannelId) {
     return null;
@@ -364,9 +362,7 @@ export function resolveConfigSecretTargetByPath(pathSegments: string[]): Resolve
   return null;
 }
 
-export function discoverConfigSecretTargets(
-  config: SunClawConfig,
-): DiscoveredConfigSecretTarget[] {
+export function discoverConfigSecretTargets(config: SunClawConfig): DiscoveredConfigSecretTarget[] {
   return discoverConfigSecretTargetsByIds(config);
 }
 

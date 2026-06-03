@@ -1,7 +1,7 @@
 import { isRecord } from "@sunclaw/normalization-core/record-coerce";
 import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
-import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { coerceSecretRef, type SecretRef } from "../config/types.secrets.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { resolveDefaultSecretProviderAlias } from "../secrets/ref-contract.js";
 import type { PluginManifestRecord } from "./manifest-registry.js";
 import type {

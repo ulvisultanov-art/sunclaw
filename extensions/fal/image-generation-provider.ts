@@ -3,10 +3,7 @@ import type {
   ImageGenerationProvider,
   ImageGenerationSourceImage,
 } from "sunclaw/plugin-sdk/image-generation";
-import {
-  imageFileExtensionForMimeType,
-  toImageDataUrl,
-} from "sunclaw/plugin-sdk/image-generation";
+import { imageFileExtensionForMimeType, toImageDataUrl } from "sunclaw/plugin-sdk/image-generation";
 import { isProviderApiKeyConfigured } from "sunclaw/plugin-sdk/provider-auth";
 import {
   assertOkOrThrowHttpError,

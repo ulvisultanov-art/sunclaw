@@ -5,10 +5,7 @@ import { format } from "node:util";
 import type { Command } from "commander";
 import { formatErrorMessage } from "sunclaw/plugin-sdk/error-runtime";
 import { callGatewayFromCli } from "sunclaw/plugin-sdk/gateway-runtime";
-import {
-  clampTimerTimeoutMs,
-  parseStrictPositiveInteger,
-} from "sunclaw/plugin-sdk/number-runtime";
+import { clampTimerTimeoutMs, parseStrictPositiveInteger } from "sunclaw/plugin-sdk/number-runtime";
 import {
   buildGoogleMeetCalendarDayWindow,
   findGoogleMeetCalendarEvent,

@@ -13,13 +13,9 @@ async function runLocalShellCommand(
   params: SandboxBackendCommandParams,
 ): Promise<SandboxBackendCommandResult> {
   return await new Promise<SandboxBackendCommandResult>((resolve, reject) => {
-    const child = spawn(
-      "sh",
-      ["-c", params.script, "sunclaw-sandbox-fs", ...(params.args ?? [])],
-      {
-        stdio: ["pipe", "pipe", "pipe"],
-      },
-    );
+    const child = spawn("sh", ["-c", params.script, "sunclaw-sandbox-fs", ...(params.args ?? [])], {
+      stdio: ["pipe", "pipe", "pipe"],
+    });
 
     const stdoutChunks: Buffer[] = [];
     const stderrChunks: Buffer[] = [];

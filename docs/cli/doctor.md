@@ -24,8 +24,8 @@ wrong.
 
 Doctor has three postures:
 
-| Posture | Command                  | Behavior                                                                        |
-| ------- | ------------------------ | ------------------------------------------------------------------------------- |
+| Posture | Command                 | Behavior                                                                        |
+| ------- | ----------------------- | ------------------------------------------------------------------------------- |
 | Inspect | `sunclaw doctor`        | Human-oriented checks and guided prompts.                                       |
 | Repair  | `sunclaw doctor --fix`  | Applies supported repairs, using prompts unless non-interactive repair is safe. |
 | Lint    | `sunclaw doctor --lint` | Read-only structured findings for CI, preflight, and review gates.              |

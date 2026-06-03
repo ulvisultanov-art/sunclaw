@@ -205,7 +205,7 @@ The auto-updater is off by default. Enable it in `~/.sunclaw/sunclaw.json`:
 | -------- | ------------------------------------------------------------------------------------------------------------- |
 | `stable` | Waits `stableDelayHours`, then applies with deterministic jitter across `stableJitterHours` (spread rollout). |
 | `beta`   | Checks every `betaCheckIntervalHours` (default: hourly) and applies immediately.                              |
-| `dev`    | No automatic apply. Use `sunclaw update` manually.                                                           |
+| `dev`    | No automatic apply. Use `sunclaw update` manually.                                                            |
 
 The gateway also logs an update hint on startup (disable with `update.checkOnStart: false`).
 For downgrade or incident recovery, set `SUNCLAW_NO_AUTO_UPDATE=1` in the gateway environment to block automatic applies even when `update.auto.enabled` is configured. Startup update hints can still run unless `update.checkOnStart` is also disabled.

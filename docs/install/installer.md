@@ -9,11 +9,11 @@ title: "Installer internals"
 
 SunClaw ships three installer scripts, served from `docs.sunclaw.complex.az`.
 
-| Script                             | Platform             | What it does                                                                                                   |
-| ---------------------------------- | -------------------- | -------------------------------------------------------------------------------------------------------------- |
-| [`install.sh`](#installsh)         | macOS / Linux / WSL  | Installs Node if needed, installs SunClaw via npm (default) or git, and can run onboarding.                   |
+| Script                             | Platform             | What it does                                                                                                 |
+| ---------------------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------ |
+| [`install.sh`](#installsh)         | macOS / Linux / WSL  | Installs Node if needed, installs SunClaw via npm (default) or git, and can run onboarding.                  |
 | [`install-cli.sh`](#install-clish) | macOS / Linux / WSL  | Installs Node + SunClaw into a local prefix (`~/.sunclaw`) with npm or git checkout modes. No root required. |
-| [`install.ps1`](#installps1)       | Windows (PowerShell) | Installs Node if needed, installs SunClaw via npm (default) or git, and can run onboarding.                   |
+| [`install.ps1`](#installps1)       | Windows (PowerShell) | Installs Node if needed, installs SunClaw via npm (default) or git, and can run onboarding.                  |
 
 ## Quick commands
 
@@ -141,7 +141,7 @@ The script exits with code `2` for invalid method selection or invalid `--instal
 | `--git`                               | Shortcut for git method. Alias: `--github`                 |
 | `--version <version\|dist-tag\|spec>` | npm version, dist-tag, or package spec (default: `latest`) |
 | `--beta`                              | Use beta dist-tag if available, else fallback to `latest`  |
-| `--git-dir <path>`                    | Checkout directory (default: `~/sunclaw`). Alias: `--dir` |
+| `--git-dir <path>`                    | Checkout directory (default: `~/sunclaw`). Alias: `--dir`  |
 | `--no-git-update`                     | Skip `git pull` for existing checkout                      |
 | `--no-prompt`                         | Disable prompts                                            |
 | `--no-onboard`                        | Skip onboarding                                            |
@@ -154,19 +154,19 @@ The script exits with code `2` for invalid method selection or invalid `--instal
 
   <Accordion title="Environment variables reference">
 
-| Variable                                          | Description                                                        |
-| ------------------------------------------------- | ------------------------------------------------------------------ |
-| `SUNCLAW_INSTALL_METHOD=git\|npm`                | Install method                                                     |
-| `SUNCLAW_VERSION=latest\|next\|<semver>\|<spec>` | npm version, dist-tag, or package spec                             |
-| `SUNCLAW_BETA=0\|1`                              | Use beta if available                                              |
+| Variable                                         | Description                                                       |
+| ------------------------------------------------ | ----------------------------------------------------------------- |
+| `SUNCLAW_INSTALL_METHOD=git\|npm`                | Install method                                                    |
+| `SUNCLAW_VERSION=latest\|next\|<semver>\|<spec>` | npm version, dist-tag, or package spec                            |
+| `SUNCLAW_BETA=0\|1`                              | Use beta if available                                             |
 | `SUNCLAW_HOME=<path>`                            | Base directory for SunClaw state and default git/onboarding paths |
-| `SUNCLAW_GIT_DIR=<path>`                         | Checkout directory                                                 |
-| `SUNCLAW_GIT_UPDATE=0\|1`                        | Toggle git updates                                                 |
-| `SUNCLAW_NO_PROMPT=1`                            | Disable prompts                                                    |
-| `SUNCLAW_NO_ONBOARD=1`                           | Skip onboarding                                                    |
-| `SUNCLAW_DRY_RUN=1`                              | Dry run mode                                                       |
-| `SUNCLAW_VERBOSE=1`                              | Debug mode                                                         |
-| `SUNCLAW_NPM_LOGLEVEL=error\|warn\|notice`       | npm log level                                                      |
+| `SUNCLAW_GIT_DIR=<path>`                         | Checkout directory                                                |
+| `SUNCLAW_GIT_UPDATE=0\|1`                        | Toggle git updates                                                |
+| `SUNCLAW_NO_PROMPT=1`                            | Disable prompts                                                   |
+| `SUNCLAW_NO_ONBOARD=1`                           | Skip onboarding                                                   |
+| `SUNCLAW_DRY_RUN=1`                              | Dry run mode                                                      |
+| `SUNCLAW_VERBOSE=1`                              | Debug mode                                                        |
+| `SUNCLAW_NPM_LOGLEVEL=error\|warn\|notice`       | npm log level                                                     |
 
   </Accordion>
 </AccordionGroup>
@@ -240,15 +240,15 @@ by default, plus git-checkout installs under the same prefix flow.
 
 | Flag                        | Description                                                                     |
 | --------------------------- | ------------------------------------------------------------------------------- |
-| `--prefix <path>`           | Install prefix (default: `~/.sunclaw`)                                         |
+| `--prefix <path>`           | Install prefix (default: `~/.sunclaw`)                                          |
 | `--install-method npm\|git` | Choose install method (default: `npm`). Alias: `--method`                       |
 | `--npm`                     | Shortcut for npm method                                                         |
 | `--git`, `--github`         | Shortcut for git method                                                         |
-| `--git-dir <path>`          | Git checkout directory (default: `~/sunclaw`). Alias: `--dir`                  |
-| `--version <ver>`           | SunClaw version or dist-tag (default: `latest`)                                |
+| `--git-dir <path>`          | Git checkout directory (default: `~/sunclaw`). Alias: `--dir`                   |
+| `--version <ver>`           | SunClaw version or dist-tag (default: `latest`)                                 |
 | `--node-version <ver>`      | Node version (default: `22.22.0`)                                               |
 | `--json`                    | Emit NDJSON events                                                              |
-| `--onboard`                 | Run `sunclaw onboard` after install                                            |
+| `--onboard`                 | Run `sunclaw onboard` after install                                             |
 | `--no-onboard`              | Skip onboarding (default)                                                       |
 | `--set-npm-prefix`          | On Linux, force npm prefix to `~/.npm-global` if current prefix is not writable |
 | `--help`                    | Show usage (`-h`)                                                               |
@@ -257,17 +257,17 @@ by default, plus git-checkout installs under the same prefix flow.
 
   <Accordion title="Environment variables reference">
 
-| Variable                                    | Description                                                        |
-| ------------------------------------------- | ------------------------------------------------------------------ |
-| `SUNCLAW_PREFIX=<path>`                    | Install prefix                                                     |
-| `SUNCLAW_INSTALL_METHOD=git\|npm`          | Install method                                                     |
+| Variable                                   | Description                                                       |
+| ------------------------------------------ | ----------------------------------------------------------------- |
+| `SUNCLAW_PREFIX=<path>`                    | Install prefix                                                    |
+| `SUNCLAW_INSTALL_METHOD=git\|npm`          | Install method                                                    |
 | `SUNCLAW_VERSION=<ver>`                    | SunClaw version or dist-tag                                       |
-| `SUNCLAW_NODE_VERSION=<ver>`               | Node version                                                       |
+| `SUNCLAW_NODE_VERSION=<ver>`               | Node version                                                      |
 | `SUNCLAW_HOME=<path>`                      | Base directory for SunClaw state and default git/onboarding paths |
-| `SUNCLAW_GIT_DIR=<path>`                   | Git checkout directory for git installs                            |
-| `SUNCLAW_GIT_UPDATE=0\|1`                  | Toggle git updates for existing checkouts                          |
-| `SUNCLAW_NO_ONBOARD=1`                     | Skip onboarding                                                    |
-| `SUNCLAW_NPM_LOGLEVEL=error\|warn\|notice` | npm log level                                                      |
+| `SUNCLAW_GIT_DIR=<path>`                   | Git checkout directory for git installs                           |
+| `SUNCLAW_GIT_UPDATE=0\|1`                  | Toggle git updates for existing checkouts                         |
+| `SUNCLAW_NO_ONBOARD=1`                     | Skip onboarding                                                   |
+| `SUNCLAW_NPM_LOGLEVEL=error\|warn\|notice` | npm log level                                                     |
 
   </Accordion>
 </AccordionGroup>
@@ -348,7 +348,7 @@ by default, plus git-checkout installs under the same prefix flow.
 | --------------------------- | ---------------------------------------------------------- |
 | `-InstallMethod npm\|git`   | Install method (default: `npm`)                            |
 | `-Tag <tag\|version\|spec>` | npm dist-tag, version, or package spec (default: `latest`) |
-| `-GitDir <path>`            | Checkout directory (default: `%USERPROFILE%\sunclaw`)     |
+| `-GitDir <path>`            | Checkout directory (default: `%USERPROFILE%\sunclaw`)      |
 | `-NoOnboard`                | Skip onboarding                                            |
 | `-NoGitUpdate`              | Skip `git pull`                                            |
 | `-DryRun`                   | Print actions only                                         |
@@ -357,8 +357,8 @@ by default, plus git-checkout installs under the same prefix flow.
 
   <Accordion title="Environment variables reference">
 
-| Variable                           | Description        |
-| ---------------------------------- | ------------------ |
+| Variable                          | Description        |
+| --------------------------------- | ------------------ |
 | `SUNCLAW_INSTALL_METHOD=git\|npm` | Install method     |
 | `SUNCLAW_GIT_DIR=<path>`          | Checkout directory |
 | `SUNCLAW_NO_ONBOARD=1`            | Skip onboarding    |

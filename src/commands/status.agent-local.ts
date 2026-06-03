@@ -24,9 +24,7 @@ type AgentLocalStatusesResult = {
   bootstrapPendingCount: number;
 };
 
-export async function getAgentLocalStatuses(
-  cfg: SunClawConfig,
-): Promise<AgentLocalStatusesResult> {
+export async function getAgentLocalStatuses(cfg: SunClawConfig): Promise<AgentLocalStatusesResult> {
   const agentList = listGatewayAgentsBasic(cfg);
   const now = Date.now();
 

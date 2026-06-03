@@ -13,8 +13,7 @@ vi.mock("./openai-chatgpt-provider.runtime.js", () => ({
 }));
 
 vi.mock("sunclaw/plugin-sdk/provider-stream-family", async (importOriginal) => {
-  const actual =
-    await importOriginal<typeof import("sunclaw/plugin-sdk/provider-stream-family")>();
+  const actual = await importOriginal<typeof import("sunclaw/plugin-sdk/provider-stream-family")>();
   const wrapStreamFn: NonNullable<typeof actual.OPENAI_RESPONSES_STREAM_HOOKS.wrapStreamFn> = (
     ctx,
   ) => {

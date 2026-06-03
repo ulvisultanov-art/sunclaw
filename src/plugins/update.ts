@@ -1,7 +1,7 @@
 import path from "node:path";
 import { isRecord } from "@sunclaw/normalization-core/record-coerce";
-import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { parseClawHubPluginSpec } from "../infra/clawhub-spec.js";
 import { satisfiesPluginApiRange } from "../infra/clawhub.js";
 import type { NpmSpecResolution } from "../infra/install-source-utils.js";

@@ -384,8 +384,7 @@ function buildRuntimeParityScenarioResult(params: {
     steps: [
       {
         name: sunclawCell.runtime,
-        status:
-          sunclawCell.runtimeErrorClass || sunclawCell.transportErrorClass ? "fail" : "pass",
+        status: sunclawCell.runtimeErrorClass || sunclawCell.transportErrorClass ? "fail" : "pass",
         details: formatRuntimeParityCellDetails(sunclawCell),
       },
       {

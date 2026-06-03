@@ -46,10 +46,7 @@ export function resolveAckReaction(
   return emoji || DEFAULT_ACK_REACTION;
 }
 
-export function resolveIdentityNamePrefix(
-  cfg: SunClawConfig,
-  agentId: string,
-): string | undefined {
+export function resolveIdentityNamePrefix(cfg: SunClawConfig, agentId: string): string | undefined {
   const name = resolveAgentIdentity(cfg, agentId)?.name?.trim();
   if (!name) {
     return undefined;

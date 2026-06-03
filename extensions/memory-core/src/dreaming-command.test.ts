@@ -1,8 +1,5 @@
 import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
-import type {
-  SunClawPluginCommandDefinition,
-  PluginCommandContext,
-} from "sunclaw/plugin-sdk/core";
+import type { SunClawPluginCommandDefinition, PluginCommandContext } from "sunclaw/plugin-sdk/core";
 import type { SunClawPluginApi } from "sunclaw/plugin-sdk/plugin-entry";
 import { describe, expect, it, vi } from "vitest";
 import { registerDreamingCommand } from "./dreaming-command.js";

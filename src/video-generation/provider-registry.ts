@@ -59,9 +59,7 @@ function buildProviderMaps(cfg?: SunClawConfig): {
   return { canonical, aliases };
 }
 
-export function listVideoGenerationProviders(
-  cfg?: SunClawConfig,
-): VideoGenerationProviderPlugin[] {
+export function listVideoGenerationProviders(cfg?: SunClawConfig): VideoGenerationProviderPlugin[] {
   return [...buildProviderMaps(cfg).canonical.values()];
 }
 

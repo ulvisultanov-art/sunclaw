@@ -59,9 +59,7 @@ function buildProviderMaps(cfg?: SunClawConfig): {
   return { canonical, aliases };
 }
 
-export function listImageGenerationProviders(
-  cfg?: SunClawConfig,
-): ImageGenerationProviderPlugin[] {
+export function listImageGenerationProviders(cfg?: SunClawConfig): ImageGenerationProviderPlugin[] {
   return [...buildProviderMaps(cfg).canonical.values()];
 }
 

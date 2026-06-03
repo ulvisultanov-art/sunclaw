@@ -125,8 +125,8 @@ and setup-time config writes through `sunclaw-gateway` with
 
 The setup script accepts these optional environment variables:
 
-| Variable                                   | Purpose                                                               |
-| ------------------------------------------ | --------------------------------------------------------------------- |
+| Variable                                  | Purpose                                                               |
+| ----------------------------------------- | --------------------------------------------------------------------- |
 | `SUNCLAW_IMAGE`                           | Use a remote image instead of building locally                        |
 | `SUNCLAW_IMAGE_APT_PACKAGES`              | Install extra apt packages during build (space-separated)             |
 | `SUNCLAW_IMAGE_PIP_PACKAGES`              | Install extra Python packages during build (space-separated)          |
@@ -138,11 +138,11 @@ The setup script accepts these optional environment variables:
 | `SUNCLAW_DOCKER_SOCKET`                   | Override Docker socket path                                           |
 | `SUNCLAW_DISABLE_BONJOUR`                 | Disable Bonjour/mDNS advertising (defaults to `1` for Docker)         |
 | `SUNCLAW_DISABLE_BUNDLED_SOURCE_OVERLAYS` | Disable bundled plugin source bind-mount overlays                     |
-| `OTEL_EXPORTER_OTLP_ENDPOINT`              | Shared OTLP/HTTP collector endpoint for OpenTelemetry export          |
-| `OTEL_EXPORTER_OTLP_*_ENDPOINT`            | Signal-specific OTLP endpoints for traces, metrics, or logs           |
-| `OTEL_EXPORTER_OTLP_PROTOCOL`              | OTLP protocol override. Only `http/protobuf` is supported today       |
-| `OTEL_SERVICE_NAME`                        | Service name used for OpenTelemetry resources                         |
-| `OTEL_SEMCONV_STABILITY_OPT_IN`            | Opt in to latest experimental GenAI semantic attributes               |
+| `OTEL_EXPORTER_OTLP_ENDPOINT`             | Shared OTLP/HTTP collector endpoint for OpenTelemetry export          |
+| `OTEL_EXPORTER_OTLP_*_ENDPOINT`           | Signal-specific OTLP endpoints for traces, metrics, or logs           |
+| `OTEL_EXPORTER_OTLP_PROTOCOL`             | OTLP protocol override. Only `http/protobuf` is supported today       |
+| `OTEL_SERVICE_NAME`                       | Service name used for OpenTelemetry resources                         |
+| `OTEL_SEMCONV_STABILITY_OPT_IN`           | Opt in to latest experimental GenAI semantic attributes               |
 | `SUNCLAW_OTEL_PRELOADED`                  | Skip starting a second OpenTelemetry SDK when one is preloaded        |
 
 The official Docker image does not ship Homebrew. During onboarding, SunClaw

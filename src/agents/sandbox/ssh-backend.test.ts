@@ -99,10 +99,7 @@ function createBackendSandboxConfig(params?: { binds?: string[]; target?: string
       ...(params?.binds ? { binds: params.binds } : {}),
     },
     ssh: {
-      ...createSandboxSshConfig(
-        "/remote/sunclaw",
-        params?.target ? { target: params.target } : {},
-      ),
+      ...createSandboxSshConfig("/remote/sunclaw", params?.target ? { target: params.target } : {}),
     },
     browser: createSandboxBrowserConfig({
       image: "img",

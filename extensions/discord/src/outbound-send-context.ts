@@ -1,8 +1,5 @@
 import { createReplyToFanout, type ReplyToResolution } from "sunclaw/plugin-sdk/channel-outbound";
-import {
-  resolveOutboundSendDep,
-  type OutboundSendDeps,
-} from "sunclaw/plugin-sdk/channel-outbound";
+import { resolveOutboundSendDep, type OutboundSendDeps } from "sunclaw/plugin-sdk/channel-outbound";
 import type { SunClawConfig, ReplyToMode } from "sunclaw/plugin-sdk/config-contracts";
 import { normalizeOptionalStringifiedId } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { withDiscordDeliveryRetry } from "./delivery-retry.js";

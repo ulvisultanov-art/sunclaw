@@ -147,10 +147,7 @@ type DiscordContractApi = {
 };
 
 type FeishuContractApi = {
-  createFeishuThreadBindingManager: (params: {
-    accountId?: string;
-    cfg: SunClawConfig;
-  }) => unknown;
+  createFeishuThreadBindingManager: (params: { accountId?: string; cfg: SunClawConfig }) => unknown;
   feishuThreadBindingTesting: {
     resetFeishuThreadBindingsForTests: () => void;
   };

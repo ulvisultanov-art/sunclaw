@@ -34,8 +34,7 @@ vi.mock("sunclaw/plugin-sdk/memory-host-core", () => ({
 }));
 
 vi.mock("sunclaw/plugin-sdk/session-transcript-hit", async (importOriginal) => {
-  const actual =
-    await importOriginal<typeof import("sunclaw/plugin-sdk/session-transcript-hit")>();
+  const actual = await importOriginal<typeof import("sunclaw/plugin-sdk/session-transcript-hit")>();
   return {
     ...actual,
     loadCombinedSessionStoreForGateway: loadCombinedSessionStoreForGatewayMock,

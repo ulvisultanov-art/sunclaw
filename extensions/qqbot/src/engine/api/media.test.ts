@@ -9,8 +9,7 @@ const fetchWithSsrFGuardMock = vi.hoisted(() => vi.fn());
 const readResponseWithLimitMock = vi.hoisted(() => vi.fn());
 
 vi.mock("sunclaw/plugin-sdk/response-limit-runtime", async (importOriginal) => {
-  const actual =
-    await importOriginal<typeof import("sunclaw/plugin-sdk/response-limit-runtime")>();
+  const actual = await importOriginal<typeof import("sunclaw/plugin-sdk/response-limit-runtime")>();
   return {
     ...actual,
     readResponseWithLimit: readResponseWithLimitMock,

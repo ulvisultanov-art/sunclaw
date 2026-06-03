@@ -78,9 +78,7 @@ function buildCurrentCodexApprovalElicitation() {
       connector_name: "GitHub",
       tool_title: "Create pull request",
       tool_description: "Creates a pull request in the selected repository.",
-      tool_params_display: [
-        { name: "repo", display_name: "Repository", value: "sunclaw/sunclaw" },
-      ],
+      tool_params_display: [{ name: "repo", display_name: "Repository", value: "sunclaw/sunclaw" }],
     },
     requestedSchema: {
       type: "object",

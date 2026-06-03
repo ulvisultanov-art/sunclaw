@@ -46,10 +46,7 @@ try {
       "SUNCLAW_PLUGIN_SDK_MAX_PUBLIC_DEPRECATED_EXPORTS",
       3143,
     ),
-    publicWildcardReexports: readBudgetEnv(
-      "SUNCLAW_PLUGIN_SDK_MAX_PUBLIC_WILDCARD_REEXPORTS",
-      215,
-    ),
+    publicWildcardReexports: readBudgetEnv("SUNCLAW_PLUGIN_SDK_MAX_PUBLIC_WILDCARD_REEXPORTS", 215),
   };
 } catch (error) {
   console.error(error instanceof Error ? error.message : String(error));

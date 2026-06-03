@@ -22,10 +22,7 @@ const OPENAI_LIVE_PROOF_MODEL = "openai/gpt-5.5";
 const COMMAND_TIMEOUT_MS = readPositiveInt(process.env.SUNCLAW_SECRET_PROOF_COMMAND_MS, 120000);
 const READY_TIMEOUT_MS = readPositiveInt(process.env.SUNCLAW_SECRET_PROOF_READY_MS, 120000);
 const RPC_TIMEOUT_MS = readPositiveInt(process.env.SUNCLAW_SECRET_PROOF_RPC_MS, 15000);
-const TEARDOWN_GRACE_MS = readPositiveInt(
-  process.env.SUNCLAW_SECRET_PROOF_TEARDOWN_GRACE_MS,
-  5000,
-);
+const TEARDOWN_GRACE_MS = readPositiveInt(process.env.SUNCLAW_SECRET_PROOF_TEARDOWN_GRACE_MS, 5000);
 const OUTPUT_CAPTURE_LIMIT_BYTES = readPositiveInt(
   process.env.SUNCLAW_SECRET_PROOF_OUTPUT_BYTES,
   4 * 1024 * 1024,

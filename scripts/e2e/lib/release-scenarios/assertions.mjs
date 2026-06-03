@@ -61,8 +61,7 @@ function fileContainsText(file, needle) {
 
 function configPath() {
   return (
-    process.env.SUNCLAW_CONFIG_PATH ??
-    path.join(process.env.HOME ?? "", ".sunclaw", "sunclaw.json")
+    process.env.SUNCLAW_CONFIG_PATH ?? path.join(process.env.HOME ?? "", ".sunclaw", "sunclaw.json")
   );
 }
 

@@ -2060,8 +2060,7 @@ function raiseMinimalReasoningForResponsesWebSearch(params: {
 function isOpenAICodexResponsesModel(model: Model): boolean {
   return (
     OPENAI_CODEX_RESPONSES_PROVIDERS.has(model.provider) &&
-    (model.api === "openai-chatgpt-responses" ||
-      model.api === "sunclaw-openai-responses-transport")
+    (model.api === "openai-chatgpt-responses" || model.api === "sunclaw-openai-responses-transport")
   );
 }
 

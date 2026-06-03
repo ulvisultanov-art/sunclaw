@@ -1492,9 +1492,7 @@ export function createPluginRegistry(registryParams: PluginRegistryParams) {
             }
           : null;
       })
-      .filter(
-        (descriptor): descriptor is SunClawPluginCliCommandDescriptor => descriptor !== null,
-      );
+      .filter((descriptor): descriptor is SunClawPluginCliCommandDescriptor => descriptor !== null);
     const commands = [
       ...(opts?.commands ?? []),
       ...descriptors.map((descriptor) => descriptor.name),

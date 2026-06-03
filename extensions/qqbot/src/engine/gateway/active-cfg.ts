@@ -36,10 +36,7 @@ export function createActiveCfgProvider(options: ActiveCfgProviderOptions): Acti
   };
 }
 
-export function resolveActiveCfg(
-  loader: GatewayCfgLoader,
-  fallback: SunClawConfig,
-): SunClawConfig {
+export function resolveActiveCfg(loader: GatewayCfgLoader, fallback: SunClawConfig): SunClawConfig {
   try {
     return loader();
   } catch {

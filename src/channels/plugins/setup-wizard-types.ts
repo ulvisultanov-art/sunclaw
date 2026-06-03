@@ -88,10 +88,7 @@ export type ChannelSetupWizardCredential = {
   keepPrompt: string;
   inputPrompt: string;
   allowEnv?: (params: { cfg: SunClawConfig; accountId: string }) => boolean;
-  inspect: (params: {
-    cfg: SunClawConfig;
-    accountId: string;
-  }) => ChannelSetupWizardCredentialState;
+  inspect: (params: { cfg: SunClawConfig; accountId: string }) => ChannelSetupWizardCredentialState;
   shouldPrompt?: (params: {
     cfg: SunClawConfig;
     accountId: string;

@@ -106,9 +106,7 @@ const DIARY_START_MARKER = "<!-- sunclaw:dreaming:diary:start -->";
 const DIARY_END_MARKER = "<!-- sunclaw:dreaming:diary:end -->";
 const BACKFILL_ENTRY_MARKER = "sunclaw:dreaming:backfill-entry";
 const DREAMS_FILE_LOCKS_KEY = Symbol.for("sunclaw.memoryCore.dreamingNarrative.fileLocks");
-const NARRATIVE_SESSION_LOCKS_KEY = Symbol.for(
-  "sunclaw.memoryCore.dreamingNarrative.sessionLocks",
-);
+const NARRATIVE_SESSION_LOCKS_KEY = Symbol.for("sunclaw.memoryCore.dreamingNarrative.sessionLocks");
 
 type DreamsFileLockEntry = {
   withLock: ReturnType<typeof createAsyncLock>;

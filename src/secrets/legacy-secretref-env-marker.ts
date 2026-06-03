@@ -1,9 +1,9 @@
-import type { SunClawConfig } from "../config/types.sunclaw.js";
 import {
   LEGACY_SECRETREF_ENV_MARKER_PREFIX,
   parseLegacySecretRefEnvMarker,
   type SecretRef,
 } from "../config/types.secrets.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { setPathExistingStrict } from "./path-utils.js";
 import {
   discoverConfigSecretTargets,

@@ -1027,9 +1027,7 @@ describe("runEmbeddedAttempt context engine sessionKey forwarding", () => {
           missing: false,
         },
       ],
-      contextFiles: [
-        { path: "/tmp/sunclaw-warning-workspace/AGENTS.md", content: "A".repeat(20) },
-      ],
+      contextFiles: [{ path: "/tmp/sunclaw-warning-workspace/AGENTS.md", content: "A".repeat(20) }],
     });
 
     await createContextEngineAttemptRunner({

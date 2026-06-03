@@ -3347,9 +3347,7 @@ ${JSON.stringify({
   });
 
   it("loads workspace bootstrap files into the Claude CLI system prompt", async () => {
-    const workspaceDir = await fs.mkdtemp(
-      path.join(os.tmpdir(), "sunclaw-cli-bootstrap-context-"),
-    );
+    const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-cli-bootstrap-context-"));
 
     await fs.writeFile(
       path.join(workspaceDir, "AGENTS.md"),

@@ -234,9 +234,7 @@ export function collectPublishablePluginPackageErrors(
   const extensions = packageJson.sunclaw?.extensions ?? [];
 
   if (!packageName.startsWith("@sunclaw/")) {
-    errors.push(
-      `package name must start with "@sunclaw/"; found "${packageName || "<missing>"}".`,
-    );
+    errors.push(`package name must start with "@sunclaw/"; found "${packageName || "<missing>"}".`);
   }
   if (packageJson.private === true) {
     errors.push("package.json private must not be true.");

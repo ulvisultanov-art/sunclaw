@@ -140,10 +140,7 @@ export async function runDoctorConfigPreflight(
     } else if (
       await recoverConfigFromLastKnownGood({ snapshot, reason: "doctor-invalid-config" })
     ) {
-      note(
-        "Restored sunclaw.json from last-known-good; original saved as .clobbered.*.",
-        "Config",
-      );
+      note("Restored sunclaw.json from last-known-good; original saved as .clobbered.*.", "Config");
       snapshot = addDoctorLegacyIssues(await readConfigFileSnapshot(readOptions));
     }
   }

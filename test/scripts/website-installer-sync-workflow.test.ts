@@ -48,11 +48,15 @@ describe("website installer sync workflow", () => {
     expect(workflow).toContain("SUNCLAW_GH_TOKEN: ${{ secrets.SUNCLAW_GH_TOKEN }}");
     expect(workflow).toContain("SUNCLAW_GH_TOKEN is not configured");
     expect(workflow).toContain("token: ${{ env.SUNCLAW_GH_TOKEN }}");
-    expect(workflow).toContain("cp sunclaw/scripts/install.sh docs.sunclaw.complex.az/public/install.sh");
+    expect(workflow).toContain(
+      "cp sunclaw/scripts/install.sh docs.sunclaw.complex.az/public/install.sh",
+    );
     expect(workflow).toContain(
       "cp sunclaw/scripts/install-cli.sh docs.sunclaw.complex.az/public/install-cli.sh",
     );
-    expect(workflow).toContain("cp sunclaw/scripts/install.ps1 docs.sunclaw.complex.az/public/install.ps1");
+    expect(workflow).toContain(
+      "cp sunclaw/scripts/install.ps1 docs.sunclaw.complex.az/public/install.ps1",
+    );
     expect(workflow).toContain("rm -f docs.sunclaw.complex.az/public/install.cmd");
     expect(workflow).toContain("bun run build");
     expect(workflow).toContain("git push origin HEAD:main");

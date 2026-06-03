@@ -15,7 +15,7 @@ describe("sandbox common smoke workflow", () => {
     );
     expect(workflow).not.toMatch(/(^|\n)\s+docker build -t sunclaw-sandbox-smoke-base/u);
     expect(workflow).not.toContain(
-      "u=\"$(docker run --rm sunclaw-sandbox-common-smoke:bookworm-slim",
+      'u="$(docker run --rm sunclaw-sandbox-common-smoke:bookworm-slim',
     );
   });
 });

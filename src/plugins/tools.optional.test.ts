@@ -491,9 +491,7 @@ describe("resolvePluginTools optional tools", () => {
   beforeEach(() => {
     loadSunClawPluginsMock.mockReset();
     resolveRuntimePluginRegistryMock.mockReset();
-    resolveRuntimePluginRegistryMock.mockImplementation((params) =>
-      loadSunClawPluginsMock(params),
-    );
+    resolveRuntimePluginRegistryMock.mockImplementation((params) => loadSunClawPluginsMock(params));
     applyPluginAutoEnableMock.mockReset();
     applyPluginAutoEnableMock.mockImplementation(({ config }: { config: unknown }) => ({
       config,

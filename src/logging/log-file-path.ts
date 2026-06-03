@@ -1,9 +1,6 @@
 import path from "node:path";
 import type { SunClawConfig } from "../config/types.js";
-import {
-  POSIX_SUNCLAW_TMP_DIR,
-  resolvePreferredSunClawTmpDir,
-} from "../infra/tmp-sunclaw-dir.js";
+import { POSIX_SUNCLAW_TMP_DIR, resolvePreferredSunClawTmpDir } from "../infra/tmp-sunclaw-dir.js";
 
 const LOG_PREFIX = "sunclaw";
 const LOG_SUFFIX = ".log";

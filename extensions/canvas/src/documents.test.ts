@@ -52,9 +52,7 @@ describe("canvas documents", () => {
 
   it("encodes special characters in hosted entrypoint path segments", () => {
     const url = buildCanvasDocumentEntryUrl("cv_example", "bundle#1/entry%20point?.html");
-    expect(url).toBe(
-      "/__sunclaw__/canvas/documents/cv_example/bundle%231/entry%2520point%3F.html",
-    );
+    expect(url).toBe("/__sunclaw__/canvas/documents/cv_example/bundle%231/entry%2520point%3F.html");
   });
 
   it("materializes inline html bundles as index documents", async () => {

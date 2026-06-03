@@ -32,7 +32,7 @@ SunClaw CI runs on every push to `main` and every pull request. The `preflight` 
 | `macos-swift`                      | Swift lint, build, and tests for the macOS app                                                            | macOS-relevant changes             |
 | `android`                          | Android unit tests for both flavors plus one debug APK build                                              | Android-relevant changes           |
 | `test-performance-agent`           | Daily Codex slow-test optimization after trusted activity                                                 | Main CI success or manual dispatch |
-| `sunclaw-performance`             | Daily/on-demand Kova runtime performance reports with mock-provider, deep-profile, and GPT 5.5 live lanes | Scheduled and manual dispatch      |
+| `sunclaw-performance`              | Daily/on-demand Kova runtime performance reports with mock-provider, deep-profile, and GPT 5.5 live lanes | Scheduled and manual dispatch      |
 
 ## Fail-fast order
 
@@ -130,8 +130,8 @@ gh workflow run full-release-validation.yml --ref main -f ref=<branch-or-sha>
 | `blacksmith-8vcpu-ubuntu-2404`   | Linux Node test shards, bundled plugin test shards, `check-additional-*` shards, `check-dependencies`, and `android`                                                                                                                |
 | `blacksmith-16vcpu-ubuntu-2404`  | `build-artifacts`, `check-lint` (CPU-sensitive enough that 8 vCPU cost more than they saved); install-smoke Docker builds (32-vCPU queue time cost more than it saved)                                                              |
 | `blacksmith-16vcpu-windows-2025` | `checks-windows`                                                                                                                                                                                                                    |
-| `blacksmith-6vcpu-macos-15`      | `macos-node` on `sunclaw/sunclaw`; forks fall back to `macos-15`                                                                                                                                                                  |
-| `blacksmith-12vcpu-macos-26`     | `macos-swift` on `sunclaw/sunclaw`; forks fall back to `macos-26`                                                                                                                                                                 |
+| `blacksmith-6vcpu-macos-15`      | `macos-node` on `sunclaw/sunclaw`; forks fall back to `macos-15`                                                                                                                                                                    |
+| `blacksmith-12vcpu-macos-26`     | `macos-swift` on `sunclaw/sunclaw`; forks fall back to `macos-26`                                                                                                                                                                   |
 
 Canonical-repo CI keeps Blacksmith as the default runner path for normal push and pull-request runs. `workflow_dispatch` and non-canonical repository runs use GitHub-hosted runners, but normal canonical runs do not currently probe Blacksmith queue health or automatically fall back to GitHub-hosted labels when Blacksmith is unavailable.
 
@@ -392,8 +392,8 @@ Docker lane definitions live in `scripts/lib/docker-e2e-scenarios.mjs`, planner 
 
 ### Tunables
 
-| Variable                               | Default | Purpose                                                                                       |
-| -------------------------------------- | ------- | --------------------------------------------------------------------------------------------- |
+| Variable                              | Default | Purpose                                                                                       |
+| ------------------------------------- | ------- | --------------------------------------------------------------------------------------------- |
 | `SUNCLAW_DOCKER_ALL_PARALLELISM`      | 10      | Main-pool slot count for normal lanes.                                                        |
 | `SUNCLAW_DOCKER_ALL_TAIL_PARALLELISM` | 10      | Provider-sensitive tail-pool slot count.                                                      |
 | `SUNCLAW_DOCKER_ALL_LIVE_LIMIT`       | 9       | Concurrent live lane cap so providers do not throttle.                                        |

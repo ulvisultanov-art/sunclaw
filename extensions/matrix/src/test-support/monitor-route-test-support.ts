@@ -1,7 +1,4 @@
-export {
-  registerSessionBindingAdapter,
-  testing,
-} from "sunclaw/plugin-sdk/session-binding-runtime";
+export { registerSessionBindingAdapter, testing } from "sunclaw/plugin-sdk/session-binding-runtime";
 export { resolveAgentRoute } from "sunclaw/plugin-sdk/routing";
 export {
   createTestRegistry,

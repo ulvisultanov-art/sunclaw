@@ -2,10 +2,7 @@ import fs from "node:fs";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { clearRuntimeAuthProfileStoreSnapshots } from "../agents/auth-profiles/store.js";
 import type { SunClawConfig } from "../config/types.sunclaw.js";
-import {
-  createSunClawTestState,
-  type SunClawTestState,
-} from "../test-utils/sunclaw-test-state.js";
+import { createSunClawTestState, type SunClawTestState } from "../test-utils/sunclaw-test-state.js";
 import {
   collectOpenAICodexAuthProfileStoreIdMap,
   maybeRepairLegacyFlatAuthProfileStores,

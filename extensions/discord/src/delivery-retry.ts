@@ -1,9 +1,5 @@
 import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
-import {
-  resolveRetryConfig,
-  retryAsync,
-  type RetryConfig,
-} from "sunclaw/plugin-sdk/retry-runtime";
+import { resolveRetryConfig, retryAsync, type RetryConfig } from "sunclaw/plugin-sdk/retry-runtime";
 import { resolveDiscordAccount } from "./accounts.js";
 import { DiscordError } from "./internal/discord.js";
 import { parseDiscordRetryAfterBodySeconds } from "./retry-after.js";

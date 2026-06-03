@@ -103,9 +103,7 @@ describe("installPluginFromGitSpec", () => {
   beforeEach(async () => {
     runCommandWithTimeoutMock.mockReset();
     installPluginFromInstalledPackageDirMock.mockReset();
-    const globalConfigRoot = await fs.mkdtemp(
-      path.join(os.tmpdir(), "sunclaw-git-install-npmrc-"),
-    );
+    const globalConfigRoot = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-git-install-npmrc-"));
     tempDirs.push(globalConfigRoot);
     const globalConfig = path.join(globalConfigRoot, "global-npmrc");
     await fs.writeFile(globalConfig, "", "utf8");

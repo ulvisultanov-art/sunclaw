@@ -3,6 +3,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { readRegularFile, statRegularFile } from "./fs-utils.js";
 import { hashText } from "./hash.js";
+import { retryTransientMemoryRead } from "./read-retry.js";
 import { createSubsystemLogger, redactSensitiveText } from "./sunclaw-runtime-io.js";
 import {
   HEARTBEAT_PROMPT,
@@ -20,7 +21,6 @@ import {
   stripInboundMetadata,
   stripInternalRuntimeContext,
 } from "./sunclaw-runtime-session.js";
-import { retryTransientMemoryRead } from "./read-retry.js";
 
 const DREAMING_NARRATIVE_RUN_PREFIX = "dreaming-narrative-";
 // Keep the historical one-line-per-message export shape for normal turns, but

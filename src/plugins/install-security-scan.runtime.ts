@@ -6,8 +6,8 @@ import {
   uniqueStrings,
 } from "@sunclaw/normalization-core/string-normalization";
 import { tryReadJson } from "../infra/json-files.js";
-import { resolveSunClawPackageRootSync } from "../infra/sunclaw-root.js";
 import { parseStrictPositiveInteger } from "../infra/parse-finite-number.js";
+import { resolveSunClawPackageRootSync } from "../infra/sunclaw-root.js";
 import { extensionUsesSkippedScannerPath, isPathInside } from "../security/scan-paths.js";
 import { scanDirectoryWithSummary } from "../skills/security/scanner.js";
 import {

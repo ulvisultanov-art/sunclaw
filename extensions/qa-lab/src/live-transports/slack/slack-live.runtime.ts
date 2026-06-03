@@ -1,8 +1,8 @@
 import { randomUUID } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { createSlackWebClient, createSlackWriteClient } from "@sunclaw/slack/api.js";
 import type { WebClient } from "@slack/web-api";
+import { createSlackWebClient, createSlackWriteClient } from "@sunclaw/slack/api.js";
 import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
 import { formatErrorMessage } from "sunclaw/plugin-sdk/error-runtime";
 import { parseStrictPositiveInteger } from "sunclaw/plugin-sdk/number-runtime";

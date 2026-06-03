@@ -1,7 +1,4 @@
-import {
-  resolveOutboundSendDep,
-  type OutboundSendDeps,
-} from "sunclaw/plugin-sdk/channel-outbound";
+import { resolveOutboundSendDep, type OutboundSendDeps } from "sunclaw/plugin-sdk/channel-outbound";
 import {
   attachChannelToResult,
   createAttachedChannelResultAdapter,

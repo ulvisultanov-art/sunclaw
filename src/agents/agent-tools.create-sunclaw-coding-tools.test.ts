@@ -657,10 +657,7 @@ describe("createSunClawCodingTools", () => {
     const createSunClawToolsMock = vi.mocked(createSunClawTools);
     createSunClawToolsMock.mockClear();
     const agentId = `inherited-allow-${Date.now()}-${Math.random().toString(16).slice(2)}`;
-    const storeTemplate = path.join(
-      os.tmpdir(),
-      `sunclaw-session-store-${agentId}-{agentId}.json`,
-    );
+    const storeTemplate = path.join(os.tmpdir(), `sunclaw-session-store-${agentId}-{agentId}.json`);
     await writeSessionStore(storeTemplate, agentId, {
       [`agent:${agentId}:subagent:limited`]: {
         sessionId: "limited-session",

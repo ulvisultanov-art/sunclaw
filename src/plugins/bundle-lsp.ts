@@ -141,10 +141,10 @@ export function inspectBundleLspRuntimeSupport(params: {
   };
 }
 
-export function loadEnabledBundleLspConfig(params: {
-  workspaceDir: string;
-  cfg?: SunClawConfig;
-}): { config: BundleLspConfig; diagnostics: Array<{ pluginId: string; message: string }> } {
+export function loadEnabledBundleLspConfig(params: { workspaceDir: string; cfg?: SunClawConfig }): {
+  config: BundleLspConfig;
+  diagnostics: Array<{ pluginId: string; message: string }>;
+} {
   return loadEnabledBundleConfig({
     workspaceDir: params.workspaceDir,
     cfg: params.cfg,

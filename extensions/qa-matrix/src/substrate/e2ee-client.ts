@@ -141,8 +141,7 @@ export type MatrixQaE2eeScenarioClient = {
 };
 
 async function loadMatrixQaE2eeRuntime(): Promise<MatrixQaE2eeRuntime> {
-  const { loadQaRunnerBundledPluginTestApi } =
-    await import("sunclaw/plugin-sdk/qa-runner-runtime");
+  const { loadQaRunnerBundledPluginTestApi } = await import("sunclaw/plugin-sdk/qa-runner-runtime");
   return loadQaRunnerBundledPluginTestApi<MatrixQaE2eeRuntime>("matrix");
 }
 

@@ -55,9 +55,7 @@ describe("plugin update unchanged Docker E2E", () => {
     expect(runner).toContain("scripts/e2e/lib/plugin-update/unchanged-scenario.sh");
     expect(scenario).toContain('node "$probe" seed');
     expect(probe).toContain("writeJson(process.env.SUNCLAW_CONFIG_PATH, { plugins: {} });");
-    expect(probe).not.toContain(
-      "writeJson(process.env.SUNCLAW_CONFIG_PATH, { plugins: { installs",
-    );
+    expect(probe).not.toContain("writeJson(process.env.SUNCLAW_CONFIG_PATH, { plugins: { installs");
     expect(probe).toContain("installRecords: {");
     expect(probe).toContain('"lossless-claw": {');
   });
@@ -95,9 +93,7 @@ describe("plugin update unchanged Docker E2E", () => {
     expect(script).not.toContain(
       'node "$entry" update --channel beta --tag "${SUNCLAW_CURRENT_PACKAGE_TGZ',
     );
-    expect(script).toContain(
-      "sunclaw update failed or timed out after ${update_timeout_seconds}s",
-    );
+    expect(script).toContain("sunclaw update failed or timed out after ${update_timeout_seconds}s");
     expect(script).toContain(
       "updated SunClaw entry failed or timed out after ${update_timeout_seconds}s",
     );

@@ -5,8 +5,7 @@ import { applyDockerOpenAiProviderConfig, type SunClawConfig } from "./docker-op
 
 async function main() {
   const stateDir = process.env.SUNCLAW_STATE_DIR?.trim() || path.join(os.homedir(), ".sunclaw");
-  const configPath =
-    process.env.SUNCLAW_CONFIG_PATH?.trim() || path.join(stateDir, "sunclaw.json");
+  const configPath = process.env.SUNCLAW_CONFIG_PATH?.trim() || path.join(stateDir, "sunclaw.json");
   const sessionsDir = path.join(stateDir, "agents", "main", "sessions");
   const sessionFile = path.join(sessionsDir, "sess-main.jsonl");
   const storePath = path.join(sessionsDir, "sessions.json");

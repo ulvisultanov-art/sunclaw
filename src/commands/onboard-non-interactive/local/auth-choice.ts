@@ -1,7 +1,7 @@
 import type { ApiKeyCredential } from "../../../agents/auth-profiles/types.js";
 import { formatCliCommand } from "../../../cli/command-format.js";
-import type { SunClawConfig } from "../../../config/types.sunclaw.js";
 import type { SecretInput } from "../../../config/types.secrets.js";
+import type { SunClawConfig } from "../../../config/types.sunclaw.js";
 import { formatErrorMessage } from "../../../infra/errors.js";
 import { resolveManifestDeprecatedProviderAuthChoice } from "../../../plugins/provider-auth-choices.js";
 import type { RuntimeEnv } from "../../../runtime.js";

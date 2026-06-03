@@ -298,9 +298,7 @@ describe("diagnostic memory", () => {
   });
 
   it("leaves critical pressure bundle writes off by default", () => {
-    const stateDir = fs.mkdtempSync(
-      path.join(os.tmpdir(), "sunclaw-memory-pressure-default-off-"),
-    );
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sunclaw-memory-pressure-default-off-"));
     const resolveSessionStorePaths = vi.fn(() => []);
     try {
       startDiagnosticStabilityRecorder();

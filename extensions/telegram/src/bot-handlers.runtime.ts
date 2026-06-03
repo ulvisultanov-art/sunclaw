@@ -17,10 +17,7 @@ import { hasControlCommand } from "sunclaw/plugin-sdk/command-detection";
 import { isAbortRequestText } from "sunclaw/plugin-sdk/command-primitives-runtime";
 import { buildCommandsMessagePaginated } from "sunclaw/plugin-sdk/command-status";
 import type { DmPolicy, SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
-import type {
-  TelegramGroupConfig,
-  TelegramTopicConfig,
-} from "sunclaw/plugin-sdk/config-contracts";
+import type { TelegramGroupConfig, TelegramTopicConfig } from "sunclaw/plugin-sdk/config-contracts";
 import { mutateConfigFile } from "sunclaw/plugin-sdk/config-mutation";
 import {
   buildPluginBindingResolvedText,

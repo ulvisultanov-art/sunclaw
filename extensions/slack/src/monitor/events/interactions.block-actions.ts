@@ -4,10 +4,7 @@ import { resolveApprovalOverGateway } from "sunclaw/plugin-sdk/approval-gateway-
 import { parseExecApprovalCommandText } from "sunclaw/plugin-sdk/approval-reply-runtime";
 import { resolveCommandAuthorization } from "sunclaw/plugin-sdk/command-auth-native";
 import { requestHeartbeat } from "sunclaw/plugin-sdk/heartbeat-runtime";
-import {
-  parseStrictFiniteNumber,
-  timestampMsToIsoString,
-} from "sunclaw/plugin-sdk/number-runtime";
+import { parseStrictFiniteNumber, timestampMsToIsoString } from "sunclaw/plugin-sdk/number-runtime";
 import {
   normalizeOptionalString,
   normalizeUniqueTrimmedStringList,

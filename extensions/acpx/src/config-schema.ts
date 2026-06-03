@@ -91,9 +91,7 @@ export const AcpxPluginConfigSchema = z.strictObject({
     })
     .optional(),
   pluginToolsMcpBridge: z.boolean({ error: "pluginToolsMcpBridge must be a boolean" }).optional(),
-  sunClawToolsMcpBridge: z
-    .boolean({ error: "sunClawToolsMcpBridge must be a boolean" })
-    .optional(),
+  sunClawToolsMcpBridge: z.boolean({ error: "sunClawToolsMcpBridge must be a boolean" }).optional(),
   strictWindowsCmdWrapper: z
     .boolean({ error: "strictWindowsCmdWrapper must be a boolean" })
     .optional(),

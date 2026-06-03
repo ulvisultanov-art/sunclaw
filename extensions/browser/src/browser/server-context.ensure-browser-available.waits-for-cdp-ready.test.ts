@@ -49,9 +49,7 @@ function createAttachOnlyLoopbackProfile(cdpUrl: string) {
   return { profile: ctx.forProfile("manual-cdp"), state };
 }
 
-function requireFirstLaunchOptions(launchSunClawChrome: {
-  mock: { calls: unknown[][] };
-}): unknown {
+function requireFirstLaunchOptions(launchSunClawChrome: { mock: { calls: unknown[][] } }): unknown {
   const [call] = launchSunClawChrome.mock.calls;
   if (!call) {
     throw new Error("expected Chrome launch call");
@@ -193,8 +191,7 @@ describe("browser server-context ensureBrowserAvailable", () => {
   });
 
   it("does not share inflight lazy-start promises across different headless overrides", async () => {
-    const { launchSunClawChrome, isChromeCdpReady, profile } =
-      setupEnsureBrowserAvailableHarness();
+    const { launchSunClawChrome, isChromeCdpReady, profile } = setupEnsureBrowserAvailableHarness();
     const isChromeReachable = vi.mocked(chromeModule.isChromeReachable);
     isChromeReachable.mockResolvedValueOnce(false).mockResolvedValueOnce(true);
     isChromeCdpReady.mockResolvedValue(true);

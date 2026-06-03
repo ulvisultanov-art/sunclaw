@@ -249,10 +249,7 @@ async function buildCodexTurnContextForTest(
     params,
     workspacePromptContext: workspaceBootstrapContext.promptContext,
   });
-  const codexTurnPromptText = prependCodexSunClawPromptContext(
-    params.prompt,
-    sunClawPromptContext,
-  );
+  const codexTurnPromptText = prependCodexSunClawPromptContext(params.prompt, sunClawPromptContext);
   const turnStartParams = buildTurnStartParams(params, {
     threadId: "thread-1",
     cwd: workspaceDir,

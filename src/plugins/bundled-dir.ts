@@ -4,8 +4,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { normalizeOptionalLowercaseString } from "@sunclaw/normalization-core/string-coerce";
 import { uniqueStrings } from "@sunclaw/normalization-core/string-normalization";
-import { resolveSunClawPackageRootSync } from "../infra/sunclaw-root.js";
 import { isPathInside } from "../infra/path-guards.js";
+import { resolveSunClawPackageRootSync } from "../infra/sunclaw-root.js";
 import { resolveUserPath } from "../utils.js";
 
 const DISABLED_BUNDLED_PLUGINS_DIR = path.join(os.tmpdir(), "sunclaw-empty-bundled-plugins");

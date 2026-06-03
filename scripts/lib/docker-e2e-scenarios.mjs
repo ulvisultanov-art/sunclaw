@@ -13,8 +13,7 @@ export const BUNDLED_PLUGIN_INSTALL_UNINSTALL_SHARDS = 24;
 const upgradeSurvivorCommand = "SUNCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:upgrade-survivor";
 const rootManagedVpsUpgradeCommand =
   "SUNCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:root-managed-vps-upgrade";
-const updateRestartAuthCommand =
-  "SUNCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:update-restart-auth";
+const updateRestartAuthCommand = "SUNCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:update-restart-auth";
 
 const LIVE_RETRY_PATTERNS = [
   /529\b/i,
@@ -318,15 +317,11 @@ export const mainLanes = [
     stateScenario: "empty",
     weight: 3,
   }),
-  serviceLane(
-    "codex-media-path",
-    "SUNCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:codex-media-path",
-    {
-      resources: ["npm"],
-      stateScenario: "empty",
-      weight: 3,
-    },
-  ),
+  serviceLane("codex-media-path", "SUNCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:codex-media-path", {
+    resources: ["npm"],
+    stateScenario: "empty",
+    weight: 3,
+  }),
   npmLane(
     "npm-onboard-channel-agent",
     "SUNCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:npm-onboard-channel-agent",
@@ -425,11 +420,11 @@ export const mainLanes = [
   lane("crestodian-planner", "SUNCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:crestodian-planner", {
     stateScenario: "empty",
   }),
-  serviceLane(
-    "cron-mcp-cleanup",
-    "SUNCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:cron-mcp-cleanup",
-    { resources: ["npm"], stateScenario: "empty", weight: 3 },
-  ),
+  serviceLane("cron-mcp-cleanup", "SUNCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:cron-mcp-cleanup", {
+    resources: ["npm"],
+    stateScenario: "empty",
+    weight: 3,
+  }),
   ...createPackageUpdateMaintenanceLanes(),
   npmLane("update-migration", "SUNCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:update-migration", {
     stateScenario: "upgrade-survivor",
@@ -632,15 +627,11 @@ const releasePathPluginRuntimeLanes = [
     weight: 6,
   }),
   ...bundledPluginInstallUninstallLanes,
-  serviceLane(
-    "cron-mcp-cleanup",
-    "SUNCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:cron-mcp-cleanup",
-    {
-      resources: ["npm"],
-      stateScenario: "empty",
-      weight: 3,
-    },
-  ),
+  serviceLane("cron-mcp-cleanup", "SUNCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:cron-mcp-cleanup", {
+    resources: ["npm"],
+    stateScenario: "empty",
+    weight: 3,
+  }),
   kitchenSinkRpcLane(),
   serviceLane(
     "openai-web-search-minimal",
@@ -659,15 +650,11 @@ const releasePathPluginRuntimePluginLanes = [
 ];
 
 const releasePathPluginRuntimeServiceLanes = [
-  serviceLane(
-    "cron-mcp-cleanup",
-    "SUNCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:cron-mcp-cleanup",
-    {
-      resources: ["npm"],
-      stateScenario: "empty",
-      weight: 3,
-    },
-  ),
+  serviceLane("cron-mcp-cleanup", "SUNCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:cron-mcp-cleanup", {
+    resources: ["npm"],
+    stateScenario: "empty",
+    weight: 3,
+  }),
   kitchenSinkRpcLane(),
   serviceLane(
     "openai-web-search-minimal",

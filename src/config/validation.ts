@@ -126,7 +126,8 @@ function stripPreservedLegacyRootKeysForValidation(
 }
 
 const CUSTOM_EXPECTED_ONE_OF_RE = /expected one of ((?:"[^"]+"(?:\|"?[^"]+"?)*)+)/i;
-const SECRETREF_POLICY_DOC_URL = "https://docs.sunclaw.complex.az/reference/secretref-credential-surface";
+const SECRETREF_POLICY_DOC_URL =
+  "https://docs.sunclaw.complex.az/reference/secretref-credential-surface";
 const bundledChannelSchemaById = new Map<string, unknown>(
   GENERATED_BUNDLED_CHANNEL_CONFIG_METADATA.filter((entry) => entry.configurable !== false).map(
     (entry) => [entry.channelId, entry.schema] as const,

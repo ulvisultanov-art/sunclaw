@@ -24,8 +24,7 @@ describe("upgrade survivor config recipe command resolution", () => {
         'sunclaw.cmd config set models.providers.openai "{""apiKey"":""sk test""}" --strict-json',
       ],
       command: String.raw`C:\Windows\System32\cmd.exe`,
-      commandLabel:
-        'sunclaw config set models.providers.openai {"apiKey":"sk test"} --strict-json',
+      commandLabel: 'sunclaw config set models.providers.openai {"apiKey":"sk test"} --strict-json',
       shell: false,
       windowsVerbatimArguments: true,
     });

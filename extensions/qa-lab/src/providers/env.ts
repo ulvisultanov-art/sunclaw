@@ -204,8 +204,7 @@ export function resolveQaLiveCliAuthEnv(
 }
 
 export function resolveQaLiveProviderConfigPath(env: NodeJS.ProcessEnv = process.env) {
-  const explicit =
-    env[QA_LIVE_PROVIDER_CONFIG_PATH_ENV]?.trim() || env.SUNCLAW_CONFIG_PATH?.trim();
+  const explicit = env[QA_LIVE_PROVIDER_CONFIG_PATH_ENV]?.trim() || env.SUNCLAW_CONFIG_PATH?.trim();
   return explicit
     ? { path: resolveUserPath(explicit, env), explicit: true }
     : { path: path.join(os.homedir(), ".sunclaw", "sunclaw.json"), explicit: false };

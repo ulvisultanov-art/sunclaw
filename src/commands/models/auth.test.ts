@@ -805,16 +805,13 @@ describe("modelsAuthLoginCommand", () => {
 
     expect(mocks.resolveDefaultAgentId).not.toHaveBeenCalled();
     expect(mocks.resolveAgentDir).toHaveBeenCalledWith(originalConfig, "coder");
-    expect(mocks.loadAuthProfileStoreForRuntime).toHaveBeenCalledWith(
-      "/tmp/sunclaw/agents/coder",
-      {
-        externalCli: {
-          mode: "scoped",
-          allowKeychainPrompt: false,
-          providerIds: ["openai"],
-        },
+    expect(mocks.loadAuthProfileStoreForRuntime).toHaveBeenCalledWith("/tmp/sunclaw/agents/coder", {
+      externalCli: {
+        mode: "scoped",
+        allowKeychainPrompt: false,
+        providerIds: ["openai"],
       },
-    );
+    });
     const authRunCall = readMockCallArg(runProviderAuth) as AuthRunCall;
     expect(authRunCall.agentDir).toBe("/tmp/sunclaw/agents/coder");
     expect(authRunCall.workspaceDir).toBe("/tmp/sunclaw/workspaces/coder");
@@ -1317,9 +1314,7 @@ describe("modelsAuthLoginCommand", () => {
       },
       agentDir: "/tmp/sunclaw/agents/main",
     });
-    expect(runtime.log).toHaveBeenCalledWith(
-      "Anthropic setup-token auth is supported in SunClaw.",
-    );
+    expect(runtime.log).toHaveBeenCalledWith("Anthropic setup-token auth is supported in SunClaw.");
     expect(runtime.log).toHaveBeenCalledWith(
       "SunClaw prefers Claude CLI reuse when it is available on the host.",
     );

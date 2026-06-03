@@ -3,10 +3,7 @@ import {
   normalizeProviderId,
 } from "@sunclaw/model-catalog-core/provider-id";
 import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
-import {
-  sortUniqueStrings,
-  uniqueStrings,
-} from "@sunclaw/normalization-core/string-normalization";
+import { sortUniqueStrings, uniqueStrings } from "@sunclaw/normalization-core/string-normalization";
 import { sanitizeForLog } from "../../packages/terminal-core/src/ansi.js";
 import type { AuthProfileCredential, OAuthCredential } from "../agents/auth-profiles/types.js";
 import { resolveGpt5SystemPromptContribution } from "../agents/gpt5-prompt-overlay.js";
@@ -150,10 +147,7 @@ function hasExplicitProviderRuntimePluginActivation(params: {
   return ownerPluginIds.some((pluginId) => allow.has(pluginId) || entries[pluginId] !== undefined);
 }
 
-function hasConfiguredModelProvider(params: {
-  provider: string;
-  config?: SunClawConfig;
-}): boolean {
+function hasConfiguredModelProvider(params: { provider: string; config?: SunClawConfig }): boolean {
   return (
     findNormalizedProviderValue(params.config?.models?.providers, params.provider) !== undefined
   );

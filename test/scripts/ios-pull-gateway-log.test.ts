@@ -11,7 +11,7 @@ describe("scripts/dev/ios-pull-gateway-log.sh", () => {
     expect(script).toContain('BUNDLE_ID="${2:-${SUNCLAW_IOS_BUNDLE_ID:-}}"');
     expect(script).toContain('DEST="${3:-${SUNCLAW_IOS_GATEWAY_LOG_DEST:-}}"');
     expect(script).toContain('mktemp -d "${TMPDIR:-/tmp}/sunclaw-ios-gateway.XXXXXX"');
-    expect(script).toContain('exit 2');
+    expect(script).toContain("exit 2");
     expect(script).not.toMatch(/DEVICE_UDID="\$\{1:-[0-9A-F-]+/u);
     expect(script).not.toMatch(/BUNDLE_ID="\$\{2:-ai\.sunclaw\.ios\.dev\.[^}]+/u);
     expect(script).not.toContain("/tmp/sunclaw-gateway.log");

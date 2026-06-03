@@ -4,10 +4,7 @@ import {
   resetDiagnosticEventsForTest,
   type DiagnosticEventPayload,
 } from "sunclaw/plugin-sdk/diagnostic-runtime";
-import {
-  initializeGlobalHookRunner,
-  resetGlobalHookRunner,
-} from "sunclaw/plugin-sdk/hook-runtime";
+import { initializeGlobalHookRunner, resetGlobalHookRunner } from "sunclaw/plugin-sdk/hook-runtime";
 import { createMockPluginRegistry } from "sunclaw/plugin-sdk/plugin-test-runtime";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CodexServerNotification, JsonObject, RpcRequest } from "./protocol.js";

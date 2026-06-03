@@ -1,7 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-type LoadSunClawProviderIndex =
-  typeof import("../model-catalog/index.js").loadSunClawProviderIndex;
+type LoadSunClawProviderIndex = typeof import("../model-catalog/index.js").loadSunClawProviderIndex;
 type LoadPluginRegistrySnapshot = typeof import("./plugin-registry.js").loadPluginRegistrySnapshot;
 type ResolveManifestProviderAuthChoices =
   typeof import("./provider-auth-choices.js").resolveManifestProviderAuthChoices;

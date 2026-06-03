@@ -12,10 +12,7 @@ async function withGlobalControlUiHardlinkFixture<T>(run: (rootPath: string) => 
     const packageRoot = path.join(tmp, "pnpm-global", "5", "node_modules", "sunclaw");
     const controlUiRoot = path.join(packageRoot, "dist", "control-ui");
     await fs.mkdir(controlUiRoot, { recursive: true });
-    await fs.writeFile(
-      path.join(packageRoot, "package.json"),
-      JSON.stringify({ name: "sunclaw" }),
-    );
+    await fs.writeFile(path.join(packageRoot, "package.json"), JSON.stringify({ name: "sunclaw" }));
 
     const storeDir = path.join(tmp, "pnpm-store", "files");
     await fs.mkdir(storeDir, { recursive: true });

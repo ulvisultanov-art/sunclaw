@@ -196,9 +196,7 @@ describe("applyCliProfileEnv", () => {
 
     const resolvedHome = path.resolve("/srv/sunclaw-home");
     expect(env.SUNCLAW_STATE_DIR).toBe(path.join(resolvedHome, ".sunclaw-work"));
-    expect(env.SUNCLAW_CONFIG_PATH).toBe(
-      path.join(resolvedHome, ".sunclaw-work", "sunclaw.json"),
-    );
+    expect(env.SUNCLAW_CONFIG_PATH).toBe(path.join(resolvedHome, ".sunclaw-work", "sunclaw.json"));
   });
 });
 
@@ -257,9 +255,7 @@ describe("formatCliCommand", () => {
   });
 
   it("handles command with no args after sunclaw", () => {
-    expect(formatCliCommand("sunclaw", { SUNCLAW_PROFILE: "test" })).toBe(
-      "sunclaw --profile test",
-    );
+    expect(formatCliCommand("sunclaw", { SUNCLAW_PROFILE: "test" })).toBe("sunclaw --profile test");
   });
 
   it("handles pnpm wrapper", () => {

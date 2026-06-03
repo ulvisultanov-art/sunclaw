@@ -120,10 +120,7 @@ vi.mock("sunclaw/plugin-sdk/models-provider-runtime", () => ({
   buildModelsProviderData: buildModelsProviderDataMock,
 }));
 
-const STORE_PATH = path.join(
-  os.tmpdir(),
-  `sunclaw-discord-think-autocomplete-${process.pid}.json`,
-);
+const STORE_PATH = path.join(os.tmpdir(), `sunclaw-discord-think-autocomplete-${process.pid}.json`);
 const SESSION_KEY = "agent:main:main";
 let findCommandByNativeName: typeof import("sunclaw/plugin-sdk/command-auth-native").findCommandByNativeName;
 let resolveCommandArgChoices: typeof import("sunclaw/plugin-sdk/command-auth-native").resolveCommandArgChoices;

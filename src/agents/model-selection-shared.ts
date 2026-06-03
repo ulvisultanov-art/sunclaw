@@ -126,10 +126,7 @@ function listModelAliasCandidates(cfg: SunClawConfig): ModelAliasCandidate[] {
   });
 }
 
-function findModelAliasCandidate(
-  cfg: SunClawConfig,
-  raw: string,
-): ModelAliasCandidate | undefined {
+function findModelAliasCandidate(cfg: SunClawConfig, raw: string): ModelAliasCandidate | undefined {
   const aliasKey = normalizeLowercaseStringOrEmpty(raw);
   let match: ModelAliasCandidate | undefined;
   for (const candidate of listModelAliasCandidates(cfg)) {

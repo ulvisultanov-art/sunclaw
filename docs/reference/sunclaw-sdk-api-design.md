@@ -348,8 +348,8 @@ contract.
 
 Recommended packages:
 
-| Package                 | Purpose                                                       |
-| ----------------------- | ------------------------------------------------------------- |
+| Package                | Purpose                                                       |
+| ---------------------- | ------------------------------------------------------------- |
 | `@sunclaw/sdk`         | Public high-level SDK and generated low-level Gateway client. |
 | `@sunclaw/sdk-react`   | Optional React hooks for dashboards and app builders.         |
 | `@sunclaw/sdk-testing` | Test helpers and fake Gateway server for app integrations.    |

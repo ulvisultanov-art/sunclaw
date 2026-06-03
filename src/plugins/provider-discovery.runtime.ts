@@ -1,10 +1,10 @@
 import path from "node:path";
 import type { NormalizedModelCatalogRow } from "@sunclaw/model-catalog-core/model-catalog-types";
 import { normalizeProviderId } from "@sunclaw/model-catalog-core/provider-id";
+import { sortUniqueStrings } from "../../packages/normalization-core/src/string-normalization.js";
 import type { ModelDefinitionConfig, ModelProviderConfig } from "../config/types.models.js";
 import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { planManifestModelCatalogRows } from "../model-catalog/manifest-planner.js";
-import { sortUniqueStrings } from "../../packages/normalization-core/src/string-normalization.js";
 import { loadManifestMetadataSnapshot } from "./manifest-contract-eligibility.js";
 import type { PluginManifestRecord } from "./manifest-registry.js";
 import { clearNativeRequireJavaScriptModuleCache } from "./native-module-require.js";

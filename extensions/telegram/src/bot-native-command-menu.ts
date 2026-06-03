@@ -3,10 +3,7 @@ import type { Bot } from "grammy";
 import type { LanguageCode } from "grammy/types";
 import { logVerbose } from "sunclaw/plugin-sdk/runtime-env";
 import type { RuntimeEnv } from "sunclaw/plugin-sdk/runtime-env";
-import {
-  normalizeOptionalString,
-  readStringValue,
-} from "sunclaw/plugin-sdk/string-coerce-runtime";
+import { normalizeOptionalString, readStringValue } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { withTelegramApiErrorLogging } from "./api-logging.js";
 import { normalizeTelegramCommandName, TELEGRAM_COMMAND_NAME_PATTERN } from "./command-config.js";
 

@@ -80,9 +80,7 @@ describe("Nix integration (U3, U5, U9)", () => {
 
     it("CONFIG_PATH respects SUNCLAW_CONFIG_PATH override", () => {
       expect(
-        resolveConfigPathCandidate(
-          envWith({ SUNCLAW_CONFIG_PATH: "/nix/store/abc/sunclaw.json" }),
-        ),
+        resolveConfigPathCandidate(envWith({ SUNCLAW_CONFIG_PATH: "/nix/store/abc/sunclaw.json" })),
       ).toBe(path.resolve("/nix/store/abc/sunclaw.json"));
     });
 
@@ -125,10 +123,7 @@ describe("Nix integration (U3, U5, U9)", () => {
 
     it("falls back to config when env is invalid", () => {
       expect(
-        resolveGatewayPort(
-          { gateway: { port: 19003 } },
-          envWith({ SUNCLAW_GATEWAY_PORT: "nope" }),
-        ),
+        resolveGatewayPort({ gateway: { port: 19003 } }, envWith({ SUNCLAW_GATEWAY_PORT: "nope" })),
       ).toBe(19003);
     });
   });

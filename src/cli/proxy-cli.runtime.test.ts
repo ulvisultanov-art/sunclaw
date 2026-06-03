@@ -468,9 +468,7 @@ describe("proxy cli runtime", () => {
           config: {
             enabled: true,
             source: "missing",
-            errors: [
-              "proxy validation requires proxy.proxyUrl, --proxy-url, or SUNCLAW_PROXY_URL",
-            ],
+            errors: ["proxy validation requires proxy.proxyUrl, --proxy-url, or SUNCLAW_PROXY_URL"],
           },
           checks: [],
         },

@@ -12,7 +12,7 @@ SunClaw provides `pixverse` as an official external plugin for hosted PixVerse v
 | Property           | Value                                                                |
 | ------------------ | -------------------------------------------------------------------- |
 | Provider id        | `pixverse`                                                           |
-| Plugin package     | `@sunclaw/pixverse-provider`                                        |
+| Plugin package     | `@sunclaw/pixverse-provider`                                         |
 | Auth env var       | `PIXVERSE_API_KEY`                                                   |
 | Onboarding flag    | `--auth-choice pixverse-api-key`                                     |
 | Direct CLI flag    | `--pixverse-api-key <key>`                                           |

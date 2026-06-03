@@ -784,9 +784,11 @@ export async function runConfigureWizard(
       const remoteUrl = normalizeOptionalString(nextConfig.gateway?.remote?.url);
       if (remoteUrl) {
         note(
-          ["Remote Gateway:", remoteUrl, "Docs: https://docs.sunclaw.complex.az/gateway/remote"].join(
-            "\n",
-          ),
+          [
+            "Remote Gateway:",
+            remoteUrl,
+            "Docs: https://docs.sunclaw.complex.az/gateway/remote",
+          ].join("\n"),
           "Gateway",
         );
       }

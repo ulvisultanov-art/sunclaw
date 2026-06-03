@@ -1,6 +1,6 @@
 import { modelKey } from "../agents/model-selection.js";
-import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type { SecretInput } from "../config/types.secrets.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { ensureApiKeyFromEnvOrPrompt } from "../plugins/provider-auth-input.js";
 import type { RuntimeEnv } from "../runtime.js";
 import { fetchWithTimeout } from "../utils/fetch-timeout.js";

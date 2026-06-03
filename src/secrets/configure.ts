@@ -10,13 +10,13 @@ import { listAgentIds, resolveAgentDir, resolveDefaultAgentId } from "../agents/
 import { AUTH_STORE_VERSION } from "../agents/auth-profiles/constants.js";
 import { loadPersistedAuthProfileStore } from "../agents/auth-profiles/persisted.js";
 import type { AuthProfileStore } from "../agents/auth-profiles/types.js";
-import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type {
   ManualExecSecretProviderConfig,
   SecretProviderConfig,
   SecretRef,
   SecretRefSource,
 } from "../config/types.secrets.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { isSafeExecutableValue } from "../infra/exec-safety.js";
 import { parseStrictPositiveInteger } from "../infra/parse-finite-number.js";
 import { loadPluginManifestRegistry } from "../plugins/manifest-registry.js";

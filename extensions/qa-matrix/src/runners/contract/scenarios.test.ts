@@ -5614,9 +5614,7 @@ describe("matrix live qa scenarios", () => {
       let cliAccountConfigDuringRun: Record<string, unknown> | null = null;
       runMatrixQaSunClawCli.mockImplementation(async ({ args, env, stdin }) => {
         if (!cliAccountConfigDuringRun && env.SUNCLAW_CONFIG_PATH) {
-          const cliConfig = JSON.parse(
-            await readFile(String(env.SUNCLAW_CONFIG_PATH), "utf8"),
-          ) as {
+          const cliConfig = JSON.parse(await readFile(String(env.SUNCLAW_CONFIG_PATH), "utf8")) as {
             channels?: {
               matrix?: {
                 accounts?: Record<string, Record<string, unknown>>;
@@ -5717,9 +5715,7 @@ describe("matrix live qa scenarios", () => {
       expect(wait).toHaveBeenCalledTimes(1);
       expect(kill).toHaveBeenCalledTimes(1);
       const registrationRequest = mockObjectArg(registerWithToken, "registerWithToken");
-      expect(registrationRequest?.deviceName).toBe(
-        "SunClaw Matrix QA CLI Self Verification Owner",
-      );
+      expect(registrationRequest?.deviceName).toBe("SunClaw Matrix QA CLI Self Verification Owner");
       if (
         typeof registrationRequest.localpart !== "string" ||
         typeof registrationRequest.password !== "string"
@@ -6273,9 +6269,7 @@ describe("matrix live qa scenarios", () => {
           success: false,
         }),
       }));
-      const wait = vi
-        .fn()
-        .mockRejectedValue(new Error("sunclaw matrix encryption setup exited 1"));
+      const wait = vi.fn().mockRejectedValue(new Error("sunclaw matrix encryption setup exited 1"));
       const kill = vi.fn();
       startMatrixQaSunClawCli.mockReturnValue({
         args: ["matrix", "encryption", "setup", "--account", "cli-encryption-failure", "--json"],
@@ -6604,9 +6598,7 @@ describe("matrix live qa scenarios", () => {
           success: false,
         }),
       }));
-      const wait = vi
-        .fn()
-        .mockRejectedValue(new Error("sunclaw matrix encryption setup exited 1"));
+      const wait = vi.fn().mockRejectedValue(new Error("sunclaw matrix encryption setup exited 1"));
       const kill = vi.fn();
       startMatrixQaSunClawCli.mockReturnValue({
         args: [

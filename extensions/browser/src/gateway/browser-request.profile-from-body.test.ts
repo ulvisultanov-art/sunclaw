@@ -9,9 +9,9 @@ const { loadConfigMock, isNodeCommandAllowedMock, resolveNodeCommandAllowlistMoc
 );
 
 vi.mock("sunclaw/plugin-sdk/runtime-config-snapshot", async () => {
-  const actual = await vi.importActual<
-    typeof import("sunclaw/plugin-sdk/runtime-config-snapshot")
-  >("sunclaw/plugin-sdk/runtime-config-snapshot");
+  const actual = await vi.importActual<typeof import("sunclaw/plugin-sdk/runtime-config-snapshot")>(
+    "sunclaw/plugin-sdk/runtime-config-snapshot",
+  );
   return {
     ...actual,
     loadConfig: loadConfigMock,

@@ -26,9 +26,7 @@ export async function maybeCompactCodexAppServerSession(
   return compactCodexNativeThread(params, options);
 }
 
-function warnIfIgnoringSunClawCompactionOverrides(
-  params: CompactEmbeddedAgentSessionParams,
-): void {
+function warnIfIgnoringSunClawCompactionOverrides(params: CompactEmbeddedAgentSessionParams): void {
   const ignoredConfig = readIgnoredCompactionOverridePaths(params);
   if (ignoredConfig.length === 0) {
     return;

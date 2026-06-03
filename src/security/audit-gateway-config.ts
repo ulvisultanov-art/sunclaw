@@ -5,8 +5,8 @@ import {
 } from "@sunclaw/normalization-core/string-coerce";
 import { normalizeStringEntries } from "@sunclaw/normalization-core/string-normalization";
 import type { GatewayAuthConfig } from "../config/types.gateway.js";
-import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { hasConfiguredSecretInput } from "../config/types.secrets.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { resolveGatewayAuth } from "../gateway/auth-resolve.js";
 import { resolveGatewayAuthTokenSourceConflict } from "../gateway/auth-token-source-conflict.js";
 import { parseStrictNonNegativeInteger } from "../infra/parse-finite-number.js";

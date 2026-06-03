@@ -1,8 +1,8 @@
 import { realpathSync } from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
-import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import {
   readSunClawManagedNpmRootOverrides,

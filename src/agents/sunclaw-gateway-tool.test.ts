@@ -189,41 +189,38 @@ describe("gateway tool", () => {
     const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "sunclaw-test-"));
 
     try {
-      await withEnvAsync(
-        { SUNCLAW_STATE_DIR: stateDir, SUNCLAW_PROFILE: "isolated" },
-        async () => {
-          const tool = requireGatewayTool();
+      await withEnvAsync({ SUNCLAW_STATE_DIR: stateDir, SUNCLAW_PROFILE: "isolated" }, async () => {
+        const tool = requireGatewayTool();
 
-          const result = await tool.execute("call1", {
-            action: "restart",
-            delayMs: 0,
-          });
-          expectRecordFields(result.details, {
-            ok: true,
-            pid: process.pid,
-            signal: "SIGUSR1",
-            delayMs: 0,
-          });
+        const result = await tool.execute("call1", {
+          action: "restart",
+          delayMs: 0,
+        });
+        expectRecordFields(result.details, {
+          ok: true,
+          pid: process.pid,
+          signal: "SIGUSR1",
+          delayMs: 0,
+        });
 
-          expect(restartSignalKillCalls()).toHaveLength(0);
-          expect(sigusr1Handler).not.toHaveBeenCalled();
-          await vi.waitFor(() => expect(sigusr1Handler).toHaveBeenCalledTimes(1), {
-            interval: 1,
-            timeout: 1_000,
-          });
-          expect(restartSignalKillCalls()).toHaveLength(0);
+        expect(restartSignalKillCalls()).toHaveLength(0);
+        expect(sigusr1Handler).not.toHaveBeenCalled();
+        await vi.waitFor(() => expect(sigusr1Handler).toHaveBeenCalledTimes(1), {
+          interval: 1,
+          timeout: 1_000,
+        });
+        expect(restartSignalKillCalls()).toHaveLength(0);
 
-          const sentinelPath = path.join(stateDir, "restart-sentinel.json");
-          const raw = await fs.readFile(sentinelPath, "utf-8");
-          const parsed = JSON.parse(raw) as {
-            payload?: { kind?: string; doctorHint?: string | null };
-          };
-          expect(parsed.payload?.kind).toBe("restart");
-          expect(parsed.payload?.doctorHint).toBe(
-            "Recommended follow-up: run sunclaw --profile isolated doctor --non-interactive in a terminal or approvals-capable SunClaw surface.",
-          );
-        },
-      );
+        const sentinelPath = path.join(stateDir, "restart-sentinel.json");
+        const raw = await fs.readFile(sentinelPath, "utf-8");
+        const parsed = JSON.parse(raw) as {
+          payload?: { kind?: string; doctorHint?: string | null };
+        };
+        expect(parsed.payload?.kind).toBe("restart");
+        expect(parsed.payload?.doctorHint).toBe(
+          "Recommended follow-up: run sunclaw --profile isolated doctor --non-interactive in a terminal or approvals-capable SunClaw surface.",
+        );
+      });
     } finally {
       process.removeListener("SIGUSR1", sigusr1Handler);
       kill.mockRestore();

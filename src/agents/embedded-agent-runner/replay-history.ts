@@ -280,9 +280,7 @@ function isTranscriptOnlySunclawAssistant(message: AgentMessage): boolean {
   const provider = (message as { provider?: unknown }).provider;
   const model = (message as { model?: unknown }).model;
   return (
-    provider === "sunclaw" &&
-    typeof model === "string" &&
-    TRANSCRIPT_ONLY_SUNCLAW_MODELS.has(model)
+    provider === "sunclaw" && typeof model === "string" && TRANSCRIPT_ONLY_SUNCLAW_MODELS.has(model)
   );
 }
 

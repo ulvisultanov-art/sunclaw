@@ -106,7 +106,7 @@ context: { findings, draft }
 
 OpenProse programs map to SunClaw primitives:
 
-| OpenProse concept         | SunClaw tool    |
+| OpenProse concept         | SunClaw tool     |
 | ------------------------- | ---------------- |
 | Spawn session / Task tool | `sessions_spawn` |
 | File read / write         | `read` / `write` |

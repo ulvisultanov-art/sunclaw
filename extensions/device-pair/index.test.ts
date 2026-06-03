@@ -1,10 +1,7 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import type {
-  SunClawPluginCommandDefinition,
-  PluginCommandContext,
-} from "sunclaw/plugin-sdk/core";
+import type { SunClawPluginCommandDefinition, PluginCommandContext } from "sunclaw/plugin-sdk/core";
 import { createTestPluginApi } from "sunclaw/plugin-sdk/plugin-test-api";
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { SunClawPluginApi } from "./api.js";

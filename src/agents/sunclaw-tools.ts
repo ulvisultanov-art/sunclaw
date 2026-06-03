@@ -18,6 +18,8 @@ import {
   wrapToolWithBeforeToolCallHook,
 } from "./agent-tools.before-tool-call.js";
 import type { AuthProfileStore } from "./auth-profiles/types.js";
+import type { SandboxFsBridge } from "./sandbox/fs-bridge.js";
+import type { SpawnedToolContext } from "./spawned-context.js";
 import { resolveSunClawPluginToolsForOptions } from "./sunclaw-plugin-tools.js";
 import {
   isToolExplicitlyAllowedByFactoryPolicy,
@@ -30,8 +32,6 @@ import {
   collectPresentSunClawTools,
   shouldIncludeUpdatePlanToolForSunClawTools,
 } from "./sunclaw-tools.registration.js";
-import type { SandboxFsBridge } from "./sandbox/fs-bridge.js";
-import type { SpawnedToolContext } from "./spawned-context.js";
 import type { ToolFsPolicy } from "./tool-fs-policy.js";
 import { resolveToolLoopDetectionConfig } from "./tool-loop-detection-config.js";
 import { createAgentsListTool } from "./tools/agents-list-tool.js";

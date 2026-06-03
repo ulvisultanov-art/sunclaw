@@ -3,8 +3,8 @@ import {
   normalizeOptionalString,
 } from "@sunclaw/normalization-core/string-coerce";
 import { normalizeStringEntries } from "@sunclaw/normalization-core/string-normalization";
-import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import type { SkillConfig } from "../../config/types.skills.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import {
   evaluateRuntimeEligibility,
   hasBinary,

@@ -541,17 +541,13 @@ describe("scripts/lib/docker-e2e-plan", () => {
   it("expands the published upgrade survivor lane across deduped baselines", () => {
     const plan = planFor({
       selectedLaneNames: ["published-upgrade-survivor"],
-      upgradeSurvivorBaselines:
-        "sunclaw@2026.4.29 2026.4.23 sunclaw@2026.4.23 sunclaw@2026.3.13-1",
+      upgradeSurvivorBaselines: "sunclaw@2026.4.29 2026.4.23 sunclaw@2026.4.23 sunclaw@2026.3.13-1",
     });
 
     expect(plan.lanes.map(summarizeLane)).toEqual([
       publishedUpgradeSurvivorLane("published-upgrade-survivor-2026.4.29", "sunclaw@2026.4.29"),
       publishedUpgradeSurvivorLane("published-upgrade-survivor-2026.4.23", "sunclaw@2026.4.23"),
-      publishedUpgradeSurvivorLane(
-        "published-upgrade-survivor-2026.3.13-1",
-        "sunclaw@2026.3.13-1",
-      ),
+      publishedUpgradeSurvivorLane("published-upgrade-survivor-2026.3.13-1", "sunclaw@2026.3.13-1"),
     ]);
   });
 

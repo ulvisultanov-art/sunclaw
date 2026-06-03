@@ -14,10 +14,7 @@ import {
 import { expandHomePrefix } from "../infra/home-dir.js";
 import { isBlockedObjectKey } from "../infra/prototype-keys.js";
 import { appendRegularFileSync } from "../infra/regular-file.js";
-import {
-  POSIX_SUNCLAW_TMP_DIR,
-  resolvePreferredSunClawTmpDir,
-} from "../infra/tmp-sunclaw-dir.js";
+import { POSIX_SUNCLAW_TMP_DIR, resolvePreferredSunClawTmpDir } from "../infra/tmp-sunclaw-dir.js";
 import { readLoggingConfig, shouldSkipMutatingLoggingConfigRead } from "./config.js";
 import { resolveEnvLogLevelOverride } from "./env-log-level.js";
 import { type LogLevel, levelToMinLevel, normalizeLogLevel } from "./levels.js";

@@ -41,9 +41,7 @@ let hasGoogleVertexAuthorizedUserAdcSync: typeof import("./vertex-adc.js").hasGo
 let resolveGoogleVertexAuthorizedUserHeaders: typeof import("./vertex-adc.js").resolveGoogleVertexAuthorizedUserHeaders;
 let resetGoogleVertexAuthorizedUserTokenCacheForTest: typeof import("./vertex-adc.js").resetGoogleVertexAuthorizedUserTokenCacheForTest;
 
-const MODEL_PROVIDER_REQUEST_TRANSPORT_SYMBOL = Symbol.for(
-  "sunclaw.modelProviderRequestTransport",
-);
+const MODEL_PROVIDER_REQUEST_TRANSPORT_SYMBOL = Symbol.for("sunclaw.modelProviderRequestTransport");
 
 function attachModelProviderRequestTransport<TModel extends object>(
   model: TModel,

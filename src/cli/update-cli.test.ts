@@ -6,8 +6,8 @@ import path from "node:path";
 import { Command } from "commander";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { TEST_BUNDLED_RUNTIME_SIDECAR_PATHS } from "../../test/helpers/bundled-runtime-sidecars.js";
-import type { SunClawConfig, ConfigFileSnapshot } from "../config/types.sunclaw.js";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
+import type { SunClawConfig, ConfigFileSnapshot } from "../config/types.sunclaw.js";
 import { GATEWAY_SERVICE_RUNTIME_PID_ENV } from "../daemon/constants.js";
 import { writePackageDistInventory } from "../infra/package-dist-inventory.js";
 import { isBetaTag } from "../infra/update-channels.js";
@@ -2376,7 +2376,10 @@ describe("update-cli", () => {
       name: "full git URL package spec",
       run: async () => {
         mockPackageInstallStatus(createCaseDir("sunclaw-update"));
-        await updateCommand({ yes: true, tag: "https://github.com/ulvisultanov-art/sunclaw.git#main" });
+        await updateCommand({
+          yes: true,
+          tag: "https://github.com/ulvisultanov-art/sunclaw.git#main",
+        });
       },
       expectedSpec: "https://github.com/ulvisultanov-art/sunclaw.git#main",
     },
@@ -2616,9 +2619,9 @@ describe("update-cli", () => {
     const doctorCall = doctorCommandCall();
     expect(doctorCall?.[0][0]).toContain("node");
     expect(doctorCall?.[0].slice(1)).toEqual([entryPath, "doctor", "--non-interactive", "--fix"]);
-    expect(
-      (doctorCall?.[1].env as NodeJS.ProcessEnv | undefined)?.SUNCLAW_UPDATE_IN_PROGRESS,
-    ).toBe("1");
+    expect((doctorCall?.[1].env as NodeJS.ProcessEnv | undefined)?.SUNCLAW_UPDATE_IN_PROGRESS).toBe(
+      "1",
+    );
   });
 
   it("runs package post-update doctor from the verified package root after a staged swap", async () => {
@@ -3188,14 +3191,7 @@ describe("update-cli", () => {
       "mingw64",
       "bin",
     );
-    const portableGitUsr = path.join(
-      localAppData,
-      "SunClaw",
-      "deps",
-      "portable-git",
-      "usr",
-      "bin",
-    );
+    const portableGitUsr = path.join(localAppData, "SunClaw", "deps", "portable-git", "usr", "bin");
     await fs.mkdir(portableGitMingw, { recursive: true });
     await fs.mkdir(portableGitUsr, { recursive: true });
     mockPackageInstallStatus(tempDir);

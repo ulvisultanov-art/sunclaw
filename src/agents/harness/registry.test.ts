@@ -143,9 +143,7 @@ describe("agent harness registry", () => {
   it("falls back to SunClaw for other models", () => {
     process.env.SUNCLAW_AGENT_RUNTIME = "auto";
 
-    expect(selectAgentHarness({ provider: "anthropic", modelId: "sonnet-4.6" }).id).toBe(
-      "sunclaw",
-    );
+    expect(selectAgentHarness({ provider: "anthropic", modelId: "sonnet-4.6" }).id).toBe("sunclaw");
   });
 
   it("lets a plugin harness win in auto mode by priority", () => {

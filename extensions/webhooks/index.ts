@@ -45,8 +45,7 @@ function registerWebhookRoutes(api: SunClawPluginApi): void {
 export default definePluginEntry({
   id: "webhooks",
   name: "Webhooks",
-  description:
-    "Authenticated inbound webhooks that bind external automation to SunClaw TaskFlows.",
+  description: "Authenticated inbound webhooks that bind external automation to SunClaw TaskFlows.",
   register(api: SunClawPluginApi) {
     registerWebhookRoutes(api);
   },

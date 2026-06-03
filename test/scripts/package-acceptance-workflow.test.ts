@@ -475,8 +475,7 @@ describe("package artifact reuse", () => {
       INCLUDE_RELEASE_PATH_SUITES: "${{ inputs.include_release_path_suites }}",
       LANES: "${{ inputs.docker_lanes }}",
       SUNCLAW_UPGRADE_SURVIVOR_BASELINE_SPEC: "${{ inputs.published_upgrade_survivor_baseline }}",
-      SUNCLAW_UPGRADE_SURVIVOR_BASELINE_SPECS:
-        "${{ inputs.published_upgrade_survivor_baselines }}",
+      SUNCLAW_UPGRADE_SURVIVOR_BASELINE_SPECS: "${{ inputs.published_upgrade_survivor_baselines }}",
       SUNCLAW_UPGRADE_SURVIVOR_SCENARIOS: "${{ inputs.published_upgrade_survivor_scenarios }}",
       RELEASE_TEST_PROFILE: "${{ inputs.release_test_profile }}",
     });
@@ -898,9 +897,7 @@ describe("package artifact reuse", () => {
     expect(build).toContain('LIVE_IMAGE_PULL_ATTEMPTS="${SUNCLAW_LIVE_DOCKER_PULL_ATTEMPTS:-3}"');
     expect(build).toContain('docker_e2e_docker_cmd pull "$LIVE_IMAGE_NAME"');
     expect(build).not.toContain('docker pull "$LIVE_IMAGE_NAME"');
-    expect(stage).toContain(
-      'local scripts_dir="${SUNCLAW_LIVE_DOCKER_SCRIPTS_DIR:-/src/scripts}"',
-    );
+    expect(stage).toContain('local scripts_dir="${SUNCLAW_LIVE_DOCKER_SCRIPTS_DIR:-/src/scripts}"');
     expect(stage).toContain('node --import tsx "$scripts_dir/live-docker-normalize-config.ts"');
   });
 

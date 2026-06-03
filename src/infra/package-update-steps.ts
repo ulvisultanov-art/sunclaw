@@ -355,9 +355,7 @@ async function replaceNpmBinShims(params: {
   }
 
   const backup: NpmBinShimBackup = {
-    backupDir: await fs.mkdtemp(
-      path.join(params.targetLayout.globalRoot, ".sunclaw-shim-backup-"),
-    ),
+    backupDir: await fs.mkdtemp(path.join(params.targetLayout.globalRoot, ".sunclaw-shim-backup-")),
     targetBinDir: params.targetLayout.binDir,
     entries: [],
   };

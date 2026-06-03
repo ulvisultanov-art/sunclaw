@@ -1,9 +1,9 @@
+import type { SsrFPolicy } from "./ssrf-policy.js";
 import {
   fetchWithSsrFGuard,
   shouldUseEnvHttpProxyForUrl,
   ssrfPolicyFromHttpBaseUrlAllowedHostname,
 } from "./sunclaw-runtime-network.js";
-import type { SsrFPolicy } from "./ssrf-policy.js";
 
 export const MEMORY_REMOTE_TRUSTED_ENV_PROXY_MODE = "trusted_env_proxy";
 

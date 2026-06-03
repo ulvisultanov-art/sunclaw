@@ -17,8 +17,7 @@ const RECORDS: Record<string, PluginInstallRecord> = {
   weixin: {
     source: "npm",
     spec: "@tencent-weixin/sunclaw-weixin@2.3.7",
-    installPath:
-      "/tmp/sunclaw-test-home/.sunclaw/npm/node_modules/@tencent-weixin/sunclaw-weixin",
+    installPath: "/tmp/sunclaw-test-home/.sunclaw/npm/node_modules/@tencent-weixin/sunclaw-weixin",
   } as PluginInstallRecord,
 };
 

@@ -7,8 +7,8 @@ import { normalizeUniqueStringEntries } from "@sunclaw/normalization-core/string
 import { formatCliCommand } from "../cli/command-format.js";
 import { getRuntimeConfigSnapshot } from "../config/config.js";
 import type { ModelProviderAuthMode, ModelProviderConfig } from "../config/types.js";
-import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { coerceSecretRef } from "../config/types.secrets.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import { getShellEnvAppliedKeys } from "../infra/shell-env.js";
 import type { Model } from "../llm/types.js";

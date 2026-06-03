@@ -1,10 +1,5 @@
 import type { AgentMessage } from "sunclaw/plugin-sdk/agent-core";
-import type {
-  AssistantMessage,
-  ThinkingContent,
-  UserMessage,
-  Usage,
-} from "sunclaw/plugin-sdk/llm";
+import type { AssistantMessage, ThinkingContent, UserMessage, Usage } from "sunclaw/plugin-sdk/llm";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   expectOpenAIResponsesStrictSanitizeCall,

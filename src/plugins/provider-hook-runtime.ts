@@ -192,10 +192,7 @@ function findProviderRuntimePluginInRegistry(params: {
     });
 }
 
-function hasConfiguredModelProvider(params: {
-  provider: string;
-  config?: SunClawConfig;
-}): boolean {
+function hasConfiguredModelProvider(params: { provider: string; config?: SunClawConfig }): boolean {
   return (
     findNormalizedProviderValue(params.config?.models?.providers, params.provider) !== undefined
   );

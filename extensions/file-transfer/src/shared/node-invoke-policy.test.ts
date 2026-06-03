@@ -79,9 +79,7 @@ function createCtx(overrides: {
   approvals?: SunClawPluginNodeInvokePolicyContext["approvals"];
 }) {
   const invokeNode = vi.fn<SunClawPluginNodeInvokePolicyContext["invokeNode"]>(
-    async ({
-      params,
-    }: Parameters<SunClawPluginNodeInvokePolicyContext["invokeNode"]>[0] = {}) => ({
+    async ({ params }: Parameters<SunClawPluginNodeInvokePolicyContext["invokeNode"]>[0] = {}) => ({
       ok: true,
       payload: {
         ok: true,

@@ -74,14 +74,13 @@ function loaderOptionsKey(loaderOptions: PluginCliLoaderOptions | undefined): st
   return String(id);
 }
 
-export const loadValidatedConfigForPluginRegistration =
-  async (): Promise<SunClawConfig | null> => {
-    const snapshot = await readConfigFileSnapshot();
-    if (!snapshot.valid) {
-      return null;
-    }
-    return getRuntimeConfig();
-  };
+export const loadValidatedConfigForPluginRegistration = async (): Promise<SunClawConfig | null> => {
+  const snapshot = await readConfigFileSnapshot();
+  if (!snapshot.valid) {
+    return null;
+  }
+  return getRuntimeConfig();
+};
 
 export async function getPluginCliCommandDescriptors(
   cfg?: SunClawConfig,

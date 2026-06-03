@@ -5,9 +5,7 @@ import { loadBundledPluginPublicSurfaceModuleSync } from "./facade-loader.js";
  * @deprecated Compatibility type for the `sunclaw/plugin-sdk/telegram-account` facade.
  * New channel plugins should prefer injected runtime helpers and generic SDK subpaths.
  */
-export type TelegramAccountConfig = NonNullable<
-  NonNullable<SunClawConfig["channels"]>["telegram"]
->;
+export type TelegramAccountConfig = NonNullable<NonNullable<SunClawConfig["channels"]>["telegram"]>;
 
 /**
  * @deprecated Compatibility type for the `sunclaw/plugin-sdk/telegram-account` facade.

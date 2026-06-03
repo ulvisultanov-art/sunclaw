@@ -155,14 +155,10 @@ describe("entry compile cache", () => {
       },
     );
 
-    expect(spawn).toHaveBeenCalledWith(
-      "/usr/bin/node",
-      ["/repo/sunclaw/dist/entry.js", "status"],
-      {
-        stdio: "inherit",
-        env: { NODE_DISABLE_COMPILE_CACHE: "1" },
-      },
-    );
+    expect(spawn).toHaveBeenCalledWith("/usr/bin/node", ["/repo/sunclaw/dist/entry.js", "status"], {
+      stdio: "inherit",
+      env: { NODE_DISABLE_COMPILE_CACHE: "1" },
+    });
     const [bridgeChild, bridgeOptions] = requireFirstMockCall(
       attachChildProcessBridge,
       "child process bridge attach",

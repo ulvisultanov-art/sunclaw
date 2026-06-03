@@ -16,8 +16,7 @@ vi.mock("../process/exec.js", () => ({
 }));
 
 vi.mock("../infra/sunclaw-root.js", () => ({
-  resolveSunClawPackageRootSync: (...args: unknown[]) =>
-    resolveSunClawPackageRootSyncMock(...args),
+  resolveSunClawPackageRootSync: (...args: unknown[]) => resolveSunClawPackageRootSyncMock(...args),
 }));
 
 vi.resetModules();

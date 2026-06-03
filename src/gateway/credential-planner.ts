@@ -1,7 +1,7 @@
 import { normalizeOptionalString } from "../../packages/normalization-core/src/string-coerce.js";
 import { containsEnvVarReference } from "../config/env-substitution.js";
-import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { hasConfiguredSecretInput, resolveSecretInputRef } from "../config/types.secrets.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 
 type GatewayCredentialInputPath =
   | "gateway.auth.token"

@@ -595,10 +595,8 @@ export async function runTsdownBuildInvocation(invocation, params = {}) {
     "SUNCLAW_TSDOWN_TIMEOUT_MS",
   );
   const heartbeatMs =
-    parseNonNegativeIntegerEnv(
-      env.SUNCLAW_TSDOWN_HEARTBEAT_MS,
-      "SUNCLAW_TSDOWN_HEARTBEAT_MS",
-    ) ?? DEFAULT_HEARTBEAT_MS;
+    parseNonNegativeIntegerEnv(env.SUNCLAW_TSDOWN_HEARTBEAT_MS, "SUNCLAW_TSDOWN_HEARTBEAT_MS") ??
+    DEFAULT_HEARTBEAT_MS;
   let timedOut = false;
   let settled = false;
   let lastOutputAt = Date.now();

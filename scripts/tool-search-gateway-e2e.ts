@@ -56,11 +56,7 @@ export function readToolSearchGatewayFetchLimits(
       1024 * 1024,
       env,
     ),
-    timeoutMs: readPositiveIntEnv(
-      "SUNCLAW_TOOL_SEARCH_GATEWAY_E2E_FETCH_TIMEOUT_MS",
-      180_000,
-      env,
-    ),
+    timeoutMs: readPositiveIntEnv("SUNCLAW_TOOL_SEARCH_GATEWAY_E2E_FETCH_TIMEOUT_MS", 180_000, env),
   };
 }
 

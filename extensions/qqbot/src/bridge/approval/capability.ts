@@ -62,10 +62,7 @@ function shouldHandleRequest(params: {
   });
 }
 
-function hasExecApprovalConfig(params: {
-  cfg: SunClawConfig;
-  accountId?: string | null;
-}): boolean {
+function hasExecApprovalConfig(params: { cfg: SunClawConfig; accountId?: string | null }): boolean {
   return resolveQQBotExecApprovalConfig(params) !== undefined;
 }
 

@@ -9,9 +9,9 @@ let resolveSlackEffectiveAllowFrom: typeof import("./auth.js").resolveSlackEffec
 let resolveSlackCommandIngress: typeof import("./auth.js").resolveSlackCommandIngress;
 
 vi.mock("sunclaw/plugin-sdk/channel-ingress-runtime", async () => {
-  const actual = await vi.importActual<
-    typeof import("sunclaw/plugin-sdk/channel-ingress-runtime")
-  >("sunclaw/plugin-sdk/channel-ingress-runtime");
+  const actual = await vi.importActual<typeof import("sunclaw/plugin-sdk/channel-ingress-runtime")>(
+    "sunclaw/plugin-sdk/channel-ingress-runtime",
+  );
   return {
     ...actual,
     readChannelIngressStoreAllowFromForDmPolicy: (...args: unknown[]) =>

@@ -1,5 +1,5 @@
-import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { coerceSecretRef, resolveSecretInputRef } from "../../config/types.secrets.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import type { AuthProfileCredential, AuthProfileStore } from "./types.js";
 
 type SecretDefaults = NonNullable<SunClawConfig["secrets"]>["defaults"];

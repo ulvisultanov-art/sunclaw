@@ -68,8 +68,6 @@ import {
   resolveLocalModelLeanPreserveToolNames,
 } from "./local-model-lean.js";
 import type { ModelAuthMode } from "./model-auth.js";
-import { resolveSunClawPluginToolsForOptions } from "./sunclaw-plugin-tools.js";
-import { createSunClawTools } from "./sunclaw-tools.js";
 import type { SandboxContext } from "./sandbox.js";
 import { SANDBOX_AGENT_WORKSPACE_MOUNT } from "./sandbox/constants.js";
 import { resolveSenderToolPolicy } from "./sender-tool-policy.js";
@@ -78,6 +76,8 @@ import {
   isSubagentEnvelopeSession,
   resolveSubagentCapabilityStore,
 } from "./subagent-capabilities.js";
+import { resolveSunClawPluginToolsForOptions } from "./sunclaw-plugin-tools.js";
+import { createSunClawTools } from "./sunclaw-tools.js";
 import {
   EXEC_TOOL_DISPLAY_SUMMARY,
   PROCESS_TOOL_DISPLAY_SUMMARY,

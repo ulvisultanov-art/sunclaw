@@ -223,9 +223,7 @@ function loadManifest(pluginDir, pluginRoot) {
 }
 
 function configPathFromEnv(env = process.env) {
-  return (
-    env.SUNCLAW_CONFIG_PATH || path.join(env.HOME || os.homedir(), ".sunclaw", "sunclaw.json")
-  );
+  return env.SUNCLAW_CONFIG_PATH || path.join(env.HOME || os.homedir(), ".sunclaw", "sunclaw.json");
 }
 
 function readConfig(env = process.env) {

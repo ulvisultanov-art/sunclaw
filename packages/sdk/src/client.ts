@@ -374,10 +374,7 @@ export class SunClaw {
     return this.iterateEvents(filter);
   }
 
-  runEvents(
-    runId: string,
-    filter?: (event: SunClawEvent) => boolean,
-  ): AsyncIterable<SunClawEvent> {
+  runEvents(runId: string, filter?: (event: SunClawEvent) => boolean): AsyncIterable<SunClawEvent> {
     return this.iterateRunEvents(runId, filter);
   }
 

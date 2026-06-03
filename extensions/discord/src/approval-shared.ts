@@ -3,10 +3,7 @@ import type {
   ExecApprovalRequest,
   PluginApprovalRequest,
 } from "sunclaw/plugin-sdk/approval-runtime";
-import type {
-  DiscordExecApprovalConfig,
-  SunClawConfig,
-} from "sunclaw/plugin-sdk/config-contracts";
+import type { DiscordExecApprovalConfig, SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
 import { resolveDiscordAccount } from "./accounts.js";
 import {
   isChannelExecApprovalClientEnabledFromConfig,

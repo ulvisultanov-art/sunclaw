@@ -318,8 +318,7 @@ function parseArgs(): Args {
   const driverModeRaw =
     resolveArg("--driver") || process.env.SUNCLAW_DISCORD_SMOKE_DRIVER || "token";
   const driverMode = parseDriverMode(driverModeRaw);
-  const driverToken =
-    resolveArg("--token") || process.env.SUNCLAW_DISCORD_SMOKE_DRIVER_TOKEN || "";
+  const driverToken = resolveArg("--token") || process.env.SUNCLAW_DISCORD_SMOKE_DRIVER_TOKEN || "";
   const driverTokenPrefix =
     resolveArg("--token-prefix") || process.env.SUNCLAW_DISCORD_SMOKE_DRIVER_TOKEN_PREFIX || "Bot";
   const botToken =
@@ -328,9 +327,7 @@ function parseArgs(): Args {
     process.env.DISCORD_BOT_TOKEN ||
     "";
   const botTokenPrefix =
-    resolveArg("--bot-token-prefix") ||
-    process.env.SUNCLAW_DISCORD_SMOKE_BOT_TOKEN_PREFIX ||
-    "Bot";
+    resolveArg("--bot-token-prefix") || process.env.SUNCLAW_DISCORD_SMOKE_BOT_TOKEN_PREFIX || "Bot";
   const targetAgent = resolveArg("--agent") || process.env.SUNCLAW_DISCORD_SMOKE_AGENT || "codex";
   const mentionUserId =
     resolveArg("--mention") || process.env.SUNCLAW_DISCORD_SMOKE_MENTION_USER_ID || undefined;

@@ -27,11 +27,11 @@ import {
   normalizeHostOverrideEnvVarKey,
   sanitizeHostExecEnvWithDiagnostics,
 } from "../infra/host-env-security.js";
-import { SUNCLAW_CLI_ENV_VAR } from "../infra/sunclaw-exec-env.js";
 import {
   getShellPathFromLoginShell,
   resolveShellEnvFallbackTimeoutMs,
 } from "../infra/shell-env.js";
+import { SUNCLAW_CLI_ENV_VAR } from "../infra/sunclaw-exec-env.js";
 import { logInfo } from "../logger.js";
 import { getGlobalHookRunner } from "../plugins/hook-runner-global.js";
 import {

@@ -39,7 +39,7 @@ skill name appears in multiple places, the highest source wins.
 | 1 — highest | Workspace skills       | `<workspace>/skills`                    |
 | 2           | Project agent skills   | `<workspace>/.agents/skills`            |
 | 3           | Personal agent skills  | `~/.agents/skills`                      |
-| 4           | Managed / local skills | `~/.sunclaw/skills`                    |
+| 4           | Managed / local skills | `~/.sunclaw/skills`                     |
 | 5           | Bundled skills         | shipped with the install                |
 | 6 — lowest  | Extra directories      | `skills.load.extraDirs` + plugin skills |
 
@@ -71,7 +71,7 @@ matches your desired visibility:
 | Per-agent      | `<workspace>/skills`         | Only that agent             |
 | Project-agent  | `<workspace>/.agents/skills` | Only that workspace's agent |
 | Personal-agent | `~/.agents/skills`           | All agents on this machine  |
-| Shared managed | `~/.sunclaw/skills`         | All agents on this machine  |
+| Shared managed | `~/.sunclaw/skills`          | All agents on this machine  |
 | Extra dirs     | `skills.load.extraDirs`      | All agents on this machine  |
 
 ## Agent allowlists
@@ -143,8 +143,8 @@ reference, and configuration.
 `sunclaw skills` commands for install and update, or the `clawhub` CLI for
 publish and sync.
 
-| Action                             | Command                                                |
-| ---------------------------------- | ------------------------------------------------------ |
+| Action                             | Command                                               |
+| ---------------------------------- | ----------------------------------------------------- |
 | Install a skill into the workspace | `sunclaw skills install <slug>`                       |
 | Install from a Git repository      | `sunclaw skills install git:owner/repo@ref`           |
 | Install a local skill directory    | `sunclaw skills install ./path/to/skill --as my-tool` |
@@ -154,7 +154,7 @@ publish and sync.
 | Update all shared managed skills   | `sunclaw skills update --all --global`                |
 | Verify a skill's trust envelope    | `sunclaw skills verify <slug>`                        |
 | Print the generated Skill Card     | `sunclaw skills verify <slug> --card`                 |
-| Publish / sync via ClawHub CLI     | `clawhub sync --all`                                   |
+| Publish / sync via ClawHub CLI     | `clawhub sync --all`                                  |
 
 <AccordionGroup>
   <Accordion title="Install details">

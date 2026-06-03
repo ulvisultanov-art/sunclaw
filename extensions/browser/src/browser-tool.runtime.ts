@@ -22,10 +22,7 @@ export {
 } from "./sdk-setup-tools.js";
 export type { AnyAgentTool, NodeListNode } from "./sdk-setup-tools.js";
 export { wrapExternalContent } from "./sdk-security-runtime.js";
-export {
-  normalizeOptionalString,
-  readStringValue,
-} from "sunclaw/plugin-sdk/string-coerce-runtime";
+export { normalizeOptionalString, readStringValue } from "sunclaw/plugin-sdk/string-coerce-runtime";
 export { BrowserToolSchema } from "./browser-tool.schema.js";
 export {
   browserAct,

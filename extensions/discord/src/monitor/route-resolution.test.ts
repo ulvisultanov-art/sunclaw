@@ -9,10 +9,7 @@ import {
   shouldIgnoreStaleDiscordRouteBinding,
 } from "./route-resolution.js";
 
-function buildWorkerBindingConfig(peer: {
-  kind: "channel" | "direct";
-  id: string;
-}): SunClawConfig {
+function buildWorkerBindingConfig(peer: { kind: "channel" | "direct"; id: string }): SunClawConfig {
   return {
     agents: {
       list: [{ id: "worker" }],

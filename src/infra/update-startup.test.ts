@@ -75,12 +75,7 @@ describe("update-startup", () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2026-01-17T10:00:00Z"));
     tempDir = await suiteRootTracker.make("case");
-    envSnapshot = captureEnv([
-      "SUNCLAW_NO_AUTO_UPDATE",
-      "SUNCLAW_STATE_DIR",
-      "NODE_ENV",
-      "VITEST",
-    ]);
+    envSnapshot = captureEnv(["SUNCLAW_NO_AUTO_UPDATE", "SUNCLAW_STATE_DIR", "NODE_ENV", "VITEST"]);
     process.env.SUNCLAW_STATE_DIR = tempDir;
 
     process.env.NODE_ENV = "test";

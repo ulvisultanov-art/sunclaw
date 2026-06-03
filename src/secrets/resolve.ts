@@ -2,7 +2,6 @@ import { spawn } from "node:child_process";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { uniqueStrings } from "@sunclaw/normalization-core/string-normalization";
-import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type {
   FileSecretProviderConfig,
   ManualExecSecretProviderConfig,
@@ -10,6 +9,7 @@ import type {
   SecretRef,
   SecretRefSource,
 } from "../config/types.secrets.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import { FsSafeError, readSecureFile } from "../infra/fs-safe.js";
 import { getCurrentPluginMetadataSnapshot } from "../plugins/current-plugin-metadata-snapshot.js";

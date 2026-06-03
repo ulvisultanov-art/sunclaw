@@ -98,9 +98,7 @@ function loadMemoryEmbeddingProviderModule(): Promise<
 let memoryHostCoreModulePromise:
   | Promise<typeof import("sunclaw/plugin-sdk/memory-host-core")>
   | undefined;
-function loadMemoryHostCoreModule(): Promise<
-  typeof import("sunclaw/plugin-sdk/memory-host-core")
-> {
+function loadMemoryHostCoreModule(): Promise<typeof import("sunclaw/plugin-sdk/memory-host-core")> {
   memoryHostCoreModulePromise ??= import("sunclaw/plugin-sdk/memory-host-core");
   return memoryHostCoreModulePromise;
 }

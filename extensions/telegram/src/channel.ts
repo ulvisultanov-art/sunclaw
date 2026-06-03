@@ -12,10 +12,7 @@ import {
 } from "sunclaw/plugin-sdk/channel-core";
 import { createAccountStatusSink } from "sunclaw/plugin-sdk/channel-outbound";
 import { createChannelMessageAdapterFromOutbound } from "sunclaw/plugin-sdk/channel-outbound";
-import {
-  resolveOutboundSendDep,
-  type OutboundSendDeps,
-} from "sunclaw/plugin-sdk/channel-outbound";
+import { resolveOutboundSendDep, type OutboundSendDeps } from "sunclaw/plugin-sdk/channel-outbound";
 import { createPairingPrefixStripper } from "sunclaw/plugin-sdk/channel-pairing";
 import {
   PAIRING_APPROVED_MESSAGE,

@@ -8,9 +8,8 @@ const registryJitiMocks = vi.hoisted(() => ({
 }));
 
 vi.mock("../discovery.js", () => ({
-  discoverSunClawPlugins: (
-    ...args: Parameters<typeof registryJitiMocks.discoverSunClawPlugins>
-  ) => registryJitiMocks.discoverSunClawPlugins(...args),
+  discoverSunClawPlugins: (...args: Parameters<typeof registryJitiMocks.discoverSunClawPlugins>) =>
+    registryJitiMocks.discoverSunClawPlugins(...args),
 }));
 
 vi.mock("../manifest-registry.js", () => ({

@@ -45,14 +45,14 @@ import {
   WORKSPACE_TEMPLATE_PACK_PATHS,
 } from "./lib/workspace-bootstrap-smoke.mjs";
 import { resolveNpmRunner } from "./npm-runner.mjs";
+import { listStaticExtensionAssetOutputs } from "./runtime-postbuild.mjs";
+import { sparkleBuildFloorsFromShortVersion, type SparkleBuildFloors } from "./sparkle-build.ts";
 import {
   collectInstalledPackageErrors,
   normalizeInstalledBinaryVersion,
   resolveInstalledBinaryCommandInvocation,
   resolveInstalledBinaryPath,
 } from "./sunclaw-npm-postpublish-verify.ts";
-import { listStaticExtensionAssetOutputs } from "./runtime-postbuild.mjs";
-import { sparkleBuildFloorsFromShortVersion, type SparkleBuildFloors } from "./sparkle-build.ts";
 import { buildCmdExeCommandLine } from "./windows-cmd-helpers.mjs";
 
 export { collectBundledExtensionManifestErrors } from "./lib/bundled-extension-manifest.ts";

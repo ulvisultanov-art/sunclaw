@@ -27,7 +27,7 @@ resources.
 
 | Surface                   | Status  | What it does                                                                      |
 | ------------------------- | ------- | --------------------------------------------------------------------------------- |
-| `SunClaw`                | Ready   | Main client entry point. Owns transport, connection, requests, and events.        |
+| `SunClaw`                 | Ready   | Main client entry point. Owns transport, connection, requests, and events.        |
 | `GatewayClientTransport`  | Ready   | WebSocket transport backed by the Gateway client.                                 |
 | `oc.agents`               | Ready   | Lists, creates, updates, deletes, and gets agent handles.                         |
 | `Agent.run()`             | Ready   | Starts a Gateway `agent` run and returns a `Run`.                                 |

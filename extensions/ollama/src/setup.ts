@@ -1,9 +1,5 @@
 import { formatErrorMessage } from "sunclaw/plugin-sdk/error-runtime";
-import type {
-  SunClawConfig,
-  SecretInput,
-  SecretInputMode,
-} from "sunclaw/plugin-sdk/provider-auth";
+import type { SunClawConfig, SecretInput, SecretInputMode } from "sunclaw/plugin-sdk/provider-auth";
 import {
   ensureApiKeyFromOptionEnvOrPrompt,
   isNonSecretApiKeyMarker,

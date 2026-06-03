@@ -144,10 +144,10 @@ the install instead.
 
 ## Choose a source
 
-| Source      | Use when                                                                    | Example                                                        |
-| ----------- | --------------------------------------------------------------------------- | -------------------------------------------------------------- |
-| ClawHub     | You want SunClaw-native discovery, scan summaries, versions, and hints     | `sunclaw plugins install clawhub:<package>`                   |
-| npmjs.com   | You already ship JavaScript packages or need npm dist-tags/private registry | `sunclaw plugins install npm:@acme/sunclaw-plugin`           |
+| Source      | Use when                                                                    | Example                                                       |
+| ----------- | --------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| ClawHub     | You want SunClaw-native discovery, scan summaries, versions, and hints      | `sunclaw plugins install clawhub:<package>`                   |
+| npmjs.com   | You already ship JavaScript packages or need npm dist-tags/private registry | `sunclaw plugins install npm:@acme/sunclaw-plugin`            |
 | git         | You want a branch, tag, or commit from a repository                         | `sunclaw plugins install git:github.com/<owner>/<repo>@<ref>` |
 | local path  | You are developing or testing a plugin on the same machine                  | `sunclaw plugins install --link ./my-plugin`                  |
 | npm pack    | You are proving a local package artifact through npm install semantics      | `sunclaw plugins install npm-pack:<path.tgz>`                 |

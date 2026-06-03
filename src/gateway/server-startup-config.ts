@@ -169,11 +169,7 @@ function withRuntimeConfig(
 /** Create the serialized secrets activation function used by startup and reload paths. */
 export function createRuntimeSecretsActivator(params: {
   logSecrets: GatewayStartupLog;
-  emitStateEvent: (
-    code: GatewaySecretsStateEventCode,
-    message: string,
-    cfg: SunClawConfig,
-  ) => void;
+  emitStateEvent: (code: GatewaySecretsStateEventCode, message: string, cfg: SunClawConfig) => void;
   prepareRuntimeSecretsSnapshot?: PrepareRuntimeSecretsSnapshot;
   activateRuntimeSecretsSnapshot?: ActivateRuntimeSecretsSnapshot;
   manifestRegistry?: Pick<PluginManifestRegistry, "plugins">;

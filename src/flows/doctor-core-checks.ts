@@ -19,8 +19,8 @@ import {
   uiProtocolFreshnessIssueToRepairEffects,
 } from "../commands/doctor-ui.js";
 import { collectDisabledCodexPluginRouteIssues } from "../commands/doctor/shared/codex-route-warnings.js";
-import type { ConfigValidationIssue, SunClawConfig } from "../config/types.sunclaw.js";
 import { resolveSecretInputRef, type SecretRef } from "../config/types.secrets.js";
+import type { ConfigValidationIssue, SunClawConfig } from "../config/types.sunclaw.js";
 import { hasAmbiguousGatewayAuthModeConfig } from "../gateway/auth-mode-policy.js";
 import { resolveGatewayAuthToken } from "../gateway/auth-token-resolution.js";
 import { resolveGatewayAuth } from "../gateway/auth.js";

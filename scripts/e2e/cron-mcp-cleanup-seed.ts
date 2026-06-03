@@ -52,8 +52,7 @@ await server.connect(new StdioServerTransport());
 
 async function main() {
   const stateDir = process.env.SUNCLAW_STATE_DIR?.trim() || path.join(os.homedir(), ".sunclaw");
-  const configPath =
-    process.env.SUNCLAW_CONFIG_PATH?.trim() || path.join(stateDir, "sunclaw.json");
+  const configPath = process.env.SUNCLAW_CONFIG_PATH?.trim() || path.join(stateDir, "sunclaw.json");
   const probeDir = path.join(stateDir, "cron-mcp-cleanup");
   const serverPath = path.join(probeDir, "probe-server.mjs");
   const pidPath = path.join(probeDir, "probe.pid");

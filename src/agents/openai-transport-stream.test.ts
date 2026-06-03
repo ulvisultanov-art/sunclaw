@@ -3556,13 +3556,10 @@ describe("openai transport stream", () => {
                   id: "rs_prior",
                   encrypted_content: "ciphertext",
                 }),
-                sunclawReasoningReplay: testing.buildOpenAIResponsesReasoningReplayMetadata(
-                  model,
-                  {
-                    authProfileId: "openai:oauth",
-                    sessionId: "session-123",
-                  },
-                ),
+                sunclawReasoningReplay: testing.buildOpenAIResponsesReasoningReplayMetadata(model, {
+                  authProfileId: "openai:oauth",
+                  sessionId: "session-123",
+                }),
               },
               {
                 type: "text",
@@ -3793,13 +3790,10 @@ describe("openai transport stream", () => {
                   id: "rs_prior",
                   encrypted_content: "ciphertext",
                 }),
-                sunclawReasoningReplay: testing.buildOpenAIResponsesReasoningReplayMetadata(
-                  model,
-                  {
-                    authProfileId: "openai:oauth",
-                    sessionId: "different-session",
-                  },
-                ),
+                sunclawReasoningReplay: testing.buildOpenAIResponsesReasoningReplayMetadata(model, {
+                  authProfileId: "openai:oauth",
+                  sessionId: "different-session",
+                }),
               },
             ],
           },
@@ -3868,13 +3862,10 @@ describe("openai transport stream", () => {
                   id: "rs_prior",
                   encrypted_content: "ciphertext",
                 }),
-                sunclawReasoningReplay: testing.buildOpenAIResponsesReasoningReplayMetadata(
-                  model,
-                  {
-                    authProfileId: "openai:old-oauth",
-                    sessionId: "session-123",
-                  },
-                ),
+                sunclawReasoningReplay: testing.buildOpenAIResponsesReasoningReplayMetadata(model, {
+                  authProfileId: "openai:old-oauth",
+                  sessionId: "session-123",
+                }),
               },
             ],
           },

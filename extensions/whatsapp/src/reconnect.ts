@@ -1,10 +1,6 @@
 import { randomUUID } from "node:crypto";
 import type { SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
-import {
-  computeBackoff,
-  sleepWithAbort,
-  type BackoffPolicy,
-} from "sunclaw/plugin-sdk/runtime-env";
+import { computeBackoff, sleepWithAbort, type BackoffPolicy } from "sunclaw/plugin-sdk/runtime-env";
 import { clamp } from "sunclaw/plugin-sdk/text-utility-runtime";
 
 export type ReconnectPolicy = BackoffPolicy & {

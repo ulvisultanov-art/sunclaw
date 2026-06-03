@@ -17,10 +17,6 @@ import {
   resolveExportCommandSessionTarget,
 } from "./commands-export-common.js";
 import {
-  buildCurrentSunClawCliArgv,
-  buildCurrentSunClawCliCommand,
-} from "./commands-sunclaw-cli.js";
-import {
   deliverPrivateCommandReply,
   readCommandDeliveryTarget,
   readCommandMessageThreadId,
@@ -28,6 +24,10 @@ import {
   resolvePrivateCommandRouteTargets,
   type PrivateCommandRouteTarget,
 } from "./commands-private-route.js";
+import {
+  buildCurrentSunClawCliArgv,
+  buildCurrentSunClawCliCommand,
+} from "./commands-sunclaw-cli.js";
 import type { HandleCommandsParams } from "./commands-types.js";
 
 const EXPORT_TRAJECTORY_DOCS_URL = "https://docs.sunclaw.complex.az/tools/trajectory";

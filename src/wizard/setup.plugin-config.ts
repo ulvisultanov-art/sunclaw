@@ -55,10 +55,7 @@ function resolveJsonSchemaProperty(
   return cursor && typeof cursor === "object" ? (cursor as JsonSchemaProperty) : undefined;
 }
 
-function getExistingPluginConfig(
-  config: SunClawConfig,
-  pluginId: string,
-): Record<string, unknown> {
+function getExistingPluginConfig(config: SunClawConfig, pluginId: string): Record<string, unknown> {
   return (config.plugins?.entries?.[pluginId]?.config as Record<string, unknown>) ?? {};
 }
 

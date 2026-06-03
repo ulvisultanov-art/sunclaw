@@ -380,14 +380,10 @@ describe("parallels npm update smoke", () => {
     expect(script).toContain("Invoke-WithScopedEnv @{ SUNCLAW_DISABLE_BUNDLED_PLUGINS = '1'");
     expect(macosScript).toContain('SUNCLAW_BIN="$(resolve_required_command sunclaw)"');
     expect(macosScript).toContain("/usr/local/bin:/usr/local/sbin");
-    expect(macosScript).toContain(
-      'SUNCLAW_DISABLE_BUNDLED_PLUGINS=1 "$SUNCLAW_BIN" update --tag',
-    );
+    expect(macosScript).toContain('SUNCLAW_DISABLE_BUNDLED_PLUGINS=1 "$SUNCLAW_BIN" update --tag');
     expect(macosScript).not.toContain("/opt/homebrew/bin/sunclaw");
     expect(script).toContain("SUNCLAW_DISABLE_BUNDLED_PLUGINS=1 sunclaw update --tag");
-    expect(macosScript).toContain(
-      'SUNCLAW_DISABLE_BUNDLED_PLUGINS=1 "$SUNCLAW_BIN" gateway stop',
-    );
+    expect(macosScript).toContain('SUNCLAW_DISABLE_BUNDLED_PLUGINS=1 "$SUNCLAW_BIN" gateway stop');
     expect(script).toContain(
       "SUNCLAW_DISABLE_BUNDLED_PLUGINS=1 SUNCLAW_ALLOW_ROOT=1 sunclaw gateway stop",
     );

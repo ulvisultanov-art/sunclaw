@@ -162,9 +162,7 @@ function openAiWildcardRuntimePolicy(
   return undefined;
 }
 
-function openAiDefaultRouteRuntimePolicy(
-  cfg: SunClawConfig,
-): AgentRuntimePolicyConfig | undefined {
+function openAiDefaultRouteRuntimePolicy(cfg: SunClawConfig): AgentRuntimePolicyConfig | undefined {
   // This mirrors the default-route slice of resolveModelRuntimePolicy: a global
   // OpenAI wildcard policy is more specific than the provider-level policy.
   return (

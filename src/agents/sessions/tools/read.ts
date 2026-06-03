@@ -108,9 +108,7 @@ function quotePosixShellArg(value: string): string {
   return `'${value.replaceAll("'", "'\\''")}'`;
 }
 
-function getSunClawDocsClassification(
-  absolutePath: string,
-): CompactReadClassification | undefined {
+function getSunClawDocsClassification(absolutePath: string): CompactReadClassification | undefined {
   const packageRoot = dirname(getReadmePath());
   const relativePath = relative(resolvePath(packageRoot), resolvePath(absolutePath));
   if (

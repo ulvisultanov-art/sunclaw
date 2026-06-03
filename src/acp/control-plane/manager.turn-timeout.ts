@@ -10,10 +10,7 @@ import { resolveRuntimeOptionsFromMeta } from "./runtime-options.js";
 const ACP_TURN_TIMEOUT_CLEANUP_GRACE_MS = 2_000;
 const ACP_TURN_TIMEOUT_REASON = "turn-timeout";
 
-export function resolveTurnTimeoutMs(params: {
-  cfg: SunClawConfig;
-  meta: SessionAcpMeta;
-}): number {
+export function resolveTurnTimeoutMs(params: { cfg: SunClawConfig; meta: SessionAcpMeta }): number {
   const runtimeTimeoutSeconds = resolveRuntimeOptionsFromMeta(params.meta).timeoutSeconds;
   if (
     typeof runtimeTimeoutSeconds === "number" &&

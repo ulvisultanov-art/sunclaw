@@ -374,9 +374,7 @@ describe("scripts/run-vitest", () => {
     expect(resolveVitestNoOutputTimeoutMs({ SUNCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS: "2500" })).toBe(
       2500,
     );
-    expect(
-      resolveVitestNoOutputTimeoutMs({ SUNCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS: "0" }),
-    ).toBeNull();
+    expect(resolveVitestNoOutputTimeoutMs({ SUNCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS: "0" })).toBeNull();
   });
 
   it("defaults direct non-watch runs to the stall watchdog", () => {

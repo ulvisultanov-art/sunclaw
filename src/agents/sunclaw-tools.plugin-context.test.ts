@@ -1,7 +1,7 @@
 import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
-import { resolveSunClawPluginToolInputs } from "./sunclaw-tools.plugin-context.js";
 import { applyPluginToolDeliveryDefaults } from "./plugin-tool-delivery-defaults.js";
+import { resolveSunClawPluginToolInputs } from "./sunclaw-tools.plugin-context.js";
 import type { AnyAgentTool } from "./tools/common.js";
 
 describe("sunclaw plugin tool context", () => {

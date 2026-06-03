@@ -1,6 +1,6 @@
+import type { Frame, Page } from "playwright-core";
 import { resolveNonNegativeIntegerOption } from "sunclaw/plugin-sdk/number-runtime";
 import { normalizeOptionalString } from "sunclaw/plugin-sdk/string-coerce-runtime";
-import type { Frame, Page } from "playwright-core";
 import { formatErrorMessage } from "../infra/errors.js";
 import type { SsrFPolicy } from "../infra/net/ssrf.js";
 import {

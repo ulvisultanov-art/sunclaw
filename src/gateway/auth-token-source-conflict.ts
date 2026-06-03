@@ -1,6 +1,6 @@
 import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
-import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { normalizeSecretInputString, resolveSecretInputRef } from "../config/types.secrets.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 
 const GATEWAY_ENV_TOKEN = "SUNCLAW_GATEWAY_TOKEN";
 const GATEWAY_SERVICE_KIND = "gateway";

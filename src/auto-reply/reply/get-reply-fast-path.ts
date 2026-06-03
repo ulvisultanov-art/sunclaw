@@ -29,9 +29,7 @@ type ReplyConfigWithMarker = SunClawConfig & {
 };
 
 function isSlowReplyTestAllowed(env: NodeJS.ProcessEnv = process.env): boolean {
-  return (
-    env.SUNCLAW_ALLOW_SLOW_REPLY_TESTS === "1" || env.SUNCLAW_STRICT_FAST_REPLY_CONFIG === "0"
-  );
+  return env.SUNCLAW_ALLOW_SLOW_REPLY_TESTS === "1" || env.SUNCLAW_STRICT_FAST_REPLY_CONFIG === "0";
 }
 
 function resolveFastSessionKey(params: {

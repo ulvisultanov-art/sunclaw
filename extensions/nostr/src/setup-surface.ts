@@ -1,8 +1,8 @@
+import { DEFAULT_ACCOUNT_ID } from "sunclaw/plugin-sdk/routing";
 import {
   hasConfiguredSecretInput,
   normalizeSecretInputString,
 } from "sunclaw/plugin-sdk/secret-input";
-import { DEFAULT_ACCOUNT_ID } from "sunclaw/plugin-sdk/routing";
 import type { ChannelSetupDmPolicy, ChannelSetupWizard, DmPolicy } from "sunclaw/plugin-sdk/setup";
 import {
   createSetupTranslator,
@@ -16,11 +16,7 @@ import {
 } from "sunclaw/plugin-sdk/setup";
 import { DEFAULT_RELAYS } from "./default-relays.js";
 import { getPublicKeyFromPrivate, normalizePubkey } from "./nostr-key-utils.js";
-import {
-  buildNostrSetupPatch,
-  createNostrSetupAdapter,
-  parseRelayUrls,
-} from "./setup-adapter.js";
+import { buildNostrSetupPatch, createNostrSetupAdapter, parseRelayUrls } from "./setup-adapter.js";
 import { resolveDefaultNostrAccountId, resolveNostrAccount } from "./types.js";
 
 const t = createSetupTranslator();

@@ -6,8 +6,7 @@ import process from "node:process";
 import { setTimeout as delay } from "node:timers/promises";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
-const PLUGIN_SPEC =
-  process.env.SUNCLAW_KITCHEN_SINK_NPM_SPEC || "npm:@sunclaw/kitchen-sink@latest";
+const PLUGIN_SPEC = process.env.SUNCLAW_KITCHEN_SINK_NPM_SPEC || "npm:@sunclaw/kitchen-sink@latest";
 const PLUGIN_ID = process.env.SUNCLAW_KITCHEN_SINK_PLUGIN_ID || "sunclaw-kitchen-sink-fixture";
 const CHANNEL_ID = "kitchen-sink-channel";
 const CHANNEL_ACCOUNT_ID = "local";
@@ -18,10 +17,7 @@ const EXPECTED_TOOLS = ["kitchen_sink_text", "kitchen_sink_search", "kitchen_sin
 const EXPECTED_PROVIDERS = ["kitchen-sink-provider", "kitchen-sink-llm"];
 const EXPECTED_SPEECH_PROVIDERS = ["kitchen-sink-speech", "kitchen-sink-speech-provider"];
 const READY_TIMEOUT_MS = readPositiveInt(process.env.SUNCLAW_KITCHEN_SINK_RPC_READY_MS, 240000);
-const COMMAND_TIMEOUT_MS = readPositiveInt(
-  process.env.SUNCLAW_KITCHEN_SINK_RPC_COMMAND_MS,
-  180000,
-);
+const COMMAND_TIMEOUT_MS = readPositiveInt(process.env.SUNCLAW_KITCHEN_SINK_RPC_COMMAND_MS, 180000);
 const INSTALL_TIMEOUT_MS = readPositiveInt(
   process.env.SUNCLAW_KITCHEN_SINK_RPC_INSTALL_MS,
   Math.max(COMMAND_TIMEOUT_MS, 600000),

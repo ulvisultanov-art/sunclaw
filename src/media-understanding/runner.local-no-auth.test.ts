@@ -149,48 +149,45 @@ describe("runCapability local no-auth audio providers", () => {
   it("regression #74644: plugin-only local no-auth audio provider can use no-auth", async () => {
     await withIsolatedAgentDir(async (agentDir) => {
       await withEnvAsync(AUTH_ENV, async () => {
-        await withAudioFixture(
-          "sunclaw-local-audio-plugin-only",
-          async ({ ctx, media, cache }) => {
-            const transcribeAudio = vi.fn(async (req: AudioTranscriptionRequest) => ({
-              text: "plugin local ok",
-              model: req.model,
-            }));
-            const cfg = createAudioCfg({ provider: "local-audio", model: "whisper-local" });
+        await withAudioFixture("sunclaw-local-audio-plugin-only", async ({ ctx, media, cache }) => {
+          const transcribeAudio = vi.fn(async (req: AudioTranscriptionRequest) => ({
+            text: "plugin local ok",
+            model: req.model,
+          }));
+          const cfg = createAudioCfg({ provider: "local-audio", model: "whisper-local" });
 
-            const result = await runCapability({
-              capability: "audio",
-              cfg,
-              ctx,
-              attachments: cache,
-              media,
-              agentDir,
-              providerRegistry: buildProviderRegistry({
-                "local-audio": createAudioProvider("local-audio", transcribeAudio, {
-                  resolveAuth: () => ({
-                    kind: "none",
-                    source: "local-audio plugin no-auth",
-                  }),
+          const result = await runCapability({
+            capability: "audio",
+            cfg,
+            ctx,
+            attachments: cache,
+            media,
+            agentDir,
+            providerRegistry: buildProviderRegistry({
+              "local-audio": createAudioProvider("local-audio", transcribeAudio, {
+                resolveAuth: () => ({
+                  kind: "none",
+                  source: "local-audio plugin no-auth",
                 }),
               }),
-            });
+            }),
+          });
 
-            if (result.decision.outcome !== "success") {
-              throw new Error(
-                result.decision.attachments[0]?.attempts[0]?.reason ??
-                  `expected success, got ${result.decision.outcome}`,
-              );
-            }
-            expect(result.decision.outcome).toBe("success");
-            expect(result.outputs[0]?.text).toBe("plugin local ok");
-            expect(transcribeAudio).toHaveBeenCalledTimes(1);
-            expect(transcribeAudio.mock.calls[0]?.[0].apiKey).toBe(CUSTOM_LOCAL_AUTH_MARKER);
-            expect(transcribeAudio.mock.calls[0]?.[0].auth).toEqual({
-              kind: "none",
-              source: "local-audio plugin no-auth",
-            });
-          },
-        );
+          if (result.decision.outcome !== "success") {
+            throw new Error(
+              result.decision.attachments[0]?.attempts[0]?.reason ??
+                `expected success, got ${result.decision.outcome}`,
+            );
+          }
+          expect(result.decision.outcome).toBe("success");
+          expect(result.outputs[0]?.text).toBe("plugin local ok");
+          expect(transcribeAudio).toHaveBeenCalledTimes(1);
+          expect(transcribeAudio.mock.calls[0]?.[0].apiKey).toBe(CUSTOM_LOCAL_AUTH_MARKER);
+          expect(transcribeAudio.mock.calls[0]?.[0].auth).toEqual({
+            kind: "none",
+            source: "local-audio plugin no-auth",
+          });
+        });
       });
     });
   });
@@ -326,44 +323,41 @@ describe("runCapability local no-auth audio providers", () => {
   it("prefers literal configured provider apiKey over media no-auth hook", async () => {
     await withIsolatedAgentDir(async (agentDir) => {
       await withEnvAsync(AUTH_ENV, async () => {
-        await withAudioFixture(
-          "sunclaw-local-audio-literal-key",
-          async ({ ctx, media, cache }) => {
-            const transcribeAudio = vi.fn(async (req: AudioTranscriptionRequest) => ({
-              text: `literal:${req.apiKey}`,
-              model: req.model,
-            }));
-            const cfg = createAudioCfg({
-              provider: "local-audio",
-              model: "whisper-local",
-              providerConfig: {
-                apiKey: "real-key",
-                models: [],
-              },
-            });
+        await withAudioFixture("sunclaw-local-audio-literal-key", async ({ ctx, media, cache }) => {
+          const transcribeAudio = vi.fn(async (req: AudioTranscriptionRequest) => ({
+            text: `literal:${req.apiKey}`,
+            model: req.model,
+          }));
+          const cfg = createAudioCfg({
+            provider: "local-audio",
+            model: "whisper-local",
+            providerConfig: {
+              apiKey: "real-key",
+              models: [],
+            },
+          });
 
-            const result = await runCapability({
-              capability: "audio",
-              cfg,
-              ctx,
-              attachments: cache,
-              media,
-              agentDir,
-              providerRegistry: buildProviderRegistry({
-                "local-audio": createAudioProvider("local-audio", transcribeAudio, {
-                  resolveAuth: () => ({
-                    kind: "none",
-                    source: "local-audio plugin no-auth",
-                  }),
+          const result = await runCapability({
+            capability: "audio",
+            cfg,
+            ctx,
+            attachments: cache,
+            media,
+            agentDir,
+            providerRegistry: buildProviderRegistry({
+              "local-audio": createAudioProvider("local-audio", transcribeAudio, {
+                resolveAuth: () => ({
+                  kind: "none",
+                  source: "local-audio plugin no-auth",
                 }),
               }),
-            });
+            }),
+          });
 
-            expect(result.decision.outcome).toBe("success");
-            expect(result.outputs[0]?.text).toBe("literal:real-key");
-            expect(transcribeAudio.mock.calls[0]?.[0].apiKey).toBe("real-key");
-          },
-        );
+          expect(result.decision.outcome).toBe("success");
+          expect(result.outputs[0]?.text).toBe("literal:real-key");
+          expect(transcribeAudio.mock.calls[0]?.[0].apiKey).toBe("real-key");
+        });
       });
     });
   });
@@ -570,42 +564,39 @@ describe("runCapability local no-auth audio providers", () => {
   it("allows explicit no-auth for plugin-only no-auth video provider", async () => {
     await withIsolatedAgentDir(async (agentDir) => {
       await withEnvAsync(AUTH_ENV, async () => {
-        await withVideoFixture(
-          "sunclaw-local-video-plugin-only",
-          async ({ ctx, media, cache }) => {
-            const describeVideo = vi.fn(async (req: VideoDescriptionRequest) => ({
-              text: `video:${req.auth?.kind}`,
-              model: req.model,
-            }));
-            const cfg = createVideoCfg({ provider: "local-video", model: "video-local" });
+        await withVideoFixture("sunclaw-local-video-plugin-only", async ({ ctx, media, cache }) => {
+          const describeVideo = vi.fn(async (req: VideoDescriptionRequest) => ({
+            text: `video:${req.auth?.kind}`,
+            model: req.model,
+          }));
+          const cfg = createVideoCfg({ provider: "local-video", model: "video-local" });
 
-            const result = await runCapability({
-              capability: "video",
-              cfg,
-              ctx,
-              attachments: cache,
-              media,
-              agentDir,
-              providerRegistry: buildProviderRegistry({
-                "local-video": createVideoProvider("local-video", describeVideo, {
-                  resolveAuth: () => ({
-                    kind: "none",
-                    source: "local-video plugin no-auth",
-                  }),
+          const result = await runCapability({
+            capability: "video",
+            cfg,
+            ctx,
+            attachments: cache,
+            media,
+            agentDir,
+            providerRegistry: buildProviderRegistry({
+              "local-video": createVideoProvider("local-video", describeVideo, {
+                resolveAuth: () => ({
+                  kind: "none",
+                  source: "local-video plugin no-auth",
                 }),
               }),
-            });
+            }),
+          });
 
-            expect(result.decision.outcome).toBe("success");
-            expect(result.outputs[0]?.text).toBe("video:none");
-            expect(describeVideo).toHaveBeenCalledTimes(1);
-            expect(describeVideo.mock.calls[0]?.[0].apiKey).toBe(CUSTOM_LOCAL_AUTH_MARKER);
-            expect(describeVideo.mock.calls[0]?.[0].auth).toEqual({
-              kind: "none",
-              source: "local-video plugin no-auth",
-            });
-          },
-        );
+          expect(result.decision.outcome).toBe("success");
+          expect(result.outputs[0]?.text).toBe("video:none");
+          expect(describeVideo).toHaveBeenCalledTimes(1);
+          expect(describeVideo.mock.calls[0]?.[0].apiKey).toBe(CUSTOM_LOCAL_AUTH_MARKER);
+          expect(describeVideo.mock.calls[0]?.[0].auth).toEqual({
+            kind: "none",
+            source: "local-video plugin no-auth",
+          });
+        });
       });
     });
   });

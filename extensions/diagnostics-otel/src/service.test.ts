@@ -1637,12 +1637,9 @@ describe("diagnostics-otel service", () => {
     });
     await flushDiagnosticEvents();
 
-    expect(telemetryState.counters.get("sunclaw.queue.lane.enqueue")?.add).toHaveBeenCalledWith(
-      1,
-      {
-        "sunclaw.lane": "session",
-      },
-    );
+    expect(telemetryState.counters.get("sunclaw.queue.lane.enqueue")?.add).toHaveBeenCalledWith(1, {
+      "sunclaw.lane": "session",
+    });
     expect(
       JSON.stringify(telemetryState.counters.get("sunclaw.queue.lane.enqueue")?.add.mock.calls),
     ).not.toContain("Agent:qa:otel-trace-smoke");
@@ -1661,12 +1658,9 @@ describe("diagnostics-otel service", () => {
     });
     await flushDiagnosticEvents();
 
-    expect(telemetryState.counters.get("sunclaw.queue.lane.enqueue")?.add).toHaveBeenCalledWith(
-      1,
-      {
-        "sunclaw.lane": "dreaming-narrative",
-      },
-    );
+    expect(telemetryState.counters.get("sunclaw.queue.lane.enqueue")?.add).toHaveBeenCalledWith(1, {
+      "sunclaw.lane": "dreaming-narrative",
+    });
     expect(
       JSON.stringify(telemetryState.counters.get("sunclaw.queue.lane.enqueue")?.add.mock.calls),
     ).not.toContain("session-main");
@@ -2248,9 +2242,9 @@ describe("diagnostics-otel service", () => {
 
     const modelCallOptions = startedSpanOptions("sunclaw.model.call");
     expect(modelCallOptions?.attributes?.["sunclaw.failureKind"]).toBe("terminated");
-    expect(
-      Object.hasOwn(modelCallOptions?.attributes ?? {}, "sunclaw.upstreamRequestIdHash"),
-    ).toBe(false);
+    expect(Object.hasOwn(modelCallOptions?.attributes ?? {}, "sunclaw.upstreamRequestIdHash")).toBe(
+      false,
+    );
     expect(modelCallOptions?.startTime).toBeTypeOf("number");
     const span = telemetryState.spans.find((candidate) => candidate.name === "sunclaw.model.call");
     expect(span?.addEvent).toHaveBeenCalledWith("sunclaw.provider.request", {
@@ -3691,9 +3685,7 @@ describe("diagnostics-otel service", () => {
       telemetryState.tracer.startSpan.mock.calls.filter((call) => call[0] === "sunclaw.run"),
     ).toHaveLength(1);
     expect(
-      telemetryState.tracer.startSpan.mock.calls.filter(
-        (call) => call[0] === "sunclaw.model.call",
-      ),
+      telemetryState.tracer.startSpan.mock.calls.filter((call) => call[0] === "sunclaw.model.call"),
     ).toHaveLength(1);
     expect(
       telemetryState.tracer.startSpan.mock.calls.filter(
@@ -4014,9 +4006,7 @@ describe("diagnostics-otel service", () => {
     expect(modelOptions?.startTime).toBeTypeOf("number");
     const toolOptions = startedSpanOptions("sunclaw.tool.execution");
     expect(Object.hasOwn(toolOptions?.attributes ?? {}, "sunclaw.content.tool_input")).toBe(false);
-    expect(Object.hasOwn(toolOptions?.attributes ?? {}, "sunclaw.content.tool_output")).toBe(
-      false,
-    );
+    expect(Object.hasOwn(toolOptions?.attributes ?? {}, "sunclaw.content.tool_output")).toBe(false);
     expect(toolOptions?.startTime).toBeTypeOf("number");
     await service.stop?.(ctx);
   });

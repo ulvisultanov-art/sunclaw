@@ -6,9 +6,7 @@ describe("buildCodexUserMcpServersThreadConfigPatch", () => {
   it("returns undefined when cfg has no mcp.servers (regression: #80814)", () => {
     expect(buildCodexUserMcpServersThreadConfigPatch(undefined)).toBeUndefined();
     expect(buildCodexUserMcpServersThreadConfigPatch({} as SunClawConfig)).toBeUndefined();
-    expect(
-      buildCodexUserMcpServersThreadConfigPatch({ mcp: {} } as SunClawConfig),
-    ).toBeUndefined();
+    expect(buildCodexUserMcpServersThreadConfigPatch({ mcp: {} } as SunClawConfig)).toBeUndefined();
     expect(
       buildCodexUserMcpServersThreadConfigPatch({ mcp: { servers: {} } } as SunClawConfig),
     ).toBeUndefined();

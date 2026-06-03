@@ -442,11 +442,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     process.env.SUNCLAW_ADDITIONAL_BOUNDARY_CONCURRENCY === undefined
       ? "SUNCLAW_EXTENSION_BOUNDARY_CONCURRENCY"
       : "SUNCLAW_ADDITIONAL_BOUNDARY_CONCURRENCY";
-  const concurrency = resolveConcurrency(
-    concurrencyRaw,
-    4,
-    concurrencyLabel,
-  );
+  const concurrency = resolveConcurrency(concurrencyRaw, 4, concurrencyLabel);
   const checkTimeoutMs = resolvePositiveInteger(
     process.env.SUNCLAW_ADDITIONAL_BOUNDARY_TIMEOUT_MS,
     DEFAULT_CHECK_TIMEOUT_MS,

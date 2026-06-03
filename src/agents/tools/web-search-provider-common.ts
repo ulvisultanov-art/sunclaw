@@ -1,6 +1,6 @@
 import { normalizeLowercaseStringOrEmpty } from "@sunclaw/normalization-core/string-coerce";
-import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { normalizeResolvedSecretInputString } from "../../config/types.secrets.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { createLazyImportLoader } from "../../shared/lazy-promise.js";
 import { normalizeSecretInput } from "../../utils/normalize-secret-input.js";
 import {

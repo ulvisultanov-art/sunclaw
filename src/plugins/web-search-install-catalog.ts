@@ -107,8 +107,7 @@ function buildProviderEntry(params: {
     setCredentialValue: (searchConfigTarget: Record<string, unknown>, value: unknown) => {
       searchConfigTarget.apiKey = value;
     },
-    getConfiguredCredentialValue: (config?: SunClawConfig) =>
-      getConfigPath(config, credentialPath),
+    getConfiguredCredentialValue: (config?: SunClawConfig) => getConfigPath(config, credentialPath),
     setConfiguredCredentialValue: (configTarget: SunClawConfig, value: unknown) => {
       setConfigPath(configTarget, credentialPath, value);
     },

@@ -86,9 +86,7 @@ run_wizard_cmd failing-wizard fake-state "node fake-wizard" send_noop false
     expect(contents).toContain('GATEWAY_LOG_PATH="$ONBOARD_TMP_DIR/gateway-e2e.log"');
     expect(contents).not.toContain("/tmp/gateway-e2e.log");
     expect(contents).toContain('validate_local_basic_log "$SUNCLAW_E2E_LAST_LOG_PATH"');
-    expect(contents).not.toContain(
-      "validate_local_basic_log /tmp/sunclaw-onboard-local-basic.log",
-    );
+    expect(contents).not.toContain("validate_local_basic_log /tmp/sunclaw-onboard-local-basic.log");
     expect(contents).toContain(
       'sunclaw_e2e_assert_log_not_contains "$log_path" "systemctl --user unavailable"',
     );

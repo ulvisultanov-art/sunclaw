@@ -169,9 +169,7 @@ function stripLegacyInternalRuntimeContext(text: string): string {
 }
 
 function isRuntimeContextPromptHeader(line: string): boolean {
-  return (
-    line === SUNCLAW_NEXT_TURN_RUNTIME_CONTEXT_HEADER || line === SUNCLAW_RUNTIME_EVENT_HEADER
-  );
+  return line === SUNCLAW_NEXT_TURN_RUNTIME_CONTEXT_HEADER || line === SUNCLAW_RUNTIME_EVENT_HEADER;
 }
 
 function stripRuntimeContextPromptPreface(text: string): string {

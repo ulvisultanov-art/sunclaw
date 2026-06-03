@@ -1,9 +1,5 @@
 import type { Bot } from "grammy";
-import {
-  computeBackoff,
-  sleepWithAbort,
-  type BackoffPolicy,
-} from "sunclaw/plugin-sdk/runtime-env";
+import { computeBackoff, sleepWithAbort, type BackoffPolicy } from "sunclaw/plugin-sdk/runtime-env";
 import { normalizeLowercaseStringOrEmpty } from "sunclaw/plugin-sdk/string-coerce-runtime";
 
 export type TelegramSendChatActionLogger = (message: string) => void;

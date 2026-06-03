@@ -9,8 +9,8 @@ import { hasErrnoCode } from "./errors.js";
 import type { NpmSpecResolution } from "./install-source-utils.js";
 import { readJson, readJsonIfExists, writeJson } from "./json-files.js";
 import type { ParsedRegistryNpmSpec } from "./npm-registry-spec.js";
-import { resolveSunClawPackageRootSync } from "./sunclaw-root.js";
 import { createSafeNpmInstallArgs, createSafeNpmInstallEnv } from "./safe-package-install.js";
+import { resolveSunClawPackageRootSync } from "./sunclaw-root.js";
 
 type ManagedNpmRootManifest = {
   private?: boolean;

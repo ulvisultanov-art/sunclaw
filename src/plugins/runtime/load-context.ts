@@ -1,8 +1,8 @@
 import { resolveAgentWorkspaceDir, resolveDefaultAgentId } from "../../agents/agent-scope.js";
 import { getRuntimeConfig } from "../../config/config.js";
 import { applyPluginAutoEnable } from "../../config/plugin-auto-enable.js";
-import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import type { PluginInstallRecord } from "../../config/types.plugins.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { createSubsystemLogger } from "../../logging.js";
 import { resolvePluginActivationSourceConfig } from "../activation-source-config.js";
 import {

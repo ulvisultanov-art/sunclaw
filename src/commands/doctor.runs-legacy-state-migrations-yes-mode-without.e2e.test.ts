@@ -171,8 +171,7 @@ describe("doctor command", () => {
       if (previousConfigWriteSupport === undefined) {
         delete process.env.SUNCLAW_UPDATE_PARENT_SUPPORTS_DOCTOR_CONFIG_WRITE;
       } else {
-        process.env.SUNCLAW_UPDATE_PARENT_SUPPORTS_DOCTOR_CONFIG_WRITE =
-          previousConfigWriteSupport;
+        process.env.SUNCLAW_UPDATE_PARENT_SUPPORTS_DOCTOR_CONFIG_WRITE = previousConfigWriteSupport;
       }
     }
 

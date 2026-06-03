@@ -1,7 +1,4 @@
-import {
-  createStandardChannelSetupStatus,
-  setSetupChannelEnabled,
-} from "sunclaw/plugin-sdk/setup";
+import { createStandardChannelSetupStatus, setSetupChannelEnabled } from "sunclaw/plugin-sdk/setup";
 import type { ChannelSetupWizard } from "sunclaw/plugin-sdk/setup";
 import { isAccountConfigured } from "../../engine/config/resolve.js";
 import { listQQBotAccountIds, resolveQQBotAccount } from "../config.js";

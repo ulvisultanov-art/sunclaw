@@ -1,8 +1,5 @@
 import type { ProviderAuthContext } from "sunclaw/plugin-sdk/plugin-entry";
-import {
-  createRuntimeEnv,
-  createTestWizardPrompter,
-} from "sunclaw/plugin-sdk/plugin-test-runtime";
+import { createRuntimeEnv, createTestWizardPrompter } from "sunclaw/plugin-sdk/plugin-test-runtime";
 import type { OAuthCredential } from "sunclaw/plugin-sdk/provider-auth";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 

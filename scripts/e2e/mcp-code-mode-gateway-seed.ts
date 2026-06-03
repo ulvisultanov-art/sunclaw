@@ -43,8 +43,7 @@ await server.connect(new StdioServerTransport());
 
 async function main() {
   const stateDir = process.env.SUNCLAW_STATE_DIR?.trim() || path.join(os.homedir(), ".sunclaw");
-  const configPath =
-    process.env.SUNCLAW_CONFIG_PATH?.trim() || path.join(stateDir, "sunclaw.json");
+  const configPath = process.env.SUNCLAW_CONFIG_PATH?.trim() || path.join(stateDir, "sunclaw.json");
   const workspaceDir = path.join(stateDir, "workspace");
   const serverPath = path.join(stateDir, "mcp-code-mode-fixture", "fixture-server.mjs");
   const apiKey =

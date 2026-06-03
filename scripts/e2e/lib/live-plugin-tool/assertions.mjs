@@ -18,10 +18,7 @@ function readPositiveIntEnv(name, fallback) {
   return value;
 }
 
-const agentTurnTimeoutSeconds = readPositiveIntEnv(
-  "SUNCLAW_LIVE_PLUGIN_TOOL_TIMEOUT_SECONDS",
-  300,
-);
+const agentTurnTimeoutSeconds = readPositiveIntEnv("SUNCLAW_LIVE_PLUGIN_TOOL_TIMEOUT_SECONDS", 300);
 const SCAN_CHUNK_BYTES = 64 * 1024;
 const SCAN_CARRY_CHARS = 256;
 const ERROR_DETAIL_TAIL_BYTES = 16 * 1024;

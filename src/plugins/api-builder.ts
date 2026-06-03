@@ -108,8 +108,7 @@ const noopRegisterConfigMigration: SunClawPluginApi["registerConfigMigration"] =
 const noopRegisterMigrationProvider: SunClawPluginApi["registerMigrationProvider"] = () => {};
 const noopRegisterAutoEnableProbe: SunClawPluginApi["registerAutoEnableProbe"] = () => {};
 const noopRegisterProvider: SunClawPluginApi["registerProvider"] = () => {};
-const noopRegisterModelCatalogProvider: SunClawPluginApi["registerModelCatalogProvider"] =
-  () => {};
+const noopRegisterModelCatalogProvider: SunClawPluginApi["registerModelCatalogProvider"] = () => {};
 const noopRegisterEmbeddingProvider: SunClawPluginApi["registerEmbeddingProvider"] = () => {};
 const noopRegisterSpeechProvider: SunClawPluginApi["registerSpeechProvider"] = () => {};
 const noopRegisterRealtimeTranscriptionProvider: SunClawPluginApi["registerRealtimeTranscriptionProvider"] =

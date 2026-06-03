@@ -256,7 +256,7 @@ Default state directory: `~/.sunclaw`.
 | `Target skill changed after proposal creation` | Revise the proposal against the current target, or create a new proposal.                    |
 | `Proposal scan failed`                         | Inspect scanner findings, then revise or quarantine the proposal.                            |
 | `Support file paths must be under one of...`   | Move support files under `assets/`, `examples/`, `references/`, `scripts/`, or `templates/`. |
-| Proposal does not show in list                 | Check the selected `--agent` workspace and `SUNCLAW_STATE_DIR`.                             |
+| Proposal does not show in list                 | Check the selected `--agent` workspace and `SUNCLAW_STATE_DIR`.                              |
 
 ## Related
 

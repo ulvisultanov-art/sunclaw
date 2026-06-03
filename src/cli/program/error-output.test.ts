@@ -27,8 +27,6 @@ describe("formatCliParseErrorOutput", () => {
       argv: ["node", "sunclaw", "plugins", "install"],
     });
 
-    expect(output).toBe(
-      'Missing required argument "name".\nTry: sunclaw plugins install --help\n',
-    );
+    expect(output).toBe('Missing required argument "name".\nTry: sunclaw plugins install --help\n');
   });
 });

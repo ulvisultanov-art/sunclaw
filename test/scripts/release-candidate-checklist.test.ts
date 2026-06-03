@@ -167,8 +167,6 @@ describe("release candidate checklist", () => {
         timeoutMs: 5,
         token: "test-token",
       }),
-    ).rejects.toThrow(
-      "GitHub API repos/sunclaw/sunclaw/actions/runs/123/jobs timed out after 5ms",
-    );
+    ).rejects.toThrow("GitHub API repos/sunclaw/sunclaw/actions/runs/123/jobs timed out after 5ms");
   });
 });

@@ -93,10 +93,7 @@ describe("normalizeWebchatReplyMediaPathsForDisplay", () => {
     return `data:image/png;base64,${PNG_BYTES.toString("base64")}`;
   }
 
-  async function normalizeReplyMedia(params: {
-    cfg: SunClawConfig;
-    payloads: ReplyMediaPayloads;
-  }) {
+  async function normalizeReplyMedia(params: { cfg: SunClawConfig; payloads: ReplyMediaPayloads }) {
     const [payload] = await normalizeWebchatReplyMediaPathsForDisplay({
       cfg: params.cfg,
       sessionKey: TEST_SESSION_KEY,

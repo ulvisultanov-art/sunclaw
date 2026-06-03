@@ -89,13 +89,11 @@ describe("config mutate helpers", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     resetConfigRuntimeState();
-    validationMocks.validateConfigObjectWithPlugins.mockImplementation(
-      (config: SunClawConfig) => ({
-        ok: true,
-        config,
-        warnings: [],
-      }),
-    );
+    validationMocks.validateConfigObjectWithPlugins.mockImplementation((config: SunClawConfig) => ({
+      ok: true,
+      config,
+      warnings: [],
+    }));
     ioMocks.resolveConfigSnapshotHash.mockImplementation(
       (snapshot: { hash?: string }) => snapshot.hash ?? null,
     );
@@ -298,9 +296,7 @@ describe("config mutate helpers", () => {
       replaceConfigFile({
         nextConfig: { gateway: { port: 19001 } },
       }),
-    ).rejects.toThrow(
-      "Agent-first Nix setup: https://github.com/sunclaw/nix-sunclaw#quick-start",
-    );
+    ).rejects.toThrow("Agent-first Nix setup: https://github.com/sunclaw/nix-sunclaw#quick-start");
 
     expect(ioMocks.writeConfigFile).not.toHaveBeenCalled();
   });

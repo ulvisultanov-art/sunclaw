@@ -230,7 +230,9 @@ function main() {
       throw new Error("Could not determine Full Release Validation run id.");
     }
 
-    console.log(`Parent run: https://github.com/ulvisultanov-art/sunclaw/actions/runs/${parentRunId}`);
+    console.log(
+      `Parent run: https://github.com/ulvisultanov-art/sunclaw/actions/runs/${parentRunId}`,
+    );
     const watch = runStatus(
       "gh",
       ["run", "watch", parentRunId, "--exit-status", "--interval", "30"],

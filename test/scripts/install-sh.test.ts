@@ -625,9 +625,7 @@ describe("install.sh", () => {
     const output = result?.stdout ?? "";
     expect(output).toContain(`git=${join(sunclawHome, "sunclaw")}`);
     expect(output).toContain(`workspace=${join(sunclawHome, ".sunclaw", "workspace")}`);
-    expect(output).toContain(
-      `workspaceProfile=${join(sunclawHome, ".sunclaw", "workspace-work")}`,
-    );
+    expect(output).toContain(`workspaceProfile=${join(sunclawHome, ".sunclaw", "workspace-work")}`);
     const mkdirParentIndex = script.indexOf('mkdir -p "$(dirname "$repo_dir")"');
     const cloneIndex = script.indexOf(
       'run_quiet_step "Cloning SunClaw" git clone "$repo_url" "$repo_dir"',

@@ -429,7 +429,9 @@ describe("resolveChannelSetupSelectionContributions", () => {
     if (typeof docsLink !== "function") {
       throw new Error("Expected docs link formatter");
     }
-    expect(docsLink("/channels/zalo", "Docs")).toBe("https://docs.sunclaw.complex.az/channels/zalo");
+    expect(docsLink("/channels/zalo", "Docs")).toBe(
+      "https://docs.sunclaw.complex.az/channels/zalo",
+    );
     expect(lines).toEqual(["Zalo\\nBot — Setup\\nhelp"]);
   });
 

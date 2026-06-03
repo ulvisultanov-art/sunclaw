@@ -6,8 +6,8 @@ import { promisify } from "node:util";
 import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
 import { note } from "../../packages/terminal-core/src/note.js";
 import { formatCliCommand } from "../cli/command-format.js";
-import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { hasConfiguredSecretInput } from "../config/types.secrets.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { findStaleSunClawUpdateLaunchdJobs } from "../daemon/launchd.js";
 import { resolveGatewayService, type GatewayService } from "../daemon/service.js";
 import { shortenHomePath } from "../utils.js";
@@ -59,9 +59,7 @@ export async function collectMacStaleSunClawUpdateLaunchdJobsWarning(deps?: {
     return null;
   }
   const scanEnv = deps?.env ?? process.env;
-  const jobs = await (deps?.findJobs ?? findStaleSunClawUpdateLaunchdJobs)(scanEnv).catch(
-    () => [],
-  );
+  const jobs = await (deps?.findJobs ?? findStaleSunClawUpdateLaunchdJobs)(scanEnv).catch(() => []);
   if (jobs.length === 0) {
     return null;
   }
@@ -138,9 +136,7 @@ export async function collectMacLaunchctlGatewayEnvOverrideWarning(
   }
 
   const getenv = deps?.getenv ?? launchctlGetenv;
-  const tokenEntries = [
-    ["SUNCLAW_GATEWAY_TOKEN", await getenv("SUNCLAW_GATEWAY_TOKEN")],
-  ] as const;
+  const tokenEntries = [["SUNCLAW_GATEWAY_TOKEN", await getenv("SUNCLAW_GATEWAY_TOKEN")]] as const;
   const passwordEntries = [
     ["SUNCLAW_GATEWAY_PASSWORD", await getenv("SUNCLAW_GATEWAY_PASSWORD")],
   ] as const;

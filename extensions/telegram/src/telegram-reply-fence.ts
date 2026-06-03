@@ -1,7 +1,4 @@
-import {
-  isExplicitCommandTurn,
-  type CommandTurnContext,
-} from "sunclaw/plugin-sdk/channel-inbound";
+import { isExplicitCommandTurn, type CommandTurnContext } from "sunclaw/plugin-sdk/channel-inbound";
 import {
   maybeResolveTextAlias,
   normalizeCommandBody,

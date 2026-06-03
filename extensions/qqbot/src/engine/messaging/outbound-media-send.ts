@@ -3,10 +3,7 @@
  */
 
 import path from "node:path";
-import {
-  pathExistsSync,
-  resolveLocalPathFromRootsSync,
-} from "sunclaw/plugin-sdk/security-runtime";
+import { pathExistsSync, resolveLocalPathFromRootsSync } from "sunclaw/plugin-sdk/security-runtime";
 import type { GatewayAccount } from "../types.js";
 import { MediaFileType } from "../types.js";
 import {

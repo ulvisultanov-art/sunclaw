@@ -51,9 +51,7 @@ describe("renderGatewayServiceStartHints", () => {
       renderGatewayServiceStartHints({
         SUNCLAW_CONTAINER: "sunclaw-demo-container",
       } as NodeJS.ProcessEnv),
-    ).toContain(
-      "Restart the container or the service that manages it for sunclaw-demo-container.",
-    );
+    ).toContain("Restart the container or the service that manages it for sunclaw-demo-container.");
   });
 
   it("prepends a single container restart hint when SUNCLAW_CONTAINER_HINT is set", () => {
@@ -61,9 +59,7 @@ describe("renderGatewayServiceStartHints", () => {
       renderGatewayServiceStartHints({
         SUNCLAW_CONTAINER_HINT: "sunclaw-demo-container",
       } as NodeJS.ProcessEnv),
-    ).toContain(
-      "Restart the container or the service that manages it for sunclaw-demo-container.",
-    );
+    ).toContain("Restart the container or the service that manages it for sunclaw-demo-container.");
   });
 });
 

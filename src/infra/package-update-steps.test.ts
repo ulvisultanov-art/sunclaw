@@ -102,10 +102,7 @@ describe("runGlobalPackageUpdateSteps", () => {
             throw new Error("missing staged prefix");
           }
           expect(path.dirname(stagePrefix)).toBe(globalRoot);
-          await writePackageRoot(
-            path.join(stagePrefix, "lib", "node_modules", "sunclaw"),
-            "2.0.0",
-          );
+          await writePackageRoot(path.join(stagePrefix, "lib", "node_modules", "sunclaw"), "2.0.0");
           await fs.mkdir(path.join(stagePrefix, "bin"), { recursive: true });
           await fs.symlink(
             "../lib/node_modules/sunclaw/dist/index.js",
@@ -459,10 +456,7 @@ describe("runGlobalPackageUpdateSteps", () => {
           if (!stagePrefix) {
             throw new Error("missing staged prefix");
           }
-          await writePackageRoot(
-            path.join(stagePrefix, "lib", "node_modules", "sunclaw"),
-            "2.0.0",
-          );
+          await writePackageRoot(path.join(stagePrefix, "lib", "node_modules", "sunclaw"), "2.0.0");
           return {
             name,
             command: argv.join(" "),
@@ -737,10 +731,7 @@ describe("runGlobalPackageUpdateSteps", () => {
           if (!stagePrefix) {
             throw new Error("missing staged prefix");
           }
-          await writePackageRoot(
-            path.join(stagePrefix, "lib", "node_modules", "sunclaw"),
-            "1.5.0",
-          );
+          await writePackageRoot(path.join(stagePrefix, "lib", "node_modules", "sunclaw"), "1.5.0");
           return {
             name,
             command: argv.join(" "),

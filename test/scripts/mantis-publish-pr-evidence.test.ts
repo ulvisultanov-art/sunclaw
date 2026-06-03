@@ -321,7 +321,8 @@ describe("scripts/mantis/publish-pr-evidence", () => {
       rawBase: "https://artifacts.docs.sunclaw.complex.az/mantis/telegram-desktop/pr-1/run-1",
       requestSource: "pull_request_target",
       runUrl: "https://github.com/ulvisultanov-art/sunclaw/actions/runs/1",
-      treeUrl: "https://artifacts.docs.sunclaw.complex.az/mantis/telegram-desktop/pr-1/run-1/index.json",
+      treeUrl:
+        "https://artifacts.docs.sunclaw.complex.az/mantis/telegram-desktop/pr-1/run-1/index.json",
     });
 
     expect(body).toContain(

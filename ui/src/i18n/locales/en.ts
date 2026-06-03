@@ -1184,8 +1184,7 @@ export const en: TranslationMap = {
         title: "Auth did not match",
         summary:
           "The supplied credential was rejected. The most common cause is a stale token or a token copied from another Gateway URL.",
-        stepDashboard:
-          "Run sunclaw dashboard --no-open and open the fresh URL or paste its token.",
+        stepDashboard: "Run sunclaw dashboard --no-open and open the fresh URL or paste its token.",
         stepReplace:
           "Replace stale token/password values; do not reuse a token from another Gateway URL.",
         stepMode:

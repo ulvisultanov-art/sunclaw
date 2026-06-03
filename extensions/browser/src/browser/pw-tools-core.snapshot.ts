@@ -1,9 +1,9 @@
+import type { Page } from "playwright-core";
 import { parseFiniteNumber, resolveIntegerOption } from "sunclaw/plugin-sdk/number-runtime";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
 } from "sunclaw/plugin-sdk/string-coerce-runtime";
-import type { Page } from "playwright-core";
 import type { SsrFPolicy } from "../infra/net/ssrf.js";
 import { ACT_MAX_VIEWPORT_DIMENSION } from "./act-policy.js";
 import { type AriaSnapshotNode, formatAriaSnapshot, type RawAXNode } from "./cdp.js";

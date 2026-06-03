@@ -1,7 +1,7 @@
 import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
 import { collectDurableServiceEnvVars } from "../config/state-dir-dotenv.js";
-import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { hasConfiguredSecretInput } from "../config/types.secrets.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 
 type GatewayInstallAuthMode = NonNullable<NonNullable<SunClawConfig["gateway"]>["auth"]>["mode"];
 

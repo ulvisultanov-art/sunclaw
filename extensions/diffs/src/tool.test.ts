@@ -60,9 +60,7 @@ describe("diffs tool", () => {
       mode: "view",
     });
 
-    expect(readTextContent(result, 0)).toContain(
-      "https://example.com/sunclaw/plugins/diffs/view/",
-    );
+    expect(readTextContent(result, 0)).toContain("https://example.com/sunclaw/plugins/diffs/view/");
     expect(String((result.details as Record<string, unknown>).viewerUrl)).toContain(
       "https://example.com/sunclaw/plugins/diffs/view/",
     );

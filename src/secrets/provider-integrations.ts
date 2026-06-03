@@ -1,11 +1,11 @@
 import fs from "node:fs";
 import path from "node:path";
 import { normalizeOptionalString } from "@sunclaw/normalization-core/string-coerce";
-import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type {
   ManualExecSecretProviderConfig,
   PluginIntegrationSecretProviderConfig,
 } from "../config/types.secrets.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { normalizePluginsConfig, type NormalizedPluginsConfig } from "../plugins/config-state.js";
 import { shouldRejectHardlinkedPluginFiles } from "../plugins/hardlink-policy.js";
 import { isActivatedManifestOwner } from "../plugins/manifest-owner-policy.js";

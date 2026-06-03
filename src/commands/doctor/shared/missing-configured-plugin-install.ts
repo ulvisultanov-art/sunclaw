@@ -7,8 +7,8 @@ import {
   listPotentialConfiguredChannelIds,
 } from "../../../channels/config-presence.js";
 import { listRawChannelPluginCatalogEntries } from "../../../channels/plugins/catalog.js";
-import type { SunClawConfig } from "../../../config/types.sunclaw.js";
 import type { PluginInstallRecord } from "../../../config/types.plugins.js";
+import type { SunClawConfig } from "../../../config/types.sunclaw.js";
 import { parseClawHubPluginSpec } from "../../../infra/clawhub-spec.js";
 import {
   compareSunClawReleaseVersions,

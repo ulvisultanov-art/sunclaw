@@ -10,6 +10,10 @@ import {
 } from "../infra/kysely-sync.js";
 import { requireNodeSqlite } from "../infra/node-sqlite.js";
 import { readSqliteNumberPragma } from "../infra/sqlite-pragma.test-support.js";
+import {
+  collectSqliteSchemaShape,
+  createSqliteSchemaShapeFromSql,
+} from "./sqlite-schema-shape.test-support.js";
 import type { DB as SunClawStateKyselyDatabase } from "./sunclaw-state-db.generated.js";
 import {
   closeSunClawStateDatabaseForTest,
@@ -17,10 +21,6 @@ import {
   runSunClawStateWriteTransaction,
 } from "./sunclaw-state-db.js";
 import { resolveSunClawStateSqlitePath } from "./sunclaw-state-db.paths.js";
-import {
-  collectSqliteSchemaShape,
-  createSqliteSchemaShapeFromSql,
-} from "./sqlite-schema-shape.test-support.js";
 
 type StateDbTestDatabase = Pick<SunClawStateKyselyDatabase, "diagnostic_events" | "schema_meta">;
 

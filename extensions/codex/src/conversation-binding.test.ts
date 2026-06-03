@@ -59,8 +59,7 @@ vi.mock("./app-server/shared-client.js", () => ({
   releaseLeasedSharedCodexAppServerClient: vi.fn(),
 }));
 vi.mock("sunclaw/plugin-sdk/exec-approvals-runtime", async (importOriginal) => {
-  const actual =
-    await importOriginal<typeof import("sunclaw/plugin-sdk/exec-approvals-runtime")>();
+  const actual = await importOriginal<typeof import("sunclaw/plugin-sdk/exec-approvals-runtime")>();
   return {
     ...actual,
     loadExecApprovals: execApprovalsRuntimeMocks.loadExecApprovals,

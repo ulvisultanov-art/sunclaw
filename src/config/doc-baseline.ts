@@ -4,8 +4,8 @@ import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { sortUniqueStrings } from "@sunclaw/normalization-core/string-normalization";
-import { resolveSunClawPackageRootSync } from "../infra/sunclaw-root.js";
 import { replaceFileAtomicSync } from "../infra/replace-file.js";
+import { resolveSunClawPackageRootSync } from "../infra/sunclaw-root.js";
 import type { ConfigSchemaResponse } from "./schema.js";
 import { schemaHasChildren } from "./schema.shared.js";
 

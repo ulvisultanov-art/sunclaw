@@ -98,7 +98,8 @@ export const en = {
       websocketUrl: "Gateway WebSocket URL",
     },
     gatewayTailscale: {
-      docsNote: "Docs:\nhttps://docs.sunclaw.complex.az/gateway/tailscale\nhttps://docs.sunclaw.complex.az/web",
+      docsNote:
+        "Docs:\nhttps://docs.sunclaw.complex.az/gateway/tailscale\nhttps://docs.sunclaw.complex.az/web",
       funnel: "Funnel",
       funnelHint: "Public HTTPS via Tailscale Funnel (internet)",
       missingBinNote:

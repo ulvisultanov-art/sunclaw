@@ -76,11 +76,11 @@ defaults write ai.sunclaw.mac sunclaw.nixMode -bool true
 
 SunClaw reads JSON5 config from `SUNCLAW_CONFIG_PATH` and stores mutable data in `SUNCLAW_STATE_DIR`. When running under Nix, set these explicitly to Nix-managed locations so runtime state and config stay out of the immutable store.
 
-| Variable               | Default                                 |
-| ---------------------- | --------------------------------------- |
+| Variable              | Default                                 |
+| --------------------- | --------------------------------------- |
 | `SUNCLAW_HOME`        | `HOME` / `USERPROFILE` / `os.homedir()` |
-| `SUNCLAW_STATE_DIR`   | `~/.sunclaw`                           |
-| `SUNCLAW_CONFIG_PATH` | `$SUNCLAW_STATE_DIR/sunclaw.json`     |
+| `SUNCLAW_STATE_DIR`   | `~/.sunclaw`                            |
+| `SUNCLAW_CONFIG_PATH` | `$SUNCLAW_STATE_DIR/sunclaw.json`       |
 
 ### Service PATH discovery
 

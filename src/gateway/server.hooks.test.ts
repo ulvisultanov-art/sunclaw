@@ -179,10 +179,7 @@ async function waitForSystemEventTexts(sessionKey: string, timeoutMs = 2_000) {
 }
 
 async function writeHookTransformModule(moduleName: string, source: string): Promise<void> {
-  const configPath = requireNonEmptyString(
-    process.env.SUNCLAW_CONFIG_PATH,
-    "SUNCLAW_CONFIG_PATH",
-  );
+  const configPath = requireNonEmptyString(process.env.SUNCLAW_CONFIG_PATH, "SUNCLAW_CONFIG_PATH");
   const transformsDir = path.join(path.dirname(configPath), "hooks", "transforms");
   await fs.mkdir(transformsDir, { recursive: true });
   await fs.writeFile(path.join(transformsDir, moduleName), source, "utf-8");

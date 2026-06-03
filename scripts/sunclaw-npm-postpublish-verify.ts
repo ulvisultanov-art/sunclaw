@@ -709,9 +709,7 @@ function verifyScenario(version: string, scenario: PublishedInstallScenario): vo
 function main(): void {
   const version = process.argv[2]?.trim();
   if (!version) {
-    throw new Error(
-      "Usage: node --import tsx scripts/sunclaw-npm-postpublish-verify.ts <version>",
-    );
+    throw new Error("Usage: node --import tsx scripts/sunclaw-npm-postpublish-verify.ts <version>");
   }
 
   const scenarios = buildPublishedInstallScenarios(version);

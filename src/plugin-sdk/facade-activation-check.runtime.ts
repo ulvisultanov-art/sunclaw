@@ -128,11 +128,7 @@ function readBundledPluginManifestRecordFromDir(params: {
   pluginsRoot: string;
   resolvedDirName: string;
 }): FacadePluginManifestLike | null {
-  const manifestPath = path.join(
-    params.pluginsRoot,
-    params.resolvedDirName,
-    "sunclaw.plugin.json",
-  );
+  const manifestPath = path.join(params.pluginsRoot, params.resolvedDirName, "sunclaw.plugin.json");
   if (!fs.existsSync(manifestPath)) {
     return null;
   }

@@ -70,10 +70,10 @@ is detected but not yet wired.
 
 ### Supported now
 
-| Feature       | How it maps                                                                                       | Applies to     |
-| ------------- | ------------------------------------------------------------------------------------------------- | -------------- |
+| Feature       | How it maps                                                                                      | Applies to     |
+| ------------- | ------------------------------------------------------------------------------------------------ | -------------- |
 | Skill content | Bundle skill roots load as normal SunClaw skills                                                 | All formats    |
-| Commands      | `commands/` and `.cursor/commands/` treated as skill roots                                        | Claude, Cursor |
+| Commands      | `commands/` and `.cursor/commands/` treated as skill roots                                       | Claude, Cursor |
 | Hook packs    | SunClaw-style `HOOK.md` + `handler.ts` layouts                                                   | Codex          |
 | MCP tools     | Bundle MCP config merged into embedded SunClaw settings; supported stdio and HTTP servers loaded | All formats    |
 | LSP servers   | Claude `.lsp.json` and manifest-declared `lspServers` merged into embedded SunClaw LSP defaults  | Claude         |

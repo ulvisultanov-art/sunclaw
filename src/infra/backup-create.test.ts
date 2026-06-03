@@ -5,10 +5,7 @@ import * as tar from "tar";
 import { describe, expect, it, vi } from "vitest";
 import { backupVerifyCommand } from "../commands/backup-verify.js";
 import type { RuntimeEnv } from "../runtime.js";
-import {
-  closeSunClawStateDatabase,
-  openSunClawStateDatabase,
-} from "../state/sunclaw-state-db.js";
+import { closeSunClawStateDatabase, openSunClawStateDatabase } from "../state/sunclaw-state-db.js";
 import { withSunClawTestState } from "../test-utils/sunclaw-test-state.js";
 import {
   testApi as backupCreateInternals,
@@ -304,9 +301,9 @@ describe("buildExtensionsNodeModulesFilter", () => {
     const filter = buildExtensionsNodeModulesFilter("C:\\Users\\me\\.sunclaw\\");
 
     expect(filter(String.raw`C:\Users\me\.sunclaw\extensions\demo\index.js`)).toBe(true);
-    expect(
-      filter(String.raw`C:\Users\me\.sunclaw\extensions\demo\node_modules\dep\index.js`),
-    ).toBe(false);
+    expect(filter(String.raw`C:\Users\me\.sunclaw\extensions\demo\node_modules\dep\index.js`)).toBe(
+      false,
+    );
   });
 });
 

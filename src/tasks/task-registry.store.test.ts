@@ -3,10 +3,7 @@ import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { executeSqliteQuerySync, getNodeSqliteKysely } from "../infra/kysely-sync.js";
 import type { DB as SunClawStateKyselyDatabase } from "../state/sunclaw-state-db.generated.js";
-import {
-  closeSunClawStateDatabase,
-  openSunClawStateDatabase,
-} from "../state/sunclaw-state-db.js";
+import { closeSunClawStateDatabase, openSunClawStateDatabase } from "../state/sunclaw-state-db.js";
 import { resolveSunClawStateSqlitePath } from "../state/sunclaw-state-db.paths.js";
 import { withSunClawTestState } from "../test-utils/sunclaw-test-state.js";
 import {

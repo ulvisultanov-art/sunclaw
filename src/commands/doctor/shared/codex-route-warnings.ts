@@ -348,10 +348,7 @@ function resolveDefaultProviderForAliasContext(params: {
   return normalizeProviderId(implicit?.provider ?? DEFAULT_PROVIDER) || DEFAULT_PROVIDER;
 }
 
-function findAgentById(
-  cfg: SunClawConfig,
-  agentId: string | undefined,
-): MutableRecord | undefined {
+function findAgentById(cfg: SunClawConfig, agentId: string | undefined): MutableRecord | undefined {
   if (!agentId) {
     return undefined;
   }
@@ -2802,8 +2799,7 @@ export function collectCodexRouteWarnings(params: {
     warnings.push(
       formatUnsupportedCompactionWarning({
         hits: fixableHits,
-        fixHint:
-          "- Run `sunclaw doctor --fix`: it removes unsupported Codex compaction overrides.",
+        fixHint: "- Run `sunclaw doctor --fix`: it removes unsupported Codex compaction overrides.",
       }),
     );
   }

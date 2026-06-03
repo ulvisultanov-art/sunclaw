@@ -74,9 +74,7 @@ describe("RTT harness", () => {
     expect(validateSunClawPackageSpec("sunclaw@beta")).toBe("sunclaw@beta");
     expect(validateSunClawPackageSpec("sunclaw@latest")).toBe("sunclaw@latest");
     expect(validateSunClawPackageSpec("sunclaw@2026.4.30")).toBe("sunclaw@2026.4.30");
-    expect(validateSunClawPackageSpec("sunclaw@2026.4.30-beta.2")).toBe(
-      "sunclaw@2026.4.30-beta.2",
-    );
+    expect(validateSunClawPackageSpec("sunclaw@2026.4.30-beta.2")).toBe("sunclaw@2026.4.30-beta.2");
     expect(validateSunClawPackageSpec("sunclaw@2026.4.30-alpha.2")).toBe(
       "sunclaw@2026.4.30-alpha.2",
     );
@@ -197,9 +195,7 @@ describe("RTT harness", () => {
     expect(script).toContain(
       '"$timeout_bin" "$npm_install_timeout" npm install -g "$install_source" --no-fund --no-audit',
     );
-    expect(script).not.toContain(
-      "running package install without SUNCLAW_E2E_NPM_INSTALL_TIMEOUT",
-    );
+    expect(script).not.toContain("running package install without SUNCLAW_E2E_NPM_INSTALL_TIMEOUT");
     expect(script).toContain("run_logged docker_e2e_docker_run_cmd run --rm");
     expect(script).not.toContain("run_logged docker run --rm");
     expect(heartbeatStartIndex).toBeGreaterThan(sourceIndex);

@@ -1,5 +1,5 @@
-import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type { SecretInput } from "../config/types.secrets.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type { EmbeddingInput } from "../memory-host-sdk/host/embedding-inputs.js";
 
 export type MemoryEmbeddingBatchChunk = {

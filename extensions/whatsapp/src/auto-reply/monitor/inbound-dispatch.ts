@@ -1,7 +1,4 @@
-import {
-  DEFAULT_TIMING,
-  type StatusReactionController,
-} from "sunclaw/plugin-sdk/channel-feedback";
+import { DEFAULT_TIMING, type StatusReactionController } from "sunclaw/plugin-sdk/channel-feedback";
 import {
   buildChannelInboundEventContext,
   type CommandTurnContext,

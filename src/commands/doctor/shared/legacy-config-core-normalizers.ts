@@ -37,10 +37,7 @@ export function normalizeLegacyCommandsConfig(
   };
 }
 
-export function normalizeLegacyBrowserConfig(
-  cfg: SunClawConfig,
-  changes: string[],
-): SunClawConfig {
+export function normalizeLegacyBrowserConfig(cfg: SunClawConfig, changes: string[]): SunClawConfig {
   const rawBrowser = cfg.browser;
   if (!isRecord(rawBrowser)) {
     return cfg;

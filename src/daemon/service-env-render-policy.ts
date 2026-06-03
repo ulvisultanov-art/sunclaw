@@ -9,8 +9,7 @@ function isLaunchAgentServiceEnvironment(params: {
   serviceEnvironment: Record<string, string | undefined>;
 }): boolean {
   return (
-    params.platform === "darwin" &&
-    Boolean(params.serviceEnvironment.SUNCLAW_LAUNCHD_LABEL?.trim())
+    params.platform === "darwin" && Boolean(params.serviceEnvironment.SUNCLAW_LAUNCHD_LABEL?.trim())
   );
 }
 

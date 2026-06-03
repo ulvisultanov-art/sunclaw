@@ -59,9 +59,7 @@ function buildProviderMaps(cfg?: SunClawConfig): {
   return { canonical, aliases };
 }
 
-export function listMusicGenerationProviders(
-  cfg?: SunClawConfig,
-): MusicGenerationProviderPlugin[] {
+export function listMusicGenerationProviders(cfg?: SunClawConfig): MusicGenerationProviderPlugin[] {
   return [...buildProviderMaps(cfg).canonical.values()];
 }
 

@@ -1,6 +1,6 @@
 import { normalizeProviderId } from "@sunclaw/model-catalog-core/provider-id";
-import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { resolveSecretInputRef } from "../config/types.secrets.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { resolveProviderSyntheticAuthWithPlugin } from "../plugins/provider-runtime.js";
 import type { ProviderAuthEvidence } from "../secrets/provider-env-vars.js";
 import type { AuthProfileStore } from "./auth-profiles/types.js";

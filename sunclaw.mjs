@@ -369,8 +369,7 @@ const resolvePrecomputedCommandHelp = (argv) => {
   return null;
 };
 
-const isHelpFastPathDisabled = () =>
-  process.env.SUNCLAW_DISABLE_CLI_STARTUP_HELP_FAST_PATH === "1";
+const isHelpFastPathDisabled = () => process.env.SUNCLAW_DISABLE_CLI_STARTUP_HELP_FAST_PATH === "1";
 
 const normalizeLauncherHomeValue = (value) => {
   const trimmed = value?.trim();

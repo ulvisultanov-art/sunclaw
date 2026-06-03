@@ -14,10 +14,7 @@ function clickClackHttpTimeoutMs() {
 }
 
 function clickClackHttpBodyMaxBytes() {
-  return readPositiveInt(
-    process.env.SUNCLAW_RELEASE_USER_JOURNEY_HTTP_BODY_MAX_BYTES,
-    1024 * 1024,
-  );
+  return readPositiveInt(process.env.SUNCLAW_RELEASE_USER_JOURNEY_HTTP_BODY_MAX_BYTES, 1024 * 1024);
 }
 
 function readJson(file) {
@@ -83,8 +80,7 @@ function pathsEqual(left, right) {
 
 function configPath() {
   return (
-    process.env.SUNCLAW_CONFIG_PATH ??
-    path.join(process.env.HOME ?? "", ".sunclaw", "sunclaw.json")
+    process.env.SUNCLAW_CONFIG_PATH ?? path.join(process.env.HOME ?? "", ".sunclaw", "sunclaw.json")
   );
 }
 
@@ -110,10 +106,7 @@ function assertOnboard() {
   const stateRaw =
     fs.readFileSync(configPath(), "utf8") +
     (fs.existsSync(authPath) ? fs.readFileSync(authPath, "utf8") : "");
-  assert(
-    !stateRaw.includes("sk-sunclaw-release-user-journey"),
-    "onboard persisted raw OpenAI key",
-  );
+  assert(!stateRaw.includes("sk-sunclaw-release-user-journey"), "onboard persisted raw OpenAI key");
 }
 
 function configureMockModel() {

@@ -234,9 +234,7 @@ describe("dependency guard workflow", () => {
 
   it("requires secops review for future workflow or guard changes", () => {
     const codeowners = readFileSync(CODEOWNERS, "utf8");
-    expect(codeowners).toContain(
-      "/.github/workflows/dependency-guard.yml @sunclaw/sunclaw-secops",
-    );
+    expect(codeowners).toContain("/.github/workflows/dependency-guard.yml @sunclaw/sunclaw-secops");
     expect(codeowners).toContain(
       "/test/scripts/dependency-guard-workflow.test.ts @sunclaw/sunclaw-secops",
     );

@@ -1,7 +1,7 @@
 import { normalizeLowercaseStringOrEmpty } from "@sunclaw/normalization-core/string-coerce";
 import { getRuntimeConfig } from "../../config/config.js";
-import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { coerceSecretRef } from "../../config/types.secrets.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { formatErrorMessage } from "../../infra/errors.js";
 import {
   getOAuthApiKey,

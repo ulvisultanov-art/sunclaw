@@ -1417,13 +1417,10 @@ export function createDiagnosticsOtelService(): SunClawPluginService {
           description: "Session recovery attempts completed",
         },
       );
-      const sessionRecoveryAgeHistogram = meter.createHistogram(
-        "sunclaw.session.recovery.age_ms",
-        {
-          unit: "ms",
-          description: "Age of sessions selected for recovery",
-        },
-      );
+      const sessionRecoveryAgeHistogram = meter.createHistogram("sunclaw.session.recovery.age_ms", {
+        unit: "ms",
+        description: "Age of sessions selected for recovery",
+      });
       const talkEventCounter = meter.createCounter("sunclaw.talk.event", {
         unit: "1",
         description: "Talk events emitted by type",
@@ -3238,9 +3235,7 @@ export function createDiagnosticsOtelService(): SunClawPluginService {
           ...(evt.eventLoopUtilization !== undefined
             ? { "sunclaw.liveness.event_loop_utilization": evt.eventLoopUtilization }
             : {}),
-          ...(evt.cpuUserMs !== undefined
-            ? { "sunclaw.liveness.cpu_user_ms": evt.cpuUserMs }
-            : {}),
+          ...(evt.cpuUserMs !== undefined ? { "sunclaw.liveness.cpu_user_ms": evt.cpuUserMs } : {}),
           ...(evt.cpuSystemMs !== undefined
             ? { "sunclaw.liveness.cpu_system_ms": evt.cpuSystemMs }
             : {}),
@@ -3273,9 +3268,7 @@ export function createDiagnosticsOtelService(): SunClawPluginService {
           ...(evt.cpuSystemMs !== undefined
             ? { "sunclaw.phase.cpu_system_ms": evt.cpuSystemMs }
             : {}),
-          ...(evt.cpuTotalMs !== undefined
-            ? { "sunclaw.phase.cpu_total_ms": evt.cpuTotalMs }
-            : {}),
+          ...(evt.cpuTotalMs !== undefined ? { "sunclaw.phase.cpu_total_ms": evt.cpuTotalMs } : {}),
           ...(evt.cpuCoreRatio !== undefined
             ? { "sunclaw.phase.cpu_core_ratio": evt.cpuCoreRatio }
             : {}),

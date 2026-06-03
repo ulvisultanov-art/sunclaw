@@ -1,8 +1,8 @@
 import { getAgentRuntimeCommandSecretTargetIds } from "../cli/command-secret-targets.js";
 import { getRuntimeConfig, readConfigFileSnapshotForWrite } from "../config/io.js";
 import { setRuntimeConfigSnapshot } from "../config/runtime-snapshot.js";
-import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { isSecretRef } from "../config/types.secrets.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import type { RuntimeEnv } from "../runtime.js";
 
 export async function resolveAgentRuntimeConfig(

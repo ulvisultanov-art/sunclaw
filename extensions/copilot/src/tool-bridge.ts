@@ -177,9 +177,7 @@ export async function createCopilotToolBridge(
   }
 
   if (!Array.isArray(sourceTools)) {
-    throw new Error(
-      "[copilot-tool-bridge] createSunClawCodingTools must return an array of tools",
-    );
+    throw new Error("[copilot-tool-bridge] createSunClawCodingTools must return an array of tools");
   }
 
   const plannedTools = filterCopilotToolsForConstructionPlan(

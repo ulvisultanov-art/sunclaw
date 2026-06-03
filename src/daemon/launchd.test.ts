@@ -684,9 +684,7 @@ describe("launchctl list detection", () => {
   );
 
   it.runIf(process.platform === "darwin")("disables explicit legacy updater jobs", async () => {
-    await expect(disableSunClawUpdateLaunchdJob("ai.sunclaw.update.2026.5.12")).resolves.toBe(
-      true,
-    );
+    await expect(disableSunClawUpdateLaunchdJob("ai.sunclaw.update.2026.5.12")).resolves.toBe(true);
 
     const domain = typeof process.getuid === "function" ? `gui/${process.getuid()}` : "gui/501";
     expect(state.launchctlCalls).toContainEqual([
@@ -867,8 +865,7 @@ describe("launchd install", () => {
     const wrapperPath =
       "/Users/test/service-env/custom-state/service-env/ai.sunclaw.gateway-env-wrapper.sh";
     const callerEnvFilePath = "/Users/test/.sunclaw/service-env/ai.sunclaw.gateway.env";
-    const callerWrapperPath =
-      "/Users/test/.sunclaw/service-env/ai.sunclaw.gateway-env-wrapper.sh";
+    const callerWrapperPath = "/Users/test/.sunclaw/service-env/ai.sunclaw.gateway-env-wrapper.sh";
     const mangledEnvFilePath =
       "/Users/test/service-env/custom-state/service-env/[ai.sunclaw.gateway.env](http:/ai.sunclaw.gateway.env)";
     const mangledWrapperPath =

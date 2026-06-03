@@ -70,9 +70,9 @@ async function waitForChatScrollIdle(page: Page): Promise<void> {
             | null;
           return Boolean(
             app &&
-              app.chatScrollFrame == null &&
-              app.chatScrollTimeout == null &&
-              !app.chatIsProgrammaticScroll,
+            app.chatScrollFrame == null &&
+            app.chatScrollTimeout == null &&
+            !app.chatIsProgrammaticScroll,
           );
         }),
       { timeout: 10_000 },

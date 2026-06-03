@@ -1,9 +1,9 @@
-import type { SunClawConfig } from "../config/types.sunclaw.js";
 import {
   normalizeSecretInputString,
   resolveSecretInputRef,
   type SecretRef,
 } from "../config/types.secrets.js";
+import type { SunClawConfig } from "../config/types.sunclaw.js";
 import { resolveSecretRefString } from "./resolve.js";
 
 type SecretDefaults = NonNullable<SunClawConfig["secrets"]>["defaults"];

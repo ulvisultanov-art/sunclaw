@@ -164,11 +164,9 @@ describe("provider auth profile helpers", () => {
       }),
     ).toBe(true);
     expect(loadAuthProfileStoreForSecretsRuntime).toHaveBeenNthCalledWith(1, "/tmp/sunclaw-agent");
-    expect(loadAuthProfileStoreForSecretsRuntime).toHaveBeenNthCalledWith(
-      2,
-      "/tmp/sunclaw-agent",
-      { externalCli },
-    );
+    expect(loadAuthProfileStoreForSecretsRuntime).toHaveBeenNthCalledWith(2, "/tmp/sunclaw-agent", {
+      externalCli,
+    });
   });
 
   it("accepts plus-signed Copilot token expiry strings", async () => {

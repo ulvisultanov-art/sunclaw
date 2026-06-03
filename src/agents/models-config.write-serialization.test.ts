@@ -425,10 +425,7 @@ describe("models-config write serialization", () => {
         },
       );
 
-      const writes = Promise.all([
-        ensureSunClawModelsJson(first),
-        ensureSunClawModelsJson(second),
-      ]);
+      const writes = Promise.all([ensureSunClawModelsJson(first), ensureSunClawModelsJson(second)]);
       await firstModelsWriteStarted;
       await Promise.resolve();
       releaseModelsWrites();

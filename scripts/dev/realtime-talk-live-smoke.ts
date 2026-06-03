@@ -13,8 +13,7 @@ import {
   redactJsonValueForDevToolLog,
 } from "../lib/dev-tooling-safety.ts";
 
-const OPENAI_REALTIME_MODEL =
-  process.env.SUNCLAW_REALTIME_OPENAI_MODEL?.trim() || "gpt-realtime-2";
+const OPENAI_REALTIME_MODEL = process.env.SUNCLAW_REALTIME_OPENAI_MODEL?.trim() || "gpt-realtime-2";
 const OPENAI_REALTIME_VOICE = process.env.SUNCLAW_REALTIME_OPENAI_VOICE?.trim() || "alloy";
 const DEFAULT_OPENAI_HTTP_TIMEOUT_MS = 30_000;
 const OPENAI_HTTP_RESPONSE_MAX_BYTES = 256 * 1024;

@@ -6,10 +6,7 @@ import {
 } from "sunclaw/plugin-sdk/provider-auth";
 import { buildOauthProviderAuthResult } from "sunclaw/plugin-sdk/provider-auth";
 import { createProviderApiKeyAuthMethod } from "sunclaw/plugin-sdk/provider-auth-api-key";
-import {
-  normalizeOptionalString,
-  readStringValue,
-} from "sunclaw/plugin-sdk/string-coerce-runtime";
+import { normalizeOptionalString, readStringValue } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { loginChutes } from "./oauth.js";
 import {
   CHUTES_DEFAULT_MODEL_REF,

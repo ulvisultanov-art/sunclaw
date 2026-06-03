@@ -113,9 +113,9 @@ function runtimeUsage(cell: RuntimeParityCell): TokenEfficiencyRuntimeUsage {
 }
 
 function toolNamesForCells(sunclaw: RuntimeParityCell, codex: RuntimeParityCell): string[] {
-  return [
-    ...new Set([...sunclaw.toolCalls, ...codex.toolCalls].map((call) => call.tool)),
-  ].toSorted((left, right) => left.localeCompare(right));
+  return [...new Set([...sunclaw.toolCalls, ...codex.toolCalls].map((call) => call.tool))].toSorted(
+    (left, right) => left.localeCompare(right),
+  );
 }
 
 function buildRow(params: {

@@ -135,9 +135,7 @@ function loadMatrixSendModule(): Promise<typeof import("../send.js")> {
   return matrixSendModulePromise;
 }
 
-function loadAcpBindingRuntime(): Promise<
-  typeof import("sunclaw/plugin-sdk/acp-binding-runtime")
-> {
+function loadAcpBindingRuntime(): Promise<typeof import("sunclaw/plugin-sdk/acp-binding-runtime")> {
   acpBindingRuntimePromise ??= import("sunclaw/plugin-sdk/acp-binding-runtime");
   return acpBindingRuntimePromise;
 }

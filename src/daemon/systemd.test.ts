@@ -709,9 +709,7 @@ describe("system-scope gateway unit detection (sunclaw#87577)", () => {
     const { stdout, write } = createWritableStreamMock();
     await expect(
       restartSystemdService({ stdout, env: { HOME: TEST_MANAGED_HOME } }),
-    ).rejects.toThrow(
-      /system-scope unit .* run `sudo systemctl restart sunclaw-gateway\.service`/,
-    );
+    ).rejects.toThrow(/system-scope unit .* run `sudo systemctl restart sunclaw-gateway\.service`/);
     expect(execFileMock).not.toHaveBeenCalled();
     expect(write).not.toHaveBeenCalled();
   });

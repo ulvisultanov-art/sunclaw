@@ -863,11 +863,7 @@ export class NpmUpdateSmoke {
     timeoutMs: number,
     ctx: UpdateJobContext,
   ): Promise<void> {
-    const scriptPath = this.writeGuestScript(
-      macosVm,
-      script,
-      "sunclaw-parallels-npm-update-macos",
-    );
+    const scriptPath = this.writeGuestScript(macosVm, script, "sunclaw-parallels-npm-update-macos");
     const macosExecArgs = this.resolveMacosUpdateExecArgs(ctx);
     const sudoUserArgIndex = macosExecArgs.indexOf("-u");
     const sudoUser =

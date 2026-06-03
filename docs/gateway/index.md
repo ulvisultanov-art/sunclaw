@@ -110,10 +110,10 @@ Admin HTTP RPC (`POST /api/v1/admin/rpc`) is a separate, default-off plugin rout
 
 ### Port and bind precedence
 
-| Setting      | Resolution order                                              |
-| ------------ | ------------------------------------------------------------- |
+| Setting      | Resolution order                                             |
+| ------------ | ------------------------------------------------------------ |
 | Gateway port | `--port` → `SUNCLAW_GATEWAY_PORT` → `gateway.port` → `18789` |
-| Bind mode    | CLI/override → `gateway.bind` → `loopback`                    |
+| Bind mode    | CLI/override → `gateway.bind` → `loopback`                   |
 
 Installed gateway services record the resolved `--port` in supervisor metadata. After changing `gateway.port`, run `sunclaw doctor --fix` or `sunclaw gateway install --force` so launchd/systemd/schtasks starts the process on the new port.
 

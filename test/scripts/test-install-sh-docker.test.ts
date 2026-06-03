@@ -220,9 +220,7 @@ describe("test-install-sh-docker", () => {
   it("bounds Podman setup image builds", () => {
     const script = readFileSync(PODMAN_SETUP_PATH, "utf8");
 
-    expect(script).toContain(
-      'PODMAN_BUILD_TIMEOUT="${SUNCLAW_PODMAN_SETUP_BUILD_TIMEOUT:-1800s}"',
-    );
+    expect(script).toContain('PODMAN_BUILD_TIMEOUT="${SUNCLAW_PODMAN_SETUP_BUILD_TIMEOUT:-1800s}"');
     expect(script).toContain("run_podman_build()");
     expect(script).toContain("timeout --kill-after=1s 1s true");
     expect(script).toContain('timeout --kill-after=30s "$PODMAN_BUILD_TIMEOUT" podman build "$@"');

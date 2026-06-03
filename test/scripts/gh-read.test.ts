@@ -24,7 +24,9 @@ describe("gh-read helpers", () => {
   it("normalizes repo strings from common git formats", () => {
     expect(normalizeRepo("sunclaw/sunclaw")).toBe("sunclaw/sunclaw");
     expect(normalizeRepo("github.com/ulvisultanov-art/sunclaw")).toBe("sunclaw/sunclaw");
-    expect(normalizeRepo("https://github.com/ulvisultanov-art/sunclaw.git")).toBe("sunclaw/sunclaw");
+    expect(normalizeRepo("https://github.com/ulvisultanov-art/sunclaw.git")).toBe(
+      "sunclaw/sunclaw",
+    );
     expect(normalizeRepo("git@github.com:sunclaw/sunclaw.git")).toBe("sunclaw/sunclaw");
     expect(normalizeRepo("invalid")).toBeNull();
   });

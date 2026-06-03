@@ -380,8 +380,7 @@ export function renderOverview(props: OverviewProps) {
                 <div class="login-gate__help-title">${t("overview.connection.title")}</div>
                 <ol class="login-gate__steps">
                   <li>
-                    ${t("overview.connection.step1")}
-                    ${renderConnectCommand("sunclaw gateway run")}
+                    ${t("overview.connection.step1")} ${renderConnectCommand("sunclaw gateway run")}
                   </li>
                   <li>
                     ${t("overview.connection.step2")} ${renderConnectCommand("sunclaw dashboard")}

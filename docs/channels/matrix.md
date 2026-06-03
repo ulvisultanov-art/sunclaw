@@ -411,8 +411,8 @@ Sends a verification request from this SunClaw account. `--own-user` requests se
 
 For lower-level lifecycle handling - typically while shadowing inbound requests from another client - these commands act on a specific request `<id>` (printed by `verify list` and `verify request`):
 
-| Command                                    | Purpose                                                             |
-| ------------------------------------------ | ------------------------------------------------------------------- |
+| Command                                   | Purpose                                                             |
+| ----------------------------------------- | ------------------------------------------------------------------- |
 | `sunclaw matrix verify accept <id>`       | Accept an inbound request                                           |
 | `sunclaw matrix verify start <id>`        | Start the SAS flow                                                  |
 | `sunclaw matrix verify sas <id>`          | Print the SAS emoji or decimals                                     |

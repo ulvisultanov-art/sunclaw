@@ -160,8 +160,7 @@ function installSnapshot(
 
 describe("optional media tool factory planning", () => {
   beforeAll(async () => {
-    ({ createSunClawTools: createSunClawToolsForTestModule } =
-      await import("./sunclaw-tools.js"));
+    ({ createSunClawTools: createSunClawToolsForTestModule } = await import("./sunclaw-tools.js"));
 
     const config = legacyModelProviderConfig({
       workflow: { "1": { inputs: {} } },

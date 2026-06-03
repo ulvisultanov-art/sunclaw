@@ -139,9 +139,7 @@ export function scanExecSafeBinCoverage(cfg: SunClawConfig): ExecSafeBinCoverage
   return hits;
 }
 
-export function scanExecSafeBinTrustedDirHints(
-  cfg: SunClawConfig,
-): ExecSafeBinTrustedDirHintHit[] {
+export function scanExecSafeBinTrustedDirHints(cfg: SunClawConfig): ExecSafeBinTrustedDirHintHit[] {
   const hits: ExecSafeBinTrustedDirHintHit[] = [];
   for (const scope of collectExecSafeBinScopes(cfg)) {
     for (const bin of scope.safeBins) {

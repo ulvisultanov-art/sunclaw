@@ -194,8 +194,8 @@ OpenRouter's documented app-attribution headers:
 
 | Header                    | Value                                                                                                  |
 | ------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `HTTP-Referer`            | `https://docs.sunclaw.complex.az`                                                                                  |
-| `X-OpenRouter-Title`      | `SunClaw`                                                                                             |
+| `HTTP-Referer`            | `https://docs.sunclaw.complex.az`                                                                      |
+| `X-OpenRouter-Title`      | `SunClaw`                                                                                              |
 | `X-OpenRouter-Categories` | `cli-agent,cloud-agent,programming-app,creative-writing,writing-assistant,general-chat,personal-agent` |
 
 <Warning>

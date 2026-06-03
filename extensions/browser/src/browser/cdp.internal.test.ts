@@ -642,7 +642,9 @@ describe("cdp internal", () => {
       });
 
       expect(snap.snapshot).toContain('- button "Save" [ref=e1]');
-      expect(snap.snapshot).toContain('- link "Docs" [ref=e2] [url=https://docs.sunclaw.complex.az/]');
+      expect(snap.snapshot).toContain(
+        '- link "Docs" [ref=e2] [url=https://docs.sunclaw.complex.az/]',
+      );
       expect(snap.snapshot).toContain(
         '- generic "Clickable Card" [ref=e3] [cursor:pointer, onclick]',
       );

@@ -145,9 +145,7 @@ describe("runCronIsolatedAgentTurn session identity", () => {
       });
       const call = lastEmbeddedAgentCall();
 
-      expect(call.sessionFile).toContain(
-        path.join(home, ".sunclaw", "agents", "main", "sessions"),
-      );
+      expect(call.sessionFile).toContain(path.join(home, ".sunclaw", "agents", "main", "sessions"));
       expect(String(call.sessionFile).endsWith(".jsonl")).toBe(true);
     });
   });

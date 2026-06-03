@@ -81,9 +81,9 @@ let currentMockSocket:
   | undefined;
 
 vi.mock("sunclaw/plugin-sdk/runtime-config-snapshot", async () => {
-  const actual = await vi.importActual<
-    typeof import("sunclaw/plugin-sdk/runtime-config-snapshot")
-  >("sunclaw/plugin-sdk/runtime-config-snapshot");
+  const actual = await vi.importActual<typeof import("sunclaw/plugin-sdk/runtime-config-snapshot")>(
+    "sunclaw/plugin-sdk/runtime-config-snapshot",
+  );
   return {
     ...actual,
     getRuntimeConfig: vi.fn().mockReturnValue({

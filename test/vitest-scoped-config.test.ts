@@ -148,12 +148,10 @@ function expectForkedIsolatedRunner(config: {
 describe("resolveVitestIsolation", () => {
   it("aliases private QA plugin SDK subpaths for source tests only", () => {
     for (const subpath of PRIVATE_PLUGIN_SDK_SUBPATHS) {
-      expect(findAlias(sharedVitestConfig.resolve.alias, `sunclaw/plugin-sdk/${subpath}`)).toEqual(
-        {
-          find: `sunclaw/plugin-sdk/${subpath}`,
-          replacement: path.join(process.cwd(), "src", "plugin-sdk", `${subpath}.ts`),
-        },
-      );
+      expect(findAlias(sharedVitestConfig.resolve.alias, `sunclaw/plugin-sdk/${subpath}`)).toEqual({
+        find: `sunclaw/plugin-sdk/${subpath}`,
+        replacement: path.join(process.cwd(), "src", "plugin-sdk", `${subpath}.ts`),
+      });
       expect(() =>
         findAlias(sharedVitestConfig.resolve.alias, `@sunclaw/plugin-sdk/${subpath}`),
       ).toThrow(`missing alias @sunclaw/plugin-sdk/${subpath}`);
@@ -165,12 +163,10 @@ describe("resolveVitestIsolation", () => {
       find: "@sunclaw/media-core/mime",
       replacement: path.join(process.cwd(), "packages", "media-core", "src", "mime.ts"),
     });
-    expect(findAlias(sharedVitestConfig.resolve.alias, "@sunclaw/acp-core/runtime/types")).toEqual(
-      {
-        find: "@sunclaw/acp-core/runtime/types",
-        replacement: path.join(process.cwd(), "packages", "acp-core", "src", "runtime", "types.ts"),
-      },
-    );
+    expect(findAlias(sharedVitestConfig.resolve.alias, "@sunclaw/acp-core/runtime/types")).toEqual({
+      find: "@sunclaw/acp-core/runtime/types",
+      replacement: path.join(process.cwd(), "packages", "acp-core", "src", "runtime", "types.ts"),
+    });
   });
 
   it("defaults shared scoped configs to the non-isolated runner", () => {

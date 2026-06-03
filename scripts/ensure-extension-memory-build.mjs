@@ -28,11 +28,7 @@ function positiveEnvInt(name, env, fallback) {
 }
 
 export function resolveExtensionMemoryBuildTimeoutMs(env = process.env) {
-  return positiveEnvInt(
-    "SUNCLAW_EXTENSION_MEMORY_BUILD_TIMEOUT_MS",
-    env,
-    DEFAULT_BUILD_TIMEOUT_MS,
-  );
+  return positiveEnvInt("SUNCLAW_EXTENSION_MEMORY_BUILD_TIMEOUT_MS", env, DEFAULT_BUILD_TIMEOUT_MS);
 }
 
 function collectExpectedExtensionMemoryEntryIds(rootDir, env) {

@@ -58,9 +58,7 @@ function isSunClawCommandBasename(basename: string, platform: NodeJS.Platform): 
     return true;
   }
   if (platform === "win32") {
-    return (
-      basename === "sunclaw.cmd" || basename === "sunclaw.ps1" || basename === "sunclaw.exe"
-    );
+    return basename === "sunclaw.cmd" || basename === "sunclaw.ps1" || basename === "sunclaw.exe";
   }
   return false;
 }
@@ -103,11 +101,7 @@ export function resolveDaemonSunClawBinDir(
   const argv1 = argv[1]?.trim();
   const dirs: string[] = [];
 
-  if (
-    argv1 &&
-    path.isAbsolute(argv1) &&
-    isSunClawCommandBasename(path.basename(argv1), platform)
-  ) {
+  if (argv1 && path.isAbsolute(argv1) && isSunClawCommandBasename(path.basename(argv1), platform)) {
     addUniquePathDir(dirs, path.dirname(argv1));
   }
 

@@ -112,9 +112,7 @@ function normalizeSlackRouteBindingConfig(cfg: SunClawConfig): SunClawConfig {
     };
   });
 
-  const normalizedCfg = changed
-    ? ({ ...cfg, bindings: normalizedBindings } as SunClawConfig)
-    : cfg;
+  const normalizedCfg = changed ? ({ ...cfg, bindings: normalizedBindings } as SunClawConfig) : cfg;
   slackRouteBindingConfigCache.set(cfg, { bindingsRef: bindings, normalizedCfg });
   return normalizedCfg;
 }

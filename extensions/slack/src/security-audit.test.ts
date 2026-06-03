@@ -22,9 +22,7 @@ function createSlackAccount(config: NonNullable<SunClawConfig["channels"]>["slac
   } as ResolvedSlackAccount;
 }
 
-function createSlashCommandSlackConfig(
-  options: { useAccessGroups?: boolean } = {},
-): SunClawConfig {
+function createSlashCommandSlackConfig(options: { useAccessGroups?: boolean } = {}): SunClawConfig {
   return {
     ...(options.useAccessGroups === undefined
       ? {}

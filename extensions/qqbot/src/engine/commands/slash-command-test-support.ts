@@ -11,10 +11,7 @@ export type WrittenQQBotConfig = {
   accounts?: { default?: { streaming?: unknown } };
 };
 
-export function installCommandRuntime(
-  currentConfig: SunClawConfig,
-  writes: SunClawConfig[],
-): void {
+export function installCommandRuntime(currentConfig: SunClawConfig, writes: SunClawConfig[]): void {
   const replaceConfigFile: ReplaceConfigFile = async (params) => {
     writes.push(params.nextConfig);
     return undefined as unknown as ReplaceConfigFileResult;

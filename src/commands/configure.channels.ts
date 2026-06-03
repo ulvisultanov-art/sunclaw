@@ -28,9 +28,7 @@ type ChannelRemovalDoneOption = Extract<ChannelRemovalOption, { value: { kind: "
 const RESERVED_CHANNEL_CONFIG_KEYS = new Set(["defaults", "modelByChannel"]);
 const DONE_VALUE: Extract<ChannelRemovalSelectValue, { kind: "done" }> = { kind: "done" };
 
-function listConfiguredChannelRemovalChoices(
-  cfg: SunClawConfig,
-): ConfiguredChannelRemovalChoice[] {
+function listConfiguredChannelRemovalChoices(cfg: SunClawConfig): ConfiguredChannelRemovalChoice[] {
   const channels = cfg.channels;
   if (!channels) {
     return [];

@@ -12,10 +12,7 @@ import type {
 import { createChannelApprovalNativeRuntimeAdapter } from "sunclaw/plugin-sdk/approval-handler-runtime";
 import type { ExecApprovalActionDescriptor } from "sunclaw/plugin-sdk/approval-reply-runtime";
 import type { ExecApprovalDecision } from "sunclaw/plugin-sdk/approval-runtime";
-import type {
-  DiscordExecApprovalConfig,
-  SunClawConfig,
-} from "sunclaw/plugin-sdk/config-contracts";
+import type { DiscordExecApprovalConfig, SunClawConfig } from "sunclaw/plugin-sdk/config-contracts";
 import { logDebug, logError } from "sunclaw/plugin-sdk/logging-core";
 import { normalizeOptionalString } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import { shouldHandleDiscordApprovalRequest } from "./approval-shared.js";

@@ -98,10 +98,7 @@ function writeOpenAiWebSearchMinimalConfig() {
 }
 
 function writeOpenWebUiConfig([openaiApiKey]) {
-  const batchPath = requireArg(
-    process.env.SUNCLAW_CONFIG_BATCH_PATH,
-    "SUNCLAW_CONFIG_BATCH_PATH",
-  );
+  const batchPath = requireArg(process.env.SUNCLAW_CONFIG_BATCH_PATH, "SUNCLAW_CONFIG_BATCH_PATH");
   writeJson(batchPath, [
     { path: "models.providers.openai.apiKey", value: requireArg(openaiApiKey, "OpenAI API key") },
     {

@@ -19,6 +19,8 @@ import {
   type MemoryMultimodalModality,
   type MemoryMultimodalSettings,
 } from "./multimodal.js";
+import { retryTransientMemoryRead } from "./read-retry.js";
+import { normalizeStringEntries, uniqueStrings } from "./string-utils.js";
 import {
   CHARS_PER_TOKEN_ESTIMATE,
   detectMime,
@@ -29,8 +31,6 @@ import {
   resolveCanonicalRootMemoryFile,
   shouldSkipRootMemoryAuxiliaryPath,
 } from "./sunclaw-runtime-memory.js";
-import { retryTransientMemoryRead } from "./read-retry.js";
-import { normalizeStringEntries, uniqueStrings } from "./string-utils.js";
 
 export { hashText } from "./hash.js";
 import { hashText } from "./hash.js";

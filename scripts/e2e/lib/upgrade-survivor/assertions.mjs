@@ -162,11 +162,7 @@ function seedState() {
     const version = process.env.SUNCLAW_UPGRADE_SURVIVOR_BASELINE_VERSION || "2026.4.24";
     for (const plugin of ["discord", "feishu", "telegram", "whatsapp"]) {
       writeJson(
-        path.join(
-          runtimeRoot,
-          `sunclaw-${version}-${plugin}`,
-          ".sunclaw-runtime-deps-stamp.json",
-        ),
+        path.join(runtimeRoot, `sunclaw-${version}-${plugin}`, ".sunclaw-runtime-deps-stamp.json"),
         {
           packageVersion: version,
           plugin,

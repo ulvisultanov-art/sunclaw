@@ -17,10 +17,10 @@ sunclaw webhooks gmail setup --account <email> [...]
 sunclaw webhooks gmail run   [--account <email>] [...]
 ```
 
-| Subcommand    | Description                                                                                  |
-| ------------- | -------------------------------------------------------------------------------------------- |
+| Subcommand    | Description                                                                                 |
+| ------------- | ------------------------------------------------------------------------------------------- |
 | `gmail setup` | Configure Gmail watch, Pub/Sub topic/subscription, and the SunClaw webhook delivery target. |
-| `gmail run`   | Run `gog watch serve` plus the watch auto-renew loop.                                        |
+| `gmail run`   | Run `gog watch serve` plus the watch auto-renew loop.                                       |
 
 ## `webhooks gmail setup`
 
@@ -52,8 +52,8 @@ sunclaw webhooks gmail setup --account you@example.com --hook-url https://gatewa
 
 | Flag                   | Default | Description                                |
 | ---------------------- | ------- | ------------------------------------------ |
-| `--hook-url <url>`     | (none)  | SunClaw webhook URL.                      |
-| `--hook-token <token>` | (none)  | SunClaw webhook token.                    |
+| `--hook-url <url>`     | (none)  | SunClaw webhook URL.                       |
+| `--hook-token <token>` | (none)  | SunClaw webhook token.                     |
 | `--push-token <token>` | (none)  | Push token forwarded to `gog watch serve`. |
 
 ### `gog watch serve` options
@@ -98,7 +98,7 @@ sunclaw webhooks gmail run --account you@example.com
 | Category          | Flags                                                                            |
 | ----------------- | -------------------------------------------------------------------------------- |
 | Pub/Sub           | `--account`, `--topic`, `--subscription`, `--label`                              |
-| SunClaw delivery | `--hook-url`, `--hook-token`, `--push-token`                                     |
+| SunClaw delivery  | `--hook-url`, `--hook-token`, `--push-token`                                     |
 | `gog watch serve` | `--bind`, `--port`, `--path`, `--include-body`, `--max-bytes`, `--renew-minutes` |
 | Tailscale         | `--tailscale`, `--tailscale-path`, `--tailscale-target`                          |
 

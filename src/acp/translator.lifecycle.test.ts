@@ -48,10 +48,7 @@ function createListSessionsRequest(params: {
   return request;
 }
 
-function createResumeSessionRequest(
-  sessionId: string,
-  cwd = "/tmp/sunclaw",
-): ResumeSessionRequest {
+function createResumeSessionRequest(sessionId: string, cwd = "/tmp/sunclaw"): ResumeSessionRequest {
   return {
     sessionId,
     cwd,

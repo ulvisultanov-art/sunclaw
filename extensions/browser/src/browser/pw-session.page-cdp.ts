@@ -1,5 +1,5 @@
-import { uniqueValues } from "sunclaw/plugin-sdk/string-coerce-runtime";
 import type { CDPSession, Page } from "playwright-core";
+import { uniqueValues } from "sunclaw/plugin-sdk/string-coerce-runtime";
 
 type PageCdpSend = (method: string, params?: Record<string, unknown>) => Promise<unknown>;
 type MarkBackendDomRef = { ref: string; backendDOMNodeId: number };

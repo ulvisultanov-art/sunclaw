@@ -1229,8 +1229,7 @@ async function main() {
   );
   const runId = process.env.SUNCLAW_DOCKER_ALL_RUN_ID || utcStampForPath();
   const logDir = path.resolve(
-    process.env.SUNCLAW_DOCKER_ALL_LOG_DIR ||
-      path.join(ROOT_DIR, ".artifacts/docker-tests", runId),
+    process.env.SUNCLAW_DOCKER_ALL_LOG_DIR || path.join(ROOT_DIR, ".artifacts/docker-tests", runId),
   );
 
   const baseEnv = commandEnv({

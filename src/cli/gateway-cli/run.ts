@@ -19,8 +19,8 @@ import {
   resolveGatewayPort,
   resolveStateDir,
 } from "../../config/paths.js";
-import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { hasConfiguredSecretInput } from "../../config/types.secrets.js";
+import type { SunClawConfig } from "../../config/types.sunclaw.js";
 import { GATEWAY_SERVICE_RUNTIME_PID_ENV } from "../../daemon/constants.js";
 import {
   defaultGatewayBindMode,

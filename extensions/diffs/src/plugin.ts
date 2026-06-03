@@ -25,9 +25,7 @@ export function registerDiffsPlugin(api: SunClawPluginApi): void {
   });
   const resolveCurrentPluginConfig = () =>
     resolveLivePluginConfigObject(
-      api.runtime.config?.current
-        ? () => api.runtime.config.current() as SunClawConfig
-        : undefined,
+      api.runtime.config?.current ? () => api.runtime.config.current() as SunClawConfig : undefined,
       "diffs",
       api.pluginConfig as Record<string, unknown>,
     ) ?? {};

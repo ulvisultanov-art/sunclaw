@@ -506,9 +506,7 @@ describe("installSunClawPluginSdkNativeResolver", () => {
 
     const requireFromRuntimeOllama = createRequire(runtimeOllamaEntry);
     expect(
-      fs.realpathSync(
-        requireFromRuntimeOllama.resolve("sunclaw/plugin-sdk/ssrf-runtime-internal"),
-      ),
+      fs.realpathSync(requireFromRuntimeOllama.resolve("sunclaw/plugin-sdk/ssrf-runtime-internal")),
     ).toBe(fs.realpathSync(internalPath));
 
     const requireFromBrowser = createRequire(browserEntry);
