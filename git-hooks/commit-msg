@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+#
+# SunClaw commit-msg hook — enforces Conventional Commits via commitlint.
+# Companion to git-hooks/pre-commit (oxfmt on staged files); both are wired by
+# scripts/prepare-git-hooks.mjs (sets core.hooksPath=git-hooks on `pnpm install`).
+#
+# Skips when committing from a sub-worktree that lacks node_modules so emergency
+# fixes (e.g. cherry-picking a hotfix from a bare checkout) are never blocked.
+
+set -euo pipefail
+
+ROOT_DIR="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+
+if [[ ! -f "$ROOT_DIR/node_modules/@commitlint/cli/cli.js" ]]; then
+  echo "[commit-msg] commitlint not installed; skipping (run \`pnpm install\` to enable)." >&2
+  exit 0
+fi
+
+exec node "$ROOT_DIR/node_modules/@commitlint/cli/cli.js" --edit "$1"
