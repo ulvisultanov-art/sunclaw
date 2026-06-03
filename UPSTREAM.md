@@ -1,6 +1,7 @@
 # SunClaw Upstream Tracking
 
-**Upstream:** github.com/ulvisultanov-art/sunclaw
+**Upstream:** github.com/openclaw/openclaw
+**Fork:** github.com/ulvisultanov-art/sunclaw
 **License:** MIT (see LICENSE)
 **Fork SHA pinned at M0:** 2accf3875ba07254becc74f65eecaf5383e74e9d
 **Fork date:** 2026-06-03

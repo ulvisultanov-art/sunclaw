@@ -55,7 +55,11 @@ jobs:
           persist-credentials: false
 
       - name: Run gitleaks
-        uses: gitleaks/gitleaks-action@v2
+        # Pinned to v2 tag commit (ff98106) instead of the floating @v2 tag --
+        # third-party security actions get full code-execution on the runner
+        # with $GITHUB_TOKEN, so a tag re-point would be a supply-chain risk.
+        # Bump this SHA when reviewing upstream releases of gitleaks-action.
+        uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7  # v2 (2025-04-17)
         env:
           # Our SunClaw-specific rules live in .gitleaks.toml; extend.useDefault
           # in that file pulls in the gitleaks-maintained baseline rule set.

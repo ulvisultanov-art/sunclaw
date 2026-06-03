@@ -25,18 +25,50 @@
 # permission in the same message) reviews the merge, then pushes / opens PR.
 #
 # Usage:
-#   ./scripts/upstream-merge.sh                  # uses upstream/main as ref
-#   ./scripts/upstream-merge.sh upstream/release # override ref
+#   ./scripts/upstream-merge.sh                              # full sync from upstream/main
+#   ./scripts/upstream-merge.sh upstream/release             # override ref
+#   ./scripts/upstream-merge.sh --skip-merge                 # post-conflict recovery
+#   ./scripts/upstream-merge.sh upstream/main --skip-merge   # ref + flag (either order)
+#
+# --skip-merge mode: when a previous run hit conflicts, the operator resolved
+# them by hand and committed. Re-running without --skip-merge would either bail
+# on the dirty-tree pre-flight (if uncommitted) or fail on the already-merged
+# branch. --skip-merge bypasses the dirty-tree check, branch creation, and the
+# merge step itself -- it picks up at the rebrand / fixture / survivor-scan /
+# pin-update sequence. The current branch must already contain the merge.
 #
 # Exit codes:
 #   0  -- merge clean, rebrand idempotent, survivor scan clean, pin updated
-#   1  -- merge conflicts (resolve manually, then re-run from step "rebrand")
+#   1  -- merge conflicts (resolve manually, then re-run with --skip-merge)
 #   2  -- rebrand pipeline failed after merge (fixture suite or survivor scan)
 #   3  -- pre-flight failed (no upstream remote, dirty tree, missing UPSTREAM.md)
 
 set -euo pipefail
 
-UPSTREAM_REF="${1:-upstream/main}"
+# Parse args -- accept --skip-merge and the optional upstream ref in either order.
+SKIP_MERGE=0
+UPSTREAM_REF=""
+for arg in "$@"; do
+  case "$arg" in
+    --skip-merge)
+      SKIP_MERGE=1
+      ;;
+    -*)
+      echo "::error::Unknown flag: $arg" >&2
+      echo "Usage: $0 [<upstream-ref>] [--skip-merge]" >&2
+      exit 3
+      ;;
+    *)
+      if [ -n "$UPSTREAM_REF" ]; then
+        echo "::error::Multiple upstream refs given: '$UPSTREAM_REF' and '$arg'" >&2
+        exit 3
+      fi
+      UPSTREAM_REF="$arg"
+      ;;
+  esac
+done
+UPSTREAM_REF="${UPSTREAM_REF:-upstream/main}"
+
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$REPO_ROOT"
 
@@ -53,8 +85,10 @@ if ! git remote get-url upstream >/dev/null 2>&1; then
   exit 3
 fi
 
-if [ -n "$(git status --porcelain)" ]; then
+if [ "$SKIP_MERGE" -eq 0 ] && [ -n "$(git status --porcelain)" ]; then
   echo "::error::Working tree is dirty. Commit or stash before syncing." >&2
+  echo "(If you are recovering from a previous conflicted merge that has now" >&2
+  echo "been resolved and committed, re-run with --skip-merge.)" >&2
   git status --short >&2
   exit 3
 fi
@@ -68,32 +102,38 @@ echo ">>> Fetching upstream..."
 git fetch upstream --tags
 
 NEW_SHA=$(git rev-parse "$UPSTREAM_REF")
-if [ "$NEW_SHA" = "$OLD_PIN" ]; then
+if [ "$NEW_SHA" = "$OLD_PIN" ] && [ "$SKIP_MERGE" -eq 0 ]; then
   echo "Upstream pin already at $NEW_SHA -- nothing to sync."
   exit 0
 fi
 
-SYNC_BRANCH="upstream-sync-$(date +%Y%m%d)"
-if git show-ref --verify --quiet "refs/heads/$SYNC_BRANCH"; then
-  echo ">>> Branch $SYNC_BRANCH already exists -- checking it out."
-  git checkout "$SYNC_BRANCH"
+if [ "$SKIP_MERGE" -eq 1 ]; then
+  SYNC_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+  echo ">>> --skip-merge: resuming on current branch $SYNC_BRANCH."
+  echo ">>> Skipping dirty-tree gate, branch creation, and merge step."
 else
-  echo ">>> Creating $SYNC_BRANCH from main."
-  git checkout -b "$SYNC_BRANCH" main
-fi
+  SYNC_BRANCH="upstream-sync-$(date +%Y%m%d)"
+  if git show-ref --verify --quiet "refs/heads/$SYNC_BRANCH"; then
+    echo ">>> Branch $SYNC_BRANCH already exists -- checking it out."
+    git checkout "$SYNC_BRANCH"
+  else
+    echo ">>> Creating $SYNC_BRANCH from main."
+    git checkout -b "$SYNC_BRANCH" main
+  fi
 
-# ---- Merge -----------------------------------------------------------------
+  # ---- Merge ---------------------------------------------------------------
 
-echo ">>> Merging $UPSTREAM_REF (was $OLD_PIN -> now $NEW_SHA)..."
-if ! git merge --no-ff "$UPSTREAM_REF" \
-    -m "merge: sync from $UPSTREAM_REF (pin $OLD_PIN -> $NEW_SHA)"; then
-  echo
-  echo "::error::Merge conflicts. Resolve manually, then re-run:" >&2
-  echo "  bash scripts/rebrand.sh ." >&2
-  echo "  bash scripts/test-rebrand.sh" >&2
-  echo "  git add -A && git commit" >&2
-  echo "  bash scripts/upstream-merge.sh  (will skip merge, re-run scans)" >&2
-  exit 1
+  echo ">>> Merging $UPSTREAM_REF (was $OLD_PIN -> now $NEW_SHA)..."
+  if ! git merge --no-ff "$UPSTREAM_REF" \
+      -m "merge: sync from $UPSTREAM_REF (pin $OLD_PIN -> $NEW_SHA)"; then
+    echo
+    echo "::error::Merge conflicts. Resolve manually, then re-run:" >&2
+    echo "  # 1. Edit conflicted files, then:" >&2
+    echo "  git add -A && git commit" >&2
+    echo "  # 2. Resume the rest of the pipeline:" >&2
+    echo "  bash scripts/upstream-merge.sh --skip-merge" >&2
+    exit 1
+  fi
 fi
 
 # ---- Re-apply rebrand + run gates ------------------------------------------

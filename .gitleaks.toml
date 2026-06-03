@@ -53,8 +53,12 @@ tags = ["llm", "openai", "key"]
 
 [[rules]]
 id = "anthropic-key"
-description = "Anthropic API key (sk-ant-... 95-char tail)"
-regex = '''sk-ant-[A-Za-z0-9_\-]{95}'''
+description = "Anthropic API key or OAuth token (sk-ant-api03-..., sk-ant-oat01-...)"
+# Real Anthropic credentials are formatted sk-ant-<class>-<payload>, where
+# <class> is api03 / oat01 / similar (lowercase + digits) and <payload> is
+# ~90+ base64url chars. The previous regex (sk-ant- + 95 char tail) silently
+# missed every real key because it skipped the class-segment dash.
+regex = '''sk-ant-(?:api|oat)[0-9]{1,4}-[A-Za-z0-9_\-]{90,}'''
 tags = ["llm", "anthropic", "key"]
 
 [[rules]]
