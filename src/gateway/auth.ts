@@ -43,7 +43,8 @@ export type GatewayAuthResult = {
     | "tailscale"
     | "device-token"
     | "bootstrap-token"
-    | "trusted-proxy";
+    | "trusted-proxy"
+    | "cloudflare-access";
   user?: string;
   reason?: string;
   /** Present when the request was blocked by the rate limiter. */

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { SunClawConfig } from "../config/config.js";
 import {
+  collectGatewayCloudflareAccessFindings,
   collectGatewayHttpNoAuthFindings,
   collectGatewayHttpSessionKeyOverrideFindings,
 } from "./audit-extra.sync.js";
@@ -140,4 +141,83 @@ describe("security audit gateway HTTP auth findings", () => {
       }
     },
   );
+});
+
+describe("security audit gateway cloudflare-access findings", () => {
+  it("flags misconfig when mode is cloudflare-access but teamDomain/aud are missing", () => {
+    const cfg = {
+      gateway: {
+        bind: "lan",
+        auth: {
+          mode: "cloudflare-access",
+          // cloudflareAccess block intentionally missing
+        },
+      },
+    } satisfies SunClawConfig;
+    const findings = collectGatewayCloudflareAccessFindings(cfg);
+    const finding = requireFinding(findings, "gateway.http.cloudflare_access_misconfig");
+    expect(finding.severity).toBe("critical");
+    expect(finding.detail).toContain("teamDomain");
+    expect(finding.detail).toContain("aud");
+    // No allowlist finding when block is entirely missing (the misconfig is the precondition)
+    expect(findings.map((entry) => entry.checkId)).not.toContain(
+      "gateway.http.cloudflare_access_no_email_allowlist",
+    );
+  });
+
+  it("flags empty email allowlist as critical when teamDomain/aud are otherwise present", () => {
+    const cfg = {
+      gateway: {
+        bind: "lan",
+        auth: {
+          mode: "cloudflare-access",
+          cloudflareAccess: {
+            teamDomain: "complex",
+            aud: "abc123",
+            allowedEmailDomains: [],
+          },
+        },
+      },
+    } satisfies SunClawConfig;
+    const findings = collectGatewayCloudflareAccessFindings(cfg);
+    const finding = requireFinding(findings, "gateway.http.cloudflare_access_no_email_allowlist");
+    expect(finding.severity).toBe("critical");
+    expect(finding.detail).toContain("allowedEmailDomains");
+    // Misconfig finding should NOT fire when teamDomain + aud are present
+    expect(findings.map((entry) => entry.checkId)).not.toContain(
+      "gateway.http.cloudflare_access_misconfig",
+    );
+  });
+
+  it("is silent on a well-formed cloudflare-access config", () => {
+    const cfg = {
+      gateway: {
+        bind: "lan",
+        auth: {
+          mode: "cloudflare-access",
+          cloudflareAccess: {
+            teamDomain: "complex",
+            aud: "abc123",
+            allowedEmailDomains: ["complex.az"],
+          },
+        },
+      },
+    } satisfies SunClawConfig;
+    const findings = collectGatewayCloudflareAccessFindings(cfg);
+    const cloudflareAccessFindings = findings.filter((entry) =>
+      entry.checkId.startsWith("gateway.http.cloudflare_access_"),
+    );
+    expect(cloudflareAccessFindings).toEqual([]);
+  });
+
+  it("does not run when mode is something other than cloudflare-access", () => {
+    const cfg = {
+      gateway: {
+        bind: "loopback",
+        auth: { mode: "token", token: "secret" },
+      },
+    } satisfies SunClawConfig;
+    const findings = collectGatewayCloudflareAccessFindings(cfg);
+    expect(findings).toEqual([]);
+  });
 });

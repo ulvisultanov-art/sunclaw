@@ -1259,6 +1259,7 @@ export async function runSecurityAudit(opts: SecurityAuditOptions): Promise<Secu
     }),
   );
   findings.push(...auditNonDeep.collectGatewayHttpSessionKeyOverrideFindings(cfg));
+  findings.push(...auditNonDeep.collectGatewayCloudflareAccessFindings(cfg));
   findings.push(...auditNonDeep.collectSandboxDockerNoopFindings(cfg));
   findings.push(...auditNonDeep.collectSandboxDangerousConfigFindings(cfg));
   findings.push(...auditNonDeep.collectNodeDenyCommandPatternFindings(cfg));

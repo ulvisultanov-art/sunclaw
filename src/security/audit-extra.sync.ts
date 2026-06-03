@@ -780,6 +780,90 @@ export function collectGatewayHttpNoAuthFindings(
   return findings;
 }
 
+/**
+ * Audit `gateway.auth.mode === "cloudflare-access"` configurations.
+ *
+ * Returns no findings when the mode is anything else — this collector is a
+ * no-op outside of cloudflare-access deployments.
+ *
+ * When the mode IS cloudflare-access, two failure modes are flagged:
+ *
+ *  1. **Misconfig (critical)** — `cloudflareAccess.teamDomain` or `.aud`
+ *     missing. Without these the JWT verifier cannot construct a JWKS URL
+ *     or validate the audience claim; every request would fail closed and
+ *     the Gateway pod cannot serve traffic safely.
+ *
+ *  2. **No email allowlist (critical)** — `allowedEmailDomains` empty.
+ *     ADR-0012 mandates a server-side email-domain check on top of the
+ *     Cloudflare Access policy as defence-in-depth: if the upstream
+ *     Access policy is briefly misconfigured (e.g. someone toggles it to
+ *     allow everyone), an empty allowlist removes the last barrier and
+ *     anyone with a valid Cloudflare-issued JWT for any team could reach
+ *     the ClawHub admin surface. We score this critical rather than warn
+ *     because cloudflare-access mode is by construction an externally
+ *     exposed deployment — there is no safe "experimental local-only"
+ *     equivalent the way `mode=none` has on loopback.
+ */
+export function collectGatewayCloudflareAccessFindings(cfg: SunClawConfig): SecurityAuditFinding[] {
+  const findings: SecurityAuditFinding[] = [];
+  const auth = cfg.gateway?.auth;
+  if (auth?.mode !== "cloudflare-access") {
+    return findings;
+  }
+
+  const cf = auth.cloudflareAccess;
+  const teamDomain = normalizeOptionalString(cf?.teamDomain);
+  const aud = normalizeOptionalString(cf?.aud);
+  const allowedEmailDomains = Array.isArray(cf?.allowedEmailDomains)
+    ? cf.allowedEmailDomains
+    : undefined;
+
+  if (!cf || !teamDomain || !aud) {
+    const missing: string[] = [];
+    if (!cf || !teamDomain) {
+      missing.push("teamDomain");
+    }
+    if (!cf || !aud) {
+      missing.push("aud");
+    }
+    findings.push({
+      checkId: "gateway.http.cloudflare_access_misconfig",
+      severity: "critical",
+      title: "Cloudflare Access auth mode is misconfigured",
+      detail:
+        `gateway.auth.mode="cloudflare-access" but gateway.auth.cloudflareAccess.${missing.join(
+          "/.",
+        )} ` +
+        "is missing. Without teamDomain the JWKS endpoint cannot be derived and without aud " +
+        "the audience claim cannot be validated — every request would fail closed and the " +
+        "Gateway cannot start safely.",
+      remediation:
+        "Set gateway.auth.cloudflareAccess.teamDomain to your Cloudflare Access team subdomain " +
+        "(e.g. 'complex') and gateway.auth.cloudflareAccess.aud to the Application Audience " +
+        "tag of the Access application that gates this Gateway.",
+    });
+    return findings;
+  }
+
+  if (!allowedEmailDomains || allowedEmailDomains.length === 0) {
+    findings.push({
+      checkId: "gateway.http.cloudflare_access_no_email_allowlist",
+      severity: "critical",
+      title: "Cloudflare Access email allowlist is empty",
+      detail:
+        "gateway.auth.cloudflareAccess.allowedEmailDomains is empty. ADR-0012 requires at " +
+        "least one verified email domain (e.g. ['complex.az']) as defence-in-depth on top of " +
+        "the Cloudflare Access policy; without it, a misconfigured upstream Access policy " +
+        "would expose the admin surface to anyone with a valid Cloudflare-issued JWT.",
+      remediation:
+        "Populate gateway.auth.cloudflareAccess.allowedEmailDomains with the domains permitted " +
+        "to administer this Gateway (e.g. ['complex.az']).",
+    });
+  }
+
+  return findings;
+}
+
 export function collectSandboxDockerNoopFindings(cfg: SunClawConfig): SecurityAuditFinding[] {
   const findings: SecurityAuditFinding[] = [];
   const configuredPaths: string[] = [];

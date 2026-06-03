@@ -147,7 +147,43 @@ export type GatewayControlUiConfig = {
   dangerouslyDisableDeviceAuth?: boolean;
 };
 
-export type GatewayAuthMode = "none" | "token" | "password" | "trusted-proxy";
+export type GatewayAuthMode = "none" | "token" | "password" | "trusted-proxy" | "cloudflare-access";
+
+/**
+ * Configuration for Cloudflare Access JWT-based authentication.
+ * Used when the Gateway is deployed behind a Cloudflare Access policy
+ * (typical for hosted admin surfaces such as ClawHub) that signs an
+ * Application Token JWT on every authenticated request.
+ *
+ * The JWT is presented as either the `Cf-Access-Jwt-Assertion` header
+ * or the `CF_Authorization` cookie. Verification follows ADR-0012:
+ * fetch the team JWKS, validate signature + `aud` + issuer, then
+ * enforce that the embedded user email belongs to one of
+ * `allowedEmailDomains` (defence-in-depth on top of the Access policy).
+ */
+export type GatewayCloudflareAccessConfig = {
+  /**
+   * Cloudflare Access team subdomain (without `.cloudflareaccess.com`).
+   * Example: `complex` for the team available at
+   * https://complex.cloudflareaccess.com. Required.
+   */
+  teamDomain: string;
+  /**
+   * Application Audience (AUD) tag from the Cloudflare Access application
+   * that gates this Gateway. Required — JWTs are rejected unless this
+   * value is present in the token's `aud` claim.
+   */
+  aud: string;
+  /**
+   * Email-domain allowlist applied AFTER JWT signature/audience checks.
+   * Defence-in-depth: even if a Cloudflare Access policy is briefly
+   * misconfigured (e.g. left wide open), only users whose verified
+   * `email` claim ends in one of these domains may reach the Gateway.
+   * At least one domain is required — an empty list is treated as a
+   * configuration error by the security audit.
+   */
+  allowedEmailDomains: string[];
+};
 
 /**
  * Configuration for trusted reverse proxy authentication.
@@ -196,6 +232,11 @@ export type GatewayAuthConfig = {
    * Required when mode is "trusted-proxy".
    */
   trustedProxy?: GatewayTrustedProxyConfig;
+  /**
+   * Configuration for cloudflare-access auth mode.
+   * Required when mode is "cloudflare-access". See ADR-0012.
+   */
+  cloudflareAccess?: GatewayCloudflareAccessConfig;
 };
 
 export type GatewayAuthRateLimitConfig = {
