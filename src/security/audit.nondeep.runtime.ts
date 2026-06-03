@@ -5,6 +5,7 @@ export {
 
 export {
   collectExposureMatrixFindings,
+  collectGatewayCloudflareAccessFindings,
   collectGatewayHttpNoAuthFindings,
   collectGatewayHttpSessionKeyOverrideFindings,
   collectHooksHardeningFindings,

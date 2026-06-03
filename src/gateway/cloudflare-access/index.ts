@@ -1,4 +1,4 @@
-export { verifyAccessJwt } from "./verify";
-export type { VerifyParams, VerifyResult } from "./verify";
-export { fetchAndCacheJwks } from "./jwks-cache";
-export type { JwksDocument, FetchJwksParams } from "./jwks-cache";
+export { verifyAccessJwt } from "./verify.js";
+export type { VerifyParams, VerifyResult } from "./verify.js";
+export { fetchAndCacheJwks } from "./jwks-cache.js";
+export type { JwksDocument, FetchJwksParams } from "./jwks-cache.js";

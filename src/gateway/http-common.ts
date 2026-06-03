@@ -42,7 +42,10 @@ export function sendMethodNotAllowed(res: ServerResponse, allow = "POST") {
   sendText(res, 405, "Method Not Allowed");
 }
 
-export function sendUnauthorized(res: ServerResponse) {
+export function sendUnauthorized(res: ServerResponse, wwwAuthenticate?: string) {
+  if (wwwAuthenticate && wwwAuthenticate.length > 0) {
+    res.setHeader("WWW-Authenticate", wwwAuthenticate);
+  }
   sendJson(res, 401, {
     error: { message: "Unauthorized", type: "unauthorized" },
   });
@@ -65,7 +68,7 @@ export function sendGatewayAuthFailure(res: ServerResponse, authResult: GatewayA
     sendRateLimited(res, authResult.retryAfterMs);
     return;
   }
-  sendUnauthorized(res);
+  sendUnauthorized(res, authResult.wwwAuthenticate);
 }
 
 export function sendInvalidRequest(res: ServerResponse, message: string) {

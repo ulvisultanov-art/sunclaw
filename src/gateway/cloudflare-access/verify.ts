@@ -14,7 +14,7 @@
  */
 
 import { jwtVerify, createLocalJWKSet, type JWTPayload } from "jose";
-import { fetchAndCacheJwks } from "./jwks-cache";
+import { fetchAndCacheJwks } from "./jwks-cache.js";
 
 export interface VerifyParams {
   readonly token: string;

@@ -12,19 +12,15 @@ import {
   type ResolvedGatewayAuth,
 } from "./auth.js";
 import { sendGatewayAuthFailure, sendMissingScopeForbidden } from "./http-common.js";
+import { getCfAccessJwt, getHeader } from "./http-headers.js";
 import { ADMIN_SCOPE, CLI_DEFAULT_OPERATOR_SCOPES } from "./method-scopes.js";
 import { authorizeOperatorScopesForMethod } from "./method-scopes.js";
 
-export function getHeader(req: IncomingMessage, name: string): string | undefined {
-  const raw = req.headers[normalizeLowercaseStringOrEmpty(name)];
-  if (typeof raw === "string") {
-    return raw;
-  }
-  if (Array.isArray(raw)) {
-    return raw[0];
-  }
-  return undefined;
-}
+// Re-exported from `./http-headers.js` so callers can keep importing
+// `getHeader` / `getCfAccessJwt` from this barrel alongside `getBearerToken`.
+// The shared helpers live in their own module to keep `auth.ts` off the
+// `http-auth-utils.ts` import edge (which would otherwise be a cycle).
+export { getCfAccessJwt, getHeader };
 
 export function getBearerToken(req: IncomingMessage): string | undefined {
   const raw = normalizeOptionalString(getHeader(req, "authorization")) ?? "";

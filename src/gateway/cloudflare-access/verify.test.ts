@@ -1,7 +1,7 @@
 import { SignJWT, exportJWK, generateKeyPair } from "jose";
 import { describe, expect, it, beforeEach, vi } from "vitest";
-import { _resetJwksCacheForTests } from "./jwks-cache";
-import { verifyAccessJwt } from "./verify";
+import { _resetJwksCacheForTests } from "./jwks-cache.js";
+import { verifyAccessJwt } from "./verify.js";
 
 describe("verifyAccessJwt", () => {
   const teamDomain = "complex";

@@ -1,5 +1,6 @@
 import type {
   GatewayAuthConfig,
+  GatewayCloudflareAccessConfig,
   GatewayTailscaleMode,
   GatewayTrustedProxyConfig,
 } from "../config/types.gateway.js";
@@ -7,7 +8,12 @@ import { resolveSecretInputRef } from "../config/types.secrets.js";
 import { resolveGatewayCredentialsFromValues } from "./credentials.js";
 
 /** Authentication modes after config, override, and credential inputs are combined. */
-export type ResolvedGatewayAuthMode = "none" | "token" | "password" | "trusted-proxy";
+export type ResolvedGatewayAuthMode =
+  | "none"
+  | "token"
+  | "password"
+  | "trusted-proxy"
+  | "cloudflare-access";
 
 /** Records which input selected the effective Gateway auth mode. */
 export type ResolvedGatewayAuthModeSource =
@@ -25,6 +31,7 @@ export type ResolvedGatewayAuth = {
   password?: string;
   allowTailscale: boolean;
   trustedProxy?: GatewayTrustedProxyConfig;
+  cloudflareAccess?: GatewayCloudflareAccessConfig;
 };
 
 /** Shared-secret auth shape exposed to Gateway clients that support a single bearer secret. */
@@ -65,6 +72,9 @@ export function resolveGatewayAuth(params: {
     if (authOverride.trustedProxy !== undefined) {
       authConfig.trustedProxy = authOverride.trustedProxy;
     }
+    if (authOverride.cloudflareAccess !== undefined) {
+      authConfig.cloudflareAccess = authOverride.cloudflareAccess;
+    }
   }
   const env = params.env ?? process.env;
   const tokenRef = resolveSecretInputRef({ value: authConfig.token }).ref;
@@ -81,6 +91,7 @@ export function resolveGatewayAuth(params: {
   const token = resolvedCredentials.token;
   const password = resolvedCredentials.password;
   const trustedProxy = authConfig.trustedProxy;
+  const cloudflareAccess = authConfig.cloudflareAccess;
 
   let mode: ResolvedGatewayAuth["mode"];
   let modeSource: ResolvedGatewayAuth["modeSource"];
@@ -116,6 +127,7 @@ export function resolveGatewayAuth(params: {
     password,
     allowTailscale,
     trustedProxy,
+    cloudflareAccess,
   };
 }
 

@@ -1,5 +1,5 @@
 import { describe, expect, it, vi, beforeEach } from "vitest";
-import { fetchAndCacheJwks, _resetJwksCacheForTests } from "./jwks-cache";
+import { fetchAndCacheJwks, _resetJwksCacheForTests } from "./jwks-cache.js";
 
 describe("jwks-cache", () => {
   beforeEach(() => {

@@ -12,6 +12,8 @@ import {
   type RateLimitCheckResult,
 } from "./auth-rate-limit.js";
 import type { ResolvedGatewayAuth } from "./auth-resolve.js";
+import { verifyAccessJwt } from "./cloudflare-access/index.js";
+import { getCfAccessJwt } from "./http-headers.js";
 import {
   isLoopbackAddress,
   resolveLocalInterfaceAddressMatch,
@@ -51,6 +53,13 @@ export type GatewayAuthResult = {
   rateLimited?: boolean;
   /** Milliseconds the client should wait before retrying (when rate-limited). */
   retryAfterMs?: number;
+  /**
+   * Optional WWW-Authenticate header value the HTTP layer should emit with a
+   * 401 response. Used by the cloudflare-access branch to surface
+   * `CF-Access-Required` when the JWT header is missing so the Cloudflare
+   * edge can re-challenge interactively (per ADR-0012).
+   */
+  wwwAuthenticate?: string;
 };
 
 type ConnectAuth = {
@@ -526,6 +535,52 @@ async function authorizeGatewayConnectCore(
       });
     }
     return { ok: false, reason: result.reason };
+  }
+
+  if (auth.mode === "cloudflare-access") {
+    // The Cloudflare Access edge terminates the user-visible auth challenge and
+    // forwards the verified identity as a JWT in `Cf-Access-Jwt-Assertion`. We
+    // re-verify the signature, AUD, and email-domain allowlist locally before
+    // trusting the identity — defence-in-depth in case the Access policy is
+    // briefly misconfigured.
+    const cfConfig = auth.cloudflareAccess;
+    if (!cfConfig) {
+      return {
+        ok: false,
+        method: "cloudflare-access",
+        reason: "cloudflare_access_config_missing",
+      };
+    }
+    const token = req ? getCfAccessJwt(req) : undefined;
+    if (!token) {
+      return {
+        ok: false,
+        method: "cloudflare-access",
+        reason: "cf_access_jwt_header_missing",
+        // ADR-0012: surface a CF-Access-Required challenge so Cloudflare's edge
+        // (or a browser hitting the origin directly) re-runs the interactive
+        // Access auth flow instead of just showing a generic 401.
+        wwwAuthenticate: "CF-Access-Required",
+      };
+    }
+    const verified = await verifyAccessJwt({
+      token,
+      teamDomain: cfConfig.teamDomain,
+      aud: cfConfig.aud,
+      allowedEmailDomains: cfConfig.allowedEmailDomains,
+    });
+    if (!verified.ok) {
+      return {
+        ok: false,
+        method: "cloudflare-access",
+        reason: `cloudflare_access_verification_failed: ${verified.reason}`,
+      };
+    }
+    return {
+      ok: true,
+      method: "cloudflare-access",
+      user: verified.email,
+    };
   }
 
   if (auth.mode === "none") {
