@@ -1,0 +1,100 @@
+name: SunClaw Fork Invariants
+
+# Verifies SunClaw-fork-specific guarantees that upstream OpenClaw's CI can't
+# check (because they assume the OpenClaw brand). Lives alongside upstream's
+# ci.yml -- does NOT duplicate lint/typecheck/test/build, which upstream
+# already runs comprehensively.
+#
+# Invariants enforced:
+#   1. scripts/test-rebrand.sh passes (rebrand.sh is still deterministic and
+#      idempotent against the input/expected fixtures).
+#   2. No raw OpenClaw / openclaw / OPENCLAW strings have leaked back into
+#      tracked sources outside the documented allowlist (LICENSE, NOTICE,
+#      UPSTREAM.md, scripts/rebrand.sh, tests/fixtures/rebrand/, docs/sunclaw/,
+#      CHANGELOG.md). External package scopes @openclaw/fs-safe and
+#      @openclaw/proxyline are also allowed because Anthropic publishes them
+#      under that scope.
+#   3. UPSTREAM.md exists and records a pinned upstream SHA -- required for
+#      scripts/upstream-merge.sh (Task 16) to know which commit we are tracking.
+#
+# Security note: this workflow does not interpolate any github.event.* inputs
+# into shell commands (no run: blocks read untrusted fields). All shell
+# substitutions use $-vars sourced from the checkout itself.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sunclaw-fork-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  fork-invariants:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Rebrand fixture suite
+        run: bash scripts/test-rebrand.sh
+
+      - name: Survivor scan (raw OpenClaw strings)
+        run: |
+          set -euo pipefail
+          # Allowlist: paths that legitimately keep "OpenClaw" references.
+          # External @openclaw/* npm scopes (fs-safe, proxyline) are allowed
+          # everywhere because Anthropic publishes them under that scope.
+          # docs/assets/*.svg files carry embedded Inkscape source-doc metadata
+          # (sodipodi:docname, inkscape:export-filename) that names the original
+          # logotype .svg file -- rebrand-resistant unless we re-render in
+          # Inkscape, which is out of scope for M0. Asciinema casts under
+          # docs/assets/*.svg likewise embed terminal output verbatim.
+          # apps/**/LICENSE files keep their upstream copyright lines per
+          # standard fork etiquette (M0 Task 13 handles top-level LICENSE).
+          if git grep -nIE 'OpenClaw|openclaw|OPENCLAW' -- \
+            ':!LICENSE' \
+            ':!NOTICE' \
+            ':!UPSTREAM.md' \
+            ':!CHANGELOG.md' \
+            ':!scripts/rebrand.sh' \
+            ':!scripts/upstream-merge.sh' \
+            ':!tests/fixtures/rebrand/**' \
+            ':!docs/sunclaw/**' \
+            ':!docs/assets/*.svg' \
+            ':!apps/**/LICENSE' \
+            ':!.github/workflows/sunclaw-fork.yml' \
+            | grep -vE '@openclaw/(fs-safe|proxyline)'; then
+            echo
+            echo "::error::Found raw OpenClaw references outside the allowlist."
+            echo "Either rebrand them (re-run scripts/rebrand.sh) or extend the"
+            echo "allowlist in .github/workflows/sunclaw-fork.yml if intentional."
+            exit 1
+          fi
+          echo "No survivor OpenClaw references found."
+
+      - name: UPSTREAM.md pinned-SHA check
+        run: |
+          set -euo pipefail
+          if [ ! -f UPSTREAM.md ]; then
+            echo "::error::UPSTREAM.md is missing -- fork-tracking is broken."
+            exit 1
+          fi
+          # Accepts either "Upstream SHA: <40-hex>" or upstream's bootstrap
+          # format "**Fork SHA pinned at M0:** <40-hex>".
+          if ! grep -qE '(Upstream SHA|Fork SHA pinned).*[0-9a-f]{40}' UPSTREAM.md; then
+            echo "::error::UPSTREAM.md is missing a pinned 40-hex SHA line."
+            echo "scripts/upstream-merge.sh needs that pin to know what to rebase against."
+            echo "Expected one of: 'Upstream SHA: <sha>' or '**Fork SHA pinned at M0:** <sha>'."
+            exit 1
+          fi
+          echo "UPSTREAM.md pin OK:"
+          grep -E '(Upstream SHA|Fork SHA pinned)' UPSTREAM.md

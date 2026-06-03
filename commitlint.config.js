@@ -1,5 +1,5 @@
 // SunClaw commit-message lint config — Conventional Commits.
-// Upstream OpenClaw already uses conventional-style messages (`fix(scope): ...`,
+// Upstream already uses conventional-style messages (`fix(scope): ...`,
 // `feat: ...`); commitlint enforces it mechanically and unblocks Release-Please.
 export default {
   extends: ["@commitlint/config-conventional"],

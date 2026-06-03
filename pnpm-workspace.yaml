@@ -66,9 +66,9 @@ nodeLinker: hoisted
 blockExoticSubdeps: true
 
 overrides:
-  # Self-reference: extensions used to depend on the published "openclaw"
-  # npm package; in this fork the root workspace IS the CLI ("sunclaw"),
-  # so map every "sunclaw" dep to the local workspace.
+  # Self-reference: extensions used to depend on the published upstream
+  # CLI npm package by name; in this fork the root workspace IS the CLI
+  # ("sunclaw"), so map every "sunclaw" dep to the local workspace.
   "sunclaw": "workspace:*"
   "@anthropic-ai/sdk": 0.100.1
   "@aws-sdk/core": 3.974.13
