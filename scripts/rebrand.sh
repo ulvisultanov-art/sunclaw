@@ -6,36 +6,48 @@ set -euo pipefail
 TARGET="${1:-.}"
 cd "$TARGET"
 
-# Exclusion list: patterns we never touch
-EXCLUDE_PATHS=(
+# Directory names to prune from `find` (path-component match, not substring).
+EXCLUDE_DIRS=(
   ".git" "node_modules" "dist" "build" "out" ".turbo" ".next"
-  "LICENSE" "NOTICE" "tests/fixtures/rebrand"
-  "*.lock" "*.png" "*.jpg" "*.jpeg" "*.gif" "*.ico" "*.svg"
-  "*.woff" "*.woff2" "*.ttf" "*.eot"
-  "*.zip" "*.tar" "*.gz" "*.tgz" "*.bz2"
-  "pnpm-lock.yaml" "yarn.lock" "package-lock.json"
+  ".pnpm" ".cache" "coverage" ".vercel" "tests/fixtures/rebrand"
 )
 
-# Build a `find` pruning expression
+# Exact filenames to skip.
+EXCLUDE_FILENAMES=(
+  "LICENSE" "NOTICE" "pnpm-lock.yaml" "yarn.lock" "package-lock.json"
+)
+
+# File-name globs to skip (binary / lock formats).
+EXCLUDE_GLOBS=(
+  "*.lock" "*.png" "*.jpg" "*.jpeg" "*.gif" "*.ico" "*.svg"
+  "*.woff" "*.woff2" "*.ttf" "*.eot" "*.icns"
+  "*.zip" "*.tar" "*.gz" "*.tgz" "*.bz2" "*.xz" "*.7z"
+)
+
+# Build `find` pruning args for directories.
 prune_args=()
-for p in "${EXCLUDE_PATHS[@]}"; do
-  prune_args+=(-name "$p" -prune -o)
+for d in "${EXCLUDE_DIRS[@]}"; do
+  prune_args+=(-path "*/$d" -prune -o)
 done
 
-# Find candidate files (text-only, by extension)
+# File extensions we rebrand. Source + config + mobile + docs.
 mapfile -t FILES < <(
   find . \
     \( "${prune_args[@]}" -false \) -o \
     -type f \( \
       -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" -o \
       -name "*.mjs" -o -name "*.cjs" -o -name "*.json" -o -name "*.md" -o \
-      -name "*.yaml" -o -name "*.yml" -o -name "*.toml" -o -name "*.sh" -o \
-      -name "*.html" -o -name "*.css" -o -name "*.scss" -o -name "*.txt" -o \
-      -name "Dockerfile*" \
+      -name "*.mdx" -o -name "*.yaml" -o -name "*.yml" -o -name "*.toml" -o \
+      -name "*.sh" -o -name "*.bash" -o -name "*.html" -o -name "*.htm" -o \
+      -name "*.css" -o -name "*.scss" -o -name "*.txt" -o -name "*.env*" -o \
+      -name "*.swift" -o -name "*.kt" -o -name "*.kts" -o -name "*.gradle" -o \
+      -name "*.xml" -o -name "*.plist" -o -name "*.xcconfig" -o -name "*.pbxproj" -o \
+      -name "*.go" -o -name "*.py" -o -name "*.rs" -o -name "*.ql" -o -name "*.lobster" -o \
+      -name "Dockerfile*" -o -name "Makefile*" -o -name ".gitignore" -o -name ".dockerignore" \
     \) -print
 )
 
-# Ordered replacements (longest-first to avoid partial collisions)
+# Ordered replacements (longest-first to avoid partial collisions).
 REPLACEMENTS=(
   's|https://docs\.openclaw\.ai|https://docs.sunclaw.complex.az|g'
   's|docs\.openclaw\.ai|docs.sunclaw.complex.az|g'
@@ -49,16 +61,24 @@ REPLACEMENTS=(
   's|OPENCLAW|SUNCLAW|g'
 )
 
+skip_file() {
+  local path="$1"
+  local base
+  base="$(basename "$path")"
+  for n in "${EXCLUDE_FILENAMES[@]}"; do
+    [[ "$base" == "$n" ]] && return 0
+  done
+  for g in "${EXCLUDE_GLOBS[@]}"; do
+    # shellcheck disable=SC2053
+    [[ "$base" == $g ]] && return 0
+  done
+  return 1
+}
+
 count=0
 for f in "${FILES[@]}"; do
-  # Skip if file path contains an excluded fragment
-  skip=0
-  for p in "${EXCLUDE_PATHS[@]}"; do
-    case "$f" in *"$p"*) skip=1; break;; esac
-  done
-  [[ "$skip" == 1 ]] && continue
+  skip_file "$f" && continue
 
-  # Apply each sed replacement
   for r in "${REPLACEMENTS[@]}"; do
     sed -i.bak "$r" "$f"
   done
