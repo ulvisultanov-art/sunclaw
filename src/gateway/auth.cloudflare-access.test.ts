@@ -16,6 +16,7 @@ import { SignJWT, exportJWK, generateKeyPair } from "jose";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { GatewayAuthConfig, GatewayCloudflareAccessConfig } from "../config/types.gateway.js";
 import { resolveGatewayAuth, type ResolvedGatewayAuth } from "./auth-resolve.js";
+import { assertGatewayAuthConfigured, authorizeHttpGatewayConnect } from "./auth.js";
 import { _resetJwksCacheForTests } from "./cloudflare-access/jwks-cache.js";
 import { checkGatewayHttpRequestAuth } from "./http-auth-utils.js";
 
@@ -107,6 +108,20 @@ describe("cloudflare-access dispatcher", () => {
     expect(result.requestAuth.trustDeclaredOperatorScopes).toBe(true);
   });
 
+  it("populates user (email) and subject (sub) on the GatewayAuthResult success branch", async () => {
+    const token = await mintAccessJwt({ email: "ulvi@complex.az", sub: "u-1" });
+    const authResult = await authorizeHttpGatewayConnect({
+      auth: makeAuth(),
+      connectAuth: null,
+      req: createReq({ headers: { "cf-access-jwt-assertion": token } }),
+    });
+    expect(authResult.ok).toBe(true);
+    if (!authResult.ok) return;
+    expect(authResult.method).toBe("cloudflare-access");
+    expect(authResult.user).toBe("ulvi@complex.az");
+    expect(authResult.subject).toBe("u-1");
+  });
+
   it("rejects when the verifier fails (email domain not in allowlist)", async () => {
     const token = await mintAccessJwt({ email: "rando@evil.tld", sub: "u-2" });
     const result = await checkGatewayHttpRequestAuth({
@@ -173,5 +188,68 @@ describe("cloudflare-access dispatcher", () => {
     const resolved = resolveGatewayAuth({ authConfig, authOverride });
     expect(resolved.cloudflareAccess?.teamDomain).toBe("override-team");
     expect(resolved.cloudflareAccess?.allowedEmailDomains).toEqual(["override.example"]);
+  });
+});
+
+describe("assertGatewayAuthConfigured — cloudflare-access fail-fast", () => {
+  it("throws when mode is cloudflare-access but cloudflareAccess config block is missing", () => {
+    const auth: ResolvedGatewayAuth = {
+      mode: "cloudflare-access",
+      allowTailscale: false,
+      cloudflareAccess: undefined,
+    };
+    expect(() => assertGatewayAuthConfigured(auth)).toThrow(/cloudflareAccess config/);
+  });
+
+  it("throws when cloudflareAccess.teamDomain is empty", () => {
+    const auth: ResolvedGatewayAuth = {
+      mode: "cloudflare-access",
+      allowTailscale: false,
+      cloudflareAccess: {
+        teamDomain: "",
+        aud: "AUD1",
+        allowedEmailDomains: ["complex.az"],
+      },
+    };
+    expect(() => assertGatewayAuthConfigured(auth)).toThrow(/teamDomain/);
+  });
+
+  it("throws when cloudflareAccess.aud is empty", () => {
+    const auth: ResolvedGatewayAuth = {
+      mode: "cloudflare-access",
+      allowTailscale: false,
+      cloudflareAccess: {
+        teamDomain: "complex",
+        aud: "",
+        allowedEmailDomains: ["complex.az"],
+      },
+    };
+    expect(() => assertGatewayAuthConfigured(auth)).toThrow(/aud is empty/);
+  });
+
+  it("throws when cloudflareAccess.allowedEmailDomains is empty", () => {
+    const auth: ResolvedGatewayAuth = {
+      mode: "cloudflare-access",
+      allowTailscale: false,
+      cloudflareAccess: {
+        teamDomain: "complex",
+        aud: "AUD1",
+        allowedEmailDomains: [],
+      },
+    };
+    expect(() => assertGatewayAuthConfigured(auth)).toThrow(/allowedEmailDomains/);
+  });
+
+  it("returns without throwing when all required cloudflareAccess fields are set", () => {
+    const auth: ResolvedGatewayAuth = {
+      mode: "cloudflare-access",
+      allowTailscale: false,
+      cloudflareAccess: {
+        teamDomain: "complex",
+        aud: "AUD1",
+        allowedEmailDomains: ["complex.az"],
+      },
+    };
+    expect(assertGatewayAuthConfigured(auth)).toBeUndefined();
   });
 });

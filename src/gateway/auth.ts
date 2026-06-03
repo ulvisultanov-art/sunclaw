@@ -48,6 +48,12 @@ export type GatewayAuthResult = {
     | "trusted-proxy"
     | "cloudflare-access";
   user?: string;
+  /**
+   * Stable, immutable identity subject. Currently populated only by the
+   * cloudflare-access mode (from the verified JWT `sub` claim). Email may
+   * rotate; subject does not.
+   */
+  subject?: string;
   reason?: string;
   /** Present when the request was blocked by the rate limiter. */
   rateLimited?: boolean;
@@ -300,6 +306,29 @@ export function assertGatewayAuthConfigured(
     if (auth.token) {
       throw new Error(
         "gateway auth mode is trusted-proxy, but a shared token is also configured; remove gateway.auth.token / SUNCLAW_GATEWAY_TOKEN because trusted-proxy and token auth are mutually exclusive",
+      );
+    }
+  }
+  if (auth.mode === "cloudflare-access") {
+    if (!auth.cloudflareAccess) {
+      throw new Error(
+        "gateway auth mode is cloudflare-access, but no cloudflareAccess config was provided (set gateway.auth.cloudflareAccess.teamDomain, .aud, and .allowedEmailDomains)",
+      );
+    }
+    const cf = auth.cloudflareAccess;
+    if (!cf.teamDomain || cf.teamDomain.trim() === "") {
+      throw new Error(
+        "gateway auth mode is cloudflare-access, but cloudflareAccess.teamDomain is empty (set the Cloudflare team-domain subdomain, e.g. 'complex' for complex.cloudflareaccess.com)",
+      );
+    }
+    if (!cf.aud || cf.aud.trim() === "") {
+      throw new Error(
+        "gateway auth mode is cloudflare-access, but cloudflareAccess.aud is empty (set the per-Application AUD tag from Cloudflare Zero Trust)",
+      );
+    }
+    if (!cf.allowedEmailDomains || cf.allowedEmailDomains.length === 0) {
+      throw new Error(
+        "gateway auth mode is cloudflare-access, but cloudflareAccess.allowedEmailDomains is empty (configure at least one allowed email domain, e.g. ['complex.az'])",
       );
     }
   }
@@ -580,6 +609,7 @@ async function authorizeGatewayConnectCore(
       ok: true,
       method: "cloudflare-access",
       user: verified.email,
+      subject: verified.sub,
     };
   }
 
