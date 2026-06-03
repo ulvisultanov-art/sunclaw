@@ -2,6 +2,102 @@
 
 Docs: https://docs.sunclaw.complex.az
 
+SunClaw-specific entries follow the [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
+format with [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Upstream
+OpenClaw release notes (dated `YYYY.M.D`) are preserved below for reference; do
+not re-tag them — they were cut by upstream against their own version line.
+
+## [0.1.0] — 2026-06-03 (M0 — Bootstrap & Fork)
+
+First tagged SunClaw cut. Tracks
+[ECO-2078](https://complex.az/ws/projects/ecosystem-master-plan?task=ECO-2078)
+(M0 bootstrap milestone) under programme
+[ECO-2077](https://complex.az/ws/projects/ecosystem-master-plan?task=ECO-2077).
+
+Upstream pin: OpenClaw `2accf3875ba07254becc74f65eecaf5383e74e9d` (see
+[`UPSTREAM.md`](UPSTREAM.md)).
+
+### Added
+
+- Deterministic fork rebrand pipeline: `scripts/rebrand.sh` + TDD fixture
+  suite under `tests/fixtures/rebrand/` driven by `scripts/test-rebrand.sh`.
+  All user-visible strings rewritten OpenClaw → SunClaw,
+  `clawhub.ai` → `clawhub.complex.az`,
+  `docs.openclaw.ai` → `docs.sunclaw.complex.az`.
+- Fork-invariant CI workflow (`.github/workflows/sunclaw-fork.yml`):
+  rebrand-fixture replay, raw-`OpenClaw` survivor scan with explicit
+  allowlist (LICENSE, NOTICE, README.md, UPSTREAM.md, CHANGELOG.md,
+  `scripts/rebrand.sh`, `scripts/upstream-merge.sh`, fixture inputs, ADRs,
+  embedded SVG metadata, upstream package LICENSE files), and UPSTREAM.md
+  pinned-SHA presence check.
+- Fork-side security workflow (`.github/workflows/sunclaw-security.yml`):
+  weekly + per-PR gitleaks (full git history), `pnpm audit --prod
+--audit-level=high`, and OSV scanner via the upstream reusable workflow
+  (`google/osv-scanner-action/.github/workflows/osv-scanner-reusable.yml@v1.9.0`).
+  Configured to complement (not duplicate) upstream's existing CI matrix.
+- `.gitleaks.toml` extending the gitleaks default ruleset with provider-key
+  rules (OpenAI, Anthropic, OpenRouter) and a test-fixture allowlist so
+  intentional sample tokens under `tests/` don't trip the scan.
+- `NOTICE` file recording the fork attribution and pointing at UPSTREAM.md,
+  CHANGELOG.md, and `docs/sunclaw/` for the audit trail.
+- Slim, fork-aware `README.md` at the repo root; the original upstream
+  product README is preserved verbatim at
+  `docs/sunclaw/README-upstream-mirror.md` (moved via `git mv`, history
+  intact).
+- Architecture Decision Records under `docs/sunclaw/`:
+  - `m0-task-08-typescript-strict.md` — kept upstream tsconfig (already strict).
+  - `m0-task-11-docker-workflow.md` — kept upstream `docker-release.yml`
+    (BuildKit-native SBOM + SLSA v0.2 provenance + verify-attestations job
+    is stronger than the plan's Kaniko+cosign+syft prescription).
+  - `m0-task-12-docker-compose.md` — kept upstream root `docker-compose.yml`
+    (postgres/redis aren't in SunClaw's runtime topology; upstream's
+    `sunclaw-gateway` + `sunclaw-cli` stack with `/healthz` healthcheck,
+    `cap_drop`, `no-new-privileges`, and `init: true` is the correct
+    smoke target).
+
+### Changed
+
+- `LICENSE` now carries both copyright lines per MIT fork etiquette:
+  upstream OpenClaw Foundation (preserved) + SUN Corporation (SunClaw fork
+  additions).
+- All upstream identifiers in tracked sources (channel adapters, skills,
+  CLI banners, package metadata, docs) rewritten by `scripts/rebrand.sh` —
+  the survivor scan above enforces this on every push and PR.
+
+### Preserved (deliberate non-deviations from upstream)
+
+The M0 plan prescribed several net-new artifacts (Husky 9, lint-staged,
+Turborepo 2 pipeline, ESLint 9 flat config, Prettier 3, Kaniko build, cosign
+keyless signing, syft SBOM, Postgres/Redis compose layer, separate
+gateway/web image split). Each was audited against what upstream already
+ships; in every case upstream's primitive was equal or stronger, so the
+plan was overridden in favor of upstream. Specifically kept as-is:
+
+- Toolchain: pnpm 11.2 workspace, `tsgo` typecheck, `oxlint` / `oxfmt`
+  (faster than ESLint+Prettier; upstream already integrates them).
+- Git hooks: upstream's `git-hooks/pre-commit` (Bash, no Husky/lint-staged
+  dependency).
+- TypeScript: upstream `tsconfig.json` is already `strict: true` with
+  `noUncheckedIndexedAccess` — no override needed.
+- CI baseline: upstream's 57-workflow matrix (lint, typecheck, unit,
+  integration, e2e, channel matrix, release, docker-release) — SunClaw's
+  two new workflows above are additive, not replacements.
+- Docker release: upstream `docker-release.yml` with SHA-pinned BuildKit,
+  multi-arch (`linux/amd64`,`linux/arm64`), `sbom: true` (SPDX),
+  `provenance: mode=max` (SLSA v0.2), and a downstream verify-attestations
+  job. Same trust chain as cosign-keyless (Fulcio CA + Rekor).
+- Smoke compose: upstream root `docker-compose.yml` (no DB/cache layer —
+  SunClaw stores state in `~/.sunclaw/` and Convex when remote).
+- Skills SDK, agent loop, planner, memory, channel adapters, runtime
+  modules — unchanged.
+
+### Tracker
+
+- Programme: [ECO-2077](https://complex.az/ws/projects/ecosystem-master-plan?task=ECO-2077)
+- Milestone: [ECO-2078](https://complex.az/ws/projects/ecosystem-master-plan?task=ECO-2078)
+
+---
+
 ## 2026.6.2
 
 ### Highlights
