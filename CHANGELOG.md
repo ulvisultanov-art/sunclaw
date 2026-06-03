@@ -7,6 +7,44 @@ format with [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Upstream
 OpenClaw release notes (dated `YYYY.M.D`) are preserved below for reference; do
 not re-tag them — they were cut by upstream against their own version line.
 
+## [0.2.0] — 2026-06-03 (M1 — K8s Deployment)
+
+K8s-deployable cut. The SunClaw source is unchanged from `0.1.0`; this
+release records the deployment foundation that lands SunClaw onto the
+SUN Ecosystem's Talos / AX162-R production cluster.
+
+Tracks [ECO-2086](https://complex.az/ws/projects/ecosystem-master-plan?task=ECO-2086)
+(M1 milestone) under programme
+[ECO-2077](https://complex.az/ws/projects/ecosystem-master-plan?task=ECO-2077).
+
+Upstream pin: unchanged from `0.1.0` (OpenClaw
+`2accf3875ba07254becc74f65eecaf5383e74e9d`; see [`UPSTREAM.md`](UPSTREAM.md)).
+
+### Added (deployment-only — no source-tree changes)
+
+- `docs/sunclaw/m1-deployment.md` — milestone ADR documenting the K8s
+  deployment shape (Helm chart in `sunecosystem`, ArgoCD app-of-apps,
+  Cloudflare Tunnel ingress, ExternalSecret pattern, NetworkPolicy
+  posture). Pairs with sunecosystem ADR-0011.
+
+### Image artefact
+
+- Container image `registry.complex.az/sunclaw:sunclaw-v0.2.0`, built via
+  the one-shot Kaniko Pod
+  `infra/build/kaniko-sunclaw-v0.2.0.yaml` in the `complexaz` repo. The
+  build context is this repo at tag `sunclaw-v0.1.0`; no fork-side code
+  changes were required to produce the image.
+
+### Out of scope (tracked separately)
+
+- M2 — Cloudflare Access JWT gate for ClawHub (`*.complex.az` only).
+- M3 — Multi-tenancy mode B (per-identity bearer tokens).
+- M4 — Wire all 23+ MVP channel adapters.
+- M5 — WhatsApp Business API end-to-end.
+- M6 — SUN ecosystem integrations (hub-web SSO, mail-server hand-off).
+- M7 — Production hardening — SLSA L3 build, SLO dashboards,
+  PrometheusRule alerts, runbooks.
+
 ## [0.1.0] — 2026-06-03 (M0 — Bootstrap & Fork)
 
 First tagged SunClaw cut. Tracks
