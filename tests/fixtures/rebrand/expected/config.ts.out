@@ -1,0 +1,5 @@
+export const BRAND = 'SunClaw';
+export const CLI_NAME = 'sunclaw';
+export const MARKETPLACE_URL = 'https://clawhub.complex.az';
+export const DOCS_URL = 'https://docs.sunclaw.complex.az';
+// SunClaw is licensed under MIT

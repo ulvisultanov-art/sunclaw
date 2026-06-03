@@ -1,0 +1,7 @@
+{
+  "name": "sunclaw",
+  "description": "SunClaw — local AI assistant",
+  "homepage": "https://docs.sunclaw.complex.az",
+  "bin": { "sunclaw": "./bin/sunclaw.js" },
+  "repository": { "type": "git", "url": "https://github.com/ulvisultanov-art/sunclaw" }
+}
