@@ -15,8 +15,33 @@ EXCLUDE_DIRS=(
 # Exact filenames to skip.
 EXCLUDE_FILENAMES=(
   "LICENSE" "NOTICE" "pnpm-lock.yaml" "yarn.lock" "package-lock.json"
-  "rebrand.sh" "test-rebrand.sh"
+  "rebrand.sh" "test-rebrand.sh" "upstream-merge.sh"
 )
+
+# Path-anchored exclusions (relative to TARGET, no leading "./"). These files
+# legitimately keep OpenClaw references for MIT fork-attribution reasons and
+# MUST NOT be rewritten by the rebrand pass. The list intentionally mirrors
+# the survivor-scan allowlist in .github/workflows/sunclaw-fork.yml so the
+# two stay in lockstep across upstream syncs.
+#
+# These exclusions ONLY apply when running against the real fork repo (the
+# presence of TARGET/.git is the signal). When running against arbitrary trees
+# -- notably the rebrand fixture suite at tests/fixtures/rebrand/, which has
+# its own README.md fixture pair -- the exclusions are disabled so the fixture
+# tests remain a faithful end-to-end check of the replacement rules.
+EXCLUDE_PATHS=(
+  "README.md"                                # slim fork README ("Forked from OpenClaw...")
+  "UPSTREAM.md"                              # pin file: names upstream by definition
+  "CHANGELOG.md"                             # SunClaw entry attributes upstream
+  "docs/sunclaw"                             # ADRs + upstream-mirror README
+  ".github/workflows/sunclaw-fork.yml"       # contains the allowlist literals
+)
+
+# Disable path-anchored exclusions when not running against the actual fork
+# repo (e.g. inside the fixture sandbox under tests/fixtures/rebrand/).
+if [ ! -d ".git" ]; then
+  EXCLUDE_PATHS=()
+fi
 
 # File-name globs to skip (binary / lock formats).
 EXCLUDE_GLOBS=(
@@ -77,6 +102,8 @@ REPLACEMENTS=(
 
 skip_file() {
   local path="$1"
+  # Normalize leading "./" so EXCLUDE_PATHS entries can be plain relative paths.
+  local rel="${path#./}"
   local base
   base="$(basename "$path")"
   for n in "${EXCLUDE_FILENAMES[@]}"; do
@@ -85,6 +112,12 @@ skip_file() {
   for g in "${EXCLUDE_GLOBS[@]}"; do
     # shellcheck disable=SC2053
     [[ "$base" == $g ]] && return 0
+  done
+  for p in "${EXCLUDE_PATHS[@]}"; do
+    # Exact-path match (single-file allowlist entry).
+    [[ "$rel" == "$p" ]] && return 0
+    # Prefix match for directory entries: any file under that directory.
+    [[ "$rel" == "$p"/* ]] && return 0
   done
   return 1
 }
